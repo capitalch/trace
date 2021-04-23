@@ -1,0 +1,93 @@
+{
+  "name": "react-client",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "./",
+  "dependencies": {
+    "@apollo/react-hooks": "^4.0.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@types/axios": "^0.14.0",
+    "@types/big.js": "^6.0.2",
+    "@types/classnames": "^2.2.11",
+    "@types/jest": "^26.0.22",
+    "@types/lodash": "^4.14.168",
+    "@types/moment": "^2.13.0",
+    "@types/node": "^14.14.41",
+    "@types/object-hash": "^2.1.0",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-input-mask": "^3.0.0",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/react-select": "^4.0.15",
+    "@types/react-table": "^7.0.29",
+    "@types/react-widgets": "^4.4.4",
+    "@types/styled-components": "^5.1.9",
+    "@types/url-join": "^4.0.0",
+    "apollo-boost": "^0.4.9",
+    "axios": "^0.21.1",
+    "big.js": "^6.0.3",
+    "classnames": "^2.3.1",
+    "clsx": "^1.1.1",
+    "fontsource-roboto": "^3.1.5",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0",
+    "is.js": "0.0.2",
+    "material-table": "^1.69.2",
+    "material-ui-confirm": "^2.1.2",
+    "moment": "^2.29.1",
+    "object-hash": "^2.1.1",
+    "primeicons": "^4.1.0",
+    "primereact": "^6.2.1",
+    "react": "^17.0.2",
+    "react-data-table-component": "^6.11.7",
+    "react-dom": "^17.0.2",
+    "react-error-boundary": "^3.1.1",
+    "react-idle-timer": "^4.6.1",
+    "react-input-mask": "^2.0.4",
+    "react-number-format": "^4.5.5",
+    "react-scripts": "^4.0.3",
+    "react-select": "^4.3.0",
+    "react-widgets": "^4.6.1",
+    "rsuite": "^4.9.3",
+    "rxjs": "^6.6.7",
+    "saas": "^1.0.0",
+    "styled-components": "^5.2.3",
+    "typescript": "^4.2.4",
+    "url-join": "^4.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "css-loader": "^5.2.2",
+    "eslint-plugin-react": "^7.23.2",
+    "gzip": "^0.1.0",
+    "sass": "^1.32.10",
+    "style-loader": "^2.0.0"
+  }
+}

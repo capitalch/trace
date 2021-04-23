@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "c:\\projects\\trace\\env\\Scripts\\python.exe",
+    "python.formatting.provider": "autopep8",
+    "git.ignoreLimitWarning": true
+}

@@ -1,0 +1,21 @@
+type AuthenticationQuery {
+    doLogin(credentials: String): Generic
+    # downloadFile(value: String): Generic
+    forgotPwd(value: String): String
+    genericView(value:Generic): Generic
+    getUsers(value:Generic): [User]
+}
+
+type Entity {
+    id: Int!
+    entityName: String!
+}
+
+type User {
+    id: Int!
+    uid: String
+    userEmail: String
+    isActive: Boolean
+    parentId: Int
+    descr: String
+}

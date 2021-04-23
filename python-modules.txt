@@ -1,0 +1,1 @@
+flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter

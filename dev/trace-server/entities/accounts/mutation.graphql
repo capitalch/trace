@@ -1,0 +1,6 @@
+type AccountsMutation {
+    accountsUpdateOpBal(value:Generic):String
+    genericUpdateMaster(value:Generic): Generic
+    genericUpdateMasterDetails(value:Generic): String
+    transferClosingBalances: String
+}

@@ -1,0 +1,26 @@
+{
+   
+    "class": "payment-voucher1",
+    "items": [
+        {
+            "type": "Text",
+            "name":"accCode",
+            "placeholder":"Account code",
+            "label":"Account code",
+            "validations":[{
+                "name":"required",
+                "message":"Account code is required"
+            }]
+        },
+        {
+            "type": "Text",
+            "name":"accName",
+            "placeholder":"Account name",
+            "label":"Account name",
+            "validations":[{
+                "name":"required",
+                "message":"Account name is required"
+            }]
+        }
+    ]
+}

@@ -1,0 +1,129 @@
+[
+    {
+        "id": 1,
+        "accCode": "code1",
+        "amount": 100,
+        "parentId": null,
+        "children": [
+            2,
+            3
+        ]
+    },
+    {
+        "id": 2,
+        "accCode": "code2",
+        "amount": 200,
+        "parentId": 1,
+        "children": [
+            4
+        ]
+    },
+    {
+        "id": 3,
+        "accCode": "code3",
+        "amount": 300,
+        "parentId": 2,
+        "children": [
+            5
+        ]
+    },
+    {
+        "id": 4,
+        "accCode": "code4",
+        "amount": 400,
+        "children": [6],
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 5,
+        "accCode": "code5",
+        "amount": 500,
+        
+        "parentId": [
+            3
+        ],
+        "children":[8]
+    },
+    {
+        "id": 6,
+        "accCode": "code6",
+        "amount": 600,
+        "children":[7],
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 7,
+        "accCode": "code7",
+        "amount": 700,
+        "parentId": [3]
+    },
+    {
+        "id": 8,
+        "accCode": "code8",
+        "amount": 800,
+        "parentId": [3]
+    }
+
+    ,{
+        "id": 11,
+        "accCode": "code11",
+        "amount": 1100,
+        "children":[12],
+        "parentId": null
+    },
+    {
+        "id": 12,
+        "accCode": "code12",
+        "amount": 1200,
+        "children":[13],
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 13,
+        "accCode": "code13",
+        "amount": 1300,
+        "children":[14,15],
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 14,
+        "accCode": "code14",
+        "amount": 1400,
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 15,
+        "accCode": "code15",
+        "amount": 1500,
+        "children":[16,17],
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 16,
+        "accCode": "code16",
+        "amount": 1600,
+        "parentId": [
+            3
+        ]
+    },
+    {
+        "id": 17,
+        "accCode": "code17",
+        "amount": 1700,
+        "parentId": [
+            3
+        ]
+    }
+]

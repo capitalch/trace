@@ -1,0 +1,34 @@
+{
+    "tableName": "SampleH",
+    "data": {
+        "refNo": "ref1",
+        "remarks": "This remarks1",
+        "details": [{
+            "tableName": "SampleD",
+            "fkeyName": "sampleHeaderId",
+            "data": [
+                {
+                    "lineRefNo": "Line ref no 1",
+                    "lineRemarks": "This is line remarks 1",
+                    "details": {
+                        "tableName": "SampleDExt",
+                        "fkeyName": "sampleDetailsId",
+                        "data": {
+                            "instrNo": "ch-44434556"
+                        }
+                    }
+                },
+                {
+                    "lineRefNo": "Line ref no 2",
+                    "lineRemarks": "This is line remarks 2",
+                    "details": {
+                        "tableName": "SampleDExt",
+                        "fkeyName": "sampleDetailsId",
+                        "data": {
+                            "instrNo": "ch-7778554"
+                        }
+                    }
+                }]
+        }]
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "contraSameAccountCodes":"Debit and credit account codes for contra entry cannot be same",
+    "gstinRequired": "GSTIN no is required",
+    "gstRateRequired": "GST rate is required",
+    "igstWithCgstAndSgst": "When IGST is there you cannot have CGST and SGSt",
+    "cgstSgstEqual": "SGST and CGST should be equal",
+    "gstZero": "GST cannot be zero",
+    "gstCalculationError": "GST calculation error",
+    "invalidGstin":"Invalid GSTIN number",
+    "debitCreditNotEqual":"Debits and credits are not equal",
+    "instrNoRequired": "Instr no is required when it is bank transaction",
+    "errorGettingnowFinYearId": "There was error in getting current financial year from server",
+    "selectBusinessUnit": "Please select a business unit from available business units",
+    "errorFinYearsBranches":"There was error in getting financial years and branch information from server",
+    "finYearNotPresent":"The selected business unit does not contain financial year for current date. Please define financial year for today's date in the business unit",
+    "branchesNotDefined":"Branches are not defined in selected business unit. Thre must be at least one branch defined",
+    "getFinYearsFailed":"Retrival of financial years from server failed",
+    "errorOpBalDebitCreditTogether": "Debit and credit entries for opening balance cannot be together",
+    "infoNothingToSave": "Nothing to save",
+    "notImplemented": "Not yet implemented",
+    "messTransferClosingBalance": "Transfer closing balances from current financial year to next financial year"
+}

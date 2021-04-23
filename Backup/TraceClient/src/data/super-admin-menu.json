@@ -1,0 +1,27 @@
+{
+    "name": "superAdmin",
+    "label": "SuperAdmin",
+    "children": [
+        {
+            "name": "artifacts",
+            "label": "Artifacts",
+            "children": [
+                {
+                    "name": "ManageAdminUsers",
+                    "label": "Manage admin users",
+                    "componentName": "manageAdminUsers"
+                },
+                {
+                    "name": "manageClients",
+                    "label": "Manage clients",
+                    "componentName": "manageClients"
+                }
+                , {
+                    "name": "manageEntities",
+                    "label": "Manage entities",
+                    "componentName": "manageEntities"
+                }
+            ]
+        }
+    ]
+}

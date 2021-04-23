@@ -1,0 +1,20 @@
+{
+  "name": "hello-electron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "odbc": "^2.3.6"
+  },
+  "devDependencies": {
+    "electron": "^11.3.0",
+    "electron-builder": "^22.10.5"
+  }
+}

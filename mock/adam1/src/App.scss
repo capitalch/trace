@@ -1,0 +1,104 @@
+.App {
+  text-align: left;
+}
+.App table,
+td,
+tr,
+th {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 0.2rem;
+  padding-left: 0.5rem;
+  font-size: 0.9em;
+}
+.App td {
+  cursor: pointer;
+}
+
+.App table {
+  margin: 1rem;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+
+.container {
+  width: 50%;
+  display: flex;
+  margin: 10px;
+  background-color: wheat;
+  justify-content: space-between;
+  border-bottom: 1px solid;
+  padding: 0.5em;
+}
+
+.dropdown-implement {
+  .btn {
+    background-color: darkmagenta;
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    border: none;
+    outline: none;
+  }
+
+  // .btn-dropdown {
+  //   background-color: darkmagenta;
+  //   color: white;
+  //   padding: 0.5rem;
+  //   font-size: 0rem;
+  //   border: none;
+  //   outline: none;
+  // }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    // min-width: 160px;
+    width: 7.5rem;
+    margin-left: -3.5rem;
+    z-index: 1;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 1rem 1rem 0.5rem 1rem;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  // .btn:hover,
+  // .dropdown:hover .btn {
+  //   background-color: #0b7dda;
+  // }
+}

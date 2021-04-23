@@ -1,0 +1,195 @@
+{
+    "title": "Club Membership Registration",
+    "class": "basic-grid-1",
+    "validations": [],
+    "items": [
+        {
+            "type": "Text",
+            "name": "clubFirstName",
+            "placeholder": "First Name",
+            "label": "First Name",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "First name is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "clubLastName",
+            "placeholder": "Last Name",
+            "label": "Last Name",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Last name is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "clubGuardianName",
+            "placeholder": "Guardian's Name",
+            "label": "Guardian's Name",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Guardian's name is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "clubContactNo",
+            "placeholder": "Contact No.",
+            "label": "Contact No.",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Contact Number is required"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "clubGender",
+            "label": "Gender",
+            "options": [
+                {
+                    "label": "Male",
+                    "value": "male"
+                },{
+                    "label": "Female",
+                    "value": "female"
+                },{
+                    "label": "Other",
+                    "value": "other"
+                }
+            ]
+        },{
+            "type": "Datepicker",
+            "name": "clubDOB",
+            "placeholder": "Date of Birth",
+            "label": "Date of Birth",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Date of birth is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "clubNationality",
+            "placeholder": "Nationality",
+            "label": "Nationality",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Nationality is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "clubHobby",
+            "placeholder": "Hobby",
+            "label": "Hobby",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Hobby is required"
+                }
+            ]
+        },{
+            "type": "Textarea",
+            "name": "clubYourself",
+            "placeholder": "A bit about yourself",
+            "label": "Tell us a bit about yourself",
+            "validations": []
+        },{
+            "type": "Radio",
+            "name": "clubMembershipDuration",
+            "label": "Membership Duration",
+            "options": [
+                {
+                    "label": "1 year",
+                    "value": "1"
+                },{
+                    "label": "5 years",
+                    "value": "5"
+                },{
+                    "label": "10 years",
+                    "value": "10"
+                }
+            ]
+        },{
+            "type": "Range",
+            "name": "clubAddressArray",
+            "label": "Addresses",
+            "pattern": {
+                "type": "Set",
+                "label": "Address",
+                "name": "clubAddressSet",
+                "validations": [],
+                "items": [
+                    {
+                        "type": "Text",
+                        "name": "clubStreet",
+                        "placeholder": "Street Address",
+                        "label": "Street",
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "Street is required"
+                            }
+                        ]
+                    },{
+                        "type": "Select",
+                        "name": "clubCity",
+                        "label": "City",
+                        "options": {
+                            "subscriptionName": "getStatesAndCities",
+                            "args":["cities"]
+                        },
+                        "style":{"width":"150px"},
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "City is required"
+                            }
+                        ]
+                    },{
+                        "type": "Select",
+                        "name": "clubState",
+                        "placeholder": "State",
+                        "label": "State",
+                        "options": {
+                            "subscriptionName": "getStatesAndCities",
+                            "args":["states"]
+                        },
+                        "style":{"width":"150px"},
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "State is required"
+                            }
+                        ]
+                    },{
+                        "type": "Text",
+                        "name": "clubPin",
+                        "placeholder": "Pin",
+                        "label": "Pin",
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "Pin is required"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },{
+            "type": "Submit",
+            "action": "submitForm1",
+            "className": "x-submit",
+            "label": "Submit",
+            "methodName": "submitForm1"
+        }
+    ]
+}

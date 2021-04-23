@@ -1,0 +1,14 @@
+type AccountsQuery {
+    allCategories: Generic
+    accountsMasterGroupsLedgers: Generic
+    accountsOpBal: Generic
+    balanceSheetProfitLoss: Generic    
+    genericView(value: Generic): Generic
+    searchProduct(value: Generic): Generic
+    trialBalance: Generic
+    
+}
+
+scalar Generic
+scalar JData
+

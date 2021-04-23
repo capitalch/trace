@@ -1,0 +1,10 @@
+{
+    "dbServerConnectionError":"Connection error"
+    , "dbServerConnected":"Connected"
+    , "deleteConfirm":"Are you sure to delete?"
+    , "errorInOperation":"There was server side error in operation"
+    , "dataNotSaved": "Data was not saved at server"
+    , "operationSuccessful": "Operation was completed successfully"
+    , "initError":"Initialization error"
+    , "validationError":"There was validation error in the form"
+}

@@ -1,0 +1,3 @@
+{
+    "typescript.tsdk": "TraceClient\\node_modules\\typescript\\lib"
+}

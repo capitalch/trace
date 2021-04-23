@@ -1,0 +1,841 @@
+{
+    "title": "HRMS",
+    "class": "hrms-grid",
+    "items": [
+        {
+            "type": "Wizard",
+            "name": "hrms",
+            "methodName": "submitForm1",
+            "items": [
+                {
+                    "type": "Set",
+                    "label": "Information release form",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "name": "information",
+                            "label": "Information release form",
+                            "class": "page-title"
+                        },
+                        {
+                            "type": "Div",
+                            "name": "declaration",
+                            "class": "declaration",
+                            "label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi sit amet libero eget nunc facilisis dapibus non nec nibh. Aliquam erat volutpat. Aliquam molestie mi sem. Sed ultrices posuere lectus in efficitur. Suspendisse eu gravida ligula. Praesent ultrices, neque ac accumsan bibendum, nibh magna consectetur magna, sed pulvinar velit neque id mi. Donec varius lacus urna, iaculis molestie lectus bibendum mattis. Suspendisse dui elit, pellentesque nec arcu a, congue efficitur neque. Nullam scelerisque, nisl eget elementum aliquam, neque est pellentesque velit, non dapibus eros risus vitae libero. Vestibulum massa nunc, dapibus sed odio at, malesuada fringilla sapien. Mauris blandit lorem a enim aliquam semper. Phasellus venenatis auctor sagittis. Nunc et sem at nulla faucibus fringilla et non lorem. Ut luctus turpis eget posuere venenatis. Praesent imperdiet consequat risus et sollicitudin"
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "signature",
+                            "label": "Signature of candidate",
+                            "placeholder": "Signature of candidate",
+                            "class": "signature"
+                        },
+                        {
+                            "type": "Input",
+                            "name": "fileUpload",
+                            "label": "",
+                            "class": "info-file-upload",
+                            "htmlProps": {
+                                "type": "file"
+                            }
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "notes",
+                            "label": "Notes",
+                            "class": "notes",
+                            "validations": [{
+                                "name": "required",
+                                "message": "Notes is required"
+                            }]
+                        }
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "name": "professionalReference",
+                            "label": "Professional reference details",
+                            "class": "page-title"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "reference1",
+                            "label": "Reference 1",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "referenceFullName",
+                            "label": "Reference full name",
+                            "placeholder": "Reference full name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "designation",
+                            "label": "Designation",
+                            "placeholder": "Designation"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "companyName",
+                            "label": "Company name",
+                            "placeholder": "Company name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "contactTelephone",
+                            "label": "Contact telephone",
+                            "placeholder": "Contact telephone"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "companyEmailAddress",
+                            "label": "Company email address",
+                            "placeholder": "Company email address"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "knowPerson",
+                            "label": "How do you know this person"
+                        },
+                        {
+                            "type": "Radio",
+                            "name": "isReferenceCurrentEmployment",
+                            "label": "Is the reference linked to current employment? ",
+                            "options": [
+                                {
+                                    "label": "No",
+                                    "value": false
+                                },
+                                {
+                                    "label": "Yes",
+                                    "value": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "additionalInfo",
+                            "label": "Additional information",
+                            "placeholder": "Additional information"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "reference2",
+                            "label": "Reference 2",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "referenceFullName2",
+                            "label": "Reference full name",
+                            "placeholder": "Reference full name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "designation",
+                            "label": "Designation",
+                            "placeholder": "Designation"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "companyName2",
+                            "label": "Company name",
+                            "placeholder": "Company name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "contactTelephone2",
+                            "label": "Contact telephone",
+                            "placeholder": "Contact telephone"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "companyEmailAddress2",
+                            "label": "Company email address",
+                            "placeholder": "Company email address"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "knowPerson2",
+                            "label": "How do you know this person"
+                        },
+                        {
+                            "type": "Radio",
+                            "name": "isReferenceCurrentEmployment2",
+                            "label": "Is the reference linked to current employment? ",
+                            "options": [
+                                {
+                                    "label": "No",
+                                    "value": false
+                                },
+                                {
+                                    "label": "Yes",
+                                    "value": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "additionalInfo2",
+                            "label": "Additional information",
+                            "placeholder": "Additional information"
+                        }
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "",
+                    "name": "unemployment1",
+                    "class": "notThere",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "name": "unemploymentHistory",
+                            "label": "Unemployment history",
+                            "class": "page-title"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "accountForHistory",
+                            "label": "Please account for all periods of unemployment for the last five years",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Range",
+                            "name": "periods",
+                            "label": "Please account for all periods of unemployment for the last five years",
+                            "pattern": {
+                                "type": "Set",
+                                "label": "",
+                                "name": "period",
+                                "items": [
+                                    {
+                                        "type": "Datepicker",
+                                        "name": "periodFrom11",
+                                        "label": "Period from",
+                                        "placeholder": "dd/mm/yyyy"
+                                    },
+                                    {
+                                        "type": "Datepicker",
+                                        "name": "periodTo11",
+                                        "label": "To",
+                                        "placeholder": "dd/mm/yyyy"
+                                    },
+                                    {
+                                        "type": "Textarea",
+                                        "name": "reasons",
+                                        "label": "Reasons",
+                                        "placeholder": "Reasons"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "Employment details",
+                    "name": "employment1",
+                    "class": "notThere",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "name": "employmentDetails",
+                            "label": "Employment details",
+                            "class": "page-title"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "employmentHeader",
+                            "label": "Cras nec ullamcorper ante, vitae convallis ex. Mauris cursus lacinia accumsan. Aenean libero lacus, mattis in sapien at, iaculis lacinia elit. Etiam facilisis est id ornare lacinia. Proin eget sem sem. Donec sed nisi lobortis erat convallis sagittis porta sit amet libero. Nulla luctus velit vel congue imperdiet. Nullam nec ex ut tortor elementum laoreet",
+                            "class": "declaration"
+                        },
+                        {
+                            "type": "Range",
+                            "name": "employments",
+                            "label": "Employments",
+                            "pattern": {
+                                "type": "Set",
+                                "label": "employment",
+                                "name": "employment",
+                                "items": [
+                                    {
+                                        "type": "Label",
+                                        "name": "current employer",
+                                        "label": "Current employer",
+                                        "class": "page-sub-title"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "totalYearsExperience",
+                                        "label": "Total years of experience",
+                                        "class": "full-span"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "companyName",
+                                        "label": "Company name",
+                                        "class": "full-span"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "mainOfficeAddress",
+                                        "label": "Main office address"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "reportingOfficeAddress",
+                                        "label": "Reporting office address"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "companyTelephone",
+                                        "label": "Company telephone (Landline)"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "companyWebsite",
+                                        "label": "Company website"
+                                    },
+                                    {
+                                        "type": "Datepicker",
+                                        "name": "employmentPeriodFrom",
+                                        "label": "Employment period from",
+                                        "placeholder": "dd/mm/yyyy"
+                                    },
+                                    {
+                                        "type": "Datepicker",
+                                        "name": "employmentPeriodTo",
+                                        "label": "Employment period To",
+                                        "placeholder": "dd/mm/yyyy"
+                                    },
+                                    {
+                                        "type": "Label",
+                                        "name": "jobdetails",
+                                        "label": "Job Details",
+                                        "class": "page-sub-title"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "positionHeld",
+                                        "label": "Position held"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "department",
+                                        "label": "Department"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "employeeCode",
+                                        "label": "Employee code"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "ssn",
+                                        "label": "SSN (if applicable)"
+                                    },
+                                    {
+                                        "type": "Radio",
+                                        "name": "employmentType",
+                                        "label": "Employment type",
+                                        "options": [
+                                            {
+                                                "label": "Permanent",
+                                                "value": "1"
+                                            },
+                                            {
+                                                "label": "Temporary",
+                                                "value": "25"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "Label",
+                                        "name": "reportingManager",
+                                        "label": "Reporting manager's details",
+                                        "class": "page-sub-title"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "managerName",
+                                        "label": "Name"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "jobTitle",
+                                        "label": "Job title"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "department",
+                                        "label": "Department"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "contactNumber",
+                                        "label": "Present contact number"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "emailId",
+                                        "label": "Official email ID"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "agencyName",
+                                        "label": "Agency name"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "details",
+                                        "label": "Details (Temporary / contractual"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "reasons",
+                                        "label": "Reasons for leaving"
+                                    },
+                                    {
+                                        "type": "Div",
+                                        "name": "place1",
+                                        "label": ""
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "baseSalary",
+                                        "label": "Starting base salary"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "otherCompensation",
+                                        "label": "Other compensation"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "baseTotal",
+                                        "label": "Total"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "finalBaseSalary",
+                                        "label": "Final base salary"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "finalOtherCompensation",
+                                        "label": "Other compensation"
+                                    },
+                                    {
+                                        "type": "Text",
+                                        "name": "finalTotal",
+                                        "label": "Total"
+                                    },
+                                    {
+                                        "type": "Radio",
+                                        "name": "isCurrentEmployment",
+                                        "label": "Is this current employment",
+                                        "options": [
+                                            {
+                                                "label": "Yes",
+                                                "value": true
+                                            },
+                                            {
+                                                "label": "No",
+                                                "value": false
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "Textarea",
+                                        "name": "pertinentInfo",
+                                        "label": "Any other pertinent information",
+                                        "validations": []
+                                    },
+                                    {
+                                        "type": "Input",
+                                        "name": "fileUpload",
+                                        "label": "Please attach a copy of experience and service certificate",
+                                        "htmlProps": {
+                                            "type": "file"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+
+
+
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "Skills and educational qualifications",
+                    "name": "skills",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "name": "skillsAnd",
+                            "label": "Skills and educational qualifications",
+                            "class": "page-title"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "skills",
+                            "label": "Skills",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "technicalSkills",
+                            "label": "Technical skills",
+                            "class": "notes"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "educationalRecord",
+                            "label": "Educational record - 10 and 10 + 2 qualification",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Input",
+                            "name": "fileUpload10",
+                            "label": "10th standard marksheet PDF <=5MB",
+                            "htmlProps": {
+                                "type": "file"
+                            }
+                        },
+                        {
+                            "type": "Input",
+                            "name": "fileUpload12",
+                            "label": "12th standard marksheet PDF <=5MB",
+                            "htmlProps": {
+                                "type": "file"
+                            }
+                        },
+                        {
+                            "type": "Label",
+                            "name": "educationalRecordHighest",
+                            "label": "Educational record highest qualification",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "universityBoardName",
+                            "label": "University / board name",
+                            "class": "full-span"
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "institution address",
+                            "label": "Institution address"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "contactTelephone",
+                            "label": "Contact telephone"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "city",
+                            "label": "City"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "state",
+                            "label": "State"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "country",
+                            "label": "Country"
+                        },
+                        {
+                            "type": "Checkbox",
+                            "name": "collegeUniversitySame",
+                            "label": "Check this if college is same as university"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "collegeName",
+                            "label": "College name",
+                            "class": "full-span"
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "collegeAddress",
+                            "label": "College address"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "contactTelephone",
+                            "label": "Contact telephone"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "city",
+                            "label": "City"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "state",
+                            "label": "State"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "country",
+                            "label": "Country"
+                        },
+                        {
+                            "type": "Div",
+                            "name": "place2",
+                            "label": ""
+                        },
+                        {
+                            "type": "Datepicker",
+                            "name": "from",
+                            "label": "From",
+                            "placeholder": "dd/mm/yyyy"
+                        },
+                        {
+                            "type": "Datepicker",
+                            "name": "to",
+                            "label": "To",
+                            "placeholder": "dd/mm/yyyy"
+                        },
+                        {
+                            "type": "Radio",
+                            "name": "isGraduated",
+                            "label": "Graduated",
+                            "options": [
+                                {
+                                    "label": "Yes",
+                                    "value": true
+                                },
+                                {
+                                    "label": "No",
+                                    "value": false
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Radio",
+                            "name": "program",
+                            "label": "Program",
+                            "options": [
+                                {
+                                    "label": "Full time",
+                                    "value": "f"
+                                },
+                                {
+                                    "label": "Part time",
+                                    "value": "p"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Text",
+                            "name": "reg",
+                            "label": "Reg / Roll no"
+                        },
+                        {
+                            "type": "Radio",
+                            "name": "copyCertificate",
+                            "label": "Copy of certificate attached",
+                            "options": [
+                                {
+                                    "label": "Yes",
+                                    "value": true
+                                },
+                                {
+                                    "label": "No",
+                                    "value": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "",
+                    "name": "candidate",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "name": "candidateInfo",
+                            "label": "Candidate information form",
+                            "class": "page-title"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "pleaseComplete",
+                            "label": "Please complete all information. Fields marked with a * are mandatory",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "note1",
+                            "label": "Note: Please avoid using short forms / abbreviations wherever possible",
+                            "class": "full-span"
+                        },
+                        {
+                            "type": "Input",
+                            "name": "profilePicture",
+                            "class": "info-file-upload",
+                            "label": "Employee profile picture (jpg/png/jpeg <=5MB)",
+                            "htmlProps": {
+                                "type": "file"
+                            }
+                        },
+                        {
+                            "type": "Text",
+                            "name": "firstName",
+                            "label": "First name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "middleName",
+                            "label": "Middle name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "lastName",
+                            "label": "Last name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "standardName",
+                            "label": "Standard format of writing the name(Your full name as in passport)"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "bloodGroup",
+                            "label": "Blood group"
+                        },
+                        {
+                            "type": "Div",
+                            "name": "place3",
+                            "label": ""
+                        },
+                        {
+                            "type": "Radio",
+                            "name": "everChangedName",
+                            "label": "Have you ever changed your name?",
+                            "class": "full-span",
+                            "options": [
+                                {
+                                    "label": "No",
+                                    "value": false
+                                },
+                                {
+                                    "label": "Yes",
+                                    "value": true
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Label",
+                            "name": "previousName",
+                            "label": "Previous name(s) / Maiden name (if applicable)",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "firstName1",
+                            "label": "First name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "middleName1",
+                            "label": "Middle name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "lastName1",
+                            "label": "Last name"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "fatherName",
+                            "label": "Father's name",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "firstName2",
+                            "label": "First name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "middleName2",
+                            "label": "Middle name"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "lastName2",
+                            "label": "Last name"
+                        },
+                        {
+                            "type": "Label",
+                            "name": "currentAddress",
+                            "label": "Current address",
+                            "class": "page-sub-title"
+                        },
+                        {
+                            "type": "Textarea",
+                            "name": "completeAddress",
+                            "label": "Complete address"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "city",
+                            "label": "City"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "postalCode",
+                            "label": "Postal code"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "state",
+                            "label": "State"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "landmark1",
+                            "label": "Landmark1"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "landmark2",
+                            "label": "Landmark2"
+                        },
+                        {
+                            "type": "Text",
+                            "name": "phoneNumber1",
+                            "label": "Phone number"
+                        },
+                        {
+                            "type": "Datepicker",
+                            "name": "periodFrom",
+                            "label": "Period of stay (from)",
+                            "placeholder": "dd/mm/yyyy"
+                        },
+                        {
+                            "type": "Datepicker",
+                            "name": "periodTo",
+                            "label": "Period of stay (To)",
+                            "placeholder": "dd/mm/yyyy"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

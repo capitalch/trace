@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Sushant Agrawal",
+      "authorEmail": "capitalch@gmail.com",
+      "authorUrl": ""
+    }
+  }
+}

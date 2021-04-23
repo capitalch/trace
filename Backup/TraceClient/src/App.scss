@@ -1,0 +1,283 @@
+html {
+  font-size: 16px;
+  // font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+// To appear all paginators of prime react at left side
+.p-paginator {
+  text-align: left!important;
+  }
+
+// .MuiButton-root {
+//   width: 100px!important;
+// }
+
+// In mobile device disable page refresh from pull down scroll
+body {
+  overscroll-behavior-y: contain;
+}
+
+.generic-dialog {
+  font: 0.8rem "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
+  .select-fin-year {
+    margin-top: 0.3rem;
+    width: 95%;
+    color: gray;
+    font-size: 0.8rem;
+  }
+  // .rw-widget-input and .rw-combobox are react-widgets.Combobx classes. These changes are necessary to compensate the input margin-top:0.2rem
+  .rw-widget-input {
+    margin-top: 0;
+  }
+
+  .rw-list {
+    max-height: 10rem;
+  }
+
+  .rw-combobox {
+    margin-top: 0.2rem;
+  }
+
+  input[type="checkbox"] {
+    width: 1.2em;
+  }
+
+  input {
+    width: 100%;
+    margin-top: 0.2rem;
+    height: 2.2rem;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .x-error {
+    margin: 0;
+    small {
+      color: red;
+
+      ul {
+        min-height: 15px;
+        margin: 0px;
+        padding-top: 3px;
+        padding-left: 1.5em;
+      }
+    }
+  }
+
+  label {
+    font-weight: bold;
+  }
+}
+
+.payment-voucher1 {
+  font: 0.8em "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  border: 2px solid green;
+
+  input,
+  textarea {
+    width: 100%;
+  }
+
+  padding: 1em;
+
+  .error {
+    color: red;
+  }
+
+  .x-error {
+    margin: 0;
+
+    small {
+      color: red;
+
+      ul {
+        min-height: 15px;
+        margin: 0px;
+        padding-top: 3px;
+        padding-left: 1.5em;
+      }
+    }
+  }
+
+  input,
+    button // label
+  {
+    line-height: 1.5em;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  .x-form-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: green;
+    justify-self: center;
+    vertical-align: middle;
+    line-height: 2em;
+  }
+
+  .x-header-set {
+    display: grid;
+    grid-template-columns: 12em 11em 10em 10em 12em 6em 1fr 4em;
+    grid-column-gap: 1em;
+    border-bottom: 1px solid#EEEEEE;
+
+    .x-tags {
+      grid-column: span 2;
+    }
+
+    .x-header-remarks {
+      grid-column: 7/9;
+    }
+  }
+
+  .decimal-right {
+    float: right;
+    color: red;
+  }
+
+  .x-voucher-set {
+    border-bottom: 1px solid#EEEEEE;
+    display: grid;
+    grid-template-columns: 24em 10em 10em 12em 6em 1fr 4em;
+    grid-column-gap: 1em;
+
+    .voucher-debits {
+      grid-column: 2/3;
+    }
+
+    .div3 {
+      grid-column: 5 / span 3;
+    }
+
+    .x-remarks {
+      grid-column: span 2;
+    }
+  }
+
+  .x-credit-set {
+    .x-credit-amount {
+      grid-column: 3/4;
+
+      input,
+      div {
+        text-align: end;
+      }
+    }
+  }
+
+  .x-debit-set {
+    .x-debit-amount {
+      grid-column: 2/3;
+
+      input,
+      div {
+        text-align: end;
+      }
+    }
+
+    .x-instr {
+      grid-column: 4/5;
+    }
+  }
+
+  .x-range-set {
+    display: grid;
+    grid-template-columns: 24em 10em 10em 12em 6em 1fr 4em;
+    grid-column-gap: 1em;
+
+    .x-debit-amount {
+      input,
+      div {
+        text-align: end;
+      }
+    }
+
+    .x-credit-amount {
+      grid-column: 3/4;
+
+      input,
+      div {
+        text-align: end;
+      }
+    }
+
+    .x-line-ref {
+      grid-column: 5/6;
+    }
+
+    .x-remarks {
+      grid-column: 6/7;
+    }
+
+    .x-add-minus {
+      grid-column: 6/7;
+    }
+
+    .x-gst {
+      grid-column: span 2;
+
+      input[type="checkbox"] {
+        width: 2em;
+        display: inline-block;
+      }
+
+      .x-gst-container {
+        display: flex;
+
+        .x-gst-details {
+          display: inline;
+          // margin-left: 0.3em;
+
+          input[type="text"] {
+            width: 7em;
+            font-size: 0.9em;
+            text-align: end;
+            margin-left: 0.2em;
+            margin-bottom: 0.2em;
+          }
+
+          input.x-gstin {
+            text-align: start;
+            width: 12em;
+          }
+
+          input.x-hsn {
+            text-align: start;
+            width: 6em;
+          }
+
+          input.x-rate {
+            width: 3em;
+          }
+        }
+      }
+    }
+  }
+
+  .x-display-journal-totals {
+    display: grid;
+    grid-template-columns: 24em 10em 10em 12em 6em 1fr 4em;
+    grid-column-gap: 1em;
+
+    .x-debit-totals {
+      grid-column: 2/3;
+    }
+  }
+
+  .x-range {
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  .x-button-set {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+}
