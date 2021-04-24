@@ -6,8 +6,8 @@ const server = http.createServer((req, res) => {
     res.end('hello')
 })
 
-server.listen(3001, async (err) => {
-    console.log('server listening at port 3001')
+server.listen(3000, async (err) => {
+    console.log('server listening at port 3000')
     const sourceConnString = 'DSN=capi2020'
     const destConnString = 'DSN=capi2021'
     // const destConnString = 'DSN=Acc'

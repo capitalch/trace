@@ -13,13 +13,15 @@ async function createTempTables(connString) {
         }
         let conn;
         try {
-          const conn = await odbc.connect(connString);
+          conn = await odbc.connect(connString);
         } catch (e) {
           console.log(e.message);
         }
         try {
           const dt = data.toString();
-          const ret = (await conn) && conn.query(dt);
+          if(conn){
+            await conn.query(dt)
+          }
         } catch (e) {
           console.log(e.message);
         } finally {
