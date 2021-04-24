@@ -14,7 +14,7 @@
     "odbc": "^2.3.6"
   },
   "devDependencies": {
-    "electron": "^11.3.0",
+    "electron": "^11.4.3",
     "electron-builder": "^22.10.5"
   }
 }

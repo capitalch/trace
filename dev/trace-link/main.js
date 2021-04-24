@@ -1,35 +1,49 @@
-const { app, BrowserWindow, Notification, ipcMain } = require("electron");
-const url = require("url");
-const path = require("path");
+const { app, BrowserWindow, Notification, ipcMain, Menu } = require('electron')
+const url = require('url')
+const path = require('path')
+const {odbcConnect} = require('./artifacts/mock-odbc')
 
-function createWindow() {
+function createWindow () {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: false
     },
-    args: process.argv,
-  });
+    args: process.argv
+  })
 
-  win.loadFile("react-app/build/index.html");
-  win.webContents.openDevTools();
+  win.loadFile('react-app/build/index.html')
+  win.webContents.openDevTools()
 }
 
-app
-  .whenReady()
-  .then(createWindow)
-  .catch((e) => console.log(e));
+app.whenReady().then(createWindow)
+.catch((e) => console.log(e));
 
-app.on("activate", () => {
+app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+    createWindow()
   }
-});
+})
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
   }
-});
+})
+
+const template = [
+  {
+      label: 'Custom',
+      submenu: [
+          {
+              label: 'odbc',
+              click: () => odbcConnect()
+          }
+      ]
+  }
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)
