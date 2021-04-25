@@ -2,7 +2,8 @@ import _ from 'lodash'
 import axios from 'axios'
 import clsx from 'clsx'
 import moment from 'moment'
-
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 import {
     Avatar,
     Badge,
@@ -46,17 +47,23 @@ import {
     Typography,
     useTheme,
 } from '@material-ui/core'
-
-function useSharedElements(){
+import { useIbuki, usingIbuki } from './utils/ibuki'
+function useSharedElements() {
     return {
         _,
         axios,
         Button,
         ButtonGroup,
         clsx,
+        DataTable,
         moment,
         Paper,
+        Column,
+        TextField,
+        Typography,
+        useIbuki,
+        usingIbuki,
     }
 }
 
-export {useSharedElements}
+export { useSharedElements }

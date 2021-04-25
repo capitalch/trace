@@ -16,6 +16,9 @@ import {
   blue,
   lightBlue,
 } from '@material-ui/core/colors'
+import 'primereact/resources/themes/nova/theme.css'
+import 'primereact/resources/primereact.min.css'
+import 'primeicons/primeicons.css'
 import {AppMain} from './app-main'
 
 declare module '@material-ui/core/styles/createPalette' {

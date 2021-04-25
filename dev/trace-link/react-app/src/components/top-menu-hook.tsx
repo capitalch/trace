@@ -4,36 +4,44 @@ import { useSharedElements } from '../shared-elements-hook'
 
 function useTopMenu() {
     const [, setRefresh] = useState({})
+    const { useIbuki } = useSharedElements()
+    const { emit } = useIbuki()
     const meta = useRef({
-        isMounted: false
+        isMounted: false,
     })
 
     useEffect(() => {
         meta.current.isMounted = true
 
-        return (() => {
+        return () => {
             meta.current.isMounted = false
-        })
+        }
     }, [])
 
-    return { meta, setRefresh }
+    function handleButtonClick(actionName: string) {
+        emit('TOPMENU-MAINBODY-LOAD-COMPONENT', actionName)
+    }
+
+    return {handleButtonClick, meta, setRefresh }
 }
 
 export { useTopMenu }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         content: {
             padding: theme.spacing(1),
             display: 'flex',
-            columnGap: theme.spacing(1),
+            columnGap: theme.spacing(2),
+            '& .menu-button': {
+                textTransform: 'none',
+                backgroundColor: 'dodgerBlue',
+                color: theme.palette.common.white,
+                padding: theme.spacing(1),
+            },
         },
 
-        dialog: {
-
-        },
-
+        dialog: {},
     })
 )
 export { useStyles }
