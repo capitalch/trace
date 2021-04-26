@@ -10,12 +10,19 @@ function TrackSaleSms() {
         meta,
         setRefresh,
     } = useTrackSaleSms()
-    const { Button, DataTable, Column, TextField } = useSharedElements()
+    const {
+        Button,
+        DataTable,
+        IconButton,
+        InputAdornment,
+        SearchIcon,
+        TextField,
+    } = useSharedElements()
     const styles = useStyles()
 
     return (
         <div className={styles.content}>
-            <Typography  variant="subtitle1" component="div" className='title'>
+            <Typography variant="subtitle1" component="div" className="title">
                 {meta.current.title}
             </Typography>
             <div className="header">
@@ -39,10 +46,38 @@ function TrackSaleSms() {
                     onClick={handleSendSms}>
                     Send sms
                 </Button>
+                <TextField
+                    value={meta.current.globalFilter}
+                    placeholder="Global search"
+                    onChange={(e) => {
+                        meta.current.globalFilter = e.target.value
+                        meta.current.isMounted && setRefresh({})
+                    }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon />
+                            </InputAdornment>
+                        ),
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    size="small"
+                                    onClick={(e) => {
+                                        meta.current.globalFilter = ''
+                                        meta.current.isMounted && setRefresh({})
+                                    }}>
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
             </div>
             <DataTable
                 className="data-table"
-                // dataKey="id"
+                globalFilter={meta.current.globalFilter}
+                scrollable={true}
+                scrollHeight="calc(100vh - 20rem)"
                 selectionMode="multiple"
                 selection={meta.current.selectedRows}
                 onSelectionChange={(e) => {

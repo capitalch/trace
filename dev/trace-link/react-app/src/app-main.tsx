@@ -6,11 +6,12 @@ import { MainBody } from './components/main-body'
 
 function AppMain() {
     const classes = useStyles()
-    const { Paper } = useSharedElements()
+    const {LoadingIndicator, Paper } = useSharedElements()
     return (
         <Paper className={classes.content}>
             <TopMenu />
             <MainBody />
+            <LoadingIndicator />
         </Paper>
     )
 }

@@ -4,8 +4,9 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core'
 
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    const { Column, moment } = useSharedElements()
+    const { Column, moment, toDecimalFormat } = useSharedElements()
     const meta = useRef({
+        globalFilter: '',
         isMounted: false,
         saleData: mockSaleData,
         selectedDate: moment().format('YYYY-MM-DD'),
@@ -27,6 +28,17 @@ function useTrackSaleSms() {
 
     function handleSendSms() {}
 
+    function sumAmount() {
+        const result = meta.current.saleData.reduce(
+            (prev, curr) => {
+                const amt = prev.total_amt + curr.total_amt
+                return {total_amt:amt}
+            },
+            { total_amt: 0 }
+        )
+        return toDecimalFormat(result.total_amt)
+    }
+
     function getColumns() {
         let numb = 0
         function incr() {
@@ -36,28 +48,138 @@ function useTrackSaleSms() {
             <Column
                 key={incr()}
                 selectionMode="multiple"
-                headerStyle={{ width: '3em' }}
+                headerStyle={{ width: '4em' }}
+                className="data-table-footer"
             />,
-            // <Column key={incr()} field="date" />,
-            // <Column key={incr()} field="bill_memo_id" />,
-            <Column key={incr()} field="ref_no" header="Ref no" />,
-            <Column key={incr()} field="mobile" header="Mobile" />,
-            <Column key={incr()} field="total_amt" header="Amount" />,
-            <Column key={incr()} field="name" header="Name" />,
-            <Column key={incr()} field="address" header="Address" />,
-            <Column key={incr()} field="pin" header="Pin" />,
-            <Column key={incr()} field="email" header="Email" />,
-
-            <Column key={incr()} field="acc_name" header="Account" />,
-            <Column key={incr()} field="gstin" header="Gstin" />,
-            <Column key={incr()} field="bill_memo" header="Bill / Memo" />,
-            <Column key={incr()} field="cgst" header="Cgst" />,
-            <Column key={incr()} field="sgst" header="Sgst" />,
-            <Column key={incr()} field="igst" header="Igst" />,
+            <Column
+                key={incr()}
+                style={{ width: '9rem', wordWrap: 'break-word' }}
+                field="ref_no"
+                header="Ref no"
+                footer={meta.current.saleData.length}
+                footerClassName="data-table-footer"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '10rem',
+                    wordWrap: 'break-word',
+                }}
+                field="name"
+                header="Name"
+                footer="Rows"
+                footerClassName="data-table-footer"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '8rem',
+                    wordWrap: 'break-word',
+                    textAlign: 'right',
+                }}
+                field="mobile"
+                header="Mobile"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '8rem',
+                    wordWrap: 'break-word',
+                    textAlign: 'right',
+                }}
+                body={(node) => toDecimalFormat(node.total_amt)}
+                header="Amount"
+                footer = {sumAmount}
+                footerClassName="data-table-footer"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '12rem',
+                    wordWrap: 'break-word',
+                }}
+                field="address"
+                header="Address"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '6rem',
+                    textAlign: 'right',
+                }}
+                field="pin"
+                header="Pin"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '8rem',
+                    wordWrap: 'break-word',
+                }}
+                field="email"
+                header="Email"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '8rem',
+                    wordWrap: 'break-word',
+                }}
+                field="acc_name"
+                header="Account"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '12rem',
+                    wordWrap: 'break-word',
+                }}
+                field="gstin"
+                header="Gstin"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '5rem',
+                    wordWrap: 'break-word',
+                }}
+                field="bill_memo"
+                header="Bill / Memo"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '6rem',
+                    wordWrap: 'break-word',
+                    textAlign: 'right',
+                }}
+                body={(node) => toDecimalFormat(node.cgst)}
+                header="Cgst"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '6rem',
+                    wordWrap: 'break-word',
+                    textAlign: 'right',
+                }}
+                body={(node) => toDecimalFormat(node.sgst)}
+                header="Sgst"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '6rem',
+                    wordWrap: 'break-word',
+                    textAlign: 'right',
+                }}
+                body={(node) => toDecimalFormat(node.igst)}
+                header="Igst"
+            />,
         ]
     }
 
-    return { getColumns, handleSendSms, handleRefresh, meta, setRefresh }
+    return { getColumns, handleSendSms, handleRefresh, meta, setRefresh, sumAmount }
 }
 
 export { useTrackSaleSms }
@@ -77,6 +199,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
             '& .data-table': {
                 marginTop: theme.spacing(2),
+                // minWidth: '110rem', // based on individual column width
+                fontSize: theme.spacing(1.8),
+                fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
+                // fontFamily:'lato',
+                '& .data-table-footer': {
+                    color: 'dodgerBlue',
+                    // fontSize: theme.spacing(1.3)
+                },
             },
         },
     })
@@ -89,7 +219,8 @@ const mockSaleData: any[] = [
         date: '2021-04-02',
         bill_memo_id: 2,
         name: 'SANJOY',
-        address: '',
+        address:
+            '22 CR Avenue, 2nd floor, near tram dipo, flat no 22, Apartment A, back side portion',
         pin: null,
         phone: null,
         email: null,
@@ -101,7 +232,7 @@ const mockSaleData: any[] = [
         type: 'S',
         bill_memo: 'M',
         roundoff: 0.01,
-        gstin: null,
+        gstin: '07AADCB2230M1ZV',
         cgst: 26.69,
         sgst: 26.69,
         igst: 0,
@@ -123,7 +254,7 @@ const mockSaleData: any[] = [
         type: 'S',
         bill_memo: 'B',
         roundoff: 0.02,
-        gstin: null,
+        gstin: '07AADCB2230M1ZV',
         cgst: 120.31,
         sgst: 120.31,
         igst: 0,

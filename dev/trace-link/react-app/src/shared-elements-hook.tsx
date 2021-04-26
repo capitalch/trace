@@ -47,8 +47,12 @@ import {
     Typography,
     useTheme,
 } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
 import { useIbuki, usingIbuki } from './utils/ibuki'
+import { utilMethods } from './utils/util-methods'
+import {LoadingIndicator} from './utils/loading-indicator'
 function useSharedElements() {
+    const { toDecimalFormat } = utilMethods()
     return {
         _,
         axios,
@@ -59,7 +63,12 @@ function useSharedElements() {
         moment,
         Paper,
         Column,
+        IconButton,
+        InputAdornment,
+        LoadingIndicator,
+        SearchIcon,
         TextField,
+        toDecimalFormat,
         Typography,
         useIbuki,
         usingIbuki,
