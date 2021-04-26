@@ -33,8 +33,8 @@ function useTrackSaleSms() {
         const selectedRows = meta.current.selectedRows
         if (selectedRows && Array.isArray(selectedRows) && selectedRows.length > 0) {
             if (areValidMobilesInRows(selectedRows)) {
-                const jsonPayload =  getJsonPayload()
-                // call ajax
+                const jsonPayload = getJsonPayload(selectedRows)
+                // call ajax to Flask and pass on the payload
             } else {
                 // const options = {
                 //     description: messages.errinvalidMobileNumber,
@@ -54,14 +54,19 @@ function useTrackSaleSms() {
             alert(messages.errSelectSmsItem)
         }
         emit('SHOW-LOADING-INDICATOR', false)
-      
+
         function areValidMobilesInRows(rows: any[]) {
             const ret = rows.every(x => isValidMobile(x.mobile))
             return (ret)
         }
 
-        async function getJsonPayload(){
-            return {}
+        async function getJsonPayload(rows: any[]) {
+            const payload = rows.map((row: any) => {
+                const ret: any[] = [] // get inventory details rows from ajax against bill_memo_id
+                row.products = ret
+                return (row)
+            })
+            return (payload)
         }
     }
 
