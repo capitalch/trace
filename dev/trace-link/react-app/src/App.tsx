@@ -1,5 +1,5 @@
-import React from 'react'
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { ConfirmProvider } from 'material-ui-confirm'
 import './App.scss'
 import {
   purple,
@@ -19,7 +19,7 @@ import {
 import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
-import {AppMain} from './app-main'
+import { AppMain } from './app-main'
 
 declare module '@material-ui/core/styles/createPalette' {
   interface Palette {
@@ -103,12 +103,14 @@ function App() {
       },
     },
   })
-
+  
   return (
-    <ThemeProvider theme={theme}>
-      <AppMain></AppMain>
+    <ThemeProvider  theme={theme}>
+      <ConfirmProvider>
+        <AppMain></AppMain>
+      </ConfirmProvider>
     </ThemeProvider>
-  );
+  )
 }
 
 export default App;

@@ -1,0 +1,7 @@
+{
+    "errSelectSmsItem": "Please select one or many rows to send SMS",
+    "errinvalidMobileNumber": "One or more mobile numbers are invalid",
+
+    "infoEmptySelection": "No selections",
+    "infoInvalidMobileNumber":"Invalid mobile number"
+}

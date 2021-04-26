@@ -4,6 +4,8 @@ import clsx from 'clsx'
 import moment from 'moment'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
+import { useConfirm } from 'material-ui-confirm'
+import messages from './messages.json'
 import {
     Avatar,
     Badge,
@@ -52,20 +54,24 @@ import { useIbuki, usingIbuki } from './utils/ibuki'
 import { utilMethods } from './utils/util-methods'
 import {LoadingIndicator} from './utils/loading-indicator'
 function useSharedElements() {
-    const { toDecimalFormat } = utilMethods()
+    const { toDecimalFormat, isValidMobile } = utilMethods()
+    const confirm = useConfirm()
     return {
         _,
         axios,
         Button,
         ButtonGroup,
         clsx,
+        confirm,
         DataTable,
         moment,
         Paper,
         Column,
+        isValidMobile,
         IconButton,
         InputAdornment,
         LoadingIndicator,
+        messages,
         SearchIcon,
         TextField,
         toDecimalFormat,

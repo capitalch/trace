@@ -19,13 +19,12 @@ function TrackSaleSms() {
         TextField,
     } = useSharedElements()
     const styles = useStyles()
-
     return (
         <div className={styles.content}>
             <Typography variant="subtitle1" component="div" className="title">
                 {meta.current.title}
             </Typography>
-            <div className="header">
+            <div  className="header">
                 <TextField
                     type="date"
                     onChange={(e) => {

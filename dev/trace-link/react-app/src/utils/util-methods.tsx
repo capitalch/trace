@@ -1,4 +1,5 @@
 function utilMethods() {
+    
     function toDecimalFormat(s: any) {
         s ?? (s = '')
         if (s === '') {
@@ -15,7 +16,17 @@ function utilMethods() {
         return ret
     }
 
-    return { toDecimalFormat }
+    function isValidMobile(mobile: any) {
+        let ret = false
+        mobile = String(mobile || '')
+        if (mobile) {
+            ret =
+                (mobile.length === 10 && !isNaN(mobile))
+        }
+        return ret
+    }
+
+    return {isValidMobile, toDecimalFormat }
 }
 
 export { utilMethods }

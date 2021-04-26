@@ -4,7 +4,9 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core'
 
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    const { Column, moment, toDecimalFormat } = useSharedElements()
+    const { Column, confirm, isValidMobile,
+        messages, moment, toDecimalFormat, useIbuki } = useSharedElements()
+    const { emit } = useIbuki()
     const meta = useRef({
         globalFilter: '',
         isMounted: false,
@@ -26,13 +28,48 @@ function useTrackSaleSms() {
         console.log(meta.current.selectedDate)
     }
 
-    function handleSendSms() {}
+    function handleSendSms() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        const selectedRows = meta.current.selectedRows
+        if (selectedRows && Array.isArray(selectedRows) && selectedRows.length > 0) {
+            if (areValidMobilesInRows(selectedRows)) {
+                const jsonPayload =  getJsonPayload()
+                // call ajax
+            } else {
+                // const options = {
+                //     description: messages.errinvalidMobileNumber,
+                //     title: messages.infoInvalidMobileNumber,
+                //     cancellationText: null,
+                // }
+                // confirm(options)
+                alert(messages.errinvalidMobileNumber)
+            }
+        } else {
+            // const options = {
+            //     description: messages.errSelectSmsItem,
+            //     title: messages.infoEmptySelection,
+            //     cancellationText: null,
+            // }
+            // confirm(options)
+            alert(messages.errSelectSmsItem)
+        }
+        emit('SHOW-LOADING-INDICATOR', false)
+      
+        function areValidMobilesInRows(rows: any[]) {
+            const ret = rows.every(x => isValidMobile(x.mobile))
+            return (ret)
+        }
+
+        async function getJsonPayload(){
+            return {}
+        }
+    }
 
     function sumAmount() {
         const result = meta.current.saleData.reduce(
             (prev, curr) => {
                 const amt = prev.total_amt + curr.total_amt
-                return {total_amt:amt}
+                return { total_amt: amt }
             },
             { total_amt: 0 }
         )
@@ -89,7 +126,7 @@ function useTrackSaleSms() {
                 }}
                 body={(node) => toDecimalFormat(node.total_amt)}
                 header="Amount"
-                footer = {sumAmount}
+                footer={sumAmount}
                 footerClassName="data-table-footer"
             />,
             <Column
@@ -118,6 +155,15 @@ function useTrackSaleSms() {
                 }}
                 field="email"
                 header="Email"
+            />,
+            <Column
+                key={incr()}
+                style={{
+                    width: '8rem',
+                    wordWrap: 'break-word',
+                }}
+                field="product"
+                header="Product"
             />,
             <Column
                 key={incr()}
