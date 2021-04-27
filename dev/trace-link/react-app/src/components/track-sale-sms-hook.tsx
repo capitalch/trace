@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSharedElements } from '../shared-elements-hook'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { makeStyles, Theme, createStyles, DialogContent } from '@material-ui/core'
 // import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
 // import odbc from 'odbc'
 import { sqls } from '../utils/sqls'
 
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    let odbc: any
-
+    // let odbc: any
+    let conn: any ={}
     const {
         Column,
         confirm,
@@ -33,33 +33,41 @@ function useTrackSaleSms() {
 
     useEffect(() => {
         meta.current.isMounted = true
-        loadSaleData()
+        isElectron() && doConn()
+        // loadSaleData()
         return () => {
             meta.current.isMounted = false
         }
     }, [])
 
-    if (isElectron()) {
-        odbc = window.require('odbc')
-    }
+    // if (isElectron()) {
+    //     const odbc = window.require('odbc')
+    //     const connString = 'DSN=capi2021'
+    //     conn = odbc.connect(connString)
+    // }
 
     // const { execSql } = useSqlAnywhere()
-
-    function handleRefresh() {        
-        loadSaleData()
+    async function doConn()
+    {
+        const odbc = window.require('odbc')
+        const connString = 'DSN=capi2021'
+        conn = await odbc.connect(connString)
+    }
+    
+    async function handleRefresh() {        
+        await loadSaleData()
     }
 
     async function execSql(queryKey: string, params: string[]) {
-        const connString = 'DSN=capi2021'
-        let conn
-        try {
-            conn = await odbc.connect(connString)
+        
+        // let conn
+        try {            
             const data = await conn.query(sqls[queryKey], params)
             return data
         } catch (e) {
             console.log(e.message)
         } finally {
-            conn && conn.close()
+            // conn && conn.close()
         }
     }
 
