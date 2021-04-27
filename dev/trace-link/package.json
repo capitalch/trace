@@ -17,6 +17,7 @@
     "electron-builder": "^22.10.5"
   },
   "dependencies": {
-    "node-gyp": "^8.0.0"
+    "node-gyp": "^8.0.0",
+    "odbc": "^2.3.6"
   }
 }

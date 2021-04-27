@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSharedElements } from '../shared-elements-hook'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
+// import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
 // import odbc from 'odbc'
 import { sqls } from '../utils/sqls'
 
@@ -51,12 +51,15 @@ function useTrackSaleSms() {
 
     async function execSql(queryKey: string, params: string[]) {
         const connString = 'DSN=capi2021'
+        let conn
         try {
-            const conn = await odbc.connect(connString)
+            conn = await odbc.connect(connString)
             const data = await conn.query(sqls[queryKey], params)
             return data
         } catch (e) {
             console.log(e.message)
+        } finally {
+            conn && conn.close()
         }
     }
 
