@@ -6,7 +6,7 @@ const {odbcConnect} = require('./artifacts/mock-odbc')
 function createWindow () {
   const win = new BrowserWindow({
     width: 1080,
-    height: 600,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -38,8 +38,12 @@ const template = [
       label: 'Custom',
       submenu: [
           {
-              label: 'odbc',
-              click: () => odbcConnect()
+              label: 'Sale',
+              click: () => odbcConnect('track-sale-sms', ['2021-04-02'])
+          },
+          {
+              label: 'Product details',
+              click: ()=> odbcConnect('track-get-product-details', [4])
           }
       ]
   }

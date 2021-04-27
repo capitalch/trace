@@ -103,13 +103,17 @@
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
 1.01 In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank.
 2.00 When focus change in purchase, sales waiting occurs without data changed. Check the logic of data changed. There is confusion. This is happening because onBlur event does not propagate the events. Try out clickAway event in place of onBlur event instead.
-2.01
+2.01 Security is open. Needs to fix it.
 
 ## Maintainance
 1.30 Github release management
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 21-04-2021 - 26-04-2021
+1. Started with Electron app, created React App
+2. UI created
 
 # 19-04-2021 - 20-04-2021
 1. Bug fix for in serial number for purchase, a comma was coming

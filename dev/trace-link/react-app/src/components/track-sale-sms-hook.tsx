@@ -1,13 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSharedElements } from '../shared-elements-hook'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
+// import odbc from 'odbc'
+import { sqls } from '../utils/sqls'
 
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    const { Column, confirm, isValidMobile,
-        messages, moment, toDecimalFormat, useIbuki } = useSharedElements()
+    let odbc: any
+
+    const {
+        Column,
+        confirm,
+        isElectron,
+        isValidMobile,
+        messages,
+        moment,
+        toDecimalFormat,
+        useIbuki,
+    } = useSharedElements()
+
     const { emit } = useIbuki()
-    const meta = useRef({
+    const meta: any = useRef({
         globalFilter: '',
         isMounted: false,
         saleData: mockSaleData,
@@ -19,66 +33,90 @@ function useTrackSaleSms() {
 
     useEffect(() => {
         meta.current.isMounted = true
+        loadSaleData()
         return () => {
             meta.current.isMounted = false
         }
     }, [])
 
-    function handleRefresh() {
-        console.log(meta.current.selectedDate)
+    if (isElectron()) {
+        odbc = window.require('odbc')
     }
 
-    function handleSendSms() {
+    // const { execSql } = useSqlAnywhere()
+
+    function handleRefresh() {        
+        loadSaleData()
+    }
+
+    async function execSql(queryKey: string, params: string[]) {
+        const connString = 'DSN=capi2021'
+        try {
+            const conn = await odbc.connect(connString)
+            const data = await conn.query(sqls[queryKey], params)
+            return data
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
+    async function handleSendSms() {
         emit('SHOW-LOADING-INDICATOR', true)
         const selectedRows = meta.current.selectedRows
-        if (selectedRows && Array.isArray(selectedRows) && selectedRows.length > 0) {
+        if (
+            selectedRows &&
+            Array.isArray(selectedRows) &&
+            selectedRows.length > 0
+        ) {
             if (areValidMobilesInRows(selectedRows)) {
-                const jsonPayload = getJsonPayload(selectedRows)
+                const jsonPayload = await getJsonPayload(selectedRows)
+                console.log(jsonPayload)
                 // call ajax to Flask and pass on the payload
             } else {
-                // const options = {
-                //     description: messages.errinvalidMobileNumber,
-                //     title: messages.infoInvalidMobileNumber,
-                //     cancellationText: null,
-                // }
-                // confirm(options)
                 alert(messages.errinvalidMobileNumber)
             }
         } else {
-            // const options = {
-            //     description: messages.errSelectSmsItem,
-            //     title: messages.infoEmptySelection,
-            //     cancellationText: null,
-            // }
-            // confirm(options)
             alert(messages.errSelectSmsItem)
         }
         emit('SHOW-LOADING-INDICATOR', false)
 
         function areValidMobilesInRows(rows: any[]) {
-            const ret = rows.every(x => isValidMobile(x.mobile))
-            return (ret)
+            const ret = rows.every((x) => isValidMobile(x.mobile))
+            return ret
         }
 
         async function getJsonPayload(rows: any[]) {
             const payload = rows.map((row: any) => {
-                const ret: any[] = [] // get inventory details rows from ajax against bill_memo_id
+                const ret: any[] = mockProductDetails // get inventory details rows from ajax against bill_memo_id
                 row.products = ret
-                return (row)
+                return row
             })
-            return (payload)
+            return payload
         }
     }
 
+    async function loadSaleData() {
+        if (isElectron()) {
+            meta.current.saleData = await execSql('track-sale-sms', [
+                meta.current.selectedDate,
+            ])
+        } else {
+            meta.current.saleData = mockSaleData
+        }
+        meta.current.isMounted && setRefresh({})
+    }
+
     function sumAmount() {
-        const result = meta.current.saleData.reduce(
-            (prev, curr) => {
-                const amt = prev.total_amt + curr.total_amt
-                return { total_amt: amt }
-            },
-            { total_amt: 0 }
-        )
-        return toDecimalFormat(result.total_amt)
+        const result = []
+        // meta.current.saleData?.reduce(
+        //     (prev: any, curr: any) => {
+        //         const amt = prev.total_amt + curr.total_amt
+        //         return { total_amt: amt }
+        //     },
+        //     { total_amt: 0 }
+        // )
+        // return toDecimalFormat(result.total_amt)
+        return 0
     }
 
     function getColumns() {
@@ -230,7 +268,14 @@ function useTrackSaleSms() {
         ]
     }
 
-    return { getColumns, handleSendSms, handleRefresh, meta, setRefresh, sumAmount }
+    return {
+        getColumns,
+        handleSendSms,
+        handleRefresh,
+        meta,
+        setRefresh,
+        sumAmount,
+    }
 }
 
 export { useTrackSaleSms }
@@ -251,7 +296,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .data-table': {
                 marginTop: theme.spacing(2),
                 // minWidth: '110rem', // based on individual column width
-                fontSize: theme.spacing(1.8),
+                fontSize: theme.spacing(1.6),
                 fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
                 // fontFamily:'lato',
                 '& .data-table-footer': {
@@ -399,3 +444,40 @@ const mockSaleData: any[] = [
         igst: 0,
     },
 ]
+
+const mockProductDetails = [
+    {
+        item: 'BAT/CHAG',
+        brand: 'NIKON',
+        model: 'MH24',
+        qty: 1,
+        price: 2415.25,
+        discount: 0,
+        spec: null,
+        hsn: null,
+    },
+    {
+        item: 'LED',
+        brand: 'SONY',
+        model: 'HX414',
+        qty: 1,
+        price: 15232.25,
+        discount: 0,
+        spec: null,
+        hsn: null,
+    },
+]
+
+// const options = {
+//     description: messages.errinvalidMobileNumber,
+//     title: messages.infoInvalidMobileNumber,
+//     cancellationText: null,
+// }
+// confirm(options)
+
+// const options = {
+//     description: messages.errSelectSmsItem,
+//     title: messages.infoEmptySelection,
+//     cancellationText: null,
+// }
+// confirm(options)

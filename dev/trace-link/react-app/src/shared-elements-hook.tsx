@@ -6,6 +6,7 @@ import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { useConfirm } from 'material-ui-confirm'
 import messages from './messages.json'
+
 import {
     Avatar,
     Badge,
@@ -56,6 +57,8 @@ import {LoadingIndicator} from './utils/loading-indicator'
 function useSharedElements() {
     const { toDecimalFormat, isValidMobile } = utilMethods()
     const confirm = useConfirm()
+    const isElectron = require('is-electron')
+
     return {
         _,
         axios,
@@ -70,6 +73,7 @@ function useSharedElements() {
         isValidMobile,
         IconButton,
         InputAdornment,
+        isElectron,
         LoadingIndicator,
         messages,
         SearchIcon,
@@ -80,5 +84,6 @@ function useSharedElements() {
         usingIbuki,
     }
 }
+
 
 export { useSharedElements }
