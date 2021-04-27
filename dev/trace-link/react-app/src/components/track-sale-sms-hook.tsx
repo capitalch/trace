@@ -136,7 +136,7 @@ function useTrackSaleSms() {
                 style={{ width: '9rem', wordWrap: 'break-word' }}
                 field="ref_no"
                 header="Ref no"
-                footer={meta.current.saleData.length}
+                // footer={meta.current.saleData.length}
                 footerClassName="data-table-footer"
             />,
             <Column
