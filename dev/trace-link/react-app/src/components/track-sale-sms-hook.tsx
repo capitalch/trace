@@ -99,6 +99,7 @@ function useTrackSaleSms() {
     }
 
     async function loadSaleData() {
+        emit('SHOW-LOADING-INDICATOR', true)
         if (isElectron()) {
             meta.current.saleData = await execSql('track-sale-sms', [
                 meta.current.selectedDate,
@@ -106,6 +107,7 @@ function useTrackSaleSms() {
         } else {
             meta.current.saleData = mockSaleData
         }
+        emit('SHOW-LOADING-INDICATOR', false)
         meta.current.isMounted && setRefresh({})
     }
 
