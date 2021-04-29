@@ -22,7 +22,7 @@ function useTopMenu() {
         emit('TOPMENU-MAINBODY-LOAD-COMPONENT', actionName)
     }
 
-    return {handleButtonClick, meta, setRefresh }
+    return { handleButtonClick, meta, setRefresh }
 }
 
 export { useTopMenu }
@@ -30,14 +30,23 @@ export { useTopMenu }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            padding: theme.spacing(1),
+            // padding: theme.spacing(1),
             display: 'flex',
             columnGap: theme.spacing(2),
+            marginTop: theme.spacing(0.5),
             '& .menu-button': {
                 textTransform: 'none',
-                backgroundColor: 'dodgerBlue',
-                color: theme.palette.common.white,
-                padding: theme.spacing(1),
+                // backgroundColor: 'dodgerBlue',
+                color: 'dodgerBlue',
+                height: theme.spacing(4),
+                fontSize: theme.spacing(2),
+                fontWeight: 'bolder',
+                '&:hover': {
+                    backgroundColor: theme.palette.lime.light,
+                    borderColor: '#0062cc',
+                    boxShadow: 'none',
+                },
+                // padding: theme.spacing(1),
             },
         },
 

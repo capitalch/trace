@@ -33,14 +33,17 @@ function TrackSaleSms() {
                     }}
                     value={meta.current.selectedDate || ''}
                 />
+
                 <Button
                     variant="contained"
                     color="primary"
+                    size='small'
                     onClick={handleRefresh}>
                     Refresh
                 </Button>
                 <Button
                     variant="contained"
+                    size='small'
                     color="secondary"
                     onClick={handleSendSms}>
                     Send sms

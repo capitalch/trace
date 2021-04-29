@@ -1,3 +1,4 @@
 {
-    "typescript.tsdk": "TraceClient\\node_modules\\typescript\\lib"
+    "python.pythonPath": "c:\\projects\\trace\\env\\Scripts\\python.exe",
+    "python.formatting.provider": "autopep8"
 }

@@ -1,17 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSharedElements } from '../shared-elements-hook'
-import { makeStyles, Theme, createStyles, DialogContent } from '@material-ui/core'
-// import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
-// import odbc from 'odbc'
-import { sqls } from '../utils/sqls'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+    // DialogContent,
+} from '@material-ui/core'
+import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
+import axios from 'axios'
+
+// import { sqls } from '../utils/sqls'
 
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    // let odbc: any
-    let conn: any ={}
+    let conn: any = {}
     const {
         Column,
-        confirm,
+        // confirm,
         isElectron,
         isValidMobile,
         messages,
@@ -24,7 +29,7 @@ function useTrackSaleSms() {
     const meta: any = useRef({
         globalFilter: '',
         isMounted: false,
-        saleData: mockSaleData,
+        saleData: [], //mockSaleData,
         selectedDate: moment().format('YYYY-MM-DD'),
         selectedRows: [],
         tableHeader: 'Sale data',
@@ -33,42 +38,26 @@ function useTrackSaleSms() {
 
     useEffect(() => {
         meta.current.isMounted = true
-        isElectron() && doConn()
-        // loadSaleData()
         return () => {
             meta.current.isMounted = false
         }
     }, [])
 
-    // if (isElectron()) {
-    //     const odbc = window.require('odbc')
-    //     const connString = 'DSN=capi2021'
-    //     conn = odbc.connect(connString)
-    // }
+    const { execSql } = useSqlAnywhere()
 
-    // const { execSql } = useSqlAnywhere()
-    async function doConn()
-    {
-        const odbc = window.require('odbc')
-        const connString = 'DSN=capi2021'
-        conn = await odbc.connect(connString)
-    }
-    
-    async function handleRefresh() {        
-        await loadSaleData()
-    }
-
-    async function execSql(queryKey: string, params: string[]) {
-        
-        // let conn
-        try {            
-            const data = await conn.query(sqls[queryKey], params)
-            return data
-        } catch (e) {
-            console.log(e.message)
-        } finally {
-            // conn && conn.close()
+    async function handleRefresh() {
+        meta.current.selectedRows = []
+        emit('SHOW-LOADING-INDICATOR', true)
+        if (isElectron()) {
+            const saleData = await execSql('track-sale-sms', [
+                meta.current.selectedDate,
+            ])
+            meta.current.saleData = saleData.map((x:any)=>x) // Just to clean the array
+        } else {
+            meta.current.saleData = mockSaleData
         }
+        emit('SHOW-LOADING-INDICATOR', false)
+        meta.current.isMounted && setRefresh({})
     }
 
     async function handleSendSms() {
@@ -80,8 +69,14 @@ function useTrackSaleSms() {
             selectedRows.length > 0
         ) {
             if (areValidMobilesInRows(selectedRows)) {
-                const jsonPayload = await getJsonPayload(selectedRows)
-                console.log(jsonPayload)
+                const jsonPayload: any = await getJsonPayload(selectedRows)
+                const config: any = {
+                    method: 'post',
+                    url: 'http://localhost:5000/track-bills',
+                    data: jsonPayload,
+                }
+                const response = await axios(config)
+                console.log(response)
                 // call ajax to Flask and pass on the payload
             } else {
                 alert(messages.errinvalidMobileNumber)
@@ -97,39 +92,39 @@ function useTrackSaleSms() {
         }
 
         async function getJsonPayload(rows: any[]) {
-            const payload = rows.map((row: any) => {
-                const ret: any[] = mockProductDetails // get inventory details rows from ajax against bill_memo_id
-                row.products = ret
-                return row
-            })
-            return payload
+            const len = rows.length
+            for(let i=0 ; i< len; i++){ // map function did not work. It returned promise instead of data
+                const billMemoId = rows[i].bill_memo_id
+                const produc = await execSql('track-get-product-details', [billMemoId])
+                const products = produc.map((x: any)=>x) // needed tfor cleanup
+                rows[i].products = products
+              }
+            // const payload =  await rows.map(async (row: any) => {
+            //     let ret: any[] = []
+            //     if (isElectron()) {
+            //         const bill_memo_id: any = row.bill_memo_id
+            //         ret = await execSql('track-get-product-details', [bill_memo_id])
+            //     } else {
+            //         ret = await mockProductDetails
+            //     }               
+            //     row.products = ret
+            //     return row
+            // })
+            
+            return rows
         }
-    }
-
-    async function loadSaleData() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        if (isElectron()) {
-            meta.current.saleData = await execSql('track-sale-sms', [
-                meta.current.selectedDate,
-            ])
-        } else {
-            meta.current.saleData = mockSaleData
-        }
-        emit('SHOW-LOADING-INDICATOR', false)
-        meta.current.isMounted && setRefresh({})
     }
 
     function sumAmount() {
-        const result = []
-        // meta.current.saleData?.reduce(
-        //     (prev: any, curr: any) => {
-        //         const amt = prev.total_amt + curr.total_amt
-        //         return { total_amt: amt }
-        //     },
-        //     { total_amt: 0 }
-        // )
-        // return toDecimalFormat(result.total_amt)
-        return 0
+        meta.current.saleData = meta.current.saleData || []
+        const result = meta.current.saleData.reduce(
+            (prev: any, curr: any) => {
+                const amt = prev.total_amt + curr.total_amt
+                return { total_amt: amt }
+            },
+            { total_amt: 0 }
+        )
+        return toDecimalFormat(result.total_amt)
     }
 
     function getColumns() {
@@ -138,20 +133,23 @@ function useTrackSaleSms() {
             return numb++
         }
         return [
+            // checkbox
             <Column
                 key={incr()}
                 selectionMode="multiple"
                 headerStyle={{ width: '4em' }}
                 className="data-table-footer"
             />,
+            // ref_no
             <Column
                 key={incr()}
                 style={{ width: '9rem', wordWrap: 'break-word' }}
                 field="ref_no"
                 header="Ref no"
-                // footer={meta.current.saleData.length}
+                footer={meta.current.saleData?.length || 0}
                 footerClassName="data-table-footer"
             />,
+            // name
             <Column
                 key={incr()}
                 style={{
@@ -163,6 +161,7 @@ function useTrackSaleSms() {
                 footer="Rows"
                 footerClassName="data-table-footer"
             />,
+            // mobile
             <Column
                 key={incr()}
                 style={{
@@ -173,6 +172,7 @@ function useTrackSaleSms() {
                 field="mobile"
                 header="Mobile"
             />,
+            // amount
             <Column
                 key={incr()}
                 style={{
@@ -185,15 +185,17 @@ function useTrackSaleSms() {
                 footer={sumAmount}
                 footerClassName="data-table-footer"
             />,
+            //address
             <Column
                 key={incr()}
+                className="overflow-ellipsis"
                 style={{
                     width: '12rem',
-                    wordWrap: 'break-word',
                 }}
                 field="address"
                 header="Address"
             />,
+            //pin
             <Column
                 key={incr()}
                 style={{
@@ -203,33 +205,7 @@ function useTrackSaleSms() {
                 field="pin"
                 header="Pin"
             />,
-            <Column
-                key={incr()}
-                style={{
-                    width: '8rem',
-                    wordWrap: 'break-word',
-                }}
-                field="email"
-                header="Email"
-            />,
-            <Column
-                key={incr()}
-                style={{
-                    width: '8rem',
-                    wordWrap: 'break-word',
-                }}
-                field="product"
-                header="Product"
-            />,
-            <Column
-                key={incr()}
-                style={{
-                    width: '8rem',
-                    wordWrap: 'break-word',
-                }}
-                field="acc_name"
-                header="Account"
-            />,
+            // gstin
             <Column
                 key={incr()}
                 style={{
@@ -239,6 +215,39 @@ function useTrackSaleSms() {
                 field="gstin"
                 header="Gstin"
             />,
+            //email
+            <Column
+                key={incr()}
+                className="overflow-ellipsis"
+                style={{
+                    width: '8rem',
+                    wordWrap: 'break-word',
+                }}
+                field="email"
+                header="Email"
+            />,
+            //product
+            <Column
+                key={incr()}
+                className="overflow-ellipsis"
+                style={{
+                    width: '8rem',
+                }}
+                field="product"
+                header="Product"
+            />,
+            // account name
+            <Column
+                key={incr()}
+                className="overflow-ellipsis"
+                style={{
+                    width: '8rem',
+                }}
+                field="acc_name"
+                header="Account"
+            />,
+
+            // bill_memo
             <Column
                 key={incr()}
                 style={{
@@ -248,6 +257,7 @@ function useTrackSaleSms() {
                 field="bill_memo"
                 header="Bill / Memo"
             />,
+            // cgst
             <Column
                 key={incr()}
                 style={{
@@ -258,6 +268,7 @@ function useTrackSaleSms() {
                 body={(node) => toDecimalFormat(node.cgst)}
                 header="Cgst"
             />,
+            // sgst
             <Column
                 key={incr()}
                 style={{
@@ -268,6 +279,7 @@ function useTrackSaleSms() {
                 body={(node) => toDecimalFormat(node.sgst)}
                 header="Sgst"
             />,
+            //igst
             <Column
                 key={incr()}
                 style={{
@@ -304,17 +316,19 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginTop: theme.spacing(2),
                 display: 'flex',
                 alignItems: 'center',
-                columnGap: theme.spacing(6),
+                columnGap: theme.spacing(2),
             },
             '& .data-table': {
                 marginTop: theme.spacing(2),
-                // minWidth: '110rem', // based on individual column width
-                fontSize: theme.spacing(1.6),
+                fontSize: theme.spacing(1.5),
                 fontFamily: 'Verdana, Geneva, Tahoma, sans-serif',
-                // fontFamily:'lato',
                 '& .data-table-footer': {
                     color: 'dodgerBlue',
-                    // fontSize: theme.spacing(1.3)
+                },
+                '& .overflow-ellipsis': {
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                 },
             },
         },

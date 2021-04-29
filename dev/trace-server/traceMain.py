@@ -227,6 +227,11 @@ def graphql_server():
 def testFunc():
     return jsonify("abcd"), 200
 
+@app.route("/track-bills", methods=["POST", "GET"])
+def track_bills():
+    data = request.get_json() 
+    return jsonify(data), 200
+
 
 @app.route("/downloadFile", methods=["GET", "POST"])
 def downloadFile():
