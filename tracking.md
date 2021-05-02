@@ -1,3 +1,43 @@
+set search_path to demounit1;
+with cte1 as (
+	select (CASE WHEN "dc" = 'D' then "amount" else -"amount" end) "amount"
+		from "AccOpBal"
+			where "branchId" = 1
+				and "finYearId" = 2021
+				and "accId" = 118
+),
+cte2 as (
+	select "tranDate", SUM(CASE WHEN "dc" = 'D' then "amount" else 0 end) as "debits",
+		SUM(CASE WHEN "dc" = 'C' then "amount" else 0 end) as "credits"
+		from "TranH" h
+			join "TranD" d
+				on h."id" = d."tranHeaderId"
+		where "branchId" = 1
+				and "finYearId" = 2021
+				and "accId" = 118
+		GROUP BY "tranDate"
+			ORDER BY "tranDate"
+	
+),
+cte3 as (
+	select "tranDate", "debits", "credits",
+		SUM("debits" - "credits") OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) "clos"
+			from cte2
+),
+cte4 as (
+	select "tranDate", LAG("clos", 1, '0') OVER (ORDER by "tranDate") "open",
+		"debits", "credits", "clos"
+			from cte3
+),
+cte5 as (
+	select "tranDate", "open" + (select "amount" from cte1) "opening", 
+	"debits", "credits", 
+	"clos" +  (select "amount" from cte1) "closing"
+		from cte4 c
+)
+
+select * from cte5 order by "tranDate" DESC
+
 ## Awe some react components libraries
 1. https://github.com/brillout/awesome-react-components
 2. Followed https://medium.com/@devesu/how-to-build-a-react-based-electron-app-d0f27413f17f
@@ -55,6 +95,10 @@
 1.01 Service+ integration with pull sales info into Trace
 1.001 Track+ electronic bill, send through SMS
 1.002 The view in many places show multiple lines. Desirable to have single line.
+1.003 Daily balance for cash book
+1.004 Purchase: default date should be null
+1.005 Login screen should be modal, should work on "enter" key
+1.006 serial number error in purchases
 1.02 Auto subledger create bill
 1.03 Purchase invoice mismatch allow saving
 1.04 GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ.

@@ -5,3 +5,6 @@
 INSERT INTO "Settings" ("id", "key", "intValue")
 	SELECT 4, 'lastProductCode', 1000
 		WHERE NOT EXISTS (SELECT 1 FROM "Settings" WHERE "id"=4);
+
+ALTER TABLE IF EXISTS "ExtBusinessContactsAccM"
+	ADD COLUMN IF NOT EXISTS "stateCode" SMALLINT DEFAULT 19;

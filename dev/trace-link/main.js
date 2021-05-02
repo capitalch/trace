@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Notification, ipcMain, Menu } = require('electron')
 const url = require('url')
 const path = require('path')
+const config = require('./config.json')
 const { odbcConnect } = require('./artifacts/mock-odbc')
 
 function createWindow() {

@@ -20,12 +20,12 @@ gzipping
 "postbuild": "gzip build/static/js/*.js && gzip build/static/css/*.css"
 
 # Creating and activating virtual env in windows in context of Trace
-download and Install Python from installer
+Download and Install Python from installer
 cd c:\projects\trace
 1. python -m pip install virtualenv
 2. python -m venv env
 3. env\Scripts\activate
-4. pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter
+4. pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter pdfkit
 5. in .vscode settings.json
 {
     "python.pythonPath": "c:\\projects\\trace\\env\\Scripts\\python.exe",
@@ -67,20 +67,16 @@ complete
 
 * Because of settings.json the environment is switched to "env"
 
-## Activate virtual env in windows by
-env/scripts/activate
-```pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter```
-
 ## Deployment procedures at Cloudjiffy Docker container / saas
-
-# Step 1: Build and upload build and static folder
-1. Build application with **npm run build**. This will create two folders build and inside the build folder static folder is created. Take out this static folder and keep it at same level of build folder.
-2. For local testing copy these two folders in the same folder where flask server is running, say at the level of traceServer folder (not inside the folder but outside it at same level)
-3. Note that client config.json is configured in the manner that for production it connects to flask.cloudjiffy.net and for development it connects to localhost:5000
-4. Delete folders build and static from app.cloudjiffy.com --> flask ROOT directory. Zip locally these two folders and upload to ROOT directory of cloudjiffy --> flask. Unzip it in command prompt. unzip dev.zip
-
-# Step 2: Upload TraceServer
-1. zip and upload the Traceserver and unzip in the ROOT folder
+# Step 1: Build client
+  a) Build application with **npm run build** at trace-client. This will create build folder, inside that static folder.
+# Step 2: Create local server environment, zip and upload
+  a) Create a local Deployment folder, in that copy TraceServer
+  b) Take out static folder from build folder and copy both in deployment folder adjacent to TraceServer folder. So you have in Deployment TraceServer, build, static
+  c) Copy the server side config.json in TraceServer folder. Originally it has client side config.json
+  c) zip the TraceServer, build, static folders and upload to cloudjiffy and unzip it
+  d) At cloudjiffy you must have folder structure TraceServer, build ,static
+  e) Restart application server cloudjiffy
 
 # Step 3: Create virtualenv if not there and install using pip
 1. virtualenv virtenv
@@ -103,20 +99,6 @@ try flask.cloudjiffy.net
   CORS(app, expose_headers='SELECTION-CRITERIA')
   here 'SELECTION-CRITERIA' is custom header. Otherwise you won't get it in server. This digout costed me an entire Sunday.
 4. Important to see the config.json file at client. It contains the development and production url for Graphql endpoint.
-
-
-
-## Install virtual environment env 
-python -m venv env
-
-## Postman
-* Used for sending data to Flask server. For mutation all data sent to server is JSON data. The JSON data from Postman was of following format. Check the "" for string format. The '' does not work. Inside "" the json data needs to be escaped. The content-type is application/json. 
-
-mutation { jAddAdam(inputJson:
-" { \"parent\": {            \"name\": \"adam1\", \"value\": { \"sample\": \"def\" } }}"
-) { id    }    }
-
-This is a mutation with name jAddAdam. This is a test scenario. All insert and update data will have similar JSON which is converted to SQL's at server by using a generic function in Python
 
 ## Server side Tips
 * I will be using several json strings from client to be sent to server having graphQL. The json string will be used to create SQL statements for data insertion in db. Python makes use of properly formatted JSON having double quotes (""). This is valid json ``` {"a":"1", "b":"2"} ``` in Python whereas ``` {a: "1", b:"2"} ``` is not. Python simplejson and json library's loads method won't work on invalid json. Use demjson.decode('not a goog json') to make use of bad json in Python. This will save you from escaping json string when you send it as graphql mutation argument.
@@ -632,6 +614,11 @@ See how I provided a blank value for the value field. This is important to stop 
 * For number formatting and input of numbers a library react-number-format is used. It is used in the Money control in html-core.tsx
 * For searchable drop down a library react-select is used.
 
+## Postman
+* Used for sending data to Flask server. For mutation all data sent to server is JSON data. The JSON data from Postman was of following format. Check the "" for string format. The '' does not work. Inside "" the json data needs to be escaped. The content-type is application/json. 
 
+mutation { jAddAdam(inputJson:
+" { \"parent\": {            \"name\": \"adam1\", \"value\": { \"sample\": \"def\" } }}"
+) { id    }    }
 
-
+This is a mutation with name jAddAdam. This is a test scenario. All insert and update data will have similar JSON which is converted to SQL's at server by using a generic function in Python

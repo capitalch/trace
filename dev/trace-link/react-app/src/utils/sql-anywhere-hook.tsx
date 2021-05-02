@@ -3,12 +3,13 @@ import { sqls } from './sqls'
 // const isElectron = require('is-electron')
 
 function useSqlAnywhere() {
+    const win: any = window
+    const config = win.config
+    const databaseName = config['database']
     async function execSql(
         queryKey: string,
         params: string[],
-        databaseName = 'capi2021'
     ) {
-        // const connString = 'DSN=capi2021'
         let conn: any = null
         try {
             const connString = `DSN=${databaseName}`
@@ -17,7 +18,7 @@ function useSqlAnywhere() {
             const data = await conn.query(sqls[queryKey], params)
             return data
         } catch (e) {
-            console.log(e.message)
+            throw e //console.log(e.message)
         } finally {
             conn && conn.close()
         }

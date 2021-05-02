@@ -18,9 +18,14 @@ from entities.authentication.artifactsHelper import loginHelper
 from loadConfig import cfg
 from downloadHelper import handleDownload
 from util import setMailConfig
+import pdfkit
+import os
 
-app = Flask(__name__, static_folder="../static",
-            template_folder="../build")
+# app = Flask(__name__, static_folder="../static",
+#             template_folder="../build")
+# app = Flask(__name__, template_folder="build", static_folder="build/static") working
+app = Flask(__name__, template_folder="build", static_folder='build/static')
+print('working dir:', os.getcwd(), 'static folder:', app.static_folder, 'static url path:', app.static_url_path, 'template folder:', app.template_folder)
 
 setMailConfig(app)
 DB_NAME = 'traceEntry'
@@ -102,6 +107,7 @@ def setDbName(info, entityName):
                      'clientId': clientId, 'entityName': entityName}, isMultipleRows=False)
     info.context['dbName'] = result['dbName']
 
+
 @query.field("menu")
 def resolve_menu(parent, info):
     # dbName = 'root'
@@ -110,6 +116,8 @@ def resolve_menu(parent, info):
     pass
 
 # Following lines are important
+
+
 @query.field("accounts")
 def resolve_accounts_query(parent, info):
     setDbName(info, 'accounts')
@@ -228,6 +236,23 @@ def testFunc():
     return jsonify("abcd"), 200
 
 
+@app.route("/track-bills", methods=["POST", "GET"])
+def track_bills():
+    data = request.get_json()
+    return jsonify(data), 200
+
+
+@app.route('/track-download-bill', methods=["GET"])
+def track_download_bill():
+    file = os.path.join(app.root_path, 'templates', 'bill-template.html')
+    rendered = render_template('../billTemplate.html',companyName='Capital chowringhee pvt ltd', address1 = '12 J.L. Nehru road', address2 = 'Kol - 700013',)
+    pdf = pdfkit.from_string(rendered, False)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = 'application/pdf'
+    response.headers["Content-Disposition"] = 'inline'
+    return response
+
+
 @app.route("/downloadFile", methods=["GET", "POST"])
 def downloadFile():
     payload = contextValue(request)
@@ -236,26 +261,32 @@ def downloadFile():
     # return processDownloadExcel(payload, request.json)
     # return testDownload()
 
+
 @app.route('/')
 def serveStatic():
     return render_template('index.html')
 
+
 @app.route('/demo')
 def serveDemo():
-    return send_from_directory('../demo/','index.html')
+    return send_from_directory('../demo/', 'index.html')
     # render_template('../build/index.html')
 
 
 @app.route("/manifest.json")
 def manifest():
-    return send_from_directory('../../build', 'manifest.json')
+    # return send_from_directory('../../build', 'manifest.json')
+    return send_from_directory('build', 'manifest.json')
 
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory('../../build', 'favicon.ico')
+    # return send_from_directory('../../build', 'favicon.ico')
+    return send_from_directory('build', 'favicon.ico')
+
 
 
 @app.route('/logo192.png')
 def logo():
-    return send_from_directory('../../build', 'logo192.png')
+    # return send_from_directory('../../build', 'logo192.png')
+    return send_from_directory('build', 'logo192.png')

@@ -159,24 +159,6 @@ def getPool(dbName):
         #     1, 500, user=cfg[dbName]['user'], password=cfg[dbName]['password'], host=cfg[dbName]['host'], port=cfg[dbName]['port'], database=cfg[dbName]['database'])
     return poolStore[dbName]
 
-    # def getSetAutoRefNo(sqlObject, cursor, no):
-#     try:
-#         lastNoSql = allSqls["get_set_last_voucher_no"]
-#         # converted to string because the sql function args are smallint type. String type property converts to smallint
-#         tup = (str(sqlObject["data"][0]["branchId"]), str(
-#             sqlObject["data"][0]["tranTypeId"]), str(sqlObject["data"][0]["finYearId"]), no)
-#         cursor.execute(lastNoSql, tup)
-#         ret = cursor.fetchone()
-#         branchCode, tranTypeCode, finYear, lastNo = ret[0].split(',')
-#         lastNo = int(lastNo)
-#         if no == 0:
-#             lastNo = lastNo + 1
-#         autoRefNo = f'{branchCode}\{tranTypeCode}\{lastNo}\{finYear}'
-#         return (autoRefNo, lastNo)
-#     except (Exception) as error:
-#         raise Exception(getErrorMessage())
-
-
 # def doDebitsEqualCredits(sqlObject):
 #     ret = False
 #     # get all instances of data in the nested object

@@ -9,12 +9,11 @@ import {
 import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
 import axios from 'axios'
 
-// import { sqls } from '../utils/sqls'
-
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    let conn: any = {}
+    // let conn: any = {}
     const {
+        _,
         Column,
         // confirm,
         isElectron,
@@ -31,7 +30,7 @@ function useTrackSaleSms() {
         isMounted: false,
         saleData: [], //mockSaleData,
         selectedDate: moment().format('YYYY-MM-DD'),
-        selectedRows: [],
+        selectedRow: {},
         tableHeader: 'Sale data',
         title: 'Send SMS to selected sale bills',
     })
@@ -46,72 +45,72 @@ function useTrackSaleSms() {
     const { execSql } = useSqlAnywhere()
 
     async function handleRefresh() {
-        meta.current.selectedRows = []
-        emit('SHOW-LOADING-INDICATOR', true)
-        if (isElectron()) {
-            const saleData = await execSql('track-sale-sms', [
-                meta.current.selectedDate,
-            ])
-            meta.current.saleData = saleData.map((x:any)=>x) // Just to clean the array
-        } else {
-            meta.current.saleData = mockSaleData
+        meta.current.selectedRow = {}
+        try {
+            emit('SHOW-LOADING-INDICATOR', true)
+            if (isElectron()) {
+                const saleData = await execSql('track-sale-sms', [
+                    meta.current.selectedDate,
+                ])
+                meta.current.saleData = saleData.map((x: any) => x) // Just to clean the array
+            } else {
+                meta.current.saleData = mockSaleData
+            }
+            emit('SHOW-LOADING-INDICATOR', false)
+            meta.current.isMounted && setRefresh({})
+        } catch (e) {
+            alert(e.message)
+        } finally {
+            emit('SHOW-LOADING-INDICATOR', false)
+            meta.current.isMounted && setRefresh({})
         }
-        emit('SHOW-LOADING-INDICATOR', false)
-        meta.current.isMounted && setRefresh({})
     }
 
     async function handleSendSms() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        const selectedRows = meta.current.selectedRows
-        if (
-            selectedRows &&
-            Array.isArray(selectedRows) &&
-            selectedRows.length > 0
-        ) {
-            if (areValidMobilesInRows(selectedRows)) {
-                const jsonPayload: any = await getJsonPayload(selectedRows)
-                const config: any = {
-                    method: 'post',
-                    url: 'http://localhost:5000/track-bills',
-                    data: jsonPayload,
+        const win: any = window
+        const config = win.config
+        const currentEnv = process.env.NODE_ENV
+        const baseUrl = config[currentEnv]
+        const saveBillUrl = baseUrl.concat('/', config['saveBillUrl'])
+        try {
+            emit('SHOW-LOADING-INDICATOR', true)
+            const selectedRow = meta.current.selectedRow
+            if (selectedRow && !_.isEmpty(selectedRow)) {
+                if (isValidMobile(selectedRow.mobile)) {
+                    const jsonPayload: any = await getJsonPayload(selectedRow)
+                    const axiosConfig: any = {
+                        method: 'post',
+                        url: saveBillUrl, //'http://localhost:5000/track/save-bill',
+                        data: jsonPayload,
+                    }
+                    const response = await axios(axiosConfig)
+                } else {
+                    alert(messages.errinvalidMobileNumber)
                 }
-                const response = await axios(config)
-                console.log(response)
-                // call ajax to Flask and pass on the payload
             } else {
-                alert(messages.errinvalidMobileNumber)
+                alert(messages.errSelectSmsItem)
             }
-        } else {
-            alert(messages.errSelectSmsItem)
-        }
-        emit('SHOW-LOADING-INDICATOR', false)
-
-        function areValidMobilesInRows(rows: any[]) {
-            const ret = rows.every((x) => isValidMobile(x.mobile))
-            return ret
+        } catch (e) {
+            alert(e?.response?.data?.error || e.message)
+        } finally {
+            emit('SHOW-LOADING-INDICATOR', false)
         }
 
-        async function getJsonPayload(rows: any[]) {
-            const len = rows.length
-            for(let i=0 ; i< len; i++){ // map function did not work. It returned promise instead of data
-                const billMemoId = rows[i].bill_memo_id
-                const produc = await execSql('track-get-product-details', [billMemoId])
-                const products = produc.map((x: any)=>x) // needed tfor cleanup
-                rows[i].products = products
-              }
-            // const payload =  await rows.map(async (row: any) => {
-            //     let ret: any[] = []
-            //     if (isElectron()) {
-            //         const bill_memo_id: any = row.bill_memo_id
-            //         ret = await execSql('track-get-product-details', [bill_memo_id])
-            //     } else {
-            //         ret = await mockProductDetails
-            //     }               
-            //     row.products = ret
-            //     return row
-            // })
-            
-            return rows
+        async function getJsonPayload(row: any) {
+            try {
+                const companyInf = await execSql('track-get-company-info', [])
+                const companyInfo = companyInf.map((x: any) => x)[0] //convert array output to object
+                const billMemoId = row.bill_memo_id
+                const produc = await execSql('track-get-product-details', [
+                    billMemoId,
+                ])
+                const products = produc.map((x: any) => x) // needed for cleanup
+                row.products = products
+                row.companyInfo = companyInfo
+            } catch (e) {
+                alert(e.message)
+            }
+            return row
         }
     }
 
@@ -136,9 +135,9 @@ function useTrackSaleSms() {
             // checkbox
             <Column
                 key={incr()}
-                selectionMode="multiple"
+                // selectionMode="single"
                 headerStyle={{ width: '4em' }}
-                className="data-table-footer"
+                // className="data-table-footer"
             />,
             // ref_no
             <Column
@@ -508,3 +507,19 @@ const mockProductDetails = [
 //     cancellationText: null,
 // }
 // confirm(options)
+
+// for (let i = 0; i < len; i++) {
+//     // map function did not work. It returned promise instead of data
+//     const billMemoId = rows[i].bill_memo_id
+//     const produc = await execSql('track-get-product-details', [
+//         billMemoId,
+//     ])
+//     const products = produc.map((x: any) => x) // needed for cleanup
+//     rows[i].products = products
+//     rows[i].companyInfo = companyInfo
+// }
+
+// function areValidMobilesInRows(row:any) {
+//     const ret = isValidMobile(row.mobile)
+//     return ret
+// }

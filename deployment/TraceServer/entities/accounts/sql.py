@@ -1266,8 +1266,8 @@ allSqls = {
             DECLARE lastNo INT;
             begin
                 select "intValue" +1 into lastNo from "Settings" where "key" = 'lastProductCode';
-                insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", "productCode", "upcCode")
-                    values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s);
+                insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", "productCode", "upcCode", "gstRate")
+                    values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s, %(gstRate)s);
                 update "Settings" 
                     set "intValue" = lastNo
                         where "key" = 'lastProductCode';

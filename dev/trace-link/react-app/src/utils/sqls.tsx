@@ -1,4 +1,19 @@
 const sqls: any = {
+    'track-get-company-info': `
+        select comp_name,addr1, addr2, pin, phone, email, pan, free1, free2, free3, free4, gstin
+            from acc_setup
+    `,
+
+    'track-get-product-details': `
+        select item, brand, model, qty, price, discount, m.spec, m.hsn  
+            from bill_memo_product m
+                join inv_main i
+                    on i.inv_main_id = m.inv_main_id
+                join product p
+                    on p.pr_id = i.pr_id
+            where bill_memo_id = ?
+    `,
+
     'track-sale-sms': `
         select NUMBER(*) id, "date", b.bill_memo_id, "name", TRIM("addr1" + ' ' + "addr2") "address",pin, phone, email, mobile, 
         (select LIST(item + ' ' +brand + ' ' + model) from 
@@ -19,16 +34,6 @@ const sqls: any = {
         where "type" = 's' and
         "date" = ?
         order by "date", b.bill_memo_id;
-    `,
-
-    'track-get-product-details': `
-        select item, brand, model, qty, price, discount, m.spec, m.hsn  
-            from bill_memo_product m
-                join inv_main i
-                    on i.inv_main_id = m.inv_main_id
-                join product p
-                    on p.pr_id = i.pr_id
-            where bill_memo_id = ?
     `,
 }
 

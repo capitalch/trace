@@ -80,10 +80,10 @@ function TrackSaleSms() {
                 globalFilter={meta.current.globalFilter}
                 scrollable={true}
                 scrollHeight="calc(100vh - 20rem)"
-                selectionMode="multiple"
-                selection={meta.current.selectedRows}
+                selectionMode="single"
+                selection={meta.current.selectedRow}
                 onSelectionChange={(e) => {
-                    meta.current.selectedRows = e.value
+                    meta.current.selectedRow = e.value
                     meta.current.isMounted && setRefresh({})
                 }}
                 value={meta.current.saleData}
