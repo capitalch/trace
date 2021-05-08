@@ -54,13 +54,15 @@ function TraceLeft({ open, matches, handleDrawerClose }: any) {
             }
             setRefresh({})
         })
-        const subs1 = filterOn('LOAD-LEFT-JUST-REFRESH').subscribe((d) => {
-            if (d.data === 'reset') {
-                meta.current.data = {}
+        const subs1: any = filterOn('LOAD-LEFT-JUST-REFRESH').subscribe(
+            (d: any) => {
+                if (d.data === 'reset') {
+                    meta.current.data = {}
+                }
+                setRefresh({})
             }
-            setRefresh({})
-        })
-        const subs2 = filterOn('LOAD-LEFT-MENU').subscribe((d) => {
+        )
+        const subs2: any = filterOn('LOAD-LEFT-MENU').subscribe((d: any) => {
             meta.current.data = meta.current.data1
             setRefresh({})
         })

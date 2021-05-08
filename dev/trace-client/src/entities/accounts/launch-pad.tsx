@@ -32,7 +32,7 @@ function LaunchPad() {
     meta.current.mainHeading = getUnitHeading()
     useEffect(() => {
         meta.current.isMounted = true
-        const subs = filterOn('LOAD-MAIN-COMPONENT-NEW').subscribe((d: any) => {
+        const subs:any = filterOn('LOAD-MAIN-COMPONENT-NEW').subscribe((d: any) => {
             if (!getCurrentEntity()) {
                 return
             }
@@ -45,7 +45,7 @@ function LaunchPad() {
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs1 = filterOn('LOAD-MAIN-COMPONENT-VIEW').subscribe(
+        const subs1:any = filterOn('LOAD-MAIN-COMPONENT-VIEW').subscribe(
             (d: any) => {
                 if (!getCurrentEntity()) {
                     return
@@ -55,7 +55,7 @@ function LaunchPad() {
             }
         )
 
-        const subs2 = filterOn('LOAD-MAIN-COMPONENT-EDIT').subscribe(
+        const subs2:any = filterOn('LOAD-MAIN-COMPONENT-EDIT').subscribe(
             (d: any) => {
                 const currentFormId = getCurrentFormId()
                 resetAllFormErrors(currentFormId)

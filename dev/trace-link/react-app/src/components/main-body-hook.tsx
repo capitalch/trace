@@ -5,7 +5,7 @@ import { TrackSaleSms } from './track-sale-sms'
 
 function useMainBody() {
     const [, setRefresh] = useState({})
-    const { useIbuki } = useSharedElements()
+    const {useIbuki } = useSharedElements()
     const meta = useRef({
         isMounted: false,
         selectedComponent: <>Nothing</>,
@@ -19,7 +19,7 @@ function useMainBody() {
                 meta.current.selectedComponent = selectLogic[d.data]
                 meta.current.isMounted && setRefresh({})
             }
-        )
+        )        
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()

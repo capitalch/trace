@@ -84,6 +84,8 @@ function useTrackSaleSms() {
                         data: jsonPayload,
                     }
                     const response = await axios(axiosConfig)
+                    emit('SHOW-MESSAGE', '')
+                    // console.log(response)
                 } else {
                     alert(messages.errinvalidMobileNumber)
                 }
@@ -105,8 +107,15 @@ function useTrackSaleSms() {
                     billMemoId,
                 ])
                 const products = produc.map((x: any) => x) // needed for cleanup
+
+                const payms = await execSql('track-get-payment-details', [
+                    billMemoId,
+                ])
+                const payms1 = payms ?? []
+                const payments = payms1.map((x: any) => x) // cleanup
                 row.products = products
                 row.companyInfo = companyInfo
+                row.payments = payments
             } catch (e) {
                 alert(e.message)
             }
@@ -137,6 +146,8 @@ function useTrackSaleSms() {
                 key={incr()}
                 // selectionMode="single"
                 headerStyle={{ width: '4em' }}
+                header= {'Sl'}
+                field={'id'}
                 // className="data-table-footer"
             />,
             // ref_no

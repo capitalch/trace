@@ -235,7 +235,7 @@ function useSaleView(arbitraryData: any) {
             },
         })
         emit('SHOW-LOADING-INDICATOR', false)
-        console.log('Sale:', ret)
+        // console.log('Sale:', ret)
         if (ret) {
             prepareArbitraryData(ret)
             emit('SALE-ITEMS-REFRESH', null)

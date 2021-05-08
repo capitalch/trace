@@ -11,15 +11,13 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "traceServer.py",
-                "FLASK_ENV": "development",
+                "FLASK_ENV": "development"
             },
             "args": [
                 "run",
-                "--no-debugger",
-                "--no-reload"
+                "--no-debugger"
             ],
             "jinja": true
         }
     ]
 }
-

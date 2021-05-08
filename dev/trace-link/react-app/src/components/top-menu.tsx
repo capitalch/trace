@@ -1,10 +1,10 @@
-import react from 'react'
 import { useSharedElements } from '../shared-elements-hook'
 import { useTopMenu, useStyles } from './top-menu-hook'
 
 function TopMenu() {
     const { handleButtonClick, meta, setRefresh } = useTopMenu()
-    const { Button } = useSharedElements()
+    const { Button, useIbuki } = useSharedElements()
+    const { emit } = useIbuki()
     const classes = useStyles()
     return (
         <div className={classes.content}>
@@ -29,6 +29,13 @@ function TopMenu() {
                 }}>
                 Service+ sale import
             </Button>
+            {/* <Button
+                className="menu-button"
+                onClick={(e) => {
+                    emit('SHOW-MESSAGE', '')
+                }}>
+                Test
+            </Button> */}
         </div>
     )
 }

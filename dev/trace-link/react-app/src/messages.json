@@ -3,5 +3,6 @@
     "errinvalidMobileNumber": "One or more mobile numbers are invalid",
 
     "infoEmptySelection": "No selections",
-    "infoInvalidMobileNumber":"Invalid mobile number"
+    "infoInvalidMobileNumber":"Invalid mobile number",
+    "infoOperationSuccessful": "Operation was successful"
 }

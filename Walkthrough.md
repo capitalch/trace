@@ -1,3 +1,4 @@
+
 # Good React.js libraries
 1. react-load-spinner
 2. react-animated-burgers for animated menus
@@ -13,6 +14,23 @@ React, GraphQL, Flask, Graphene, Python, postgreSql
 ## Methodology
 For Inserts and Updates of data, the entire data is converted to a big JSON object with all master and details data to be inserted in tables at back end. This JSON object is sent to GraphQL / Flask server as GraphQL mutation. The same is saved in PostgreSQL db using Graphene and Python.
 
+# Flask deployment while serving static files and index.html from Apache web server.
+Go through ood at my documentation of cloudjiffy
+
+# Flask tips
+## Understanding of template_folder, static_url_path, static_folder
+These can be set during construction of the app object
+In TraceServer->traceMain see:
+app = Flask(__name__, static_folder="../static",
+            template_folder="../build")
+template_folder: The html templates / files are stored here. Just define a template_folder and keep only html files and corresponding resources in it.
+static_folder keeps the js/css files etc.
+
+I used blueprint to create a "track" module. In this module I used:
+trackApp = Blueprint('trackApp', __name__,
+                     template_folder='templates', static_folder='static', static_url_path='/track/view/css')
+I created a folder "templates" and stored billTemplate.html in it. It worked fine but didn't call the bill.css stored in the static folder. When I set the static_url_path as above and set the  <link href="css/bill.css" rel="stylesheet"> in billTemplate.html it worked. Explaination: The static_url_path becomes the path of resource file and that resource file will be served from static folder. Remember that the path should not be same as any route of flask app otherwise it will take precedence and it will not work. The above path translates to url http://localhost:5000/track/view/css/bill.css and it will look for bill.css in static folder under track folder. File location and url path have no relation, but above setting maps there two and enforces that when a resource with that url is asked it will be taken from static folder.
+
 # Reducing the build size of React app
 in package.json file use "build": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build", in "scripts" tag.
 This removed the map files
@@ -25,7 +43,7 @@ cd c:\projects\trace
 1. python -m pip install virtualenv
 2. python -m venv env
 3. env\Scripts\activate
-4. pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter pdfkit
+4. pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter flask_scss flask_weasyprint babel
 5. in .vscode settings.json
 {
     "python.pythonPath": "c:\\projects\\trace\\env\\Scripts\\python.exe",
@@ -83,7 +101,7 @@ complete
 2. cd virtenv/bin
 3. . activate
 4. When virtenv is activated run this command:
-```pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter```
+```pip install ...```
 
 5. wsgi.py file is already edited to make use of virtenv
 6. Restart nodes and check log in httpd/error_log

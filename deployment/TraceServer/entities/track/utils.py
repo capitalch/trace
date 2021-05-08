@@ -48,10 +48,6 @@ def processDataForPdf(cp):
         item['amount'] = formatNumber(item['amount'])
         idx = idx + 1
         item['index'] = idx
-    
-    for item in cp['payments']:
-        item['amount'] = formatNumber(item['amount'])
-
     cp['subtotal'] = formatNumber(cp['subtotal'])
     cp['amountInWords'] = convertToWord(cp['total_amt'])
     cp['total_amt'] = format_currency(cp['total_amt'], 'INR', locale='en_IN') # To show Rs symbol and Indian currency formatting
@@ -94,5 +90,5 @@ def convertToWord(n):
     else:
         decimalPartWord = ''
     
-    final = 'Rs ' + integerPartWord.capitalize() + decimalPartWord + ' only.'
+    final = 'Rs ' + integerPartWord + decimalPartWord + ' only.'
     return(final)

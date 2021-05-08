@@ -7,7 +7,7 @@ import { Column } from 'primereact/column'
 import { useConfirm } from 'material-ui-confirm'
 import messages from './messages.json'
 
-import {
+import {    
     Avatar,
     Badge,
     Box,
@@ -41,6 +41,7 @@ import {
     Paper,
     Radio,
     RadioGroup,
+    Snackbar,
     Switch,
     Tabs,
     Tab,
@@ -50,10 +51,13 @@ import {
     Typography,
     useTheme,
 } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 import SearchIcon from '@material-ui/icons/Search'
 import { useIbuki, usingIbuki } from './utils/ibuki'
 import { utilMethods } from './utils/util-methods'
 import {LoadingIndicator} from './utils/loading-indicator'
+import CloseIcon from '@material-ui/icons/Close'
+
 function useSharedElements() {
     const { toDecimalFormat, isValidMobile } = utilMethods()
     const confirm = useConfirm()
@@ -61,9 +65,11 @@ function useSharedElements() {
 
     return {
         _,
+        Alert,
         axios,
         Button,
         ButtonGroup,
+        CloseIcon,
         clsx,
         confirm,
         DataTable,
@@ -77,6 +83,7 @@ function useSharedElements() {
         LoadingIndicator,
         messages,
         SearchIcon,
+        Snackbar,
         TextField,
         toDecimalFormat,
         Typography,

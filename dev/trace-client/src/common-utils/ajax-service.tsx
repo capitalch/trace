@@ -1,6 +1,6 @@
 import urlJoin from 'url-join'
 import axios from 'axios'
-import config from '../config.json'
+// import config from '../config.json'
 import moment from 'moment'
 import { manageEntitiesState } from './esm'
 
@@ -24,6 +24,8 @@ function ajaxService() {
     }
 
     function getUrl(endPoint: string) {
+        const win: any = window
+        const config = win.config
         const env: any = process.env.NODE_ENV
         const graphql: any = config.graphql
         const url = urlJoin(graphql[env], endPoint)

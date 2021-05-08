@@ -1,3 +1,5 @@
+a4: 297 X 210 MM = 3508 X 2480 px
+
 set search_path to demounit1;
 with cte1 as (
 	select (CASE WHEN "dc" = 'D' then "amount" else -"amount" end) "amount"
@@ -99,6 +101,7 @@ select * from cte5 order by "tranDate" DESC
 1.004 Purchase: default date should be null
 1.005 Login screen should be modal, should work on "enter" key
 1.006 serial number error in purchases
+1.007 RXJS 7.x not working with ibuki
 1.02 Auto subledger create bill
 1.03 Purchase invoice mismatch allow saving
 1.04 GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ.
@@ -154,6 +157,15 @@ select * from cte5 order by "tranDate" DESC
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 27-04-2021 - 08-052021
+1. Completed Track SMS sending.
+2. Implemented SMS sending through fast2SMS
+3. Investigated and applied for DLT registration
+4. Updated server side deployment. Arrived at new strategy of deployment of TraceServer
+5. Upgraded python code to latest
+6. Overall revamp
+
 
 # 21-04-2021 - 26-04-2021
 1. Started with Electron app, created React App

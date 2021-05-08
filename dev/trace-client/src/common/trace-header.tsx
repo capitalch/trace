@@ -61,17 +61,17 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     useEffect(() => {
         meta.current.isMounted = true
 
-        const subs = filterOn('MENU-RECEIVED-FROM-SERVER').subscribe(d => {
+        const subs:any = filterOn('MENU-RECEIVED-FROM-SERVER').subscribe((d:any) => {
             meta.current.menuHead = d.data
             shortCircuit() // This line is for doing autologin in development environment
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs1 = filterOn('LOGIN-SUCCESSFUL').subscribe(d => {
+        const subs1:any = filterOn('LOGIN-SUCCESSFUL').subscribe((d:any) => {
             meta.current.uid = d.data
             meta.current.isMounted && setRefresh({})
         })
-        const subs2 = filterOn('SHOW-MESSAGE').subscribe(d => {
+        const subs2:any = filterOn('SHOW-MESSAGE').subscribe((d:any) => {
             snackbar.current.open = true
             snackbar.current.severity = d.data.severity || 'success'
             snackbar.current.message = d.data.message || 'Operation was successful'
@@ -79,7 +79,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs3 = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(d => {
+        const subs3:any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(d => {
             // Only doing refresh, because by now the datacache is already loaded. This code is for autoLogout execution. The autoLogoutTimeInMins is tal=ken from generalSettings of global bag which is populated in initcode datacache
             setRefresh({})
         })

@@ -1,4 +1,4 @@
-from os import stat, path
+from os import stat
 from flask import Blueprint, request, render_template
 from flask_weasyprint import HTML, render_pdf
 import simplejson as json
@@ -16,7 +16,7 @@ from entities.track.utils import processDataForPdf, sendSms
 trackApp = Blueprint('trackApp', __name__,
                      template_folder='templates', static_folder='static', static_url_path='/track/view/css')
 
-# Saves the sale bill in database postgres and send ths SMS to customer
+
 @trackApp.route('/track/save-bill', methods=['POST'])
 def track_save_bill():
     data = request.get_json()
@@ -36,10 +36,10 @@ def track_save_bill():
             'upsert-sale-bill'), args, isMultipleRows=False)
         smsTemplate = messages.infoMessages['sms-template']
         env = cfg['env']
-        url = urljoin(cfg[env]['url'], cfg["sms"]["view"]) + '/' + billNoHash
+        url = urljoin(cfg[env]['url'], billNoHash)
         smsMessage = smsTemplate(data, url)
         mobile = data['mobile']
-        response = sendSms(smsMessage, '98310523322')
+        response = sendSms(smsMessage, '9831052332')
         resString = str(response.content, 'utf8')
         resObj = djson.decode(resString)
         result = resObj.get('return')

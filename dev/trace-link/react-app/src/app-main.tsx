@@ -3,16 +3,18 @@ import { TopMenu } from './components/top-menu'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from './shared-elements-hook'
 import { MainBody } from './components/main-body'
-
+import { ShowMessage } from './utils/show-message'
 function AppMain() {
     const classes = useStyles()
     const { LoadingIndicator, Paper } = useSharedElements()
     // const myRef = useRef(null) // using ref removes one JavaScript error
+
     return (
         <Paper className={classes.content}>
             <TopMenu />
             <MainBody />
             <LoadingIndicator />
+            <ShowMessage />
         </Paper>
     )
 }
