@@ -521,17 +521,18 @@ function useTraceHeader({ setRefresh }: any) {
     }
 
     return {
-        closeDialog,
-        meta,
-        snackbar,
         Alert,
+        closeDialog,
+        doLogin,
         handleClose,
         handleEntityClicked,
         isUserLoggedIn,
-        showDialogMenu,
-        doLogin,
         logout,
+        meta,
         shortCircuit,
+        showDialogMenu,
+        snackbar,
+        submitDialog,
     }
 }
 

@@ -457,6 +457,8 @@ Implemented by using react-idle-timer library in trace-header
 
 * It is good to use Roboto fonts, material meta tag and CssBaseLine
 
+* To create true modal dialog, means dialog is not closed when clicked outside. <Dialog disableBackdropClick = {true}
+
 **  In public / index.html, include following in <head> tag:
     <meta
       name="viewport"

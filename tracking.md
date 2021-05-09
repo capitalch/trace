@@ -78,19 +78,15 @@ select * from cte5 order by "tranDate" DESC
 3. Create PG Database at server to store sale bills (id, hash, jData, dateTime )
 4. On click: a) Hash sale info, b) Save data in database c) send SMS to mobile no with url having hash d) Flask api reads the hash; Obtains data from database; creates online PDF bill from info and sends it back to caller. No auth required. Hash is part of url parameter.
 
-1. Check Python Flask send SMS
-2. Electron app
-	2.00 
-	2.01 
-	2.02 Select and send SMS button
-	2.03 JSON info sent to flask api
-
 # Working on
-1. Track+ SMS gateway for sale bills
-2. Purchase sale clickaway
-3. PDF invoice through mail, sms
-4. Track+ billing throuh SMS gateway
-5. trace-link: Trace link to other applications
+1. Purchase sale clickaway
+2. ODF master documentation
+3. Flask sockets
+4. Master reports
+5. RXJS 7.1 incorporation
+6. Purchase default date should be null
+7. Sale bill to email and sms
+8. Migration of Track+ and service+ sale
 
 # Pending
 ## Functionality
@@ -99,9 +95,10 @@ select * from cte5 order by "tranDate" DESC
 1.002 The view in many places show multiple lines. Desirable to have single line.
 1.003 Daily balance for cash book
 1.004 Purchase: default date should be null
-1.005 Login screen should be modal, should work on "enter" key
+1.005 Master report mechanism to serve several reports in one page
 1.006 serial number error in purchases
 1.007 RXJS 7.x not working with ibuki
+1.008 Documentation odf format; organize
 1.02 Auto subledger create bill
 1.03 Purchase invoice mismatch allow saving
 1.04 GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ.
@@ -139,7 +136,8 @@ select * from cte5 order by "tranDate" DESC
 1.13 Think of same user iD / email in multiple clients
 1.14 Export of PL, BL and TB should be lowest and highest levels
 1.15 Bank recon should show details of default bank
-1.16 The login screen should be modal
+1.16 Flask Socket mechanism to final reports
+1.17 Independent databases
 
 ## New features
 1.0 Purchase invoice upload and search on metadata. Click will show invoice in PDF
@@ -158,13 +156,17 @@ select * from cte5 order by "tranDate" DESC
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 27-04-2021 - 08-052021
+# 27-04-2021 - 08-05-2021
 1. Completed Track SMS sending.
 2. Implemented SMS sending through fast2SMS
 3. Investigated and applied for DLT registration
 4. Updated server side deployment. Arrived at new strategy of deployment of TraceServer
 5. Upgraded python code to latest
 6. Overall revamp
+7. Login screen should be modal, should work on "enter" key
+8. Track+ SMS gateway for sale bills
+9. PDF invoice through sms
+10. Track+ billing throuh SMS gateway
 
 
 # 21-04-2021 - 26-04-2021

@@ -23,17 +23,18 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
     const {
-        closeDialog
-        , meta
-        , snackbar
-        , Alert
-        , handleClose
-        , handleEntityClicked
-        , isUserLoggedIn
-        , showDialogMenu
-        , doLogin
-        , logout
-        , shortCircuit
+        Alert,
+        closeDialog,
+        doLogin,
+        handleClose,
+        handleEntityClicked,
+        isUserLoggedIn,
+        logout,
+        meta,
+        shortCircuit,
+        showDialogMenu,
+        snackbar,
+        submitDialog,
     } = useTraceHeader({ setRefresh })
     const theme = useTheme()
     
@@ -178,6 +179,14 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper
                 }}
+                onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                        closeDialog()
+                    } else if(e.key === 'Enter'){
+                        submitDialog()
+                    }
+                }}
+                disableBackdropClick={true}
                 open={meta.current.showDialog}
                 onClose={() => {
                     closeDialog()
