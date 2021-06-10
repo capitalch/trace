@@ -15,10 +15,9 @@ const graphqlService = () => {
     }
 
     const getClient = () => {
-
         const url = getUrl()
         const link = new HttpLink({
-            uri: url
+            uri: url,
         })
         const authLink = new ApolloLink((operation, forward) => {
             // Retrieve the authorization token from local storage.
@@ -30,34 +29,38 @@ const graphqlService = () => {
             const buCode = getFromBag('buCode') || ''
             const finYearId = getFromBag('finYearObject')?.finYearId || ''
             const branchId = getFromBag('branchObject')?.branchId || ''
-            const selectionCriteria = buCode.concat(':', finYearId, ':', branchId)
+            const selectionCriteria = buCode.concat(
+                ':',
+                finYearId,
+                ':',
+                branchId
+            )
             // Use the setContext method to set the HTTP headers.
             operation.setContext({
                 headers: {
-                    authorization: token ? `Bearer ${token}` : ''
-                    , 'SELECTION-CRITERIA': selectionCriteria
-                }
-            });
+                    authorization: token ? `Bearer ${token}` : '',
+                    'SELECTION-CRITERIA': selectionCriteria,
+                },
+            })
             // Call the next link in the middleware chain.
-            return forward(operation);
-        });
-
+            return forward(operation)
+        })
 
         clientStore['client'] = new ApolloClient({
             cache: new InMemoryCache(),
             link: authLink.concat(link),
             defaultOptions: {
                 query: {
-                    fetchPolicy: 'network-only'
-                }
+                    fetchPolicy: 'network-only',
+                },
             },
         })
         clientStore['client'].request = (operation: any) => {
             const token = 'abcd'
             operation.setContext({
                 headers: {
-                    authorization: token ? `Bearer ${token}` : ''
-                }
+                    authorization: token ? `Bearer ${token}` : '',
+                },
             })
         }
         return clientStore['client']
@@ -65,23 +68,27 @@ const graphqlService = () => {
 
     const queryGraphql = async (q: string) => {
         const client = getClient()
-        const ret = await client.query({
-            query: q
-        })
+        let ret: any
+        try {
+            ret = await client.query({
+                query: q,
+            })
+        } catch (e) {
+            console.log(e)
+        }
         return ret
     }
 
     const mutateGraphql = async (m: string) => {
         const client = getClient()
         const ret = await client.mutate({
-            mutation: m
+            mutation: m,
         })
         return ret
     }
 
     return { queryGraphql, mutateGraphql }
 }
-
 
 export { graphqlService }
 /*

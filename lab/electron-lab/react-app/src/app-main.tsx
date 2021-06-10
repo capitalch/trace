@@ -1,12 +1,11 @@
-import React from 'react';
-import { InventoryExport } from './components/inventory-export';
-import { useInventoryExport } from './components/inventory-export-hook'
+import React from "react";
+import { Configuration } from "./components/configuration";
 function AppMain() {
-    return (
-        <div>
-            <InventoryExport />
-        </div>
-    )
+  return (
+    <div>
+      <Configuration />
+    </div>
+  );
 }
 
-export { AppMain }
+export { AppMain };

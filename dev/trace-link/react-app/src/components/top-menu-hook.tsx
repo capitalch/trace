@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../shared-elements-hook'
+// import { socket } from '../utils/socket'
 
 function useTopMenu() {
     const [, setRefresh] = useState({})
@@ -12,7 +13,9 @@ function useTopMenu() {
 
     useEffect(() => {
         meta.current.isMounted = true
-
+        // socket.on('connect', () => {
+        //     console.log('Socket connected')
+        // })
         return () => {
             meta.current.isMounted = false
         }

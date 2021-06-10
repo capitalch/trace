@@ -1,0 +1,59 @@
+{
+    "tableName": "TranH",
+    "data": [
+        {
+            "contactsId": 161,
+            "tranDate": "2021-05-30",
+            "jData": null,
+            "finYearId": 2021,
+            "branchId": 1,
+            "posId": "1",
+            "tranTypeId": 4,
+            "details": {
+                "tableName": "TranD",
+                "fkeyName": "tranHeaderId",
+                "data": [
+                    {
+                        "accId": 167,
+                        "dc": "C",
+                        "amount": 2312,
+                        "details": [
+                            {
+                                "tableName": "ExtGstTranD",
+                                "fkeyName": "tranDetailsId",
+                                "data": [
+                                    {
+                                        "gstin": null,
+                                        "cgst": 176.34,
+                                        "sgst": 176.34,
+                                        "igst": 0,
+                                        "isInput": false
+                                    }
+                                ]
+                            },
+                            {
+                                "tableName": "SalePurchaseDetails",
+                                "fkeyName": "tranDetailsId",
+                                "data": [
+                                    {
+                                        "productId": 9,
+                                        "qty": 1,
+                                        "priceGst": 2312,
+                                        "discount": 0,
+                                        "amount": 2312,
+                                        "gstRate": 18,
+                                        "cgst": 176.34,
+                                        "sgst": 176.34,
+                                        "igst": 0,
+                                        "hsn": "333"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    { "accId": 118, "dc": "D", "amount": 2312, "remarks": "" }
+                ]
+            }
+        }
+    ]
+}

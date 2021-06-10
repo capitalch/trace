@@ -1,24 +1,31 @@
 // import odbc from 'odbc'
 import { sqls } from './sqls'
-// const isElectron = require('is-electron')
+import isElectron from 'is-electron'
+let odbc: any
+if(isElectron()){
+    odbc = window.require('odbc')
+    console.log('odbc loaded')
+}
 
-function useSqlAnywhere() {
-    const win: any = window
-    const config = win.config
-    const databaseName = config['database']
-    async function execSql(
-        queryKey: string,
-        params: string[],
-    ) {
+function useSqlAnywhere(databaseName: string) {
+    // let odbc:any = undefined
+    // if(isElectron()){
+    //     odbc = window.require('odbc')
+    // }
+    async function execSql(queryKey: string, params: string[]) {
         let conn: any = null
         try {
             const connString = `DSN=${databaseName}`
-            const odbc = window.require('odbc')
-            const conn = await odbc.connect(connString)
-            const data = await conn.query(sqls[queryKey], params)
+            let data = undefined
+            if(isElectron()){
+                // const odbc = window.require('odbc')
+                conn = await odbc.connect(connString)
+                data = await conn.query(sqls[queryKey], params)
+            }
+            
             return data
         } catch (e) {
-            throw e //console.log(e.message)
+            throw e
         } finally {
             conn && conn.close()
         }
@@ -27,3 +34,7 @@ function useSqlAnywhere() {
     return { execSql }
 }
 export { useSqlAnywhere }
+
+// const win: any = window
+// const config = win.config
+// const databaseName = config['database']

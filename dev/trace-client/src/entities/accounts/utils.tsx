@@ -122,22 +122,40 @@ function utils() {
             meta.current.sum = pre.sum
             meta.current.opBalance = pre.opBalance || { debit: 0, credit: 0 }
             pre.transactions || (pre.transactions = [{ debit: 0, credit: 0 }])
-            meta.current.transactions = pre.transactions.map((x: any) => {
-                return {
-                    ...x,
-                    debit: toDecimalFormat(x.debit),
-                    credit: toDecimalFormat(x.credit),
-                    tranDate: moment(x.tranDate).format(
-                        meta.current.dateFormat
-                    ),
-                }
-            }) || [{}]
+
+            if (meta.current.isDailySummary) {
+                const summaryRows = getSummaryRows(pre.transactions, meta)
+                // merge transactions with summaryRows and sort
+                meta.current.transactions = pre.transactions.concat(summaryRows)
+                meta.current.transactions = _.sortBy(
+                    meta.current.transactions,
+                    ['tranDate']
+                ) // Used lodash because JavaScript sort did not work out
+                meta.current.transactions.shift(1) // remove first row which is having blank date value
+                // cleanup
+                meta.current.transactions = meta.current.transactions.map(
+                    (item: any) => {
+                        return {
+                            ...item,
+                            // tranDate: item.tranType === 'Summary' ? '' : item.tranDate,
+                            tranType:
+                                item.tranType === 'Summary'
+                                    ? ''
+                                    : item.tranType,
+                        }
+                    }
+                )
+            } else {
+                meta.current.transactions = pre.transactions
+            }
+
             // Add opening balance at the begining
             meta.current.transactions.unshift({
                 otherAccounts: 'Opening balance',
                 debit: toDecimalFormat(meta.current.opBalance.debit),
                 credit: toDecimalFormat(meta.current.opBalance.credit),
             })
+            meta.current.isReverseOrder && meta.current.transactions.reverse()
             const preSum = meta.current.sum[0]
             const debit = preSum.debit || 0
             const credit = preSum.credit || 0
@@ -163,16 +181,22 @@ function utils() {
                 <Column
                     style={{ width: '5.2rem', textAlign: 'left' }}
                     field="tranDate"
+                    body={(node: any) =>
+                        node.tranDate
+                            ? moment(node.tranDate).format(
+                                  meta.current.dateFormat
+                              )
+                            : ''
+                    }
                     key={incr()}
                     header="Date"
-                    footerStyle = {{textAlign: 'left', paddingLeft:'4px'}}
-                    footer='Rows:'
-                    ></Column>,
+                    footerStyle={{ textAlign: 'left', paddingLeft: '4px' }}
+                    footer="Rows:"></Column>,
                 <Column
-                    style={{ width: '9rem', textAlign: 'left' }}
+                    style={{ width: '12rem' }}
                     field="otherAccounts"
                     header="Account name"
-                    footerStyle = {{textAlign: 'left', paddingLeft:'4px'}}
+                    footerStyle={{ textAlign: 'left', paddingLeft: '4px' }}
                     footer={
                         meta.current.transactions.length
                             ? meta.current.transactions.length - 1
@@ -182,25 +206,27 @@ function utils() {
                 <Column
                     style={{ width: '8rem', textAlign: 'right' }}
                     field="debit"
+                    body={(node: any) => toDecimalFormat(node.debit)}
                     key={incr()}
                     header="Debits"
-                    footerStyle = {{textAlign: 'right', paddingRight:'8px'}}
+                    footerStyle={{ textAlign: 'right', paddingRight: '8px' }}
                     footer={toDecimalFormat(
                         meta.current.sum ? meta.current?.sum[0]?.debit : 0.0
                     )}></Column>,
                 <Column
                     style={{ width: '8rem', textAlign: 'right' }}
                     field="credit"
+                    body={(node: any) => toDecimalFormat(node.credit)}
                     key={incr()}
                     header="Credits"
-                    footerStyle = {{textAlign: 'right', paddingRight:'8px'}}
+                    footerStyle={{ textAlign: 'right', paddingRight: '8px' }}
                     footer={toDecimalFormat(
                         meta.current.sum ? meta.current?.sum[0]?.credit : 0.0
                     )}></Column>,
                 <Column
                     style={{ width: '4rem', textAlign: 'left' }}
                     field="tranType"
-                    footerStyle={{textAlign:'left', paddingLeft:'4px'}}
+                    footerStyle={{ textAlign: 'left', paddingLeft: '4px' }}
                     footer="Clos:"
                     key={incr()}
                     header="Type"></Column>,
@@ -208,7 +234,7 @@ function utils() {
                     style={{ width: '11rem', textAlign: 'left' }}
                     field="autoRefNo"
                     key={incr()}
-                    footerStyle = {{textAlign: 'left', paddingLeft: '4px'}}
+                    footerStyle={{ textAlign: 'left', paddingLeft: '4px' }}
                     footer={
                         <div>
                             <span>
@@ -216,10 +242,11 @@ function utils() {
                             </span>
                             <span
                                 style={{
-                                    color: `${meta.current.finalBalanceType === ' Dr'
-                                        ? 'dodgerBlue'
-                                        : 'red'
-                                        }`,
+                                    color: `${
+                                        meta.current.finalBalanceType === ' Dr'
+                                            ? 'dodgerBlue'
+                                            : 'red'
+                                    }`,
                                 }}>
                                 {meta.current.finalBalanceType}
                             </span>
@@ -280,6 +307,9 @@ function utils() {
             return (
                 <DataTable
                     className={className}
+                    rowClassName={(node: any) => ({
+                        'ledger-summary': !node.tranType,
+                    })}
                     rowHover={true}
                     scrollable={isScrollable}
                     scrollHeight="calc(100vh - 24rem)"
@@ -287,6 +317,68 @@ function utils() {
                     {getLedgerColumns()}
                 </DataTable>
             )
+        }
+
+        function getSummaryRows(arr: any[], meta: any) {
+            const summary: any[] = []
+            let opBalance = 0
+            if (meta.current.opBalance?.debit) {
+                opBalance = meta.current.opBalance.debit
+            } else {
+                opBalance = -meta.current.opBalance.credit
+            }
+            opBalance = opBalance || 0
+            const acc: any = {
+                tranDate: '',
+                op: opBalance,
+                otherAccounts: toOpeningDrCr(opBalance),
+                debit: 0,
+                credit: 0,
+                clos: 0,
+                autoRefNo: toClosingDrCr(opBalance), // to show closing balance
+                tranType: 'Summary',
+            }
+
+            for (let item of arr) {
+                if (item.tranDate !== acc.tranDate) {
+                    //push
+                    acc.clos = acc.op + acc.debit - acc.credit
+                    acc.otherAccounts = toOpeningDrCr(acc.op)
+                    acc.autoRefNo = toClosingDrCr(acc.clos)
+                    summary.push({ ...acc })
+                    acc.tranDate = item.tranDate
+                    acc.op = acc.clos
+                    acc.otherAccounts = toOpeningDrCr(acc.op)
+                    acc.debit = item.debit
+                    acc.credit = item.credit
+                    acc.clos = 0
+                    acc.autoRefNo = toClosingDrCr(acc.clos)
+                } else {
+                    acc.debit = acc.debit + (item.debit || 0)
+                    acc.credit = acc.credit + (item.credit || 0)
+                }
+            }
+
+            acc.clos = acc.op + acc.debit - acc.credit
+
+            acc.autoRefNo = toClosingDrCr(acc.clos)
+            summary.push({ ...acc })
+
+            return summary
+
+            function toOpeningDrCr(value: number) {
+                return 'Opening: '.concat(
+                    String(toDecimalFormat(Math.abs(value))) +
+                        (value >= 0 ? ' Dr' : ' Cr')
+                )
+            }
+
+            function toClosingDrCr(value: number) {
+                return 'Closing: '.concat(
+                    String(toDecimalFormat(Math.abs(value))) +
+                        (value >= 0 ? ' Dr' : ' Cr')
+                )
+            }
         }
 
         return { fetchData, getLedgerColumns, LedgerDataTable }
@@ -535,7 +627,6 @@ function utils() {
 }
 
 export { utils }
-
 
 // const useStyles: any = makeStyles((theme: Theme) =>
 //     createStyles({

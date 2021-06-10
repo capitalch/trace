@@ -3,13 +3,13 @@ import styled from 'styled-components'
 import { useTable, useBlockLayout } from 'react-table'
 import { FixedSizeList } from 'react-window'
 import makeData from './makeData'
-import { Table1 } from './table1'
+// import { Table1 } from './table1'
 
 function Component9() {
     const data = makeData(1000)
     return (
         <Styles>
-            <Table1 columns={columns} data={data} />
+            {/* <Table1 columns={columns} data={data} /> */}
         </Styles>
     )
 }

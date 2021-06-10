@@ -42,6 +42,7 @@ function BalanceSheetProfitLoss() {
         _,
         Big,
         emit,
+        filterOn,
         getCurrentComponent,
         getFromBag,
         queryGraphql,
@@ -52,9 +53,17 @@ function BalanceSheetProfitLoss() {
 
     useEffect(() => {
         meta.current.isMounted = true
+        const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
+            () => {
+                setTimeout(() => {
+                    getData(false)
+                }, 0)
+            }
+        )
         getData()
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -73,7 +82,7 @@ function BalanceSheetProfitLoss() {
         return ret
     }
 
-    async function getData() {
+    async function getData(isBusyIndicator=true) {
         const currentComponent: any = getCurrentComponent()
         const componentName: string = currentComponent.componentName
         meta.current.isBs = componentName === 'balanceSheet'
@@ -85,7 +94,7 @@ function BalanceSheetProfitLoss() {
         if (q) {
             let results: any
             try {
-                emit('SHOW-LOADING-INDICATOR', true)
+                isBusyIndicator && emit('SHOW-LOADING-INDICATOR', true)
                 results = await queryGraphql(q)
                 emit('SHOW-LOADING-INDICATOR', false)
                 const pre = results.data.accounts.balanceSheetProfitLoss

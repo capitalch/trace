@@ -13,11 +13,19 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^12.0.7",
-    "electron-builder": "^22.11.1"
+    "electron": "^13.0.1",
+    "electron-builder": "^22.10.5"
   },
   "dependencies": {
-    "node-gyp": "^8.0.0",
     "odbc": "^2.3.6"
+  },
+  "build": {
+    "productName": "Trace import utility",
+    "extraFiles": [
+      {
+        "from": "config.json",
+        "to": "resources/config.json"
+      }
+    ]
   }
 }

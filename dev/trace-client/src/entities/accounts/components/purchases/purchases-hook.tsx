@@ -47,7 +47,7 @@ function usePurchases() {
         qty: 0,
         sgst: 0.0,
         summary: {},
-        tranDate: moment().format(isoFormat),
+        tranDate: undefined, //moment().format(isoFormat),
         userRefNo: '',
     }
     const arbitraryData: any = useRef(JSON.parse(JSON.stringify(initData)))

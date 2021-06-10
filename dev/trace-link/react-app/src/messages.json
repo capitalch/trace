@@ -1,8 +1,16 @@
 {
-    "errSelectSmsItem": "Please select one or many rows to send SMS",
+    
     "errinvalidMobileNumber": "One or more mobile numbers are invalid",
+    "errSelectSmsItem": "Please select one or many rows to send SMS",
+    "errInvalidDate":"Start or end date is invalid",
+    "errNoConfig": "Config ile is nt present",
+    "errNoDatafetched": "No data found at Service+"  ,
+    "errTransferData": "error in transferring data to Trace",
+    "errCompanyNotFound": "Company not found in mapping of config.json",
 
+    "infoDataSuccessfullyTransferred": "Service+ sale data successfully transferred to Trace",
     "infoEmptySelection": "No selections",
     "infoInvalidMobileNumber":"Invalid mobile number",
-    "infoOperationSuccessful": "Operation was successful"
+    "infoOperationSuccessful": "Operation was successful",
+    "transferDataTitle": "Transfer data from Service+ software to Trace"
 }

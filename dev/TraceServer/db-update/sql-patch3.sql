@@ -8,3 +8,10 @@ INSERT INTO "Settings" ("id", "key", "intValue")
 
 ALTER TABLE IF EXISTS "ExtBusinessContactsAccM"
 	ADD COLUMN IF NOT EXISTS "stateCode" SMALLINT DEFAULT 19;
+
+
+-- 02-06-2021. Create index for faster search
+CREATE INDEX if not exists "branchId_tranTypeId_finYearId"
+    ON demounit1."TranH" USING btree
+    ("branchId" ASC NULLS LAST, "tranTypeId" ASC NULLS LAST, "finYearId" ASC NULLS LAST)
+    TABLESPACE pg_default;

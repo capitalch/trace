@@ -39,7 +39,7 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public'):
         if connection:
             cursor.close()
             connection.close()
-            print("PostgreSQL connection is closed")
+            # print("PostgreSQL connection is closed")
     return ret
 
 
@@ -98,7 +98,7 @@ def execSql(dbName, sqlString, args=None, isMultipleRows=True,  autoCommitMode=F
             cursor.close()
             connection.close()
             pool.putconn(connection)
-            print("PostgreSQL connection is closed")
+            # print("PostgreSQL connection is closed")
     return out
 
 
@@ -130,7 +130,7 @@ def execSqls(dbName, sqlTupleListWithArgs, buCode='public'):
         if connection:
             cursor.close()
             connection.close()
-            print("PostgreSQL connection is closed")
+            # print("PostgreSQL connection is closed")
     return out
 
 
@@ -146,6 +146,7 @@ def getConnectionCursor(dbName, autoCommitMode=False):
     if autoCommitMode:
         connection.autocommit = True
     cursor = connection.cursor(cursor_factory=RealDictCursor)
+    # cursor = connection.cursor(cursor_factory=DictCursor)
     return connection, cursor, pool
 
 

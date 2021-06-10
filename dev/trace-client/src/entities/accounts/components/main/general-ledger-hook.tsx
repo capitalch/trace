@@ -112,7 +112,9 @@ function useGeneralLedger() {
         data: [],
         dateFormat: getFromBag('dateFormat'),
         ledgerAccounts: [],
+        isDailySummary: false,
         isMounted: false,
+        isReverseOrder: false,
         showDialog: false,
         // rowCount: 0,
         transactions: [],
@@ -144,6 +146,7 @@ function useGeneralLedger() {
 
 export { useGeneralLedger }
 
+
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
@@ -154,8 +157,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 marginBottom: theme.spacing(1),
                 '& .heading': {
-                    position: 'relative',
-                    top: '-2.5rem',
+                    fontWeight:'bold'
+                    // position: 'relative',
+                    // top: '-2.5rem',
                 },
                 '& .expand': {
                     position: 'relative',
@@ -182,7 +186,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         }
                     }
                 },
+                '& .ledger-summary':{
+                    color: theme.palette.blue.dark,
+                    backgroundColor: '#FFFAFA',
+                    // fontSize:'0.7rem',
+                    fontFamily:'Lato',
+                    fontWeight: 'bold'
+                    // textAlign:'right',
+                }
             },
+
+           
         },
     })
 )

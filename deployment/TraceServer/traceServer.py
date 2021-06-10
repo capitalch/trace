@@ -5,13 +5,14 @@ from flask_scss import Scss
 from werkzeug.exceptions import HTTPException
 # import demjson  # This library understands dirty json escaped with ' or with no escape
 import simplejson as json
+# import demjson as json
 from flask_mail import Mail, Message
 from ariadne.constants import PLAYGROUND_HTML
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
-from flask import Flask, jsonify, request, render_template, send_from_directory, Response, abort, make_response
+from flask import Flask, jsonify, request, render_template, send_from_directory, Response, abort, make_response, redirect
 import codecs
 from datetime import datetime
-
+from json import JSONEncoder
 from allMessages import infoMessages, errorMessages
 from postgres import execSql
 from entities.authentication.sql import allSqls
@@ -23,13 +24,19 @@ from entities.authentication.artifactsHelper import loginHelper
 from loadConfig import cfg
 from downloadHelper import handleDownload
 from util import setMailConfig
-from entities.track.artifacts import trackApp
+from entities.legacy.artifacts import trackApp
+from app import create_app  # , socketio
 
-# app = Flask(__name__, static_folder="../static",
-#             template_folder="../build")
-app = Flask(__name__)
+# import app.socket # This line is necessary to activate socket.py file in app folder
+
+#
+app = Flask(__name__, template_folder="../build")
+# app = create_app()
+# app = Flask(__name__, template_folder="../build")
 app.register_blueprint(trackApp)
-Scss(app, asset_dir='entities/track/assets', static_dir='entities/track/static') # asset folder has .scss files, static folder has .css files. The Scss creates .css files from .scss files
+# asset folder has .scss files, static folder has .css files. The Scss creates .css files from .scss files
+Scss(app, asset_dir='entities/legacy/assets',
+     static_dir='entities/legacy/static')
 CORS(app, expose_headers='SELECTION-CRITERIA')
 
 setMailConfig(app)
@@ -77,7 +84,7 @@ def contextValue(request):
             # auth is like 'Bearer xxxxx'. the xxxxx is token. You need to take out the last word
             auth = request.headers.get('AUTHORIZATION')
             selectionCriteria = request.headers.get('SELECTION-CRITERIA')
-            print('selectionCriteria:', selectionCriteria)
+            # print('selectionCriteria:', selectionCriteria)
             if selectionCriteria is not None:
                 temp = selectionCriteria.split(':')
                 buCode = temp[0] if temp[0] != '' else None
@@ -99,12 +106,14 @@ def contextValue(request):
 
 # gets dbName from TraceEntry database against clientId and entityName
 
+
 def setDbName(info, entityName):
     clientId = info.context['clientId']
     sqlString = allSqls['get_dbName']
     result = execSql(DB_NAME, sqlString, {
                      'clientId': clientId, 'entityName': entityName}, isMultipleRows=False)
     info.context['dbName'] = result['dbName']
+
 
 @query.field("accounts")
 def resolve_accounts_query(parent, info):
@@ -200,6 +209,14 @@ def graphql_playgroud():
     return PLAYGROUND_HTML, 200
 
 
+# def enco(obj): return (
+#     obj.isoformat()
+#     if isinstance(obj, datetime.datetime)
+#     or isinstance(obj, datetime.date)
+#     else None
+# )
+
+
 @app.route("/graphql", methods=["POST"])
 def graphql_server():
     # GraphQL queries are always sent as POST
@@ -214,7 +231,11 @@ def graphql_server():
         debug=app.debug
     )
     status_code = 200 if success else 400  # This is python ternary operator
-    return jsonify(result), status_code
+    res = json.dumps(result, default=str)
+    
+    # return jsonify(result), status_code
+    return res, status_code
+    # return result, status_code
 
 
 @app.route("/test", methods=["GET"])
@@ -228,9 +249,11 @@ def downloadFile():
     return handleDownload(payload, request.json)
 
 
-# @app.route('/')
-# def serveStatic():
-#     return render_template('index.html')
+@app.route('/')
+def index():
+    return render_template('index.html')
+    # In cloudjiffy server in wsgi.conf 'Alias /index /var/www/webroot/ROOT/build/index.html'. The alias statement does not take blank hence redirect from Flask is done.
+    return redirect('/index')
 
 
 # @app.route("/manifest.json")
@@ -255,5 +278,9 @@ def handle_error(e):
         code = e.code
     return (jsonify(error=str(e)), code)
 
+
+# Following lines are not executed in cloud. Because __name__ is not '__main__'
 if __name__ == '__main__':
-    app.run(debug=True, threaded=True)
+    # app.run(debug=True, threaded=True)
+    # socketio.run(app)
+    pass

@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../shared-elements-hook'
 import { TrackSaleSms } from './track-sale-sms'
+import {ImportSericeSale} from './import-service-sale'
 
 function useMainBody() {
     const [, setRefresh] = useState({})
     const {useIbuki } = useSharedElements()
     const meta = useRef({
         isMounted: false,
-        selectedComponent: <>Nothing</>,
+        selectedComponent: <></>,
     })
     const { filterOn } = useIbuki()
 
@@ -28,8 +29,8 @@ function useMainBody() {
 
     const selectLogic: any = {
         trackSaleSms: <TrackSaleSms />,
-        trackSaleImport: <>Track sale import</>,
-        serviceSaleImport: <>Service sale import</>,
+        importTrackSale: <>Track sale import</>,
+        importServiceSale: <ImportSericeSale />,
     }
 
     return { meta, setRefresh }

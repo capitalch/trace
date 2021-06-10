@@ -1,45 +1,5 @@
 a4: 297 X 210 MM = 3508 X 2480 px
 
-set search_path to demounit1;
-with cte1 as (
-	select (CASE WHEN "dc" = 'D' then "amount" else -"amount" end) "amount"
-		from "AccOpBal"
-			where "branchId" = 1
-				and "finYearId" = 2021
-				and "accId" = 118
-),
-cte2 as (
-	select "tranDate", SUM(CASE WHEN "dc" = 'D' then "amount" else 0 end) as "debits",
-		SUM(CASE WHEN "dc" = 'C' then "amount" else 0 end) as "credits"
-		from "TranH" h
-			join "TranD" d
-				on h."id" = d."tranHeaderId"
-		where "branchId" = 1
-				and "finYearId" = 2021
-				and "accId" = 118
-		GROUP BY "tranDate"
-			ORDER BY "tranDate"
-	
-),
-cte3 as (
-	select "tranDate", "debits", "credits",
-		SUM("debits" - "credits") OVER (ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) "clos"
-			from cte2
-),
-cte4 as (
-	select "tranDate", LAG("clos", 1, '0') OVER (ORDER by "tranDate") "open",
-		"debits", "credits", "clos"
-			from cte3
-),
-cte5 as (
-	select "tranDate", "open" + (select "amount" from cte1) "opening", 
-	"debits", "credits", 
-	"clos" +  (select "amount" from cte1) "closing"
-		from cte4 c
-)
-
-select * from cte5 order by "tranDate" DESC
-
 ## Awe some react components libraries
 1. https://github.com/brillout/awesome-react-components
 2. Followed https://medium.com/@devesu/how-to-build-a-react-based-electron-app-d0f27413f17f
@@ -60,45 +20,32 @@ select * from cte5 order by "tranDate" DESC
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
-# Breakup for SMS gateway for Track+ code named Track SMS
-## POC's
-1. Python Flask send SMS through gateway
-2. Create PDF invoice from JSON data
-3. Python create hash
-4. Read url parameter
-5. Assemble complete sale data to create a PDF bill, which is also printable to a4 sheet
+# logic for Service+ legacy app migration to Trace
 
-## Functionality
-1. Refresh shows all sale bills cash / credit for today in tabular form
-2. Send SMS throws SMS for selected bills
-
-## Technical work
-1. Define container; Node and Window
-2. Get today's sale complete info in tabular form selectable
-3. Create PG Database at server to store sale bills (id, hash, jData, dateTime )
-4. On click: a) Hash sale info, b) Save data in database c) send SMS to mobile no with url having hash d) Flask api reads the hash; Obtains data from database; creates online PDF bill from info and sends it back to caller. No auth required. Hash is part of url parameter.
 
 # Working on
 1. Purchase sale clickaway
-2. ODF master documentation
+2. react-widgets library cannot be upgraded to new versions. Consider discarding it
 3. Flask sockets
 4. Master reports
 5. RXJS 7.1 incorporation
-6. Purchase default date should be null
+6. 
 7. Sale bill to email and sms
 8. Migration of Track+ and service+ sale
+9. 
+10. Provide a way to come out of app in mobile. Presently there is no way
 
 # Pending
 ## Functionality
 1.01 Service+ integration with pull sales info into Trace
-1.001 Track+ electronic bill, send through SMS
+1.001 Try out gzip in apache server, which is not working at present
 1.002 The view in many places show multiple lines. Desirable to have single line.
-1.003 Daily balance for cash book
-1.004 Purchase: default date should be null
+1.003 
+1.004 
 1.005 Master report mechanism to serve several reports in one page
 1.006 serial number error in purchases
 1.007 RXJS 7.x not working with ibuki
-1.008 Documentation odf format; organize
+1.008 
 1.02 Auto subledger create bill
 1.03 Purchase invoice mismatch allow saving
 1.04 GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ.
@@ -149,12 +96,27 @@ select * from cte5 order by "tranDate" DESC
 1.01 In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank.
 2.00 When focus change in purchase, sales waiting occurs without data changed. Check the logic of data changed. There is confusion. This is happening because onBlur event does not propagate the events. Try out clickAway event in place of onBlur event instead.
 2.01 Security is open. Needs to fix it.
+2.02 Change password not working
+2.03 In Journals Debits not equals credits being possible
 
 ## Maintainance
 1.30 Github release management
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 16-05-2021
+1.
+
+# 12-05-2021 - 25-05-2021
+Did not work in Trace
+
+# 11-05-2021
+1. Purchase default date should be null
+2. In mobile phones the top headings are overlapping
+
+# 09-05-2021 - 10-05-2021
+1. Daily balance for cash book in general ledger
 
 # 27-04-2021 - 08-05-2021
 1. Completed Track SMS sending.
@@ -167,6 +129,7 @@ select * from cte5 order by "tranDate" DESC
 8. Track+ SMS gateway for sale bills
 9. PDF invoice through sms
 10. Track+ billing throuh SMS gateway
+11. ODF master documentation
 
 
 # 21-04-2021 - 26-04-2021

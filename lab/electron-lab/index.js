@@ -1,6 +1,6 @@
-const { app, BrowserWindow, Menu } = require("electron");
+const { app, BrowserWindow, Notification, ipcMain } = require("electron");
+const url = require("url");
 const path = require("path");
-const odbc = require("odbc");
 const fs = require("fs");
 
 function createWindow() {
@@ -8,26 +8,47 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      // Following lines are necessary for window.require to work in react-app
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
+  win.loadFile('react-app/build/index.html')
+  win.webContents.openDevTools()
+  // win.loadURL(
+  //   url.format({
+  //     pathname: path.join(__dirname, "react-app/build/index.html"),
+  //     protocol: "file",
+  //     slashes: true,
+  //   })
+  // );
 
-  win.loadFile("react-app/build/index.html");
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools(); // to open dev toools // This way data is sent to renderer / react application
+  win.webContents.on("dom-ready", () => {
+    win.webContents.send("MAIN-EVENT", "jkljlkjljljkl");
+  });
+  try {
+    let filePath;
+    if (fs.existsSync("config.json")) {
+      filePath = path.resolve("config.json");
+    } else {
+      filePath = path.join(__dirname, "..", "config.json");
+      // console.log("app path:", app.getAppPath());
+      // console.log("dirname:", __dirname);
+    }
+    console.log("filePath:", filePath);
+    const temp = fs.readFileSync(filePath, { encoding: "utf8" });
+    const config = JSON.parse(temp);
+    console.log(config.name);
+  } catch (e) {
+    console.log(e.message);
+  }
 }
 
-app
-  .whenReady()
-  .then(createWindow)
-  .catch((e) => console.log(e));
-
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+ipcMain.on("TEST-EVENT", (e, a) => {
+  console.log("Args from renderer", a);
 });
+
+app.on("ready", createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
@@ -35,41 +56,8 @@ app.on("window-all-closed", () => {
   }
 });
 
-const template = [
-  {
-    label: "Custom",
-    submenu: [
-      {
-        label: "Export inventory",
-        click: () => odbcConnect(),
-      },
-    ],
-  },
-];
-const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
-
-async function odbcConnect() {
-  const connString = "DSN=Acc";
-  try {
-    fs.readFile(
-      path.join(__dirname, "sql", "create-temp-files.sql"),
-      async (error, data) => {
-        if (error) {
-          throw error;
-        }
-        try {
-          const conn = await odbc.connect(connString);
-          console.log("Successfully connected");
-        } catch(e){
-            console.log(e.message)
-        }
-        // const ret = await conn.query(data.toString())
-      }
-    );
-
-    //   console.log(data)
-  } catch (e) {
-    console.log(e);
+app.on("activate", () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow();
   }
-}
+});

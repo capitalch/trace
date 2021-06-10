@@ -25,7 +25,7 @@ import { manageEntitiesState } from '../../../../common-utils/esm'
 import _ from 'lodash'
 
 function TrialBalance() {
-    const { emit } = usingIbuki()
+    const { emit, filterOn } = usingIbuki()
     const [, setRefresh] = useState({})
     const { toDecimalFormat } = utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
@@ -59,11 +59,8 @@ function TrialBalance() {
     const { queryGraphql } = graphqlService()
     const classes = useStyles({ meta: meta })
     const { traceGlobalSearch } = useTraceMaterialComponents()
-    const {
-        getCurrentMediaSize,
-        isMediumSizeUp,
-        getCurrentWindowSize,
-    } = useTraceGlobal()
+    const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
+        useTraceGlobal()
 
     const currentMediaSize: string = getCurrentMediaSize()
 
@@ -96,9 +93,9 @@ function TrialBalance() {
         return footer
     }
 
-    async function getData() {
+    async function getData(isBusyIndicator = true) {
         try {
-            emit('SHOW-LOADING-INDICATOR', true)
+            isBusyIndicator && emit('SHOW-LOADING-INDICATOR', true)
             const q = queries['genericQueryBuilder']({
                 queryName: 'trialBalance',
             })
@@ -108,7 +105,7 @@ function TrialBalance() {
 
             meta.current.footer = getFooter(meta.current.data)
             meta.current.allKeys = pre?.allKeys
-            emit('SHOW-LOADING-INDICATOR', false)
+
             meta.current.isMounted && setRefresh({})
         } catch (error) {
             emit('SHOW-MESSAGE', {
@@ -116,14 +113,24 @@ function TrialBalance() {
                 severity: 'error',
                 duration: null,
             })
+        } finally {
+            emit('SHOW-LOADING-INDICATOR', false)
         }
     }
 
     useEffect(() => {
         meta.current.isMounted = true
+        const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
+            () => {
+                setTimeout(() => {
+                    getData(false)
+                }, 1000)
+            }
+        )
         getData()
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -221,7 +228,7 @@ function TrialBalance() {
                 <Box component="span" className={classes.expandRefresh}>
                     <Span style={{ marginTop: '-1px' }}>Expand</Span>
                     <InputSwitch
-                        checked = {getFromBag('trialBalExpandAll') || false}
+                        checked={getFromBag('trialBalExpandAll') || false}
                         style={{ float: 'right', marginRight: '0.5rem' }}
                         onChange={(e) => {
                             const val = e.target.value
@@ -280,17 +287,17 @@ function TrialBalance() {
                         <TDiv align="right">
                             {meta.current.footer.opening >= 0
                                 ? amountTemplate({
-                                    amt: meta.current.footer.opening,
-                                    dc: 'D',
-                                    isOpeningClosing: true,
-                                    accLeaf: 'Y',
-                                })
+                                      amt: meta.current.footer.opening,
+                                      dc: 'D',
+                                      isOpeningClosing: true,
+                                      accLeaf: 'Y',
+                                  })
                                 : amountTemplate({
-                                    amt: meta.current.footer.opening,
-                                    dc: 'C',
-                                    isOpeningClosing: true,
-                                    accLeaf: 'Y',
-                                })}
+                                      amt: meta.current.footer.opening,
+                                      dc: 'C',
+                                      isOpeningClosing: true,
+                                      accLeaf: 'Y',
+                                  })}
                         </TDiv>
                     }
                     body={(node: any) =>
@@ -345,17 +352,17 @@ function TrialBalance() {
                         <TDiv align="right">
                             {meta.current.footer.closing >= 0
                                 ? amountTemplate({
-                                    amt: meta.current.footer.closing,
-                                    dc: 'D',
-                                    isOpeningClosing: true,
-                                    accLeaf: 'Y',
-                                })
+                                      amt: meta.current.footer.closing,
+                                      dc: 'D',
+                                      isOpeningClosing: true,
+                                      accLeaf: 'Y',
+                                  })
                                 : amountTemplate({
-                                    amt: meta.current.footer.closing,
-                                    dc: 'C',
-                                    isOpeningClosing: true,
-                                    accLeaf: 'Y',
-                                })}
+                                      amt: meta.current.footer.closing,
+                                      dc: 'C',
+                                      isOpeningClosing: true,
+                                      accLeaf: 'Y',
+                                  })}
                         </TDiv>
                     }
                     body={(node: any) =>

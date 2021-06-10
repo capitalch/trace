@@ -1,4 +1,5 @@
 html {
+    scroll-behavior: smooth;
     body {
         font-size: 16px;
     }
@@ -154,3 +155,19 @@ th.MuiTableCell-root.MuiTableCell-head {
 .MuiToolbar-gutters {
     padding-left: 8px !important;
 }
+
+// .testClass {
+//     color: red;
+//     background-color: yellow;
+// }
+
+//Does alternate grey color
+// body .p-datatable .p-datatable-tbody > tr:nth-child(even) {
+//     background-color: #f9f9f9;
+// }
+
+// In general ledger, daily balace the row of datatable needs to be highlighted. Writing this line of code does some sort of override
+// and allows to change background color of row. If following code is not used then alternate rows are highlighted.
+// .ui-datatable tbody > tr.ui-widget-content.ledger-summary { 
+//     background-color: #808080; /* This is only a placeholder color */
+// }

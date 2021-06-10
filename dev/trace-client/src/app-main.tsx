@@ -15,8 +15,10 @@ import { TraceSubHeader } from './common/trace-subheader'
 import { usingIbuki } from './common-utils/ibuki'
 import messages from './messages.json'
 import {TraceLoadingIndicator} from './common/trace-loading-indicator'
+// import {clientId, socket} from './common-utils/socket'
 
 function AppMain() {
+    // let cId = clientId // just to initialize socket
     const { emit } = usingIbuki()
     const classes = useStyles()
     const [open, setOpen] = useState(false)

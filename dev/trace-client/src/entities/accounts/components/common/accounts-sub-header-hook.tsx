@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { initCode } from '../../init-code'
+// import { changeRoom } from '../../../../common-utils/socket'
 
 function useAccountsSubHeader() {
     const [, setRefresh] = useState({})
@@ -242,7 +243,7 @@ function useAccountsSubHeader() {
             <List component="ul">{listItems}</List>
         )
         meta.current.isMounted && setRefresh({})
-        
+
         function handleListItemClick(item: any) {
             const finYearId = item.id
             if (finYearObject?.finYearId !== finYearId) {
@@ -265,7 +266,6 @@ function useAccountsSubHeader() {
                 meta.current.isMounted && setRefresh({})
             }
         }
-        
     }
 
     async function handleSelectBu() {
@@ -330,6 +330,7 @@ function useAccountsSubHeader() {
                 //when buCode is changed then set the default branch id which is 1
                 setLastBuCodeFinYearIdBranchId(1) // to restart init-code to load bu, finYear and branch in trace-subheader. The finYear and branch depend on bu.
                 // now set permissions for the selected bu and user
+
                 const buObject = buArray.find(
                     (x: any) => x.buCode === item.buCode
                 )
@@ -339,6 +340,7 @@ function useAccountsSubHeader() {
                 getLoginData().permissions = permissions
                 meta.current.showDialog = false
                 meta.current.isMounted && setRefresh({})
+                // changeRoom()
             }
         }
     }
@@ -361,9 +363,8 @@ function useAccountsSubHeader() {
                 const endDate = ret?.endDate
                 if (startDate && endDate) {
                     finYearObject.finYearId = prevFinYearId
-                    finYearObject.startDate = moment(startDate).format(
-                        dateFormat
-                    )
+                    finYearObject.startDate =
+                        moment(startDate).format(dateFormat)
                     finYearObject.endDate = moment(endDate).format(dateFormat)
                     setInBag('finYearObject', finYearObject)
                     emit('LOAD-SUBHEADER-JUST-REFRESH', '')

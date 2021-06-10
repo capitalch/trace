@@ -153,6 +153,32 @@ allSqls = {
                 order by c."accClass" DESC, a."accName" ASC, a."id" ASC
     ''',
 
+    'get_auto_ref_no': '''        
+        with cte1 as (
+            select "tranCode" 
+                from "TranTypeM"
+                    where "id" = %(tranTypeId)s
+        ),
+        cte2 as (
+            select "branchCode"
+                from "BranchM"
+                    where "id" = %(branchId)s
+        ),
+        cte3 as (
+            select "lastNo"
+                    from "TranCounter"
+                        where "finYearId" = %(finYearId)s and
+                                    "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s
+        ),
+        cte4 as (
+            select (select "branchCode" from cte2) || '\\' || (select "tranCode" from cte1) || '\\' || (select "lastNo" from cte3) ||
+            '\\' || (select 2020)
+                as "autoRefNo"
+        )
+
+        select (select "autoRefNo" from cte4) as "autoRefNo", (select "lastNo" from cte3) as "lastNo"
+    ''',
+
     'get_balanceSheetProfitLoss': ''' -- Fin
         with cte1 as (
             with RECURSIVE cte as (
@@ -1261,6 +1287,13 @@ allSqls = {
                 values (%(accId)s, %(finYearId)s, %(amount)s, %(dc)s, %(branchId)s)
     ''',
 
+    'insert_last_no': '''
+        insert into "TranCounter" ("finYearId", "branchId", "tranTypeId", "lastNo")
+                select  %(finYearId)s, %(branchId)s, %(tranTypeId)s, 1
+                    where not exists (select 1 from "TranCounter" where "branchId" = %(branchId)s 
+                        and "tranTypeId" = %(tranTypeId)s and "finYearId" = %(finYearId)s);
+    ''',
+
     "insert_product_block": '''
         do $$
             DECLARE lastNo INT;
@@ -1272,6 +1305,14 @@ allSqls = {
                     set "intValue" = lastNo
                         where "key" = 'lastProductCode';
         end $$;
+    ''',
+
+    "is_exist_user_ref_no": '''
+        select 1 as "out" from "TranH"
+	        where "branchId" = %(branchId)s and
+            "tranTypeId" = %(tranTypeId)s and
+            "finYearId" = %(finYearId)s and
+            "userRefNo" = %(userRefNo)s
     ''',
 
     "transfer_closingBalances": '''

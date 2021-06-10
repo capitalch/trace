@@ -16,6 +16,7 @@ from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsL
 from .artifactsHelper import genericUpdateMasterDetailsHelper, accountsUpdateOpBalHelper, allCategoriesHelper, transferClosingBalancesHelper
 from .artifactsHelper import searchProductHelper
 import util
+# from app import socketio
 
 DB_NAME = 'trace'
 entityName = 'accounts'
@@ -54,6 +55,7 @@ def resolve_accounts_opBal(parent, info):
         info.context)
     return accountsOpBalHelper(dbName, buCode, finYearId, branchId)
 
+
 @accountsMutation.field("accountsUpdateOpBal")
 def resolve_accountsUpdateOpBal(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
@@ -64,17 +66,20 @@ def resolve_accountsUpdateOpBal(parent, info, value):
     accountsUpdateOpBalHelper(rows, dbName, buCode, finYearId, branchId)
     return 1
 
+
 @accountsQuery.field("allCategories")
 def resolve_categories(parent, info):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     return allCategoriesHelper(dbName, buCode)
 
+
 @accountsQuery.field("balanceSheetProfitLoss")
 def resolve_balance_sheet_profit_loss(parent, info):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     return balanceSheetProfitLossHelper(dbName, buCode, finYearId, branchId)
+
 
 @accountsMutation.field("genericUpdateMaster")
 def resolve_generic_update_master(parent, info, value):
@@ -91,6 +96,7 @@ def resolve_generic_update_master(parent, info, value):
 
     id = execGenericUpdateMaster(dbName, valueDict, buCode)
     return id
+
 
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
@@ -114,8 +120,10 @@ def resolve_generic_update_master_details(parent, info, value):
             processData(item)
     else:
         processData(valueData)
-
+    from app.socket import voucherUpdatedSocket
+    voucherUpdatedSocket(info.context)
     return True
+
 
 @accountsQuery.field("genericView")
 def resolve_generic_view(parent, info, value):
@@ -131,6 +139,7 @@ def resolve_generic_view(parent, info, value):
     valueDict['args']['branchId'] = branchId
     valueDict['isMultipleRows'] = valueDict.get('isMultipleRows', False)
     return genericView(dbName, sqlString, valueDict, buCode)
+
 
 @accountsQuery.field("searchProduct")
 def resolve_search_product(parent, info, value):

@@ -89,11 +89,13 @@ function GeneralLedger() {
         useGeneric,
     } = useSharedElements()
 
-    const { fetchData, getLedgerColumns, LedgerDataTable } = getGeneralLedger(meta)
+    const { fetchData, getLedgerColumns, LedgerDataTable } = getGeneralLedger(
+        meta
+    )
     return (
         <div className={classes.content}>
             <Box className="header">
-                <Typography variant="h6" className="heading" component="span">
+                <Typography variant="subtitle1" className="heading" component="span">
                     {meta.current.headerConfig.title}
                 </Typography>
                 <div className="select-ledger">
@@ -122,17 +124,35 @@ function GeneralLedger() {
                         <SyncIcon></SyncIcon>
                     </IconButton>
                 </div>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={meta.current.isDailySummary}
+                            onChange={(e: any) => {
+                                meta.current.isDailySummary = e.target.checked
+                                handleFetchData()
+                            }}
+                        />
+                    }
+                    label="Daily summary"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={meta.current.isReverseOrder}
+                            onChange={(e: any) => {
+                                meta.current.isReverseOrder = e.target.checked
+                                handleFetchData()
+                                
+                            }}
+                        />
+                    }
+                    label="Reverse order"
+                />
+
                 {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
             </Box>
-            <LedgerDataTable isScrollable={true} className='data-table' />
-            {/* <DataTable
-                className='data-table'
-                rowHover={true}
-                scrollable={true}
-                scrollHeight="calc(100vh - 24rem)"
-                value={meta.current.transactions}>
-                {getLedgerColumns()}
-            </DataTable> */}
+            <LedgerDataTable isScrollable={true} className="data-table" />
 
             <PrimeDialog
                 header={accountsMessages.selectAccountHeader}

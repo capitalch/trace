@@ -1,21 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSharedElements } from '../shared-elements-hook'
-import {
-    makeStyles,
-    Theme,
-    createStyles,
-    // DialogContent,
-} from '@material-ui/core'
+import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSqlAnywhere } from '../utils/sql-anywhere-hook'
 import axios from 'axios'
 
 function useTrackSaleSms() {
     const [, setRefresh] = useState({})
-    // let conn: any = {}
     const {
         _,
+        config,
         Column,
-        // confirm,
         isElectron,
         isValidMobile,
         messages,
@@ -28,7 +22,7 @@ function useTrackSaleSms() {
     const meta: any = useRef({
         globalFilter: '',
         isMounted: false,
-        saleData: [], //mockSaleData,
+        saleData: [],
         selectedDate: moment().format('YYYY-MM-DD'),
         selectedRow: {},
         tableHeader: 'Sale data',
@@ -42,20 +36,23 @@ function useTrackSaleSms() {
         }
     }, [])
 
-    const { execSql } = useSqlAnywhere()
+    const dbName: string = config.track.database
+    const { execSql } = useSqlAnywhere(dbName)
 
     async function handleRefresh() {
         meta.current.selectedRow = {}
         try {
             emit('SHOW-LOADING-INDICATOR', true)
+            
             if (isElectron()) {
-                const saleData = await execSql('track-sale-sms', [
+                const saleData:any = await execSql('track-sale-sms', [
                     meta.current.selectedDate,
                 ])
                 meta.current.saleData = saleData.map((x: any) => x) // Just to clean the array
             } else {
                 meta.current.saleData = mockSaleData
             }
+            console.log(meta.current.saleData)
             emit('SHOW-LOADING-INDICATOR', false)
             meta.current.isMounted && setRefresh({})
         } catch (e) {
@@ -66,12 +63,11 @@ function useTrackSaleSms() {
         }
     }
 
+
     async function handleSendSms() {
-        const win: any = window
-        const config = win.config
-        const currentEnv = process.env.NODE_ENV
+        const currentEnv = config.env // process.env.NODE_ENV
         const baseUrl = config[currentEnv]
-        const saveBillUrl = baseUrl.concat('/', config['saveBillUrl'])
+        const saveBillUrl = baseUrl.concat('/', config['track']['saveBillUrl'])
         try {
             emit('SHOW-LOADING-INDICATOR', true)
             const selectedRow = meta.current.selectedRow
@@ -100,10 +96,10 @@ function useTrackSaleSms() {
 
         async function getJsonPayload(row: any) {
             try {
-                const companyInf = await execSql('track-get-company-info', [])
-                const companyInfo = companyInf.map((x: any) => x)[0] //convert array output to object
+                const companyInf:any = await execSql('track-get-company-info', [])
+                const companyInfo: any = companyInf.map((x: any) => x)[0] //convert array output to object
                 const billMemoId = row.bill_memo_id
-                const produc = await execSql('track-get-product-details', [
+                const produc:any = await execSql('track-get-product-details', [
                     billMemoId,
                 ])
                 const products = produc.map((x: any) => x) // needed for cleanup
@@ -146,7 +142,7 @@ function useTrackSaleSms() {
                 key={incr()}
                 // selectionMode="single"
                 headerStyle={{ width: '4em' }}
-                header= {'Sl'}
+                header={'Sl'}
                 field={'id'}
                 // className="data-table-footer"
             />,

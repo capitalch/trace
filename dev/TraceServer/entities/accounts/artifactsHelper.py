@@ -1,5 +1,6 @@
 import pandas as pd
 import psycopg2
+from psycopg2.extras import RealDictCursor
 import numpy as np
 import simplejson as json
 from decimal import Decimal
@@ -9,9 +10,7 @@ from .sql import allSqls
 from postgres import execSql, execSqls, getPool
 from postgresHelper import execSqlObject
 from util import getErrorMessage, getschemaSearchPath
-
-DB_NAME = 'trace'
-
+# from app import socketio, store
 
 def formatTree(rawData):
     # formats in form of tree consumable by react.js
@@ -47,6 +46,7 @@ def formatTree(rawData):
         ret.append(the)
     return ret
 
+
 def accountsMasterGroupsLedgersHelper(dbName, buCode):
     sqlString = allSqls['getJson_accountsMaster_groups_ledgers']
     allKeys = []
@@ -58,6 +58,7 @@ def accountsMasterGroupsLedgersHelper(dbName, buCode):
         jsonResult['accountsMaster'])
     jsonResult['allKeys'] = allKeys
     return jsonResult
+
 
 def accountsOpBalHelper(dbName, buCode, finYearId, branchId):
     sqlString = allSqls['get_opBal']
@@ -99,24 +100,24 @@ def accountsUpdateOpBalHelper(rows, dbName, buCode, finYearId, branchId):
 
     execSqls(dbName, sqlTupleListWithArgs, buCode)
 
+
 def allCategoriesHelper(dbName, buCode):
     sqlString = allSqls['getJson_categories']
     allKeys = []
     jsonResult = execSql(dbName, isMultipleRows=False,
                          sqlString=sqlString, buCode=buCode)['jsonResult']
-    
-    # categories = jsonResult.get('categories', [])
 
     if(jsonResult['categories']):
         for item in jsonResult['categories']:
             allKeys.append(item['id'])
-    
+
     jsonResult['categories'] = [] if jsonResult['categories'] is None else formatTree(
         jsonResult['categories'])
-    
+
     jsonResult['allKeys'] = allKeys
     return jsonResult
-    
+
+
 def balanceSheetProfitLossHelper(dbName, buCode, finYearId, branchId):
     sqlString = allSqls['get_balanceSheetProfitLoss']
     allKeys = []
@@ -126,14 +127,11 @@ def balanceSheetProfitLossHelper(dbName, buCode, finYearId, branchId):
     if(jsonResult['balanceSheetProfitLoss'] is not None):
         for item in jsonResult['balanceSheetProfitLoss']:
             allKeys.append(item['id'])
-        jsonResult['balanceSheetProfitLoss'] = formatTree(jsonResult['balanceSheetProfitLoss'])
+        jsonResult['balanceSheetProfitLoss'] = formatTree(
+            jsonResult['balanceSheetProfitLoss'])
         jsonResult['allKeys'] = allKeys
-
-    # jsonResult['balanceSheetProfitLoss'] = None if jsonResult['balanceSheetProfitLoss'] is None else formatTree(
-    #     jsonResult['balanceSheetProfitLoss'])
-
-    # jsonResult['allKeys'] = allKeys
     return jsonResult
+
 
 def doDebitsEqualCredits(sqlObject):
     ret = False
@@ -219,25 +217,70 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, valueDict):
         if connection:
             cursor.close()
             connection.close()
-            print("PostgreSQL connection is closed")
 
 
-def searchProductHelper1(dbName, buCode, valueDict):
-    def createSql():
-        template = allSqls['get_searchProduct']
-        argDict = {}
-        temp = ''
-        for index, item in enumerate(valueDict): # valueDict is a list
-            sqlX = template.replace('arg', f'arg{str(index)}')
-            temp = f'{temp} union {sqlX}'
-            argDict['arg'+str(index)] = item
-    
-        sqlString = temp.replace(' union ','', 1) # remove first occurence of ' union '
-        return sqlString, argDict
-    
-    sqlString, argDict = createSql()
-    result = execSql(dbName, sqlString, args=argDict, isMultipleRows=True, buCode=buCode)
-    return result
+def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, socketId):
+    try:
+        connection = None
+        pool = getPool(dbName)
+        connection = pool.getconn()
+        cursor = connection.cursor()
+        autoRefNo = ''
+        # sid = store.get(socketId, None) # get sid of socket
+
+        branchId = valueDictList[0]["data"][0]["branchId"]
+        tranTypeId = valueDictList[0]["data"][0]["tranTypeId"]
+        finYearId = valueDictList[0]["data"][0]["finYearId"]
+        searchPathSql = getschemaSearchPath(buCode)
+        cursor.execute(searchPathSql)
+        cursor.execute(allSqls['insert_last_no'], {
+            'branchId': branchId,
+            'tranTypeId': tranTypeId,
+            'finYearId': finYearId})
+
+        count = 0
+        
+        for valueDict in valueDictList:
+            userRefNo = valueDict["data"][0]["userRefNo"]
+            cursor.execute(allSqls['is_exist_user_ref_no'], {
+                'branchId': branchId,
+                'tranTypeId': tranTypeId,
+                'finYearId': finYearId,
+                'userRefNo': userRefNo
+            })
+            result = cursor.fetchone()
+
+            # userRefNo already is not there
+            if((result is None) or (result[0] != 1)):
+                cursor.execute(allSqls['get_auto_ref_no'], {
+                    'branchId': branchId,
+                    'tranTypeId': tranTypeId,
+                    'finYearId': finYearId})
+                result = cursor.fetchone()
+
+                autoRefNo = result[0]
+                lastNo = result[1]
+                valueDict["data"][0]["autoRefNo"] = autoRefNo
+
+                execSqlObject(valueDict, cursor, buCode=buCode)
+
+                sqlString = allSqls['update_last_no']
+                cursor.execute(sqlString, {'lastNo': lastNo + 1, 'branchId': branchId,
+                                           'tranTypeId': tranTypeId, 'finYearId': finYearId})
+            count = count+1
+            # socketio.emit('SC-NOTIFY-ROWS-PROCESSED', count, room=sid)
+
+        connection.commit()
+    except (Exception, psycopg2.Error) as error:
+        print("Error with PostgreSQL", error)
+        if connection:
+            connection.rollback()
+        raise Exception(getErrorMessage('generic', error))
+    finally:
+        if connection:
+            cursor.close()
+            connection.close()
+
 
 def searchProductHelper(dbName, buCode, valueDict):
     def createSql():
@@ -250,11 +293,11 @@ def searchProductHelper(dbName, buCode, valueDict):
         some = some.rstrip(",")
         sqlString = template.replace('someArgs', some)
         return sqlString
-       
-    
+
     sqlString = createSql()
     result = execSql(dbName, sqlString, isMultipleRows=True, buCode=buCode)
     return result
+
 
 def transferClosingBalancesHelper(dbName, buCode, finYearId, branchId):
     nextFinYearId = int(finYearId) + 1
@@ -277,6 +320,25 @@ def trialBalanceHelper(dbName, buCode, finYearId, branchId):
         allKeys.append(item['id'])
     dt = formatTree(data)
     return {'trialBal': dt, 'allKeys': allKeys}
+
+# def searchProductHelper1(dbName, buCode, valueDict):
+#     def createSql():
+#         template = allSqls['get_searchProduct']
+#         argDict = {}
+#         temp = ''
+#         for index, item in enumerate(valueDict):  # valueDict is a list
+#             sqlX = template.replace('arg', f'arg{str(index)}')
+#             temp = f'{temp} union {sqlX}'
+#             argDict['arg'+str(index)] = item
+
+#         # remove first occurence of ' union '
+#         sqlString = temp.replace(' union ', '', 1)
+#         return sqlString, argDict
+
+#     sqlString, argDict = createSql()
+#     result = execSql(dbName, sqlString, args=argDict,
+#                      isMultipleRows=True, buCode=buCode)
+#     return result
 
 # 0 means getting a tuple with autoRefNo and corresponding lastNo in tranCounter table
 # autoRefNoTup = getSetAutoRefNo(valueDict, cursor, 0, buCode)

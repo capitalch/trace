@@ -5,6 +5,8 @@ import { utilMethods } from '../../common-utils/util-methods'
 import accountsMessages from './json/accounts-messages.json'
 import datacache from '../../data/datacache.json'
 import { test } from '../accounts/test/functions'
+// import {initSocket} from '../../common-utils/socket'
+// import {clientId} from '../../common-utils/socket'
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {
@@ -24,6 +26,7 @@ function initCode() {
         emit('SHOW-LOADING-INDICATOR', true)
         if (buCode) {
             setInBag('buCode', buCode)
+            // const c = clientId
             const branchId = brId || getLoginData().lastUsedBranchId
             await setNowFinYearIdDatesFinYearsBranches(branchId)
         } else {
@@ -67,8 +70,7 @@ function initCode() {
     async function setNowFinYearIdDatesFinYearsBranches(branchId: number) {
         const nowDate = moment().format(isoDateFormat)
         const ret = await execGenericView({
-            sqlKey:
-                'getJson_finYears_branches_nowFinYearIdDates_generalSettings',
+            sqlKey: 'getJson_finYears_branches_nowFinYearIdDates_generalSettings',
             isMultipleRows: false,
             args: {
                 nowDate: nowDate,
@@ -95,7 +97,7 @@ function initCode() {
                 startDate: moment(fObject.startDate).format(dateFormat),
                 endDate: moment(fObject.endDate).format(dateFormat),
                 isoStartDate: fObject.startDate,
-                isoEndDate: fObject.endDate
+                isoEndDate: fObject.endDate,
             }
             setInBag('finYearObject', finYearObject)
             setInBag('finYears', pre.finYears)
@@ -156,7 +158,8 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('LOAD-MAIN-JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-        // testIsInvalidDate()
+        
+        // initSocket() // initializes the socket
     }
 
     return { setLastBuCodeFinYearIdBranchId, execDataCache }
