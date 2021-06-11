@@ -20,7 +20,13 @@ a4: 297 X 210 MM = 3508 X 2480 px
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
-# logic for Service+ legacy app migration to Trace
+# logic for PUB SUB in Sockets
+1. There is one socket server implemented as node.js container.
+2. All the units are either producers or subscribers.
+3. Socket server:
+	a) in Socket.js implement ibuki emit and filterOn
+	b) socket.on('emit'): do the ibuki emit, which pushes the data in observable
+	c) socket.on('filterOn'): do the ibuki filterOn. On subscribe of filterOn do push the data into the socket
 
 
 # Working on

@@ -30,7 +30,7 @@ from app import create_app  # , socketio
 # import app.socket # This line is necessary to activate socket.py file in app folder
 
 #
-app = Flask(__name__, template_folder="../build")
+app = Flask(__name__,  template_folder="../build")
 # app = create_app()
 # app = Flask(__name__, template_folder="../build")
 app.register_blueprint(trackApp)
