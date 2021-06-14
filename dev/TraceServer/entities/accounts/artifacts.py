@@ -121,7 +121,7 @@ def resolve_generic_update_master_details(parent, info, value):
     else:
         processData(valueData)
     from app.socket import voucherUpdatedSocket
-    voucherUpdatedSocket(info.context)
+    # voucherUpdatedSocket(info.context)
     return True
 
 

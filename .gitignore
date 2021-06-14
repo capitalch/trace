@@ -67,3 +67,4 @@ __pycache*/
 build/
 static/
 dist/
+keys/

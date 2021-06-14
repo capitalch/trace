@@ -9,8 +9,6 @@ from urllib.parse import unquote
 from postgresHelper import getSql, processData, execSqlObject
 from util import getErrorMessage, getschemaSearchPath
 from entities.accounts.sql import allSqls
-# from urllib.parse import unquote
-# import demjson as demJson
 
 with open('config.json') as f:
     cfg = json.load(f)
@@ -112,8 +110,7 @@ def execSqls(dbName, sqlTupleListWithArgs, buCode='public'):
         cursor = connection.cursor(cursor_factory=RealDictCursor)
 
         for item in sqlTupleListWithArgs:
-            # list is [('sql1','select ...',args), ('sql2','select ...',args)]
-            # cursor.execute(item[1], item[2]) ; item[1] is sql and item[2] is args
+            # list is [('sql1','select ...',args), ('sql2','select ...',args)]\
             str = f'{searchPathSql};{item[1]}'
             cursor.execute(str, item[2])
             try:
@@ -130,7 +127,6 @@ def execSqls(dbName, sqlTupleListWithArgs, buCode='public'):
         if connection:
             cursor.close()
             connection.close()
-            # print("PostgreSQL connection is closed")
     return out
 
 
@@ -146,18 +142,16 @@ def getConnectionCursor(dbName, autoCommitMode=False):
     if autoCommitMode:
         connection.autocommit = True
     cursor = connection.cursor(cursor_factory=RealDictCursor)
-    # cursor = connection.cursor(cursor_factory=DictCursor)
     return connection, cursor, pool
 
 
 def getPool(dbName):
     if not dbName in poolStore:
-        ref = cfg['baseConnection']
-        # poolStore[dbName] = psycopg2.pool.SimpleConnectionPool(
+        env = cfg['env']
+        ref = cfg[env]['baseConnection']
+        # ref = cfg['baseConnection']
         poolStore[dbName] = psycopg2.pool.ThreadedConnectionPool(
-            1, 500, user=ref['user'], password=ref['password'], host=ref['host'], port=ref['port'], database=dbName)
-        # poolStore[dbName] = psycopg2.pool.SimpleConnectionPool(
-        #     1, 500, user=cfg[dbName]['user'], password=cfg[dbName]['password'], host=cfg[dbName]['host'], port=cfg[dbName]['port'], database=cfg[dbName]['database'])
+            1, 500, user=ref['user'], password=ref['password'], host=ref['host'], port=ref['port'], database=dbName)        
     return poolStore[dbName]
 
 # def doDebitsEqualCredits(sqlObject):
