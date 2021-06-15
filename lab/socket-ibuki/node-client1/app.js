@@ -1,18 +1,21 @@
 const express = require('express')
+const { usingZestClient } = require('./zest-client')
 const PORT = 5001
 const app = express()
+
 app.listen(PORT, function () {
     console.log(`Listening on port ${PORT}`)
 })
+const {initLink, ibukiFilterOn, onReceiveDataFromPoint} = usingZestClient()
 
-const { initSocket } = require('./socket')
-const socket = initSocket('', 'node-client1')
-socket.ibukiFilterOn('REACT-APP-MESSAGE1', (data) => {
-    console.log(data)
+initLink('http://localhost:5000', 'node-client1')
+
+ibukiFilterOn('REACT-APP1-MESSAGE').subscribe((d) => {
+    console.log(d)
 })
 
-socket.onReceiveFromPoint((message, data) => {
-    console.log(message, ' ', data)
+onReceiveDataFromPoint().subscribe((d) => {
+    console.log(d)
 })
 
 // Static files
@@ -24,4 +27,12 @@ app.get('/', (req, res) => {
 
 // socketFilterOn('REACT-APP-MESSAGE1').subscribe((d)=>{
 //     console.log(d)
+// })
+
+// socket.ibukiFilterOn('REACT-APP-MESSAGE1', (data) => {
+//     console.log(data)
+// })
+
+// socket.onReceiveFromPoint((message, data) => {
+//     console.log(message, ' ', data)
 // })

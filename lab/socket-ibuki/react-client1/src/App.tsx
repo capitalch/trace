@@ -1,14 +1,27 @@
 import React, { useEffect, useRef } from 'react'
 import _ from 'lodash'
-import { initSocket } from './utils/socket'
+// import { initSocket } from './utils/socket'
+import { usingZestClient } from './utils/zest-client'
 import './App.scss'
 
 function App() {
+    const {
+        initLink,
+        ibukiEmit,
+        ibukiFilterOn,
+        joinRoom,
+        onReceiveData,
+        onReceiveDataFromPoint,
+        sendToPoint,
+        sendToRoom,
+    } = usingZestClient()
+
     const meta: any = useRef({
-        socket: undefined,
+        link: undefined,
     })
+
     useEffect(() => {
-        meta.current.socket = initSocket()
+        initLink('http://localhost:5000')
     }, [])
 
     return (
@@ -17,23 +30,50 @@ function App() {
             <div className="header">
                 <button
                     onClick={(e) => {
-                        meta.current.socket.ibukiEmit('REACT-APP-MESSAGE1', {
-                            source: 'react-app',
-                            dest: 'node-client2',
-                            arbitraryData: 'hjhhhhhhj',
+                        ibukiEmit('REACT-APP1-MESSAGE', {
+                            source: 'react-app1',
+                            dest: 'Based on subscription',
+                            arbitraryData: 'Hi Ibuki testing',
                         })
                     }}>
-                    Send message1
+                    REACT-APP1-MESSAGE
+                </button>
+                <button
+                    onClick={() => {
+                        sendToRoom(
+                            'REACT-CLIENT1-SEND-TO-ROOM1',
+                            {
+                                a: 'Sending data to room1',
+                                junkData: 'hhh hjhj9090',
+                            },
+                            'room1'
+                        )
+                    }}>
+                    Send to room1
                 </button>
                 <button onClick={handleClickSendToNodeClient1}>
                     Send to node-client1
+                </button>
+                <button
+                    onClick={() => {
+                        sendToPoint(
+                            'POINT-TO-POINT-MESSAGE',
+                            { foo: 'XYZ' },
+                            'pythonClient1'
+                        )
+                    }}>
+                    Send to pythonClient1
                 </button>
             </div>
         </div>
     )
 
     function handleClickSendToNodeClient1() {
-        meta.current.socket.sendToPoint({ rubbish: 'ABCDEFG' }, 'node-client1')
+        sendToPoint(
+            'a-message',
+            { rubbish: 'ABCDEFG' },
+            'node-client1'
+        )
     }
 }
 

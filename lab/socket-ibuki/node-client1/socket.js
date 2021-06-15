@@ -1,15 +1,11 @@
 const io = require('socket.io-client')
-const { fromEvent, lastValueFrom } = require('rxjs')
+const { Subject } = require('rxjs')
 
 let socket
 
-function initSocket(
-    socUrl = 'http://localhost:5000',
-    pointId = '',
-    token = ''
-) {
+function initSocket(socUrl, pointId = '', token = '') {
     const url = socUrl || 'http://localhost:5000'
-    const pId = pointId || newRandomId()
+    const pId = pointId // || newRandomId()
     socket = io(url, {
         query: {
             pointId: pId,
@@ -20,70 +16,82 @@ function initSocket(
         transports: ['websocket'],
     })
 
-    function newRandomId() {
-        return (
-            Math.random().toString(36).substring(2, 5) +
-            '-' +
-            Math.random().toString(36).substring(2, 5)
-        ).toUpperCase()
-    }
-
     socket.ibukiEmit = (message, data) => {
         socket.emit('cs-socket-emit', message, data)
     }
 
-    socket.ibukiFilterOn = (message, f) => {
+    socket.ibukiFilterOn = (message) => {
         socket.emit('cs-socket-filter-on', message)
+        const subject = new Subject()
         socket.on(message, (data) => {
-            f(data)
+            subject.next(data)
         })
+        return subject
     }
 
     socket.joinRoom = (room) => {
-        socket.join(room)
+        // socket.join(room)
+        socket.emit('cs-join-room', room)
     }
 
     socket.on('connect', () => {
         console.log('Connected')
     })
 
-    // socket.onAny((message, data) => {
-    //     console.log('message:', message, 'data:', data)
-    // })
-
-    socket.onReceiveFromPoint = (f) => {
+    socket.onReceiveDataFromPoint = () => {
+        const subject = new Subject()
         socket.on('sc-send-to-point', (message, data, sourcePointId) => {
-            f(message, data, sourcePointId)
+            subject.next({ message, data, sourcePointId })
         })
+        return subject
+    }
+
+    socket.onReceiveData = () => {
+        const subject = new Subject()
+        socket.on('sc-send', (message, data) => {
+            subject.next({message, data})
+        })
+        return subject
+    }
+
+    socket.onReceiveDataFromPoint = () => {
+        const subject = new Subject()
+        socket.on(
+            'sc-send-to-point',
+            (message, data, sourcePointId) => {
+                subject.next({ message, data, sourcePointId })
+            }
+        )
+        return subject
+    }
+
+    socket.on('error', (message) => {
+        console.log(message)
+    })
+
+    socket.sendToPoint = (message, data, point) => {
+        socket.emit('cs-send-to-point', message, data, point)
     }
 
     socket.sendToRoom = (message, data, room) => {
         socket.emit('cs-send-to-room', message, data, room)
     }
 
-    socket.onReceiveInRoom = (f) => {
-        socket.on('sc-send-to-room', (message, data) => {
-            f(message, data)
-        })
-    }
-
-    // socket.onReceiveFromPointWithReturn = (returnData, f) => {
-    //     socket.on('sc-send-to-point-with-return', (data, sourcePoint) => {
-    //         f(data)
-    //         socket.emit('cs-send-to-point', returnData, sourcePoint)
-    //     })
-    // }
-
-    // socket.on('sc-send-to-point', (data) => {
-    //     console.log(data)
-    // })
-
-    socket.on('error', (message) => {
-        console.log(message)
-    })
-
     return socket
 }
+
+module.exports = { initSocket }
+
+// socket.onReceiveFromPointWithReturn = (returnData, f) => {
+//     socket.on('sc-send-to-point-with-return', (data, sourcePoint) => {
+//         f(data)
+//         socket.emit('cs-send-to-point', returnData, sourcePoint)
+//     })
+// }
+
+// socket.on('sc-send-to-point', (data) => {
+//     console.log(data)
+// })
 
 // function socketFilterOn(message, f) {
 //     socket.emit('cs-socket-filter-on', message)
@@ -91,8 +99,6 @@ function initSocket(
 //         f(data)
 //     })
 // }
-
-module.exports = { initSocket } //, socketEmit, socketFilterOn }
 
 // function socketEmit(message, data) {
 //     socket.emit('cs-socket-emit', message, data)
@@ -118,3 +124,33 @@ module.exports = { initSocket } //, socketEmit, socketFilterOn }
 //     reconnection: true,
 //     transports: ['websocket'],
 // })
+
+// socket.onAny((message, data) => {
+//     console.log('message:', message, 'data:', data)
+// })
+
+// socket.onReceiveFromPoint = (f) => {
+//     socket.on('sc-send-to-point', (message, data, sourcePointId) => {
+//         f(message, data, sourcePointId)
+//     })
+// }
+// socket.ibukiFilterOn = (message, f) => {
+//     socket.emit('cs-socket-filter-on', message)
+//     socket.on(message, (data) => {
+//         f(data)
+//     })
+// }
+
+// socket.onReceiveInRoom = (f) => {
+//     socket.on('sc-send-to-room', (message, data) => {
+//         f(message, data)
+//     })
+// }
+
+// function newRandomId() {
+//     return (
+//         Math.random().toString(36).substring(2, 5) +
+//         '-' +
+//         Math.random().toString(36).substring(2, 5)
+//     ).toUpperCase()
+// }

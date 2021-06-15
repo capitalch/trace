@@ -1,29 +1,50 @@
 import React, { useEffect, useRef } from 'react'
-import { initSocket } from './utils/socket'
+import { usingZestClient } from './utils/zest-client'
 
 import './App.scss'
 
 function App() {
-    const meta: any = useRef({
-        socket: undefined,
-    })
+    const {
+        initLink,
+        ibukiEmit,
+        ibukiFilterOn,
+        joinRoom,
+        onReceiveData,
+        onReceiveDataFromPoint,
+        sendToPoint,
+        sendToRoom,
+    } = usingZestClient()
+
     useEffect(() => {
-        meta.current.socket = initSocket()
+        initLink('http://localhost:5000')
+        ibukiFilterOn('REACT-APP1-MESSAGE')
+            .subscribe((d: any) => {
+                console.log(d)
+            })
+        onReceiveData().subscribe((d: any) => {
+            console.log(d)
+        })
     }, [])
 
     return (
         <div className="title">
-            <div>React client 1</div>
+            <div>React client 3</div>
             <div className="header">
                 <button
                     onClick={(e) => {
-                        meta.current.socket.ibukiEmit('REACT-APP-MESSAGE1', {
+                        ibukiEmit('REACT-APP-MESSAGE1', {
                             source: 'react-app',
                             dest: 'node-client2',
                             arbitraryData: 'hjhhhhhhj',
                         })
                     }}>
                     Send message1
+                </button>
+                <button
+                    onClick={() => {
+                        joinRoom('room1')
+                    }}>
+                    Join room1
                 </button>
             </div>
         </div>
