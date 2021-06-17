@@ -1,6 +1,5 @@
 import urlJoin from 'url-join'
 import axios from 'axios'
-// import config from '../config.json'
 import moment from 'moment'
 import { manageEntitiesState } from './esm'
 
@@ -24,13 +23,32 @@ function ajaxService() {
     }
 
     function getUrl(endPoint: string) {
+        let ur
         const win: any = window
         const config = win.config
         const env: any = process.env.NODE_ENV
-        const graphql: any = config.graphql
-        const url = urlJoin(graphql[env], endPoint)
+        if (env === 'development') {
+            ur = config.graphql[env]
+        } else {
+            ur = window.location.href
+        }
+        // const graphql: any = config.graphql
+        // const url = urlJoin(graphql[env], graphql.endPoint)
+        const url = urlJoin(ur, endPoint)
         return url
     }
+
+    // function getUrl(endPoint: string) {
+    //     const environment = getFromBag('environment')
+    //     const ur = environment['url']
+    //     const url = urlJoin(ur, endPoint)
+    //     // const win: any = window
+    //     // const config = win.config
+    //     // const env: any = process.env.NODE_ENV
+    //     // const graphql: any = config.graphql
+    //     // const url = urlJoin(graphql[env], endPoint)
+    //     return url
+    // }
 
     async function httpGet(endPoint: string) {
         const url = getUrl(endPoint)
@@ -67,7 +85,9 @@ function ajaxService() {
         const itemName = item?.name || ''
         const ext = item?.fileFormat || 'json'
         const currentDateTime = moment().format('YYYY-MM-DD-HHmmSSS')
-        const dateRange = item.startDate ? item.startDate.concat('-to-', item.endDate): ''
+        const dateRange = item.startDate
+            ? item.startDate.concat('-to-', item.endDate)
+            : ''
         const fileName = itemName.concat(
             '-',
             dateRange,

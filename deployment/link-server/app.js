@@ -1,8 +1,8 @@
 const socket = require('socket.io')
 const express = require('express')
-const PORT = 5000
+const PORT = 5001
 const app = express()
-const {usingZestServer} = require('./zest-server')
+const {startLinkServer} = require('./link-server')
 server = app.listen(PORT, function () {
     console.log(`Listening on port ${PORT}`)
 })
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 })
 
 const io = socket(server)
-usingZestServer(io)
+startLinkServer(io)
 
 app.use((err, req, res, next) => {
     if(!(res.headersSent)){

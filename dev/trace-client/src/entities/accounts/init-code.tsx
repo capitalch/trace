@@ -4,19 +4,21 @@ import { manageEntitiesState } from '../../common-utils/esm'
 import { utilMethods } from '../../common-utils/util-methods'
 import accountsMessages from './json/accounts-messages.json'
 import datacache from '../../data/datacache.json'
-import { test } from '../accounts/test/functions'
-// import {initSocket} from '../../common-utils/socket'
-// import {clientId} from '../../common-utils/socket'
+import queries from './artifacts/graphql-queries-mutations'
+import {graphqlService} from '../../common-utils/graphql-service'
+// import { test } from '../accounts/test/functions'
+import { usingLinkClient } from '../../common-utils/link-client'
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {
-    const { getLoginData, setInBag } = manageEntitiesState()
+    const { getFromBag, getLoginData, setInBag } = manageEntitiesState()
     const { execGenericView } = utilMethods()
+    const { connectToLinkServer, joinRoom, onReceiveData } = usingLinkClient()
+    const {queryGraphql} = graphqlService()
     const isoDateFormat = 'YYYY-MM-DD'
 
     // these following two lines is for testing functions in application. Must remove from production build
-    const { testIsInvalidDate, testIsInvalidDate1 } = test()
-
+    // const { testIsInvalidDate, testIsInvalidDate1 } = test()
     // testIsInvalidStateCode()
 
     async function setLastBuCodeFinYearIdBranchId(brId: any = undefined) {
@@ -26,7 +28,6 @@ function initCode() {
         emit('SHOW-LOADING-INDICATOR', true)
         if (buCode) {
             setInBag('buCode', buCode)
-            // const c = clientId
             const branchId = brId || getLoginData().lastUsedBranchId
             await setNowFinYearIdDatesFinYearsBranches(branchId)
         } else {
@@ -67,8 +68,17 @@ function initCode() {
         emit('LOAD-LEFT-MENU', '')
     }
 
+
     async function setNowFinYearIdDatesFinYearsBranches(branchId: number) {
         const nowDate = moment().format(isoDateFormat)
+
+        // get configuration from server
+        // const q = queries['genericQueryBuilder']({
+        //     queryName: 'configuration',
+        // })
+        // const ret1 = await queryGraphql(q)
+        // setInBag('configuration', ret1?.data?.accounts?.configuration)
+
         const ret = await execGenericView({
             sqlKey: 'getJson_finYears_branches_nowFinYearIdDates_generalSettings',
             isMultipleRows: false,
@@ -150,6 +160,32 @@ function initCode() {
         const item = allSettings.find((item) => item.key === 'generalSettings')
         item && (generalSettings = item?.jData)
         const allAccounts = dataCache?.allAccounts
+        
+        const q = queries['genericQueryBuilder']({
+            queryName: 'configuration',
+        })
+        const ret1 = await queryGraphql(q)
+        setInBag('configuration', ret1?.data?.accounts?.configuration)
+
+        
+        // connect to link-server
+        const configuration = getFromBag('configuration')
+        const linkServerUrl = configuration?.linkServerUrl
+        console.log('linkServerUrl:', linkServerUrl)
+        connectToLinkServer(linkServerUrl).subscribe((d: any) => {
+            if (d.connected) {
+                const room = getRoom()
+                joinRoom(room)
+                onReceiveData().subscribe((d: any) => {
+                    if (
+                        d.message === 'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE'
+                    ) {
+                        emit('VOUCHER-UPDATED-REFRESH-REPORTS', null)
+                    }
+                })
+            }
+        })
+
         setInBag('allSettings', allSettings)
         setInBag('generalSettings', generalSettings)
         setInBag('auditLockDate', generalSettings?.auditLockDate || '')
@@ -158,8 +194,17 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('LOAD-MAIN-JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-        
-        // initSocket() // initializes the socket
+
+        function getRoom() {
+            const clientId = getLoginData()?.clientId
+            const buCode = getFromBag('buCode')
+            const { finYearId } = getFromBag('finYearObject') || ''
+            const { branchId } = getFromBag('branchObject') || ''
+            const room = `${String(
+                clientId
+            )}:${buCode}:${finYearId}:${branchId}`
+            return room
+        }
     }
 
     return { setLastBuCodeFinYearIdBranchId, execDataCache }

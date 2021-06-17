@@ -10,7 +10,6 @@ import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { IconButton } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
-// import {useSharedElements} from './components/common/shared-elements-hook'
 import moment from 'moment'
 
 const accStore: any = {}
@@ -18,7 +17,7 @@ const accStore: any = {}
 function utils() {
     const { execGenericView, extractAmount, toDecimalFormat } = utilMethods()
     const { mutateGraphql } = graphqlService()
-    const { getFromBag, getCurrentEntity } = manageEntitiesState()
+    const { getFromBag, getCurrentEntity, getLoginData } = manageEntitiesState()
     const { emit } = usingIbuki()
     // const classes = useStyles()
     function extractGst(x: any) {

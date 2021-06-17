@@ -269,7 +269,7 @@ def loginHelper(credentials):
                     }
                     bundle = {
                         'uid': adminUser['uid'], 'userType': 'a', 'id': adminUser['id'], 'token': getToken(payload), 'entityNames': adminUser['entityNames'], 'permissions': [], 'buCodes': adminUser['buCodes']
-                        , 'lastUsedBuCode': adminUser['lastUsedBuCode'], 'lastUsedBranchId': adminUser['lastUsedBranchId']
+                        , 'lastUsedBuCode': adminUser['lastUsedBuCode'], 'lastUsedBranchId': adminUser['lastUsedBranchId'], 'clientId': adminUser['clientId']
                     }
             elif businessUser is not None:  # Business user
                 payload = {
@@ -277,7 +277,7 @@ def loginHelper(credentials):
                 }
                 bundle = {
                     'uid': businessUser['uid'], 'userType': 'b', 'id': businessUser['id'], 'token': getToken(payload), 'entityNames': businessUser['entityNames'], 'permissions': businessUser.get('permissions',None), 'buCodes': businessUser['buCodes']
-                    , 'lastUsedBuCode': businessUser['lastUsedBuCode'], 'lastUsedBranchId': businessUser['lastUsedBranchId']
+                    , 'lastUsedBuCode': businessUser['lastUsedBuCode'], 'lastUsedBranchId': businessUser['lastUsedBranchId'] , 'clientId': businessUser['clientId']
                 }
         return bundle
 

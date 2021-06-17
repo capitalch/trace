@@ -10,7 +10,9 @@ from .sql import allSqls
 from postgres import execSql, execSqls, getPool
 from postgresHelper import execSqlObject
 from util import getErrorMessage, getschemaSearchPath
+from app.link_client import connectToLinkServer, disconnectFromLinkServer, sendToPoint
 # from app import socketio, store
+
 
 def formatTree(rawData):
     # formats in form of tree consumable by react.js
@@ -219,14 +221,14 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, valueDict):
             connection.close()
 
 
-def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, socketId):
+def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=None):
     try:
+        # connectToLinkServer('http://localhost:5001', 'traceServer')
         connection = None
         pool = getPool(dbName)
         connection = pool.getconn()
         cursor = connection.cursor()
         autoRefNo = ''
-        # sid = store.get(socketId, None) # get sid of socket
 
         branchId = valueDictList[0]["data"][0]["branchId"]
         tranTypeId = valueDictList[0]["data"][0]["tranTypeId"]
@@ -239,7 +241,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, socketId
             'finYearId': finYearId})
 
         count = 0
-        
+
         for valueDict in valueDictList:
             userRefNo = valueDict["data"][0]["userRefNo"]
             cursor.execute(allSqls['is_exist_user_ref_no'], {
@@ -268,7 +270,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, socketId
                 cursor.execute(sqlString, {'lastNo': lastNo + 1, 'branchId': branchId,
                                            'tranTypeId': tranTypeId, 'finYearId': finYearId})
             count = count+1
-            # socketio.emit('SC-NOTIFY-ROWS-PROCESSED', count, room=sid)
+            sendToPoint('SC-NOTIFY-ROWS-PROCESSED', count, pointId)
 
         connection.commit()
     except (Exception, psycopg2.Error) as error:
@@ -280,6 +282,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, socketId
         if connection:
             cursor.close()
             connection.close()
+        # disconnectFromLinkServer()
 
 
 def searchProductHelper(dbName, buCode, valueDict):

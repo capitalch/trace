@@ -1,12 +1,10 @@
 import { manageFormsState } from '../../../react-form/core/fsm'
 import { graphqlService } from '../../../common-utils/graphql-service';
 import { usingIbuki } from '../../../common-utils/ibuki'
-// import configuration from '../config.json'
 import { utilMethods } from '../../../common-utils/util-methods'
 // import { manageEntitiesState } from '../../../utils/esm'
 import graphqlQueries from './graphql-queries-mutations'
 import { map } from 'rxjs/operators'
-// const config: any = configuration
 const { queryGraphql, mutateGraphql }: any = graphqlService()
 
 

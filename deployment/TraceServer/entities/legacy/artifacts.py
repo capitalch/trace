@@ -98,8 +98,9 @@ def import_service_sale():
     meta = jsonPayload.get('meta')
     dbName = meta.get('dbName')
     buCode = meta.get('buCode')
-    socketId = meta.get('socketId')
-    bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueData, socketId)
+    pointId = meta.get('pointId')
+    # socketId = meta.get('socketId')
+    bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueData, pointId)
     delta = (datetime.datetime.now() - startTime)/60
     print(delta, ' Mins')
     return('Ok')

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useSharedElements } from '../shared-elements-hook'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useImportServiceSaleHelper } from './import-service-sale-helper-hook'
+import { usingLinkClient } from '../utils/link-client'
 
 function useImportServiceSale() {
     const {
@@ -30,6 +31,12 @@ function useImportServiceSale() {
     } = useSharedElements()
     const classes = useStyles()
     const { prepareData, processAndMoveData } = useImportServiceSaleHelper()
+    const {
+        connectToLinkServer,
+        disconnectFromLinkServer,
+        getPointId,
+        onReceiveData,
+    } = usingLinkClient()
 
     const arbitraryData = useRef({
         startDate: undefined,
@@ -43,6 +50,7 @@ function useImportServiceSale() {
         const [, setRefresh] = useState({})
 
         const meta: any = useRef({
+            isMounted : false,
             closeButtonDisabled: true,
             openDialog: false,
             processedRows: 0,
@@ -54,7 +62,11 @@ function useImportServiceSale() {
             isDisabledTansferButton: true,
         })
 
+        const env = config.env
+        const linkServerUrl = config[env]?.linkServerUrl
+
         useEffect(() => {
+            meta.current.isMounted = true
             const subs1 = filterOn(
                 'IMPORT-SERVICE-SALE-HOOK-OPEN-DIALOG'
             ).subscribe(() => {
@@ -62,13 +74,20 @@ function useImportServiceSale() {
                 meta.current.processedRows = 0
                 setRefresh({})
             })
-            // meta.current.transferButtonDisabled =  (!meta.current.serviceData) ||
-            // (meta.current.serviceData.length === 0)
-
+            try {
+                connectToLinkServer(linkServerUrl)?.subscribe((d: any) => {
+                    if (d.connected) {
+                        meta.current.pointId = getPointId()
+                    }
+                })
+            } catch (e) {
+                alert(e.message)
+            }
             setRefresh({})
-
             return () => {
+                meta.current.isMounted = false
                 subs1.unsubscribe()
+                disconnectFromLinkServer()
             }
         }, [])
 
@@ -102,17 +121,15 @@ function useImportServiceSale() {
                     {meta.current.status2}
                     <Button
                         className="transfer-button"
-                        // style={{ width: '15rem' }}
                         onClick={() =>
                             processAndMoveData(arbitraryDataCurrent, meta)
                         }
                         disabled={meta.current.isDisabledTansferButton}
                         variant="contained"
-                        // size="small"
                         color="secondary">
                         Transfer data to Trace
                     </Button>
-                    {/* <ProgressIndicator /> */} 
+                    <ProgressIndicator />
                     <Typography className="status3" variant="body1">
                         {meta.current.status3}
                     </Typography>
@@ -130,19 +147,32 @@ function useImportServiceSale() {
         )
         function handleOnClose() {
             meta.current.openDialog = false
-            setRefresh({})
+            meta.current.isMounted && setRefresh({})
         }
 
         function ProgressIndicator() {
             const [, setRefresh] = useState({})
             useEffect(() => {
+                let subs2:any
+                try {
+                    subs2 = onReceiveData().subscribe((d: any) => {
+                        if (d.message === 'SC-NOTIFY-ROWS-PROCESSED') {
+                            meta.current.processedRows = d.data
+                            meta.current.isMounted && setRefresh({})
+                        }
+                    })
+                } catch (e) {
+                    alert(e.message)
+                }
+
                 const subs1 = filterOn(
                     'IMPORT-SERVICE-SALE-HELPER-HOOK-COUNTER-TICK'
-                ).subscribe((d:any) => {
+                ).subscribe((d: any) => {
                     meta.current.processedRows = d.data
-                    setRefresh({})
+                    meta.current.isMounted && setRefresh({})
                 })
                 return () => {
+                    subs2.unsubscribe()
                     subs1.unsubscribe()
                 }
             }, [])
@@ -225,7 +255,7 @@ function useImportServiceSale() {
                         '[]'
                     )
                 ) {
-                    // open dialog                    
+                    // open dialog
                     emit('IMPORT-SERVICE-SALE-HOOK-OPEN-DIALOG', null)
                 } else {
                     alert(messages.errInvalidDate)

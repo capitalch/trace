@@ -1,3 +1,4 @@
+const socket = require('socket.io')
 const { filter } = require('rxjs/operators')
 const { Subject, BehaviorSubject } = require('rxjs')
 const _ = require('lodash')
@@ -7,7 +8,7 @@ const behSubject = new BehaviorSubject(0)
 let allLinksMap = new Map() // property is system generated link id
 let allLinksObject = {} // property is pointId provided by client or id of the link
 
-function usingZestServer(io) {
+function startLinkServer(io) {
     const { emit, filterOn } = useIbuki()
     io.on('connection', function (link) {
         allLinksMap = io.sockets.sockets
@@ -19,7 +20,7 @@ function usingZestServer(io) {
         link.pointId = pointId
         allLinksObject[pointId] = link
 
-        allLinksObject = _.omitBy(allLinksObject, _.isUndefined) // To remove the undefined values
+        // allLinksObject = _.omitBy(allLinksObject, _.isUndefined) // To remove the undefined values
         console.log(
             'link connected,',
             'Map length:',
@@ -28,7 +29,8 @@ function usingZestServer(io) {
             allLinksObject
         )
         link.on('disconnect', () => {
-            allLinksObject[link.pointId] = undefined
+            delete allLinksObject[link.pointId]
+            // io.sockets.sockets.delete(link.id)
             console.log(
                 'link disconnected,',
                 'Map length:',
@@ -58,7 +60,7 @@ function usingZestServer(io) {
             const pointlink = allLinksObject[pointId]
             if (pointlink) {
                 pointlink.emit(
-                    'sc-send-to-point',
+                    'sc-send',
                     message,
                     data,
                     link.pointId
@@ -90,4 +92,4 @@ function useIbuki() {
     return { emit, filterOn, hotEmit, hotFilterOn }
 }
 
-module.exports = { useIbuki, usingZestServer }
+module.exports = { useIbuki, startLinkServer }

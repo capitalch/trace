@@ -1,11 +1,15 @@
 const io = require('socket.io-client')
 const { Subject } = require('rxjs')
 
-function usingZestClient() {
+function usingLinkClient() {
     let zLink
 
-    function initLink(url, pointId = undefined, token = undefined) {
+    function getLink(url, pointId = undefined, token = undefined) {
+        const subject = new Subject()
         if (!url) return null
+        if (zLink) {
+            return zLink
+        }
         zLink = io(url, {
             query: {
                 pointId: pointId,
@@ -17,10 +21,12 @@ function usingZestClient() {
         })
         zLink.on('connect', () => {
             console.log('Connected')
+            subject.next(zLink)
         })
         zLink.on('error', (message) => {
             console.log(message)
         })
+        return subject
     }
 
     function ibukiEmit(message, data) {
@@ -65,7 +71,7 @@ function usingZestClient() {
     }
 
     return {
-        initLink,
+        getLink,
         ibukiEmit,
         ibukiFilterOn,
         joinRoom,
@@ -76,4 +82,4 @@ function usingZestClient() {
     }
 }
 
-module.exports = { usingZestClient }
+module.exports = { usingLinkClient }

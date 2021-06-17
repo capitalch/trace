@@ -9,13 +9,15 @@ import re  # Python regex
 from time import sleep
 from urllib.parse import unquote
 from util import getErrorMessage
-# ,  tranHeadersWithDetails_helper
+
 from .artifactsHelper import trialBalanceHelper
 # tranHeaderAndDetails_helper,
 from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsLedgersHelper, accountsOpBalHelper
 from .artifactsHelper import genericUpdateMasterDetailsHelper, accountsUpdateOpBalHelper, allCategoriesHelper, transferClosingBalancesHelper
 from .artifactsHelper import searchProductHelper
-import util
+from .accounts_utils import getRoomFromCtx
+from app.link_client import sendToRoom
+import loadConfig
 # from app import socketio
 
 DB_NAME = 'trace'
@@ -29,7 +31,6 @@ accountsMutation = ObjectType("AccountsMutation")
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
-    # ctx = info.context
     clientId = ctx['clientId']
     finYearId = ctx['finYearId']
     branchId = ctx['branchId']
@@ -81,6 +82,15 @@ def resolve_balance_sheet_profit_loss(parent, info):
     return balanceSheetProfitLossHelper(dbName, buCode, finYearId, branchId)
 
 
+@accountsQuery.field("configuration")
+def resolve_configuration(parent, info):
+    cfg = loadConfig.cfg
+    env = cfg['env']
+    configuration = {'url': cfg[env]['url'],
+                     'linkServerUrl': cfg[env]['linkServerUrl']}
+    return(configuration)
+
+
 @accountsMutation.field("genericUpdateMaster")
 def resolve_generic_update_master(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
@@ -120,7 +130,9 @@ def resolve_generic_update_master_details(parent, info, value):
             processData(item)
     else:
         processData(valueData)
-    from app.socket import voucherUpdatedSocket
+    room = getRoomFromCtx(info.context)
+    sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+    # from app.socket import voucherUpdatedSocket
     # voucherUpdatedSocket(info.context)
     return True
 

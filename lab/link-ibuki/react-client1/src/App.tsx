@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import _ from 'lodash'
-// import { initSocket } from './utils/socket'
-import { usingZestClient } from './utils/zest-client'
+import { usingLinkClient } from './utils/link-client'
 import './App.scss'
 
 function App() {
     const {
-        initLink,
+        connectToLinkServer,
+        getPointId,
         ibukiEmit,
         ibukiFilterOn,
         joinRoom,
@@ -14,14 +14,20 @@ function App() {
         onReceiveDataFromPoint,
         sendToPoint,
         sendToRoom,
-    } = usingZestClient()
+    } = usingLinkClient()
 
     const meta: any = useRef({
         link: undefined,
     })
 
     useEffect(() => {
-        initLink('http://localhost:5000')
+        connectToLinkServer('http://localhost:5001')?.subscribe((d:any)=>{
+            if(d && d.connected){
+                
+            } else {
+
+            }
+        })
     }, [])
 
     return (
@@ -64,16 +70,18 @@ function App() {
                     }}>
                     Send to pythonClient1
                 </button>
+                <button
+                    onClick={() => {
+                        console.log('pointId:', getPointId())
+                    }}>
+                    Get point id
+                </button>
             </div>
         </div>
     )
 
     function handleClickSendToNodeClient1() {
-        sendToPoint(
-            'a-message',
-            { rubbish: 'ABCDEFG' },
-            'node-client1'
-        )
+        sendToPoint('a-message', { rubbish: 'ABCDEFG' }, 'node-client1')
     }
 }
 

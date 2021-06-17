@@ -2,7 +2,8 @@ type AccountsQuery {
     allCategories: Generic
     accountsMasterGroupsLedgers: Generic
     accountsOpBal: Generic
-    balanceSheetProfitLoss: Generic    
+    balanceSheetProfitLoss: Generic
+    configuration: Generic 
     genericView(value: Generic): Generic
     searchProduct(value: Generic): Generic
     trialBalance: Generic

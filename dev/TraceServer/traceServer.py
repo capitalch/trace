@@ -25,11 +25,14 @@ from loadConfig import cfg
 from downloadHelper import handleDownload
 from util import setMailConfig
 from entities.legacy.artifacts import trackApp
-from app import create_app  # , socketio
+from app.link_client import connectToLinkServer
+from loadConfig import cfg
+# from app import create_app  # , socketio
 
-# import app.socket # This line is necessary to activate socket.py file in app folder
+env = cfg['env']
+linkServerUrl = cfg[env]['linkServerUrl']
+connectToLinkServer(linkServerUrl,'traceServer')
 
-#
 app = Flask(__name__,  template_folder="../build")
 # app = create_app()
 # app = Flask(__name__, template_folder="../build")

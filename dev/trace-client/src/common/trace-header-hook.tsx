@@ -353,6 +353,7 @@ function useTraceHeader({ setRefresh }: any) {
                 lastUsedbranchId: login?.lastUsedBranchId,
                 lastUsedBuCode: login?.lastUsedBuCode,
                 buCodes: login?.buCodes,
+                clientId: login?.clientId,
             })
             if (token) {
                 meta.current.uid = uid
@@ -492,7 +493,6 @@ function useTraceHeader({ setRefresh }: any) {
         meta.current.uid = undefined
         meta.current.dialogConfig.displayArray.length = 0
         setRefresh({})
-        // shortCircuit()
     }
 
     function shortCircuit() {
@@ -506,6 +506,7 @@ function useTraceHeader({ setRefresh }: any) {
             lastUsedBuCode: 'demoUnit1',
             lastUsedBranchId: 1,
             buCodes: ['demoUnit1'],
+            clientId: 2,
         })
         handleEntityClicked(meta.current.menuHead.menu[0])
     }

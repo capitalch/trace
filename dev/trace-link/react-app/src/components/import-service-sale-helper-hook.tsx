@@ -1,11 +1,14 @@
 import { useSharedElements } from '../shared-elements-hook'
 import sampleServiceData from './sampleServiceData.json'
+import { useEffect } from 'react'
+import { useRef } from 'react'
 // import {socketId, socket} from '../utils/socket'
 
 function useImportServiceSaleHelper() {
-    const { axios, config, emit, messages, useSqlAnywhere } = useSharedElements()
+    const { axios, config, emit, messages, useSqlAnywhere } =
+        useSharedElements()
     const { execSql } = useSqlAnywhere('service')
-
+    
     async function prepareData(meta: any, arbitraryDataCurrent: any) {
         try {
             let result = await execSql('service-get-sale-receipts', [
@@ -44,7 +47,7 @@ function useImportServiceSaleHelper() {
             meta.current.setRefresh({})
             // emit('SHOW-LOADING-INDICATOR', true)
             const currentEnv = config.env
-            const baseUrl = config[currentEnv]
+            const baseUrl = config[currentEnv]?.url
             const serviceUrlForIds = baseUrl.concat(
                 '/',
                 config['service']['urlForCashSaleIds']
@@ -69,12 +72,13 @@ function useImportServiceSaleHelper() {
                             buCode: pre.name,
                             branchId: 1,
                             finYearId: arbitraryDataCurrent.finYear,
+                            pointId: meta.current.pointId,
                             // socketId: socketId
                         },
                         data: temp,
                     }
                     payload = escape(JSON.stringify(payload))
-                    
+
                     const serviceUrl = baseUrl.concat(
                         '/',
                         config['service']['urlForImportServiceSale']
@@ -87,7 +91,8 @@ function useImportServiceSaleHelper() {
                             'Content-Type': 'text/html',
                         },
                     })
-                    meta.current.status3 = messages.infoDataSuccessfullyTransferred
+                    meta.current.status3 =
+                        messages.infoDataSuccessfullyTransferred
                     meta.current.closeButtonDisabled = false
                     meta.current.setRefresh({})
                     // console.log(out)

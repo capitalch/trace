@@ -117,14 +117,14 @@ function TrialBalance() {
             emit('SHOW-LOADING-INDICATOR', false)
         }
     }
-
     useEffect(() => {
         meta.current.isMounted = true
         const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
             () => {
-                setTimeout(() => {
-                    getData(false)
-                }, 1000)
+                getData(false)
+                // setTimeout(() => {
+                //     getData(false)
+                // }, 1000)
             }
         )
         getData()

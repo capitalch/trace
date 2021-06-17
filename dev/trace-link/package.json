@@ -13,8 +13,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^13.0.1",
-    "electron-builder": "^22.10.5"
+    "electron": "^13.1.2",
+    "electron-builder": "^22.11.7"
   },
   "dependencies": {
     "odbc": "^2.3.6"

@@ -65,8 +65,8 @@ function useTrackSaleSms() {
 
 
     async function handleSendSms() {
-        const currentEnv = config.env // process.env.NODE_ENV
-        const baseUrl = config[currentEnv]
+        const currentEnv = config.env
+        const baseUrl = config[currentEnv]?.url
         const saveBillUrl = baseUrl.concat('/', config['track']['saveBillUrl'])
         try {
             emit('SHOW-LOADING-INDICATOR', true)
@@ -76,12 +76,11 @@ function useTrackSaleSms() {
                     const jsonPayload: any = await getJsonPayload(selectedRow)
                     const axiosConfig: any = {
                         method: 'post',
-                        url: saveBillUrl, //'http://localhost:5000/track/save-bill',
+                        url: saveBillUrl,
                         data: jsonPayload,
                     }
                     const response = await axios(axiosConfig)
                     emit('SHOW-MESSAGE', '')
-                    // console.log(response)
                 } else {
                     alert(messages.errinvalidMobileNumber)
                 }
