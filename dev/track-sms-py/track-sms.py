@@ -6,6 +6,30 @@ from tkcalendar import Calendar
 from datetime import datetime
 from sql import sqls
 
+a = ("John", "Charles", "Mike")
+b = ("Jenny", "Christy", "Monica")
+
+x = zip(a, b)
+
+def get_sale_data():
+        connString = 'DSN=capi2021'
+        sql = sqls['track-sale-sms']
+        try:
+            with pyodbc.connect(connString) as conn:
+                with conn.cursor() as cursor:
+                    result = cursor.execute(sql, ['2021-04-05']).fetchall()
+                    desc = cursor.description
+                    return(result)
+                    # for item in result:
+                    #     print(item.ref_no)
+        except(Exception) as error:
+            print(error)
+
+data = get_sale_data()
+x = data.description
+datalist = []
+# for dt in data:
+    
 root = Tk()
 root.geometry('800x600+200+200')
 frame_controls = Frame(root, borderwidth=2, relief=RAISED, padx=5, pady=6)
@@ -37,9 +61,11 @@ tv.heading('address', text='Address')
 tv.heading('pin', text='Pin')
 tv.heading('gstin', text='Gstin')
 
-data = [(1, '111', 'Sushant', '88877765', '2333.23',
-         '12 J.L. ', '799987', 'TTTF5554rFFFTy')]
-tv.insert('',index=0, text='Label', values=data[0])
+# data = ((1, '111', 'Sushant', '88877765', '2333.23',
+#          '12 J.L. ', '799987', 'TTTF5554rFFFTy'))
+
+for item in data:
+    tv.insert('',index=0, text='Label', values=item)
 tv.pack()
 
 
