@@ -20,13 +20,13 @@ a4: 297 X 210 MM = 3508 X 2480 px
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
-# logic for PUB SUB in Sockets
-1. There is one socket server implemented as node.js container.
-2. All the units are either producers or subscribers.
-3. Socket server:
-	a) in Socket.js implement ibuki emit and filterOn
-	b) socket.on('emit'): do the ibuki emit, which pushes the data in observable
-	c) socket.on('filterOn'): do the ibuki filterOn. On subscribe of filterOn do push the data into the socket
+## Python Service+ tools and warranty extension program
+# prototypes
+1. UI develop
+2. create API for upload cust data
+3. API to get data
+4. Async python to insert data in postgreSql and sending ticks async to client
+5. Async way to send parallel sms to all customers and update database
 
 
 # Working on
@@ -34,7 +34,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 2. react-widgets library cannot be upgraded to new versions. Consider discarding it
 3. Flask sockets
 4. Master reports
-5. RXJS 7.1 incorporation
+5. 
 6. 
 7. Sale bill to email and sms
 8. Migration of Track+ and service+ sale
@@ -43,7 +43,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 
 # Pending
 ## Functionality
-1.01 Service+ integration with pull sales info into Trace
+1.01 
 1.001 Try out gzip in apache server, which is not working at present
 1.002 The view in many places show multiple lines. Desirable to have single line.
 1.003 
@@ -111,8 +111,16 @@ a4: 297 X 210 MM = 3508 X 2480 px
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 16-05-2021
-1.
+# 20-06-2021 - 21-06-2021
+1. Service extended warranty for Sony started
+2. Reading Excel files in python
+
+# Till 19-06-2021
+1. Completed link-server and implemented with trace
+2. Trial balance is now getting updated auto
+3. Changed deployment strategy
+4. Service+ integration with pull sales info into Trace
+5. Updated all libraries to latest versions
 
 # 12-05-2021 - 25-05-2021
 Did not work in Trace

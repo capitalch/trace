@@ -1,10 +1,10 @@
 {
-    
     "errinvalidMobileNumber": "One or more mobile numbers are invalid",
     "errSelectSmsItem": "Please select one or many rows to send SMS",
     "errInvalidDate":"Start or end date is invalid",
     "errNoConfig": "Config ile is nt present",
-    "errNoDatafetched": "No data found at Service+"  ,
+    "errNoDatafetched": "No data found at Service+",
+    "errNotAvailableInBrowser":"This feature is not available in browser. You need to use the windows application",
     "errTransferData": "error in transferring data to Trace",
     "errCompanyNotFound": "Company not found in mapping of config.json",
 

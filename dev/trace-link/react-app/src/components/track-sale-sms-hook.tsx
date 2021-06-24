@@ -96,6 +96,9 @@ function useTrackSaleSms() {
         async function getJsonPayload(row: any) {
             try {
                 const companyInf:any = await execSql('track-get-company-info', [])
+                if(!companyInf){
+                    throw new Error(messages.errNotAvailableInBrowser)
+                }
                 const companyInfo: any = companyInf.map((x: any) => x)[0] //convert array output to object
                 const billMemoId = row.bill_memo_id
                 const produc:any = await execSql('track-get-product-details', [
@@ -113,6 +116,7 @@ function useTrackSaleSms() {
                 row.payments = payments
             } catch (e) {
                 alert(e.message)
+                throw e
             }
             return row
         }

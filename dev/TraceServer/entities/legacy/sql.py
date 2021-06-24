@@ -14,7 +14,7 @@ allSqls = {
                     update "SaleBills"
                         set "jData" = %(jData)s,
                         "billNo" = %(billNo)s
-                        --,"modifiedTimestamp" = now()
+                        ,"modifiedTimestamp" = now()
                             where "billNoHash" = %(billNoHash)s;
         else
             insert into "SaleBills" ("billNoHash", "jData", "billNo")

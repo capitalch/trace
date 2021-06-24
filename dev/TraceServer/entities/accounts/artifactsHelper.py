@@ -223,7 +223,6 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, valueDict):
 
 def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=None):
     try:
-        # connectToLinkServer('http://localhost:5001', 'traceServer')
         connection = None
         pool = getPool(dbName)
         connection = pool.getconn()

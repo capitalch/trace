@@ -99,17 +99,7 @@ def import_service_sale():
     dbName = meta.get('dbName')
     buCode = meta.get('buCode')
     pointId = meta.get('pointId')
-    # socketId = meta.get('socketId')
     bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueData, pointId)
     delta = (datetime.datetime.now() - startTime)/60
     print(delta, ' Mins')
     return('Ok')
-
-
-# valueData = djson.decode(payload)['data']
-
-# valueData = jsonPayload.get('data')
-# def apply(a):
-#     return(djson.decode(a))
-# temp = map(apply,valueData)
-# valueData = list(temp)
