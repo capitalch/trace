@@ -18,16 +18,20 @@ def get_sale_data():
             with pyodbc.connect(connString) as conn:
                 with conn.cursor() as cursor:
                     result = cursor.execute(sql, ['2021-04-05']).fetchall()
-                    desc = cursor.description
-                    return(result)
+                    descriptions = cursor.description # tuple of tuples
+                    desc_tuple = tuple([item[0] for item in descriptions])
+                    zipped_list = []
+                    for item in result:
+                        zipped = zip(desc_tuple,item)
+                        zipped_list.append(dict(zipped))
+                    return(zipped_list)
                     # for item in result:
                     #     print(item.ref_no)
         except(Exception) as error:
             print(error)
 
 data = get_sale_data()
-x = data.description
-datalist = []
+# datalist = []
 # for dt in data:
     
 root = Tk()
