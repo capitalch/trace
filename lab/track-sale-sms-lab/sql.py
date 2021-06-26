@@ -21,6 +21,6 @@ sqls = {
                     on c.cust_id = b.cust_id
         where "type" = 's' and
         "date" = ?
-        order by "date", b.bill_memo_id;
+        --order by id, b.bill_memo_id;
     '''
 }

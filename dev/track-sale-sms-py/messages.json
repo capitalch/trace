@@ -1,0 +1,11 @@
+{
+    "errGeneric": "There was error in operation",
+    "errHttp": "Http error occured while doing SMS from server",
+    "errInvalidMobile": "Invalid mobile number ",    
+    "errNoItemsSelected": "No items are selected",
+    "errNoSmsWillBeSent": "SMS will not be sent at mobile number ",
+    "errOneMobileInvalid": "At least one mobile number in the selected items is invalid",
+    
+    "infoNoSmsSent": "SMS could not be sent",
+    "infoSuccessSms": "SMS were successfully sent to selected persons"
+}
