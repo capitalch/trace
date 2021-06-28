@@ -1,22 +1,21 @@
-from tkinter import Button, Tk, Frame, messagebox
-from tkinter.constants import FLAT, RAISED, RIDGE, SUNKEN, X
+from tkinter import Button, Frame
+from tkinter.constants import E, RIDGE
 from tkcalendar import DateEntry
-from tkinter import ttk
-import pyodbc
-from utils import get_config, fetch_local_data
-from sql import sqls
-# from data_table_treeview import get_data_table_treeview
-from ibuki import emit, Ibuki
+from utils import fetch_local_data
+from ibuki import Ibuki
+
 sale_date = ''
 
 
 def fetch_sale_data():
     tuple_data = fetch_local_data('track-sale-sms', sale_date)
     Ibuki.emit('POPULATE-DATA-TABLE-TREE-VIEW',
-                tuple_data)
-    
+               tuple_data)
+
+
 def send_sms():
     Ibuki.emit('SEND-SMS', '')
+
 
 def get_controls_frame(root):
     def change_date(e):
@@ -36,9 +35,13 @@ def get_controls_frame(root):
     date_entry.grid(row=0, column=0, padx=5)
 
     btn_send_sms = Button(frame, text='Send SMS',
-                          width=10, fg='red', font=12, padx=10, command=send_sms)
-    btn_send_sms.grid(row=0, column=2)
+                          width=10,bg='yellow', fg='red', font=12, padx=10, command=send_sms)
 
+    frame.columnconfigure(0, weight=1)
+    frame.columnconfigure(1, weight=1)
+    frame.columnconfigure(2, weight=10)
+    btn_send_sms.grid(row=0, column=2, sticky=E)
+    
     sale_date = (date_entry.get_date()).isoformat()
 
     date_entry.bind('<<DateEntrySelected>>', change_date)

@@ -1,5 +1,6 @@
 errorMessages = {
-    'billNoNotFound': 'Sale bill number is not found'
+    'billNoNotFound': 'Sale bill number is not found',
+    'noData': 'No sales data found to SMS'
 }
 
 infoMessages = {

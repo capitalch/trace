@@ -1,7 +1,7 @@
 import psycopg2
 import simplejson as json
 from psycopg2 import pool
-from psycopg2.extras import RealDictCursor, DictCursor
+from psycopg2.extras import RealDictCursor
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from nested_lookup import nested_lookup
 from decimal import Decimal

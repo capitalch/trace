@@ -34,8 +34,6 @@ linkServerUrl = cfg[env]['linkServerUrl']
 connectToLinkServer(linkServerUrl,'traceServer')
 
 app = Flask(__name__,  template_folder="../build")
-# app = create_app()
-# app = Flask(__name__, template_folder="../build")
 app.register_blueprint(trackApp)
 # asset folder has .scss files, static folder has .css files. The Scss creates .css files from .scss files
 Scss(app, asset_dir='entities/legacy/assets',
@@ -211,15 +209,6 @@ def graphql_playgroud():
     # exploring your API using desktop GraphQL Playground app.
     return PLAYGROUND_HTML, 200
 
-
-# def enco(obj): return (
-#     obj.isoformat()
-#     if isinstance(obj, datetime.datetime)
-#     or isinstance(obj, datetime.date)
-#     else None
-# )
-
-
 @app.route("/graphql", methods=["POST"])
 def graphql_server():
     # GraphQL queries are always sent as POST
@@ -258,6 +247,20 @@ def index():
     # In cloudjiffy server in wsgi.conf 'Alias /index /var/www/webroot/ROOT/build/index.html'. The alias statement does not take blank hence redirect from Flask is done.
     return redirect('/index')
 
+@app.errorhandler(Exception)
+def handle_error(e):
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return (jsonify(error=str(e)), code)
+
+
+# Following lines are not executed in cloud. Because __name__ is not '__main__'
+if __name__ == '__main__':
+    # app.run(debug=True, threaded=True)
+    # socketio.run(app)
+    pass
+
 
 # @app.route("/manifest.json")
 # def manifest():
@@ -274,16 +277,9 @@ def index():
 #     return send_from_directory('build', 'logo192.png')
 
 
-@app.errorhandler(Exception)
-def handle_error(e):
-    code = 500
-    if isinstance(e, HTTPException):
-        code = e.code
-    return (jsonify(error=str(e)), code)
-
-
-# Following lines are not executed in cloud. Because __name__ is not '__main__'
-if __name__ == '__main__':
-    # app.run(debug=True, threaded=True)
-    # socketio.run(app)
-    pass
+# def enco(obj): return (
+#     obj.isoformat()
+#     if isinstance(obj, datetime.datetime)
+#     or isinstance(obj, datetime.date)
+#     else None
+# )

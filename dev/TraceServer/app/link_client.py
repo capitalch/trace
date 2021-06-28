@@ -23,13 +23,13 @@ def connectToLinkServer(url, pointId=None, token=None):
 
     @sio.on('error')
     def on_error(reason):
-        print('connection error:', reason)
+        print('connection error with link server:', reason)
         subject.on_next({'connected': False})
 
     try:
         sio.connect(url, headers={'pointId': pid},  transports=('websocket'))
     except(Exception) as error:
-        print(error)
+        print(' '.join(['Link server', str(error)]))
 
     return(subject, sio)
 

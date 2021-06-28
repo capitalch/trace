@@ -77,7 +77,7 @@ function useTrackSaleSms() {
                     const axiosConfig: any = {
                         method: 'post',
                         url: saveBillUrl,
-                        data: jsonPayload,
+                        data: [jsonPayload],
                     }
                     const response = await axios(axiosConfig)
                     emit('SHOW-MESSAGE', '')

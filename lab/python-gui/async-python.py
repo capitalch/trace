@@ -3,7 +3,6 @@ import asyncio
 import time
 import random
 import requests
-import asyncio
 import aiohttp
 import http3
 from requests.models import Response

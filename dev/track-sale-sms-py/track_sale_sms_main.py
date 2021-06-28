@@ -1,9 +1,8 @@
 from tkinter import Tk
 from tkinter.constants import BOTH, X
-from ibuki import emit, filterOn, Ibuki
 
-from controls_frame import get_controls_frame, fetch_sale_data, sale_date
-from data_table_treeview import get_data_table_treeview, populate_treeview
+from controls_frame import get_controls_frame, fetch_sale_data
+from data_table_treeview import get_data_table_treeview
 
 root = Tk()
 root.title('Sale SMS from Track+')

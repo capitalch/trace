@@ -18,6 +18,7 @@ import Combobox from 'react-widgets/lib/Combobox'
 import Select from 'react-select'
 import moment from 'moment'
 import 'react-widgets/dist/css/react-widgets.css'
+// import 'react-widgets/styles.css'
 import { getArtifacts } from '../common/react-form-hook'
 import { manageFormsState } from '../core/fsm'
 
