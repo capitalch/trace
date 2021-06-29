@@ -1,5 +1,5 @@
 import io from 'socket.io-client'
-import {BehaviorSubject, Subject } from 'rxjs'
+import { BehaviorSubject, Subject } from 'rxjs'
 
 let zLink: any
 function usingLinkClient() {
@@ -9,9 +9,9 @@ function usingLinkClient() {
         pointId: any = undefined,
         token: any = undefined
     ) {
-        const subject = new BehaviorSubject<any>(1)
+        const subject = new BehaviorSubject<any>(0)
         if (!url) return subject
-        
+
         if (zLink && zLink.connected) {
             subject.next({ connected: zLink.connected })
             return subject
@@ -24,6 +24,7 @@ function usingLinkClient() {
             },
             autoConnect: true,
             reconnection: true,
+            reconnectionAttempts: 20,
             transports: ['websocket'],
         })
         zLink.on('connect', () => {
@@ -78,6 +79,10 @@ function usingLinkClient() {
         } else {
             throw new Error(errNotConnected)
         }
+    }
+
+    function isLinkConnected() {
+        return zLink.connected
     }
 
     function onReceiveData() {

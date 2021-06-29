@@ -16,7 +16,7 @@ from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsL
 from .artifactsHelper import genericUpdateMasterDetailsHelper, accountsUpdateOpBalHelper, allCategoriesHelper, transferClosingBalancesHelper
 from .artifactsHelper import searchProductHelper
 from .accounts_utils import getRoomFromCtx
-from app.link_client import sendToRoom
+from app.link_client import sendToRoom, isLinkConnected
 import loadConfig
 # from app import socketio
 
@@ -131,7 +131,8 @@ def resolve_generic_update_master_details(parent, info, value):
     else:
         processData(valueData)
     room = getRoomFromCtx(info.context)
-    sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+    if isLinkConnected():
+        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
     # from app.socket import voucherUpdatedSocket
     # voucherUpdatedSocket(info.context)
     return True

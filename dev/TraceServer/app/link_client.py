@@ -1,5 +1,5 @@
 import socketio
-from rx.subject import Subject
+from rx.subject import BehaviorSubject
 sio = None
 
 
@@ -7,8 +7,8 @@ def connectToLinkServer(url, pointId=None, token=None):
     global sio
     if(url is None):
         return
-    subject = Subject()
-    pid = pointId if pointId is not None else pointId
+    subject = BehaviorSubject(0)
+    pid = pointId
 
     if((sio is not None) and (sio.connected)):
         subject.on_next({'connected', True})
@@ -18,7 +18,7 @@ def connectToLinkServer(url, pointId=None, token=None):
 
     @sio.on('connect')
     def on_connect():
-        print('connected')
+        print('Link server connected')
         subject.on_next({'connected', True})
 
     @sio.on('error')
@@ -35,13 +35,14 @@ def connectToLinkServer(url, pointId=None, token=None):
 
 
 def disconnectFromLinkServer():
-    global sio
-    sio.emit('disconnect')
+    if sio.connected:
+        sio.emit('disconnect')
     # sio = None
 
 
 def ibukiEmit(message, data):
-    sio.emit('cs-socket-emit', (message, data))
+    if sio.connected:
+        sio.emit('cs-socket-emit', (message, data))
 
 
 def ibukiFilterOn(message, f):
@@ -52,8 +53,16 @@ def ibukiFilterOn(message, f):
         f(data)
 
 
+def isLinkConnected():
+    ret = False
+    if(sio and sio.connected):
+        ret = True
+    return(ret)
+
+
 def joinRoom(room):
-    sio.emit('cs-join-room', room)
+    if sio.connected:
+        sio.emit('cs-join-room', room)
 
 
 def onReceiveData(f):
@@ -69,8 +78,10 @@ def onReceiveDataFromPoint(f):
 
 
 def sendToPoint(message, data, point):
-    sio.emit('cs-send-to-point', (message, data, point))
+    if sio.connected:
+        sio.emit('cs-send-to-point', (message, data, point))
 
 
 def sendToRoom(message, data, room):
-    sio.emit('cs-send-to-room', (message, data, room))
+    if sio.connected:
+        sio.emit('cs-send-to-room', (message, data, room))

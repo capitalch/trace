@@ -511,9 +511,10 @@ const customControls = {
                 }
                 setAllAccounts(allAccounts)
             })
-            subs.add(sub1)
+            // subs.add(sub1)
             return () => {
                 subs.unsubscribe()
+                sub1.unsubscribe()
             }
         }, [xValue])
 
@@ -636,10 +637,11 @@ const customControls = {
             const subs1 = filterOn('ROW-COUNT-CHANGED').subscribe((d) => {
                 doForward()
             })
-            subs.add(subs1)
+            // subs.add(subs1)
             return () => {
                 meta.current.isMounted = false
                 subs.unsubscribe()
+                subs1.unsubscribe()
             }
         }, [])
 

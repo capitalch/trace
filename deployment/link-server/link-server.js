@@ -20,13 +20,12 @@ function startLinkServer(io) {
         link.pointId = pointId
         allLinksObject[pointId] = link
 
-        // allLinksObject = _.omitBy(allLinksObject, _.isUndefined) // To remove the undefined values
         console.log(
             'link connected,',
             'Map length:',
             allLinksMap.size,
-            ',allLinksObject:',
-            allLinksObject
+            // ',allLinksObject:',
+            // allLinksObject
         )
         link.on('disconnect', () => {
             delete allLinksObject[link.pointId]
@@ -35,8 +34,8 @@ function startLinkServer(io) {
                 'link disconnected,',
                 'Map length:',
                 allLinksMap.size,
-                ',allLinksObject:',
-                allLinksObject
+                // ',allLinksObject:',
+                // allLinksObject
             )
         })
 

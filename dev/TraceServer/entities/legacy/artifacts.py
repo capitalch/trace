@@ -3,8 +3,6 @@ import datetime
 from flask import Blueprint, request, render_template, jsonify
 from flask_weasyprint import HTML, render_pdf
 import simplejson as json
-# import demjson as djson
-# import zlib
 from urllib.parse import unquote, urljoin
 from copy import deepcopy
 from postgres import execSql
@@ -13,7 +11,6 @@ from entities.legacy import messages
 from entities.legacy.sql import allSqls
 from entities.legacy.utils import saveBillsAndSms, processDataForPdf
 from entities.accounts.artifactsHelper import bulkGenericUpdateMasterDetailsHelper
-# from utils import saveBillAndSms
 
 trackApp = Blueprint('trackApp', __name__,
                      template_folder='templates', static_folder='static', static_url_path='/track/view/css')

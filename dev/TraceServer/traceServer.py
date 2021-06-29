@@ -30,7 +30,11 @@ from loadConfig import cfg
 # from app import create_app  # , socketio
 
 env = cfg['env']
-linkServerUrl = cfg[env]['linkServerUrl']
+if(env=='local'):
+    linkServerUrl = cfg[env]['linkServerUrl']
+else:
+    linkServerUrl = cfg[env]['linkServerIp']
+print('env:', env)
 connectToLinkServer(linkServerUrl,'traceServer')
 
 app = Flask(__name__,  template_folder="../build")

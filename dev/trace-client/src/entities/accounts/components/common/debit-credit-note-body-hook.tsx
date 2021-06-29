@@ -101,11 +101,14 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         ).subscribe((d: any) => {
             meta.current.allAccounts = d.data.allAccounts
         })
-        subs1.add(subs2).add(subs3).add(subs4)
+        // subs1.add(subs2).add(subs3).add(subs4)
         setRefresh({})
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 

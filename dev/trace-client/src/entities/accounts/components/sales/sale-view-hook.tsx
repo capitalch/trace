@@ -44,10 +44,11 @@ function useSaleView(arbitraryData: any) {
                 loadSaleOnId(d.data, false) // isModify; 2nd arg is false for new entries in table
             }
         )
-        subs1.add(subs2)
+        // subs1.add(subs2)
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 

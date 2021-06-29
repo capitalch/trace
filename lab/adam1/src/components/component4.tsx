@@ -4,38 +4,31 @@ import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import { Send } from '@material-ui/icons'
 import './component4.scss'
-import moment from 'moment'
+import {useIbuki} from '../utils/ibuki'
 import { Button } from '@material-ui/core'
 
 const Component4 = () => {
     const [, setRefresh] = useState({})
+    const {filterOn}  = useIbuki()
     useEffect(() => {
-        
+        const subs1 = filterOn('ABCD').subscribe(()=>{
+            console.log('ABCD')
+        })
+        // const subs2 = filterOn('EFGH').subscribe(()=>{
+        //     console.log('EFGH')
+        // })
+        // const subs3 = filterOn('EFGH').subscribe(()=>{
+        //     console.log('EFGH')
+        // })
+        // subs1.add(subs2).add(subs3)
         return () => {
+            subs1.unsubscribe()
         }
     }, [])
 
-    function createRcId(rcId: number){
-        const rndArr = 'XWSGH29TRP'.split('')
-        const rndAdd = 134567
-        const temp = String(rcId + rndAdd)
-        const out = []
-        for(let char of temp){
-            out.push(rndArr[+char])
-        }
-        alert(out.join(''))
-    }
-
     return (
         <div>
-            <Button onClick = {()=>createRcId(100002)}>Test</Button>
-            <button onClick={()=>{
-                console.log((
-                    Math.random().toString(36).substring(2, 5) + '-' + Math.random().toString(36).substring(2, 5)).toUpperCase())
-            }}>Test1</button>
-            <button onClick={()=>{
-                console.log((Math.random().toString(36).substring(2, 5)).toUpperCase())
-            }}>Test2</button>
+           <Button>Test</Button>
         </div>
     )
 }

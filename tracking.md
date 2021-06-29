@@ -104,12 +104,20 @@ a4: 297 X 210 MM = 3508 X 2480 px
 2.01 Security is open. Needs to fix it.
 2.02 Change password not working
 2.03 In Journals Debits not equals credits being possible
+2.04 In Inventory--> Brands--> edit: when you close the dialog it blows up
 
 ## Maintainance
 1.30 Github release management
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 28-06-2021 - 29-06-2021
+1. Fixed up some bug with link-server
+2. Incorporated rxjs latest version 7.x
+
+# 22-06-2021 - 27-06-2021
+1. completed SMS sale using tkinter GUI library
 
 # 20-06-2021 - 21-06-2021
 1. Service extended warranty for Sony started

@@ -52,10 +52,11 @@ function usePurchaseItems(arbitraryData: any) {
         const subs2 = filterOn('PURCHASE-ITEMS-REFRESH').subscribe(() => {
             meta.current.isMounted && setRefresh({})
         })
-        subs1.add(subs2)
+        // subs1.add(subs2)
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 

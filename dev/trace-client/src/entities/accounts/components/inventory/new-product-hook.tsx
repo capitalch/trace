@@ -30,10 +30,11 @@ function useNewProduct() {
         const subs2 = filterOn('NEW-PRODUCT-DELETE').subscribe((d: any)=>{
             handleDelete(d.data)
         })
-        subs1.add(subs2)
+        // subs1.add(subs2)
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 

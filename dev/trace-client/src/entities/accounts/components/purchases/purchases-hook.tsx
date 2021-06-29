@@ -16,10 +16,11 @@ function usePurchases() {
             arbitraryData.current = JSON.parse(JSON.stringify(initData))
             meta.current.isMounted && setRefresh({})
         })
-        subs1.add(subs2)
+        // subs1.add(subs2)
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 

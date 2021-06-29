@@ -24,9 +24,10 @@ function TraceSubHeader() {
         const subs2 = filterOn('LOAD-SUBHEADER-JUST-REFRESH').subscribe((d) => {
             meta.current.isMounted && setRefresh({})
         })
-        subs1.add(subs2)
+        // subs1.add(subs2)
         return () => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
             meta.current.isMounted = false
         }
     }, [])

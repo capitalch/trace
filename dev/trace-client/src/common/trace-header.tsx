@@ -85,11 +85,14 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
             setRefresh({})
         })
 
-        subs.add(subs1).add(subs2).add(subs3)
+        // subs.add(subs1).add(subs2).add(subs3)
 
         return (() => {
             meta.current.isMounted = false
             subs.unsubscribe()
+            subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
         })
     }, [])
 

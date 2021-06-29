@@ -119,10 +119,13 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             meta.current.allAccounts = d.data.allAccounts
             registerAccounts(meta.current.allAccounts)
         })
-        subs1.add(subs2).add(subs3).add(subs4)
+        // subs1.add(subs2).add(subs3).add(subs4)
         setRefresh({})
         return () => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 
