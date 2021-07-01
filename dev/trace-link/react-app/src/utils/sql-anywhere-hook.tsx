@@ -8,17 +8,12 @@ if(isElectron()){
 }
 
 function useSqlAnywhere(databaseName: string) {
-    // let odbc:any = undefined
-    // if(isElectron()){
-    //     odbc = window.require('odbc')
-    // }
     async function execSql(queryKey: string, params: string[]) {
         let conn: any = null
         try {
             const connString = `DSN=${databaseName}`
             let data = undefined
             if(isElectron()){
-                // const odbc = window.require('odbc')
                 conn = await odbc.connect(connString)
                 data = await conn.query(sqls[queryKey], params)
             }

@@ -1,16 +1,17 @@
 from tkinter import Button, Frame, Label
-from utils import fetch_local_data
+from utils import fetch_local_data, do_export
 
 counter = 0
 temp_label = None
 
 def handle_export():
+    do_export()
     global counter
     # data_tuple_of_dictionary = fetch_local_data(
     #     'service-get-sale-receipts', '2020-04-01', '2021-03-31')
     # print(data_tuple_of_dictionary)
-    counter+=1
-    temp_label['text'] = counter
+    # counter+=1
+    # temp_label['text'] = counter
 
 
 

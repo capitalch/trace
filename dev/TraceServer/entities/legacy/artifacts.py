@@ -53,7 +53,7 @@ def service_cash_sale_account_ids():
     return(result)
 
 
-@trackApp.route('/service/import-service-sale', methods=['POST'])
+@trackApp.route('/service/export-service-sale', methods=['POST'])
 def import_service_sale():
     print('started')
     startTime = datetime.datetime.now()
