@@ -20,13 +20,6 @@
             ],
             "jinja": true
         },
-        // {
-        //     "name": "Python: Current File",
-        //     "type": "python",
-        //     "request": "launch",
-        //     "program": "traceServer.py",
-        //     "console": "integratedTerminal"
-        //   },
     ]
 }
 

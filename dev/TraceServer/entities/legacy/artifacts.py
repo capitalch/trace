@@ -1,5 +1,7 @@
 # from os import stat, path
 import datetime
+import re
+import cairosvg
 from flask import Blueprint, request, render_template, jsonify
 from flask_weasyprint import HTML, render_pdf
 import simplejson as json
@@ -50,7 +52,7 @@ def service_cash_sale_account_ids():
     }
     result = execSql(data.get('database'), allSqls.get(
         'get-cash-sale-account-ids'), args, isMultipleRows=False)
-    return(result)
+    return(result,200)
 
 
 @trackApp.route('/service/export-service-sale', methods=['POST'])
@@ -58,9 +60,11 @@ def import_service_sale():
     print('started')
     startTime = datetime.datetime.now()
     payload = request.data
-    payload = unquote(payload)
+    # payload = unquote(payload)
+    payload =payload.decode()
     jsonPayload = json.loads(payload)
-    valueData = jsonPayload.get('data')
+    jsonObj = json.loads(jsonPayload)
+    valueData = jsonObj.get('data')
 
     meta = jsonPayload.get('meta')
     dbName = meta.get('dbName')

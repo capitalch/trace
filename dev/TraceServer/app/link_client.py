@@ -2,7 +2,6 @@ import socketio
 from rx.subject import BehaviorSubject
 sio = None
 
-
 def connectToLinkServer(url, pointId=None, token=None):
     global sio
     if(url is None):
