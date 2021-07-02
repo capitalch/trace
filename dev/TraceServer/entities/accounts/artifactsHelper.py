@@ -247,7 +247,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=
                 'branchId': branchId,
                 'tranTypeId': tranTypeId,
                 'finYearId': finYearId,
-                'userRefNo': userRefNo
+                'userRefNo': str(userRefNo)
             })
             result = cursor.fetchone()
 

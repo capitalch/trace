@@ -64,7 +64,7 @@ def populate_meta():
         raise error
 
 
-def get_cash_sale_account_ids():
+def get_cash_and_sale_account_ids():
     baseUrl = meta.get('base_url')
     urlForCashSaleIds = config.get('service').get('urlForCashSaleIds')
     mapping = meta.get('mapping')
@@ -81,9 +81,6 @@ def get_cash_sale_account_ids():
     return cashAccountId, saleAccountId
 
 
-+66
-
-
 def do_export():
     try:
         populate_meta()
@@ -91,18 +88,26 @@ def do_export():
         service_receipts = fetch_local_data(
             'service-get-sale-receipts', '2020-04-01', '2020-06-11')
 
-        cashAccountId, saleAccountId = get_cash_sale_account_ids()
+        cashAccountId, saleAccountId = get_cash_and_sale_account_ids()
 
         finYear = 2021
-        payload = [get_reshaped_data(item, finYear=finYear, cashAccountId=cashAccountId,
-                                     saleAccountId=saleAccountId) for item in service_receipts]
+        mapping = meta.get('mapping')
+        metaData = {'dbName': mapping.get('database'),
+                    'buCode': mapping.get('buCode'),
+                    'branchId': 1,
+                    'finYearId': finYear,
+                    'pointId': '1234'
+                    }
+        payloadData = [get_reshaped_data(item, finYear=finYear, cashAccountId=cashAccountId,
+                                         saleAccountId=saleAccountId) for item in service_receipts]
+        payload = {'meta': metaData, 'data': payloadData}
         payloadStr = json.dumps(payload)
         # payloadBytes = payload.encode()
         # payload = quote(payloadBytes)
         payload = payloadStr.encode()
         baseurl = meta.get('base_url')
         urlExport = config['service']['urlForExportServiceSale']
-        url = ''.join([baseurl,'/',urlExport])
+        url = ''.join([baseurl, '/', urlExport])
         requests.post(url=url, json=payload)
         z = 0
 
@@ -123,9 +128,9 @@ def get_reshaped_data(obj, **args):
     saleAccountId = args['saleAccountId']
     amount = obj.get('rec_amt')
     recDate = obj.get('rec_date').strftime("%Y-%m-%d")
-    
+
     gst = (float(amount) * (gstRate / 100)) / (1 + gstRate / 100)
-    cgst = round((gst / 2),2)
+    cgst = round((gst / 2), 2)
     sgst = cgst
     igst = 0
     temp = {

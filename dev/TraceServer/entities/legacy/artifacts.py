@@ -41,7 +41,7 @@ def track_view_bill(billNoHash):
     return(render_pdf(HTML(string=html)))
 
 
-@trackApp.route('/service/cash-sale-account-ids', methods=['POST'])
+@trackApp.route('/service/cash-and-sale-account-ids', methods=['POST'])
 def service_cash_sale_account_ids():
     data = request.get_json()
 
@@ -60,11 +60,13 @@ def import_service_sale():
     print('started')
     startTime = datetime.datetime.now()
     payload = request.data
-    # payload = unquote(payload)
-    payload =payload.decode()
-    jsonPayload = json.loads(payload)
-    jsonObj = json.loads(jsonPayload)
-    valueData = jsonObj.get('data')
+    jsonString = unquote(payload)
+    jsonPayload = json.loads(jsonString)
+    jsonPayload = json.loads(jsonPayload) ## extra for python client
+    # payload =payload.decode()
+    # jsonPayload = json.loads(payload)
+    # jsonObj = json.loads(jsonPayload)
+    valueData = jsonPayload.get('data')
 
     meta = jsonPayload.get('meta')
     dbName = meta.get('dbName')
