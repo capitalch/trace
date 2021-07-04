@@ -1,14 +1,16 @@
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from 'apollo-boost'
 import urlJoin from 'url-join'
 import { manageEntitiesState } from './esm'
+import { config } from '../config'
+
 const clientStore: any = {}
 const graphqlService = () => {
     const { getLoginData, getFromBag } = manageEntitiesState()
 
     const getUrl = () => {
         let ur
-        const win: any = window
-        const config = win.config
+        // const win: any = window
+        // const config = win.config
         const env: any = process.env.NODE_ENV
         if (env === 'development') {
             ur = config.graphql[env]

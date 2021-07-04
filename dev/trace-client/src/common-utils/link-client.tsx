@@ -9,7 +9,7 @@ function usingLinkClient() {
         pointId: any = undefined,
         token: any = undefined
     ) {
-        const subject = new BehaviorSubject<any>(0)
+        const subject = new BehaviorSubject<any>(1)
         if (!url) return subject
 
         if (zLink && zLink.connected) {
@@ -24,7 +24,7 @@ function usingLinkClient() {
             },
             autoConnect: true,
             reconnection: true,
-            reconnectionAttempts: 20,
+            reconnectionAttempts: 50,
             transports: ['websocket'],
         })
         zLink.on('connect', () => {
@@ -43,7 +43,6 @@ function usingLinkClient() {
 
     function disconnectFromLinkServer() {
         if (zLink.connected) {
-            // zLink.emit('disconnect')
             zLink.disconnect()
         }
     }

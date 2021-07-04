@@ -1,8 +1,12 @@
-global sio
-sio = 123
+import simplejson as json
+jData = {
+    'name':'xxx',
+    'address':'abc'
+}
 
-def my_func():
-    sio = 'abc'
+jString = json.dumps(jData)
+escaped = jString.encode('utf-8')
 
-my_func()
-print(sio)
+unescaped = escaped.decode()
+jOut = json.loads(unescaped)
+z = 1

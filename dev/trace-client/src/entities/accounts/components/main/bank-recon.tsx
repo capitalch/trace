@@ -257,7 +257,7 @@ function BankRecon() {
             <DataTable
                 style={{ marginTop: '1rem', fontSize: '0.8rem' }}
                 value={meta.current.reconData}
-                scrollable={true}
+                scrollable={true} selectionMode="checkbox" showSelectionElement={()=>true}
                 scrollHeight="calc(100vh - 20rem)">
                 {/* id */}
                 <Column

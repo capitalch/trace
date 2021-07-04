@@ -101,10 +101,7 @@ def do_export():
         payloadData = [get_reshaped_data(item, finYear=finYear, cashAccountId=cashAccountId,
                                          saleAccountId=saleAccountId) for item in service_receipts]
         payload = {'meta': metaData, 'data': payloadData}
-        payloadStr = json.dumps(payload)
-        # payloadBytes = payload.encode()
-        # payload = quote(payloadBytes)
-        payload = payloadStr.encode()
+        payload = payload #.encode('utf-8')
         baseurl = meta.get('base_url')
         urlExport = config['service']['urlForExportServiceSale']
         url = ''.join([baseurl, '/', urlExport])
