@@ -36,6 +36,7 @@ function SaleView({ arbitraryData }: any) {
 
                     actionsColumnIndex: 1,
                     paging: false,
+                    // selection: true,
                 }}
                 components={{
                     Action: (props: any) => {

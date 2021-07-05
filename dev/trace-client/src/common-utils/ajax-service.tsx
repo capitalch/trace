@@ -2,8 +2,10 @@ import urlJoin from 'url-join'
 import axios from 'axios'
 import moment from 'moment'
 import { manageEntitiesState } from './esm'
+import { config } from '../config'
 
 function ajaxService() {
+    
     const { getLoginData, getFromBag, getCurrentEntity } = manageEntitiesState()
 
     function getHeaders() {
@@ -23,32 +25,16 @@ function ajaxService() {
     }
 
     function getUrl(endPoint: string) {
-        let ur
-        const win: any = window
-        const config = win.config
+        let ur: any
         const env: any = process.env.NODE_ENV
         if (env === 'development') {
-            ur = config.graphql[env]
+            ur = config['graphql'][env]
         } else {
             ur = window.location.href
         }
-        // const graphql: any = config.graphql
-        // const url = urlJoin(graphql[env], graphql.endPoint)
         const url = urlJoin(ur, endPoint)
         return url
     }
-
-    // function getUrl(endPoint: string) {
-    //     const environment = getFromBag('environment')
-    //     const ur = environment['url']
-    //     const url = urlJoin(ur, endPoint)
-    //     // const win: any = window
-    //     // const config = win.config
-    //     // const env: any = process.env.NODE_ENV
-    //     // const graphql: any = config.graphql
-    //     // const url = urlJoin(graphql[env], endPoint)
-    //     return url
-    // }
 
     async function httpGet(endPoint: string) {
         const url = getUrl(endPoint)

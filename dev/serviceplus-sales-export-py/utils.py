@@ -109,9 +109,15 @@ def do_export(temp_label, export_button):
         payloadData = [get_reshaped_data(item, finYear=finYear, cashAccountId=cashAccountId, mapping=mapping,
                                          saleAccountId=saleAccountId) for item in service_receipts]
         payload = {'meta': metaData, 'data': payloadData}
+<<<<<<< HEAD
         print('id:', config.sio.pointId)
         baseurl = config.url
         urlExport = config.urlForExportServiceSale
+=======
+        payload = payload #.encode('utf-8')
+        baseurl = meta.get('base_url')
+        urlExport = config['service']['urlForExportServiceSale']
+>>>>>>> 54691d75f40f30cd6ab58561cc7f27b71f63aed5
         url = ''.join([baseurl, '/', urlExport])
 
         def handle_feedback(m, data, sourcePointId):

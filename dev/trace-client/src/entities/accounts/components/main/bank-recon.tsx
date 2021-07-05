@@ -41,6 +41,7 @@ import { useTraceMaterialComponents } from '../../../../common/trace-material-co
 import messages from '../../../../messages.json'
 
 function BankRecon() {
+    const [selectedItems, setSelectedItems] = useState(null)
     const { emit } = usingIbuki()
     const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const {
@@ -258,7 +259,14 @@ function BankRecon() {
                 style={{ marginTop: '1rem', fontSize: '0.8rem' }}
                 value={meta.current.reconData}
                 scrollable={true}
+                selectionMode="multiple"
+                selection={selectedItems}
+                onSelectionChange={(e) => setSelectedItems(e.value)}
                 scrollHeight="calc(100vh - 20rem)">
+                <Column
+                    selectionMode="multiple"
+                    style={{ width: '3rem', textAlign: 'center' }}
+                />
                 {/* id */}
                 <Column
                     style={{ width: '4rem', textAlign: 'left' }}
@@ -273,7 +281,11 @@ function BankRecon() {
 
                 {/* instr no  */}
                 <Column
-                    style={{ width: '7rem', textAlign: 'left', wordWrap: 'break-word' }}
+                    style={{
+                        width: '7rem',
+                        textAlign: 'left',
+                        wordWrap: 'break-word',
+                    }}
                     field="instrNo"
                     header="Instr no"></Column>
 

@@ -1,8 +1,5 @@
 import { useSharedElements } from '../shared-elements-hook'
 import sampleServiceData from './sampleServiceData.json'
-import { useEffect } from 'react'
-import { useRef } from 'react'
-// import {socketId, socket} from '../utils/socket'
 
 function useImportServiceSaleHelper() {
     const { axios, config, emit, messages, useSqlAnywhere } =
@@ -35,7 +32,6 @@ function useImportServiceSaleHelper() {
             meta.current.status3 = ''
             meta.current.closeButtonDisabled = true
             meta.current.setRefresh({})
-            // console.log(JSON.stringify(result))
         } catch (e) {
             alert(e.message || messages.errTransferData)
         }
@@ -45,7 +41,6 @@ function useImportServiceSaleHelper() {
         try {
             meta.current.isDisabledTansferButton = true
             meta.current.setRefresh({})
-            // emit('SHOW-LOADING-INDICATOR', true)
             const currentEnv = config.env
             const baseUrl = config[currentEnv]?.url
             const serviceUrlForIds = baseUrl.concat(
@@ -73,7 +68,6 @@ function useImportServiceSaleHelper() {
                             branchId: 1,
                             finYearId: arbitraryDataCurrent.finYear,
                             pointId: meta.current.pointId,
-                            // socketId: socketId
                         },
                         data: temp,
                     }

@@ -29,7 +29,3 @@ function useSqlAnywhere(databaseName: string) {
     return { execSql }
 }
 export { useSqlAnywhere }
-
-// const win: any = window
-// const config = win.config
-// const databaseName = config['database']

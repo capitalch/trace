@@ -60,6 +60,8 @@ def import_service_sale():
     print('started')
     startTime = datetime.datetime.now()
     payload = request.data
+    # unescaped = payload.decode()
+    # jsonPayload = json.loads(unescaped)
     jsonString = unquote(payload)
     jsonPayload = json.loads(jsonString)
     # jsonPayload = json.loads(jsonPayload) ## extra for python client

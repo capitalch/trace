@@ -1,5 +1,6 @@
 import _ from 'lodash'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useState } from 'react'
+// import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { utilMethods } from '../../common-utils/util-methods'
 import { manageFormsState } from '../../react-form/core/fsm'
 import { graphqlQueries } from '../../shared-artifacts/graphql-queries-mutations'
@@ -19,6 +20,7 @@ function utils() {
     const { mutateGraphql } = graphqlService()
     const { getFromBag, getCurrentEntity, getLoginData } = manageEntitiesState()
     const { emit } = usingIbuki()
+
     // const classes = useStyles()
     function extractGst(x: any) {
         const clone: any = { ...x }
@@ -172,6 +174,10 @@ function utils() {
             }
             return [
                 <Column
+                    selectionMode="multiple"
+                    style={{ width: '3rem', textAlign: 'center' }}
+                />,
+                <Column
                     header="D"
                     key={incr()}
                     style={{ width: '2.1rem', textAlign: 'left' }}
@@ -303,12 +309,16 @@ function utils() {
         }
 
         function LedgerDataTable({ isScrollable, className }: any) {
+            const [selectedItems, setSelectedItems] = useState(null)
             return (
                 <DataTable
                     className={className}
                     rowClassName={(node: any) => ({
                         'ledger-summary': !node.tranType,
                     })}
+                    selection={selectedItems}
+                    onSelectionChange={(e) => setSelectedItems(e.value)}
+                    selectionMode='multiple'
                     rowHover={true}
                     scrollable={isScrollable}
                     scrollHeight="calc(100vh - 24rem)"
