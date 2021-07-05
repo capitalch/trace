@@ -1,8 +1,9 @@
 from tkinter import Button, Radiobutton, Frame, Label, StringVar
-from tkinter.constants import ANCHOR, LEFT, RIDGE, SUNKEN, W, X
+from tkinter.constants import ANCHOR, DISABLED, LEFT, NORMAL, RIDGE, SUNKEN, W, X
 from tkinter import ttk
 from datetime import date, datetime
 from tkcalendar import DateEntry
+
 
 class DateMode(Frame):
     def __init__(self, parent):
@@ -26,6 +27,14 @@ class DateMode(Frame):
         self.end_date_entry = DateEntry(self, width=11, background='darkblue',
                                         foreground='white', borderwidth=2, date_pattern='dd/MM/yyyy')
         self.end_date_entry.grid(row=0, column=4)
+
+    def disable(self):
+        for child in self.winfo_children():
+            child.configure(state=DISABLED)
+
+    def enable(self):
+        for child in self.winfo_children():
+            child.configure(state=NORMAL)
 
     def get_dates(self):
         startDate = self.start_date_entry.get_date().isoformat()
@@ -60,14 +69,14 @@ class QuarterMode(Frame):
     def get_dates(self):
         today = date.today()
         yr = today.year
-        curr_fin_year = (yr+1) if today.month in(1,2,3) else yr
+        curr_fin_year = (yr+1) if today.month in (1, 2, 3) else yr
         logic = {
             '1': (f'{curr_fin_year}-04-01', f'{curr_fin_year}-06-31'),
-            '2': (f'{curr_fin_year}-05-01', f'{curr_fin_year}-09-30'),
+            '2': (f'{curr_fin_year}-07-01', f'{curr_fin_year}-09-30'),
             '3': (f'{curr_fin_year}-10-01', f'{curr_fin_year}-12-31'),
             '4': (f'{curr_fin_year + 1}-01-01', f'{curr_fin_year + 1}-03-31'),
         }
-        return(logic[self.qtr])
+        return(logic[self.qtr.get()])
 
 
 class YearMode(Frame):
@@ -78,22 +87,34 @@ class YearMode(Frame):
                               variable=parent.mode, highlightcolor='blue')
         rb_year.grid(row=0, column=0, pady=10)
 
-        cb_year = ttk.Combobox(self, width=23, values=self.get_fin_years())
-        cb_year.current(1)
-        cb_year.grid(row=0, column=1, padx=10)
+        self.cb_year = ttk.Combobox(
+            self, width=23, values=self.get_fin_years())
+        self.cb_year.current(1)
+        self.cb_year.grid(row=0, column=1, padx=10)
+
+    def get_current_fin_year(self):
+        today = date.today()
+        fin_year = today.year
+        if(today.month in (1, 2, 3)):
+            fin_year = today.year - 1
+        return(fin_year)
 
     def get_fin_years(self):
         def get_formatted_year(year):
             return(f'01/04/{year} - 31/03/{year + 1}')
 
-        def get_current_fin_year():
-            today = date.today()
-            fin_year = today.year
-            if(today.month in (1, 2, 3)):
-                fin_year = today.year - 1
-            return(fin_year)
+        return [get_formatted_year(self.get_current_fin_year() - 1), get_formatted_year(self.get_current_fin_year())]
 
-        return [get_formatted_year(get_current_fin_year() - 1), get_formatted_year(get_current_fin_year())]
+    def get_dates(self):
+        yr = self.get_current_fin_year()
+        # selected index for year: 0 is previous yr, 1 is current yr
+        yr_index = str(self.cb_year.current())
+        logic = {
+            '0': (f'{yr-1}-04-01', f'{yr}-03-31'),
+            '1': (f'{yr}-04-01', f'{yr+1}-03-31')
+        }
+
+        return(logic[yr_index])
 
 
 class DateRangeContainer(Frame):
@@ -115,14 +136,28 @@ class DateRangeContainer(Frame):
         self.year_mode = YearMode(self)
         self.year_mode.grid(row=3, column=0, sticky=W)
 
-    def get_selected_dates(self):
-        startDate = datetime.now().isoformat()
-        endDate = datetime.now().isoformat()
-        if(self.mode == 'D'):
-            startDate, endDate = self.date_mode.get_dates()
-        elif(self.mode == 'Q'):
-            startDate, endDate = self.quarter_mode.get_dates()
+        # self.config(state=DISABLED)
+
+    def get_dates(self):
+        # startDate = datetime.now().isoformat()
+        # endDate = datetime.now().isoformat()
+        val = self.mode.get()
+        if(val == 'D'):
+            dates = self.date_mode.get_dates()
+        elif(val == 'Q'):
+            dates = self.quarter_mode.get_dates()
+        else:
+            dates = self.year_mode.get_dates()
+        return(dates)
+
 
 def init_date_range_container(root):
     date_range_container = DateRangeContainer(root)
     date_range_container.pack(fill=X, pady=10, padx=10)
+
+    def get_dates():
+        startDate, endDate = date_range_container.get_dates()
+        date_range_container.date_mode.disable()
+
+    btn1 = Button(text='Get dates', command=get_dates)
+    btn1.pack()
