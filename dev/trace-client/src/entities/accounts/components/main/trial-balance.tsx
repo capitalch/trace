@@ -29,7 +29,7 @@ function TrialBalance() {
     const [, setRefresh] = useState({})
     const { toDecimalFormat } = utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
-
+    // const [selectedItems, setSelectedItems] = useState(null)
     const meta: any = useRef({
         data: [],
         isMounted: false,
@@ -122,9 +122,6 @@ function TrialBalance() {
         const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
             () => {
                 getData(false)
-                // setTimeout(() => {
-                //     getData(false)
-                // }, 1000)
             }
         )
         getData()
@@ -261,6 +258,9 @@ function TrialBalance() {
                 })}
             </Box>
             <TreeTable
+                // selectionMode="multiple"
+                // selection={selectedItems}
+                // onSelectionChange={(e: any) => setSelectedItems(e.value)}
                 scrollable={true}
                 scrollHeight="calc(100vh - 22rem)"
                 value={meta.current.data}
@@ -270,6 +270,10 @@ function TrialBalance() {
                     setInBag('trialBalExpandedKeys', e.value)
                     meta.current.isMounted && setRefresh({})
                 }}>
+                    <Column
+                    selectionMode="multiple"
+                    style={{ width: '3rem', textAlign: 'center' }}
+                />
                 <Column
                     field="accName"
                     expander

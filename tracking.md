@@ -22,12 +22,6 @@ a4: 297 X 210 MM = 3508 X 2480 px
 
 ## Python Service+ tools and warranty extension program
 # prototypes
-1. UI develop
-2. create API for upload cust data
-3. API to get data
-4. Async python to insert data in postgreSql and sending ticks async to client
-5. Async way to send parallel sms to all customers and update database
-
 
 # Working on
 1. Purchase sale clickaway
@@ -102,7 +96,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 1.01 In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank.
 2.00 When focus change in purchase, sales waiting occurs without data changed. Check the logic of data changed. There is confusion. This is happening because onBlur event does not propagate the events. Try out clickAway event in place of onBlur event instead.
 2.01 Security is open. Needs to fix it.
-2.02 Change password not working
+2.02 Change password not working --ujjal
 2.03 In Journals Debits not equals credits being possible
 2.04 In Inventory--> Brands--> edit: when you close the dialog it blows up
 
