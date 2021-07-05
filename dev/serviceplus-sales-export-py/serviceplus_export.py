@@ -1,24 +1,13 @@
 from tkinter import Tk
-from tkinter.constants import BOTH, X
-from components.export import get_export_button
-# from controls_frame import get_controls_frame, fetch_sale_data
-# from data_table_treeview import get_data_table_treeview
-
+from tkinter.constants import X
+from components.export import init_export_button
+from components.select_date_range import init_date_range_container
 root = Tk()
 root.title('Export serviceplus sales to Trace')
-root.geometry('800x600+200+200')
+root.geometry('800x400+200+200')
 
-# export_button = get_export_button(root)
-# export_button.pack()
-temp_frame = get_export_button(root)
-temp_frame.pack(fill=X)
+init_date_range_container(root)
 
-# tv = get_data_table_treeview(root)
-
-# frame = get_controls_frame(root)
-# frame.pack(fill=X)
-
-# tv.pack(fill=BOTH, expand=1)
-# fetch_sale_data()
+init_export_button(root)
 
 root.mainloop()

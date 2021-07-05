@@ -89,13 +89,14 @@ a4: 297 X 210 MM = 3508 X 2480 px
 1.13 Think of same user iD / email in multiple clients
 1.14 Export of PL, BL and TB should be lowest and highest levels
 1.15 Bank recon should show details of default bank
-1.16 Flask Socket mechanism to final reports
+			1.16 Flask Socket mechanism to final reports
 1.17 Independent databases
 
 ## New features
 1.0 Purchase invoice upload and search on metadata. Click will show invoice in PDF
 2.0 From bank reconcillation to modify voucher
 3.0 Trace database to stay in control of client facility. Possibility of local database
+4.0 Audit select multiple rows in datatable
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
@@ -122,6 +123,9 @@ a4: 297 X 210 MM = 3508 X 2480 px
 # 20-06-2021 - 21-06-2021
 1. Service extended warranty for Sony started
 2. Reading Excel files in python
+
+# Till 04-07-2021
+1. Working on Service+ data upload to Trace in Python
 
 # Till 19-06-2021
 1. Completed link-server and implemented with trace

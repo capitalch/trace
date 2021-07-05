@@ -1,10 +1,13 @@
 const socket = require('socket.io')
+const bcrypt = require('bcrypt')
 const express = require('express')
+const config = require('./config.json')
+const messages = require('./messages.json')
 const PORT = 5001
 const app = express()
 const {startLinkServer} = require('./link-server')
 server = app.listen(PORT, function () {
-    console.log(`Listening on port ${PORT}`)
+    console.log(`Listening on port ${server.address().port}`)
 })
 
 app.use(express.static('public'))
@@ -27,6 +30,14 @@ app.use(allowCrossDomain)
 
 app.get('/', (req, res) => {
     res.end('Hello')
+})
+
+app.get('/token',(req,res)=>{
+    const key = config.authKey
+    bcrypt.hash(key, 10, function(err, hash) {
+        console.log(hash)
+        res.status(200).send(messages['infoTokenGenerated'])
+    })
 })
 
 const io = socket(server)

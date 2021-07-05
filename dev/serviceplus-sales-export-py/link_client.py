@@ -18,7 +18,9 @@ def connectToLinkServer(url, pointId=None, token=None):
 
     @sio.on('connect')
     def on_connect():
-        print('Link server connected')
+        pid = sio.namespaces['/']
+        print('Link server connected', 'id:', pid)
+        sio.pointId = pid
         subject.on_next({'connected', True})
 
     @sio.on('error')
@@ -68,8 +70,8 @@ def joinRoom(room):
 
 def onReceiveData(f):
     @sio.on('sc-send')
-    def on_receive(message, data):
-        f(message, data)
+    def on_receive(message, data, sourcePointId):
+        f(message, data, sourcePointId)
 
 
 def onReceiveDataFromPoint(f):

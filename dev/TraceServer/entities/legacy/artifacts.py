@@ -62,7 +62,7 @@ def import_service_sale():
     payload = request.data
     jsonString = unquote(payload)
     jsonPayload = json.loads(jsonString)
-    jsonPayload = json.loads(jsonPayload) ## extra for python client
+    # jsonPayload = json.loads(jsonPayload) ## extra for python client
     # payload =payload.decode()
     # jsonPayload = json.loads(payload)
     # jsonObj = json.loads(jsonPayload)
@@ -75,4 +75,4 @@ def import_service_sale():
     bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueData, pointId)
     delta = (datetime.datetime.now() - startTime)/60
     print(delta, ' Mins')
-    return('Ok')
+    return('Ok',200)
