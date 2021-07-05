@@ -1,20 +1,25 @@
 from datetime import datetime, date
+from tkinter import Button, Radiobutton, StringVar
+from typing_extensions import IntVar
 
 
-def get_fin_years():
+def activate_lab_radio_buttons(root):
+    rb_value = StringVar(root, "2")
+    rb_1 = Radiobutton(root, variable=rb_value, value="1")
+    # rb_1.grid(row=0, column=0)
+    rb_1.pack()
 
-    def get_formatted_year(year):
-        return(f'{year}: 01/04/{year} - 31/03/{year + 1}')
+    rb_2 = Radiobutton(root, variable=rb_value, value="2")
+    # rb_2.grid(row=0,column=1)
+    rb_2.pack()
 
-    def get_current_fin_year():
-        today = date.today()
-        fin_year = today.year
-        if(today.month in (1, 2, 3)):
-            fin_year = today.year - 1
-        return(fin_year)
+    rb_3 = Radiobutton(root, variable=rb_value, value="3")
+    # rb_3.grid(row=0, column=2)
+    rb_3.pack()
 
-    return [get_formatted_year(get_current_fin_year() - 1), get_formatted_year(get_current_fin_year())]
+    def handle_btn():
+        print(rb_value.get())
 
-list = get_fin_years()
-
-i = 0
+    btn_1 = Button(root, text='Get value', command=handle_btn)
+    # btn1.grid(row=1,column=0)
+    btn_1.pack()
