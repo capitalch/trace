@@ -91,6 +91,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 2.0 From bank reconcillation to modify voucher
 3.0 Trace database to stay in control of client facility. Possibility of local database
 4.0 Audit select multiple rows in datatable
+5.0 Show ledger balance at the time of data entry
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
