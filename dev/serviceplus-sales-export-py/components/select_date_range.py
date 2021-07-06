@@ -6,6 +6,7 @@ from tkcalendar import DateEntry
 
 
 class DateMode(Frame):
+
     def __init__(self, parent):
         super().__init__(parent)
         rb_date = Radiobutton(self, text='Select date', value='D', fg='blue', font=10,
@@ -29,12 +30,16 @@ class DateMode(Frame):
         self.end_date_entry.grid(row=0, column=4)
 
     def disable(self):
-        for child in self.winfo_children():
-            child.configure(state=DISABLED)
+        self.start_date_entry.set_date(date.today())
+        self.end_date_entry.set_date(date.today())
+        self.start_date_entry.config(state=DISABLED)
+        self.end_date_entry.config(state=DISABLED)
+        # for child in self.frame_inner.winfo_children():
+        #     child.configure(state=DISABLED)
 
     def enable(self):
-        for child in self.winfo_children():
-            child.configure(state=NORMAL)
+        self.start_date_entry.config(state=NORMAL)
+        self.end_date_entry.config(state=NORMAL)
 
     def get_dates(self):
         startDate = self.start_date_entry.get_date().isoformat()
@@ -50,21 +55,21 @@ class QuarterMode(Frame):
                                  variable=parent.mode, highlightcolor='blue')
         rb_quarter.grid(row=0, column=0, pady=10)
 
-        rb_quarter1 = Radiobutton(self, text='Quarter 1 (Apr - Jun)', value='1', fg='green', font=10,
+        self.rb_quarter1 = Radiobutton(self, text='Quarter 1 (Apr - Jun)', value='1', fg='green', font=10,
                                   variable=self.qtr)
-        rb_quarter1.grid(row=1, column=0)
+        self.rb_quarter1.grid(row=1, column=0)
 
-        rb_quarter2 = Radiobutton(self, text='Quarter 2 (Jul - Sep)', value='2', fg='green', font=10,
+        self.rb_quarter2 = Radiobutton(self, text='Quarter 2 (Jul - Sep)', value='2', fg='green', font=10,
                                   variable=self.qtr)
-        rb_quarter2.grid(row=2, column=0)
+        self.rb_quarter2.grid(row=2, column=0)
 
-        rb_quarter3 = Radiobutton(self, text='Quarter 3 (Oct - Dec)', value='3', fg='green', font=10,
+        self.rb_quarter3 = Radiobutton(self, text='Quarter 3 (Oct - Dec)', value='3', fg='green', font=10,
                                   variable=self.qtr)
-        rb_quarter3.grid(row=3, column=0)
+        self.rb_quarter3.grid(row=3, column=0)
 
-        rb_quarter4 = Radiobutton(self, text='Quarter 4 (Jan - Mar)', value='4', fg='green', font=10,
+        self.rb_quarter4 = Radiobutton(self, text='Quarter 4 (Jan - Mar)', value='4', fg='green', font=10,
                                   variable=self.qtr)
-        rb_quarter4.grid(row=4, column=0)
+        self.rb_quarter4.grid(row=4, column=0)
 
     def get_dates(self):
         today = date.today()
@@ -77,6 +82,26 @@ class QuarterMode(Frame):
             '4': (f'{curr_fin_year + 1}-01-01', f'{curr_fin_year + 1}-03-31'),
         }
         return(logic[self.qtr.get()])
+    
+    def disable(self):
+        # self.qtr = StringVar(self, '1')
+        self.rb_quarter1.config(state=DISABLED)
+        self.rb_quarter2.config(state=DISABLED)
+        self.rb_quarter3.config(state=DISABLED)
+        self.rb_quarter4.config(state=DISABLED)
+    
+    def enable(self):
+        
+        self.rb_quarter1.config(state=NORMAL)
+        self.rb_quarter2.config(state=NORMAL)
+        self.rb_quarter3.config(state=NORMAL)
+        self.rb_quarter4.config(state=NORMAL)
+        # self.qtr = StringVar(self, '1')
+
+    def get_dates(self):
+        startDate = self.start_date_entry.get_date().isoformat()
+        endDate = self.end_date_entry.get_date().isoformat()
+        return(startDate, endDate)
 
 
 class YearMode(Frame):
@@ -139,8 +164,6 @@ class DateRangeContainer(Frame):
         # self.config(state=DISABLED)
 
     def get_dates(self):
-        # startDate = datetime.now().isoformat()
-        # endDate = datetime.now().isoformat()
         val = self.mode.get()
         if(val == 'D'):
             dates = self.date_mode.get_dates()
@@ -158,6 +181,8 @@ def init_date_range_container(root):
     def get_dates():
         startDate, endDate = date_range_container.get_dates()
         date_range_container.date_mode.disable()
+        date_range_container.quarter_mode.enable()
+        print(startDate, ' ', endDate)
 
     btn1 = Button(text='Get dates', command=get_dates)
     btn1.pack()
