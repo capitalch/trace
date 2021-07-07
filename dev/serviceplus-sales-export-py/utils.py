@@ -7,6 +7,8 @@ from threading import Thread
 from multiprocessing.dummy import Process
 import requests
 import pyodbc
+from datetime import date, datetime
+
 from tkinter import messagebox
 from sql import sqls
 from messages import messages
@@ -63,11 +65,11 @@ def get_local_company_id():
                 result = cursor.execute(sql).fetchone()
                 if(result and len(result) == 1):
                     company_id = result[0]
+        return(company_id)
     except(Exception) as error:
         messagebox.showerror('Error', messages.get('serviceDatabaseError'))
         raise error
-    finally:
-        return(company_id)
+        
 
 def get_cash_and_sale_account_ids(mapping):
     baseUrl = config.url
@@ -128,6 +130,7 @@ def do_export(temp_label, export_button):
 
     except(Exception) as error:
         messagebox.showerror('Error', error)
+        raise error
 
 def updateServerSync(url, payload):
     requests.post(url=url, json=payload)
@@ -212,31 +215,30 @@ def get_reshaped_data(obj, **args):
     }
     return(temp)
 
-# messages = get_messages()
-# loop = temp_label.loop
-# loop.run_until_complete(update_status())
-# asyncio.run(update_status())
-# tr = Thread(t
-# tr = Process(target=update_status)
-# tr.start()
-# temp_label.set(data)
-# temp_label.after(100, update_status)
-# temp_label['text'] = data
-# temp_label.update()
-# temp_label.pack()
+def is_valid_iso_date(dt):
+    ret = True
+    try:
+        datetime.strptime(dt,'%Y-%m-%d')
+    except:
+        ret = False
+    return(ret)
 
-# await session.post(url=url, data = payloadData)
-# async def updateServer(url, payload):
-#     payloadData = json.dumps(payload).encode()
-#     async with aiohttp.ClientSession() as session:
-#         async with session.post(url=url, data=payloadData) as response:
-#             print(await response.text())
-#             return
+def get_fin_year(dt):
+    date1 = datetime.strptime(dt,'%Y-%m-%d')
+    month1 = date1.month
+    year1 = date1.year
+    fin_year = year1
+    if(month1 in [1,2,3]):
+        fin_year = year1 -1
+    return(fin_year)
 
-# requests.post(url=url, json=payload)
-    # loop = temp_label.loop
-    # loop.run_until_complete(asyncio.gather(updateServer(url, payload)))
-    # x = asyncio.gather()
-    # asyncio.run(updateServer(url, payload))
-    # fut = asyncio.run_coroutine_threadsafe(updateServer(url, payload), loop)
-    # fut.result(100)
+def is_valid_date_range(startDate, endDate): # iso format
+    valid = True
+    iso_format = '%Y-%m-%d'
+    if((not is_valid_iso_date(startDate)) or (not(is_valid_iso_date(endDate)))):
+        valid = False
+    elif(get_fin_year(startDate) != get_fin_year(endDate)):
+        valid = False
+    elif(datetime.strptime(startDate,iso_format) > datetime.strptime(endDate, iso_format)):
+        valid = False    
+    return(valid)

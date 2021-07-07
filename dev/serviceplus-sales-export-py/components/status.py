@@ -1,5 +1,5 @@
-from tkinter import Frame, Label
-from tkinter.constants import ANCHOR, LEFT, W, X
+from tkinter import Frame, Label, Button
+from tkinter.constants import ANCHOR, E, LEFT, W, X
 from utils import config
 from ibuki import Ibuki
 from utils import get_local_company_id
@@ -28,7 +28,7 @@ class Status(Frame):
 
         target_db = f'Target database: {self.target}'
         lbl_target_db = Label(self, text=target_db,  fg='darkblue', font=0.5)
-        lbl_target_db.grid(row=0, column=1, sticky=W)
+        lbl_target_db.grid(row=0, column=1, columnspan=3, sticky=W)
 
         self.lbl_start_date = Label(self, text='', font=0.5)
         self.lbl_start_date.grid(row=1, column=0, sticky=W)
@@ -36,30 +36,37 @@ class Status(Frame):
         self.lbl_end_date = Label(self, text='', font=0.5)
         self.lbl_end_date.grid(row=1, column=1, sticky=W)
 
+        lbl_no_of_records = Label(
+            self, text='No of records:         ', font=0.5, fg='red')
+        lbl_no_of_records.grid(row=1, column=2, sticky=W)
+
+        lbl_processed = Label(
+            self, text='Processed:              ', font=0.5, fg='red')
+        lbl_processed.grid(row=1, column=3, sticky=W)
+
+        btn_exxport = Button(self, text='Export', bg='yellow',
+                             fg='red', width=10, font=12, command=self.handle_export)
+        btn_exxport.grid(row=1, column=4, sticky=E)
+
+    def handle_export():
+        pass
+
+    def check_date_range():
+        pass
+
+    def get_fin_year():
+        pass
+
 
 def get_frame_status(root):
-
     def ibuki_dates(d):
         meta.dates = d['data']
         frame_status.lbl_start_date.config(text='Start date: ' + meta.dates[0])
         frame_status.lbl_end_date.config(text='End date: ' + meta.dates[1])
-
     try:
         Ibuki.filterOn('GET-DATES').subscribe(ibuki_dates)
         frame_status = Status(root)
         # frame_status.pack(fill=X, padx=10)
-    except(Exception) as error:
-        pass
-    finally:
         return(frame_status)
-    # frame_status = Frame(root, border=2, borderwidth=2,  padx=10, pady=10)
-    # frame_status.pack(fill=X, padx=10, pady=10)
-
-    # lbl_source = Label(frame_status, text='Source: Nav', font=12)
-    # lbl_source.grid(row=0, column=1)
-
-
-# Ibuki.filterOn('GET-DATES').subscribe(lambda d: print(d['data']))
-# start_date = date_range_container.get_dates()[0]
-# lbl_start_date = Label(frame_status, text = start_date)
-# lbl_start_date.grid(row=0, column=2)
+    except(Exception) as error:
+        raise error
