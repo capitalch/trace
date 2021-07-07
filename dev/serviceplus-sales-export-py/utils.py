@@ -70,7 +70,6 @@ def get_local_company_id():
         messagebox.showerror('Error', messages.get('serviceDatabaseError'))
         raise error
         
-
 def get_cash_and_sale_account_ids(mapping):
     baseUrl = config.url
     urlForCashSaleIds = config.urlForCashSaleIds
