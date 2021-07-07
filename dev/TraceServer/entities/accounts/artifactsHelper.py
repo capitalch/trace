@@ -229,6 +229,10 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=
         cursor = connection.cursor()
         autoRefNo = ''
 
+        if(len(valueDictList) == 0):
+            sendToPoint('COMPLETED', None, pointId)
+            raise Exception('Empty list for export')
+
         branchId = valueDictList[0]["data"][0]["branchId"]
         tranTypeId = valueDictList[0]["data"][0]["tranTypeId"]
         finYearId = valueDictList[0]["data"][0]["finYearId"]

@@ -195,10 +195,10 @@ class DateRangeContainer(Frame):
         else:
             dates = self.year_mode.get_dates()
         startDate, endDate = dates
-        startDate = datetime.strptime(
-            startDate, '%Y-%m-%d').strftime('%d/%m/%Y')
-        endDate = datetime.strptime(endDate, '%Y-%m-%d').strftime('%d/%m/%Y')
-        Ibuki.emit('GET-DATES', (startDate, endDate))
+        # startDate = datetime.strptime(
+        #     startDate, '%Y-%m-%d').strftime('%d/%m/%Y')
+        # endDate = datetime.strptime(endDate, '%Y-%m-%d').strftime('%d/%m/%Y')
+        Ibuki.emit('GET-DATES', (startDate, endDate, self.get_dates))
         return(dates)
 
 

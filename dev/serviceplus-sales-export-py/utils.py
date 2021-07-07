@@ -1,13 +1,13 @@
-# from components.export import handle_export
 from tkinter import messagebox
 from os import path
 from tkinter.constants import DISABLED, NORMAL
+from babel.localedata import load
 import simplejson as json
 from threading import Thread
 from multiprocessing.dummy import Process
 import requests
 import pyodbc
-from datetime import date, datetime
+from datetime import datetime
 
 from tkinter import messagebox
 from sql import sqls
@@ -37,7 +37,9 @@ class Config:
             config = json.load(config_file)
         return(config)
 
+
 config = Config()
+
 
 def fetch_local_data(sql_key, *args):  # returns tuple of dictionary
     sql = sqls[sql_key]
@@ -56,6 +58,7 @@ def fetch_local_data(sql_key, *args):  # returns tuple of dictionary
     finally:
         return(data_tuple_of_dictionary)
 
+
 def get_local_company_id():
     sql = sqls['service-get-company-id']
     company_id = None
@@ -69,7 +72,8 @@ def get_local_company_id():
     except(Exception) as error:
         messagebox.showerror('Error', messages.get('serviceDatabaseError'))
         raise error
-        
+
+
 def get_cash_and_sale_account_ids(mapping):
     baseUrl = config.url
     urlForCashSaleIds = config.urlForCashSaleIds
@@ -86,20 +90,20 @@ def get_cash_and_sale_account_ids(mapping):
     cashAccountId, saleAccountId = data.values()
     return cashAccountId, saleAccountId
 
-def do_export(temp_label, export_button):
+
+def do_export(**args):
     try:
-        company_id = get_local_company_id()
-        if(company_id):
-            mapping = config.service_mapping[company_id]
-        else:
-            raise Exception(messages.get('companyIdError'))
-
         service_receipts = fetch_local_data(
-            'service-get-sale-receipts', '2020-04-01', '2020-06-11')
+            'service-get-sale-receipts', args['dates'][0], args['dates'][1])
+        cnt = len(service_receipts)
+        lbl_no_of_records = args['lbl_no_of_records']
+        lbl_no_of_records.config(text='Records found: ' + str(cnt),fg='blue')
 
-        cashAccountId, saleAccountId = get_cash_and_sale_account_ids(mapping)
+        cashAccountId, saleAccountId = get_cash_and_sale_account_ids(
+            args['mapping'])
 
-        finYear = 2021
+        finYear = args['fin_year']
+        mapping = args['mapping']
 
         metaData = {'dbName': mapping.get('database'),
                     'buCode': mapping.get('buCode'),
@@ -107,36 +111,44 @@ def do_export(temp_label, export_button):
                     'finYearId': finYear,
                     'pointId': config.sio.pointId
                     }
+
         payloadData = [get_reshaped_data(item, finYear=finYear, cashAccountId=cashAccountId, mapping=mapping,
                                          saleAccountId=saleAccountId) for item in service_receipts]
         payload = {'meta': metaData, 'data': payloadData}
-        print('id:', config.sio.pointId)
+        
         baseurl = config.url
         urlExport = config.urlForExportServiceSale
         url = ''.join([baseurl, '/', urlExport])
 
+        lbl_processed = args['lbl_processed']
+        btn_export = args['btn_export']
         def handle_feedback(m, data, sourcePointId):
-            temp_label.config(text=data)
+            dat = '0' if data is None else data
+            lbl_processed.config(text = ''.join(['Processed: ',str(dat),'/', str(cnt)]), fg='darkblue')            
             if(m == 'COMPLETED'):
-                export_button.config(state=NORMAL)
+                btn_export.config(state=NORMAL)
+                messagebox.showinfo('Success', messages['infoExportSuccess'])
 
         onReceiveData(handle_feedback)
 
         thread = Thread(target=updateServerSync,
                         args=(url, payload), daemon=True)
         thread.start()
-        export_button.config(state=DISABLED)
+        btn_export.config(state=DISABLED)
 
     except(Exception) as error:
         messagebox.showerror('Error', error)
         raise error
 
+
 def updateServerSync(url, payload):
     requests.post(url=url, json=payload)
+
 
 def get_reshaped_data(obj, **args):
     mapping = args['mapping']
     hsn = mapping['hsn']
+    custId = mapping['custId']
     productId = mapping['productId']
     gstRate = mapping['gstRate']
     finYear = args['finYear']
@@ -160,6 +172,7 @@ def get_reshaped_data(obj, **args):
             "branchId": 1,
             "posId": "1",
             "tranTypeId": 4,
+            "contactsId": custId,
             "details": {
                 "tableName": "TranD",
                 "fkeyName": "tranHeaderId",
@@ -214,30 +227,40 @@ def get_reshaped_data(obj, **args):
     }
     return(temp)
 
+
 def is_valid_iso_date(dt):
     ret = True
     try:
-        datetime.strptime(dt,'%Y-%m-%d')
+        datetime.strptime(dt, '%Y-%m-%d')
     except:
         ret = False
     return(ret)
 
+
 def get_fin_year(dt):
-    date1 = datetime.strptime(dt,'%Y-%m-%d')
+    date1 = datetime.strptime(dt, '%Y-%m-%d')
     month1 = date1.month
     year1 = date1.year
     fin_year = year1
-    if(month1 in [1,2,3]):
-        fin_year = year1 -1
+    if(month1 in [1, 2, 3]):
+        fin_year = year1 - 1
     return(fin_year)
 
-def is_valid_date_range(startDate, endDate): # iso format
+
+def is_valid_date_range(dates):  # iso format
     valid = True
+    startDate, endDate = dates
     iso_format = '%Y-%m-%d'
     if((not is_valid_iso_date(startDate)) or (not(is_valid_iso_date(endDate)))):
         valid = False
     elif(get_fin_year(startDate) != get_fin_year(endDate)):
         valid = False
-    elif(datetime.strptime(startDate,iso_format) > datetime.strptime(endDate, iso_format)):
-        valid = False    
+    elif(datetime.strptime(startDate, iso_format) > datetime.strptime(endDate, iso_format)):
+        valid = False
     return(valid)
+
+
+def to_local_date(dt):
+    iso = '%Y-%m-%d'
+    local = '%d/%m/%Y'
+    return(datetime.strptime(dt, iso).strftime(local))

@@ -1,8 +1,8 @@
-from tkinter import Frame, Label, Button
-from tkinter.constants import ANCHOR, E, LEFT, W, X
-from utils import config
+from messages import messages
 from ibuki import Ibuki
-from utils import get_local_company_id
+from tkinter import Frame, Label, Button, messagebox
+from tkinter.constants import ANCHOR, E, LEFT, RIGHT, W, X
+from utils import config, get_local_company_id, get_fin_year, do_export, is_valid_date_range, to_local_date
 
 
 class Meta:  # contains discrete variables
@@ -18,9 +18,9 @@ class Status(Frame):
         super().__init__(parent, highlightbackground='red',
                          highlightthickness=2, padx=10, pady=10)
         self.source = get_local_company_id()
-        source_mapping = config.service_mapping[self.source]
-        self.target = source_mapping['database'] + \
-            ' / ' + source_mapping['buCode']
+        self.mapping = config.service_mapping[self.source]
+        self.target = self.mapping['database'] + \
+            ' / ' + self.mapping['buCode']
 
         source_db = f'Source databse: {self.source}'
         lbl_source_db = Label(self, text=source_db,  fg='darkblue', font=0.5)
@@ -36,33 +36,40 @@ class Status(Frame):
         self.lbl_end_date = Label(self, text='', font=0.5)
         self.lbl_end_date.grid(row=1, column=1, sticky=W)
 
-        lbl_no_of_records = Label(
-            self, text='No of records:         ', font=0.5, fg='red')
-        lbl_no_of_records.grid(row=1, column=2, sticky=W)
+        self.lbl_no_of_records = Label(
+            self, text='Records found: 0', font=0.5, fg='black')
+        self.lbl_no_of_records.grid(row=1, column=2, sticky=W)
 
-        lbl_processed = Label(
-            self, text='Processed:              ', font=0.5, fg='red')
-        lbl_processed.grid(row=1, column=3, sticky=W)
+        self.lbl_processed = Label(
+            self, text='Processed: 0', font=0.5, fg='black')
+        self.lbl_processed.grid(row=1, column=3, sticky=W)
 
-        btn_exxport = Button(self, text='Export', bg='yellow',
-                             fg='red', width=10, font=12, command=self.handle_export)
-        btn_exxport.grid(row=1, column=4, sticky=E)
+        self.btn_export = Button(self, text='Export', bg='yellow',
+                            fg='red', width=10, font=12, command=self.handle_export, cursor='hand2')
+        self.btn_export.grid(row=0, column=4,columnspan=2, sticky=E, padx=40)
 
-    def handle_export():
-        pass
-
-    def check_date_range():
-        pass
-
-    def get_fin_year():
-        pass
+    def handle_export(self):
+        meta.get_dates()
+        if(is_valid_date_range(meta.dates)):
+            do_export(dates=meta.dates, mapping=self.mapping,
+                      lbl_no_of_records=self.lbl_no_of_records, fin_year = get_fin_year(meta.dates[0]),
+                      lbl_processed = self.lbl_processed, btn_export = self.btn_export
+                      )
+        else:
+            messagebox.showerror('Error', messages['errInvalidDateRange'])
 
 
 def get_frame_status(root):
     def ibuki_dates(d):
-        meta.dates = d['data']
-        frame_status.lbl_start_date.config(text='Start date: ' + meta.dates[0])
-        frame_status.lbl_end_date.config(text='End date: ' + meta.dates[1])
+        meta.dates = (d['data'][0], d['data'][1])
+        meta.get_dates = d['data'][2]
+        frame_status.lbl_start_date.config(
+            text='Start date: ' + to_local_date(meta.dates[0]))
+        frame_status.lbl_end_date.config(
+            text='End date: ' + to_local_date(meta.dates[1]))
+        frame_status.lbl_no_of_records.config(text='Records found: 0')
+        frame_status.lbl_processed.config(text='Processed: 0/0')
+        x = 0
     try:
         Ibuki.filterOn('GET-DATES').subscribe(ibuki_dates)
         frame_status = Status(root)
