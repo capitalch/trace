@@ -1,5 +1,4 @@
 from tkinter import Tk, messagebox
-import sys
 from tkinter.constants import X
 from components.select_date_range import init_date_range_container
 from components.status import get_frame_status
