@@ -124,7 +124,7 @@ def do_export(**args):
         btn_export = args['btn_export']
         def handle_feedback(m, data, sourcePointId):
             dat = '0' if data is None else data
-            lbl_processed.config(text = ''.join(['Processed: ',str(dat),'/', str(cnt)]), fg='darkblue')            
+            lbl_processed.config(text = ''.join(['Processed: ',str(dat),'/', str(cnt)]), fg='red')            
             if(m == 'COMPLETED'):
                 btn_export.config(state=NORMAL)
                 messagebox.showinfo('Success', messages['infoExportSuccess'])

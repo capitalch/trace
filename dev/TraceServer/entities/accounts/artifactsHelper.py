@@ -275,7 +275,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=
             count = count+1
             sendToPoint('SC-NOTIFY-ROWS-PROCESSED', count, pointId)
 
-        sendToPoint('COMPLETED', None, pointId)
+        sendToPoint('COMPLETED', count, pointId)
         connection.commit()
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)

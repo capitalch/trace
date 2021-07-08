@@ -42,12 +42,13 @@ class Status(Frame):
 
         self.lbl_processed = Label(
             self, text='Processed: 0', font=0.5, fg='black')
-        self.lbl_processed.grid(row=1, column=3, sticky=W)
+        self.lbl_processed.grid(row=1, column=3,columnspan=2, sticky=W)
 
         self.btn_export = Button(self, text='Export', bg='yellow',
                             fg='red', width=10, font=12, command=self.handle_export, cursor='hand2')
-        self.btn_export.grid(row=0, column=4,columnspan=2, sticky=E, padx=40)
+        self.btn_export.grid(row=0, column=4, sticky=E, padx=10)
 
+        self.columnconfigure(4, weight=2)
     def handle_export(self):
         meta.get_dates()
         if(is_valid_date_range(meta.dates)):
