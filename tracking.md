@@ -92,6 +92,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 3.0 Trace database to stay in control of client facility. Possibility of local database
 4.0 Audit select multiple rows in datatable
 5.0 Show ledger balance at the time of data entry
+6.0 When new account code is created that should immediately be visible at payment options
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
@@ -101,6 +102,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 2.02 Change password not working --ujjal
 2.03 In Journals Debits not equals credits being possible
 2.04 In Inventory--> Brands--> edit: when you close the dialog it blows up
+2.05 Seen in case of receipts same auto_ref_no generated twice
 
 ## Maintainance
 1.30 Github release management

@@ -1,6 +1,20 @@
 import socketio
+import engineio
+# import asyncio
 from rx.subject import BehaviorSubject
 sio = None
+
+
+# async def aync_connect(sio, url, pointId=None, token=None):
+#     connected = False
+#     while not connected:
+#         try:
+#             await sio.connect(url, headers={'pointId': pointId, 'token': token},  transports=('websocket'))
+#         except engineio.exceptions.ConnectionError as err:
+#             print("ConnectionError: %s", err)
+#         else:
+#             print("Connected!")
+#             connected = True
 
 
 def connectToLinkServer(url, pointId=None, token=None):
@@ -14,21 +28,21 @@ def connectToLinkServer(url, pointId=None, token=None):
         subject.on_next({'connected', True})
         return(subject, sio)
 
-    sio = socketio.Client(reconnection=True)
+    sio = socketio.Client()
 
     @sio.on('connect')
     def on_connect():
         print('Link server connected')
         subject.on_next({'connected', True})
 
-    @sio.on('error')
-    def on_error(reason):
-        print('connection error with link server:', reason)
-        subject.on_next({'connected': False})
+    @sio.on('disconnect')
+    def on_disconnect():
+        print('Link server disconnected')
 
     try:
         sio.connect(url, headers={'pointId': pid,
-                    'token': token},  transports=('websocket'))
+                'token': token},  transports=('websocket'))
+        # await aync_connect(sio, url, pointId=pid, token=token)
     except(Exception) as error:
         print(' '.join(['Link server', str(error)]))
 
@@ -38,8 +52,6 @@ def connectToLinkServer(url, pointId=None, token=None):
 def disconnectFromLinkServer():
     if sio.connected:
         sio.emit('disconnect')
-    # sio = None
-
 
 def ibukiEmit(message, data):
     if sio.connected:
@@ -86,3 +98,18 @@ def sendToPoint(message, data, point):
 def sendToRoom(message, data, room):
     if sio.connected:
         sio.emit('cs-send-to-room', (message, data, room))
+
+# @sio.on('connect_error')
+    # def on_error(reason):
+    #     print('connection error with link server:', reason)
+
+    # connected = False
+    # while not connected:
+    #     try:
+    #         sio.connect(url, headers={'pointId': pid,
+    #             'token': token},  transports=('websocket'))
+    #     except socketio.exceptions.ConnectionError as err:
+    #         print("ConnectionError: %s", err)
+    #     else:
+    #         print("Connected!")
+    #         connected = True

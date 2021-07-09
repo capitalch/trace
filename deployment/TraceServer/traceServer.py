@@ -1,11 +1,9 @@
 from flask_cors import CORS
 import jwt
+import asyncio
 from flask_scss import Scss
-# from flask.ext.scss import Scss
 from werkzeug.exceptions import HTTPException
-# import demjson  # This library understands dirty json escaped with ' or with no escape
 import simplejson as json
-# import demjson as json
 from flask_mail import Mail, Message
 from ariadne.constants import PLAYGROUND_HTML
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
@@ -27,7 +25,6 @@ from util import setMailConfig
 from entities.legacy.artifacts import trackApp
 from app.link_client import connectToLinkServer
 from loadConfig import cfg
-# from app import create_app  # , socketio
 
 env = cfg['env']
 if(env == 'local'):
@@ -35,6 +32,7 @@ if(env == 'local'):
 else:
     linkServerUrl = cfg[env]['linkServerIp']
 print('env:', env)
+# asyncio.run(connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey']))
 connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey'])
 
 app = Flask(__name__,  template_folder="../build")

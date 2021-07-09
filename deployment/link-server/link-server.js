@@ -15,7 +15,8 @@ function startLinkServer (io) {
 
     io.use((link, next) => {
         const handshake = link.handshake
-        const {token, authorization} = handshake.headers
+        let {token} = handshake.headers 
+        token = token || handshake?.query?.token
         if(config.auth){
             if(token){
                 bcrypt.compare(config.authKey,token,(err, value)=>{
