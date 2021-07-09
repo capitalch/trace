@@ -1,3 +1,5 @@
 {
-    "errDestPointDisconnected":"Destination point is not currently cunnected"
+    "errDestPointDisconnected":"Destination point is not currently cunnected",
+    "errInvalidToken": "Current token is not present or is invalid. Socket could not connect",
+    "infoTokenGenerated":"Token is successfully generated and copied to log file or console"
 }

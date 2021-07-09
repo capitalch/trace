@@ -1,7 +1,7 @@
 import socketio
+import asyncio
 from rx.subject import BehaviorSubject
 sio = None
-
 
 def connectToLinkServer(url, pointId=None, token=None):
     global sio
@@ -14,21 +14,32 @@ def connectToLinkServer(url, pointId=None, token=None):
         subject.on_next({'connected', True})
         return(subject, sio)
 
-    sio = socketio.Client(reconnection=True)
+    sio = socketio.Client()
+    # sio = socketio.AsyncClient()
 
     @sio.on('connect')
     def on_connect():
         print('Link server connected')
         subject.on_next({'connected', True})
 
-    @sio.on('error')
+    @sio.on('connect_error')
     def on_error(reason):
         print('connection error with link server:', reason)
-        subject.on_next({'connected': False})
+        # subject.on_next({'connected': False})
 
+    # connected = False
+    # while not connected:
+    #     try:
+    #         sio.connect(url, headers={'pointId': pid,
+    #             'token': token},  transports=('websocket'))
+    #     except socketio.exceptions.ConnectionError as err:
+    #         print("ConnectionError: %s", err)
+    #     else:
+    #         print("Connected!")
+    #         connected = True
     try:
         sio.connect(url, headers={'pointId': pid,
-                    'token': token},  transports=('websocket'))
+                'token': token},  transports=('websocket'))
     except(Exception) as error:
         print(' '.join(['Link server', str(error)]))
 

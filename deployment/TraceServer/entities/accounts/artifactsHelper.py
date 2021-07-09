@@ -229,6 +229,10 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=
         cursor = connection.cursor()
         autoRefNo = ''
 
+        if(len(valueDictList) == 0):
+            sendToPoint('COMPLETED', None, pointId)
+            raise Exception('Empty list for export')
+
         branchId = valueDictList[0]["data"][0]["branchId"]
         tranTypeId = valueDictList[0]["data"][0]["tranTypeId"]
         finYearId = valueDictList[0]["data"][0]["finYearId"]
@@ -247,7 +251,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=
                 'branchId': branchId,
                 'tranTypeId': tranTypeId,
                 'finYearId': finYearId,
-                'userRefNo': userRefNo
+                'userRefNo': str(userRefNo)
             })
             result = cursor.fetchone()
 
@@ -271,6 +275,7 @@ def bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueDictList, pointId=
             count = count+1
             sendToPoint('SC-NOTIFY-ROWS-PROCESSED', count, pointId)
 
+        sendToPoint('COMPLETED', count, pointId)
         connection.commit()
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)

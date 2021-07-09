@@ -1,7 +1,12 @@
 import socketio
+import asyncio
+import time
 from rx.subject import Subject, BehaviorSubject
 sio = None
 
+async def aync_connect(sio, url, pointId=None, token=None):
+    await sio.connect(url, headers={'pointId': pointId, 'token': token},  transports=('websocket'))
+    
 
 def connectToLinkServer(url, pointId=None, token=None):
     global sio
@@ -14,7 +19,8 @@ def connectToLinkServer(url, pointId=None, token=None):
         subject.on_next({'connected', True})
         return(subject, sio)
 
-    sio = socketio.Client(reconnection=True)
+    # sio = socketio.Client(reconnection=True)
+    sio = socketio.AsyncClient()
 
     @sio.on('connect')
     def on_connect():
@@ -27,10 +33,10 @@ def connectToLinkServer(url, pointId=None, token=None):
         subject.on_next({'connected': False})
 
     try:
-        sio.connect(url, headers={'pointId': pid},  transports=('websocket'))
+        # sio.connect(url, headers={'pointId': pid, 'token': token},  transports=('websocket'))
+        asyncio.run(aync_connect(sio, url, pointId=pid, token=token))
     except(Exception) as error:
         print(' '.join(['Link server', str(error)]))
-
     return(subject, sio)
 
 def disconnectFromLinkServer():
@@ -68,3 +74,5 @@ def sendToPoint(message, data, point):
 
 def sendToRoom(message, data, room):
     sio.emit('cs-send-to-room', (message, data, room))
+
+

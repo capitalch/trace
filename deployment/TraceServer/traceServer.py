@@ -30,11 +30,12 @@ from loadConfig import cfg
 # from app import create_app  # , socketio
 
 env = cfg['env']
-if(env=='local'):
+if(env == 'local'):
     linkServerUrl = cfg[env]['linkServerUrl']
 else:
     linkServerUrl = cfg[env]['linkServerIp']
-connectToLinkServer(linkServerUrl,'traceServer')
+print('env:', env)
+connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey'])
 
 app = Flask(__name__,  template_folder="../build")
 app.register_blueprint(trackApp)
@@ -212,6 +213,7 @@ def graphql_playgroud():
     # exploring your API using desktop GraphQL Playground app.
     return PLAYGROUND_HTML, 200
 
+
 @app.route("/graphql", methods=["POST"])
 def graphql_server():
     # GraphQL queries are always sent as POST
@@ -227,7 +229,7 @@ def graphql_server():
     )
     status_code = 200 if success else 400  # This is python ternary operator
     res = json.dumps(result, default=str)
-    
+
     # return jsonify(result), status_code
     return res, status_code
     # return result, status_code
@@ -249,6 +251,7 @@ def index():
     return render_template('index.html')
     # In cloudjiffy server in wsgi.conf 'Alias /index /var/www/webroot/ROOT/build/index.html'. The alias statement does not take blank hence redirect from Flask is done.
     return redirect('/index')
+
 
 @app.errorhandler(Exception)
 def handle_error(e):

@@ -1,10 +1,10 @@
 # from os import stat, path
 import datetime
+import re
+import cairosvg
 from flask import Blueprint, request, render_template, jsonify
 from flask_weasyprint import HTML, render_pdf
 import simplejson as json
-# import demjson as djson
-# import zlib
 from urllib.parse import unquote, urljoin
 from copy import deepcopy
 from postgres import execSql
@@ -13,7 +13,6 @@ from entities.legacy import messages
 from entities.legacy.sql import allSqls
 from entities.legacy.utils import saveBillsAndSms, processDataForPdf
 from entities.accounts.artifactsHelper import bulkGenericUpdateMasterDetailsHelper
-# from utils import saveBillAndSms
 
 trackApp = Blueprint('trackApp', __name__,
                      template_folder='templates', static_folder='static', static_url_path='/track/view/css')
@@ -42,7 +41,7 @@ def track_view_bill(billNoHash):
     return(render_pdf(HTML(string=html)))
 
 
-@trackApp.route('/service/cash-sale-account-ids', methods=['POST'])
+@trackApp.route('/service/cash-and-sale-account-ids', methods=['POST'])
 def service_cash_sale_account_ids():
     data = request.get_json()
 
@@ -53,16 +52,16 @@ def service_cash_sale_account_ids():
     }
     result = execSql(data.get('database'), allSqls.get(
         'get-cash-sale-account-ids'), args, isMultipleRows=False)
-    return(result)
+    return(result,200)
 
 
-@trackApp.route('/service/import-service-sale', methods=['POST'])
+@trackApp.route('/service/export-service-sale', methods=['POST'])
 def import_service_sale():
     print('started')
     startTime = datetime.datetime.now()
     payload = request.data
-    payload = unquote(payload)
-    jsonPayload = json.loads(payload)
+    jsonString = unquote(payload)
+    jsonPayload = json.loads(jsonString)
     valueData = jsonPayload.get('data')
 
     meta = jsonPayload.get('meta')
@@ -72,4 +71,4 @@ def import_service_sale():
     bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueData, pointId)
     delta = (datetime.datetime.now() - startTime)/60
     print(delta, ' Mins')
-    return('Ok')
+    return('Ok',200)

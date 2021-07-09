@@ -7,7 +7,7 @@ def connectToLinkServer(url, pointId=None, token=None):
     global sio
     if(url is None):
         return
-    subject = BehaviorSubject(0)
+    subject = BehaviorSubject(1)
     pid = pointId
 
     if((sio is not None) and (sio.connected)):
@@ -27,7 +27,8 @@ def connectToLinkServer(url, pointId=None, token=None):
         subject.on_next({'connected': False})
 
     try:
-        sio.connect(url, headers={'pointId': pid},  transports=('websocket'))
+        sio.connect(url, headers={'pointId': pid,
+                    'token': token},  transports=('websocket'))
     except(Exception) as error:
         print(' '.join(['Link server', str(error)]))
 

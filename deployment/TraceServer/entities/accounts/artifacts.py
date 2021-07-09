@@ -87,7 +87,9 @@ def resolve_configuration(parent, info):
     cfg = loadConfig.cfg
     env = cfg['env']
     configuration = {'url': cfg[env]['url'],
-                     'linkServerUrl': cfg[env]['linkServerUrl']}
+                     'linkServerUrl': cfg[env]['linkServerUrl'],
+                     'linkServerKey':cfg['linkServerKey']
+                     }
     return(configuration)
 
 
