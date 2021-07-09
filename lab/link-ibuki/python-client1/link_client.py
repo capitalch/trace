@@ -45,7 +45,6 @@ def disconnectFromLinkServer():
 def ibukiEmit(message, data):
     sio.emit('cs-socket-emit', (message, data))
 
-
 def ibukiFilterOn(message, f):
     sio.emit('cs-socket-filter-on', message)
 
@@ -53,16 +52,13 @@ def ibukiFilterOn(message, f):
     def on_message(data):
         f(data)
 
-
 def joinRoom(room):
     sio.emit('cs-join-room', room)
-
 
 def onReceiveData(f):
     @sio.on('sc-send')
     def on_receive(message, data):
         f(message, data)
-
 
 def onReceiveDataFromPoint(f):
     @sio.on('sc-send-to-point')
