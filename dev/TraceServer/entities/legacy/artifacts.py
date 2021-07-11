@@ -72,3 +72,7 @@ def import_service_sale():
     delta = (datetime.datetime.now() - startTime)/60
     print(delta, ' Mins')
     return('Ok',200)
+
+@trackApp.route('/service/upload-extended-warranty-customers', methods=['POST'])
+def upload_extended_warranty_customer():
+    return('Ok', 200)

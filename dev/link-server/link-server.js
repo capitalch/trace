@@ -15,12 +15,12 @@ function startLinkServer (io) {
 
     io.use((link, next) => {
         const handshake = link.handshake
-        let {token} = handshake.headers 
+        let { token } = handshake.headers
         token = token || handshake?.query?.token
-        if(config.auth){
-            if(token){
-                bcrypt.compare(config.authKey,token,(err, value)=>{
-                    if(value){
+        if (config.auth) {
+            if (token) {
+                bcrypt.compare(config.authKey, token, (err, value) => {
+                    if (value) {
                         next()
                     } else {
                         console.log(messages['errInvalidToken'])
@@ -45,25 +45,18 @@ function startLinkServer (io) {
         allLinksObject[pointId] = link
 
         console.log(
-            'link connected,',
-            'Map length:',
-            allLinksMap.size,
-            'id:',
-            pointId
-            // ',allLinksObject:',
-            // allLinksObject
+            'link connected, id=',
+            pointId,
+            `,allConnections:(${allLinksMap.size})`,
+            `[${String(Object.keys(allLinksObject))}]`
         )
         link.on('disconnect', () => {
             delete allLinksObject[link.pointId]
-            // io.sockets.sockets.delete(link.id)
             console.log(
-                'link disconnected,',
-                'Map length:',
-                allLinksMap.size,
-                'id:',
-                link.pointId
-                // ',allLinksObject:',
-                // allLinksObject
+                'link disconnected, id=',
+                pointId,
+                `,allConnections:(${allLinksMap.size})`,
+                `[${String(Object.keys(allLinksObject))}]`
             )
         })
 

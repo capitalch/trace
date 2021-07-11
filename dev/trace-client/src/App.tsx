@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
     purple,
@@ -56,7 +56,7 @@ declare module '@material-ui/core/styles/createPalette' {
 }
 
 const App: React.FC = () => {
-    const theme = createMuiTheme({
+    const theme = createTheme({
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },

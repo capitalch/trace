@@ -82,7 +82,7 @@ function BalanceSheetProfitLoss() {
         return ret
     }
 
-    async function getData(isBusyIndicator=true) {
+    async function getData(isBusyIndicator = true) {
         const currentComponent: any = getCurrentComponent()
         const componentName: string = currentComponent.componentName
         meta.current.isBs = componentName === 'balanceSheet'
@@ -103,14 +103,14 @@ function BalanceSheetProfitLoss() {
                 profitOrLoss = pre.profitOrLoss
                 const aggregates: any[] = pre.aggregates || []
                 const aggrObject: any = {}
-                let total:any = Big(0)
+                let total: any = Big(0)
                 for (let aggr of aggregates) {
                     const prop: string = aggr['accType']
                     aggrObject[prop] = aggr.amount
                     total = Big(total).plus(Big(aggr.amount))
                 }
                 total = total.toNumber()
-                
+
                 if (total !== 0) {
                     meta.current.isOpBalError = true
                 }
@@ -225,9 +225,9 @@ function BalanceSheetProfitLoss() {
                                     checked={
                                         meta.current.isBs
                                             ? getFromBag('bsLeftExpandAll') ||
-                                              false
+                                            false
                                             : getFromBag('plLeftExpandAll') ||
-                                              false
+                                            false
                                     }
                                     style={{
                                         float: 'right',
@@ -248,23 +248,23 @@ function BalanceSheetProfitLoss() {
                                             )
                                             meta.current.isBs
                                                 ? setInBag(
-                                                      'bsLeftExpandedKeys',
-                                                      expObject
-                                                  )
+                                                    'bsLeftExpandedKeys',
+                                                    expObject
+                                                )
                                                 : setInBag(
-                                                      'plLeftExpandedKeys',
-                                                      expObject
-                                                  )
+                                                    'plLeftExpandedKeys',
+                                                    expObject
+                                                )
                                         } else {
                                             meta.current.isBs
                                                 ? setInBag(
-                                                      'bsLeftExpandedKeys',
-                                                      {}
-                                                  )
+                                                    'bsLeftExpandedKeys',
+                                                    {}
+                                                )
                                                 : setInBag(
-                                                      'plLeftExpandedKeys',
-                                                      {}
-                                                  )
+                                                    'plLeftExpandedKeys',
+                                                    {}
+                                                )
                                         }
                                         meta.current.isMounted && setRefresh({})
                                     }}></InputSwitch>
@@ -272,11 +272,13 @@ function BalanceSheetProfitLoss() {
                             </HeaderDiv>
                         }>
                         <Column
+                            columnKey='0'
                             field="accName"
                             header={<TDiv align="left">Account names</TDiv>}
                             footer={<TDiv align="left">Total</TDiv>}
                             expander></Column>
                         <Column
+                            columnKey='1'
                             field="amount"
                             header={<TDiv align="right">Amount</TDiv>}
                             style={{
@@ -293,6 +295,7 @@ function BalanceSheetProfitLoss() {
                             }
                             body={amountTemplate}></Column>
                         <Column
+                            columnKey='2'
                             body={actionTemplate}
                             style={{ width: '3rem' }}
                         />
@@ -328,9 +331,9 @@ function BalanceSheetProfitLoss() {
                                     checked={
                                         meta.current.isBs
                                             ? getFromBag('bsRightExpandAll') ||
-                                              false
+                                            false
                                             : getFromBag('plRightExpandAll') ||
-                                              false
+                                            false
                                     }
                                     style={{
                                         float: 'right',
@@ -351,23 +354,23 @@ function BalanceSheetProfitLoss() {
                                             )
                                             meta.current.isBs
                                                 ? setInBag(
-                                                      'bsRightExpandedKeys',
-                                                      expObject
-                                                  )
+                                                    'bsRightExpandedKeys',
+                                                    expObject
+                                                )
                                                 : setInBag(
-                                                      'plRightExpandedKeys',
-                                                      expObject
-                                                  )
+                                                    'plRightExpandedKeys',
+                                                    expObject
+                                                )
                                         } else {
                                             meta.current.isBs
                                                 ? setInBag(
-                                                      'bsRightExpandedKeys',
-                                                      {}
-                                                  )
+                                                    'bsRightExpandedKeys',
+                                                    {}
+                                                )
                                                 : setInBag(
-                                                      'plRightExpandedKeys',
-                                                      {}
-                                                  )
+                                                    'plRightExpandedKeys',
+                                                    {}
+                                                )
                                         }
                                         meta.current.isMounted && setRefresh({})
                                     }}></InputSwitch>

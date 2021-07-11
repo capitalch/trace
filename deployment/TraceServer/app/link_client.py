@@ -1,20 +1,10 @@
+from datetime import time
 import socketio
-import engineio
+import threading
+import time
 # import asyncio
 from rx.subject import BehaviorSubject
 sio = None
-
-
-# async def aync_connect(sio, url, pointId=None, token=None):
-#     connected = False
-#     while not connected:
-#         try:
-#             await sio.connect(url, headers={'pointId': pointId, 'token': token},  transports=('websocket'))
-#         except engineio.exceptions.ConnectionError as err:
-#             print("ConnectionError: %s", err)
-#         else:
-#             print("Connected!")
-#             connected = True
 
 
 def connectToLinkServer(url, pointId=None, token=None):
@@ -39,12 +29,24 @@ def connectToLinkServer(url, pointId=None, token=None):
     def on_disconnect():
         print('Link server disconnected')
 
-    try:
-        sio.connect(url, headers={'pointId': pid,
-                'token': token},  transports=('websocket'))
-        # await aync_connect(sio, url, pointId=pid, token=token)
-    except(Exception) as error:
-        print(' '.join(['Link server', str(error)]))
+    timeInterToReconnect = 0.5
+
+    def connectTo():
+        nonlocal timeInterToReconnect
+        try:
+            if((sio is not None) and (sio.connected)):
+                return
+            sio.connect(url, headers={'pointId': pid,
+                                      'token': token},  transports=('websocket'))
+        except(Exception) as error:
+            print(' '.join(['Link server', str(error)]))
+            time.sleep(timeInterToReconnect)
+            if timeInterToReconnect <= 300:  # increase the time to reconnect
+                timeInterToReconnect = timeInterToReconnect * 2
+            connectTo()
+
+    thread = threading.Thread(target=connectTo)
+    thread.start()
 
     return(subject, sio)
 
@@ -52,6 +54,7 @@ def connectToLinkServer(url, pointId=None, token=None):
 def disconnectFromLinkServer():
     if sio.connected:
         sio.emit('disconnect')
+
 
 def ibukiEmit(message, data):
     if sio.connected:
@@ -113,3 +116,14 @@ def sendToRoom(message, data, room):
     #     else:
     #         print("Connected!")
     #         connected = True
+# async def aync_connect(sio, url, pointId=None, token=None):
+#     connected = False
+#     while not connected:
+#         try:
+#             await sio.connect(url, headers={'pointId': pointId, 'token': token},  transports=('websocket'))
+#         except engineio.exceptions.ConnectionError as err:
+#             print("ConnectionError: %s", err)
+#         else:
+#             print("Connected!")
+#             connected = True
+# await aync_connect(sio, url, pointId=pid, token=token)

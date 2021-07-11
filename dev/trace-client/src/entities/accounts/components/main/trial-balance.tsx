@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
     IconButton,
     Typography,
@@ -29,7 +29,7 @@ function TrialBalance() {
     const [, setRefresh] = useState({})
     const { toDecimalFormat } = utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
-    // const [selectedItems, setSelectedItems] = useState(null)
+
     const meta: any = useRef({
         data: [],
         isMounted: false,
@@ -102,7 +102,6 @@ function TrialBalance() {
             const ret = await queryGraphql(q)
             const pre = ret?.data?.accounts?.trialBalance
             meta.current.data = pre?.trialBal
-
             meta.current.footer = getFooter(meta.current.data)
             meta.current.allKeys = pre?.allKeys
 
@@ -270,132 +269,157 @@ function TrialBalance() {
                     setInBag('trialBalExpandedKeys', e.value)
                     meta.current.isMounted && setRefresh({})
                 }}>
-                    <Column
-                    selectionMode="multiple"
-                    style={{ width: '3rem', textAlign: 'center' }}
-                />
-                <Column
-                    field="accName"
-                    expander
-                    style={{ width: tableConfig.expanderColumn }}
-                    header={<TDiv align="left">Account names</TDiv>}
-                    footer={<TDiv align="left">Total</TDiv>}
-                    body={(node: any) => {
-                        return <span>{node.data.accName}</span>
-                    }}></Column>
-                <Column
-                    style={{ width: '10rem' }}
-                    field="opening"
-                    header={<TDiv align="right">Opening</TDiv>}
-                    footer={
-                        <TDiv align="right">
-                            {meta.current.footer.opening >= 0
-                                ? amountTemplate({
-                                      amt: meta.current.footer.opening,
-                                      dc: 'D',
-                                      isOpeningClosing: true,
-                                      accLeaf: 'Y',
-                                  })
-                                : amountTemplate({
-                                      amt: meta.current.footer.opening,
-                                      dc: 'C',
-                                      isOpeningClosing: true,
-                                      accLeaf: 'Y',
-                                  })}
-                        </TDiv>
-                    }
-                    body={(node: any) =>
-                        amountTemplate({
-                            amt: node.data.opening,
-                            isOpeningClosing: true,
-                            dc: node.data.opening_dc,
-                            accLeaf: node.data.accLeaf,
-                        })
-                    }></Column>
-                <Column
-                    style={{ width: '10rem' }}
-                    field="debit"
-                    header={<TDiv align="right">Debits</TDiv>}
-                    footer={
-                        <TDiv align="right">
-                            {amountTemplate({
-                                amt: meta.current.footer.debit,
-                                accLeaf: 'Y',
-                            })}
-                        </TDiv>
-                    }
-                    body={(node: any) =>
-                        amountTemplate({
-                            amt: node.data.debit,
-                            accLeaf: node.data.accLeaf,
-                        })
-                    }></Column>
-                <Column
-                    style={{ width: '10rem' }}
-                    field="credit"
-                    header={<TDiv align="right">Credits</TDiv>}
-                    footer={
-                        <TDiv align="right">
-                            {amountTemplate({
-                                amt: meta.current.footer.credit,
-                                accLeaf: 'Y',
-                            })}
-                        </TDiv>
-                    }
-                    body={(node: any) =>
-                        amountTemplate({
-                            amt: node.data.credit,
-                            accLeaf: node.data.accLeaf,
-                        })
-                    }></Column>
-                <Column
-                    style={{ width: '10rem' }}
-                    field="closing"
-                    header={<TDiv align="right">Closing</TDiv>}
-                    footer={
-                        <TDiv align="right">
-                            {meta.current.footer.closing >= 0
-                                ? amountTemplate({
-                                      amt: meta.current.footer.closing,
-                                      dc: 'D',
-                                      isOpeningClosing: true,
-                                      accLeaf: 'Y',
-                                  })
-                                : amountTemplate({
-                                      amt: meta.current.footer.closing,
-                                      dc: 'C',
-                                      isOpeningClosing: true,
-                                      accLeaf: 'Y',
-                                  })}
-                        </TDiv>
-                    }
-                    body={(node: any) =>
-                        amountTemplate({
-                            amt: node.data.closing,
-                            dc: node.data.closing_dc,
-                            isOpeningClosing: true,
-                            accLeaf: node.data.accLeaf,
-                        })
-                    }></Column>
-                <Column
-                    style={{ width: '5rem' }}
-                    field="accType"
-                    header={<TDiv align="left">Type</TDiv>}
-                    body={(node: any) => {
-                        const logic: any = {
-                            A: 'Asset',
-                            L: 'Liability',
-                            I: 'Income',
-                            E: 'Expence',
-                        }
-                        return (
-                            <TDiv align="left">{logic[node.data.accType]}</TDiv>
-                        )
-                    }}></Column>
-                <Column body={actionTemplate} style={{ width: '4rem' }} />
+                {getColumns()}
             </TreeTable>
         </div>
     )
+
+    function getColumns() {
+        let numb = 0
+        function incr() {
+            return String(numb++)
+        }
+        const columns = [
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                selectionMode="multiple"
+                style={{ width: '3rem', textAlign: 'center' }}
+            />,
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                field="accName"
+                expander
+                style={{ width: tableConfig.expanderColumn }}
+                header={<TDiv align="left">Account names</TDiv>}
+                footer={<TDiv align="left">Total</TDiv>}
+                body={(node: any) => {
+                    return <span>{node.data.accName}</span>
+                }}></Column>,
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                style={{ width: '10rem' }}
+                field="opening"
+                header={<TDiv align="right">Opening</TDiv>}
+                footer={
+                    <TDiv align="right">
+                        {meta.current.footer.opening >= 0
+                            ? amountTemplate({
+                                amt: meta.current.footer.opening,
+                                dc: 'D',
+                                isOpeningClosing: true,
+                                accLeaf: 'Y',
+                            })
+                            : amountTemplate({
+                                amt: meta.current.footer.opening,
+                                dc: 'C',
+                                isOpeningClosing: true,
+                                accLeaf: 'Y',
+                            })}
+                    </TDiv>
+                }
+                body={(node: any) =>
+                    amountTemplate({
+                        amt: node.data.opening,
+                        isOpeningClosing: true,
+                        dc: node.data.opening_dc,
+                        accLeaf: node.data.accLeaf,
+                    })
+                }></Column>,
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                style={{ width: '10rem' }}
+                field="debit"
+                header={<TDiv align="right">Debits</TDiv>}
+                footer={
+                    <TDiv align="right">
+                        {amountTemplate({
+                            amt: meta.current.footer.debit,
+                            accLeaf: 'Y',
+                        })}
+                    </TDiv>
+                }
+                body={(node: any) =>
+                    amountTemplate({
+                        amt: node.data.debit,
+                        accLeaf: node.data.accLeaf,
+                    })
+                }></Column>,
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                style={{ width: '10rem' }}
+                field="credit"
+                header={<TDiv align="right">Credits</TDiv>}
+                footer={
+                    <TDiv align="right">
+                        {amountTemplate({
+                            amt: meta.current.footer.credit,
+                            accLeaf: 'Y',
+                        })}
+                    </TDiv>
+                }
+                body={(node: any) =>
+                    amountTemplate({
+                        amt: node.data.credit,
+                        accLeaf: node.data.accLeaf,
+                    })
+                }></Column>,
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                style={{ width: '10rem' }}
+                field="closing"
+                header={<TDiv align="right">Closing</TDiv>}
+                footer={
+                    <TDiv align="right">
+                        {meta.current.footer.closing >= 0
+                            ? amountTemplate({
+                                amt: meta.current.footer.closing,
+                                dc: 'D',
+                                isOpeningClosing: true,
+                                accLeaf: 'Y',
+                            })
+                            : amountTemplate({
+                                amt: meta.current.footer.closing,
+                                dc: 'C',
+                                isOpeningClosing: true,
+                                accLeaf: 'Y',
+                            })}
+                    </TDiv>
+                }
+                body={(node: any) =>
+                    amountTemplate({
+                        amt: node.data.closing,
+                        dc: node.data.closing_dc,
+                        isOpeningClosing: true,
+                        accLeaf: node.data.accLeaf,
+                    })
+                }></Column>,
+            <Column
+                key={incr()}
+                columnKey={incr()}
+                style={{ width: '5rem' }}
+                field="accType"
+                header={<TDiv align="left">Type</TDiv>}
+                body={(node: any) => {
+                    const logic: any = {
+                        A: 'Asset',
+                        L: 'Liability',
+                        I: 'Income',
+                        E: 'Expence',
+                    }
+                    return (
+                        <TDiv align="left">{logic[node.data.accType]}</TDiv>
+                    )
+                }}></Column>,
+            <Column key={incr()} columnKey={incr()} body={actionTemplate} style={{ width: '4rem' }} />
+        ]
+        return (columns)
+    }
 }
 
 export { TrialBalance }

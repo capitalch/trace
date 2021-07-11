@@ -189,10 +189,12 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                         submitDialog()
                     }
                 }}
-                disableBackdropClick={true}
+                // disableBackdropClick={true} //deprecated
                 open={meta.current.showDialog}
-                onClose={() => {
-                    closeDialog()
+                onClose={(event, reason) => {
+                    if(reason !== 'backdropClick'){
+                        closeDialog()
+                    }
                 }}>
                 {meta.current.dialogConfig.dialogTitle}
                 {meta.current.dialogConfig.dialogContent}

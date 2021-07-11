@@ -175,6 +175,7 @@ function utils() {
             return [
                 <Column
                     selectionMode="multiple"
+                    key={incr()}
                     style={{ width: '3rem', textAlign: 'center' }}
                 />,
                 <Column

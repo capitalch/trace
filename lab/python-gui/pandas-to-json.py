@@ -4,6 +4,8 @@ import json
 import datetime
 
 try:
+    # df1 = pandas.read_table('data/may 21.xls')
+    # book = xlrd.open_workbook_xls('data/may 21.xls')
     df = pandas.read_excel('data/may 21.xlsx', converters ={'Purchased Date': str, 'Serial No': str}, header=1, usecols=['ASC Code', 'Customer Group', 'Job ID', 'Warranty Type','Warranty Category', 'Service Type', 'Product category name',
                                                              'Product sub category name', 'Set Model', 'Model Name', 'Serial No', 'Purchased Date', 'Customer Name', 'Mobile No', 'Postal Code', 'Address'
                                                              ])

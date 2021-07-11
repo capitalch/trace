@@ -1,16 +1,16 @@
 from flask_cors import CORS
 import jwt
-import asyncio
+# import asyncio
 from flask_scss import Scss
 from werkzeug.exceptions import HTTPException
 import simplejson as json
 from flask_mail import Mail, Message
 from ariadne.constants import PLAYGROUND_HTML
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
-from flask import Flask, jsonify, request, render_template, send_from_directory, Response, abort, make_response, redirect
+from flask import Flask, jsonify, request, render_template, Response, abort, redirect
 import codecs
 from datetime import datetime
-from json import JSONEncoder
+# from json import JSONEncoder
 from allMessages import infoMessages, errorMessages
 from postgres import execSql
 from entities.authentication.sql import allSqls
@@ -31,9 +31,11 @@ if(env == 'local'):
     linkServerUrl = cfg[env]['linkServerUrl']
 else:
     linkServerUrl = cfg[env]['linkServerIp']
-print('env:', env)
-# asyncio.run(connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey']))
-connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey'])
+traceServerId = cfg[env].get('traceServerId', None)
+traceServerId = traceServerId if traceServerId is not None else 'traceServer'
+print('env:', env, 'linkServerUrl:', linkServerUrl)
+
+connectToLinkServer(linkServerUrl, traceServerId, token=cfg['linkServerKey'])
 
 app = Flask(__name__,  template_folder="../build")
 app.register_blueprint(trackApp)
@@ -287,3 +289,5 @@ if __name__ == '__main__':
 #     or isinstance(obj, datetime.date)
 #     else None
 # )
+
+# asyncio.run(connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey']))
