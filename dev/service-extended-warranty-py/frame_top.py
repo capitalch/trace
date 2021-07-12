@@ -49,11 +49,23 @@ class TopFrame(Frame):
         df = pandas.read_excel(filename, converters={'Purchased Date': str, 'Serial No': str}, header=1, usecols=['ASC Code', 'Customer Group', 'Job ID', 'Warranty Type', 'Warranty Category', 'Service Type', 'Product category name',
                                                                                                                   'Product sub category name', 'Set Model', 'Model Name', 'Serial No', 'Purchased Date', 'Customer Name', 'Mobile No', 'Postal Code', 'Address'
                                                                                                                   ])
+        # df1 = df.loc[(df['Product category name'] == '07LCDTV') & (~df['Purchased Date'].isin(['', None]))]
         json_str = df.to_json(orient='index')
         js = json_str.encode('ascii', "ignore").decode()
         js = js.replace(u'\\ufeff', '').replace('\\/', '').replace("\'", '')
-        jsn = json.loads(js).values()
-        return(jsn)
+        jsn = json.loads(js)
+        temp_data = [value for key, value in jsn.items()]
+        # data = []
+        # for key, value in jsn.items():
+        filtered = filter(
+            lambda value: ('TV' in value.get('Product category name','').upper()) 
+                and (value.get('Purchased Date',None) is not None)
+                and (value.get('Purchased Date','').strip() != ''), temp_data)
+        data = [item for item in filtered]
+        # data = []
+        # for item in filtered:
+        #     data.append(item)
+        return(data)
 
     def upload_data(self, data):
         upload_endpoint = config.uploadEndPoint
