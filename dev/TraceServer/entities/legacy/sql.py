@@ -5,6 +5,15 @@ allSqls = {
                 where "billNoHash" = %(billNoHash)s
     ''',
 
+    'get-extended-warranty-customers': '''
+        select "id","purchDate", "custName", "mobileNo", "address", "pin","productCategory", "modelCode", "modelName", 
+            "serialNumber", "smsSentDates", (now()::date - "purchDate"::date) as "dateDiff"
+        from "service_extended_warranty"
+            where "hasWarrantyPurchased" = false
+                and (now()::date - "purchDate"::date) between 350 and 365
+        order by "id"
+    ''',
+
     'upsert-extended-warranty-customer': '''
     do $$
     begin

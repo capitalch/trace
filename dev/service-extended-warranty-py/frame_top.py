@@ -69,7 +69,7 @@ class TopFrame(Frame):
     def upload_data(self, data):
         try:
             upload_endpoint = config.uploadEndPoint
-            result = requests.post(upload_endpoint, json=data)
+            requests.post(upload_endpoint, json=data)
             messagebox.showinfo("Success",messages['infoUploadSuccess'])
             self.enable_disable_button(self.btn_select_input, True)
         except(Exception) as error:

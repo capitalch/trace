@@ -74,6 +74,9 @@ def import_service_sale():
     print(delta, ' Mins')
     return('Ok', 200)
 
+@trackApp.route('/service/get-extended-warranty-customers', methods=['POST'])
+def get_extended_warranty_customers():
+    pass
 
 @trackApp.route('/service/upload-extended-warranty-customers', methods=['POST'])
 def upload_extended_warranty_customer():
