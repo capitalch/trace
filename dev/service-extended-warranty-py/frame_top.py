@@ -1,7 +1,8 @@
 from tkinter import Frame, Label, Button, messagebox, filedialog as fd
-from tkinter.constants import E, X
+from tkinter.constants import DISABLED, E, NORMAL, RAISED, SUNKEN, X
 import pandas
 import requests
+from threading import Thread
 import json
 from messages import messages
 from utils import config
@@ -12,11 +13,11 @@ class TopFrame(Frame):
         super().__init__(parent, highlightcolor='black',
                          highlightthickness=2, padx=10, pady=10)
 
-        btn_select_input = Button(self, text='Select input', width=12, bg='yellow',
-                                  fg='blue', font=10, cursor='hand2', command=self.select_file)
-        btn_select_input.grid(row=0, column=0)
+        self.btn_select_input = Button(self, text='Select input file and upload', width=22, bg='yellow',
+                                       fg='blue', font=10, cursor='hand2', command=self.select_file)
+        self.btn_select_input.grid(row=0, column=0)
 
-        btn_view_refresh = Button(self, text='View / Refresh warranty',
+        btn_view_refresh = Button(self, text='Extended warranty view',
                                   width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2')
         btn_view_refresh.grid(row=0, column=1)
 
@@ -39,38 +40,45 @@ class TopFrame(Frame):
                 filetypes=filetypes
             )
             data = self.get_json(filename)
-            self.upload_data(data=data)
-            print(json)
+            self.enable_disable_button(self.btn_select_input, False)
+            s = Thread(target=self.upload_data, args=(data,))
+            s.start()
+
         except(Exception) as error:
             messagebox.showerror(
                 'Error', error or messages.get('errSelectingFile'))
+            self.enable_disable_button(self.btn_select_input, True)
 
     def get_json(self, filename):
         df = pandas.read_excel(filename, converters={'Purchased Date': str, 'Serial No': str}, header=1, usecols=['ASC Code', 'Customer Group', 'Job ID', 'Warranty Type', 'Warranty Category', 'Service Type', 'Product category name',
                                                                                                                   'Product sub category name', 'Set Model', 'Model Name', 'Serial No', 'Purchased Date', 'Customer Name', 'Mobile No', 'Postal Code', 'Address'
                                                                                                                   ])
-        # df1 = df.loc[(df['Product category name'] == '07LCDTV') & (~df['Purchased Date'].isin(['', None]))]
         json_str = df.to_json(orient='index')
         js = json_str.encode('ascii', "ignore").decode()
         js = js.replace(u'\\ufeff', '').replace('\\/', '').replace("\'", '')
         jsn = json.loads(js)
         temp_data = [value for key, value in jsn.items()]
-        # data = []
-        # for key, value in jsn.items():
         filtered = filter(
-            lambda value: ('TV' in value.get('Product category name','').upper()) 
-                and (value.get('Purchased Date',None) is not None)
-                and (value.get('Purchased Date','').strip() != ''), temp_data)
+            lambda value: ('TV' in value.get(
+                'Product category name', '').upper())
+            and (value.get('Purchased Date', None) is not None)
+            and (value.get('Purchased Date', '').strip() != ''), temp_data)
         data = [item for item in filtered]
-        # data = []
-        # for item in filtered:
-        #     data.append(item)
         return(data)
 
     def upload_data(self, data):
-        upload_endpoint = config.uploadEndPoint
-        result = requests.post(upload_endpoint, json=data)
-        pass
+        try:
+            upload_endpoint = config.uploadEndPoint
+            result = requests.post(upload_endpoint, json=data)
+            messagebox.showinfo("Success",messages['infoUploadSuccess'])
+            self.enable_disable_button(self.btn_select_input, True)
+        except(Exception) as error:
+            messagebox.showerror('Error', error or 'Upload error')
+            self.enable_disable_button(self.btn_select_input, True)
+
+    def enable_disable_button(self, btn, isEnabled):
+        btn.configure(relief=RAISED if isEnabled else SUNKEN)
+        btn.configure(state=NORMAL if isEnabled else DISABLED)
 
 
 def init_top_frame(root):
