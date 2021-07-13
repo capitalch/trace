@@ -7,7 +7,7 @@ from flask_weasyprint import HTML, render_pdf
 import simplejson as json
 from urllib.parse import unquote, urljoin
 from copy import deepcopy
-from postgres import execSql
+from postgres import execSql, getConnectionCursor
 from loadConfig import cfg
 from entities.legacy import messages
 from entities.legacy.sql import allSqls
@@ -25,6 +25,7 @@ def track_save_bill_and_sms():
     dataList = request.get_json()
     ret = saveBillsAndSms(dataList)
     return(jsonify(ret), 200)
+
 
 @trackApp.route('/track/view/<billNoHash>', methods=['GET'])
 def track_view_bill(billNoHash):
@@ -52,7 +53,7 @@ def service_cash_sale_account_ids():
     }
     result = execSql(data.get('database'), allSqls.get(
         'get-cash-sale-account-ids'), args, isMultipleRows=False)
-    return(result,200)
+    return(result, 200)
 
 
 @trackApp.route('/service/export-service-sale', methods=['POST'])
@@ -71,4 +72,41 @@ def import_service_sale():
     bulkGenericUpdateMasterDetailsHelper(dbName, buCode, valueData, pointId)
     delta = (datetime.datetime.now() - startTime)/60
     print(delta, ' Mins')
-    return('Ok',200)
+    return('Ok', 200)
+
+@trackApp.route('/service/get-extended-warranty-customers', methods=['POST'])
+def get_extended_warranty_customers():
+    pass
+
+@trackApp.route('/service/upload-extended-warranty-customers', methods=['POST'])
+def upload_extended_warranty_customer():
+    try:
+        def getArgsDict(item):
+            return({
+                "ascCode": item["ASC Code"],
+                "custName": item["Customer Name"],
+                "mobileNo": item["Mobile No"],
+                "address": item["Address"],
+                "pin": item["Postal Code"],
+                "purchDate": item["Purchased Date"],
+                "warrantyType": item["Warranty Type"],
+                "warrantyCategory": item["Warranty Category"],
+                "productCategory": item["Product category name"],
+                "productSubCategory": item["Product sub category name"],
+                "modelCode": item["Set Model"],
+                "modelName": item["Model Name"],
+                "serialNumber": item["Serial No"]
+            })
+
+        payload = request.json
+        sql = allSqls['upsert-extended-warranty-customer']
+        connection, cursor, pool = getConnectionCursor(dbName='postgres')
+        sqlListWithArgs = [(sql,getArgsDict(item)) for item in payload]
+        with connection:
+            with cursor:
+                for entry in sqlListWithArgs:
+                    cursor.execute(entry[0],entry[1])
+        return('Ok', 200)
+    except(Exception) as error:
+        print(error)
+    

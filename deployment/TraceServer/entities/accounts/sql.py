@@ -172,7 +172,7 @@ allSqls = {
         ),
         cte4 as (
             select (select "branchCode" from cte2) || '\\' || (select "tranCode" from cte1) || '\\' || (select "lastNo" from cte3) ||
-            '\\' || (select 2020)
+            '\\' || (select %(finYearId)s)
                 as "autoRefNo"
         )
 
