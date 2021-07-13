@@ -7,10 +7,11 @@ allSqls = {
 
     'get-extended-warranty-customers': '''
         select "id","purchDate", "custName", "mobileNo", "address", "pin","productCategory", "modelCode", "modelName", 
-            "serialNumber", "smsSentDates", (now()::date - "purchDate"::date) as "dateDiff"
+            "serialNumber", "smsSentDates", (select extract(day from ((now() - interval '1 day') - (date("purchDate") + interval '1 year'))) ) as "daysLeft"
         from "service_extended_warranty"
             where "hasWarrantyPurchased" = false
-                and (now()::date - "purchDate"::date) between 350 and 365
+                and (select extract(day from ((now() - interval '1 day') - (date("purchDate") + interval '1 year'))) )
+                    between -3 and %(daysOver)s
         order by "id"
     ''',
 
