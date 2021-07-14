@@ -7,7 +7,7 @@ from flask_weasyprint import HTML, render_pdf
 import simplejson as json
 from urllib.parse import unquote, urljoin
 from copy import deepcopy
-from postgres import execSql, getConnectionCursor
+from postgres import execSql, genericView, getConnectionCursor
 from loadConfig import cfg
 from entities.legacy import messages
 from entities.legacy.sql import allSqls
@@ -74,9 +74,18 @@ def import_service_sale():
     print(delta, ' Mins')
     return('Ok', 200)
 
+
 @trackApp.route('/service/get-extended-warranty-customers', methods=['POST'])
 def get_extended_warranty_customers():
-    pass
+    sql = allSqls.get('get-extended-warranty-customers')
+    try:
+        result = genericView(dbName='postgres', sqlString=sql,
+                             valueDict={'args': {'daysOver': 2}})
+        res = tuple(result)
+        return(res, 200)
+    except(Exception) as error:
+        raise error
+
 
 @trackApp.route('/service/upload-extended-warranty-customers', methods=['POST'])
 def upload_extended_warranty_customer():
@@ -101,12 +110,11 @@ def upload_extended_warranty_customer():
         payload = request.json
         sql = allSqls['upsert-extended-warranty-customer']
         connection, cursor, pool = getConnectionCursor(dbName='postgres')
-        sqlListWithArgs = [(sql,getArgsDict(item)) for item in payload]
+        sqlListWithArgs = [(sql, getArgsDict(item)) for item in payload]
         with connection:
             with cursor:
                 for entry in sqlListWithArgs:
-                    cursor.execute(entry[0],entry[1])
+                    cursor.execute(entry[0], entry[1])
         return('Ok', 200)
     except(Exception) as error:
         print(error)
-    

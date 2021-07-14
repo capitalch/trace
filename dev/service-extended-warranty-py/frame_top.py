@@ -17,9 +17,9 @@ class TopFrame(Frame):
                                        fg='blue', font=10, cursor='hand2', command=self.select_file)
         self.btn_select_input.grid(row=0, column=0)
 
-        btn_view_refresh = Button(self, text='Extended warranty view',
-                                  width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2')
-        btn_view_refresh.grid(row=0, column=1)
+        btn_view= Button(self, text='Extended warranty view',
+                                  width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2', command=self.get_extended_warranty_customers)
+        btn_view.grid(row=0, column=1)
 
         btn_send_sms = Button(self, text='Send SMS', width=10,
                               bg='yellow', fg='red', font=10,  padx=10, cursor='hand2')
@@ -79,6 +79,8 @@ class TopFrame(Frame):
     def enable_disable_button(self, btn, isEnabled):
         btn.configure(relief=RAISED if isEnabled else SUNKEN)
         btn.configure(state=NORMAL if isEnabled else DISABLED)
+    def get_extended_warranty_customers(self):
+        requests.post()
 
 
 def init_top_frame(root):
