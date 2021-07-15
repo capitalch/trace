@@ -6,6 +6,7 @@ from threading import Thread
 import json
 from messages import messages
 from utils import config
+from ibuki import Ibuki
 
 
 class TopFrame(Frame):
@@ -18,7 +19,7 @@ class TopFrame(Frame):
         self.btn_select_input.grid(row=0, column=0)
 
         btn_view= Button(self, text='Extended warranty view',
-                                  width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2', command=self.get_extended_warranty_customers)
+                                  width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2', command=self.view_extended_warranty_customers)
         btn_view.grid(row=0, column=1)
 
         btn_send_sms = Button(self, text='Send SMS', width=10,
@@ -79,8 +80,9 @@ class TopFrame(Frame):
     def enable_disable_button(self, btn, isEnabled):
         btn.configure(relief=RAISED if isEnabled else SUNKEN)
         btn.configure(state=NORMAL if isEnabled else DISABLED)
-    def get_extended_warranty_customers(self):
-        requests.post()
+    
+    def view_extended_warranty_customers(self):
+        Ibuki.emit('VIEW-EXTENDED-WARRANTY-CUSTOMERS',None)
 
 
 def init_top_frame(root):

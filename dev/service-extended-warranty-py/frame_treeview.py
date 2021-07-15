@@ -1,11 +1,17 @@
 from tkinter.constants import BOTH, BOTTOM, CENTER, HORIZONTAL, RIGHT, X, Y
 from tkinter.ttk import Treeview, Scrollbar
 from tkinter import Frame, messagebox
+from utils import config
+
+import requests
 from messages import messages
+from ibuki import Ibuki
 
 
 class TreeviewFrame(Frame):
     def __init__(self, parent):
+        Ibuki.filterOn('VIEW-EXTENDED-WARRANTY-CUSTOMERS').subscribe(lambda d:
+                                                                     self.get_extended_warranty_customers())
         columns = ('id', 'date')
         super().__init__(parent, highlightcolor='black',
                          highlightthickness=2, padx=10, pady=10)
@@ -30,6 +36,10 @@ class TreeviewFrame(Frame):
 
     def select_item(self):
         pass
+
+    def get_extended_warranty_customers(self):
+        result = requests.post(config.extendedWarrantyCustomersEndPoint)
+        print(result)
 
 
 def init_treeview_frame(root):

@@ -82,7 +82,7 @@ def get_extended_warranty_customers():
         result = genericView(dbName='postgres', sqlString=sql,
                              valueDict={'args': {'daysOver': 2}})
         res = tuple(result)
-        return(res, 200)
+        return(res)
     except(Exception) as error:
         raise error
 
