@@ -1,16 +1,14 @@
 from datetime import datetime, date
 from tkinter import Button, Radiobutton, StringVar
 from typing_extensions import IntVar
+import simplejson as json
 
-class Animal:
-    mew='Iam mewing'
-    def __init__(self) -> None:
-        pass
-    
-    @classmethod
-    def do_mew(self):
-        print(self.mew)
-    
-animal = Animal()
-animal.do_mew()
-Animal.do_mew()
+s = 'i am mad'
+try:
+    a = json.loads(s)
+except(Exception) as e:
+    mess = e.args[0] or repr(e)
+    print(mess)
+finally:
+    print(a)
+    pass

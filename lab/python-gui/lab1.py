@@ -1,9 +1,11 @@
 import simplejson as json
 
-temp_dict = {
-    'a': 1,
-    'b': '',
-    'c': None
-}
-res = temp_dict.get('c', '')
-pass
+s = "xyz"
+try:
+    a = json.loads(s)
+except(Exception) as e:
+    mess = e.args[0] or repr(e)
+    print(mess)
+finally:
+    # print(a)
+    pass

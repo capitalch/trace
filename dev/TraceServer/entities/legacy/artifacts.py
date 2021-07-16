@@ -1,7 +1,5 @@
 # from os import stat, path
 import datetime
-import re
-import cairosvg
 from flask import Blueprint, request, render_template, jsonify
 from flask_weasyprint import HTML, render_pdf
 import simplejson as json
@@ -11,6 +9,7 @@ from postgres import execSql, genericView, getConnectionCursor
 from loadConfig import cfg
 from entities.legacy import messages
 from entities.legacy.sql import allSqls
+from entities.accounts.sql import allSqls as allSqls1
 from entities.legacy.utils import saveBillsAndSms, processDataForPdf
 from entities.accounts.artifactsHelper import bulkGenericUpdateMasterDetailsHelper
 
@@ -78,13 +77,17 @@ def import_service_sale():
 @trackApp.route('/service/get-extended-warranty-customers', methods=['POST'])
 def get_extended_warranty_customers():
     sql = allSqls.get('get-extended-warranty-customers')
+    res = {}
+    status = 200
     try:
         result = genericView(dbName='postgres', sqlString=sql,
                              valueDict={'args': {'daysOver': 2}})
-        res = tuple(result)
-        return(res)
+        res = json.dumps(result, default=str)
     except(Exception) as error:
-        raise error
+        res = json.dumps({"error": error.args[0] or repr(error)})
+        status = 500
+    finally:
+        return(res, status)
 
 
 @trackApp.route('/service/upload-extended-warranty-customers', methods=['POST'])

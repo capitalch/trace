@@ -2,7 +2,7 @@ from tkinter.constants import BOTH, BOTTOM, CENTER, HORIZONTAL, RIGHT, X, Y
 from tkinter.ttk import Treeview, Scrollbar
 from tkinter import Frame, messagebox
 from utils import config
-
+import simplejson  as json
 import requests
 from messages import messages
 from ibuki import Ibuki
@@ -38,8 +38,13 @@ class TreeviewFrame(Frame):
         pass
 
     def get_extended_warranty_customers(self):
-        result = requests.post(config.extendedWarrantyCustomersEndPoint)
-        print(result)
+        try:
+            result = requests.post(config.extendedWarrantyCustomersEndPoint)
+            jsn = json.loads(result.text)
+            print(jsn)
+        except(Exception) as error:
+            print(error)
+        
 
 
 def init_treeview_frame(root):
