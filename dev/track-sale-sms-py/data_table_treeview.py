@@ -12,9 +12,6 @@ tv = None  # tree view control having tabular data
 columns = ('id', 'ref_no', 'name', 'mobile',
            'total_amt', 'address', 'pin', 'gstin', 'bill_memo_id', 'date', 'cgst', 'sgst', 'igst',
            'cgstRate', 'sgstRate', 'igstRate', 'acc_name', 'bill_memo', 'email','stateCode')
-# x={
-#     "a":[{"b":10}]
-# }
 
 def get_data_table_treeview(root):
     global tv
