@@ -121,3 +121,10 @@ def upload_extended_warranty_customer():
         return('Ok', 200)
     except(Exception) as error:
         print(error)
+
+
+@trackApp.route('/service/send-sms', methods=['POST'])
+def send_sms():
+    payload = request.json
+    
+    return('ok', 200)

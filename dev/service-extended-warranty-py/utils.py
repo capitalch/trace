@@ -7,10 +7,12 @@ class Config:
         env = config['env']
         upload_endpoint = config['uploadDataEndpoint']
         extended_warranty_customers_endpoint = config['extendedWarrantyCustomers']
+        send_sms_endpoint = config['sendSms']
         baseUrl = config[env].get('url')
         self.selectFolder = config.get('selectFolder', None)
         self.uploadEndPoint = path.join(baseUrl,upload_endpoint).replace('\\','/')
         self.extendedWarrantyCustomersEndPoint = path.join(baseUrl, extended_warranty_customers_endpoint).replace('\\','/')
+        self.sendSmsEndPoint = path.join(baseUrl, send_sms_endpoint).replace('\\','/')
 
     def get_config(self):
         with open('config.json', 'r') as config_file:

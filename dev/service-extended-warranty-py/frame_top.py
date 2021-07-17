@@ -18,12 +18,12 @@ class TopFrame(Frame):
                                        fg='blue', font=10, cursor='hand2', command=self.select_file)
         self.btn_select_input.grid(row=0, column=0)
 
-        btn_view= Button(self, text='Extended warranty view',
-                                  width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2', command=self.view_extended_warranty_customers)
+        btn_view = Button(self, text='Extended warranty view',
+                          width=18, bg='yellow', fg='blue', font=10,  padx=10, cursor='hand2', command=self.view_extended_warranty_customers)
         btn_view.grid(row=0, column=1)
 
         btn_send_sms = Button(self, text='Send SMS', width=10,
-                              bg='yellow', fg='red', font=10,  padx=10, cursor='hand2')
+                              bg='yellow', fg='red', font=10,  padx=10, cursor='hand2', command=self.send_sms)
         btn_send_sms.grid(row=0, column=2, sticky=E)
         self.columnconfigure(2, weight=4)
         self.columnconfigure(1, weight=2)
@@ -71,7 +71,7 @@ class TopFrame(Frame):
         try:
             upload_endpoint = config.uploadEndPoint
             requests.post(upload_endpoint, json=data)
-            messagebox.showinfo("Success",messages['infoUploadSuccess'])
+            messagebox.showinfo("Success", messages['infoUploadSuccess'])
             self.enable_disable_button(self.btn_select_input, True)
         except(Exception) as error:
             messagebox.showerror('Error', error or 'Upload error')
@@ -80,9 +80,12 @@ class TopFrame(Frame):
     def enable_disable_button(self, btn, isEnabled):
         btn.configure(relief=RAISED if isEnabled else SUNKEN)
         btn.configure(state=NORMAL if isEnabled else DISABLED)
-    
+
     def view_extended_warranty_customers(self):
-        Ibuki.emit('VIEW-EXTENDED-WARRANTY-CUSTOMERS',None)
+        Ibuki.emit('VIEW-EXTENDED-WARRANTY-CUSTOMERS', None)
+
+    def send_sms(self):
+        Ibuki.emit('SEND-SMS', None)
 
 
 def init_top_frame(root):

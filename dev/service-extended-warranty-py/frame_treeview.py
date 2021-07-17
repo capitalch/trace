@@ -14,18 +14,20 @@ class TreeviewFrame(Frame):
     def __init__(self, parent):
         Ibuki.filterOn('VIEW-EXTENDED-WARRANTY-CUSTOMERS').subscribe(lambda d:
                                                                      self.get_extended_warranty_customers())
-        columns = ('id', 'purchDate',  'daysLeft','custName', 'mobileNo', 'smsSentDates', 'serialNumber',
-                   'productCategory', 'address', 'pin',  'modelCode', 'modelName',)
+
+        Ibuki.filterOn('SEND-SMS').subscribe(lambda d: self.send_sms())
+        self.columns = ('id', 'purchDate',  'daysLeft', 'custName', 'mobileNo', 'smsSentDates', 'serialNumber',
+                        'productCategory', 'address', 'pin',  'modelCode', 'modelName',)
         super().__init__(parent, highlightcolor='black',
                          highlightthickness=2, padx=10, pady=10)
-        self.tv = Treeview(parent, columns=columns, show='headings')
+        self.tv = Treeview(parent, columns=self.columns, show='headings')
         tv = self.tv
         tv.column('id', width=50, minwidth=50, anchor=CENTER)
         tv.column('purchDate', width=80, minwidth=50, anchor=CENTER)
         tv.column('daysLeft', width=80, anchor=E)
         tv.column('custName', width=150, anchor=W)
         tv.column('mobileNo', width=80, anchor=W)
-        
+
         tv.column('smsSentDates', width=100, anchor=W)
         tv.column('serialNumber', width=80, anchor=W)
         tv.column('productCategory', width=80, anchor=W)
@@ -39,7 +41,7 @@ class TreeviewFrame(Frame):
         tv.heading('daysLeft', text='Days left', anchor=E)
         tv.heading('custName', text='Cust name', anchor=W)
         tv.heading('mobileNo', text='Mobile no', anchor=E)
-        
+
         tv.heading('smsSentDates', text='SMS sent dates', anchor=W)
         tv.heading('serialNumber', text='Serial no', anchor=W)
         tv.heading('productCategory', text='Product cat', anchor=W)
@@ -60,8 +62,8 @@ class TreeviewFrame(Frame):
         vsb.pack(fill=Y, side=RIGHT)
         hsb.pack(fill=X, side=BOTTOM)
 
-    def select_item(self):
-        pass
+    def select_item(self, event):
+        tree = event.widget
 
     def get_extended_warranty_customers(self):
         try:
@@ -75,10 +77,11 @@ class TreeviewFrame(Frame):
             show_data = [add_row(
                 (
                     item['id'],
-                    datetime.strptime(item['purchDate'], '%Y-%m-%d').strftime('%d/%m/%Y'),
+                    datetime.strptime(item['purchDate'],
+                                      '%Y-%m-%d').strftime('%d/%m/%Y'),
                     int(item['daysLeft']),
                     item['custName'],
-                    item['mobileNo'],                    
+                    item['mobileNo'],
                     item['smsSentDates'],
                     item['serialNumber'],
                     item['productCategory'],
@@ -93,6 +96,32 @@ class TreeviewFrame(Frame):
         except(Exception) as error:
             messagebox.showerror('Error', error.args[0] or repr(
                 error) or messages.get('errGettingExtendedWarrantyCustomers'))
+
+    def send_sms(self):
+        def is_any_invalid_mobile(selection_list):
+            res = any(not(str(item['mobileNo']).isnumeric() and (
+                len(str(item['mobileNo'])) == 10)) for item in selection_list)
+            return(res)
+
+        try:
+            selected_items = [dict(zip(self.columns, self.tv.item(x)['values']))
+                              for x in self.tv.selection()]
+
+            if (len(selected_items) == 0):
+                raise Exception(messages['errNoItemsSelected'])
+
+            if (is_any_invalid_mobile(selected_items)):
+                raise Exception(messages['errOneMobileInvalid'])
+
+            payload = [{'id': item['id'], 'mobileNo':item['mobileNo'],
+                        'custName': item['custName'], 'daysLeft': item['daysLeft'], 'serialNo': item['serialNumber']} for item in selected_items]
+            url = config.sendSmsEndPoint
+            response = requests.post(url=url, json=payload)
+            pass
+
+
+        except(Exception) as error:
+            messagebox.showerror('Error', str(error.args[0]))
 
 
 def init_treeview_frame(root):
