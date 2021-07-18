@@ -86,7 +86,7 @@ class TreeviewFrame(Frame):
                     item['serialNumber'],
                     item['productCategory'],
                     item['address'],
-                    int(float(item['pin'])),
+                    int(float(item['pin'])) if item['pin'] is not None else '',
                     item['modelCode'],
                     item['modelName']
                 )) for item in data]
@@ -114,7 +114,7 @@ class TreeviewFrame(Frame):
                 raise Exception(messages['errOneMobileInvalid'])
 
             payload = [{'id': item['id'], 'mobileNo':item['mobileNo'],
-                        'custName': item['custName'], 'daysLeft': item['daysLeft'], 'serialNo': item['serialNumber']} for item in selected_items]
+                        'custName': item['custName'], 'daysLeft': item['daysLeft'], 'serialNumber': item['serialNumber']} for item in selected_items]
             url = config.sendSmsEndPoint
             response = requests.post(url=url, json=payload)
             pass

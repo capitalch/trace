@@ -1,5 +1,85 @@
 a4: 297 X 210 MM = 3508 X 2480 px
 
+<style>
+table.GeneratedTable {
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #ffcc00;
+  border-style: solid;
+  color: #000000;
+}
+
+table.GeneratedTable td, table.GeneratedTable th {
+  border-width: 2px;
+  border-color: #ffcc00;
+  border-style: solid;
+  padding: 3px;
+}
+
+table.GeneratedTable thead {
+  background-color: #ffcc00;
+}
+
+table.GeneratedTable .name {
+  background-color: #F5EDEB;
+  width: 100px;
+}
+table.GeneratedTable .details {
+  background-color: #F5EDEB;
+  width: 200px;
+  font-weight: bold;
+}
+</style>
+
+<!-- HTML Code: Place this code in the document's body (between the 'body' tags) where the table should appear -->
+<table class="GeneratedTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class='name'>Id</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Purch date:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Cust name:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Mobile no:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Product cat:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Serial no:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Address:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Pin:</td>
+      <td class='details'>Cell</td>
+    </tr>
+  </tbody>
+</table>
+
+## Service SMS
+#custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
+{#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV
 ## Awe some react components libraries
 1. https://github.com/brillout/awesome-react-components
 2. Followed https://medium.com/@devesu/how-to-build-a-react-based-electron-app-d0f27413f17f
@@ -109,6 +189,9 @@ a4: 297 X 210 MM = 3508 X 2480 px
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 30-06-2021 - 18-07-2021
+1. Other works apart from Trace
 
 # 28-06-2021 - 29-06-2021
 1. Fixed up some bug with link-server

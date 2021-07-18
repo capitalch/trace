@@ -73,15 +73,3 @@ def sendMail(recipients, message, htmlBody):
         return True
     except (Exception) as e:
         return False
-
-# bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-# pwd = 'superAdmin'.encode('utf-8')
-# salt = bcrypt.gensalt(rounds=12)
-# pwdHash = bcrypt.hashpw(pwd,salt).decode('utf-8')
-# # b'$2b$12$nAXGJ.Ji5v0vXl5NAScIQuSdbjIPehLGjGGcatY7NHZK4Nnxf0i7a'
-# print(pwdHash)
-# hashed = '$2b$12$MlC4/PqV2OoD8.Csg2ode.jBjVvi6fkeNO5GF9hdq8yzVxZHmVBJ6'
-# if bcrypt.checkpw('superAdmin'.encode('utf-8'), hashed.encode('utf-8')):
-#     print("match")
-# else:
-#     print("does not match")

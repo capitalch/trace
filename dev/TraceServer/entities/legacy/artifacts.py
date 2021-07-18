@@ -10,7 +10,7 @@ from loadConfig import cfg
 from entities.legacy import messages
 from entities.legacy.sql import allSqls
 from entities.accounts.sql import allSqls as allSqls1
-from entities.legacy.utils import saveBillsAndSms, processDataForPdf
+from entities.legacy.utils import saveBillsAndSms, processDataForPdf, sendManySmsForExtendedWarranty
 from entities.accounts.artifactsHelper import bulkGenericUpdateMasterDetailsHelper
 
 trackApp = Blueprint('trackApp', __name__,
@@ -126,5 +126,24 @@ def upload_extended_warranty_customer():
 @trackApp.route('/service/send-sms', methods=['POST'])
 def send_sms():
     payload = request.json
-    
+    sendManySmsForExtendedWarranty(payload)
     return('ok', 200)
+
+
+@trackApp.route('/ser/warr/<id>', methods=['GET'])
+def awail_extended_warranty(id):
+    # get extended warranty customer details on id
+    res = {}
+    status = 200
+    try:
+        args = {'id': id}
+        sql = allSqls['get-extended-warranty-customer']
+        result = execSql('postgres', sql, args, isMultipleRows=False)
+        result['pin'] = int(float(result['pin'])) if result['pin'] is not None else ''
+        res = json.dumps(result, default=str)
+        pass
+    except(Exception) as error:
+        res = json.dumps({"error": error.args[0] or repr(error)})
+        status = 500
+    finally:
+        return(res, status)

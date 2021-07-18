@@ -192,7 +192,7 @@ def pwd_forgot():
                 sent on date and time: {datetime.now()}
             </div>
         </div>'''
-        ret = util.sendMail(
+        ret = util.(
             [userEmail], settings['forgotPwdNewPwdMessage'], htmlBody)
         if ret:
             # mail sent. Now update password hash into TraceUser table

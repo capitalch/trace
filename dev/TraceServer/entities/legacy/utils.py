@@ -14,6 +14,84 @@ from entities.legacy import messages
 from entities.legacy.sql import allSqls
 from postgres import execSql, execSqls
 
+def getHtmlForExtendedWarrMail():
+    html = f'''
+    <style>
+table.GeneratedTable {
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #ffcc00;
+  border-style: solid;
+  color: #000000;
+}
+
+table.GeneratedTable td, table.GeneratedTable th {
+  border-width: 2px;
+  border-color: #ffcc00;
+  border-style: solid;
+  padding: 3px;
+}
+
+table.GeneratedTable thead {
+  background-color: #ffcc00;
+}
+
+table.GeneratedTable .name {
+  background-color: #F5EDEB;
+  width: 100px;
+}
+table.GeneratedTable .details {
+  background-color: #F5EDEB;
+  width: 200px;
+  font-weight: bold;
+}
+</style>
+
+<table class="GeneratedTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class='name'>Id</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Purch date:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Cust name:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Mobile no:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Product cat:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Serial no:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Address:</td>
+      <td class='details'>Cell</td>
+    </tr>
+    <tr>
+      <td class='name'>Pin:</td>
+      <td class='details'>Cell</td>
+    </tr>
+  </tbody>
+</table>
+    '''
 
 def saveBillsAndSms(dataList):
     if((dataList is None) or (len(dataList) == 0)):
@@ -37,7 +115,7 @@ def saveBillsAndSms(dataList):
     def getListOfManySmsAndData(listOfViewUrlsAndData):
         # list of tuples of format [(apiUrl, headers, data1), (apiUrl, headers, data2) ...]
         apiUrl = cfg['sms']['api']
-        dltConfig = cfg['sms']['dlt']
+        dltConfig = cfg['sms']['trackDlt']
         # company = 'Capital Chowringhee Pvt Ltd'
 
         headers = {
@@ -56,7 +134,6 @@ def saveBillsAndSms(dataList):
                 "message": f"Thanks for purchasing from {company}. See your bill here {viewUrl} - Capital",
                 "template_id": dltConfig['templateId'],
                 "entity_id": dltConfig['entityId'],
-                "route": dltConfig['route'],
 
                 "language": "english",
                 "flash": 0,
@@ -99,6 +176,66 @@ async def sendManySmsAsync(listOfManySmsAndData):
             listSuccess.append(result)
 
         return(listSuccess)  # Response output cannot be list, it can be tuple
+
+
+def sendManySmsForExtendedWarranty(exlist):
+    try:
+        def getListOfManySms(elist):
+            apiUrl = cfg['sms']['api']
+            dltConfig = cfg['sms']['extendedWarrantyDlt']
+            headers = {
+                "authorization": cfg['sms']['key'],
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Cache-Control": "no-cache"
+            }
+
+            def getUrl(item):
+                env = cfg['env']
+                url = path.join(
+                    cfg[env]['url'], dltConfig['availWarrantyEndPoint'], str(item['id'])).replace('\\', '/')
+                return(url)
+
+            def getJsonBody(item):
+                mess = dltConfig['message']
+                hashUrl = getUrl(item)
+                return({
+                    "route": dltConfig['route'],
+                    "sender_id": dltConfig['senderId'],
+                    "message": f"Thanks for purchasing from test company. See your bill here www.test.com - Capital",
+                    # "message": mess.format(serialNumber=item['serialNumber'], hashUrl=hashUrl),
+                    "template_id": dltConfig['templateId'],
+                    "entity_id": dltConfig['entityId'],
+
+                    "language": "english",
+                    "flash": 0,
+                    "numbers": item['mobileNo']  # '9831052332'
+                })
+
+            out = [(apiUrl, headers, getJsonBody(item), item['id'],)
+                   for item in elist]
+            return(out)
+
+        manySmsListOfTuples = getListOfManySms(exlist)
+        resultList = []
+        for item in manySmsListOfTuples:
+            res = requests.post(url=item[0], headers=item[1], data=item[2])
+            respString = res.text
+            respObj = djson.decode(respString)
+            result = respObj.get('return')
+            if(result): # success 
+                resultList.append((item[3], True))
+
+        def prepareSql(index, id):
+            sql = allSqls['update-extended-warranty-sms-sent']
+            return((index, sql, {'id':id}))
+
+        sqlTupleListAndArgs = [prepareSql(index, item[0])
+                               for index, item in enumerate(resultList)]
+        execSqls('postgres', sqlTupleListAndArgs)
+
+        return(True)
+    except(Exception) as error:
+        print(error)
 
 
 def processDataForPdf(cp):
