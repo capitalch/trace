@@ -26,6 +26,7 @@ table.GeneratedTable .name {
   background-color: #F5EDEB;
   width: 100px;
 }
+
 table.GeneratedTable .details {
   background-color: #F5EDEB;
   width: 200px;
@@ -33,7 +34,6 @@ table.GeneratedTable .details {
 }
 </style>
 
-<!-- HTML Code: Place this code in the document's body (between the 'body' tags) where the table should appear -->
 <table class="GeneratedTable">
   <thead>
     <tr>
