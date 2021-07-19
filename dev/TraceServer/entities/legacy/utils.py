@@ -13,85 +13,62 @@ from loadConfig import cfg
 from entities.legacy import messages
 from entities.legacy.sql import allSqls
 from postgres import execSql, execSqls
+from util import sendMail
 
-def getHtmlForExtendedWarrMail():
-    html = f'''
-    <style>
-table.GeneratedTable {
-  width: 100%;
-  background-color: #ffffff;
-  border-collapse: collapse;
-  border-width: 2px;
-  border-color: #ffcc00;
-  border-style: solid;
-  color: #000000;
-}
 
-table.GeneratedTable td, table.GeneratedTable th {
-  border-width: 2px;
-  border-color: #ffcc00;
-  border-style: solid;
-  padding: 3px;
-}
+def sendSelfMailForExtendedWarrCust(data):
+    def getHtmlForExtendedWarrMail(data):
+        html = f'''
+        
 
-table.GeneratedTable thead {
-  background-color: #ffcc00;
-}
+        <table style = 'width: 100%; background-color: #ffffff; border-collapse: collapse; border-width: 2px; border-color: #ffcc00; border-style: solid; color: #000000;'>
+            <thead style="background-color: #ffcc00;">
+                <tr>
+                <th style = "border-width: 2px; border-color: #ffcc00; border-style: solid; padding: 3px;">Name</th>
+                <th style = "border-width: 2px; border-color: #ffcc00; border-style: solid; padding: 3px;">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                <td class='name'>Id</td>
+                <td class='details'>{data['id']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Purch date:</td>
+                <td class='details'>{data['purchDate']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Cust name:</td>
+                <td class='details'>{data['custName']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Mobile no:</td>
+                <td class='details'>{data['mobileNo']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Product cat:</td>
+                <td class='details'>{data['productCategory']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Serial no:</td>
+                <td class='details'>{data['serialNumber']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Address:</td>
+                <td class='details'>{data['address']}</td>
+                </tr>
+                <tr>
+                <td class='name'>Pin:</td>
+                <td class='details'>{data['pin']}</td>
+                </tr>
+            </tbody>
+        </table>'''
+        return(html)
 
-table.GeneratedTable .name {
-  background-color: #F5EDEB;
-  width: 100px;
-}
-table.GeneratedTable .details {
-  background-color: #F5EDEB;
-  width: 200px;
-  font-weight: bold;
-}
-</style>
+    html = getHtmlForExtendedWarrMail(data)
+    sendMail(['capitalch@gmail.com'], 'This is test message', html)
+    pass
 
-<table class="GeneratedTable">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class='name'>Id</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Purch date:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Cust name:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Mobile no:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Product cat:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Serial no:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Address:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Pin:</td>
-      <td class='details'>Cell</td>
-    </tr>
-  </tbody>
-</table>
-    '''
 
 def saveBillsAndSms(dataList):
     if((dataList is None) or (len(dataList) == 0)):
@@ -222,12 +199,12 @@ def sendManySmsForExtendedWarranty(exlist):
             respString = res.text
             respObj = djson.decode(respString)
             result = respObj.get('return')
-            if(result): # success 
+            if(result):  # success
                 resultList.append((item[3], True))
 
         def prepareSql(index, id):
             sql = allSqls['update-extended-warranty-sms-sent']
-            return((index, sql, {'id':id}))
+            return((index, sql, {'id': id}))
 
         sqlTupleListAndArgs = [prepareSql(index, item[0])
                                for index, item in enumerate(resultList)]
