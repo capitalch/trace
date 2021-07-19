@@ -14,10 +14,11 @@ from entities.legacy import messages
 from entities.legacy.sql import allSqls
 from postgres import execSql, execSqls
 
+
 def getHtmlForExtendedWarrMail():
     html = f'''
     <style>
-table.GeneratedTable {
+table.GeneratedTable {{
   width: 100%;
   background-color: #ffffff;
   border-collapse: collapse;
@@ -25,28 +26,29 @@ table.GeneratedTable {
   border-color: #ffcc00;
   border-style: solid;
   color: #000000;
-}
+}}
 
-table.GeneratedTable td, table.GeneratedTable th {
+table.GeneratedTable td, table.GeneratedTable th {{
   border-width: 2px;
   border-color: #ffcc00;
   border-style: solid;
   padding: 3px;
-}
+}}
 
-table.GeneratedTable thead {
+table.GeneratedTable thead {{
   background-color: #ffcc00;
-}
+}}
 
-table.GeneratedTable .name {
+table.GeneratedTable .name {{
   background-color: #F5EDEB;
   width: 100px;
-}
-table.GeneratedTable .details {
+}}
+
+table.GeneratedTable .details {{
   background-color: #F5EDEB;
   width: 200px;
   font-weight: bold;
-}
+}}
 </style>
 
 <table class="GeneratedTable">
@@ -92,6 +94,7 @@ table.GeneratedTable .details {
   </tbody>
 </table>
     '''
+
 
 def saveBillsAndSms(dataList):
     if((dataList is None) or (len(dataList) == 0)):
@@ -222,12 +225,12 @@ def sendManySmsForExtendedWarranty(exlist):
             respString = res.text
             respObj = djson.decode(respString)
             result = respObj.get('return')
-            if(result): # success 
+            if(result):  # success
                 resultList.append((item[3], True))
 
         def prepareSql(index, id):
             sql = allSqls['update-extended-warranty-sms-sent']
-            return((index, sql, {'id':id}))
+            return((index, sql, {'id': id}))
 
         sqlTupleListAndArgs = [prepareSql(index, item[0])
                                for index, item in enumerate(resultList)]
