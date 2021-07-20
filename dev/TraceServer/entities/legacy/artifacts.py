@@ -142,8 +142,11 @@ def awail_extended_warranty(id):
         result['pin'] = int(float(result['pin'])) if result['pin'] is not None else ''
         res = json.loads(json.dumps(result, default=str))
         sendSelfMailForExtendedWarrCust(res)
+        html = cfg['sms']['extendedWarrantyResponse']
+        return(html, 200)
     except(Exception) as error:
         res = json.dumps({"error": error.args[0] or repr(error)})
         status = 500
     finally:
-        return(res, status)
+        pass
+        # return(res, status)

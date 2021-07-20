@@ -19,54 +19,53 @@ from util import sendMail
 def sendSelfMailForExtendedWarrCust(data):
     def getHtmlForExtendedWarrMail(data):
         html = f'''
-        <table style = 'width: 100%; background-color: #ffffff; border-collapse: collapse; border-width: 2px; border-color: #ffcc00; border-style: solid; color: #000000;'>
-            <thead style="background-color: #ffcc00;">
-                <tr>
-                <th style = "border-width: 2px; border-color: #ffcc00; border-style: solid; padding: 3px;">Name</th>
-                <th style = "border-width: 2px; border-color: #ffcc00; border-style: solid; padding: 3px;">Details</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <td class='name'>Id</td>
-                <td class='details'>{data['id']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Purch date:</td>
-                <td class='details'>{data['purchDate']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Cust name:</td>
-                <td class='details'>{data['custName']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Mobile no:</td>
-                <td class='details'>{data['mobileNo']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Product cat:</td>
-                <td class='details'>{data['productCategory']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Serial no:</td>
-                <td class='details'>{data['serialNumber']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Address:</td>
-                <td class='details'>{data['address']}</td>
-                </tr>
-                <tr>
-                <td class='name'>Pin:</td>
-                <td class='details'>{data['pin']}</td>
-                </tr>
-            </tbody>
+        <table style = 'width: 100%; font-size: 14px; '>
+        <thead>
+            <tr>
+            <th style = 'border-width: 2px;border-color: #ffcc00;border-style: solid;padding: 3px;text-align: left; width: 100px'>Name</th>
+            <th style = 'border-width: 2px;border-color: #ffcc00;border-style: solid;padding: 3px;text-align: left;width: 300px'>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Id</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['id']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Purch date:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['purchDate']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Cust name:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['custName']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Mobile no:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px; color:red; font-weight: bold; font-size: 16px'>{data['mobileNo']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Product cat:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['productCategory']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Serial no:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['serialNumber']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Address:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['address']}</td>
+            </tr>
+            <tr>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>Pin:</td>
+            <td style='border: 1px solid #ffcc00; border-collapse: collapse;padding: 5px;'>{data['pin']}</td>
+            </tr>
+        </tbody>
         </table>'''
         return(html)
 
     html = getHtmlForExtendedWarrMail(data)
-    sendMail(['capitalch@gmail.com'], 'This is test message', html)
-    pass
-
+    mailSetting = cfg["sms"]['extendedWarrantyMail']
+    sendMail(['capitalch@gmail.com'], mailSetting.get('subject') or 'New customer', html)
 
 def saveBillsAndSms(dataList):
     if((dataList is None) or (len(dataList) == 0)):
