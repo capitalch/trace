@@ -19,8 +19,6 @@ from util import sendMail
 def sendSelfMailForExtendedWarrCust(data):
     def getHtmlForExtendedWarrMail(data):
         html = f'''
-        
-
         <table style = 'width: 100%; background-color: #ffffff; border-collapse: collapse; border-width: 2px; border-color: #ffcc00; border-style: solid; color: #000000;'>
             <thead style="background-color: #ffcc00;">
                 <tr>
@@ -174,12 +172,12 @@ def sendManySmsForExtendedWarranty(exlist):
 
             def getJsonBody(item):
                 mess = dltConfig['message']
-                hashUrl = getUrl(item)
+                url = getUrl(item)
                 return({
                     "route": dltConfig['route'],
                     "sender_id": dltConfig['senderId'],
-                    "message": f"Thanks for purchasing from test company. See your bill here www.test.com - Capital",
-                    # "message": mess.format(serialNumber=item['serialNumber'], hashUrl=hashUrl),
+                    # "message": f"Thanks for purchasing from test company. See your bill here www.test.com - Capital",
+                    "message": mess.format(serialNumber=item['serialNumber'], hashUrl=url),
                     "template_id": dltConfig['templateId'],
                     "entity_id": dltConfig['entityId'],
 
