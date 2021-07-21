@@ -183,6 +183,7 @@ table.GeneratedTable .details {
 2.03 In Journals Debits not equals credits being possible
 2.04 In Inventory--> Brands--> edit: when you close the dialog it blows up
 2.05 Seen in case of receipts same auto_ref_no generated twice
+2.06 purchase entry unable to enter gst price of an item
 
 ## Maintainance
 1.30 Github release management
