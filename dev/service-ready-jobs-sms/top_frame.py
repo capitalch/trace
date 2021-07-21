@@ -14,7 +14,7 @@ class TopFrame(Frame):
     def __init__(self, parent):
         super().__init__(parent, highlightcolor='black',
                          highlightthickness=2, padx=10, pady=10)
-        self.btn_ready_jobs = Button(self, text='Ready jobs', width=10, bg='yellow',
+        self.btn_ready_jobs = Button(self, text='Service+ Ready jobs', width=20, bg='yellow',
                                fg='blue', font=10, cursor='hand2', command=self.view)
         self.btn_ready_jobs.grid(row=0, column=0)
 
