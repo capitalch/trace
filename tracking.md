@@ -191,7 +191,10 @@ table.GeneratedTable .details {
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 30-06-2021 - 18-07-2021
+# 19-07-2021
+1. Fixed bug in purchase, gst amount does auto change
+
+# 30-06-2021 - 23-07-2021
 1. Other works apart from Trace
 
 # 28-06-2021 - 29-06-2021

@@ -227,12 +227,13 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
 
     function checkIfValidInvoice() {
         const errorAllowed = 0.99
+        const amountErrorAllowed = arbitraryData.invoiceAmount * 0.5/100 // 0.5 % error in total amount is allowed
         meta.current.amountQtyGstErrors = {}
         const errorObject: any = meta.current.amountQtyGstErrors
         if (
             Math.abs(
                 arbitraryData.invoiceAmount - arbitraryData.summary.amount
-            ) >= errorAllowed
+            ) >= Math.max(errorAllowed, amountErrorAllowed)
         ) {
             errorObject.amountErr = 'Error in invoice amount'
         }
@@ -290,9 +291,11 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
 
     function handleIsGstInvoice(e: any) {
         ad.isGstInvoice = e.target.checked
-        for(let item of ad.lineItems){
-            item.isGstInvoice = ad.isGstInvoice            
-            item.isGstInvoice ? item.gstRate = item.gstRateCopy || 0.0: item.gstRate = 0
+        for (let item of ad.lineItems) {
+            item.isGstInvoice = ad.isGstInvoice
+            item.isGstInvoice
+                ? (item.gstRate = item.gstRateCopy || 0.0)
+                : (item.gstRate = 0)
         }
         emit('PURCHASE-ITEMS-COMPUTE-ALL-ROWS', null)
         emit('PURCHASE-ITEMS-REFRESH', null)

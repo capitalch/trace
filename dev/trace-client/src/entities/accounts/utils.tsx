@@ -529,8 +529,10 @@ function utils() {
                 lockDate = startDate.subtract(1, 'days')
             }
             lockDate = moment(lockDate)
-            const tranDate = moment(mDate)
+            // const tranDate = moment(mDate)
+            const tranDate: any = mDate === undefined ? undefined : moment(mDate)
             const isInValidDate =
+                tranDate === undefined ||
                 tranDate.isBefore(startDate) ||
                 tranDate.isAfter(endDate) ||
                 tranDate.isBetween(startDate, lockDate, undefined, '[]') // inclusive

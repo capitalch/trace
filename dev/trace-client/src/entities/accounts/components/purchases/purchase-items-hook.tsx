@@ -18,8 +18,10 @@ function usePurchaseItems(arbitraryData: any) {
         CloseIcon,
         confirm,
         emit,
+        extractAmount,
         filterOn,
         IconButton,
+        InputNumber,
         messages,
         NumberFormat,
         PrimeColumn,
@@ -100,7 +102,7 @@ function usePurchaseItems(arbitraryData: any) {
                 slNoError: undefined,
             },
             gstRate: 0.0,
-            gstRateCopy:0.0,
+            gstRateCopy: 0.0,
             hsn: undefined,
             igst: 0.0,
             index: arbitraryData.lineItems.length + 1,
@@ -163,14 +165,16 @@ function usePurchaseItems(arbitraryData: any) {
             let ret = undefined
             if (arbitraryData.isGstInvoice) {
                 ret =
-                    rowData.gstRate > 0 && rowData.gstRate < 100 ? undefined : true
+                    rowData.gstRate > 0 && rowData.gstRate < 100
+                        ? undefined
+                        : true
             } else {
                 ret = rowData.gstRate === 0 ? undefined : true
             }
             return ret
         }
 
-        function setGstRateError(rowData: any) {            
+        function setGstRateError(rowData: any) {
             const er = getGstRateError(rowData)
             if (er !== rowData.errorsObject.gstRateError) {
                 rowData.errorsObject.gstRateError = er
@@ -203,7 +207,7 @@ function usePurchaseItems(arbitraryData: any) {
         }
 
         function getSlNoError(rowData: any) {
-            function getCount() {                
+            function getCount() {
                 return rowData.serialNumbers.split(',').filter(Boolean).length
             }
             const ok = getCount() === rowData.qty || getCount() === 0
@@ -578,7 +582,8 @@ function usePurchaseItems(arbitraryData: any) {
                                 // e.preventDefault()
                                 if (meta.current.isDataChanged) {
                                     meta.current.isDataChanged = false
-                                    rowData.isGstInvoice = arbitraryData.isGstInvoice
+                                    rowData.isGstInvoice =
+                                        arbitraryData.isGstInvoice
                                     searchProductOnUpcCode(rowData)
                                     // return(true)
                                 }
@@ -766,7 +771,6 @@ function usePurchaseItems(arbitraryData: any) {
                             customInput={TextField}
                             decimalScale={2}
                             error={allErrorMethods().getDiscountError(rowData)}
-                            
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 //using onChange event stores formatted value
@@ -810,31 +814,66 @@ function usePurchaseItems(arbitraryData: any) {
                 style={{ width: '8rem', textAlign: 'end' }}
                 body={(rowData: any) => {
                     return (
+                        // <InputNumber
+                        //     minFractionDigits={2}
+                        //     maxFractionDigits={2}
+                        //     onFocus={(e) => {
+                        //         e.target.select()
+                        //         meta.current.isDataChanged = false
+                        //     }}
+                        //     onBlur={() => {
+                        //         if (meta.current.isDataChanged) {
+                        //             computeRow(rowData)
+                        //             meta.current.isDataChanged = false
+                        //         }
+                        //     }}
+                        //     onKeyDown={(e: any) => {
+                        //         if ([9, 13].includes(e.keyCode)) {
+                        //             meta.current.isDataChanged &&
+                        //                 computeRow(rowData)
+                        //             meta.current.isDataChanged = false
+                        //         }
+                        //     }}
+                        //     value={rowData.priceGst || 0.0}
+                        //     onValueChange={(e: any) => {
+                        //         rowData.priceGst = e.value || 0.0
+                        //         allErrorMethods().setDiscountError(rowData)
+                        //         meta.current.isDataChanged = true
+                        //         rowData.price =
+                        //             e.value / (1 + rowData.gstRate / 100)
+                        //         meta.current.isMounted && setRefresh({})
+                        //     }}
+                        // />
                         <NumberFormat
                             allowNegative={false}
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
+                            isNumericString={true}
                             error={allErrorMethods().getDiscountError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
-                                const { floatValue } = values
+                                const { floatValue, value } = values
                                 rowData.priceGst = floatValue || 0.0
                                 allErrorMethods().setDiscountError(rowData)
                                 meta.current.isDataChanged = true
-                                rowData.price =
-                                    floatValue / (1 + rowData.gstRate / 100)
+                                // Adding following line does approximation error hence moved to onBlur event
+                                // rowData.price =
+                                //     floatValue / (1 + rowData.gstRate / 100)
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
-                            onBlur={() => {
-                                if (meta.current.isDataChanged) {
-                                    computeRow(rowData)
-                                    meta.current.isDataChanged = false
-                                }
+                            onBlur={(e: any) => {
+                                // if (meta.current.isDataChanged) {
+                                rowData.price =
+                                    (+extractAmount(e.target.value)) / (1 + rowData.gstRate / 100)
+                                computeRow(rowData)
+                                meta.current.isMounted && setRefresh({})
+                                meta.current.isDataChanged = false
+                                // }
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {

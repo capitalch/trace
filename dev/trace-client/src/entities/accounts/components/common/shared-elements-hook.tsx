@@ -87,6 +87,7 @@ import { Column as PrimeColumn } from 'primereact/column'
 import { Dialog as PrimeDialog} from 'primereact/dialog'
 import { InputSwitch } from 'primereact/inputswitch'
 import { InputTextarea } from 'primereact/inputtextarea'
+import {InputNumber} from 'primereact/inputnumber'
 import { usingIbuki } from '../../../../common-utils/ibuki'
 import { manageFormsState } from '../../../../react-form/core/fsm'
 import { graphqlService } from '../../../../common-utils/graphql-service'
@@ -131,6 +132,7 @@ function useSharedElements() {
     } = manageFormsState()
     const { doValidateForm, isValidForm } = getValidationFabric()
     const {
+        extractAmount,
         saveForm,
         genericUpdateMaster,
         genericUpdateMasterNoForm,
@@ -203,6 +205,7 @@ function useSharedElements() {
         emit,
         ErrorIcon,
         execGenericView,
+        extractAmount,
         faSpinner,
         filterOn,
         FontAwesomeIcon,
@@ -241,6 +244,7 @@ function useSharedElements() {
         InputAdornment,
         InputLabel,
         InputMask,
+        InputNumber,
         InputSwitch,
         InputTextarea,
         isImproperDate,
