@@ -179,6 +179,34 @@ function usePurchaseView(arbitraryData: any, purchaseType: string) {
             },
             { title: 'Invoice no', field: 'userRefNo' },
             {
+                title: "Aggr",
+                field: 'aggr',
+                align: 'right',
+                type: 'numeric',
+                render: (rowData: any) => toDecimalFormat(rowData.aggr)
+            },
+            {
+                title: "Cgst",
+                field: 'cgst',
+                align: 'right',
+                type: 'numeric',
+                render: (rowData: any) => toDecimalFormat(rowData.cgst)
+            },
+            {
+                title: "Sgst",
+                field: 'sgst',
+                align: 'right',
+                type: 'numeric',
+                render: (rowData: any) => toDecimalFormat(rowData.sgst)
+            },
+            {
+                title: "Igst",
+                field: 'igst',
+                align: 'right',
+                type: 'numeric',
+                render: (rowData: any) => toDecimalFormat(rowData.igst)
+            },
+            {
                 title: 'Amount',
                 field: 'amount',
                 align: 'right',
@@ -225,11 +253,11 @@ function usePurchaseView(arbitraryData: any, purchaseType: string) {
             meta.current.data = ret
         }
         meta.current.isMounted && setRefresh({})
-        function smoothOut(sl: any){
-            let ret = sl.split(',').map((x:string)=> x.trim()) // removes space
+        function smoothOut(sl: any) {
+            let ret = sl.split(',').map((x: string) => x.trim()) // removes space
             ret = ret.filter(Boolean) // removes empty items in array
             ret = ret.join() // comma separated string out from array
-            return(ret)
+            return (ret)
         }
     }
 

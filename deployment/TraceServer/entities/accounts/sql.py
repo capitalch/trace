@@ -488,6 +488,51 @@ allSqls = {
         cte2 as (
             select h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
                 d."amount" , string_agg("label", ' ,') as "labels", 
+                string_agg(s."jData"->>'serialNumbers', ' ,') as "serialNumbers",
+                SUM(s."price" - s."discount") as "aggr", SUM(s."cgst") as "cgst",
+                SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
+                from "TranH" h			
+                    join "TranD" d
+                        on "h"."id" = d."tranHeaderId" 
+                    join "SalePurchaseDetails" s
+                        on d."id" = s."tranDetailsId"
+                    join "ProductM" p
+                        on p."id" = s."productId"		
+                where "tranTypeId" = %(tranTypeId)s
+                    and "dc" = %(tranDc)s
+                    and "finYearId" = %(finYearId)s
+                    and "branchId" = %(branchId)s
+                group by h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
+                    d."amount"
+            )
+					
+        select  cte1."id",cte1."accounts", cte1."clearDate", cte2.* 
+            from cte1
+                join cte2
+                    on cte1."id" = cte2."id"
+                order by cte1."id" DESC LIMIT %(no)s
+    ''',
+
+    "get_sale_purchase_headers1": '''
+        with cte1 as (
+            select h."id", string_agg("accName",', ') as "accounts", "clearDate"
+                from "TranH" h		
+                    join "TranD" d
+                        on h."id" = d."tranHeaderId" 
+                    join "AccM" a
+                        on a."id" = d."accId"
+                    left outer join "ExtBankReconTranD" b
+						on d."id" = b."tranDetailsId"
+                    where "tranTypeId" = %(tranTypeId)s
+                        and "dc" <> %(tranDc)s
+                        and "accId"::text ILIKE %(accId)s
+                        and "finYearId" = %(finYearId)s
+                        and "branchId" = %(branchId)s
+                group by h."id", "clearDate"
+        ),
+        cte2 as (
+            select h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
+                d."amount" , string_agg("label", ' ,') as "labels", 
                 string_agg(s."jData"->>'serialNumbers', ' ,') as "serialNumbers"
                 from "TranH" h			
                     join "TranD" d
@@ -511,25 +556,25 @@ allSqls = {
                 order by cte1."id" DESC LIMIT %(no)s
     ''',
     
-    "get_searchProduct1": '''
-        select p."id", 
-		"catName",
-		"brandName", "salePrice", "discount", "discountRate", "isActive",
-		"hsn", "info", "label", "productCode", "upcCode", "gstRate"
-		from "ProductM" p
-			join "CategoryM" c
-				on c."id" = p."catId"
-			join "BrandM" b
-				on b."id" = p."brandId"
-			where "label" ILIKE '%%' || %(arg)s || '%%'
-			or "catName" ILIKE '%%' || %(arg)s || '%%'
-			or "brandName" ILIKE '%%' || %(arg)s || '%%'
-			or c."descr" ILIKE '%%' || %(arg)s || '%%'
-			or "hsn"::text ILIKE '%%' || %(arg)s || '%%'
-			or "info" ILIKE '%%' || %(arg)s || '%%'
-			or "productCode"::text ILIKE '%%' || %(arg)s || '%%'
-			or "upcCode" ILIKE '%%' || %(arg)s || '%%'
-    ''',
+    # "get_searchProduct1": '''
+    #     select p."id", 
+	# 	"catName",
+	# 	"brandName", "salePrice", "discount", "discountRate", "isActive",
+	# 	"hsn", "info", "label", "productCode", "upcCode", "gstRate"
+	# 	from "ProductM" p
+	# 		join "CategoryM" c
+	# 			on c."id" = p."catId"
+	# 		join "BrandM" b
+	# 			on b."id" = p."brandId"
+	# 		where "label" ILIKE '%%' || %(arg)s || '%%'
+	# 		or "catName" ILIKE '%%' || %(arg)s || '%%'
+	# 		or "brandName" ILIKE '%%' || %(arg)s || '%%'
+	# 		or c."descr" ILIKE '%%' || %(arg)s || '%%'
+	# 		or "hsn"::text ILIKE '%%' || %(arg)s || '%%'
+	# 		or "info" ILIKE '%%' || %(arg)s || '%%'
+	# 		or "productCode"::text ILIKE '%%' || %(arg)s || '%%'
+	# 		or "upcCode" ILIKE '%%' || %(arg)s || '%%'
+    # ''',
 
     "get_search_product": '''
         select p."id", 

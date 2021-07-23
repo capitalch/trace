@@ -173,6 +173,7 @@ table.GeneratedTable .details {
 4.0 Audit select multiple rows in datatable
 5.0 Show ledger balance at the time of data entry
 6.0 When new account code is created that should immediately be visible at payment options
+6.1 Bill wise payment
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.

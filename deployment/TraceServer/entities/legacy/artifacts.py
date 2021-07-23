@@ -1,17 +1,16 @@
 # from os import stat, path
 import datetime
-import re
-import cairosvg
 from flask import Blueprint, request, render_template, jsonify
 from flask_weasyprint import HTML, render_pdf
 import simplejson as json
 from urllib.parse import unquote, urljoin
 from copy import deepcopy
-from postgres import execSql, getConnectionCursor
+from postgres import execSql, genericView, getConnectionCursor
 from loadConfig import cfg
 from entities.legacy import messages
 from entities.legacy.sql import allSqls
-from entities.legacy.utils import saveBillsAndSms, processDataForPdf
+from entities.accounts.sql import allSqls as allSqls1
+from entities.legacy.utils import saveBillsAndSms, processDataForPdf, sendManySmsForExtendedWarranty, sendSelfMailForExtendedWarrCust
 from entities.accounts.artifactsHelper import bulkGenericUpdateMasterDetailsHelper
 
 trackApp = Blueprint('trackApp', __name__,
@@ -74,9 +73,22 @@ def import_service_sale():
     print(delta, ' Mins')
     return('Ok', 200)
 
+
 @trackApp.route('/service/get-extended-warranty-customers', methods=['POST'])
 def get_extended_warranty_customers():
-    pass
+    sql = allSqls.get('get-extended-warranty-customers')
+    res = {}
+    status = 200
+    try:
+        result = genericView(dbName='postgres', sqlString=sql,
+                             valueDict={'args': {'daysOver': 2}})
+        res = json.dumps(result, default=str)
+    except(Exception) as error:
+        res = json.dumps({"error": error.args[0] or repr(error)})
+        status = 500
+    finally:
+        return(res, status)
+
 
 @trackApp.route('/service/upload-extended-warranty-customers', methods=['POST'])
 def upload_extended_warranty_customer():
@@ -101,12 +113,40 @@ def upload_extended_warranty_customer():
         payload = request.json
         sql = allSqls['upsert-extended-warranty-customer']
         connection, cursor, pool = getConnectionCursor(dbName='postgres')
-        sqlListWithArgs = [(sql,getArgsDict(item)) for item in payload]
+        sqlListWithArgs = [(sql, getArgsDict(item)) for item in payload]
         with connection:
             with cursor:
                 for entry in sqlListWithArgs:
-                    cursor.execute(entry[0],entry[1])
+                    cursor.execute(entry[0], entry[1])
         return('Ok', 200)
     except(Exception) as error:
         print(error)
-    
+
+
+@trackApp.route('/service/send-sms', methods=['POST'])
+def send_sms():
+    payload = request.json
+    sendManySmsForExtendedWarranty(payload)
+    return('ok', 200)
+
+
+@trackApp.route('/ser/warr/<id>', methods=['GET'])
+def awail_extended_warranty(id):
+    # get extended warranty customer details on id
+    res = {}
+    status = 200
+    try:
+        args = {'id': id}
+        sql = allSqls['get-extended-warranty-customer']
+        result = execSql('postgres', sql, args, isMultipleRows=False)
+        result['pin'] = int(float(result['pin'])) if result['pin'] is not None else ''
+        res = json.loads(json.dumps(result, default=str))
+        sendSelfMailForExtendedWarrCust(res)
+        html = cfg['sms']['extendedWarrantyResponse']
+        return(html, 200)
+    except(Exception) as error:
+        res = json.dumps({"error": error.args[0] or repr(error)})
+        status = 500
+    finally:
+        pass
+        # return(res, status)

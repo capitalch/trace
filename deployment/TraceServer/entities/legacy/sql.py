@@ -5,12 +5,24 @@ allSqls = {
                 where "billNoHash" = %(billNoHash)s
     ''',
 
+    'update-extended-warranty-sms-sent':'''
+        update "service_extended_warranty"
+            set "smsSentDates" = array_append("smsSentDates", CURRENT_DATE )
+	    where "id" = %(id)s
+    ''',
+
+    'get-extended-warranty-customer':'''
+        select "id", "purchDate", "custName", "mobileNo","productCategory", "serialNumber", "address", "pin"
+            from "service_extended_warranty"
+        where "id"= %(id)s
+    ''',
+
     'get-extended-warranty-customers': '''
         select "id","purchDate", "custName", "mobileNo", "address", "pin","productCategory", "modelCode", "modelName", 
-            "serialNumber", "smsSentDates", (select extract(day from ((now() - interval '1 day') - (date("purchDate") + interval '1 year'))) ) as "daysLeft"
+            "serialNumber", "smsSentDates"::text, (select (CURRENT_DATE - interval '1 day')::date - ("purchDate"::date + interval '1 year')::date) as "daysLeft"
         from "service_extended_warranty"
             where "hasWarrantyPurchased" = false
-                and (select extract(day from ((now() - interval '1 day') - (date("purchDate") + interval '1 year'))) )
+                and (select (CURRENT_DATE - interval '1 day')::date - ("purchDate"::date + interval '1 year')::date)
                     between -3 and %(daysOver)s
         order by "id"
     ''',
