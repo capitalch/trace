@@ -14,15 +14,16 @@ import { Button } from 'primereact/button'
 import { useGeneric } from '../core/generic-item'
 import { useSubmit } from '../core/submit'
 import NumberFormat from 'react-number-format'
-import Combobox from 'react-widgets/lib/Combobox'
+import { Combobox } from 'react-widgets'
 import Select from 'react-select'
 import moment from 'moment'
-import 'react-widgets/dist/css/react-widgets.css'
-// import 'react-widgets/styles.css'
+// import 'react-widgets/dist/css/react-widgets.css'
+import 'react-widgets/styles.css'
 import { getArtifacts } from '../common/react-form-hook'
 import { manageFormsState } from '../core/fsm'
 
 const componentStore: any = {
+    
     Button: (props: any) => {
         const { item } = props
         let [, setRefresh] = useState({})
@@ -133,11 +134,7 @@ const componentStore: any = {
         const classes = useStyles()
         const [, setRefresh] = useState({})
 
-        const {
-            getValidationFabric,
-            setField,
-            getField,
-        } = manageFormsState()
+        const { getValidationFabric, setField, getField } = manageFormsState()
         const { doValidateControl } = getValidationFabric()
         const theme = useTheme()
         // date validation format for <input type='date> is always iso date Format
@@ -186,11 +183,7 @@ const componentStore: any = {
         const classes = useStyles()
         const [, setRefresh] = useState({})
 
-        const {
-            getValidationFabric,
-            setField,
-            getField,
-        } = manageFormsState()
+        const { getValidationFabric, setField, getField } = manageFormsState()
         const { doValidateControl } = getValidationFabric()
         const theme = useTheme()
         // date validation format for <input type='date> is always iso date Format
@@ -230,12 +223,13 @@ const componentStore: any = {
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton 
-                                onClick= {()=>{
-                                    setField(parent, item.name, '')
-                                    setRefresh({})
-                                }}
-                                size='small' style={{ marginTop: '.5rem' }} >
+                                <IconButton
+                                    onClick={() => {
+                                        setField(parent, item.name, '')
+                                        setRefresh({})
+                                    }}
+                                    size="small"
+                                    style={{ marginTop: '.5rem' }}>
                                     <Clear />
                                 </IconButton>
                             </InputAdornment>
@@ -326,7 +320,7 @@ const componentStore: any = {
             return ret
         }
 
-        ; (function resolveError() {
+        ;(function resolveError() {
             meta.current.isError = false
             meta.current.errorNode = null
 
@@ -755,7 +749,7 @@ const componentStore: any = {
             return ret
         }
 
-        ; (function resolveError() {
+        ;(function resolveError() {
             meta.current.isError = false
             meta.current.errorNode = null
 
@@ -930,7 +924,8 @@ const componentStore: any = {
                     onChange={(e: any) => onChangeEvent(e.value)}
                     disabled={disabled}
                     textField="label"
-                    valueField="value"
+                    dataKey="value"
+                    // valueField="value"
                     filter="contains"></Combobox>
                 <XErrorDisplay />
             </>

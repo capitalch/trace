@@ -192,8 +192,9 @@ table.GeneratedTable .details {
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 19-07-2021
+# 19-07-2021 - 20-07-2021
 1. Fixed bug in purchase, gst amount does auto change
+2. Upgraded all libs in trace-client. Fixed issue of library react-widgets
 
 # 30-06-2021 - 23-07-2021
 1. Other works apart from Trace

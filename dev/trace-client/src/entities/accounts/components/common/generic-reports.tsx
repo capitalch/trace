@@ -64,10 +64,15 @@ function GenericReports({ loadReport }: any) {
                         actions={getActionsList()}
                         options={{
                             paging: false,
-                            search: true,
+                            search: true, 
+                            selection: true,
+                            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),                            
                             headerStyle: { position: 'sticky', top: 0 },
                             maxBodyHeight: 'calc(100vh - 15rem)',
                         }}
+                        // onSelectionChange={(rows)=>{
+                        //     console.log(rows)
+                        // }}
                         components={{
                             Action: (props: any) => {
                                 let ret = <></>

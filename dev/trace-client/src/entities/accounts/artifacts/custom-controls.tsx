@@ -25,21 +25,13 @@ import { Combobox } from 'react-widgets'
 const customControls = {
     DateMask: (props: any) => {
         const { getFromBag } = manageEntitiesState()
-        const {
-            getValidationFabric,
-            setField,
-            setDateValidatorFormat,
-        } = manageFormsState()
+        const { getValidationFabric, setField, setDateValidatorFormat } =
+            manageFormsState()
         const { doValidateControl } = getValidationFabric()
 
         const { parent, item } = props
-        const {
-            xValue,
-            XLabel,
-            XErrorDisplay,
-            formId,
-            controlId,
-        } = useGeneric(props)
+        const { xValue, XLabel, XErrorDisplay, formId, controlId } =
+            useGeneric(props)
         const [, setRefresh] = useState({})
 
         const isoDateFormat = 'YYYY-MM-DD'
@@ -190,8 +182,8 @@ const customControls = {
                                     if (e.target.checked) {
                                         calculateGst('cgst')
                                     }
-                                    meta.current.autoCalculate = !meta.current
-                                        .autoCalculate
+                                    meta.current.autoCalculate =
+                                        !meta.current.autoCalculate
                                     meta.current.isMounted && setRefresh({})
                                 }}></Checkbox>
                         </span>
@@ -452,13 +444,25 @@ const customControls = {
                     )
                 )
                 .subscribe((d: any) => {
-                    const selectOptions = d.map((el: any) => {
-                        return {
-                            label: el.accName,
-                            value: el.id,
-                            accLeaf: el.accLeaf,
-                        }
-                    })
+                    const selectOptions = d
+                        .map((el: any) => {
+                            return {
+                                label: el.accName,
+                                value: el.id,
+                                accLeaf: el.accLeaf,
+                            }
+                        })
+                        .sort((a: any, b: any) => {
+                            let ret = 0
+                            if (a.label.toLowerCase() < b.label.toLowerCase()) {
+                                ret = -1
+                            } else if (
+                                a.label.toLowerCase() > b.label.toLowerCase()
+                            ) {
+                                ret = 1
+                            }
+                            return ret
+                        })
                     setLedgerOptions(selectOptions)
                 })
             const sub1: any = hotFilterOn(
@@ -511,22 +515,21 @@ const customControls = {
                 }
                 setAllAccounts(allAccounts)
             })
-            // subs.add(sub1)
             return () => {
                 subs.unsubscribe()
                 sub1.unsubscribe()
             }
         }, [xValue])
 
-        function listItem({ item }: any) {
-            let ret = <></>
-            if (item.accLeaf === 'L') {
-                ret = <strong>{item.label + ' >>>'}</strong>
-            } else {
-                ret = <span>{item.label}</span>
-            }
-            return ret
-        }
+        // function listItem({ item }: any) {
+        //     let ret = <></>
+        //     if (item.accLeaf === 'L') {
+        //         ret = <strong>{item.label + ' >>>'}</strong>
+        //     } else {
+        //         ret = <span>{item.label}</span>
+        //     }
+        //     return ret
+        // }
         return (
             <>
                 {showLabel && (
@@ -538,10 +541,20 @@ const customControls = {
                     placeholder="Ledger a/c"
                     data={ledgerOptions}
                     textField="label"
-                    valueField="value"
+                    // valueField="value"
+                    dataKey="value"
                     filter="contains"
-                    itemComponent={listItem}
-                    // ch3
+                    // itemComponent={listItem}
+                    // renderListItem = {({item})=> listItem}
+                    renderListItem={({ item }: any) => {
+                        let ret = <></>
+                        if (item.accLeaf === 'L') {
+                            ret = <strong>{item.label + ' >>>'}</strong>
+                        } else {
+                            ret = <span>{item.label}</span>
+                        }
+                        return ret
+                    }}
                     value={
                         ledgerValue.value
                             ? { value: ledgerValue.value }
@@ -577,9 +590,20 @@ const customControls = {
                 <Combobox
                     placeholder="Subledger a/c"
                     disabled={subledgerDisabled}
-                    data={subledgerOptions}
+                    data={subledgerOptions.sort((a: any, b: any) => {
+                        let ret = 0
+                        if (a.label.toLowerCase() < b.label.toLowerCase()) {
+                            ret = -1
+                        } else if (
+                            a.label.toLowerCase() > b.label.toLowerCase()
+                        ) {
+                            ret = 1
+                        }
+                        return ret
+                    })}
                     textField="label"
-                    valueField="value"
+                    // valueField="value"
+                    dataKey="value"
                     filter="contains"
                     value={
                         subledgerValue.value

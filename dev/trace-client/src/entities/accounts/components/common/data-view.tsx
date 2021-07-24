@@ -15,9 +15,9 @@ import { Edit } from '@material-ui/icons'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/AddCircle'
 import upperFirst from 'lodash/capitalize'
-import { manageEntitiesState } from '../../../../common-utils/esm'
-import { usingIbuki } from '../../../../common-utils/ibuki'
-import messages from '../../../../messages.json'
+// import { manageEntitiesState } from '../../../../common-utils/esm'
+// import { usingIbuki } from '../../../../common-utils/ibuki'
+// import messages from '../../../../messages.json'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { utils } from '../../utils'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
@@ -26,11 +26,8 @@ import { useSharedElements } from './shared-elements-hook'
 function DataView({ loadComponent }: any) {
     const [, setRefresh] = useState({})
     const { isDateAuditLocked } = utils()
-    const {
-        getFromGlobalBag,
-        getCurrentMediaSize,
-        getCurrentWindowSize,
-    } = useTraceGlobal()
+    const { getFromGlobalBag, getCurrentMediaSize, getCurrentWindowSize } =
+        useTraceGlobal()
     const {
         accountsMessages,
         confirm,
@@ -82,6 +79,12 @@ function DataView({ loadComponent }: any) {
                     maxBodyHeight: 'calc(100vh - 15rem)',
                     paging: false,
                     draggable: true,
+                    // selection: true,
+                    // rowStyle: (rowData) => ({
+                    //     backgroundColor: rowData.tableData.checked
+                    //         ? '#37b15933'
+                    //         : '',
+                    // }),
                     searchFieldStyle: {
                         width: meta.current.searchFieldWidth,
                         marginLeft: '0px',
@@ -89,6 +92,12 @@ function DataView({ loadComponent }: any) {
                     },
                     // to make fixed header
                     headerStyle: { position: 'sticky', top: 0 },
+                }}
+                // onRowClick={(row)=>{
+                //     console.log(row)
+                // }}
+                onSelectionChange={(row)=>{
+                    console.log(row)
                 }}
                 actions={getActionsList()}
                 components={{
@@ -219,13 +228,13 @@ function DataView({ loadComponent }: any) {
                 toolTip: 'Add new transaction',
                 name: 'new',
                 isFreeAction: true, // isFreeAction puts the icon in toolbar
-                onClick: () => { }, // This empty onClick is a hack. Without this warning appears
+                onClick: () => {}, // This empty onClick is a hack. Without this warning appears
             },
             {
                 icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
                 name: 'select',
                 isFreeAction: true,
-                onClick: () => { }, // This empty onClick is a hack. Without this warning appears
+                onClick: () => {}, // This empty onClick is a hack. Without this warning appears
             },
             {
                 icon: () => <Edit color="secondary" fontSize="small" />,
@@ -239,7 +248,8 @@ function DataView({ loadComponent }: any) {
                             message: accountsMessages.auditLockError,
                             duration: null,
                         })
-                    } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                    } else if (rowData?.clearDate) {
+                        // already reconciled so edit /delete not possible
                         emit('SHOW-MESSAGE', {
                             severity: 'error',
                             message: accountsMessages.reconcillationDone,
@@ -251,7 +261,6 @@ function DataView({ loadComponent }: any) {
                             headerId: tranHeaderId,
                         })
                     }
-
                 },
             },
             {
@@ -274,7 +283,8 @@ function DataView({ loadComponent }: any) {
                             message: accountsMessages.auditLockError,
                             duration: null,
                         })
-                    } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                    } else if (rowData?.clearDate) {
+                        // already reconciled so edit /delete not possible
                         emit('SHOW-MESSAGE', {
                             severity: 'error',
                             message: accountsMessages.reconcillationDone,
@@ -290,7 +300,7 @@ function DataView({ loadComponent }: any) {
                                 emit('SHOW-MESSAGE', {})
                                 emit('LOAD-MAIN-JUST-REFRESH', '')
                             })
-                            .catch(() => { }) // important to have otherwise eror
+                            .catch(() => {}) // important to have otherwise eror
                     }
                 },
             },
