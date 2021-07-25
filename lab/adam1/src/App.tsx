@@ -52,7 +52,7 @@ import { useTraceGlobal } from "./utils/trace-global";
 import { Component1 } from "./components/component1";
 import { Component3 } from "./components/component3";
 import { Component4 } from "./components/component4";
-import { Component10 } from "./components/component10";
+import { Component5 } from "./components/component5";
 
 declare module "@material-ui/core/styles/createPalette" {
   interface Palette {
@@ -136,7 +136,7 @@ const App: React.FC = () => {
           }}
         >
           <RecoilRoot>
-            <Component4></Component4>
+            <Component5></Component5>
           </RecoilRoot>
         </div>
       </ConfirmProvider>

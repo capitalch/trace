@@ -1,35 +1,55 @@
-import { env } from 'process'
 import _ from 'lodash'
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
-import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
-import { Send } from '@material-ui/icons'
+import Paper from '@material-ui/core/Paper'
+import React, { useState, useEffect } from 'react'
+import { Grid, Table, TableHeaderRow,  TableSummaryRow } from '@devexpress/dx-react-grid-material-ui'
+// import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+// import { Send } from '@material-ui/icons'
+import mock from '../data/mockData.json'
 import './component4.scss'
-import {useIbuki} from '../utils/ibuki'
+
 import { Button } from '@material-ui/core'
+import {  IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
 
 const Component4 = () => {
     const [, setRefresh] = useState({})
-    const {filterOn}  = useIbuki()
     useEffect(() => {
-        const subs1 = filterOn('ABCD').subscribe(()=>{
-            console.log('ABCD')
-        })
-        // const subs2 = filterOn('EFGH').subscribe(()=>{
-        //     console.log('EFGH')
-        // })
-        // const subs3 = filterOn('EFGH').subscribe(()=>{
-        //     console.log('EFGH')
-        // })
-        // subs1.add(subs2).add(subs3)
-        return () => {
-            subs1.unsubscribe()
-        }
     }, [])
 
+    const columns = [
+        { name: 'id', title: 'Id' },
+        { name: 'full_name', title: 'Full name' },
+        { name: 'email', title: 'Email' },
+        { name: 'debits', title: 'Debits' },
+        { name: 'credits', title: 'Credits' }
+    ]
+    const rows = mock
+
+    const columnExtensions: any = [{ columnName: 'id', width: '5rem', align: 'center' },
+    { columnName: 'full_name', width: '10rem', wordWrapEnabled: true },
+    { columnName: 'debits', width: '10rem', align: 'right' },
+    { columnName: 'credits', width: '10rem', align: 'right' },
+    ]
+
     return (
-        <div>
-           <Button>Test</Button>
-        </div>
+        <Paper>
+            <Grid rows={rows} columns={columns} >
+                <SummaryState totalItems={[
+                    {
+                        columnName: 'debits',
+                        type: 'sum'
+                    },
+                    {
+                        columnName: 'credits',
+                        type: 'sum'
+                    }
+                ]} />
+                <IntegratedSummary />
+                <Table columnExtensions={columnExtensions} />
+                <TableHeaderRow />
+
+                <TableSummaryRow />
+            </Grid>
+        </Paper>
     )
 }
 
