@@ -138,7 +138,6 @@ function utils() {
                     (item: any) => {
                         return {
                             ...item,
-                            // tranDate: item.tranType === 'Summary' ? '' : item.tranDate,
                             tranType:
                                 item.tranType === 'Summary'
                                     ? ''

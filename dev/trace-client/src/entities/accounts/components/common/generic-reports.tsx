@@ -66,9 +66,11 @@ function GenericReports({ loadReport }: any) {
                             paging: false,
                             search: true, 
                             selection: true,
+                            showTextRowsSelected: false,
                             rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),                            
                             headerStyle: { position: 'sticky', top: 0 },
                             maxBodyHeight: 'calc(100vh - 15rem)',
+                            
                         }}
                         // onSelectionChange={(rows)=>{
                         //     console.log(rows)
@@ -162,12 +164,15 @@ function GenericReports({ loadReport }: any) {
 
         }
 
-        function getActionsList() {
+        function getActionsList(): any {
             return [
                 {
                     icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
                     name: 'select',
-                    isFreeAction: true,
+                    // isFreeAction: true,
+                    disabled: false,
+                    hidden: false,
+                    position:'toolbar',
                     onClick: () => { }, // This empty onClick is a hack. Without this warning appears
                 },
             ]

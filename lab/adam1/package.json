@@ -3,10 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@devexpress/dx-react-core": "^2.7.6",
+    "@devexpress/dx-react-grid": "^2.7.6",
+    "@devexpress/dx-react-grid-material-ui": "^2.7.6",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@material-ui/core": "^4.12.2",
+<<<<<<< HEAD
+=======
+    "@material-ui/data-grid": "^4.0.0-alpha.34",
+>>>>>>> 26b035dab272117ff5d179663c425ec721dc7f92
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@progress/kendo-react-dropdowns": "^4.7.0",
