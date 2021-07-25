@@ -80,11 +80,14 @@ function DataView({ loadComponent }: any) {
                     paging: false,
                     draggable: true,
                     // selection: true,
+
                     // rowStyle: (rowData) => ({
                     //     backgroundColor: rowData.tableData.checked
                     //         ? '#37b15933'
                     //         : '',
                     // }),
+                    showSelectAllCheckbox:false,
+                    showTextRowsSelected: false,
                     searchFieldStyle: {
                         width: meta.current.searchFieldWidth,
                         marginLeft: '0px',
@@ -97,7 +100,7 @@ function DataView({ loadComponent }: any) {
                 //     console.log(row)
                 // }}
                 onSelectionChange={(row)=>{
-                    console.log(row)
+                    // console.log(row)
                 }}
                 actions={getActionsList()}
                 components={{

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useLayoutEffect } from 'react'
 import { useTable, useExpanded } from 'react-table'
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import makeData from '../utils/makeData'
 import {useTestHook} from './myTestHook'
 import '../App.scss'
