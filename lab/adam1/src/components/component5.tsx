@@ -1,31 +1,32 @@
-import React, { useEffect, useState, useMemo, useLayoutEffect } from 'react'
-import { DataGrid, GridToolbar,  } from '@material-ui/data-grid'
+import React, { useEffect, useState, useMemo, useLayoutEffect, useRef } from 'react'
+// import { DataGrid } from '@material-ui/data-grid'
 import { interval } from 'rxjs'
-import { XGrid, useGridApiRef } from '@material-ui/x-grid'
+import { XGrid, useGridApiRef, GridToolbar, } from '@material-ui/x-grid'
 import mock from '../data/mockData.json'
 import { randomInt, randomUserName } from '@material-ui/x-grid-data-generator'
 
 function Component5() {
     const [, setRefresh] = useState({})
     const apiRef: any = useGridApiRef()
+    const myRef: any = useRef(null)
     React.useEffect(() => {
-        const subscription = interval(200).subscribe(() => {
-            apiRef.current.updateRows([
-                {
-                    id: randomInt(1, 20),
-                    full_name: randomUserName(),
-                    debits: randomInt(10, 80),
-                },
-                {
-                    id: randomInt(1, 4),
-                    full_name: randomUserName(),
-                    credits: randomInt(10, 80),
-                },
-            ])
-        })
+        // const subscription = interval(200).subscribe(() => {
+        //     apiRef.current.updateRows([
+        //         {
+        //             id: randomInt(1, 20),
+        //             full_name: randomUserName(),
+        //             debits: randomInt(10, 80),
+        //         },
+        //         {
+        //             id: randomInt(1, 4),
+        //             full_name: randomUserName(),
+        //             credits: randomInt(10, 80),
+        //         },
+        //     ])
+        // })
 
         return () => {
-            subscription.unsubscribe()
+            // subscription.unsubscribe()
         }
     }, [apiRef])
 
@@ -44,15 +45,28 @@ function Component5() {
     const rows = mock
 
     return (
-        <div style={{ height: '80vh', width: '100%' }}>
+        <div style={{ height: '90vh', width: '100%' }}>
             <XGrid
                 apiRef={apiRef}
                 rows={rows}
                 columns={columns}
                 checkboxSelection={true}
-                // components={{
-                //     Toolbar: GridToolbar
+                onRowClick={(e:any, other:any)=>{
+                    console.log(e)
+                    console.log(e.api.getSelectedRows())
+                    console.log(other.target.checked)
+                }}
+                
+                // onSelectionChange = {(s:any)=>{
+                //     console.log(s)
                 // }}
+                components={{
+                    Toolbar: GridToolbar,
+                    Footer: () => {
+                        // console.log('a:', a, 'b:', b)
+                        return <div>Working </div>
+                    }
+                }}
                 onColumnResize={(e) => {
                     console.log('resized')
                 }}

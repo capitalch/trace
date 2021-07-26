@@ -41,12 +41,12 @@ import { Loader } from "./components/loader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import clsx from "clsx";
-import {
-  makeStyles,
-  useTheme,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles";
+// import {
+//   makeStyles,
+//   useTheme,
+//   Theme,
+//   createStyles,
+// } from "@material-ui/core/styles";
 import { PersistentDrawerLeft } from "./drawyer";
 import { useTraceGlobal } from "./utils/trace-global";
 import { Component1 } from "./components/component1";

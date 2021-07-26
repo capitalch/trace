@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-
+import { createStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
