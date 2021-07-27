@@ -1,6 +1,7 @@
 //based on primereact
 import React, { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import {Theme, createStyles } from '@material-ui/core'
+import makeStyles from "@material-ui/styles/makeStyles";
 import { Dropdown } from 'primereact/dropdown'
 
 interface LedgerSubledgerOptions {

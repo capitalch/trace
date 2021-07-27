@@ -1,6 +1,7 @@
 // based on react-widgets
 import React, { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import {Theme, createStyles } from '@material-ui/core'
+import makeStyles from "@material-ui/styles/makeStyles";
 import { Combobox } from 'react-widgets'
 import 'react-widgets/dist/css/react-widgets.css'
 

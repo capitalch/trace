@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from "@material-ui/styles/makeStyles";
 
 function Component7() {
     function Alert(props: any) {
@@ -13,7 +13,7 @@ function Component7() {
         root: {
             width: '100%',
             '& > * + *': {
-                marginTop: theme.spacing(2),
+                // marginTop: theme.spacing(2),
             },
         },
     }));

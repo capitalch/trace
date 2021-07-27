@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
-  makeStyles,
   Theme,
   createStyles,
   Button,
@@ -8,6 +7,8 @@ import {
   Tab,
   Paper,
 } from "@material-ui/core";
+// import { makeStyles } from "@material-ui/core/styles";
+import makeStyles from "@material-ui/styles/makeStyles";
 
 import { Child1 } from "./sub-components/child1";
 import { Child2 } from "./sub-components/child2";

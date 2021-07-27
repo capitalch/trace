@@ -6,9 +6,10 @@ import {
   , Button, IconButton, Chip,
   Avatar, Box, Container, Paper
   , Dialog, DialogTitle
-  , DialogActions, DialogContent, Theme, useTheme, createStyles, makeStyles
+  , DialogActions, DialogContent, Theme, useTheme, createStyles
   , List, ListItem, ListItemAvatar, ListItemText, Grid
 } from '@material-ui/core'
+import makeStyles from "@material-ui/styles/makeStyles";
 import MaterialTable from "material-table"
 import {
   AddBox, ArrowDownward, Check, ChevronLeft, ChevronRight, Clear
@@ -51,7 +52,6 @@ const Component1 = () => {
     dialogConfig1: {
       title: 'Second dialog'
     },
-
   })
   const headerConfig = meta.current.headerConfig
   const theme: any = useTheme()
@@ -69,7 +69,7 @@ const Component1 = () => {
     meta.current.showDialog1 = true
     setRefresh({})
   }
-  
+
   function closeDialog() {
     meta.current.showDialog = false
     setRefresh({})
@@ -268,7 +268,7 @@ const Component1 = () => {
           setRefresh({})
         }}
       >
-        <DialogTitle disableTypography
+        <DialogTitle
         >
           <h3>
             {meta.current.dialogConfig1.title}
@@ -283,7 +283,7 @@ const Component1 = () => {
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
           <Button variant="contained" color="secondary"
-          onClick={handleSelectBankClick}
+            onClick={handleSelectBankClick}
           >Open</Button>
         </DialogContent>
       </Dialog>
@@ -292,7 +292,7 @@ const Component1 = () => {
         fullScreen={true}
         // fullWidth={true}
         onClose={closeDialog}>
-        <DialogTitle disableTypography id="generic-dialog-title"
+        <DialogTitle id="generic-dialog-title"
           className={classes.dialogTitle}>
           <h3>
             {meta.current.dialogConfig.title}
@@ -307,12 +307,12 @@ const Component1 = () => {
             {getAllBanksListItems()}
           </List>
           <Button variant="contained" color="secondary"
-          onClick={handleSecondDialogOpen}
+            onClick={handleSecondDialogOpen}
           >Open</Button>
         </DialogContent>
         <DialogActions className={classes.dialogActions}></DialogActions>
       </Dialog>
-      
+
     </Container>
   )
 
@@ -332,6 +332,7 @@ const Component1 = () => {
     return ret;
   }
 }
+
 
 export { Component1 }
 
@@ -363,8 +364,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
     },
     header: {
       display: 'flex',
-      flexDirection: ({ headerConfig }): any => headerConfig.flexDirection,
-      alignItems: ({ headerConfig }): any => headerConfig.alignItems,
+      flexDirection: ({ headerConfig }:any): any => headerConfig.flexDirection,
+      alignItems: ({ headerConfig }: any): any => headerConfig.alignItems,
       // fontWeight: 'bold',
       justifyContent: 'space-between',
       flexWrap: 'wrap',

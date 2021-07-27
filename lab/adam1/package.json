@@ -12,9 +12,9 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@material-ui/core": "^5.0.0-beta.2",
-    
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^5.0.0-alpha.41",
+    "@material-ui/styles": "^5.0.0-beta.2",
     "@material-ui/x-grid": "^4.0.0-alpha.34",
     "@material-ui/x-grid-data-generator": "^4.0.0-alpha.34",
     "@progress/kendo-react-dropdowns": "^4.7.0",
@@ -26,6 +26,7 @@
     "@types/jest": "26.0.24",
     "@types/lodash": "^4.14.171",
     "@types/match-sorter": "^5.0.0",
+    "@types/material-ui": "^0.21.9",
     "@types/node": "16.4.2",
     "@types/react": "17.0.15",
     "@types/react-data-grid": "^4.0.6",

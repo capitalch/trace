@@ -4,10 +4,9 @@ import { graphqlService } from '../utils/graphql-service'
 import DataTable, { createTheme } from 'react-data-table-component'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import { makeStyles } from '@material-ui/core/styles'
+import makeStyles from "@material-ui/styles/makeStyles";
 
 function Component12() {
-  
     useEffect(() => {
         
     },[])
