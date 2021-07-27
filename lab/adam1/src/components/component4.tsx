@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { Grid, Table, TableHeaderRow,  TableSummaryRow } from '@devexpress/dx-react-grid-material-ui'
 // import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 // import { Send } from '@material-ui/icons'
-import mock from '../data/mockData.json'
+// import mock from '../data/mockData.json'
+
 import './component4.scss'
 
 import { Button } from '@material-ui/core'
@@ -22,7 +23,7 @@ const Component4 = () => {
         { name: 'debits', title: 'Debits' },
         { name: 'credits', title: 'Credits' }
     ]
-    const rows = mock
+    // const rows = mock
 
     const columnExtensions: any = [{ columnName: 'id', width: '5rem', align: 'center' },
     { columnName: 'full_name', width: '10rem', wordWrapEnabled: true },
@@ -32,7 +33,7 @@ const Component4 = () => {
 
     return (
         <Paper>
-            <Grid rows={rows} columns={columns} >
+            {/* <Grid rows={rows} columns={columns} >
                 <SummaryState totalItems={[
                     {
                         columnName: 'debits',
@@ -48,7 +49,7 @@ const Component4 = () => {
                 <TableHeaderRow />
 
                 <TableSummaryRow />
-            </Grid>
+            </Grid> */}
         </Paper>
     )
 }

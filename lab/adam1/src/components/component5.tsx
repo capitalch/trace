@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useLayoutEffect, useRef } from 're
 // import { DataGrid } from '@material-ui/data-grid'
 import { interval } from 'rxjs'
 import { XGrid, useGridApiRef, GridToolbar, } from '@material-ui/x-grid'
-import mock from '../data/mockData.json'
+import mock from '../data/mock-data.json'
 import { randomInt, randomUserName } from '@material-ui/x-grid-data-generator'
 
 function Component5() {
