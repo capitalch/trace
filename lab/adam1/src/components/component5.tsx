@@ -10,20 +10,6 @@ function Component5() {
     const apiRef: any = useGridApiRef()
     const myRef: any = useRef(null)
     React.useEffect(() => {
-        // const subscription = interval(200).subscribe(() => {
-        //     apiRef.current.updateRows([
-        //         {
-        //             id: randomInt(1, 20),
-        //             full_name: randomUserName(),
-        //             debits: randomInt(10, 80),
-        //         },
-        //         {
-        //             id: randomInt(1, 4),
-        //             full_name: randomUserName(),
-        //             credits: randomInt(10, 80),
-        //         },
-        //     ])
-        // })
 
         return () => {
             // subscription.unsubscribe()
@@ -34,12 +20,13 @@ function Component5() {
         { field: 'id', headerName: 'Id', width: 90 },
         { field: 'full_name', headerName: 'Full name', width: 150 },
         { field: 'email', headerName: 'Email' },
-        { field: 'debits', headerName: 'Debits', type: 'number' },
+        { field: 'debits', headerName: 'Debits', type: 'number', width:150 },
         {
             field: 'credits',
             headerName: 'Credits',
             type: 'number',
             editable: true,
+            width:150,
         },
     ]
     const rows = mock

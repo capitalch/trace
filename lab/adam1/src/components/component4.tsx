@@ -25,10 +25,10 @@ const Component4 = () => {
     ]
     // const rows = mock
 
-    const columnExtensions: any = [{ columnName: 'id', width: '5rem', align: 'center' },
+    const columnExtensions: any = [{ columnName: 'id', width: 20, align: 'center' },
     { columnName: 'full_name', width: '10rem', wordWrapEnabled: true },
-    { columnName: 'debits', width: '10rem', align: 'right' },
-    { columnName: 'credits', width: '10rem', align: 'right' },
+    { columnName: 'debits', width: '50rem', align: 'right' },
+    { columnName: 'credits', width: '50rem', align: 'right' },
     ]
 
     return (
