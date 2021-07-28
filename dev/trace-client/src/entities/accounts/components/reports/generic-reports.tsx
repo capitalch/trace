@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import MaterialTable from 'material-table'
+import { XGrid, useGridApiRef, GridToolbar } from '@material-ui/x-grid'
+// import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
 import {
     Theme,
     createStyles,
@@ -9,23 +11,22 @@ import {
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
-import { tableIcons } from './material-table-icons'
+import { tableIcons } from '../common/material-table-icons'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function GenericReports({ loadReport }: any) {
     const [, setRefresh] = useState({})
-
+    const apiRef: any = useGridApiRef()
     const meta: any = useRef({
         isMounted: false,
-        // isLoading: false,
-        no: 10,
+        no: 100000,
         title: '',
         reportData: [],
     })
 
     const { getCurrentWindowSize } = useTraceGlobal()
     const { getCurrentEntity } = manageEntitiesState()
-    
+
     const { execGenericView } = utilMethods()
     const { toDecimalFormat } = utilMethods()
 
@@ -48,8 +49,79 @@ function GenericReports({ loadReport }: any) {
     }
 
     return selectLogic[loadReport]().display()
-
     function allTransactionsReport() {
+       
+        function display() {
+            return (
+                <Card style={{ height: '80vh', width: '100%' }}>
+                    <XGrid
+                        apiRef={apiRef}
+                        columns={getColumns()}
+                        rows={meta.current.reportData}
+                        // autoHeight={true}
+                        rowHeight={32}
+                        components={{
+                            Toolbar: GridToolbar
+                        }}
+                        checkboxSelection={true}
+                    />
+                </Card>
+            )
+
+            function getColumns(): any[] {
+                return [
+                    { headerName: 'Index', field: 'index', width: 20 },
+                    { headerName: 'Id', field: 'id', width: 20 },
+                    { headerName: 'Date', field: 'tranDate' },
+                    { headerName: 'Ref no', field: 'autoRefNo' },
+                    { headerName: 'Account', field: 'accName' },
+                    {
+                        headerName: 'Debit',
+                        field: 'debit',
+                        type: 'number',
+                        width: 140,
+                        // render: (rowData: any) => toDecimalFormat(rowData.debit),
+                    },
+                    {
+                        headerName: 'Credit',
+                        field: 'credit',
+                        type: 'number',
+                        // render: (rowData: any) => toDecimalFormat(rowData.credit),
+                    },
+
+                    { headerName: 'Instr no', field: 'instrNo' },
+                    { headerName: 'User ref no', field: 'userRefNo' },
+                    { headerName: 'Remarks', field: 'remarks' },
+                    { headerName: 'Line ref no', field: 'lineRefNo' },
+                    { headerName: 'Line remarks', field: 'lineRemarks' },
+                ]
+
+            }
+        }
+
+        async function fetchData() {
+            meta.current.title = 'All transactions report'
+            emit('SHOW-LOADING-INDICATOR', true)
+
+            const ret = await execGenericView({
+                isMultipleRows: true,
+                sqlKey: 'get_allTransactions',
+                args: {
+                    dateFormat: dateFormat,
+                    no: (getFromBag('allTrans') ?? meta.current.no) || null,
+                },
+                entityName: entityName,
+            })
+            emit('SHOW-LOADING-INDICATOR', false)
+
+            ret && (meta.current.reportData = ret)
+            meta.current.isMounted && setRefresh({})
+        }
+
+        return ({ display, fetchData })
+    }
+
+    function allTransactionsReport1() {
         function display() {
             const w = getCurrentWindowSize()
             return (
@@ -64,17 +136,14 @@ function GenericReports({ loadReport }: any) {
                         actions={getActionsList()}
                         options={{
                             paging: false,
-                            search: true, 
+                            search: true,
                             selection: true,
                             showTextRowsSelected: false,
-                            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),                            
+                            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
                             headerStyle: { position: 'sticky', top: 0 },
                             maxBodyHeight: 'calc(100vh - 15rem)',
-                            
+
                         }}
-                        // onSelectionChange={(rows)=>{
-                        //     console.log(rows)
-                        // }}
                         components={{
                             Action: (props: any) => {
                                 let ret = <></>
@@ -87,7 +156,7 @@ function GenericReports({ loadReport }: any) {
                                                 Last
                                             </Typography>
                                             <NativeSelect
-                                                className = 'select'
+                                                className='select'
                                                 value={
                                                     getFromBag('allTrans') ?? meta.current.no // if undefined or null then 10
                                                 }
@@ -172,7 +241,7 @@ function GenericReports({ loadReport }: any) {
                     // isFreeAction: true,
                     disabled: false,
                     hidden: false,
-                    position:'toolbar',
+                    position: 'toolbar',
                     onClick: () => { }, // This empty onClick is a hack. Without this warning appears
                 },
             ]
