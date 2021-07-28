@@ -1,0 +1,190 @@
+{
+    "title": "Electronics Rental",
+    "class": "basic-grid-1",
+    "validations": [],
+    "items": [
+        {
+            "type": "Text",
+            "name": "rentalFirstName",
+            "placeholder": "First Name",
+            "label": "First Name",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "First name is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "rentalLastName",
+            "placeholder": "Last Name",
+            "label": "Last Name",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Last name is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "rentalContactNo",
+            "placeholder": "Contact No.",
+            "label": "Contact No.",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Contact Number is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "rentalEmail",
+            "placeholder": "Email",
+            "label": "Email",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Email is required"
+                }
+            ]
+        },{
+            "type": "Datepicker",
+            "name": "rentalDOB",
+            "placeholder": "Date of Birth",
+            "label": "Date of Birth",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Date of birth is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "rentalPAN",
+            "placeholder": "PAN",
+            "label": "PAN",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "PAN is required"
+                }
+            ]
+        },{
+            "type": "Text",
+            "name": "rentalAadhar",
+            "placeholder": "Aadhar",
+            "label": "Aadhar",
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Aadhar is required"
+                }
+            ]
+        },{
+            "type": "Select",
+            "name": "rentalProduct",
+            "placeholder": "Product",
+            "label": "Product",
+            "options": {
+                "methodName": "electronicProduct",
+                "labelName": "label",
+                "valueName": "value"
+            },
+            "style":{"width":"150px"},
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Product is required"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "rentalType",
+            "label": "Rental Type",
+            "options": [
+                {
+                    "label": "Daily",
+                    "value": "daily"
+                },{
+                    "label": "Monthly",
+                    "value": "monthly"
+                },{
+                    "label": "Yearly",
+                    "value": "yearly"
+                }
+            ]
+        },{
+            "type": "Range",
+            "name": "rentalAddressArray",
+            "label": "Addresses",
+            "pattern": {
+                "type": "Set",
+                "label": "Address",
+                "name": "rentalAddressSet",
+                "validations": [],
+                "items": [
+                    {
+                        "type": "Text",
+                        "name": "rentalStreet",
+                        "placeholder": "Street Address",
+                        "label": "Street",
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "Street is required"
+                            }
+                        ]
+                    },{
+                        "type": "Select",
+                        "name": "rentalCity",
+                        "label": "City",
+                        "options": {
+                            "subscriptionName": "getStatesAndCities",
+                            "args":["cities"]
+                        },
+                        "style":{"width":"150px"},
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "City is required"
+                            }
+                        ]
+                    },{
+                        "type": "Select",
+                        "name": "rentalState",
+                        "placeholder": "State",
+                        "label": "State",
+                        "options": {
+                            "subscriptionName": "getStatesAndCities",
+                            "args":["states"]
+                        },
+                        "style":{"width":"150px"},
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "State is required"
+                            }
+                        ]
+                    },{
+                        "type": "Text",
+                        "name": "rentalPin",
+                        "placeholder": "Pin",
+                        "label": "Pin",
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "Pin is required"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },{
+            "type": "Submit",
+            "action": "submitForm1",
+            "className": "x-submit",
+            "label": "Submit",
+            "methodName": "submitForm1"
+        }
+    ]
+}
