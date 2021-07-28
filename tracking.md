@@ -96,6 +96,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 5.0 Show ledger balance at the time of data entry
 6.0 When new account code is created that should immediately be visible at payment options
 6.1 Bill wise payment
+6.2 Sales include price without GST
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.

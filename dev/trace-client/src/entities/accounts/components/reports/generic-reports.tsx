@@ -2,12 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import MaterialTable from 'material-table'
 import { XGrid, useGridApiRef, GridToolbar } from '@material-ui/x-grid'
 // import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
-import {
-    Theme,
-    createStyles,
-    makeStyles,
-    Card,
-} from '@material-ui/core'
+import { Theme, createStyles, makeStyles, Card } from '@material-ui/core'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
@@ -31,7 +26,15 @@ function GenericReports({ loadReport }: any) {
     const { toDecimalFormat } = utilMethods()
 
     const entityName = getCurrentEntity()
-    const { AddIcon, Box, emit, getFromBag, NativeSelect, setInBag, Typography, } = useSharedElements()
+    const {
+        AddIcon,
+        Box,
+        emit,
+        getFromBag,
+        NativeSelect,
+        setInBag,
+        Typography,
+    } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
     const classes = useStyles()
 
@@ -50,7 +53,6 @@ function GenericReports({ loadReport }: any) {
 
     return selectLogic[loadReport]().display()
     function allTransactionsReport() {
-       
         function display() {
             return (
                 <Card style={{ height: '80vh', width: '100%' }}>
@@ -58,10 +60,9 @@ function GenericReports({ loadReport }: any) {
                         apiRef={apiRef}
                         columns={getColumns()}
                         rows={meta.current.reportData}
-                        // autoHeight={true}
                         rowHeight={32}
                         components={{
-                            Toolbar: GridToolbar
+                            Toolbar: GridToolbar,
                         }}
                         checkboxSelection={true}
                     />
@@ -71,7 +72,7 @@ function GenericReports({ loadReport }: any) {
             function getColumns(): any[] {
                 return [
                     { headerName: 'Index', field: 'index', width: 20 },
-                    { headerName: 'Id', field: 'id', width: 20 },
+                    { headerName: 'Id', field: 'id1', width: 20 },
                     { headerName: 'Date', field: 'tranDate' },
                     { headerName: 'Ref no', field: 'autoRefNo' },
                     { headerName: 'Account', field: 'accName' },
@@ -95,7 +96,6 @@ function GenericReports({ loadReport }: any) {
                     { headerName: 'Line ref no', field: 'lineRefNo' },
                     { headerName: 'Line remarks', field: 'lineRemarks' },
                 ]
-
             }
         }
 
@@ -103,7 +103,7 @@ function GenericReports({ loadReport }: any) {
             meta.current.title = 'All transactions report'
             emit('SHOW-LOADING-INDICATOR', true)
 
-            const ret = await execGenericView({
+            const ret: any[] = await execGenericView({
                 isMultipleRows: true,
                 sqlKey: 'get_allTransactions',
                 args: {
@@ -113,12 +113,20 @@ function GenericReports({ loadReport }: any) {
                 entityName: entityName,
             })
             emit('SHOW-LOADING-INDICATOR', false)
-
-            ret && (meta.current.reportData = ret)
+            let i = 1
+            function incr(){
+                return(i++)
+            }
+            ret &&
+                (meta.current.reportData = ret.map((x: any) => {
+                    x['id1'] = x.id
+                    x.id = incr()
+                    return x
+                }))
             meta.current.isMounted && setRefresh({})
         }
 
-        return ({ display, fetchData })
+        return { display, fetchData }
     }
 
     function allTransactionsReport1() {
@@ -139,47 +147,58 @@ function GenericReports({ loadReport }: any) {
                             search: true,
                             selection: true,
                             showTextRowsSelected: false,
-                            rowStyle: rowData => ({ backgroundColor: rowData.tableData.checked ? '#37b15933' : '' }),
+                            rowStyle: (rowData) => ({
+                                backgroundColor: rowData.tableData.checked
+                                    ? '#37b15933'
+                                    : '',
+                            }),
                             headerStyle: { position: 'sticky', top: 0 },
                             maxBodyHeight: 'calc(100vh - 15rem)',
-
                         }}
                         components={{
                             Action: (props: any) => {
                                 let ret = <></>
                                 if (props.action.name === 'select') {
                                     ret = (
-                                        <Box className="select-last" component="span">
+                                        <Box
+                                            className="select-last"
+                                            component="span">
                                             <Typography
                                                 variant="caption"
                                                 component="span">
                                                 Last
                                             </Typography>
                                             <NativeSelect
-                                                className='select'
+                                                className="select"
                                                 value={
-                                                    getFromBag('allTrans') ?? meta.current.no // if undefined or null then 10
+                                                    getFromBag('allTrans') ??
+                                                    meta.current.no // if undefined or null then 10
                                                 }
                                                 style={{
                                                     width: '3.3rem',
                                                     marginLeft: '0.1rem',
                                                 }}
                                                 onChange={(e) => {
-                                                    setInBag('allTrans', e.target.value)
+                                                    setInBag(
+                                                        'allTrans',
+                                                        e.target.value
+                                                    )
                                                     fetchData()
                                                 }}>
                                                 <option value={10}>10</option>
                                                 <option value={50}>50</option>
                                                 <option value={100}>100</option>
                                                 <option value={500}>500</option>
-                                                <option value={1000}>1000</option>
+                                                <option value={1000}>
+                                                    1000
+                                                </option>
                                                 <option value={''}>All</option>
                                             </NativeSelect>
                                         </Box>
                                     )
                                 }
                                 return ret
-                            }
+                            },
                         }}
                     />
                 </Card>
@@ -230,7 +249,6 @@ function GenericReports({ loadReport }: any) {
                 { title: 'Line ref no', field: 'lineRefNo' },
                 { title: 'Line remarks', field: 'lineRemarks' },
             ]
-
         }
 
         function getActionsList(): any {
@@ -242,23 +260,23 @@ function GenericReports({ loadReport }: any) {
                     disabled: false,
                     hidden: false,
                     position: 'toolbar',
-                    onClick: () => { }, // This empty onClick is a hack. Without this warning appears
+                    onClick: () => {}, // This empty onClick is a hack. Without this warning appears
                 },
             ]
         }
 
-        return ({ display, fetchData })
+        return { display, fetchData }
     }
 }
 export { GenericReports }
 
-const useStyles: any = makeStyles((theme: Theme) => createStyles({
-    content: {
-        '& .select': {
-            fontSize: '0.8rem',
-            minWidth: '4rem'
-        }
-    }
-}))
-
-
+const useStyles: any = makeStyles((theme: Theme) =>
+    createStyles({
+        content: {
+            '& .select': {
+                fontSize: '0.8rem',
+                minWidth: '4rem',
+            },
+        },
+    })
+)
