@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 // import MaterialTable from 'material-table'
 import { XGrid, GridToolbar } from '@material-ui/x-grid'
 // import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
-import { Theme, createStyles, makeStyles, Card } from '@material-ui/core'
+import { Theme, createStyles, makeStyles, Card, Typography, Box } from '@material-ui/core'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
@@ -62,8 +62,12 @@ function GenericReports({ loadReport }: any) {
     function CustomToolbar() {
         return (
             <div className="custom-toolbar">
-                <label className='title'>{title}</label>
+                <Typography className='toolbar-title'>{title}</Typography>
                 <GridToolbar />
+                <Box className='toolbar-selected-summary'>
+                    <Typography color='secondary'>Selected debits:</Typography>
+                    <Typography color='secondary'>Selected credits:</Typography>
+                </Box>
             </div>
         )
     }
@@ -103,11 +107,19 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginLeft: '10px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
-                '& .title': {
+                '& .toolbar-title': {
                     color: 'dodgerblue',
-                    fontSize:'1rem',
-                    fontWeight: 'bold'
+                    fontSize:'1.2rem',
+                    fontWeight: 'bold',
+                    // lineHeight:'2rem',
+                    // height:'1.4rem'
+                    marginTop: theme.spacing(0.4)
                 },
+                '& .toolbar-selected-summary': {
+                    display: 'flex',
+                    marginTop: theme.spacing(0.4)
+                    
+                }
             },
             '& .select': {
                 fontSize: '0.8rem',
