@@ -21,7 +21,7 @@ function GenericReports({ loadReport }: any) {
     // const { getCurrentWindowSize } = useTraceGlobal()
     const { getCurrentEntity } = manageEntitiesState()
 
-    const { execGenericView  } = utilMethods()
+    const { execGenericView } = utilMethods()
 
     const entityName = getCurrentEntity()
     const {
@@ -33,7 +33,7 @@ function GenericReports({ loadReport }: any) {
         // Typography,
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
-    // const classes = useStyles()
+    const classes = useStyles()
 
     useEffect(() => {
         setIsMounted(true)
@@ -44,7 +44,9 @@ function GenericReports({ loadReport }: any) {
     }, [])
 
     return (
-        <Card style={{ height: '82vh', width: '100%' }}>
+        <Card
+            // style={{ height: '82vh', width: '100%' }}
+            className={classes.content}>
             <XGrid
                 columns={columns}
                 rows={rows}
@@ -57,10 +59,10 @@ function GenericReports({ loadReport }: any) {
         </Card>
     )
 
-    function CustomToolbar(){
-        return(
-            <div style = {{display:'flex'}}>
-                <label>{title}</label>
+    function CustomToolbar() {
+        return (
+            <div className="custom-toolbar">
+                <label className='title'>{title}</label>
                 <GridToolbar />
             </div>
         )
@@ -92,6 +94,21 @@ export { GenericReports }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
+            height: '83vh',
+            width: '100%',
+            marginTop: '5px',
+            '& .custom-toolbar': {
+                display: 'flex',
+                // color: theme.palette.secondary.dark,// 'dodgerblue',
+                marginLeft: '10px',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                '& .title': {
+                    color: 'dodgerblue',
+                    fontSize:'1rem',
+                    fontWeight: 'bold'
+                },
+            },
             '& .select': {
                 fontSize: '0.8rem',
                 minWidth: '4rem',
