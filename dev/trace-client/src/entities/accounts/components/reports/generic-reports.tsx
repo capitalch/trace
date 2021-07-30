@@ -1,8 +1,27 @@
 import { useEffect, useState, useRef } from 'react'
 // import MaterialTable from 'material-table'
-import { XGrid, GridToolbar, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer, GridToolbarColumnsButton, GridFooter, GridFooterContainer } from '@material-ui/x-grid'
+import {
+    XGrid,
+    GridApi,
+    GridToolbar,
+    GridToolbarFilterButton,
+    GridToolbarDensitySelector,
+    GridToolbarExport,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridFooter,
+    GridFooterContainer,
+    useGridApiRef
+} from '@material-ui/x-grid'
 // import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
-import { Theme, createStyles, makeStyles, Card, Typography, Box } from '@material-ui/core'
+import {
+    Theme,
+    createStyles,
+    makeStyles,
+    Card,
+    Typography,
+    Box,
+} from '@material-ui/core'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
@@ -18,8 +37,10 @@ function GenericReports({ loadReport }: any) {
     const { args, columns, sqlQueryId, title } = selectLogic[loadReport]()
     const [rows, setRows]: any[] = useState([])
     const [selectedRowsCount, setSelectedRowsCount] = useState(0)
+    const [selectedTotal, setSelectedTotal] = useState(0)
+    const [grandTotal, setGrandTotal] = useState({ debits: 0, credits: 0 })
     const [isMounted, setIsMounted] = useState(false)
-
+    const apiRef = useGridApiRef()
     // const { getCurrentWindowSize } = useTraceGlobal()
     const { getCurrentEntity } = manageEntitiesState()
 
@@ -38,58 +59,66 @@ function GenericReports({ loadReport }: any) {
     const classes = useStyles()
 
     useEffect(() => {
-        setIsMounted(true)
+        // setIsMounted(true)
         fetchRows(sqlQueryId, args)
         return () => {
-            setIsMounted(false)
+            // setIsMounted(false)
         }
     }, [])
 
+    console.log('rendered')
     return (
         <Card
             // style={{ height: '82vh', width: '100%' }}
             className={classes.content}>
             <XGrid
+                apiRef={apiRef}
                 columns={columns}
                 rows={rows}
                 rowHeight={32}
-
                 components={{
                     Toolbar: CustomGridToolbar,
                     Footer: CustomGridFooter,
                 }}
                 checkboxSelection={true}
                 componentsProps={{
-                    footer: { count: rows.length, selectedRowsCount: selectedRowsCount },
+                    footer: {
+                        count: rows.length,
+                        selectedRowsCount: selectedRowsCount,
+                        grandTotal: grandTotal,
+                        selectedTotal: selectedTotal,
+                    },
                 }}
                 onSelectionModelChange={onSelectModelChange}
+                onFilterModelChange={onFilterModelChange}
+                showColumnRightBorder={true}
+                showCellRightBorder={true}
             />
         </Card>
     )
 
     function onSelectModelChange(nrows: any) {
         setSelectedRowsCount(nrows.length)
+        const s1 = apiRef.current.getSelectedRows()
+        console.log(s1)
+        
+    }
+
+    function onFilterModelChange(e:any){
+        console.log('count:', apiRef.current.getRowsCount())
     }
 
     function CustomGridToolbar() {
         return (
             <GridToolbarContainer className="custom-toolbar">
-                <Typography variant='h6' className='toolbar-title'>{title}</Typography>
-                <GridToolbarColumnsButton color='secondary' />
-                <GridToolbarFilterButton color='secondary' />
-                <GridToolbarDensitySelector color='secondary' />
-                <GridToolbarExport color='secondary' />
-
+                <Typography variant="h6" className="toolbar-title">
+                    {title}
+                </Typography>
+                <GridToolbarColumnsButton color="secondary" />
+                <GridToolbarFilterButton color="secondary" />
+                <GridToolbarDensitySelector color="secondary" />
+                <GridToolbarExport color="secondary" />
             </GridToolbarContainer>
-            // <div className="custom-toolbar">
-            //     <Typography className='toolbar-title'>{title}</Typography>
-            //     <GridToolbar />
-            //     <Box className='toolbar-selected-summary'>
-            //         <Typography color='secondary'>Selected debits:</Typography>
-            //         <Typography color='secondary'>Selected credits:</Typography>
-            //     </Box>
-            //     <CustomRowCounter />
-            // </div>
         )
     }
 
@@ -97,15 +126,11 @@ function GenericReports({ loadReport }: any) {
         return (
             <GridFooterContainer>
                 <span>Selected rows count:{props.selectedRowsCount}</span>
-                <span>Count of rows:{props.count}</span>                
+                <span>Count of rows:{props.count}</span>
+                <span>Total debits:{props?.grandTotal?.debits}</span>
+                <span>Total credits:{props?.grandTotal?.credits}</span>
             </GridFooterContainer>
         )
-    }
-
-    function CustomRowCounter() {
-        // const { rows } = useGridSlotComponentProps()
-        const rows = []
-        return (<div>Row count: {rows.length}</div>)
     }
 
     async function fetchRows(queryId: string, arg: any) {
@@ -121,12 +146,21 @@ function GenericReports({ loadReport }: any) {
         function incr() {
             return i++
         }
+        const tot = {
+            debits: 0,
+            credits: 0,
+        }
         const temp: any[] = ret.map((x: any) => {
             x['id1'] = x.id
             x.id = incr()
+            tot.debits = tot.debits + x.debit
+            tot.credits = tot.credits + x.credit
             return x
         })
-        ret && setRows(temp)
+        if (ret) {
+            setRows(temp)
+            setGrandTotal(tot)
+        }
     }
 }
 export { GenericReports }
@@ -139,7 +173,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: '5px',
             '& .custom-toolbar': {
                 display: 'flex',
-                // color: theme.palette.secondary.dark,// 'dodgerblue',
                 marginLeft: '10px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
@@ -147,15 +180,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: 'dodgerblue',
                     fontSize: '1.2rem',
                     fontWeight: 'bold',
-                    // lineHeight:'2rem',
-                    // height:'1.4rem'
-                    // marginTop: theme.spacing(0.4)
                 },
                 '& .toolbar-selected-summary': {
                     display: 'flex',
-                    marginTop: theme.spacing(0.4)
-
-                }
+                    marginTop: theme.spacing(0.4),
+                },
             },
             '& .select': {
                 fontSize: '0.8rem',
@@ -164,3 +193,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
+
+// <div className="custom-toolbar">
+//     <Typography className='toolbar-title'>{title}</Typography>
+//     <GridToolbar />
+//     <Box className='toolbar-selected-summary'>
+//         <Typography color='secondary'>Selected debits:</Typography>
+//         <Typography color='secondary'>Selected credits:</Typography>
+//     </Box>
+//     <CustomRowCounter />
+// </div>
