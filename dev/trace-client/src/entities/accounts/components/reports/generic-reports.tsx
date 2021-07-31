@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 // import MaterialTable from 'material-table'
 import {
+    escapeRegExp,
     XGrid,
     GridApi,
     GridToolbar,
@@ -18,9 +19,6 @@ import {
     Theme,
     createStyles,
     makeStyles,
-    Card,
-    Typography,
-    Box,
 } from '@material-ui/core'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
@@ -31,43 +29,55 @@ import { useAllTransactions } from './helpers/all-transactions'
 import { useGridSlotComponentProps } from '@material-ui/data-grid'
 
 function GenericReports({ loadReport }: any) {
-    const [,setRefresh] = useState({})
+    const [, setRefresh] = useState({})
     const selectLogic: any = {
         allTransactions: useAllTransactions,
     }
+    const meta: any = useRef({
+        isMounted: false,
+        rows: [],
+        selectedRowsCount: 0,
+        selectedTotal: 0,
+        grandTotal: {},
+    })
     const { args, columns, sqlQueryId, title } = selectLogic[loadReport]()
     const [rows, setRows]: any[] = useState([])
+    const [searchText, setSearchText] = useState('')
     const [selectedRowsCount, setSelectedRowsCount] = useState(0)
     const [selectedTotal, setSelectedTotal] = useState(0)
-    const [grandTotal, setGrandTotal] = useState({ debits: 0, credits: 0 })
-    const [isMounted, setIsMounted] = useState(false)
+    // const [grandTotal, setGrandTotal] = useState({ debits: 0, credits: 0 })
+    // const [isMounted, setIsMounted] = useState(false)
     const apiRef = useGridApiRef()
     // const { getCurrentWindowSize } = useTraceGlobal()
     const { getCurrentEntity } = manageEntitiesState()
-
     const { execGenericView } = utilMethods()
-
     const entityName = getCurrentEntity()
     const {
-        // AddIcon,
-        // Box,
+        Box,
+        Card,
+        CloseIcon,
         emit,
         getFromBag,
-        // setInBag,
-        // Typography,
+        IconButton,
+        // setInBag,  
+        SearchIcon,
+        TextField,
+        Typography,
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
     const classes = useStyles()
 
     useEffect(() => {
         // setIsMounted(true)
+        meta.current.isMounted = true
         fetchRows(sqlQueryId, args)
         return () => {
             // setIsMounted(false)
+            meta.current.isMounted = false
         }
     }, [])
 
-    // console.log('rendered')
+    console.log('rendered')
     return (
         <Card
             // style={{ height: '82vh', width: '100%' }}
@@ -75,7 +85,7 @@ function GenericReports({ loadReport }: any) {
             <XGrid
                 apiRef={apiRef}
                 columns={columns}
-                rows={rows}
+                rows={meta.current.rows}
                 rowHeight={32}
                 components={{
                     Toolbar: CustomGridToolbar,
@@ -83,20 +93,39 @@ function GenericReports({ loadReport }: any) {
                 }}
                 checkboxSelection={true}
                 componentsProps={{
+                    toolbar: {
+                        value: searchText,
+                        onChange: (event: any) => requestSearch(event.target.value),
+                        clearSearch: () => requestSearch(''),
+                    },
                     footer: {
-                        count: rows.length,
+                        // count: meta.current.rows.length,
                         selectedRowsCount: selectedRowsCount,
-                        grandTotal: grandTotal,
+                        grandTotal: meta.current.grandTotal,
                         selectedTotal: selectedTotal,
                     },
                 }}
-                onSelectionModelChange={onSelectModelChange}
-                onFilterModelChange={onFilterModelChange}
+                // onSelectionModelChange={onSelectModelChange}
+                // onFilterModelChange={onFilterModelChange}
                 showColumnRightBorder={true}
                 showCellRightBorder={true}
             />
         </Card>
     )
+
+    function requestSearch(searchValue: string) {
+        setSearchText(searchValue)
+        const searchRegex = new RegExp(escapeRegExp(searchValue), 'i');
+        const filteredRows = rows.filter((row: any) => {
+            return Object.keys(row).some((field) => {
+                const temp = row[field] ? row[field].toString(): ''
+                // return searchRegex.test(row[field].toString())
+                return searchRegex.test(temp)
+            })
+        })
+
+        setRows(filteredRows)
+    }
 
     function onSelectModelChange(nrows: any) {
         setSelectedRowsCount(nrows.length)
@@ -105,23 +134,46 @@ function GenericReports({ loadReport }: any) {
         // setRefresh({})
         const s1 = apiRef.current.getSelectedRows()
         console.log(s1)
-        
+
     }
 
-    function onFilterModelChange(e:any){
+    function onFilterModelChange(e: any) {
         console.log('count:', apiRef.current.getRowsCount())
     }
 
-    function CustomGridToolbar() {
+    function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className="custom-toolbar">
-                <Typography variant="h6" className="toolbar-title">
+                <Typography className="toolbar-title">
                     {title}
                 </Typography>
-                <GridToolbarColumnsButton color="secondary" />
-                <GridToolbarFilterButton color="secondary" />
-                <GridToolbarDensitySelector color="secondary" />
-                <GridToolbarExport color="secondary" />
+                <div>
+                    <GridToolbarColumnsButton color="secondary" />
+                    <GridToolbarFilterButton color="secondary" />
+                    <GridToolbarDensitySelector color="secondary" />
+                    <GridToolbarExport color="secondary" />
+                </div>
+                {/* global filter */}
+                <TextField
+                    variant="standard"
+                    value={props.value}
+                    onChange={props.onChange}
+                    placeholder="Search…"
+                    className='global-search'
+                    InputProps={{
+                        startAdornment: <SearchIcon fontSize="small" />,
+                        endAdornment: (
+                            <IconButton
+                                title="Clear"
+                                aria-label="Clear"
+                                size="small"
+                                style={{ visibility: props.value ? 'visible' : 'hidden' }}
+                                onClick={props.clearSearch}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        ),
+                    }}
+                />
             </GridToolbarContainer>
         )
     }
@@ -130,7 +182,7 @@ function GenericReports({ loadReport }: any) {
         return (
             <GridFooterContainer>
                 <span>Selected rows count:{props.selectedRowsCount}</span>
-                <span>Count of rows:{props.count}</span>
+                <span>Count of rows:{props?.grandTotal?.count}</span>
                 <span>Total debits:{props?.grandTotal?.debits}</span>
                 <span>Total credits:{props?.grandTotal?.credits}</span>
             </GridFooterContainer>
@@ -153,6 +205,7 @@ function GenericReports({ loadReport }: any) {
         const tot = {
             debits: 0,
             credits: 0,
+            count:0,
         }
         const temp: any[] = ret.map((x: any) => {
             x['id1'] = x.id
@@ -161,9 +214,13 @@ function GenericReports({ loadReport }: any) {
             tot.credits = tot.credits + x.credit
             return x
         })
+        tot.count= ret?.length
         if (ret) {
-            setRows(temp)
-            setGrandTotal(tot)
+            meta.current.rows = temp
+            meta.current.grandTotal = tot
+            // setRows(temp)
+            meta.current.isMounted && setRefresh({})
+            // setGrandTotal(tot)
         }
     }
 }
@@ -180,20 +237,27 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginLeft: '10px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
+                columnGap: '1.5rem',
+                // marginBottom: '1rem',
+                borderBottom: '1px solid lightgrey',
                 '& .toolbar-title': {
                     color: 'dodgerblue',
                     fontSize: '1.2rem',
                     fontWeight: 'bold',
                 },
-                '& .toolbar-selected-summary': {
-                    display: 'flex',
-                    marginTop: theme.spacing(0.4),
-                },
+                '& .global-search': {
+                    marginLeft: 'auto',
+                    marginRight: '1rem'
+                }
+                // '& .toolbar-selected-summary': {
+                //     display: 'flex',
+                //     marginTop: theme.spacing(0.4),
+                // },
             },
-            '& .select': {
-                fontSize: '0.8rem',
-                minWidth: '4rem',
-            },
+            // '& .select': {
+            //     fontSize: '0.8rem',
+            //     minWidth: '4rem',
+            // },
         },
     })
 )
