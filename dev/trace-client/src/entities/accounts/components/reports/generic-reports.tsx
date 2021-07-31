@@ -31,6 +31,7 @@ import { useAllTransactions } from './helpers/all-transactions'
 import { useGridSlotComponentProps } from '@material-ui/data-grid'
 
 function GenericReports({ loadReport }: any) {
+    const [,setRefresh] = useState({})
     const selectLogic: any = {
         allTransactions: useAllTransactions,
     }
@@ -66,7 +67,7 @@ function GenericReports({ loadReport }: any) {
         }
     }, [])
 
-    console.log('rendered')
+    // console.log('rendered')
     return (
         <Card
             // style={{ height: '82vh', width: '100%' }}
@@ -99,6 +100,9 @@ function GenericReports({ loadReport }: any) {
 
     function onSelectModelChange(nrows: any) {
         setSelectedRowsCount(nrows.length)
+        // apiRef.current.showFilterPanel('tranDate')
+        const s2 = apiRef.current.getVisibleRowModels()
+        // setRefresh({})
         const s1 = apiRef.current.getSelectedRows()
         console.log(s1)
         
