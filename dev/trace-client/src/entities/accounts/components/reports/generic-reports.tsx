@@ -99,7 +99,7 @@ function GenericReports({ loadReport }: any) {
     )
 
     function onSelectModelChange(nrows: any) {
-        setSelectedRowsCount(nrows.length)
+        // setSelectedRowsCount(nrows.length)
         // apiRef.current.showFilterPanel('tranDate')
         const s2 = apiRef.current.getVisibleRowModels()
         // setRefresh({})
@@ -109,6 +109,7 @@ function GenericReports({ loadReport }: any) {
     }
 
     function onFilterModelChange(e:any){
+        const s2 = apiRef.current.getVisibleRowModels()
         console.log('count:', apiRef.current.getRowsCount())
     }
 
