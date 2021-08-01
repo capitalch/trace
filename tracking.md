@@ -97,6 +97,7 @@ a4: 297 X 210 MM = 3508 X 2480 px
 6.0 When new account code is created that should immediately be visible at payment options
 6.1 Bill wise payment
 6.2 Sales include price without GST
+6.3 Generic Grid for reporting purpose
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
@@ -115,6 +116,9 @@ a4: 297 X 210 MM = 3508 X 2480 px
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 26-07-2021 - 31-07-2021
+1. All transactions report
 
 # 19-07-2021 - 20-07-2021
 1. Fixed bug in purchase, gst amount does auto change

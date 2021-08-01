@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 // import MaterialTable from 'material-table'
 import {
-    escapeRegExp,
+    // escapeRegExp,
     XGrid,
     GridApi,
     GridToolbar,
@@ -13,22 +13,18 @@ import {
     GridFooter,
     GridFooterContainer,
     useGridApiRef,
-    GridRowId
+    GridRowId,
+    GridRowData,
 } from '@material-ui/x-grid'
-// import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
-import {
-    Theme,
-    createStyles,
-    makeStyles,
-    Box,
-    Button,
-} from '@material-ui/core'
+// import { escapeRegExp,} from '@material-ui/data-grid'
+
+import { Theme, createStyles, makeStyles, Box, Button } from '@material-ui/core'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useAllTransactions } from './helpers/all-transactions'
-import { GridRowData, useGridSlotComponentProps } from '@material-ui/data-grid'
+// import { GridRowData, useGridSlotComponentProps } from '@material-ui/data-grid'
 
 function GenericReports({ loadReport }: any) {
     const [, setRefresh] = useState({})
@@ -39,20 +35,20 @@ function GenericReports({ loadReport }: any) {
         filteredRows: [],
         filteredSummary: {
             count: 0,
-            debits: 0,
-            credits: 0
+            debit: 0,
+            credit: 0,
         },
         totalSummary: {
             count: 0,
             debits: 0,
-            credits: 0
+            credits: 0,
         },
         isMounted: false,
         rows: [],
         selectedSummary: {
             count: 0,
             debits: 0,
-            credits: 0
+            credits: 0,
         },
         searchText: '',
         selectedRowsCount: 0,
@@ -70,12 +66,13 @@ function GenericReports({ loadReport }: any) {
         CloseIcon,
         emit,
         getFromBag,
+        NativeSelect,
         IconButton,
         SearchIcon,
         TextField,
         Typography,
     } = useSharedElements()
-    const dateFormat = getFromBag('dateFormat')
+    // const dateFormat = getFromBag('dateFormat')
     const classes = useStyles()
 
     useEffect(() => {
@@ -87,42 +84,10 @@ function GenericReports({ loadReport }: any) {
         }
     }, [])
 
-    useEffect(() => {
-        return (
-            apiRef.current.subscribeEvent('filterModelChange', (params: any) => {
-                // console.log('params:', params)
-                // setRefresh({})
-                // console.log('Filter count:', apiRef.current.getVisibleRowModels())
-                const map = apiRef.current.getVisibleRowModels()
-                const arr: any[] = []
-                map.forEach((value: GridRowData, key: GridRowId) => {
-                    arr.push(value)
-                })
-                const obj = arr.reduce((prev: any, current: any) => {
-                    prev.count = prev.count || 0
-                    prev.debit = prev.debit || 0.00
-                    prev.credit = prev.credit || 0.00
-                    prev.count = prev.count + 1
-                    prev.debit = (prev.debit || 0.00) + (current.debit || 0.00)
-                    prev.credit = (prev.credit || 0.00) + (current.credit || 0.00)
-                    return (prev)
-                }, {})
-                _.isEmpty(obj) ? meta.current.filteredSummary = { count: 0, debits: 0, credits: 0 } : meta.current.filteredSummary = obj
-                meta.current.isMounted && setRefresh({})
-                // const rowsArray = Object.values(apiRef.current.getVisibleRowModels())
-                // console.log(rowsArray)
-                // for (let map of rowsMap) {
-                //     console.log(map)
-                // }
-            })
-        )
-    }, [apiRef])
-
     console.log('rendered')
 
     return (
-        <Card
-            className={classes.content}>
+        <Card className={classes.content}>
             <XGrid
                 apiRef={apiRef}
                 columns={columns}
@@ -136,17 +101,19 @@ function GenericReports({ loadReport }: any) {
                 componentsProps={{
                     toolbar: {
                         value: meta.current.searchText,
-                        onChange: (event: any) => requestSearch(event.target.value),
+                        onChange: (event: any) =>
+                            requestSearch(event.target.value),
                         clearSearch: () => requestSearch(''),
                     },
                     footer: {
                         selectedSummary: meta.current.selectedSummary,
+                        filteredSummary: meta.current.filteredSummary,
                         totalSummary: meta.current.totalSummary,
                     },
                 }}
                 onRowClick={onRowClick}
                 onSelectionModelChange={onSelectModelChange}
-                onFilterModelChange={onFilterModelChange}
+                // onFilterModelChange={onFilterModelChange}
                 showColumnRightBorder={true}
                 showCellRightBorder={true}
             />
@@ -156,7 +123,7 @@ function GenericReports({ loadReport }: any) {
     function requestSearch(searchValue: string) {
         // setSearchText(searchValue)
         meta.current.searchText = searchValue
-        const searchRegex = new RegExp(escapeRegExp(searchValue), 'i');
+        const searchRegex = new RegExp(searchValue, 'i')
         const filteredRows = meta.current.rows.filter((row: any) => {
             return Object.keys(row).some((field) => {
                 const temp = row[field] ? row[field].toString() : ''
@@ -170,51 +137,89 @@ function GenericReports({ loadReport }: any) {
     }
 
     function onSelectModelChange(rowIds: any) {
-        // meta.current.selectedSummary.count = rowIds.length
-        // const selectedRows = rowIds.map((r: any) => {
-        //     const row = rows[r - 1]
-        // })
         const rows = meta.current.rows
         const obj = rowIds.reduce((prev: any, current: any) => {
             prev.count = prev.count ? prev.count + 1 : 1
-            prev.debits = prev.debits ? prev.debits + rows[current - 1].debit : rows[current - 1].debit || 0.00
-            prev.credits = prev.credits ? prev.credits + rows[current - 1].credit : rows[current - 1].credit || 0.00
-            return (prev)
+            prev.debits = prev.debits
+                ? prev.debits + rows[current - 1].debit
+                : rows[current - 1].debit || 0.0
+            prev.credits = prev.credits
+                ? prev.credits + rows[current - 1].credit
+                : rows[current - 1].credit || 0.0
+            return prev
         }, {})
 
-        meta.current.selectedSummary = _.isEmpty(obj) ? { count: 0, debits: 0.00, credits: 0.00 } : obj
+        meta.current.selectedSummary = _.isEmpty(obj)
+            ? { count: 0, debits: 0.0, credits: 0.0 }
+            : obj
 
         meta.current.isMounted && setRefresh({})
     }
 
-    function onRowClick(e: any, f: any) {
-        // console.log('e:', e)
-        // console.log('f:', f)
-        console.log(meta.current)
-        console.log('Filter count:', apiRef.current.getVisibleRowModels())
-        // const rws = apiRef.current.getVisibleRowModels()
-        // console.log(rws)
+    function onFilteredClick() {
+        const rowsMap = apiRef.current.getVisibleRowModels()
+        const arr: any[] = []
+        rowsMap.forEach((value: GridRowData, key: GridRowId) => {
+            arr.push(value)
+        })
+        const obj = arr.reduce((prev: any, current: any) => {
+            // prev.count = prev.count || 0
+            // prev.debit = prev.debit || 0.00
+            // prev.credit = prev.credit || 0.00
+            prev.count = (prev.count || 0) + 1
+            prev.debit = (prev.debit || 0.0) + (current.debit || 0.0)
+            prev.credit = (prev.credit || 0.0) + (current.credit || 0.0)
+            return prev
+        }, {})
+        _.isEmpty(obj)
+            ? (meta.current.filteredSummary = { count: 0, debit: 0, credit: 0 })
+            : (meta.current.filteredSummary = obj)
+        meta.current.isMounted && setRefresh({})
     }
 
-    function onFilterModelChange(e: any) {
-        // apiRef.current.applyFilters()
-        // console.log('Filter count:', apiRef.current.getVisibleRowModels())
-        // setRefresh({})
+    function onRowClick(e: any, f: any) {
+        console.log(meta.current)
+        console.log('Filter count:', apiRef.current.getVisibleRowModels())
     }
 
     function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className="custom-toolbar">
-                <Typography className="toolbar-title">
-                    {title}
-                </Typography>
+                <Typography className="toolbar-title">{title}</Typography>
                 <div>
                     <GridToolbarColumnsButton color="secondary" />
                     <GridToolbarFilterButton color="secondary" />
                     <GridToolbarDensitySelector color="secondary" />
                     <GridToolbarExport color="secondary" />
                 </div>
-                <Button variant='text' color='secondary'>Filtered</Button>
+                <Button
+                    variant="text"
+                    color="secondary"
+                    onClick={onFilteredClick}>
+                    Filtered
+                </Button>
+                {/* <div> */}
+                    <span>Last</span>
+                    <NativeSelect
+                        // value={getFromBag(loadComponent) || meta.current.no}
+                        value={10}
+                        style={{
+                            fontSize: '0.8rem',
+                            width: '3.3rem',
+                            marginLeft: '0.1rem',
+                        }}
+                        // onChange={(e) => {
+                        //     setInBag(loadComponent, e.target.value)
+                        //     getData()
+                        // }}
+                    >
+                        <option value={10}>10</option>
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={0}>All</option>
+                    </NativeSelect>
+                {/* </div> */}
+
                 {/* global filter */}
                 <TextField
                     variant="standard"
@@ -222,7 +227,7 @@ function GenericReports({ loadReport }: any) {
                     value={props.value}
                     onChange={props.onChange}
                     placeholder="Search…"
-                    className='global-search'
+                    className="global-search"
                     InputProps={{
                         startAdornment: <SearchIcon fontSize="small" />,
                         endAdornment: (
@@ -230,7 +235,11 @@ function GenericReports({ loadReport }: any) {
                                 title="Clear"
                                 aria-label="Clear"
                                 size="small"
-                                style={{ visibility: props.value ? 'visible' : 'hidden' }}
+                                style={{
+                                    visibility: props.value
+                                        ? 'visible'
+                                        : 'hidden',
+                                }}
                                 onClick={props.clearSearch}>
                                 <CloseIcon fontSize="small" />
                             </IconButton>
@@ -241,24 +250,55 @@ function GenericReports({ loadReport }: any) {
         )
     }
 
-
     function CustomGridFooter(props: any) {
         return (
-            <GridFooterContainer className='custom-footer'>
+            <GridFooterContainer className="custom-footer">
                 {/* Selected */}
                 <div style={{ display: 'flex' }}>
                     <div>Selected: </div>
-                    <div> Rows: {props.selectedSummary.count},{' '} </div>
-                    <div> Debits: {toDecimalFormat(props.selectedSummary.debits)}, </div>
-                    <div> Credits: {toDecimalFormat(props.selectedSummary.credits)}</div>
+                    <div> Rows: {props.selectedSummary.count}, </div>
+                    <div>
+                        {' '}
+                        Debits: {toDecimalFormat(
+                            props.selectedSummary.debits
+                        )},{' '}
+                    </div>
+                    <div>
+                        {' '}
+                        Credits:{' '}
+                        {toDecimalFormat(props.selectedSummary.credits)}
+                    </div>
+                </div>
+                {/* Filtered */}
+                <div style={{ display: 'flex' }}>
+                    <div>Filtered: </div>
+                    <div> Rows: {props.filteredSummary.count}, </div>
+                    <div>
+                        {' '}
+                        Debits: {toDecimalFormat(
+                            props.filteredSummary.debit
+                        )},{' '}
+                    </div>
+                    <div>
+                        {' '}
+                        Credits: {toDecimalFormat(props.filteredSummary.credit)}
+                    </div>
                 </div>
 
                 {/* Total */}
                 <div style={{ display: 'flex' }}>
                     <div>Total: </div>
-                    <div> Rows: {props.totalSummary.count},{' '} </div>
-                    <div> Debits: {toDecimalFormat(props.totalSummary.debits)}, </div>
-                    <div> Credits: {toDecimalFormat(props.totalSummary.credits)}</div>
+                    <div> Rows: {props.totalSummary.count}, </div>
+                    <div>
+                        {' '}
+                        Debits: {toDecimalFormat(
+                            props.totalSummary.debits
+                        )},{' '}
+                    </div>
+                    <div>
+                        {' '}
+                        Credits: {toDecimalFormat(props.totalSummary.credits)}
+                    </div>
                 </div>
 
                 {/* <span>Selected rows count:{props.selectedRowsCount}</span>
@@ -325,15 +365,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
                 '& .global-search': {
                     marginLeft: 'auto',
-                    marginRight: '1rem'
-                }
+                    marginRight: '1rem',
+                },
             },
             '& .custom-footer': {
                 display: 'flex',
                 marginLeft: '10px',
                 flexWrap: 'wrap',
-                justifyContent: 'flexStart'
-            }
+                justifyContent: 'flexStart',
+            },
             // '& .select': {
             //     fontSize: '0.8rem',
             //     minWidth: '4rem',
