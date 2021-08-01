@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 // import MaterialTable from 'material-table'
 import {
+    escapeRegExp,
     XGrid,
     GridApi,
     GridToolbar,
@@ -11,71 +12,121 @@ import {
     GridToolbarColumnsButton,
     GridFooter,
     GridFooterContainer,
-    useGridApiRef
+    useGridApiRef,
+    GridRowId
 } from '@material-ui/x-grid'
 // import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
 import {
     Theme,
     createStyles,
     makeStyles,
-    Card,
-    Typography,
     Box,
+    Button,
 } from '@material-ui/core'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
-// import { tableIcons } from '../common/material-table-icons'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useAllTransactions } from './helpers/all-transactions'
-import { useGridSlotComponentProps } from '@material-ui/data-grid'
+import { GridRowData, useGridSlotComponentProps } from '@material-ui/data-grid'
 
 function GenericReports({ loadReport }: any) {
-    const [,setRefresh] = useState({})
+    const [, setRefresh] = useState({})
     const selectLogic: any = {
         allTransactions: useAllTransactions,
     }
+    const meta: any = useRef({
+        filteredRows: [],
+        filteredSummary: {
+            count: 0,
+            debits: 0,
+            credits: 0
+        },
+        totalSummary: {
+            count: 0,
+            debits: 0,
+            credits: 0
+        },
+        isMounted: false,
+        rows: [],
+        selectedSummary: {
+            count: 0,
+            debits: 0,
+            credits: 0
+        },
+        searchText: '',
+        selectedRowsCount: 0,
+        selectedTotal: 0,
+    })
     const { args, columns, sqlQueryId, title } = selectLogic[loadReport]()
-    const [rows, setRows]: any[] = useState([])
-    const [selectedRowsCount, setSelectedRowsCount] = useState(0)
-    const [selectedTotal, setSelectedTotal] = useState(0)
-    const [grandTotal, setGrandTotal] = useState({ debits: 0, credits: 0 })
-    const [isMounted, setIsMounted] = useState(false)
     const apiRef = useGridApiRef()
     // const { getCurrentWindowSize } = useTraceGlobal()
     const { getCurrentEntity } = manageEntitiesState()
-
-    const { execGenericView } = utilMethods()
-
+    const { execGenericView, toDecimalFormat } = utilMethods()
     const entityName = getCurrentEntity()
     const {
-        // AddIcon,
-        // Box,
+        _,
+        Card,
+        CloseIcon,
         emit,
         getFromBag,
-        // setInBag,
-        // Typography,
+        IconButton,
+        SearchIcon,
+        TextField,
+        Typography,
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
     const classes = useStyles()
 
     useEffect(() => {
-        // setIsMounted(true)
+        meta.current.isMounted = true
         fetchRows(sqlQueryId, args)
+
         return () => {
-            // setIsMounted(false)
+            meta.current.isMounted = false
         }
     }, [])
 
-    // console.log('rendered')
+    useEffect(() => {
+        return (
+            apiRef.current.subscribeEvent('filterModelChange', (params: any) => {
+                // console.log('params:', params)
+                // setRefresh({})
+                // console.log('Filter count:', apiRef.current.getVisibleRowModels())
+                const map = apiRef.current.getVisibleRowModels()
+                const arr: any[] = []
+                map.forEach((value: GridRowData, key: GridRowId) => {
+                    arr.push(value)
+                })
+                const obj = arr.reduce((prev: any, current: any) => {
+                    prev.count = prev.count || 0
+                    prev.debit = prev.debit || 0.00
+                    prev.credit = prev.credit || 0.00
+                    prev.count = prev.count + 1
+                    prev.debit = (prev.debit || 0.00) + (current.debit || 0.00)
+                    prev.credit = (prev.credit || 0.00) + (current.credit || 0.00)
+                    return (prev)
+                }, {})
+                _.isEmpty(obj) ? meta.current.filteredSummary = { count: 0, debits: 0, credits: 0 } : meta.current.filteredSummary = obj
+                meta.current.isMounted && setRefresh({})
+                // const rowsArray = Object.values(apiRef.current.getVisibleRowModels())
+                // console.log(rowsArray)
+                // for (let map of rowsMap) {
+                //     console.log(map)
+                // }
+            })
+        )
+    }, [apiRef])
+
+    console.log('rendered')
+
     return (
         <Card
-            // style={{ height: '82vh', width: '100%' }}
             className={classes.content}>
             <XGrid
                 apiRef={apiRef}
                 columns={columns}
-                rows={rows}
+                rows={meta.current.filteredRows}
                 rowHeight={32}
                 components={{
                     Toolbar: CustomGridToolbar,
@@ -83,13 +134,17 @@ function GenericReports({ loadReport }: any) {
                 }}
                 checkboxSelection={true}
                 componentsProps={{
+                    toolbar: {
+                        value: meta.current.searchText,
+                        onChange: (event: any) => requestSearch(event.target.value),
+                        clearSearch: () => requestSearch(''),
+                    },
                     footer: {
-                        count: rows.length,
-                        selectedRowsCount: selectedRowsCount,
-                        grandTotal: grandTotal,
-                        selectedTotal: selectedTotal,
+                        selectedSummary: meta.current.selectedSummary,
+                        totalSummary: meta.current.totalSummary,
                     },
                 }}
+                onRowClick={onRowClick}
                 onSelectionModelChange={onSelectModelChange}
                 onFilterModelChange={onFilterModelChange}
                 showColumnRightBorder={true}
@@ -98,42 +153,118 @@ function GenericReports({ loadReport }: any) {
         </Card>
     )
 
-    function onSelectModelChange(nrows: any) {
-        // setSelectedRowsCount(nrows.length)
-        // apiRef.current.showFilterPanel('tranDate')
-        const s2 = apiRef.current.getVisibleRowModels()
+    function requestSearch(searchValue: string) {
+        // setSearchText(searchValue)
+        meta.current.searchText = searchValue
+        const searchRegex = new RegExp(escapeRegExp(searchValue), 'i');
+        const filteredRows = meta.current.rows.filter((row: any) => {
+            return Object.keys(row).some((field) => {
+                const temp = row[field] ? row[field].toString() : ''
+                // return searchRegex.test(row[field].toString())
+                return searchRegex.test(temp)
+            })
+        })
+        meta.current.filteredRows = filteredRows
+        meta.current.isMounted && setRefresh({})
+        // setRows(meta.current.filteredRows)
+    }
+
+    function onSelectModelChange(rowIds: any) {
+        // meta.current.selectedSummary.count = rowIds.length
+        // const selectedRows = rowIds.map((r: any) => {
+        //     const row = rows[r - 1]
+        // })
+        const rows = meta.current.rows
+        const obj = rowIds.reduce((prev: any, current: any) => {
+            prev.count = prev.count ? prev.count + 1 : 1
+            prev.debits = prev.debits ? prev.debits + rows[current - 1].debit : rows[current - 1].debit || 0.00
+            prev.credits = prev.credits ? prev.credits + rows[current - 1].credit : rows[current - 1].credit || 0.00
+            return (prev)
+        }, {})
+
+        meta.current.selectedSummary = _.isEmpty(obj) ? { count: 0, debits: 0.00, credits: 0.00 } : obj
+
+        meta.current.isMounted && setRefresh({})
+    }
+
+    function onRowClick(e: any, f: any) {
+        // console.log('e:', e)
+        // console.log('f:', f)
+        console.log(meta.current)
+        console.log('Filter count:', apiRef.current.getVisibleRowModels())
+        // const rws = apiRef.current.getVisibleRowModels()
+        // console.log(rws)
+    }
+
+    function onFilterModelChange(e: any) {
+        // apiRef.current.applyFilters()
+        // console.log('Filter count:', apiRef.current.getVisibleRowModels())
         // setRefresh({})
-        const s1 = apiRef.current.getSelectedRows()
-        console.log(s1)
-        
     }
 
-    function onFilterModelChange(e:any){
-        const s2 = apiRef.current.getVisibleRowModels()
-        console.log('count:', apiRef.current.getRowsCount())
-    }
-
-    function CustomGridToolbar() {
+    function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className="custom-toolbar">
-                <Typography variant="h6" className="toolbar-title">
+                <Typography className="toolbar-title">
                     {title}
                 </Typography>
-                <GridToolbarColumnsButton color="secondary" />
-                <GridToolbarFilterButton color="secondary" />
-                <GridToolbarDensitySelector color="secondary" />
-                <GridToolbarExport color="secondary" />
+                <div>
+                    <GridToolbarColumnsButton color="secondary" />
+                    <GridToolbarFilterButton color="secondary" />
+                    <GridToolbarDensitySelector color="secondary" />
+                    <GridToolbarExport color="secondary" />
+                </div>
+                <Button variant='text' color='secondary'>Filtered</Button>
+                {/* global filter */}
+                <TextField
+                    variant="standard"
+                    autoFocus
+                    value={props.value}
+                    onChange={props.onChange}
+                    placeholder="Search…"
+                    className='global-search'
+                    InputProps={{
+                        startAdornment: <SearchIcon fontSize="small" />,
+                        endAdornment: (
+                            <IconButton
+                                title="Clear"
+                                aria-label="Clear"
+                                size="small"
+                                style={{ visibility: props.value ? 'visible' : 'hidden' }}
+                                onClick={props.clearSearch}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        ),
+                    }}
+                />
             </GridToolbarContainer>
         )
     }
 
+
     function CustomGridFooter(props: any) {
         return (
-            <GridFooterContainer>
-                <span>Selected rows count:{props.selectedRowsCount}</span>
-                <span>Count of rows:{props.count}</span>
-                <span>Total debits:{props?.grandTotal?.debits}</span>
-                <span>Total credits:{props?.grandTotal?.credits}</span>
+            <GridFooterContainer className='custom-footer'>
+                {/* Selected */}
+                <div style={{ display: 'flex' }}>
+                    <div>Selected: </div>
+                    <div> Rows: {props.selectedSummary.count},{' '} </div>
+                    <div> Debits: {toDecimalFormat(props.selectedSummary.debits)}, </div>
+                    <div> Credits: {toDecimalFormat(props.selectedSummary.credits)}</div>
+                </div>
+
+                {/* Total */}
+                <div style={{ display: 'flex' }}>
+                    <div>Total: </div>
+                    <div> Rows: {props.totalSummary.count},{' '} </div>
+                    <div> Debits: {toDecimalFormat(props.totalSummary.debits)}, </div>
+                    <div> Credits: {toDecimalFormat(props.totalSummary.credits)}</div>
+                </div>
+
+                {/* <span>Selected rows count:{props.selectedRowsCount}</span>
+                <span>Count of rows:{props?.totalSummary?.count}</span>
+                <span>Total debits:{props?.totalSummary?.debits}</span>
+                <span>Total credits:{props?.totalSummary?.credits}</span> */}
             </GridFooterContainer>
         )
     }
@@ -154,6 +285,7 @@ function GenericReports({ loadReport }: any) {
         const tot = {
             debits: 0,
             credits: 0,
+            count: 0,
         }
         const temp: any[] = ret.map((x: any) => {
             x['id1'] = x.id
@@ -162,9 +294,12 @@ function GenericReports({ loadReport }: any) {
             tot.credits = tot.credits + x.credit
             return x
         })
+        tot.count = ret?.length
         if (ret) {
-            setRows(temp)
-            setGrandTotal(tot)
+            meta.current.rows = temp
+            meta.current.filteredRows = [...meta.current.rows]
+            meta.current.totalSummary = tot
+            meta.current.isMounted && setRefresh({})
         }
     }
 }
@@ -173,7 +308,7 @@ export { GenericReports }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: '83vh',
+            height: 'calc(100vh - 163px)',
             width: '100%',
             marginTop: '5px',
             '& .custom-toolbar': {
@@ -181,20 +316,28 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginLeft: '10px',
                 flexWrap: 'wrap',
                 alignItems: 'center',
+                columnGap: '1.5rem',
+                borderBottom: '1px solid lightgrey',
                 '& .toolbar-title': {
                     color: 'dodgerblue',
                     fontSize: '1.2rem',
                     fontWeight: 'bold',
                 },
-                '& .toolbar-selected-summary': {
-                    display: 'flex',
-                    marginTop: theme.spacing(0.4),
-                },
+                '& .global-search': {
+                    marginLeft: 'auto',
+                    marginRight: '1rem'
+                }
             },
-            '& .select': {
-                fontSize: '0.8rem',
-                minWidth: '4rem',
-            },
+            '& .custom-footer': {
+                display: 'flex',
+                marginLeft: '10px',
+                flexWrap: 'wrap',
+                justifyContent: 'flexStart'
+            }
+            // '& .select': {
+            //     fontSize: '0.8rem',
+            //     minWidth: '4rem',
+            // },
         },
     })
 )
@@ -208,3 +351,21 @@ const useStyles: any = makeStyles((theme: Theme) =>
 //     </Box>
 //     <CustomRowCounter />
 // </div>
+// function MyText() {
+//     const [myText, setMyText] = useState('')
+//     return (
+//         <TextField
+//             value={myText}
+//             onChange={
+//                 (e: any) => {
+//                     meta.current.searchText = e.target.value
+//                     // meta.current.isMounted && setRefresh({})
+//                     setMyText(e.target.value)
+//                     meta.current.isMounted && setRefresh({})
+//                     // meta.current.myText = e.target.value
+//                     // meta.current.isMounted && setRefresh({})
+//                 }
+//             }
+//         />
+//     )
+// }
