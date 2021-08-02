@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
-import { Theme, createStyles, makeStyles, } from '@material-ui/core'
+import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
-import { useGridApiRef, GridRowId, GridRowData, } from '@material-ui/x-grid'
+import { useGridApiRef, GridRowId, GridRowData } from '@material-ui/x-grid'
 import { utilMethods } from '../../../../../common-utils/util-methods'
 import { manageEntitiesState } from '../../../../../common-utils/esm'
 
@@ -14,7 +14,7 @@ function useGenericReports(loadReport: any) {
     const { args, columns, sqlQueryId, title } = selectLogic[loadReport]()
 
     const meta: any = useRef({
-        rowModels: 0,
+        // rowModels: 0,
         filteredRows: [],
         filteredSummary: {
             count: 0,
@@ -38,7 +38,7 @@ function useGenericReports(loadReport: any) {
         selectedTotal: 0,
     })
 
-    const { _, emit, } = useSharedElements()
+    const { _, emit } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -50,7 +50,7 @@ function useGenericReports(loadReport: any) {
 
     const { getCurrentEntity } = manageEntitiesState()
     const apiRef = useGridApiRef()
-    const { execGenericView, } = utilMethods()
+    const { execGenericView } = utilMethods()
     const entityName = getCurrentEntity()
 
     async function fetchRows(queryId: string, arg: any) {
@@ -88,7 +88,6 @@ function useGenericReports(loadReport: any) {
         }
     }
 
-
     function onSelectModelChange(rowIds: any) {
         const rows = meta.current.rows
         const obj = rowIds.reduce((prev: any, current: any) => {
@@ -125,15 +124,29 @@ function useGenericReports(loadReport: any) {
 
     function setFilteredSummary() {
         // Evaluates the meta.current.filteredSummary from meta.current.filteredRows
-        meta.current.filteredSummary = meta.current.filteredRows.reduce((prev: any, current: any) => {
-            prev.count = (prev.count || 0) + 1
-            prev.debit = (prev.debit || 0.0) + (current.debit || 0.0)
-            prev.credit = (prev.credit || 0.0) + (current.credit || 0.0)
-            return prev
-        }, {})
+        meta.current.filteredSummary = meta.current.filteredRows.reduce(
+            (prev: any, current: any) => {
+                prev.count = (prev.count || 0) + 1
+                prev.debit = (prev.debit || 0.0) + (current.debit || 0.0)
+                prev.credit = (prev.credit || 0.0) + (current.credit || 0.0)
+                return prev
+            },
+            {}
+        )
     }
 
-    return { args, columns, fetchRows, meta, onSelectModelChange, requestSearch, setFilteredSummary, setRefresh, sqlQueryId, title }
+    return {
+        args,
+        columns,
+        fetchRows,
+        meta,
+        onSelectModelChange,
+        requestSearch,
+        setFilteredSummary,
+        setRefresh,
+        sqlQueryId,
+        title,
+    }
 }
 
 export { useGenericReports, useStyles }
@@ -144,6 +157,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
             height: 'calc(100vh - 163px)',
             width: '100%',
             marginTop: '5px',
+            '& .delete': {
+                color: 'red',
+            },
             '& .custom-toolbar': {
                 display: 'flex',
                 marginLeft: '10px',
@@ -176,13 +192,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
 
                 '& .filtered': {
-                    color: theme.palette.secondary.main
+                    color: theme.palette.secondary.main,
                 },
 
                 '& .all': {
                     color: 'dodgerblue',
-                    marginRight: '1rem'
-                }
+                    marginRight: '1rem',
+                },
             },
         },
     })

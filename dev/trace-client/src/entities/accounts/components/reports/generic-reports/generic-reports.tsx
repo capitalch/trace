@@ -8,7 +8,8 @@ import {
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    GridRowId, GridRowData,
+    GridRowId,
+    GridRowData,
     useGridApiRef,
     GridCellParams,
 } from '@material-ui/x-grid'
@@ -16,11 +17,20 @@ import {
 import { manageEntitiesState } from '../../../../../common-utils/esm'
 import { utilMethods } from '../../../../../common-utils/util-methods'
 import { useSharedElements } from '../../common/shared-elements-hook'
+import { RowingSharp } from '@material-ui/icons'
 
 function GenericReports({ loadReport }: any) {
-    const { args, columns,
-        fetchRows, meta,
-        onSelectModelChange, requestSearch, setRefresh, sqlQueryId, title } = useGenericReports(loadReport)
+    const {
+        args,
+        columns,
+        fetchRows,
+        meta,
+        onSelectModelChange,
+        requestSearch,
+        setRefresh,
+        sqlQueryId,
+        title,
+    } = useGenericReports(loadReport)
     const apiRef = useGridApiRef()
 
     const { getCurrentEntity } = manageEntitiesState()
@@ -31,6 +41,8 @@ function GenericReports({ loadReport }: any) {
         Button,
         Card,
         CloseIcon,
+        DeleteIcon,
+        EditIcon,
         NativeSelect,
         IconButton,
         SearchIcon,
@@ -45,9 +57,9 @@ function GenericReports({ loadReport }: any) {
 
     useEffect(() => {
         // onFilteredClick()
-    }, [(meta.current.rowModels !== 0)])
+    }, [meta.current.rowModels !== 0])
 
-    addModifiers({isRemove: true})
+    addSpecialColumns({ isRemove: true, isEdit: true, isDelete: true })
 
     return (
         <Card className={classes.content}>
@@ -82,7 +94,6 @@ function GenericReports({ loadReport }: any) {
         </Card>
     )
 
-
     function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className="custom-toolbar">
@@ -106,8 +117,7 @@ function GenericReports({ loadReport }: any) {
                     className={classes.syncIconButton}
                     size="medium"
                     color="secondary"
-                    onClick={(e: any) => fetchRows(sqlQueryId, args)}
-                >
+                    onClick={(e: any) => fetchRows(sqlQueryId, args)}>
                     <SyncIcon></SyncIcon>
                 </IconButton>
                 <span>Last</span>
@@ -119,10 +129,10 @@ function GenericReports({ loadReport }: any) {
                         width: '3.3rem',
                         marginLeft: '0.1rem',
                     }}
-                // onChange={(e) => {
-                //     setInBag(loadComponent, e.target.value)
-                //     getData()
-                // }}
+                    // onChange={(e) => {
+                    //     setInBag(loadComponent, e.target.value)
+                    //     getData()
+                    // }}
                 >
                     <option value={10}>10</option>
                     <option value={50}>50</option>
@@ -165,41 +175,54 @@ function GenericReports({ loadReport }: any) {
         return (
             <GridFooterContainer className="custom-footer">
                 {/* Selected */}
-                <div className='common selected'>
-                    <div><b>Selected</b>  &nbsp;</div>
-                    <div>count <b>{props.selectedSummary.count}</b> &nbsp;&nbsp; </div>
+                <div className="common selected">
                     <div>
-                        debit <b>{toDecimalFormat(
-                            props.selectedSummary.debit
-                        )}</b>&nbsp;&nbsp;
+                        <b>Selected</b> &nbsp;
                     </div>
                     <div>
-                        credit <b>{toDecimalFormat(props.selectedSummary.credit)}</b>
+                        count <b>{props.selectedSummary.count}</b> &nbsp;&nbsp;{' '}
+                    </div>
+                    <div>
+                        debit{' '}
+                        <b>{toDecimalFormat(props.selectedSummary.debit)}</b>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div>
+                        credit{' '}
+                        <b>{toDecimalFormat(props.selectedSummary.credit)}</b>
                     </div>
                 </div>
 
                 {/* Filtered */}
-                <div className='common filtered'>
-                    <div><b>Filtered</b>  &nbsp;</div>
-                    <div>count <b>{props.filteredSummary.count}</b> &nbsp;&nbsp; </div>
+                <div className="common filtered">
                     <div>
-                        debit <b>{toDecimalFormat(
-                            props.filteredSummary.debit
-                        )}</b>&nbsp;&nbsp;
+                        <b>Filtered</b> &nbsp;
                     </div>
                     <div>
-                        credit <b>{toDecimalFormat(props.filteredSummary.credit)}</b>
+                        count <b>{props.filteredSummary.count}</b> &nbsp;&nbsp;{' '}
+                    </div>
+                    <div>
+                        debit{' '}
+                        <b>{toDecimalFormat(props.filteredSummary.debit)}</b>
+                        &nbsp;&nbsp;
+                    </div>
+                    <div>
+                        credit{' '}
+                        <b>{toDecimalFormat(props.filteredSummary.credit)}</b>
                     </div>
                 </div>
 
                 {/* All */}
-                <div className='common all'>
-                    <div><b>All</b>  &nbsp;</div>
-                    <div>count <b>{props.allSummary.count}</b> &nbsp;&nbsp; </div>
+                <div className="common all">
                     <div>
-                        debit <b>{toDecimalFormat(
-                            props.allSummary.debit
-                        )}</b>&nbsp;&nbsp;
+                        <b>All</b> &nbsp;
+                    </div>
+                    <div>
+                        count <b>{props.allSummary.count}</b> &nbsp;&nbsp;{' '}
+                    </div>
+                    <div>
+                        debit <b>{toDecimalFormat(props.allSummary.debit)}</b>
+                        &nbsp;&nbsp;
                     </div>
                     <div>
                         credit <b>{toDecimalFormat(props.allSummary.credit)}</b>
@@ -227,27 +250,81 @@ function GenericReports({ loadReport }: any) {
         meta.current.isMounted && setRefresh({})
     }
 
-    interface ModifierOptions {
+    interface SpecialColumnOptions {
         isEdit?: boolean
         isDelete?: boolean
         isRemove?: boolean
         isEditMethos?: any
         isDeleteMethod?: any
     }
-    function addModifiers(options: ModifierOptions) {
+    function addSpecialColumns(options: SpecialColumnOptions) {
+        if (options.isDelete) {
+            const deleteColumn = {
+                width: 20,
+                field: '2',
+                renderCell: (params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            className="delete"
+                            onClick={() => removeRow(params)}
+                            aria-label="Delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(deleteColumn)
+        }
+
+        if (options.isEdit) {
+            const editColumn = {
+                width: 20,
+                field: '1',
+                renderCell: (params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            onClick={() => removeRow(params)}
+                            aria-label="Edit">
+                            <EditIcon />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(editColumn)
+        }
+
         if (options.isRemove) {
             const removeColumn = {
-                headerName: 'R',
-                width: 80,
-                field:'',
+                // headerName: 'R',
+                width: 20,
+                field: '0',
                 renderCell: (params: GridCellParams) => {
-                    return (<Button variant='outlined' color='secondary'>Test</Button>)
-                }
+                    return (
+                        <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => removeRow(params)}
+                            aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                    )
+                },
             }
             columns.unshift(removeColumn)
         }
-    }
 
+        function removeRow(params: any) {
+            const idx = params['row']['index']
+            // meta.current.filteredRows.pop()
+            // meta.current.filteredRows.splice(idx, 1)
+            // meta.current.filteredColumns
+            // console.log(params)
+            meta.current.isMounted && setRefresh({})
+        }
+    }
 }
 export { GenericReports }
-
