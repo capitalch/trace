@@ -27,6 +27,7 @@ function GenericReports({ loadReport }: any) {
         meta,
         onSelectModelChange,
         requestSearch,
+        setFilteredSummary,
         setRefresh,
         sqlQueryId,
         title,
@@ -68,6 +69,7 @@ function GenericReports({ loadReport }: any) {
                 columns={columns}
                 rows={meta.current.filteredRows}
                 rowHeight={32}
+                // disableSelectionOnClick={true}
                 components={{
                     Toolbar: CustomGridToolbar,
                     Footer: CustomGridFooter,
@@ -260,6 +262,13 @@ function GenericReports({ loadReport }: any) {
     function addSpecialColumns(options: SpecialColumnOptions) {
         if (options.isDelete) {
             const deleteColumn = {
+                headerName: 'D',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
                 width: 20,
                 field: '2',
                 renderCell: (params: GridCellParams) => {
@@ -280,6 +289,13 @@ function GenericReports({ loadReport }: any) {
 
         if (options.isEdit) {
             const editColumn = {
+                headerName: 'E',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
                 width: 20,
                 field: '1',
                 renderCell: (params: GridCellParams) => {
@@ -299,7 +315,13 @@ function GenericReports({ loadReport }: any) {
 
         if (options.isRemove) {
             const removeColumn = {
-                // headerName: 'R',
+                headerName: 'R',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
                 width: 20,
                 field: '0',
                 renderCell: (params: GridCellParams) => {
@@ -318,12 +340,12 @@ function GenericReports({ loadReport }: any) {
         }
 
         function removeRow(params: any) {
-            const idx = params['row']['index']
-            // meta.current.filteredRows.pop()
-            // meta.current.filteredRows.splice(idx, 1)
-            // meta.current.filteredColumns
-            // console.log(params)
-            meta.current.isMounted && setRefresh({})
+            const id = params.id
+            const temp = [...meta.current.filteredRows]
+            _.remove(temp,(x:any)=>x.id === id)
+            // meta.current.filteredRows = temp                       
+            // setFilteredSummary()
+            // meta.current.isMounted && setRefresh({})
         }
     }
 }
