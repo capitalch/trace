@@ -7,6 +7,8 @@
 				6. Select control and its default all or last 100
 7. Subscribe to some event so that update possible through socket
 				8. Refresh icon button
+10. Custom control
+11. Create as XXGrid component
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
