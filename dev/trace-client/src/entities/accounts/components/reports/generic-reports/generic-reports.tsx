@@ -59,7 +59,7 @@ function GenericReports({ loadReport }: any) {
         // onFilteredClick()
     }, [meta.current.rowModels !== 0])
 
-    addSpecialColumns({ isRemove: true, isEdit: true, isDelete: true })
+    addSpecialColumns({ isRemove: true, isEdit: true, isDelete: true, isDrillDown: true })
 
     return (
         <Card className={classes.content}>
@@ -102,7 +102,7 @@ function GenericReports({ loadReport }: any) {
                 <div>
                     <GridToolbarColumnsButton color="secondary" />
                     <GridToolbarFilterButton color="secondary" />
-                    <GridToolbarDensitySelector color="secondary" />
+                    {/* <GridToolbarDensitySelector color="secondary" /> */}
                     <GridToolbarExport color="secondary" />
                 </div>
                 <Button
@@ -121,25 +121,30 @@ function GenericReports({ loadReport }: any) {
                     onClick={(e: any) => fetchRows(sqlQueryId, args)}>
                     <SyncIcon></SyncIcon>
                 </IconButton>
+                <div className='last-no'>
                 <span>Last</span>
-                <NativeSelect
+                <select
                     // value={getFromBag(loadComponent) || meta.current.no}
-                    value={10}
+                    value={meta.current.no}
                     style={{
                         fontSize: '0.8rem',
-                        width: '3.3rem',
+                        width: '4rem',
                         marginLeft: '0.1rem',
                     }}
-                // onChange={(e) => {
-                //     setInBag(loadComponent, e.target.value)
-                //     getData()
-                // }}
+
+                onChange={(e) => {
+                    meta.current.no = e.target.value
+                    meta.current.isMounted && setRefresh({})
+                    // setInBag(loadComponent, e.target.value)
+                    // getData()
+                }}
                 >
-                    <option value={10}>10</option>
-                    <option value={50}>50</option>
                     <option value={100}>100</option>
+                    <option value={1000}>1000</option>
                     <option value={0}>All</option>
-                </NativeSelect>
+                </select>
+                </div>
+                
                 {/* </div> */}
 
                 {/* global filter */}
@@ -299,6 +304,7 @@ function GenericReports({ loadReport }: any) {
         isEdit?: boolean
         isDelete?: boolean
         isRemove?: boolean
+        isDrillDown?: boolean
         isEditMethos?: any
         isDeleteMethod?: any
     }
@@ -306,6 +312,7 @@ function GenericReports({ loadReport }: any) {
         if (options.isDelete) {
             const deleteColumn = {
                 headerName: 'D',
+                description: 'Delete from database',
                 disableColumnMenu: true,
                 disableExport: true,
                 disableReorder: true,
@@ -333,6 +340,7 @@ function GenericReports({ loadReport }: any) {
         if (options.isEdit) {
             const editColumn = {
                 headerName: 'E',
+                description: 'Edit',
                 disableColumnMenu: true,
                 disableExport: true,
                 disableReorder: true,
@@ -359,6 +367,7 @@ function GenericReports({ loadReport }: any) {
         if (options.isRemove) {
             const removeColumn = {
                 headerName: 'R',
+                description: 'Remove without delete',
                 disableColumnMenu: true,
                 disableExport: true,
                 disableReorder: true,
@@ -382,6 +391,33 @@ function GenericReports({ loadReport }: any) {
             columns.unshift(removeColumn)
         }
 
+        if(options.isDrillDown){
+            const drillDownColumn = {
+                headerName: 'D',
+                description: 'Drill down',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field:'3',
+                renderCell:(params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="primary"
+                            // onClick={() => removeRow(params)}
+                            aria-label="close">
+                            <SearchIcon color='secondary' fontSize='small' />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(drillDownColumn)
+        }
+        
         function removeRow(params: any) {
             const id = params.id
             const temp = [...meta.current.filteredRows]

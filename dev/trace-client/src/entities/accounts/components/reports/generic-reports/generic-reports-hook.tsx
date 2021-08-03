@@ -18,6 +18,7 @@ function useGenericReports(loadReport: any) {
         filteredSummary: {},
         allSummary: {},
         isMounted: false,
+        no: 0,
         rows: [],
         selectedSummary: {},
         searchText: '',
@@ -155,6 +156,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     marginLeft: 'auto',
                     marginRight: '1rem',
                 },
+                '& .last-no':{
+                    display: 'flex',
+                    columnGap: '0.5rem',
+                    color: theme.palette.secondary.main,
+                    '& select':{
+                        borderColor:'grey'
+                    }
+
+                }
             },
             '& .custom-footer': {
                 display: 'flex',

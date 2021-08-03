@@ -1,12 +1,12 @@
 ## Generic report XXGrid
-1. Organize code
-2. Genenic Summary columns
-3. Settle selected, filtered and total
-4. IsRemove property
-5. Is Edit, IsDelete, IsDrillDown
-6. Select control and its default all or last 100
+				1. Organize code
+				2. Genenic Summary columns
+				3. Settle selected, filtered and total
+				4. IsRemove property
+				5. Is Edit, IsDelete, IsDrillDown
+				6. Select control and its default all or last 100
 7. Subscribe to some event so that update possible through socket
-8. Refresh icon button
+				8. Refresh icon button
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
