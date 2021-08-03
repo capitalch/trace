@@ -72,13 +72,7 @@ function Component5() {
                 columns={columns}
                 checkboxSelection={true}
                 onRowClick={(e: any, other: any) => {
-                    // console.log(e)
-                    // console.log(e.api.getSelectedRows())
-                    // console.log(other.target.checked)
                 }}
-                // onSelectionChange = {(s:any)=>{
-                //     console.log(s)
-                // }}
                 components={{
                     Toolbar: MyToolbar,
                     // Checkbox: MyCheckbox,
@@ -140,10 +134,37 @@ function MyCheckbox() {
 function MyToolbar() {
     return (
         <div style={{ display: 'flex' }}>
-            <button>Test</button>
+            <button onClick={accum}>Test</button>
             <GridToolbar />
             <label>Last:</label>
             <select></select>
         </div>
     )
+
+    function accum(){
+        const cols = ['debit', 'credit']
+        const props: any = {selectedSummary:{
+            count:0,
+            debit: 1000,
+            credit: 2000
+        }, filteredSummary:{
+            count:10,
+            debit: 100,
+            credit: 20000
+        }, allSummary:{
+            count:44,
+            debit: 10000,
+            credit: 20000
+        }}
+        const markupArray =  cols.map((item:any)=>{
+            return(
+                <div>
+                    {item}{' '}
+                    <b>{props.selectedSummary[item]}</b>&nbsp;&nbsp;
+                </div>
+            )
+        })
+        const markup = markupArray.join('')
+        console.log(markup)
+    }
 }

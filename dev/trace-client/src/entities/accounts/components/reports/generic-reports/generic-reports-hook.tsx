@@ -11,31 +11,16 @@ function useGenericReports(loadReport: any) {
     const selectLogic: any = {
         allTransactions: useAllTransactions,
     }
-    const { args, columns, sqlQueryId, title } = selectLogic[loadReport]()
+    const { args, columns, sqlQueryId, summaryColumns, title, } = selectLogic[loadReport]()
 
     const meta: any = useRef({
-        // rowModels: 0,
         filteredRows: [],
-        filteredSummary: {
-            count: 0,
-            debit: 0,
-            credit: 0,
-        },
-        allSummary: {
-            count: 0,
-            debit: 0,
-            credit: 0,
-        },
+        filteredSummary: {},
+        allSummary: {},
         isMounted: false,
         rows: [],
-        selectedSummary: {
-            count: 0,
-            debit: 0,
-            credit: 0,
-        },
+        selectedSummary: {},
         searchText: '',
-        selectedRowsCount: 0,
-        selectedTotal: 0,
     })
 
     const { _, emit } = useSharedElements()
@@ -66,18 +51,16 @@ function useGenericReports(loadReport: any) {
         function incr() {
             return i++
         }
-        const tot = {
-            debit: 0,
-            credit: 0,
-            count: 0,
-        }
+        const tot: any = {}
         const temp: any[] = ret.map((x: any) => {
             x['id1'] = x.id
             x.id = incr()
-            tot.debit = tot.debit + x.debit
-            tot.credit = tot.credit + x.credit
+            for (let col of summaryColumns) {
+                tot[col] = (tot[col] || 0) + x[col]
+            }
             return x
         })
+
         tot.count = ret?.length
         if (ret) {
             meta.current.rows = temp
@@ -92,19 +75,13 @@ function useGenericReports(loadReport: any) {
         const rows = meta.current.rows
         const obj = rowIds.reduce((prev: any, current: any) => {
             prev.count = prev.count ? prev.count + 1 : 1
-            prev.debit = prev.debit
-                ? prev.debit + rows[current - 1].debit
-                : rows[current - 1].debit || 0.0
-            prev.credit = prev.credit
-                ? prev.credit + rows[current - 1].credit
-                : rows[current - 1].credit || 0.0
+            for (let col of summaryColumns) {
+                prev[col] = (prev[col] || 0.0) + rows[current - 1][col]
+            }
             return prev
         }, {})
 
-        meta.current.selectedSummary = _.isEmpty(obj)
-            ? { count: 0, debit: 0.0, credit: 0.0 }
-            : obj
-
+        meta.current.selectedSummary = _.isEmpty(obj) ? {} : obj
         meta.current.isMounted && setRefresh({})
     }
 
@@ -127,8 +104,9 @@ function useGenericReports(loadReport: any) {
         meta.current.filteredSummary = meta.current.filteredRows.reduce(
             (prev: any, current: any) => {
                 prev.count = (prev.count || 0) + 1
-                prev.debit = (prev.debit || 0.0) + (current.debit || 0.0)
-                prev.credit = (prev.credit || 0.0) + (current.credit || 0.0)
+                for(let col of summaryColumns){
+                    prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
+                }
                 return prev
             },
             {}
@@ -145,6 +123,7 @@ function useGenericReports(loadReport: any) {
         setFilteredSummary,
         setRefresh,
         sqlQueryId,
+        summaryColumns,
         title,
     }
 }

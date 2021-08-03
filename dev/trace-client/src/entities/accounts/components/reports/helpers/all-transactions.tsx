@@ -42,7 +42,8 @@ function useAllTransactions() {
         dateFormat: getFromBag('dateFormat'),
         no: null,
     }
-    return { args, columns, sqlQueryId, title }
+    const summaryColumns = ['debit','credit']
+    return { args, columns, sqlQueryId, title, summaryColumns }
 }
 
 export { useAllTransactions }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect} from 'react'
 import { useGenericReports, useStyles } from './generic-reports-hook'
 import {
     XGrid,
@@ -17,7 +17,6 @@ import {
 import { manageEntitiesState } from '../../../../../common-utils/esm'
 import { utilMethods } from '../../../../../common-utils/util-methods'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { RowingSharp } from '@material-ui/icons'
 
 function GenericReports({ loadReport }: any) {
     const {
@@ -27,16 +26,16 @@ function GenericReports({ loadReport }: any) {
         meta,
         onSelectModelChange,
         requestSearch,
-        setFilteredSummary,
         setRefresh,
         sqlQueryId,
+        summaryColumns,
         title,
     } = useGenericReports(loadReport)
     const apiRef = useGridApiRef()
 
     const { getCurrentEntity } = manageEntitiesState()
     const { toDecimalFormat } = utilMethods()
-    const entityName = getCurrentEntity()
+    // const entityName = getCurrentEntity()
     const {
         _,
         Button,
@@ -131,10 +130,10 @@ function GenericReports({ loadReport }: any) {
                         width: '3.3rem',
                         marginLeft: '0.1rem',
                     }}
-                    // onChange={(e) => {
-                    //     setInBag(loadComponent, e.target.value)
-                    //     getData()
-                    // }}
+                // onChange={(e) => {
+                //     setInBag(loadComponent, e.target.value)
+                //     getData()
+                // }}
                 >
                     <option value={10}>10</option>
                     <option value={50}>50</option>
@@ -176,62 +175,104 @@ function GenericReports({ loadReport }: any) {
     function CustomGridFooter(props: any) {
         return (
             <GridFooterContainer className="custom-footer">
-                {/* Selected */}
+                <SelectedMarkup />
+                <FilteredMarkup />
+                <AllMarkup />
+            </GridFooterContainer>
+        )
+
+        function SelectedMarkup() {
+            return (
                 <div className="common selected">
                     <div>
                         <b>Selected</b> &nbsp;
                     </div>
                     <div>
-                        count <b>{props.selectedSummary.count}</b> &nbsp;&nbsp;{' '}
+                        count <b>{props.selectedSummary['count']}</b> &nbsp;&nbsp;{' '}
                     </div>
-                    <div>
-                        debit{' '}
-                        <b>{toDecimalFormat(props.selectedSummary.debit)}</b>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div>
-                        credit{' '}
-                        <b>{toDecimalFormat(props.selectedSummary.credit)}</b>
-                    </div>
+                    <SelectedCols />
                 </div>
+            )
+            function SelectedCols() {
+                let k = 1
+                function incr() {
+                    return (k++)
+                }
+                return (
+                    summaryColumns.map((col: string) => {
+                        return (
+                            <div key={incr()}>
+                                {col}{' '}
+                                <b>{toDecimalFormat(props.selectedSummary[col])}</b>
+                                &nbsp;&nbsp;
+                            </div>
+                        )
+                    })
+                )
+            }
+        }
 
-                {/* Filtered */}
+        function FilteredMarkup() {
+            return (
                 <div className="common filtered">
                     <div>
                         <b>Filtered</b> &nbsp;
                     </div>
                     <div>
-                        count <b>{props.filteredSummary.count}</b> &nbsp;&nbsp;{' '}
+                        count <b>{props.filteredSummary['count']}</b> &nbsp;&nbsp;{' '}
                     </div>
-                    <div>
-                        debit{' '}
-                        <b>{toDecimalFormat(props.filteredSummary.debit)}</b>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div>
-                        credit{' '}
-                        <b>{toDecimalFormat(props.filteredSummary.credit)}</b>
-                    </div>
+                    <FilteredCols />
                 </div>
+            )
+            function FilteredCols() {
+                let k = 1
+                function incr() {
+                    return (k++)
+                }
+                return (
+                    summaryColumns.map((col: string) => {
+                        return (
+                            <div key={incr()}>
+                                {col}{' '}
+                                <b>{toDecimalFormat(props.filteredSummary[col])}</b>
+                                &nbsp;&nbsp;
+                            </div>
+                        )
+                    })
+                )
+            }
+        }
 
-                {/* All */}
+        function AllMarkup() {
+            return (
                 <div className="common all">
                     <div>
                         <b>All</b> &nbsp;
                     </div>
                     <div>
-                        count <b>{props.allSummary.count}</b> &nbsp;&nbsp;{' '}
+                        count <b>{props.allSummary['count']}</b> &nbsp;&nbsp;{' '}
                     </div>
-                    <div>
-                        debit <b>{toDecimalFormat(props.allSummary.debit)}</b>
-                        &nbsp;&nbsp;
-                    </div>
-                    <div>
-                        credit <b>{toDecimalFormat(props.allSummary.credit)}</b>
-                    </div>
+                    <AllCols />
                 </div>
-            </GridFooterContainer>
-        )
+            )
+            function AllCols() {
+                let k = 1
+                function incr() {
+                    return (k++)
+                }
+                return (
+                    summaryColumns.map((col: string) => {
+                        return (
+                            <div key={incr()}>
+                                {col}{' '}
+                                <b>{toDecimalFormat(props.allSummary[col])}</b>
+                                &nbsp;&nbsp;
+                            </div>
+                        )
+                    })
+                )
+            }
+        }
     }
 
     function onFilteredClick() {
@@ -242,12 +283,14 @@ function GenericReports({ loadReport }: any) {
         })
         const obj = arr.reduce((prev: any, current: any) => {
             prev.count = (prev.count || 0) + 1
-            prev.debit = (prev.debit || 0.0) + (current.debit || 0.0)
-            prev.credit = (prev.credit || 0.0) + (current.credit || 0.0)
+            for (let col of summaryColumns) {
+                prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
+            }
             return prev
         }, {})
+
         _.isEmpty(obj)
-            ? (meta.current.filteredSummary = { count: 0, debit: 0, credit: 0 })
+            ? (meta.current.filteredSummary = {})
             : (meta.current.filteredSummary = obj)
         meta.current.isMounted && setRefresh({})
     }
@@ -342,7 +385,7 @@ function GenericReports({ loadReport }: any) {
         function removeRow(params: any) {
             const id = params.id
             const temp = [...meta.current.filteredRows]
-            _.remove(temp,(x:any)=>x.id === id)
+            _.remove(temp, (x: any) => x.id === id)
             // meta.current.filteredRows = temp                       
             // setFilteredSummary()
             // meta.current.isMounted && setRefresh({})
