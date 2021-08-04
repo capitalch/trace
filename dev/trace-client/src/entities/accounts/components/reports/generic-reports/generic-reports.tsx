@@ -43,7 +43,8 @@ function GenericReports({ loadReport }: any) {
         CloseIcon,
         DeleteIcon,
         EditIcon,
-        NativeSelect,
+        emit,
+        // NativeSelect,
         IconButton,
         SearchIcon,
         SyncIcon,
@@ -310,6 +311,9 @@ function GenericReports({ loadReport }: any) {
         isDrillDown?: boolean
         isEditMethos?: any
         isDeleteMethod?: any
+        editIbukiMessage?: any
+        deleteIbukiMessage?: any
+        drillDownIbukiMessage?: any
     }
     function addSpecialColumns(options: SpecialColumnOptions) {
         if (options.isDelete) {
@@ -330,7 +334,7 @@ function GenericReports({ loadReport }: any) {
                             size="small"
                             color="secondary"
                             className="delete"
-                            onClick={() => removeRow(params)}
+                            onClick={() => emit(options.deleteIbukiMessage, '')}
                             aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>
@@ -357,7 +361,7 @@ function GenericReports({ loadReport }: any) {
                         <IconButton
                             size="small"
                             color="secondary"
-                            onClick={() => removeRow(params)}
+                            onClick={() => emit(options.editIbukiMessage, '')}
                             aria-label="Edit">
                             <EditIcon />
                         </IconButton>
@@ -411,7 +415,7 @@ function GenericReports({ loadReport }: any) {
                         <IconButton
                             size="small"
                             color="primary"
-                            // onClick={() => removeRow(params)}
+                            onClick={() => emit(options.drillDownIbukiMessage, '')}
                             aria-label="close">
                             <SearchIcon color="secondary" fontSize="small" />
                         </IconButton>
