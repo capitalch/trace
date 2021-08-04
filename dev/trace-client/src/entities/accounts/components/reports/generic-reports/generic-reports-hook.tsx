@@ -18,10 +18,10 @@ function useGenericReports(loadReport: any) {
         filteredSummary: {},
         allSummary: {},
         isMounted: false,
-        no: 0,
         rows: [],
         selectedSummary: {},
-        searchText: '',
+        searchText: '',        
+        viewLimit: 0,
     })
 
     const { _, emit } = useSharedElements()
@@ -44,7 +44,7 @@ function useGenericReports(loadReport: any) {
         const ret: any[] = await execGenericView({
             isMultipleRows: true,
             sqlKey: queryId,
-            args: arg,
+            args:  arg || null,
             entityName: entityName,
         })
         emit('SHOW-LOADING-INDICATOR', false)
@@ -156,12 +156,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     marginLeft: 'auto',
                     marginRight: '1rem',
                 },
-                '& .last-no':{
+                '& .view-limit':{
                     display: 'flex',
                     columnGap: '0.5rem',
                     color: theme.palette.secondary.main,
                     '& select':{
-                        borderColor:'grey'
+                        borderColor:'grey',
+                        color:theme.palette.primary.main
+                        // height: '1.5rem'
                     }
 
                 }

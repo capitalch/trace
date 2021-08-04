@@ -1,4 +1,4 @@
-import { useEffect} from 'react'
+import { useEffect } from 'react'
 import { useGenericReports, useStyles } from './generic-reports-hook'
 import {
     XGrid,
@@ -59,7 +59,12 @@ function GenericReports({ loadReport }: any) {
         // onFilteredClick()
     }, [meta.current.rowModels !== 0])
 
-    addSpecialColumns({ isRemove: true, isEdit: true, isDelete: true, isDrillDown: true })
+    addSpecialColumns({
+        isRemove: true,
+        isEdit: true,
+        isDelete: true,
+        isDrillDown: true,
+    })
 
     return (
         <Card className={classes.content}>
@@ -121,30 +126,32 @@ function GenericReports({ loadReport }: any) {
                     onClick={(e: any) => fetchRows(sqlQueryId, args)}>
                     <SyncIcon></SyncIcon>
                 </IconButton>
-                <div className='last-no'>
-                <span>Last</span>
-                <select
-                    // value={getFromBag(loadComponent) || meta.current.no}
-                    value={meta.current.no}
-                    style={{
-                        fontSize: '0.8rem',
-                        width: '4rem',
-                        marginLeft: '0.1rem',
-                    }}
-
-                onChange={(e) => {
-                    meta.current.no = e.target.value
-                    meta.current.isMounted && setRefresh({})
-                    // setInBag(loadComponent, e.target.value)
-                    // getData()
-                }}
-                >
-                    <option value={100}>100</option>
-                    <option value={1000}>1000</option>
-                    <option value={0}>All</option>
-                </select>
+                <div className="view-limit">
+                    <span>View</span>
+                    <select
+                        // value={getFromBag(loadComponent) || meta.current.no}
+                        value={meta.current.viewLimit}
+                        style={{
+                            fontSize: '0.8rem',
+                            width: '4rem',
+                            marginLeft: '0.1rem',
+                        }}
+                        onChange={(e) => {
+                            meta.current.viewLimit = e.target.value
+                            args['no'] = meta.current.viewLimit
+                                ? meta.current.viewLimit
+                                : null // null for all items in postgresql
+                            fetchRows(sqlQueryId, args)
+                            meta.current.isMounted && setRefresh({})
+                            // setInBag(loadComponent, e.target.value)
+                            // getData()
+                        }}>
+                        <option value={100}>100</option>
+                        <option value={1000}>1000</option>
+                        <option value={0}>All</option>
+                    </select>
                 </div>
-                
+
                 {/* </div> */}
 
                 {/* global filter */}
@@ -193,7 +200,8 @@ function GenericReports({ loadReport }: any) {
                         <b>Selected</b> &nbsp;
                     </div>
                     <div>
-                        count <b>{props.selectedSummary['count']}</b> &nbsp;&nbsp;{' '}
+                        count <b>{props.selectedSummary['count']}</b>{' '}
+                        &nbsp;&nbsp;{' '}
                     </div>
                     <SelectedCols />
                 </div>
@@ -201,19 +209,17 @@ function GenericReports({ loadReport }: any) {
             function SelectedCols() {
                 let k = 1
                 function incr() {
-                    return (k++)
+                    return k++
                 }
-                return (
-                    summaryColumns.map((col: string) => {
-                        return (
-                            <div key={incr()}>
-                                {col}{' '}
-                                <b>{toDecimalFormat(props.selectedSummary[col])}</b>
-                                &nbsp;&nbsp;
-                            </div>
-                        )
-                    })
-                )
+                return summaryColumns.map((col: string) => {
+                    return (
+                        <div key={incr()}>
+                            {col}{' '}
+                            <b>{toDecimalFormat(props.selectedSummary[col])}</b>
+                            &nbsp;&nbsp;
+                        </div>
+                    )
+                })
             }
         }
 
@@ -224,7 +230,8 @@ function GenericReports({ loadReport }: any) {
                         <b>Filtered</b> &nbsp;
                     </div>
                     <div>
-                        count <b>{props.filteredSummary['count']}</b> &nbsp;&nbsp;{' '}
+                        count <b>{props.filteredSummary['count']}</b>{' '}
+                        &nbsp;&nbsp;{' '}
                     </div>
                     <FilteredCols />
                 </div>
@@ -232,19 +239,17 @@ function GenericReports({ loadReport }: any) {
             function FilteredCols() {
                 let k = 1
                 function incr() {
-                    return (k++)
+                    return k++
                 }
-                return (
-                    summaryColumns.map((col: string) => {
-                        return (
-                            <div key={incr()}>
-                                {col}{' '}
-                                <b>{toDecimalFormat(props.filteredSummary[col])}</b>
-                                &nbsp;&nbsp;
-                            </div>
-                        )
-                    })
-                )
+                return summaryColumns.map((col: string) => {
+                    return (
+                        <div key={incr()}>
+                            {col}{' '}
+                            <b>{toDecimalFormat(props.filteredSummary[col])}</b>
+                            &nbsp;&nbsp;
+                        </div>
+                    )
+                })
             }
         }
 
@@ -263,19 +268,17 @@ function GenericReports({ loadReport }: any) {
             function AllCols() {
                 let k = 1
                 function incr() {
-                    return (k++)
+                    return k++
                 }
-                return (
-                    summaryColumns.map((col: string) => {
-                        return (
-                            <div key={incr()}>
-                                {col}{' '}
-                                <b>{toDecimalFormat(props.allSummary[col])}</b>
-                                &nbsp;&nbsp;
-                            </div>
-                        )
-                    })
-                )
+                return summaryColumns.map((col: string) => {
+                    return (
+                        <div key={incr()}>
+                            {col}{' '}
+                            <b>{toDecimalFormat(props.allSummary[col])}</b>
+                            &nbsp;&nbsp;
+                        </div>
+                    )
+                })
             }
         }
     }
@@ -391,7 +394,7 @@ function GenericReports({ loadReport }: any) {
             columns.unshift(removeColumn)
         }
 
-        if(options.isDrillDown){
+        if (options.isDrillDown) {
             const drillDownColumn = {
                 headerName: 'D',
                 description: 'Drill down',
@@ -402,27 +405,27 @@ function GenericReports({ loadReport }: any) {
                 hideSortIcons: true,
                 resizable: false,
                 width: 20,
-                field:'3',
-                renderCell:(params: GridCellParams) => {
+                field: '3',
+                renderCell: (params: GridCellParams) => {
                     return (
                         <IconButton
                             size="small"
                             color="primary"
                             // onClick={() => removeRow(params)}
                             aria-label="close">
-                            <SearchIcon color='secondary' fontSize='small' />
+                            <SearchIcon color="secondary" fontSize="small" />
                         </IconButton>
                     )
                 },
             }
             columns.unshift(drillDownColumn)
         }
-        
+
         function removeRow(params: any) {
             const id = params.id
             const temp = [...meta.current.filteredRows]
             _.remove(temp, (x: any) => x.id === id)
-            // meta.current.filteredRows = temp                       
+            // meta.current.filteredRows = temp
             // setFilteredSummary()
             // meta.current.isMounted && setRefresh({})
         }
