@@ -138,9 +138,9 @@ function GenericReports({ loadReport }: any) {
                         }}
                         onChange={(e) => {
                             meta.current.viewLimit = e.target.value
-                            args['no'] = meta.current.viewLimit
-                                ? meta.current.viewLimit
-                                : null // null for all items in postgresql
+                            args['no'] = (meta.current === '0')
+                                ? null
+                                : meta.current.viewLimit // null for all items in postgresql
                             fetchRows(sqlQueryId, args)
                             meta.current.isMounted && setRefresh({})
                             // setInBag(loadComponent, e.target.value)
