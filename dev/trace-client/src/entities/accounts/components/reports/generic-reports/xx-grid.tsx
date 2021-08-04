@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
-import { useGenericReports, useStyles } from './generic-reports-hook'
+
+import { useStyles } from './xx-grid-hook'
 import {
     XGrid,
     GridToolbarFilterButton,
-    GridToolbarDensitySelector,
+    // GridToolbarDensitySelector,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
@@ -14,30 +14,48 @@ import {
     GridCellParams,
 } from '@material-ui/x-grid'
 
-import { manageEntitiesState } from '../../../../../common-utils/esm'
-import { utilMethods } from '../../../../../common-utils/util-methods'
+// import { manageEntitiesState } from '../../../../../common-utils/esm'
+// import { utilMethods } from '../../../../../common-utils/util-methods'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
 
+interface SpecialColumnOptions {
+    isEdit?: boolean
+    isDelete?: boolean
+    isRemove?: boolean
+    isDrillDown?: boolean
+    isEditMethos?: any
+    isDeleteMethod?: any
+    editIbukiMessage?: any
+    deleteIbukiMessage?: any
+    drillDownIbukiMessage?: any
+}
 
 interface XXGridOptions {
     columns: any[]
-    // rows: any[]
     sqlQueryArgs?: any
     sqlQueryId?: any
-    summaryColumns: string[]
+    summaryColNames: string[]
     title: string
+    specialColumns: SpecialColumnOptions
 }
 
 function XXGrid(gridOptions: XXGridOptions) {
-    const { columns, sqlQueryArgs, sqlQueryId, summaryColumns, title } = gridOptions
-    // summaryColumns.push('debit')
+    const { columns, sqlQueryArgs, sqlQueryId, summaryColNames, title } =
+        gridOptions
     const apiRef = useGridApiRef()
-    const { fetchRows, meta, onSelectModelChange, requestSearch, setRefresh } = useXXGrid(gridOptions)
+    const {
+        fetchRows,
+        meta,
+        onSelectModelChange,
+        requestSearch,
+        setFilteredSummary,
+        setRefresh,
+    } = useXXGrid(gridOptions)
     const {
         _,
         Button,
-        Card,
+        // Card,
         CloseIcon,
         DeleteIcon,
         EditIcon,
@@ -52,7 +70,8 @@ function XXGrid(gridOptions: XXGridOptions) {
     } = useSharedElements()
 
     const classes = useStyles()
-
+    const specialColumns = gridOptions.specialColumns
+    addSpecialColumns(specialColumns)
     return (
         <XGrid
             apiRef={apiRef}
@@ -68,8 +87,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             componentsProps={{
                 toolbar: {
                     value: meta.current.searchText,
-                    onChange: (event: any) =>
-                        requestSearch(event.target.value),
+                    onChange: (event: any) => requestSearch(event.target.value),
                     clearSearch: () => requestSearch(''),
                 },
                 footer: {
@@ -123,9 +141,10 @@ function XXGrid(gridOptions: XXGridOptions) {
                         }}
                         onChange={(e) => {
                             meta.current.viewLimit = e.target.value
-                            sqlQueryArgs['no'] = (meta.current.viewLimit === '0')
-                                ? null
-                                : meta.current.viewLimit // null for all items in postgresql
+                            sqlQueryArgs['no'] =
+                                meta.current.viewLimit === '0'
+                                    ? null
+                                    : meta.current.viewLimit // null for all items in postgresql
                             fetchRows(sqlQueryId, sqlQueryArgs)
                             meta.current.isMounted && setRefresh({})
                             // setInBag(loadComponent, e.target.value)
@@ -197,7 +216,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 function incr() {
                     return k++
                 }
-                return summaryColumns.map((col: string) => {
+                return summaryColNames.map((col: string) => {
                     return (
                         <div key={incr()}>
                             {col}{' '}
@@ -228,7 +247,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 function incr() {
                     return k++
                 }
-                return summaryColumns.map((col: string) => {
+                return summaryColNames.map((col: string) => {
                     return (
                         <div key={incr()}>
                             {col}{' '}
@@ -259,7 +278,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 function incr() {
                     return k++
                 }
-                return (summaryColumns.map((col: string) => {
+                return summaryColNames.map((col: string) => {
                     return (
                         <div key={incr()}>
                             {col}{' '}
@@ -267,8 +286,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             &nbsp;&nbsp;
                         </div>
                     )
-                }))
-
+                })
             }
         }
     }
@@ -281,7 +299,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         })
         const obj = arr.reduce((prev: any, current: any) => {
             prev.count = (prev.count || 0) + 1
-            for (let col of summaryColumns) {
+            for (let col of summaryColNames) {
                 prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
             }
             return prev
@@ -293,6 +311,127 @@ function XXGrid(gridOptions: XXGridOptions) {
         meta.current.isMounted && setRefresh({})
     }
 
+    function addSpecialColumns(options: SpecialColumnOptions) {
+        if (options.isDelete) {
+            const deleteColumn = {
+                headerName: 'D',
+                description: 'Delete from database',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field: '2',
+                renderCell: (params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            className="delete"
+                            onClick={() => emit(options.deleteIbukiMessage, '')}
+                            aria-label="Delete">
+                            <DeleteIcon />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(deleteColumn)
+        }
+
+        if (options.isEdit) {
+            const editColumn = {
+                headerName: 'E',
+                description: 'Edit',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field: '1',
+                renderCell: (params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            onClick={() => emit(options.editIbukiMessage, '')}
+                            aria-label="Edit">
+                            <EditIcon />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(editColumn)
+        }
+
+        if (options.isRemove) {
+            const removeColumn = {
+                headerName: 'R',
+                description: 'Remove without delete',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field: '0',
+                renderCell: (params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() => removeRow(params)}
+                            aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(removeColumn)
+        }
+
+        if (options.isDrillDown) {
+            const drillDownColumn = {
+                headerName: 'D',
+                description: 'Drill down',
+                disableColumnMenu: true,
+                disableExport: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field: '3',
+                renderCell: (params: GridCellParams) => {
+                    return (
+                        <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={() =>
+                                emit(options.drillDownIbukiMessage, '')
+                            }
+                            aria-label="close">
+                            <SearchIcon color="secondary" fontSize="small" />
+                        </IconButton>
+                    )
+                },
+            }
+            columns.unshift(drillDownColumn)
+        }
+
+        function removeRow(params: any) {
+            const id = params.id
+            const temp = [...meta.current.filteredRows]
+            _.remove(temp, (x: any) => x.id === id)
+            meta.current.filteredRows = temp
+            setFilteredSummary()
+            meta.current.isMounted && setRefresh({})
+        }
+    }
 }
 
 export { XXGrid }
