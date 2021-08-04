@@ -6,7 +6,7 @@
     "@apollo/react-hooks": "^4.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "@material-ui/core": "^4.12.3",
     "@material-ui/data-grid": "^4.0.0-alpha.35",
     "@material-ui/icons": "^4.11.2",
@@ -18,7 +18,7 @@
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.172",
     "@types/moment": "^2.13.0",
-    "@types/node": "^16.4.10",
+    "@types/node": "^16.4.11",
     "@types/object-hash": "^2.1.1",
     "@types/react": "^17.0.15",
     "@types/react-dom": "^17.0.9",
@@ -88,7 +88,7 @@
     "css-loader": "^6.2.0",
     "eslint-plugin-react": "^7.24.0",
     "gzip": "^0.1.0",
-    "sass": "^1.37.2",
+    "sass": "^1.37.5",
     "style-loader": "^3.2.1"
   }
 }

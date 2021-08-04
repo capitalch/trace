@@ -109,6 +109,7 @@
 6.1 Bill wise payment
 6.2 Sales include price without GST
 6.3 Generic Grid for reporting purpose
+6.4 Expence entry with GST
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.

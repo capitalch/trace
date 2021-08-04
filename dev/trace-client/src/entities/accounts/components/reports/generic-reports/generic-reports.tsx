@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useGenericReports, useStyles } from './generic-reports-hook'
+import { XXGrid } from './xx-grid'
 import {
     XGrid,
     GridToolbarFilterButton,
@@ -26,6 +27,7 @@ function GenericReports({ loadReport }: any) {
         meta,
         onSelectModelChange,
         requestSearch,
+        setFilteredSummary,
         setRefresh,
         sqlQueryId,
         summaryColumns,
@@ -56,20 +58,25 @@ function GenericReports({ loadReport }: any) {
 
     console.log('rendered')
 
-    useEffect(() => {
-        // onFilteredClick()
-    }, [meta.current.rowModels !== 0])
+    // addSpecialColumns({
+    //     isRemove: true,
+    //     isEdit: true,
+    //     isDelete: true,
+    //     isDrillDown: true,
+    // })
 
-    addSpecialColumns({
-        isRemove: true,
-        isEdit: true,
-        isDelete: true,
-        isDrillDown: true,
-    })
+    // const { args, columns, sqlQueryId, summaryColumns, title, } = selectLogic[loadReport]()
 
     return (
         <Card className={classes.content}>
-            <XGrid
+            <XXGrid 
+                columns={columns}
+                summaryColumns={summaryColumns}
+                title={title}
+                sqlQueryId = {sqlQueryId}
+                sqlQueryArgs={args}
+            />
+            {/* <XGrid
                 apiRef={apiRef}
                 columns={columns}
                 rows={meta.current.filteredRows}
@@ -97,212 +104,212 @@ function GenericReports({ loadReport }: any) {
                 onSelectionModelChange={onSelectModelChange}
                 showColumnRightBorder={true}
                 showCellRightBorder={true}
-            />
+            /> */}
         </Card>
     )
 
-    function CustomGridToolbar(props: any) {
-        return (
-            <GridToolbarContainer className="custom-toolbar">
-                <Typography className="toolbar-title">{title}</Typography>
-                <div>
-                    <GridToolbarColumnsButton color="secondary" />
-                    <GridToolbarFilterButton color="secondary" />
-                    {/* <GridToolbarDensitySelector color="secondary" /> */}
-                    <GridToolbarExport color="secondary" />
-                </div>
-                <Button
-                    variant="text"
-                    color="secondary"
-                    onClick={() => {
-                        onFilteredClick()
-                        meta.current.isMounted && setRefresh({})
-                    }}>
-                    Filtered
-                </Button>
-                <IconButton
-                    className={classes.syncIconButton}
-                    size="medium"
-                    color="secondary"
-                    onClick={(e: any) => fetchRows(sqlQueryId, args)}>
-                    <SyncIcon></SyncIcon>
-                </IconButton>
-                <div className="view-limit">
-                    <span>View</span>
-                    <select
-                        // value={getFromBag(loadComponent) || meta.current.no}
-                        value={meta.current.viewLimit}
-                        style={{
-                            fontSize: '0.8rem',
-                            width: '4rem',
-                            marginLeft: '0.1rem',
-                        }}
-                        onChange={(e) => {
-                            meta.current.viewLimit = e.target.value
-                            args['no'] = (meta.current === '0')
-                                ? null
-                                : meta.current.viewLimit // null for all items in postgresql
-                            fetchRows(sqlQueryId, args)
-                            meta.current.isMounted && setRefresh({})
-                            // setInBag(loadComponent, e.target.value)
-                            // getData()
-                        }}>
-                        <option value={100}>100</option>
-                        <option value={1000}>1000</option>
-                        <option value={0}>All</option>
-                    </select>
-                </div>
+    // function CustomGridToolbar(props: any) {
+    //     return (
+    //         <GridToolbarContainer className="custom-toolbar">
+    //             <Typography className="toolbar-title">{title}</Typography>
+    //             <div>
+    //                 <GridToolbarColumnsButton color="secondary" />
+    //                 <GridToolbarFilterButton color="secondary" />
+    //                 {/* <GridToolbarDensitySelector color="secondary" /> */}
+    //                 <GridToolbarExport color="secondary" />
+    //             </div>
+    //             <Button
+    //                 variant="text"
+    //                 color="secondary"
+    //                 onClick={() => {
+    //                     onFilteredClick()
+    //                     meta.current.isMounted && setRefresh({})
+    //                 }}>
+    //                 Filtered
+    //             </Button>
+    //             <IconButton
+    //                 className={classes.syncIconButton}
+    //                 size="medium"
+    //                 color="secondary"
+    //                 onClick={(e: any) => fetchRows(sqlQueryId, args)}>
+    //                 <SyncIcon></SyncIcon>
+    //             </IconButton>
+    //             <div className="view-limit">
+    //                 <span>View</span>
+    //                 <select
+    //                     // value={getFromBag(loadComponent) || meta.current.no}
+    //                     value={meta.current.viewLimit}
+    //                     style={{
+    //                         fontSize: '0.8rem',
+    //                         width: '4rem',
+    //                         marginLeft: '0.1rem',
+    //                     }}
+    //                     onChange={(e) => {
+    //                         meta.current.viewLimit = e.target.value
+    //                         args['no'] = (meta.current.viewLimit === '0')
+    //                             ? null
+    //                             : meta.current.viewLimit // null for all items in postgresql
+    //                         fetchRows(sqlQueryId, args)
+    //                         meta.current.isMounted && setRefresh({})
+    //                         // setInBag(loadComponent, e.target.value)
+    //                         // getData()
+    //                     }}>
+    //                     <option value={100}>100</option>
+    //                     <option value={1000}>1000</option>
+    //                     <option value={0}>All</option>
+    //                 </select>
+    //             </div>
 
-                {/* </div> */}
+    //             {/* </div> */}
 
-                {/* global filter */}
-                <TextField
-                    variant="standard"
-                    autoFocus
-                    value={props.value}
-                    onChange={props.onChange}
-                    placeholder="Search…"
-                    className="global-search"
-                    InputProps={{
-                        startAdornment: <SearchIcon fontSize="small" />,
-                        endAdornment: (
-                            <IconButton
-                                title="Clear"
-                                aria-label="Clear"
-                                size="small"
-                                style={{
-                                    visibility: props.value
-                                        ? 'visible'
-                                        : 'hidden',
-                                }}
-                                onClick={props.clearSearch}>
-                                <CloseIcon fontSize="small" />
-                            </IconButton>
-                        ),
-                    }}
-                />
-            </GridToolbarContainer>
-        )
-    }
+    //             {/* global filter */}
+    //             <TextField
+    //                 variant="standard"
+    //                 autoFocus
+    //                 value={props.value}
+    //                 onChange={props.onChange}
+    //                 placeholder="Search…"
+    //                 className="global-search"
+    //                 InputProps={{
+    //                     startAdornment: <SearchIcon fontSize="small" />,
+    //                     endAdornment: (
+    //                         <IconButton
+    //                             title="Clear"
+    //                             aria-label="Clear"
+    //                             size="small"
+    //                             style={{
+    //                                 visibility: props.value
+    //                                     ? 'visible'
+    //                                     : 'hidden',
+    //                             }}
+    //                             onClick={props.clearSearch}>
+    //                             <CloseIcon fontSize="small" />
+    //                         </IconButton>
+    //                     ),
+    //                 }}
+    //             />
+    //         </GridToolbarContainer>
+    //     )
+    // }
 
-    function CustomGridFooter(props: any) {
-        return (
-            <GridFooterContainer className="custom-footer">
-                <SelectedMarkup />
-                <FilteredMarkup />
-                <AllMarkup />
-            </GridFooterContainer>
-        )
+    // function CustomGridFooter(props: any) {
+    //     return (
+    //         <GridFooterContainer className="custom-footer">
+    //             <SelectedMarkup />
+    //             <FilteredMarkup />
+    //             <AllMarkup />
+    //         </GridFooterContainer>
+    //     )
 
-        function SelectedMarkup() {
-            return (
-                <div className="common selected">
-                    <div>
-                        <b>Selected</b> &nbsp;
-                    </div>
-                    <div>
-                        count <b>{props.selectedSummary['count']}</b>{' '}
-                        &nbsp;&nbsp;{' '}
-                    </div>
-                    <SelectedCols />
-                </div>
-            )
-            function SelectedCols() {
-                let k = 1
-                function incr() {
-                    return k++
-                }
-                return summaryColumns.map((col: string) => {
-                    return (
-                        <div key={incr()}>
-                            {col}{' '}
-                            <b>{toDecimalFormat(props.selectedSummary[col])}</b>
-                            &nbsp;&nbsp;
-                        </div>
-                    )
-                })
-            }
-        }
+    //     function SelectedMarkup() {
+    //         return (
+    //             <div className="common selected">
+    //                 <div>
+    //                     <b>Selected</b> &nbsp;
+    //                 </div>
+    //                 <div>
+    //                     count <b>{props.selectedSummary['count']}</b>{' '}
+    //                     &nbsp;&nbsp;{' '}
+    //                 </div>
+    //                 <SelectedCols />
+    //             </div>
+    //         )
+    //         function SelectedCols() {
+    //             let k = 1
+    //             function incr() {
+    //                 return k++
+    //             }
+    //             return summaryColumns.map((col: string) => {
+    //                 return (
+    //                     <div key={incr()}>
+    //                         {col}{' '}
+    //                         <b>{toDecimalFormat(props.selectedSummary[col])}</b>
+    //                         &nbsp;&nbsp;
+    //                     </div>
+    //                 )
+    //             })
+    //         }
+    //     }
 
-        function FilteredMarkup() {
-            return (
-                <div className="common filtered">
-                    <div>
-                        <b>Filtered</b> &nbsp;
-                    </div>
-                    <div>
-                        count <b>{props.filteredSummary['count']}</b>{' '}
-                        &nbsp;&nbsp;{' '}
-                    </div>
-                    <FilteredCols />
-                </div>
-            )
-            function FilteredCols() {
-                let k = 1
-                function incr() {
-                    return k++
-                }
-                return summaryColumns.map((col: string) => {
-                    return (
-                        <div key={incr()}>
-                            {col}{' '}
-                            <b>{toDecimalFormat(props.filteredSummary[col])}</b>
-                            &nbsp;&nbsp;
-                        </div>
-                    )
-                })
-            }
-        }
+    //     function FilteredMarkup() {
+    //         return (
+    //             <div className="common filtered">
+    //                 <div>
+    //                     <b>Filtered</b> &nbsp;
+    //                 </div>
+    //                 <div>
+    //                     count <b>{props.filteredSummary['count']}</b>{' '}
+    //                     &nbsp;&nbsp;{' '}
+    //                 </div>
+    //                 <FilteredCols />
+    //             </div>
+    //         )
+    //         function FilteredCols() {
+    //             let k = 1
+    //             function incr() {
+    //                 return k++
+    //             }
+    //             return summaryColumns.map((col: string) => {
+    //                 return (
+    //                     <div key={incr()}>
+    //                         {col}{' '}
+    //                         <b>{toDecimalFormat(props.filteredSummary[col])}</b>
+    //                         &nbsp;&nbsp;
+    //                     </div>
+    //                 )
+    //             })
+    //         }
+    //     }
 
-        function AllMarkup() {
-            return (
-                <div className="common all">
-                    <div>
-                        <b>All</b> &nbsp;
-                    </div>
-                    <div>
-                        count <b>{props.allSummary['count']}</b> &nbsp;&nbsp;{' '}
-                    </div>
-                    <AllCols />
-                </div>
-            )
-            function AllCols() {
-                let k = 1
-                function incr() {
-                    return k++
-                }
-                return summaryColumns.map((col: string) => {
-                    return (
-                        <div key={incr()}>
-                            {col}{' '}
-                            <b>{toDecimalFormat(props.allSummary[col])}</b>
-                            &nbsp;&nbsp;
-                        </div>
-                    )
-                })
-            }
-        }
-    }
+    //     function AllMarkup() {
+    //         return (
+    //             <div className="common all">
+    //                 <div>
+    //                     <b>All</b> &nbsp;
+    //                 </div>
+    //                 <div>
+    //                     count <b>{props.allSummary['count']}</b> &nbsp;&nbsp;{' '}
+    //                 </div>
+    //                 <AllCols />
+    //             </div>
+    //         )
+    //         function AllCols() {
+    //             let k = 1
+    //             function incr() {
+    //                 return k++
+    //             }
+    //             return summaryColumns.map((col: string) => {
+    //                 return (
+    //                     <div key={incr()}>
+    //                         {col}{' '}
+    //                         <b>{toDecimalFormat(props.allSummary[col])}</b>
+    //                         &nbsp;&nbsp;
+    //                     </div>
+    //                 )
+    //             })
+    //         }
+    //     }
+    // }
 
-    function onFilteredClick() {
-        const rowsMap = apiRef.current.getVisibleRowModels()
-        const arr: any[] = []
-        rowsMap.forEach((value: GridRowData, key: GridRowId) => {
-            arr.push(value)
-        })
-        const obj = arr.reduce((prev: any, current: any) => {
-            prev.count = (prev.count || 0) + 1
-            for (let col of summaryColumns) {
-                prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
-            }
-            return prev
-        }, {})
+    // function onFilteredClick() {
+    //     const rowsMap = apiRef.current.getVisibleRowModels()
+    //     const arr: any[] = []
+    //     rowsMap.forEach((value: GridRowData, key: GridRowId) => {
+    //         arr.push(value)
+    //     })
+    //     const obj = arr.reduce((prev: any, current: any) => {
+    //         prev.count = (prev.count || 0) + 1
+    //         for (let col of summaryColumns) {
+    //             prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
+    //         }
+    //         return prev
+    //     }, {})
 
-        _.isEmpty(obj)
-            ? (meta.current.filteredSummary = {})
-            : (meta.current.filteredSummary = obj)
-        meta.current.isMounted && setRefresh({})
-    }
+    //     _.isEmpty(obj)
+    //         ? (meta.current.filteredSummary = {})
+    //         : (meta.current.filteredSummary = obj)
+    //     meta.current.isMounted && setRefresh({})
+    // }
 
     interface SpecialColumnOptions {
         isEdit?: boolean
@@ -429,9 +436,9 @@ function GenericReports({ loadReport }: any) {
             const id = params.id
             const temp = [...meta.current.filteredRows]
             _.remove(temp, (x: any) => x.id === id)
-            // meta.current.filteredRows = temp
-            // setFilteredSummary()
-            // meta.current.isMounted && setRefresh({})
+            meta.current.filteredRows = temp
+            setFilteredSummary()
+            meta.current.isMounted && setRefresh({})
         }
     }
 }

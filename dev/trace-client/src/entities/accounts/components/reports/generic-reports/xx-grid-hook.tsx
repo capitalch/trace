@@ -1,18 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { useAllTransactions } from '../helpers/all-transactions'
-// import { useGridApiRef, GridRowId, GridRowData } from '@material-ui/x-grid'
-import { utilMethods } from '../../../../../common-utils/util-methods'
-import { manageEntitiesState } from '../../../../../common-utils/esm'
+import { useGridApiRef, GridRowId, GridRowData } from '@material-ui/x-grid'
 
-function useGenericReports(loadReport: any) {
+
+
+function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
-    const selectLogic: any = {
-        allTransactions: useAllTransactions,
-    }
-    const { args, columns, sqlQueryId, summaryColumns, title, } = selectLogic[loadReport]()
-
+    const {sqlQueryArgs, sqlQueryId, summaryColumns} = gridOptions
     const meta: any = useRef({
         filteredRows: [],
         filteredSummary: {},
@@ -20,31 +15,28 @@ function useGenericReports(loadReport: any) {
         isMounted: false,
         rows: [],
         selectedSummary: {},
-        searchText: '',        
+        searchText: '',
         viewLimit: 0,
     })
 
-    const { _, emit } = useSharedElements()
+    const { _, emit, getCurrentEntity, execGenericView } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
-        fetchRows(sqlQueryId, args)
+        fetchRows(sqlQueryId, sqlQueryArgs)
         return () => {
             meta.current.isMounted = false
         }
     }, [])
 
-    const { getCurrentEntity } = manageEntitiesState()
-    // const apiRef = useGridApiRef()
-    const { execGenericView } = utilMethods()
     const entityName = getCurrentEntity()
 
-    async function fetchRows(queryId: string, arg: any) {
+    async function fetchRows(queryId: string, queryArgs: any) {
         emit('SHOW-LOADING-INDICATOR', true)
         const ret: any[] = await execGenericView({
             isMultipleRows: true,
             sqlKey: queryId,
-            args:  arg || null,
+            args: queryArgs || null,
             entityName: entityName,
         })
         emit('SHOW-LOADING-INDICATOR', false)
@@ -114,22 +106,10 @@ function useGenericReports(loadReport: any) {
         )
     }
 
-    return {
-        args,
-        columns,
-        fetchRows,
-        meta,
-        onSelectModelChange,
-        requestSearch,
-        setFilteredSummary,
-        setRefresh,
-        sqlQueryId,
-        summaryColumns,
-        title,
-    }
+    return {fetchRows, meta,onSelectModelChange, requestSearch, setRefresh }
 }
 
-export { useGenericReports, useStyles }
+export { useXXGrid, useStyles }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
@@ -156,13 +136,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     marginLeft: 'auto',
                     marginRight: '1rem',
                 },
-                '& .view-limit':{
+                '& .view-limit': {
                     display: 'flex',
                     columnGap: '0.5rem',
                     color: theme.palette.secondary.main,
-                    '& select':{
-                        borderColor:'grey',
-                        color:theme.palette.primary.main
+                    '& select': {
+                        borderColor: 'grey',
+                        color: theme.palette.primary.main
                         // height: '1.5rem'
                     }
 
