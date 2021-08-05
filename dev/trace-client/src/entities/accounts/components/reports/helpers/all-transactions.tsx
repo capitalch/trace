@@ -1,5 +1,6 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { utilMethods } from '../../../../../common-utils/util-methods'
+import moment from 'moment'
 // import { useState } from 'react'
 
 function useAllTransactions() {
@@ -17,7 +18,12 @@ function useAllTransactions() {
             disableColumnMenu: true,
         },
         { headerName: 'Id', field: 'id1', width: 90 },
-        { headerName: 'Date', field: 'tranDate', width: 120 },
+        {
+            headerName: 'Date',
+            field: 'tranDate',
+            width: 120,
+            valueGetter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
+        },
         { headerName: 'Ref', field: 'autoRefNo', width: 200 },
         { headerName: 'Account', field: 'accName', width: 200 },
         {

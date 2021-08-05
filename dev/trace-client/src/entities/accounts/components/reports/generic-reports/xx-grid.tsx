@@ -13,6 +13,19 @@ import {
     useGridApiRef,
     GridCellParams,
 } from '@material-ui/x-grid'
+// import {
+//     DataGrid,
+//     GridToolbarFilterButton,
+//     // GridToolbarDensitySelector,
+//     GridToolbarExport,
+//     GridToolbarContainer,
+//     GridToolbarColumnsButton,
+//     GridFooterContainer,
+//     GridRowId,
+//     GridRowData,
+//     useGridApiRef,
+//     GridCellParams,
+// } from '@material-ui/data-grid'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
 
@@ -40,7 +53,7 @@ interface XXGridOptions {
 function XXGrid(gridOptions: XXGridOptions) {
     const { columns, sqlQueryArgs, sqlQueryId, summaryColNames, title } =
         gridOptions
-    const apiRef = useGridApiRef()
+    const apiRef:any = useGridApiRef()
     const {
         fetchRows,
         meta,
@@ -67,6 +80,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     const classes = useStyles()
     const specialColumns = gridOptions.specialColumns
     addSpecialColumns(specialColumns)
+    
     return (
         <XGrid className={classes.content}
             apiRef={apiRef}

@@ -106,6 +106,24 @@ allSqls = {
 
     'get_allTransactions': '''
         select ROW_NUMBER() over (order by h."id" DESC) as "index"
+            , h."id", h."tranDate" as "tranDate"
+            , h."autoRefNo", h."userRefNo", h."remarks"
+            , a."accName"
+            , CASE WHEN "dc" = 'D' THEN "amount" ELSE 0.00 END as "debit"
+            , CASE WHEN "dc" = 'C' THEN "amount" ELSE 0.00 END as "credit"
+            , d."instrNo", d."lineRefNo", d."remarks" as "lineRemarks"
+            , h."tags"
+            from "TranD" d
+                join "TranH" h
+                    on h."id" = d."tranHeaderId"
+                join "AccM" a
+                    on a."id" = d."accId"
+            where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+            order by "tranDate" DESC, h."id" limit (%(no)s)
+    ''',
+
+    'get_allTransactions1': '''
+        select ROW_NUMBER() over (order by h."id" DESC) as "index"
             , h."id", to_char(h."tranDate", %(dateFormat)s) as "tranDate"
             , h."autoRefNo", h."userRefNo", h."remarks"
             , a."accName"
