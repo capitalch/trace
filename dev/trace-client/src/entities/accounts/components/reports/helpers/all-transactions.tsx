@@ -11,6 +11,7 @@ function useAllTransactions() {
     const columns = [
         {
             headerName: 'Ind',
+            description: 'Index',
             field: 'index',
             width: 80,
             disableColumnMenu: true,
@@ -56,6 +57,12 @@ function useAllTransactions() {
         {
             headerName: 'Line remarks',
             field: 'lineRemarks',
+            width: 200,
+            sortable: false,
+        },
+        {
+            headerName: 'Tags',
+            field: 'tags',
             width: 200,
             sortable: false,
         },

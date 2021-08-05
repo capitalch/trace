@@ -131,6 +131,10 @@
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 01-08-2021 - 5-08-2021
+1. Making the XXGrid as generic multi-place grid
+2. All transaction report has all fields
+
 # 26-07-2021 - 31-07-2021
 1. All transactions report
 

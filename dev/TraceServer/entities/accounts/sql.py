@@ -112,13 +112,14 @@ allSqls = {
             , CASE WHEN "dc" = 'D' THEN "amount" ELSE 0.00 END as "debit"
             , CASE WHEN "dc" = 'C' THEN "amount" ELSE 0.00 END as "credit"
             , d."instrNo", d."lineRefNo", d."remarks" as "lineRemarks"
+            , h."tags"
             from "TranD" d
                 join "TranH" h
                     on h."id" = d."tranHeaderId"
                 join "AccM" a
                     on a."id" = d."accId"
             where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-            order by "id" DESC limit (%(no)s)
+            order by "tranDate" DESC, h."id" limit (%(no)s)
     ''',
 
     'get_allTransactions_download': '''

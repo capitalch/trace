@@ -1,9 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { useGridApiRef, GridRowId, GridRowData } from '@material-ui/x-grid'
-
-
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
@@ -28,7 +25,6 @@ function useXXGrid(gridOptions: any) {
             meta.current.isMounted = false
         }
     }, [])
-
     const entityName = getCurrentEntity()
 
     async function fetchRows(queryId: string, queryArgs: any) {

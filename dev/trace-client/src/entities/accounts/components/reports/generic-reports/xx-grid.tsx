@@ -13,9 +13,6 @@ import {
     useGridApiRef,
     GridCellParams,
 } from '@material-ui/x-grid'
-
-// import { manageEntitiesState } from '../../../../../common-utils/esm'
-// import { utilMethods } from '../../../../../common-utils/util-methods'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
 
@@ -55,12 +52,10 @@ function XXGrid(gridOptions: XXGridOptions) {
     const {
         _,
         Button,
-        // Card,
         CloseIcon,
         DeleteIcon,
         EditIcon,
         emit,
-        // NativeSelect,
         IconButton,
         SearchIcon,
         SyncIcon,
@@ -73,7 +68,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     const specialColumns = gridOptions.specialColumns
     addSpecialColumns(specialColumns)
     return (
-        <XGrid
+        <XGrid className={classes.content}
             apiRef={apiRef}
             columns={columns}
             rows={meta.current.filteredRows}
@@ -96,7 +91,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                     allSummary: meta.current.allSummary,
                 },
             }}
-            // onRowClick={onRowClick}
             onSelectionModelChange={onSelectModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
@@ -132,7 +126,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                 <div className="view-limit">
                     <span>View</span>
                     <select
-                        // value={getFromBag(loadComponent) || meta.current.no}
                         value={meta.current.viewLimit}
                         style={{
                             fontSize: '0.8rem',
@@ -147,16 +140,12 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     : meta.current.viewLimit // null for all items in postgresql
                             fetchRows(sqlQueryId, sqlQueryArgs)
                             meta.current.isMounted && setRefresh({})
-                            // setInBag(loadComponent, e.target.value)
-                            // getData()
                         }}>
                         <option value={100}>100</option>
                         <option value={1000}>1000</option>
                         <option value={0}>All</option>
                     </select>
                 </div>
-
-                {/* </div> */}
 
                 {/* global filter */}
                 <TextField
@@ -208,7 +197,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                         &nbsp;&nbsp;{' '}
                     </div>
                     {SelectedCols()}
-                    {/* <SelectedCols /> */}
                 </div>
             )
             function SelectedCols() {
