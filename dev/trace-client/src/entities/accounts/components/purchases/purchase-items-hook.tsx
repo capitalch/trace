@@ -813,37 +813,7 @@ function usePurchaseItems(arbitraryData: any) {
                 header="Price (Gst)"
                 style={{ width: '8rem', textAlign: 'end' }}
                 body={(rowData: any) => {
-                    return (
-                        // <InputNumber
-                        //     minFractionDigits={2}
-                        //     maxFractionDigits={2}
-                        //     onFocus={(e) => {
-                        //         e.target.select()
-                        //         meta.current.isDataChanged = false
-                        //     }}
-                        //     onBlur={() => {
-                        //         if (meta.current.isDataChanged) {
-                        //             computeRow(rowData)
-                        //             meta.current.isDataChanged = false
-                        //         }
-                        //     }}
-                        //     onKeyDown={(e: any) => {
-                        //         if ([9, 13].includes(e.keyCode)) {
-                        //             meta.current.isDataChanged &&
-                        //                 computeRow(rowData)
-                        //             meta.current.isDataChanged = false
-                        //         }
-                        //     }}
-                        //     value={rowData.priceGst || 0.0}
-                        //     onValueChange={(e: any) => {
-                        //         rowData.priceGst = e.value || 0.0
-                        //         allErrorMethods().setDiscountError(rowData)
-                        //         meta.current.isDataChanged = true
-                        //         rowData.price =
-                        //             e.value / (1 + rowData.gstRate / 100)
-                        //         meta.current.isMounted && setRefresh({})
-                        //     }}
-                        // />
+                    return (                        
                         <NumberFormat
                             allowNegative={false}
                             className="right-aligned-numeric"
@@ -858,8 +828,6 @@ function usePurchaseItems(arbitraryData: any) {
                                 allErrorMethods().setDiscountError(rowData)
                                 meta.current.isDataChanged = true
                                 // Adding following line does approximation error hence moved to onBlur event
-                                // rowData.price =
-                                //     floatValue / (1 + rowData.gstRate / 100)
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e) => {

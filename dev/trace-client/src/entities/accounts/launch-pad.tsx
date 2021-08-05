@@ -96,6 +96,7 @@ function LaunchPad() {
         // subs.add(subs1).add(subs2)
         return () => {
             subs.unsubscribe()
+            subs1.unsubscribe()
             subs2.unsubscribe()
             meta.current.isMounted = false
         }

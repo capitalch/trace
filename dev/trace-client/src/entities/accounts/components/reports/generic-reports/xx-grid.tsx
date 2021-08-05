@@ -48,9 +48,10 @@ interface XXGridOptions {
     summaryColNames: string[]
     title: string
     specialColumns: SpecialColumnOptions
+    xGridProps?: any
 }
 
-function XXGrid(gridOptions: XXGridOptions) {
+function XXGrid(gridOptions: XXGridOptions, ) {
     const { columns, sqlQueryArgs, sqlQueryId, summaryColNames, title } =
         gridOptions
     const apiRef:any = useGridApiRef()
@@ -83,6 +84,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     
     return (
         <XGrid className={classes.content}
+            {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}
             rows={meta.current.filteredRows}

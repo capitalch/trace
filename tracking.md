@@ -1,4 +1,3 @@
-x-grid 4.0.0-alpha.35
 ## Generic report XXGrid
 				1. Organize code
 				2. Genenic Summary columns
