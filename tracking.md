@@ -110,6 +110,7 @@
 6.2 Sales include price without GST
 6.3 Generic Grid for reporting purpose
 6.4 Expence entry with GST
+6.5 Check all columns in all transaction report. It should have everything
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
