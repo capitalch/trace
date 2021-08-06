@@ -110,7 +110,8 @@
 6.2 Sales include price without GST
 6.3 Generic Grid for reporting purpose
 6.4 Expence entry with GST
-6.5 Check all columns in all transaction report. It should have everything
+6.5 Drill down, edit and delete functionality from report
+6.6 First page reporting charts
 
 ## Bugs
 1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
@@ -129,6 +130,10 @@
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 01-08-2021 - 5-08-2021
+1. Making the XXGrid as generic multi-place grid
+2. All transaction report has all fields
 
 # 26-07-2021 - 31-07-2021
 1. All transactions report

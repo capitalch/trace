@@ -1,13 +1,10 @@
 import { useEffect, useState, useRef } from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { useGridApiRef, GridRowId, GridRowData } from '@material-ui/x-grid'
-
-
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
-    const {sqlQueryArgs, sqlQueryId, summaryColumns} = gridOptions
+    const {sqlQueryArgs, sqlQueryId, summaryColNames} = gridOptions
     const meta: any = useRef({
         filteredRows: [],
         filteredSummary: {},
@@ -18,7 +15,7 @@ function useXXGrid(gridOptions: any) {
         searchText: '',
         viewLimit: 0,
     })
-
+    
     const { _, emit, getCurrentEntity, execGenericView } = useSharedElements()
 
     useEffect(() => {
@@ -28,7 +25,6 @@ function useXXGrid(gridOptions: any) {
             meta.current.isMounted = false
         }
     }, [])
-
     const entityName = getCurrentEntity()
 
     async function fetchRows(queryId: string, queryArgs: any) {
@@ -48,7 +44,7 @@ function useXXGrid(gridOptions: any) {
         const temp: any[] = ret.map((x: any) => {
             x['id1'] = x.id
             x.id = incr()
-            for (let col of summaryColumns) {
+            for (let col of summaryColNames) {
                 tot[col] = (tot[col] || 0) + x[col]
             }
             return x
@@ -68,7 +64,7 @@ function useXXGrid(gridOptions: any) {
         const rows = meta.current.rows
         const obj = rowIds.reduce((prev: any, current: any) => {
             prev.count = prev.count ? prev.count + 1 : 1
-            for (let col of summaryColumns) {
+            for (let col of summaryColNames) {
                 prev[col] = (prev[col] || 0.0) + rows[current - 1][col]
             }
             return prev
@@ -97,7 +93,7 @@ function useXXGrid(gridOptions: any) {
         meta.current.filteredSummary = meta.current.filteredRows.reduce(
             (prev: any, current: any) => {
                 prev.count = (prev.count || 0) + 1
-                for(let col of summaryColumns){
+                for(let col of summaryColNames){
                     prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
                 }
                 return prev
@@ -106,7 +102,7 @@ function useXXGrid(gridOptions: any) {
         )
     }
 
-    return {fetchRows, meta,onSelectModelChange, requestSearch, setRefresh }
+    return {fetchRows, meta,onSelectModelChange, requestSearch,setFilteredSummary, setRefresh }
 }
 
 export { useXXGrid, useStyles }
