@@ -65,10 +65,10 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                 component="span"
                 variant="body2"
                 className="gst-details">{`Cgst: ${toDecimalFormat(
-                rowData?.cgst
-            )}, Sgst: ${toDecimalFormat(rowData?.sgst)}, Igst:${toDecimalFormat(
-                rowData?.igst
-            )},`}</Typography>
+                    rowData?.cgst
+                )}, Sgst: ${toDecimalFormat(rowData?.sgst)}, Igst:${toDecimalFormat(
+                    rowData?.igst
+                )},`}</Typography>
         )
     }
 
@@ -360,61 +360,12 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                 }}
                 footer={arbitraryData?.summary?.qty || 0}
             />,
-            //price
-            // <PrimeColumn
-            //     key={incr()}
-            //     // field="price"
-            //     header="Price"
-            //     style={{ width: '8rem', textAlign: 'end' }}
-            //     body={(rowData: any) => {
-            //         return (
-            //             <NumberFormat
-            //                 allowNegative={false}
-            //                 className="right-aligned-numeric"
-            //                 customInput={TextField}
-            //                 decimalScale={2}
-            //                 // error={allErrorMethods().getDiscountError(rowData)}
-            //                 fixedDecimalScale={true}
-            //                 onValueChange={(values: any) => {
-            //                     //using onChange event stores formatted value
-            //                     const { floatValue } = values
-            //                     rowData.price = floatValue || 0.0
-                                
-            //                     meta.current.isDataChanged = true
-            //                     // computeRow(rowData)
-            //                     // computeSummary()
-            //                     meta.current.isMounted && setRefresh({})
-            //                 }}
-            //                 onFocus={(e) => {
-            //                     e.target.select()
-            //                     meta.current.isDataChanged = false
-            //                 }}
-            //                 onBlur={() => {
-            //                     if (meta.current.isDataChanged) {
-            //                         computeRow(rowData)
-            //                         meta.current.isDataChanged = false
-            //                     }
-            //                 }}
-            //                 onKeyDown={(e: any) => {
-            //                     if ([9, 13].includes(e.keyCode)) {
-            //                         meta.current.isDataChanged &&
-            //                             computeRow(rowData)
-            //                         meta.current.isDataChanged = false
-            //                     }
-            //                 }}
-            //                 thousandSeparator={true}
-            //                 value={rowData.price || 0.0}
-            //             />
-            //         )
-            //     }}
-            //     footer=""
-            // />,
 
-            //price(GST)
+            //price
             <PrimeColumn
                 key={incr()}
                 field="price"
-                header="Price (Gst)"
+                header="Price"
                 style={{ width: '8rem', textAlign: 'end' }}
                 body={(rowData: any) => {
                     return (
@@ -426,9 +377,9 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
-                                rowData.priceGst = floatValue || 0.0
-                                meta.current.isDataChanged = true
                                 rowData.price = floatValue || 0.0
+                                meta.current.isDataChanged = true
+                                // rowData.price = floatValue || 0.0
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e) => {
@@ -452,6 +403,54 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             }}
                             thousandSeparator={true}
                             value={rowData.price || 0.0}
+                        />
+                    )
+                }}
+                footer=""
+            />,
+
+            //price(GST)
+            <PrimeColumn
+                key={incr()}
+                field="priceGst"
+                header="Price (Gst)"
+                style={{ width: '8rem', textAlign: 'end' }}
+                body={(rowData: any) => {
+                    return (
+                        <NumberFormat
+                            allowNegative={false}
+                            className="right-aligned-numeric"
+                            customInput={TextField}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                rowData.priceGst = floatValue || 0.0
+                                meta.current.isDataChanged = true
+                                // rowData.price = floatValue || 0.0
+                                meta.current.isMounted && setRefresh({})
+                            }}
+                            onFocus={(e) => {
+                                e.target.select()
+                                meta.current.isDataChanged = false
+                            }}
+                            onBlur={() => {
+                                if (meta.current.isDataChanged) {
+                                    computeRow(rowData)
+                                    computeSummary()
+                                    meta.current.isDataChanged = false
+                                }
+                            }}
+                            onKeyDown={(e: any) => {
+                                if ([9, 13].includes(e.keyCode)) {
+                                    meta.current.isDataChanged &&
+                                        computeRow(rowData)
+                                    computeSummary()
+                                    meta.current.isDataChanged = false
+                                }
+                            }}
+                            thousandSeparator={true}
+                            value={rowData.priceGst || 0.0}
                         />
                     )
                 }}

@@ -827,7 +827,6 @@ function usePurchaseItems(arbitraryData: any) {
                                 rowData.priceGst = floatValue || 0.0
                                 allErrorMethods().setDiscountError(rowData)
                                 meta.current.isDataChanged = true
-                                // Adding following line does approximation error hence moved to onBlur event
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e) => {

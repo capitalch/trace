@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useProductUtils } from '../common/product-utils-hook'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { findDOMNode } from 'react-dom'
 
 function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
@@ -59,7 +58,7 @@ function useSaleItems(arbitraryData: any) {
         rowData.productDetails = undefined
         rowData.gstRate = 0.0
         rowData.qty = 1
-        rowData.price = 0.0
+        rowData.priceGst = 0.0
         rowData.discount = 0.0
         rowData.amount = 0.0
         rowData.lineRefNo = undefined
@@ -80,6 +79,7 @@ function useSaleItems(arbitraryData: any) {
 
     function computeRow(rowData: any) {
         const gstRate = rowData.gstRate
+        const priceGst = rowData.priceGst
         const price = rowData.price
         const discount = rowData.discount
         const qty = rowData.qty
