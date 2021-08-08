@@ -212,8 +212,17 @@ function useProductUtils(
             rowData.price = product.purPrice || 0.0
             rowData.discount = product.purDiscount || 0.0
         } else {
-            rowData.price = product.salePriceGst || 0.0
-            rowData.discount = product.saleDiscount || 0.0
+            // consider when salePriceGst, salePrice exists / not exists
+            if(product.salePriceGst){
+                rowData.priceGst = product.salePriceGst 
+                rowData.price = product.salePriceGst / (1 + ((product.gstRate || 0.0) / 100))
+            } else if( product.salePrice){
+                rowData.price = product.salePrice
+                rowData.priceGst = product.salePrice * (1 + ((product.gstRate || 0.0) / 100))
+            } else {
+                rowData.price = 0.0
+                rowData.priceGst = 0.0
+            }            
         }
 
         rowData.cgst = 0.0

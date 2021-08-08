@@ -97,6 +97,20 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
             return numb++
         }
 
+        function setPrice(rowData:any){
+            const priceGst = rowData.priceGst
+            const gstRate = rowData.gstRate
+            const price = priceGst / (1 + (gstRate / 100))
+            rowData.price = price
+        }
+
+        function setPriceGst(rowData: any){
+            const price = rowData.price
+            const gstRate = rowData.gstRate
+            const priceGst = price * (1 + (gstRate / 100))
+            rowData.priceGst = priceGst
+        }
+
         return [
             // Index
             <PrimeColumn
@@ -388,6 +402,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             }}
                             onBlur={() => {
                                 if (meta.current.isDataChanged) {
+                                    setPriceGst(rowData) // sets the priceGst based on price and gstRate
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false
@@ -395,8 +410,10 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    meta.current.isDataChanged &&
+                                    if(meta.current.isDataChanged) {
+                                        setPriceGst(rowData)
                                         computeRow(rowData)
+                                    }
                                     computeSummary()
                                     meta.current.isDataChanged = false
                                 }
@@ -436,6 +453,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             }}
                             onBlur={() => {
                                 if (meta.current.isDataChanged) {
+                                    setPrice(rowData) // sets the price based on priceGst and gstRate
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false
@@ -443,8 +461,10 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    meta.current.isDataChanged &&
+                                    if(meta.current.isDataChanged){
+                                        setPrice(rowData)
                                         computeRow(rowData)
+                                    }   
                                     computeSummary()
                                     meta.current.isDataChanged = false
                                 }
@@ -460,7 +480,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
             <PrimeColumn
                 key={incr()}
                 field="discount"
-                header="Discount"
+                header="Discount / unit"
                 style={{ width: '8rem', textAlign: 'end' }}
                 body={(rowData: any) => {
                     return (
@@ -500,9 +520,9 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                         />
                     )
                 }}
-                footer={toDecimalFormat(
-                    arbitraryData?.summary?.discount || 0.0
-                )}
+                // footer={toDecimalFormat(
+                //     arbitraryData?.summary?.discount || 0.0
+                // )}
             />,
 
             //Amount / gst

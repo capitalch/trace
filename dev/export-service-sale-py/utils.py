@@ -156,8 +156,8 @@ def get_reshaped_data(obj, **args):
     saleAccountId = args['saleAccountId']
     amount = obj.get('rec_amt')
     recDate = obj.get('rec_date').strftime("%Y-%m-%d")
-
     gst = (float(amount) * (gstRate / 100)) / (1 + gstRate / 100)
+    price = float(amount)/(1+(gstRate/100))
     cgst = round((gst / 2), 2)
     sgst = cgst
     igst = 0
@@ -202,6 +202,7 @@ def get_reshaped_data(obj, **args):
                                         {
                                             "productId": productId,
                                             "qty": 1,
+                                            "price": price,
                                             "priceGst": amount,
                                             "discount": 0,
                                             "amount": amount,

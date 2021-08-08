@@ -22,7 +22,7 @@ function useSaleItems(arbitraryData: any) {
     useEffect(() => {
         meta.current.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
-        const subs1 = filterOn('SALE-ITEMS-REFRESH').subscribe(()=>{
+        const subs1 = filterOn('SALE-ITEMS-REFRESH').subscribe(() => {
             setRefresh({})
         })
         return () => {
@@ -41,7 +41,7 @@ function useSaleItems(arbitraryData: any) {
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => {},
+            actions: () => { },
         },
     })
 
@@ -78,16 +78,26 @@ function useSaleItems(arbitraryData: any) {
     }
 
     function computeRow(rowData: any) {
-        const gstRate = rowData.gstRate
-        const priceGst = rowData.priceGst
-        const price = rowData.price
+        const gstRate = rowData.gstRate || 0.0
+        let priceGst = rowData.priceGst
+        let price = rowData.price
         const discount = rowData.discount
         const qty = rowData.qty
-        const amount = _.round((price - discount) * qty, 2)
-        const gst = ((gstRate / 100) * amount) / (1 + gstRate / 100)
-        const sgst = _.round(gst / 2, 2)
-        const cgst = sgst
-        const actualSalePrice = amount - gst
+        let amount, gst, sgst, cgst
+        if (priceGst) {
+            price = priceGst / (1 + (gstRate / 100))
+        } else if (price) {
+            priceGst = price * (1 + (gstRate / 100))
+        }
+        if (discount === 0) {
+            amount = priceGst * qty
+            gst = (priceGst - price) * qty
+        } else {
+            amount = (price - discount) * qty * (1 + (gstRate / 100))
+            gst = amount - ((price - discount) * qty)
+        }
+        cgst = _.round(gst / 2, 2)
+        sgst = cgst
         if (arbitraryData.isIgst) {
             rowData.igst = _.round(gst, 2)
             rowData.cgst = 0.0
@@ -97,8 +107,7 @@ function useSaleItems(arbitraryData: any) {
             rowData.cgst = cgst
             rowData.sgst = sgst
         }
-        rowData.actualSalePrice = _.round(actualSalePrice, 2)
-        rowData.amount = amount
+        rowData.amount = _.round(amount, 2)
     }
 
     function computeSummary() {
@@ -106,7 +115,7 @@ function useSaleItems(arbitraryData: any) {
             const summ = arbitraryData.summary
             summ.amount = 0.0
             summ.count = 0.0
-            summ.discount = 0.0
+            // summ.discount = 0.0
             summ.qty = 0.0
             summ.cgst = 0
             summ.sgst = 0
@@ -120,9 +129,9 @@ function useSaleItems(arbitraryData: any) {
                     prev.cgst = +Big(curr.cgst || 0).plus(Big(prev.cgst || 0))
                     prev.sgst = +Big(curr.sgst || 0).plus(Big(prev.sgst || 0))
                     prev.igst = +Big(curr.igst || 0).plus(Big(prev.igst || 0))
-                    prev.discount = +Big(curr.discount || 0).plus(
-                        Big(prev.discount || 0)
-                    )
+                    // prev.discount = +Big(curr.discount || 0).plus(
+                    //     Big(prev.discount || 0)
+                    // )
                     prev.qty = +Big(curr.qty).plus(Big(prev.qty))
                     return prev
                 },
@@ -130,7 +139,7 @@ function useSaleItems(arbitraryData: any) {
             )
             arbitraryData.summary.count = arbitraryData.lineItems.length
             arbitraryData.backCalulateAmount = arbitraryData.summary.amount
-            if(arbitraryData.footer.items.length === 1){ // if footer has one row then set its amount
+            if (arbitraryData.footer.items.length === 1) { // if footer has one row then set its amount
                 arbitraryData.footer.items[0].amount = arbitraryData.summary.amount
             }
         }
@@ -164,7 +173,7 @@ function useSaleItems(arbitraryData: any) {
     }
 
     function getSlNoError(rowData: any) {
-        function getCount() {            
+        function getCount() {
             return rowData.serialNumbers.split(',').filter(Boolean).length
         }
         const ok = getCount() === rowData.qty || getCount() === 0
@@ -185,9 +194,10 @@ function useSaleItems(arbitraryData: any) {
 
         const factor: number = defaultAmount / arbitraryData.summary.amount
         for (let item of arbitraryData.lineItems) {
-            item.price = item.price - (item.discount || 0)
+            item.priceGst = item.priceGst - (item.discount || 0)
             item.discount = 0.0
-            item.price = item.price * factor
+            item.priceGst = item.priceGst * factor
+            item.price = _.round(item.priceGst / (1 + (item.gstRate/100)),2)
         }
         arbitraryData.backCalulateAmount =
             arbitraryData.summary.amount
@@ -329,7 +339,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     alignItems: 'center',
                     justifyContent: 'flex-start',
                     '& .index': {
-                        marginLeft:'0.2rem'
+                        marginLeft: '0.2rem'
                     },
                     '& .add-box': {
                         position: 'relative',
@@ -387,15 +397,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     backgroundColor: 'dodgerBlue',
                     color: theme.palette.common.white,
                     textTransform: 'none',
-                    fontSize:'0.8rem',
+                    fontSize: '0.8rem',
                 },
-                '& .total-amount':{
+                '& .total-amount': {
                     '& input': {
                         fontWeight: 'bold',
                         fontSize: '1rem',
                         color: 'dodgerBlue'
                     }
-                    
+
                 }
             },
         },
