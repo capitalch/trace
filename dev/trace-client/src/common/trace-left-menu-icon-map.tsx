@@ -30,7 +30,7 @@ import IconAllTransactions from '@material-ui/icons/ViewListSharp'
 import IconExports from '@material-ui/icons/SystemUpdate'
 import IconUtilities from '@material-ui/icons/Build'
 import {
-    DeleteForever, HighlightOff, DeleteRounded,
+    DeleteForever, HighlightOff, DeleteRounded, MonetizationOn as MoneyIcon,
     DeleteTwoTone, People, DynamicFeed as SalesAndPurchases, AssignmentReturn as SalesReturn,
     AssignmentReturned as PurchaseReturn, FlightLand as DebitNotes,
     FlightTakeoff as CreditNotes, Dialpad as Inventory, Category as Categories, AccountTree, LibraryBooks
@@ -50,9 +50,10 @@ const iconMap: any = {
     , contraSubMenu: <IconLibraryBooks></IconLibraryBooks>
     , journalsSubMenu: <IconGavel></IconGavel>
 
-
     , optionsMenu: <IconExtension></IconExtension>
     , bankReconSubMenu: <IconReorder></IconReorder>
+    , expencesSubMenu: <IconLibraryBooks></IconLibraryBooks>
+    , incomeSubMenu: <MoneyIcon></MoneyIcon>
     , genericExportsSubMenu: <IconExports></IconExports>
     , commonUtilitiesSubMenu: <IconUtilities></IconUtilities>
 
