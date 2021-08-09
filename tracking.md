@@ -74,6 +74,10 @@
 9. 
 10. Provide a way to come out of app in mobile. Presently there is no way
 
+## pyinstaller command for tkenter
+# acivate env where pyinstaller is installed
+pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
+create installer from innosetup
 # Pending
 ## Functionality
 1.01 

@@ -520,9 +520,6 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                         />
                     )
                 }}
-                // footer={toDecimalFormat(
-                //     arbitraryData?.summary?.discount || 0.0
-                // )}
             />,
 
             //Amount / gst
