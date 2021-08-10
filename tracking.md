@@ -10,32 +10,10 @@
 10. Custom control
 11. Create as XXGrid component
 
-# Purchase-items change logic
-1. computeRow: Uses Big
-		actualPrice = price - discount
-		subTotal = qty * actualPrice
-		priceGst = price * (1+ gstRate/100)
-		cgst = subTotal * rowData.gstRate / 200
-		sgst = subTotal * rowData.gstRate / 200
-		amount = subTotal + cgst + sgst
-2. computeSummary
-		add all amount, cgst, sgst, igst, discount, subTotal, qty. count = .length
-3. gstRate: change: computeRow, computeSummary
-						onBlur: computeRow
-						onKeyDown: (tab, enter) => computeRow
-4. qty: change: computeRow, computeSummary
-				onBlur: computeRow
-				onKeyDown: (tab, enter) => computeRow
-5. price: change: computeRow, computeSummary
-					onBlur: computeRow
-					onKeyDown: (tab, enter) => computeRow
-6. priceGst: change: nothing
-					onBlur: computeRow
-					onKeyDown: (tab, enter) => computeRow
-7. discount: change: computeRow, computeSummary
-					onBlur: computeRow
-					onKeyDown: (tab, enter) => computeRow
-8. 
+## Change
+1. Payment means payments to parties only. debtor, creditor, loan, capital, other
+2. Convert all expence payments to type Expence
+3. Expence has cash and credit expences. Includes Gst
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
 {#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV
