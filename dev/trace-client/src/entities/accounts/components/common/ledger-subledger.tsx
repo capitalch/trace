@@ -26,7 +26,7 @@ function LedgerSubledger({
     const { emit } = useIbuki()
     useEffect(() => {
         meta.current.isMounted = true
-        const value = rowData.accId
+        const value = rowData?.accId
         if (value) {
             const item = getItemFromValue(value)
             if (['Y', 'L'].includes(item?.accLeaf)) {

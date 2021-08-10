@@ -30,6 +30,8 @@ function useExpences() {
         isIgst: false,
         isGstInvoice: true,
         invoiceAmount: 0.0,
+        ledgerSubledgerExpences: { isLedgerSubledgerError: true },
+        ledgerSubledgerOther: { isLedgerSubledgerError: true },
         lineItems: [],
         cashOrCredit: 'credit',
         sgst: 0.0,
