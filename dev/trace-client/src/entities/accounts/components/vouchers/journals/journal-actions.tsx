@@ -1,0 +1,105 @@
+import React, { useState, useEffect, useRef } from 'react'
+import { useSharedElements } from '../../common/shared-elements-hook'
+import { useJournalActions, useStyles } from './journal-actions-hook'
+import {
+        DataGrid,
+        GridToolbarFilterButton,
+        // GridToolbarDensitySelector,
+        GridToolbarExport,
+        GridToolbarContainer,
+        GridToolbarColumnsButton,
+        GridFooterContainer,
+        GridRowId,
+        GridRowData,
+        useGridApiRef,
+        GridCellParams,
+    } from '@material-ui/data-grid'
+
+function JournalActions({ arbitraryData }: any) {
+        const classes = useStyles()
+        const { meta, setRefresh } = useJournalActions(arbitraryData)
+
+        const { _,
+                accountsMessages,
+                AddCircle,
+                AddIcon,
+                Avatar,
+                Big,
+                Box,
+                Button,
+                Card,
+                Checkbox,
+                CheckIcon,
+                Chip,
+                CloseIcon,
+                confirm,
+                DataTable,
+                DeleteIcon,
+                Dialog,
+                DialogTitle,
+                DialogContent,
+                DialogActions,
+                Divider,
+                doValidateForm,
+                EditIcon,
+                emit,
+                ErrorIcon,
+                execGenericView,
+                genericUpdateMaster,
+                getCurrentEntity,
+                getFormData,
+                getFormObject,
+                getFromBag,
+                globalMessages,
+                FormControlLabel,
+                Icon,
+                IconButton,
+                Input,
+                InputAdornment,
+                isInvalidDate,
+                isInvalidGstin,
+                isValidForm,
+                List,
+                ListItem,
+                ListItemAvatar,
+                ListItemText,
+                MaterialTable,
+                messages,
+                moment,
+                MTableBody,
+                MTableToolbar,
+                NativeSelect,
+                NumberFormat,
+                Paper,
+                PrimeColumn,
+                queries,
+                queryGraphql,
+                Radio,
+                ReactForm,
+                releaseForm,
+                resetAllFormErrors,
+                resetForm,
+                saveForm,
+                SearchIcon,
+                setFormError,
+                SyncIcon,
+                tableIcons,
+                TextField,
+                toDecimalFormat,
+                TraceDialog,
+                TraceFullWidthSubmitButton,
+                traceGlobalSearch,
+                TraceSearchBox,
+                Typography,
+                useGeneric, } = useSharedElements()
+
+        return (<DataGrid className={classes.content}
+                columns={meta.current.columns}
+                rows={meta.current.rows}
+                showColumnRightBorder={true}
+                showCellRightBorder={true}
+                hideFooterPagination={true}
+        />)
+}
+
+export { JournalActions }

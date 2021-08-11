@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useSharedElements } from '../common/shared-elements-hook'
-import { use<%= compName %>, useStyles } from './<%= snakeCompName %>-hook'
+import { useSharedElements } from '../../common/shared-elements-hook'
+import { useJournalView, useStyles } from './journal-view-hook'
 
-function <%= compName %>(){
+function JournalView({hidden}:any){
 	const classes = useStyles()
-	const {meta, setRefresh} = use<%= compName %>()
+	const {meta, setRefresh} = useJournalView()
 
 	const { _,
         accountsMessages,
@@ -80,9 +80,9 @@ function <%= compName %>(){
         Typography,
         useGeneric, } = useSharedElements()
 
-        return(<div className={classes.content}>
-        	<%= compName %>
+        return(<div className={classes.content} hidden = {hidden} >
+        	JournalView
         </div>)
 }
 
-export {<%= compName %>}
+export {JournalView}

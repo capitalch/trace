@@ -31,7 +31,6 @@ function Purchases({ purchaseType }: any) {
                 />
                 <PurchaseItems arbitraryData={arbitraryData.current} />
             </div>
-
             <div hidden={meta.current.value !== 1}>
                 <PurchaseView arbitraryData={arbitraryData.current} purchaseType={purchaseType} />
             </div>

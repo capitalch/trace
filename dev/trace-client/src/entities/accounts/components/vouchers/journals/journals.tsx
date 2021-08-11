@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useJournals, useStyles } from './journals-hook'
+import {JournalMain} from './journal-main'
+import {JournalView} from './journal-view'
 
 function Journals() {
     const classes = useStyles()
@@ -94,10 +96,12 @@ function Journals() {
                 <Tab label={meta.current.tabLabel} />
                 <Tab label="View" />
             </Tabs>
+            <JournalMain arbitraryData={arbitraryData.current} hidden = {meta.current.tabValue !==0 } />
+            <JournalView hidden = {meta.current.tabValue !==1} />
         </div>
     )
 
-    function Header() {}
+    
 }
 
 export { Journals }

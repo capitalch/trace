@@ -132,6 +132,7 @@ create installer from innosetup
 2.05 Seen in case of receipts same auto_ref_no generated twice
 2.06 purchase entry unable to enter gst price of an item
 2.07 In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
+2.08 In Bank recon when selected yellow backgrond with white foreground problematic.
 
 ## Maintainance
 1.30 Github release management
@@ -758,81 +759,3 @@ select h."id" as "tranHeaderId", "autoRefNo", "userRefNo", h."remarks" as "commo
  		join "TranD" d
  			on h."id" = d."tranHeaderId"
 	where "tranTypeId" = 7
-
-
-<style>
-table.GeneratedTable {
-  width: 100%;
-  background-color: #ffffff;
-  border-collapse: collapse;
-  border-width: 2px;
-  border-color: #ffcc00;
-  border-style: solid;
-  color: #000000;
-}
-
-table.GeneratedTable td, table.GeneratedTable th {
-  border-width: 2px;
-  border-color: #ffcc00;
-  border-style: solid;
-  padding: 3px;
-}
-
-table.GeneratedTable thead {
-  background-color: #ffcc00;
-}
-
-table.GeneratedTable .name {
-  background-color: #F5EDEB;
-  width: 100px;
-}
-
-table.GeneratedTable .details {
-  background-color: #F5EDEB;
-  width: 200px;
-  font-weight: bold;
-}
-</style>
-
-<table class="GeneratedTable">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class='name'>Id</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Purch date:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Cust name:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Mobile no:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Product cat:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Serial no:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Address:</td>
-      <td class='details'>Cell</td>
-    </tr>
-    <tr>
-      <td class='name'>Pin:</td>
-      <td class='details'>Cell</td>
-    </tr>
-  </tbody>
-</table>

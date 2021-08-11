@@ -15,9 +15,6 @@ import { Edit } from '@material-ui/icons'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/AddCircle'
 import upperFirst from 'lodash/capitalize'
-// import { manageEntitiesState } from '../../../../common-utils/esm'
-// import { usingIbuki } from '../../../../common-utils/ibuki'
-// import messages from '../../../../messages.json'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { utils } from '../../utils'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
@@ -34,7 +31,6 @@ function DataView({ loadComponent }: any) {
         emit,
         execGenericView,
         getFromBag,
-        isDateNotAuditLocked,
         setInBag,
         toDecimalFormat,
     } = useSharedElements()
@@ -79,13 +75,6 @@ function DataView({ loadComponent }: any) {
                     maxBodyHeight: 'calc(100vh - 15rem)',
                     paging: false,
                     draggable: true,
-                    // selection: true,
-
-                    // rowStyle: (rowData) => ({
-                    //     backgroundColor: rowData.tableData.checked
-                    //         ? '#37b15933'
-                    //         : '',
-                    // }),
                     showSelectAllCheckbox:false,
                     showTextRowsSelected: false,
                     searchFieldStyle: {
@@ -95,12 +84,6 @@ function DataView({ loadComponent }: any) {
                     },
                     // to make fixed header
                     headerStyle: { position: 'sticky', top: 0 },
-                }}
-                // onRowClick={(row)=>{
-                //     console.log(row)
-                // }}
-                onSelectionChange={(row)=>{
-                    // console.log(row)
                 }}
                 actions={getActionsList()}
                 components={{

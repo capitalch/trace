@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { use<%= compName %>, useStyles } from './<%= snakeCompName %>-hook'
+import { useJournalActions, useStyles } from './journal-actions-hook'
 
-function <%= compName %>(){
+function JournalActions(){
 	const classes = useStyles()
-	const {meta, setRefresh} = use<%= compName %>()
+	const {meta, setRefresh} = useJournalActions()
 
 	const { _,
         accountsMessages,
@@ -81,8 +81,8 @@ function <%= compName %>(){
         useGeneric, } = useSharedElements()
 
         return(<div className={classes.content}>
-        	<%= compName %>
+        	JournalActions
         </div>)
 }
 
-export {<%= compName %>}
+export {JournalActions}

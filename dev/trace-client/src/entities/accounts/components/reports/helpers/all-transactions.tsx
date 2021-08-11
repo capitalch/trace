@@ -6,9 +6,6 @@ import moment from 'moment'
 function useAllTransactions() {
     const { getFromBag } = useSharedElements()
     const { toDecimalFormat } = utilMethods()
-    // const { AddIcon, Box, emit, getFromBag, NativeSelect, setInBag, Typography, } = useSharedElements()
-    // const { execGenericView, toDecimalFormat } = utilMethods()
-    // const dateFormat = getFromBag('dateFormat')
     const columns = [
         {
             headerName: 'Ind',

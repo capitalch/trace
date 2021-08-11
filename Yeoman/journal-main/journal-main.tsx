@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { useJournalMain, useStyles } from './journal-main-hook'
 
-function use<%= compName %>(){
+function JournalMain(){
 	const [, setRefresh] = useState({})
+	const classes = useStyles()
+	const {meta, setRefresh} = useJournalMain()
 
-    const { _,
+	const { _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -15,6 +17,7 @@ function use<%= compName %>(){
         Button,
         Card,
         Checkbox,
+        CheckIcon,
         Chip,
         CloseIcon,
         confirm,
@@ -28,8 +31,8 @@ function use<%= compName %>(){
         doValidateForm,
         EditIcon,
         emit,
+        ErrorIcon,
         execGenericView,
-        filterOn,
         genericUpdateMaster,
         getCurrentEntity,
         getFormData,
@@ -40,7 +43,8 @@ function use<%= compName %>(){
         Icon,
         IconButton,
         Input,
-        InputAdornment,
+        InputAdornment,        
+        isInvalidDate,
         isInvalidGstin,
         isValidForm,
         List,
@@ -77,38 +81,9 @@ function use<%= compName %>(){
         Typography,
         useGeneric, } = useSharedElements()
 
-    useEffect(() => {
-        meta.current.isMounted = true
-
-        return (() => {
-            meta.current.isMounted = false
-        })
-    }, [])
-
-    const meta: any = useRef({
-        isMounted: false,
-        showDialog: false,
-        dialogConfig: {
-            title: '',
-            content: () => { },
-            actions: () => { }
-        },
-    })
-        
-    return({meta, setRefresh})
-
+        return(<div className={classes.content}>
+        	JournalMain
+        </div>)
 }
 
-export {use<%= compName %>}
-
-const useStyles: any = makeStyles((theme: Theme) =>
-    createStyles({
-
-        content: {
-            
-        },
-
-    })
-)
-
-export { useStyles }
+export {JournalMain}

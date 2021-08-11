@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { use<%= compName %>, useStyles } from './<%= snakeCompName %>-hook'
 
-function <%= compName %>(){
-	const classes = useStyles()
-	const {meta, setRefresh} = use<%= compName %>()
+function useJournalTran(){
+	const [, setRefresh] = useState({})
 
-	const { _,
+    const { _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -16,7 +15,6 @@ function <%= compName %>(){
         Button,
         Card,
         Checkbox,
-        CheckIcon,
         Chip,
         CloseIcon,
         confirm,
@@ -30,8 +28,8 @@ function <%= compName %>(){
         doValidateForm,
         EditIcon,
         emit,
-        ErrorIcon,
         execGenericView,
+        filterOn,
         genericUpdateMaster,
         getCurrentEntity,
         getFormData,
@@ -42,8 +40,7 @@ function <%= compName %>(){
         Icon,
         IconButton,
         Input,
-        InputAdornment,        
-        isInvalidDate,
+        InputAdornment,
         isInvalidGstin,
         isValidForm,
         List,
@@ -80,9 +77,38 @@ function <%= compName %>(){
         Typography,
         useGeneric, } = useSharedElements()
 
-        return(<div className={classes.content}>
-        	<%= compName %>
-        </div>)
+    useEffect(() => {
+        meta.current.isMounted = true
+
+        return (() => {
+            meta.current.isMounted = false
+        })
+    }, [])
+
+    const meta: any = useRef({
+        isMounted: false,
+        showDialog: false,
+        dialogConfig: {
+            title: '',
+            content: () => { },
+            actions: () => { }
+        },
+    })
+        
+    return({meta, setRefresh})
+
 }
 
-export {<%= compName %>}
+export {useJournalTran}
+
+const useStyles: any = makeStyles((theme: Theme) =>
+    createStyles({
+
+        content: {
+            
+        },
+
+    })
+)
+
+export { useStyles }

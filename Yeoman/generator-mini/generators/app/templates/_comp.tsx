@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { use<%= compName %>, useStyles } from './<%= snakeCompName %>-hook'
 
 function <%= compName %>(){
 	const [, setRefresh] = useState({})
 	const classes = useStyles()
-	const {meta, setRefresh} = use<%= compName %>()
 
 	const { _,
         accountsMessages,
@@ -84,6 +83,32 @@ function <%= compName %>(){
         return(<div className={classes.content}>
         	<%= compName %>
         </div>)
+
+        const meta: any = useRef({
+            isMounted: false,
+        })
+
+        useEffect(() => {
+            meta.current.isMounted = true
+
+            return (() => {
+                meta.current.isMounted = false
+            })
+        }, [])
+
+        function test(){
+
+        }
 }
 
 export {<%= compName %>}
+
+const useStyles: any = makeStyles((theme: Theme) =>
+    createStyles({
+
+        content: {
+            
+        },
+
+    })
+)
