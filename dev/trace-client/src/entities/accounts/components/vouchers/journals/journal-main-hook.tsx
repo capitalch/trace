@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
+import { classNames } from 'react-select/src/utils'
 
 function useJournalMain(arbitraryData: any) {
     const [, setRefresh] = useState({})
 
-    const { _,
+    const {
+        _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -77,90 +79,98 @@ function useJournalMain(arbitraryData: any) {
         traceGlobalSearch,
         TraceSearchBox,
         Typography,
-        useGeneric, } = useSharedElements()
+        useGeneric,
+    } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
 
-        return (() => {
+        return () => {
             meta.current.isMounted = false
-        })
+        }
     }, [])
 
     const meta: any = useRef({
         isMounted: false,
     })
 
-    function Header({arbitraryData}:any) {
+    function Header({ arbitraryData }: any) {
         const classes = useStyles()
         return (
-            <div className={classes.content}>
-                <TextField
-                    className="auto-ref-no"
-                    disabled={true}
-                    label="Ref no"
-                    value={arbitraryData.autoRefNo || ''}
-                />
-                {/* date */}
-                <div className="date-block">
-                    <label className='date-label'>Date</label>
+            <div className={classes.contentHeader}>
+                <Typography
+                    className="header-label"
+                    variant="subtitle2"
+                    color="secondary">
+                    Header
+                </Typography>
+                <div className="header-block">
                     <TextField
-                        // error={getDateError()}
-                        // helperText={
-                        //     getDateError()
-                        //         ? 'Date range / Audit lock error'
-                        //         : undefined
-                        // }
-                        type="date"
+                        className="auto-ref-no"
+                        disabled={true}
+                        label="Ref no"
+                        value={arbitraryData.autoRefNo || ''}
+                    />
+                    {/* date */}
+                    <div className="date-block">
+                        <label className="date-label">Date</label>
+                        <TextField
+                            // error={getDateError()}
+                            // helperText={
+                            //     getDateError()
+                            //         ? 'Date range / Audit lock error'
+                            //         : undefined
+                            // }
+                            type="date"
+                            onChange={(e: any) => {
+                                arbitraryData.tranDate = e.target.value
+                                setRefresh({})
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            value={arbitraryData.tranDate || ''}
+                        />
+                    </div>
+                    {/* user ref no  */}
+                    <TextField
+                        label="Use ref"
+                        className="user-ref"
+                        // error={getInvoiceError()}
                         onChange={(e: any) => {
-                            arbitraryData.tranDate = e.target.value
+                            arbitraryData.userRefNo = e.target.value
                             setRefresh({})
                         }}
-                        onFocus={(e) => e.target.select()}
-                        value={arbitraryData.tranDate || ''}
+                        value={arbitraryData.userRefNo || ''}
                     />
-                </div>
-                {/* user ref no  */}
-                <TextField
-                    label="Use ref"
-                    className="user-ref"
-                    // error={getInvoiceError()}
-                    onChange={(e: any) => {
-                        arbitraryData.userRefNo = e.target.value
-                        setRefresh({})
-                    }}
-                    value={arbitraryData.userRefNo || ''}
-                />
-                {/* remarks */}
-                <TextField
-                    label="Common remarks"
-                    className="common-remarks"
-                    onChange={(e: any) => {
-                        arbitraryData.commonRemarks = e.target.value
-                        setRefresh({})
-                    }}
-                    value={arbitraryData.commonRemarks || ''}
-                />
+                    {/* remarks */}
+                    <TextField
+                        label="Common remarks"
+                        className="common-remarks"
+                        onChange={(e: any) => {
+                            arbitraryData.commonRemarks = e.target.value
+                            setRefresh({})
+                        }}
+                        value={arbitraryData.commonRemarks || ''}
+                    />
 
-                <SubmitButton />
+                    <SubmitButton />
+                </div>
             </div>
         )
 
-                
         function SubmitButton() {
             const [, setRefresh] = useState({})
             useEffect(() => {
-                const subs1 = filterOn('PURCHASE-BODY-SUBMIT-REFRESH').subscribe(
-                    () => {
-                        setRefresh({})
-                    }
-                )
-    
+                const subs1 = filterOn(
+                    'PURCHASE-BODY-SUBMIT-REFRESH'
+                ).subscribe(() => {
+                    setRefresh({})
+                })
+
                 return () => {
                     subs1.unsubscribe()
                 }
             }, [])
-    
+
             return (
                 <Button
                     className="submit-button"
@@ -179,63 +189,79 @@ function useJournalMain(arbitraryData: any) {
                     Submit
                 </Button>
             )
-    }
-
-    
+        }
 
         function getError() {
-            return (true)
+            return true
         }
 
-        function handleSubmit() {
-
-
-        }
+        function handleSubmit() {}
     }
 
-    return ({Header, meta, setRefresh})
+    function ActionDebit({ arbitraryData }: any) {
+        const classes = useStyles()
+        return <div className={classes.contentActionDebit}>
+             <Typography
+                    className="debits-label"
+                    variant="subtitle2"
+                    color="secondary">
+                    Debits
+                </Typography>
+        </div>
+    }
 
+    return {ActionDebit, Header, meta, setRefresh }
 }
 
 export { useJournalMain }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
-        content: {
-            display: 'flex',
-            columnGap: theme.spacing(4),
-            marginTop: theme.spacing(2),
-            flexWrap: 'wrap',
-            rowGap: theme.spacing(3),
-            alignItems: 'center',
-            // border: '1px solid lightgrey',
-            // padding: theme.spacing(2),
-
-            '& .auto-ref-no': {
-                maxWidth: theme.spacing(19),
+        contentHeader: {
+            '& .header-label': {
+                marginTop: theme.spacing(2),
             },
-
-            '& .date-block': {
+            '& .header-block': {
                 display: 'flex',
-                flexDirection: 'column',
-                '& .date-label': {
-                    fontSize: '0.7rem'
-                }
-            },
+                columnGap: theme.spacing(4),
+                // marginTop: theme.spacing(2),
+                flexWrap: 'wrap',
+                rowGap: theme.spacing(3),
+                alignItems: 'center',
+                border: '1px solid lightgrey',
+                padding: theme.spacing(3),
 
-            '& .user-ref': {
-                maxWidth: '10rem',
-            },
-            '& .common-remarks': {
-                maxWidth: '20rem',
-                flexGrow:2,
-            },
-            '& .submit-button': {
-                marginLeft: 'auto',
+                '& .auto-ref-no': {
+                    maxWidth: theme.spacing(19),
+                },
+
+                '& .date-block': {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    '& .date-label': {
+                        fontSize: '0.7rem',
+                    },
+                },
+
+                '& .user-ref': {
+                    maxWidth: '10rem',
+                },
+                '& .common-remarks': {
+                    maxWidth: '20rem',
+                    flexGrow: 2,
+                },
+                '& .submit-button': {
+                    marginLeft: 'auto',
+                },
             },
         },
 
+        contentActionDebit: {
+
+            '& .debits-label':{
+                marginTop: theme.spacing(2),
+            }
+        },
     })
 )
 

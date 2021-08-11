@@ -1,4 +1,3 @@
-// based on react-delect
 import clsx from 'clsx'
 import Select, { components } from 'react-select'
 import { useState, useEffect, useRef } from 'react'

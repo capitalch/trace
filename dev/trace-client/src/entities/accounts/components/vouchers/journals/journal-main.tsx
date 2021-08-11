@@ -5,7 +5,7 @@ import {JournalActions} from './journal-actions'
 
 function JournalMain({ arbitraryData, hidden }: any) {
         const classes = useStyles()
-        const {Header, meta, setRefresh,} = useJournalMain(arbitraryData)
+        const {ActionDebit, Header, meta, setRefresh,} = useJournalMain(arbitraryData)
 
         const { _,
                 accountsMessages,
@@ -83,7 +83,7 @@ function JournalMain({ arbitraryData, hidden }: any) {
 
         return (<div hidden={hidden}>
                <Header arbitraryData={arbitraryData}/>
-                <JournalActions  arbitraryData={arbitraryData} />
+                <ActionDebit  arbitraryData={arbitraryData} />
         </div>)
 }
 
