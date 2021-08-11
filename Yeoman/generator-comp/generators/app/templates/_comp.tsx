@@ -5,7 +5,7 @@ import { use<%= compName %>, useStyles } from './<%= snakeCompName %>-hook'
 function <%= compName %>(){
 	const [, setRefresh] = useState({})
 	const classes = useStyles()
-	const {meta} = use<%= compName %>()
+	const {meta, setRefresh} = use<%= compName %>()
 
 	const { _,
         accountsMessages,

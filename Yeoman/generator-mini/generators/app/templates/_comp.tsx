@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { useDateRangeSelector, useStyles } from './date-range-selector-hook'
+import { use<%= compName %>, useStyles } from './<%= snakeCompName %>-hook'
 
-function DateRangeSelector(){
+function <%= compName %>(){
 	const [, setRefresh] = useState({})
 	const classes = useStyles()
-	const {meta} = useDateRangeSelector()
+	const {meta, setRefresh} = use<%= compName %>()
 
 	const { _,
         accountsMessages,
@@ -82,8 +82,8 @@ function DateRangeSelector(){
         useGeneric, } = useSharedElements()
 
         return(<div className={classes.content}>
-        	DateRangeSelector
+        	<%= compName %>
         </div>)
 }
 
-export {DateRangeSelector}
+export {<%= compName %>}

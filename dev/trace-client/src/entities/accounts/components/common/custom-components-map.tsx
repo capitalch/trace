@@ -2,25 +2,26 @@ import { TrialBalance } from '../main/trial-balance'
 import { DataView } from './data-view'
 import { BalanceSheetProfitLoss } from '../main/balance-sheet-profit-loss'
 import { AccountsMaster } from '../main/accounts-master'
-import {AccountsOpBal} from '../main/accounts-opbal'
-import {GenericCRUD} from './generic-crud'
-import {GenericDialoges} from './generic-dialoges'
-import {BankRecon} from '../main/bank-recon'
-import {GenericReports} from '../reports/generic-reports/generic-reports'
-import {GenericExports} from './generic-exports'
-import {GenericForms} from './generic-forms'
-import {CommonUtilities} from './common-utilities'
-import {Sales} from '../sales/sales'
-import {CategoriesMaster} from '../inventory/categories-master'
-import {BrandsMaster} from '../inventory/brands-master'
-import {ProductsMaster} from '../inventory/products-master'
-import {DebitNotes} from '../purchases/debit-notes'
-import {CreditNotes} from '../sales/credit-notes'
-import {Purchases} from '../purchases/purchases'
-import {GeneralLedger} from '../main/general-ledger'
-import {Taxation} from '../reports/taxation'
-import {Expences} from '../expences/expences'
-import {Income} from '../income/income'
+import { AccountsOpBal } from '../main/accounts-opbal'
+import { GenericCRUD } from './generic-crud'
+import { GenericDialoges } from './generic-dialoges'
+import { BankRecon } from '../main/bank-recon'
+import { GenericReports } from '../reports/generic-reports/generic-reports'
+import { GenericExports } from './generic-exports'
+import { GenericForms } from './generic-forms'
+import { CommonUtilities } from './common-utilities'
+import { Sales } from '../sales/sales'
+import { CategoriesMaster } from '../inventory/categories-master'
+import { BrandsMaster } from '../inventory/brands-master'
+import { ProductsMaster } from '../inventory/products-master'
+import { DebitNotes } from '../purchases/debit-notes'
+import { CreditNotes } from '../sales/credit-notes'
+import { Purchases } from '../purchases/purchases'
+import { GeneralLedger } from '../main/general-ledger'
+import { Taxation } from '../reports/taxation'
+import { Expences } from '../expences/expences'
+import { Journals } from '../vouchers/journals/journals'
+import { Income } from '../income/income'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -33,14 +34,15 @@ const customComponents = {
     creditNotes: CreditNotes,
     dataView: DataView,
     debitNotes: DebitNotes,
-    expences:Expences,
-    income:Income,
+    expences: Expences,
+    income: Income,
     genericCRUD: GenericCRUD,
     genericDialoges: GenericDialoges,
     genericExports: GenericExports,
     genericForms: GenericForms,
     genericReports: GenericReports,
     generalLedger: GeneralLedger,
+    journals: Journals,
     productsMaster: ProductsMaster,
     profitLoss: BalanceSheetProfitLoss,
     purchases: Purchases,

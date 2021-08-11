@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../../common/shared-elements-hook'
+import { useJournals, useStyles } from './journals-hook'
 
-function useDateRangeSelector(){
-	const [, setRefresh] = useState({})
+function Journals() {
+    const classes = useStyles()
+    const { arbitraryData,handleOnTabChange, meta, setRefresh } = useJournals()
 
-    const { _,
+    const {
+        _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -15,6 +17,7 @@ function useDateRangeSelector(){
         Button,
         Card,
         Checkbox,
+        CheckIcon,
         Chip,
         CloseIcon,
         confirm,
@@ -28,8 +31,8 @@ function useDateRangeSelector(){
         doValidateForm,
         EditIcon,
         emit,
+        ErrorIcon,
         execGenericView,
-        filterOn,
         genericUpdateMaster,
         getCurrentEntity,
         getFormData,
@@ -41,6 +44,7 @@ function useDateRangeSelector(){
         IconButton,
         Input,
         InputAdornment,
+        isInvalidDate,
         isInvalidGstin,
         isValidForm,
         List,
@@ -68,6 +72,8 @@ function useDateRangeSelector(){
         setFormError,
         SyncIcon,
         tableIcons,
+        Tab,
+        Tabs,
         TextField,
         toDecimalFormat,
         TraceDialog,
@@ -75,40 +81,23 @@ function useDateRangeSelector(){
         traceGlobalSearch,
         TraceSearchBox,
         Typography,
-        useGeneric, } = useSharedElements()
+        useGeneric,
+    } = useSharedElements()
 
-    useEffect(() => {
-        meta.current.isMounted = true
+    return (
+        <div className={classes.content}>
+            <Tabs
+                className="tabs"
+                indicatorColor="primary"
+                onChange={handleOnTabChange}
+                value={meta.current.tabValue}>
+                <Tab label={meta.current.tabLabel} />
+                <Tab label="View" />
+            </Tabs>
+        </div>
+    )
 
-        return (() => {
-            meta.current.isMounted = false
-        })
-    }, [])
-
-    const meta: any = useRef({
-        isMounted: false,
-        showDialog: false,
-        dialogConfig: {
-            title: '',
-            content: () => { },
-            actions: () => { }
-        },
-    })
-        
-    return({meta})
-
+    function Header() {}
 }
 
-export {useDateRangeSelector}
-
-const useStyles: any = makeStyles((theme: Theme) =>
-    createStyles({
-
-        content: {
-            
-        },
-
-    })
-)
-
-export { useStyles }
+export { Journals }

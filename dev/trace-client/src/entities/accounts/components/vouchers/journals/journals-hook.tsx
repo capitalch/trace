@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../../common/shared-elements-hook'
 
-function use<%= compName %>(){
-	const [, setRefresh] = useState({})
+function useJournals() {
+    const [, setRefresh] = useState({})
 
-    const { _,
+    const {
+        _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -75,39 +76,56 @@ function use<%= compName %>(){
         traceGlobalSearch,
         TraceSearchBox,
         Typography,
-        useGeneric, } = useSharedElements()
+        useGeneric,
+    } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
 
-        return (() => {
+        return () => {
             meta.current.isMounted = false
-        })
+        }
     }, [])
 
     const meta: any = useRef({
-        isMounted: false,
-        showDialog: false,
-        dialogConfig: {
-            title: '',
-            content: () => { },
-            actions: () => { }
-        },
+        isMounted: false,        
+        tabLabel: 'Journals',
+        tabValue: 0,
     })
-        
-    return({meta, setRefresh})
 
+    const arbitraryData: any = useRef({
+        autoRefNo: undefined,
+        commonRemarks: undefined,
+        gstin: undefined,
+        id: undefined,
+        isIgst: false,
+        lineItems: [],
+        tranDate: undefined,
+        userRefNo: undefined,
+    })
+
+    function handleOnTabChange(e: any, newValue: number) {
+        meta.current.tabValue = newValue
+        // if (newValue === 1) { // to refresh view
+        //     emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
+        // }
+        meta.current.isMounted && setRefresh({})
+    }
+
+    return { arbitraryData, handleOnTabChange, meta, setRefresh }
 }
 
-export {use<%= compName %>}
+export { useJournals }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         content: {
-            
+            '& .tabs': {
+                marginTop:theme.spacing(2),
+                color: theme.palette.common.white,
+                backgroundColor: 'dodgerBlue',
+            },
         },
-
     })
 )
 

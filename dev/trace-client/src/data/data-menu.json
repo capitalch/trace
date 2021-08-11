@@ -39,6 +39,11 @@
                             "args": {
                                 "loadComponent": "journals"
                             }
+                        },
+                        {
+                            "name": "journalsSubMenu",
+                            "label": "Journals",
+                            "componentName": "journals"
                         }
                     ]
                 },
