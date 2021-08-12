@@ -102,14 +102,6 @@ function SaleFooter({ arbitraryData }: any) {
                             computeSummary()
                             meta.current.isMounted && setRefresh({})
                         }}
-                        // onBlur={() => {
-                        //     if (meta.current.isDataChanged) {
-                        //     }
-                        // }}
-                        // onKeyDown={(e: any) => {
-                        //     if ([9, 13].includes(e.keyCode)) {
-                        //     }
-                        // }}
                         thousandSeparator={true}
                         value={rowData.amount || 0.0}
                     />

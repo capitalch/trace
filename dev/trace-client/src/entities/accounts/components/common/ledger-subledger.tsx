@@ -224,11 +224,12 @@ function LedgerSubledger({
 
 export { LedgerSubledger }
 
+
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            minWidth: '22rem',
-            maxWidth: '25rem',
+            minWidth: theme.spacing(40),
+            maxWidth: theme.spacing(50),
             border: (meta: any) => {
                 const isError = meta.current.getError()
                 return isError ? '3px solid red' : ''

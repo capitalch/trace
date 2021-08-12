@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { classNames } from 'react-select/src/utils'
+import { LedgerSubledger } from '../../common/ledger-subledger'
 
 function useJournalMain(arbitraryData: any) {
     const [, setRefresh] = useState({})
@@ -39,6 +40,7 @@ function useJournalMain(arbitraryData: any) {
         getFormData,
         getFormObject,
         getFromBag,
+        getMappedAccounts,
         globalMessages,
         FormControlLabel,
         Icon,
@@ -84,9 +86,12 @@ function useJournalMain(arbitraryData: any) {
 
     useEffect(() => {
         meta.current.isMounted = true
-
+        const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>
+            setRefresh({})
+        )
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -200,17 +205,70 @@ function useJournalMain(arbitraryData: any) {
 
     function ActionDebit({ arbitraryData }: any) {
         const classes = useStyles()
-        return <div className={classes.contentActionDebit}>
-             <Typography
+        return (
+            <div className={classes.contentActionDebit}>
+                <Typography
                     className="debits-label"
                     variant="subtitle2"
+                    component="div"
                     color="secondary">
                     Debits
                 </Typography>
-        </div>
+                <ul className="debits-block">{ActionList()}</ul>
+            </div>
+        )
+
+        function ActionList() {
+            const [, setRefresh] = useState({})
+            let ind = 0
+            const debits: any[] = arbitraryData.debits
+            const matProps = {label:'Debit amount'}
+            const list: any[] = debits.map((item: any) => {
+                const ret = (
+                    <li key={incr()} className='debits-row'>
+                        <LedgerSubledger
+                            allAccounts={arbitraryData.accounts.all}
+                            // emitMessageOnChange="SALES-CROWN-REFRESH"
+                            ledgerAccounts={getMappedAccounts(
+                                arbitraryData.accounts.journal
+                            )}
+                            // onChange={onChangeLedgerSubledger}
+                            rowData={item}
+                        />
+                        <NumberFormat
+                            allowNegative={false}
+                            {...matProps}
+                            className="right-aligned-numeric"
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={item.amount ? false : true}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.amount || 0.0}
+                        />
+                    </li>
+                )
+                return ret
+            })
+
+            return list
+
+            function incr() {
+                return ind++
+            }
+        }
     }
 
-    return {ActionDebit, Header, meta, setRefresh }
+    return { ActionDebit, Header, meta, setRefresh }
 }
 
 export { useJournalMain }
@@ -220,6 +278,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
         contentHeader: {
             '& .header-label': {
                 marginTop: theme.spacing(2),
+                // padding: theme.spacing(2),
+                // paddingBottom:0,
             },
             '& .header-block': {
                 display: 'flex',
@@ -228,9 +288,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(3),
                 alignItems: 'center',
-                border: '1px solid lightgrey',
-                padding: theme.spacing(3),
-
+                // border: '1px solid lightgrey',
+                padding: theme.spacing(2),
+                paddingTop: 0,
                 '& .auto-ref-no': {
                     maxWidth: theme.spacing(19),
                 },
@@ -257,10 +317,27 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
 
         contentActionDebit: {
+            '& .right-aligned-numeric': {
+                '& input': {
+                    textAlign: 'end',
+                },
+            },
 
-            '& .debits-label':{
+            '& .debits-label': {
                 marginTop: theme.spacing(2),
-            }
+            },
+            '& .debits-block': {
+                listStyle: 'none',
+                marginLeft: 0,
+                paddingLeft: 0,
+                '& .debits-row': {
+                    display: 'flex',
+                    columnGap: theme.spacing(4),
+                    flexWrap: 'wrap',
+                    rowGap: theme.spacing(3),
+                    alignItems: 'center',
+                },
+            },
         },
     })
 )
