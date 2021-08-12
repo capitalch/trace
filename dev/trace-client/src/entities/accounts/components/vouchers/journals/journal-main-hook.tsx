@@ -3,6 +3,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { classNames } from 'react-select/src/utils'
 import { LedgerSubledger } from '../../common/ledger-subledger'
+import { RemoveCircle } from '@material-ui/icons'
 
 function useJournalMain(arbitraryData: any) {
     const [, setRefresh] = useState({})
@@ -214,7 +215,7 @@ function useJournalMain(arbitraryData: any) {
                     color="secondary">
                     Debits
                 </Typography>
-                <ul className="debits-block">{ActionList()}</ul>
+                <ActionList />
             </div>
         )
 
@@ -222,10 +223,10 @@ function useJournalMain(arbitraryData: any) {
             const [, setRefresh] = useState({})
             let ind = 0
             const debits: any[] = arbitraryData.debits
-            const matProps = {label:'Debit amount'}
             const list: any[] = debits.map((item: any) => {
                 const ret = (
-                    <li key={incr()} className='debits-row'>
+                    <li key={incr()} className="debits-row">
+                        {/* Account */}
                         <LedgerSubledger
                             allAccounts={arbitraryData.accounts.all}
                             // emitMessageOnChange="SALES-CROWN-REFRESH"
@@ -235,13 +236,37 @@ function useJournalMain(arbitraryData: any) {
                             // onChange={onChangeLedgerSubledger}
                             rowData={item}
                         />
+                        {/* Gst rate` */}
                         <NumberFormat
                             allowNegative={false}
-                            {...matProps}
+                            {...{ label: 'Gst rate' }}
+                            className="right-aligned-numeric gst-rate"
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={item.amount ? false : true}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.gstRate || 0.0}
+                        />
+                        {/* Amount */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Debit amount' }}
+                            // {...matProps}
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
                             error={item.amount ? false : true}
+                            // error={()=>false}
                             fixedDecimalScale={true}
                             onFocus={(e) => {
                                 e.target.select()
@@ -255,12 +280,51 @@ function useJournalMain(arbitraryData: any) {
                             thousandSeparator={true}
                             value={item.amount || 0.0}
                         />
+
+                        <div style={{display:'flex',flexDirection:'column', width:'5rem',fontSize:'.8rem', rowGap:0}}>
+                        <Checkbox />
+                        <Typography>111.00</Typography>
+                        <Typography>111.00</Typography>
+                        <Typography>111.00</Typography>
+                        </div>
+
+                        {/* line ref no  */}
+                        <TextField
+                            label="Line ref"
+                            // className="user-ref"
+                            // error={getInvoiceError()}
+                            onChange={(e: any) => {
+                                arbitraryData.userRefNo = e.target.value
+                                setRefresh({})
+                            }}
+                            value={arbitraryData.lineRefNo || ''}
+                        />
+                        {/* remarks */}
+                        <TextField
+                            label="Remarks"
+                            // className="common-remarks"
+                            onChange={(e: any) => {
+                                arbitraryData.commonRemarks = e.target.value
+                                setRefresh({})
+                            }}
+                            value={arbitraryData.remarks || ''}
+                        />
+
+                        {/* Add remove */}
+                        <div>
+                            <IconButton color='secondary' size='medium' aria-label="delete" style={{margin:0,padding:0}}>
+                                <RemoveCircle style={{fontSize:'2.5rem'}} />
+                            </IconButton>
+                            <IconButton color='secondary' aria-label="delete" style={{margin:0,padding:0}}>
+                                <AddCircle style={{fontSize:'2.5rem'}} />
+                            </IconButton>
+                        </div>
                     </li>
                 )
                 return ret
             })
 
-            return list
+            return <ul className="debits-block">{list}</ul>
 
             function incr() {
                 return ind++
@@ -321,6 +385,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& input': {
                     textAlign: 'end',
                 },
+            },
+
+            '& .gst-rate': {
+                width: theme.spacing(8),
             },
 
             '& .debits-label': {

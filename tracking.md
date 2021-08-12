@@ -10,10 +10,27 @@
 10. Custom control
 11. Create as XXGrid component
 
-## Change
-1. Payment means payments to parties only. debtor, creditor, loan, capital, other
-2. Convert all expence payments to type Expence
-3. Expence has cash and credit expences. Includes Gst
+## Change UI
+1. Debits and UI reduce gap
+2. Debit amount reduce width
+3. GSt control: reduce font. Grey. Checkbox name as igst. Implement, recalculate. Give prefix as sgst, cgst, igst
+4. from gst control move to right
+5. Implement a reset method, which is called when change accounts
+6. onBlur of gstRate, debitAmount computeRow for gst calculations and computeall and send message to header to display debits
+7. Add delete functionality
+8. Create credit control
+9. mechanism for error for submit show
+10. Default date, correct date functionality
+11. Draw controls from arbitrarydata values
+12. Save functionality
+13. header alldebits, all credits values
+14.View data
+15. edit data
+16. Show as paper or card
+17. Show bottom border as light grey
+18. create as generic to be used with all vouchers 
+
+
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
 {#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV

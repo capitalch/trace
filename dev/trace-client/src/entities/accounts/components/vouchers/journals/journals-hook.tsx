@@ -108,7 +108,7 @@ function useJournals() {
         tranDate: undefined,
         userRefNo: undefined,
 
-        debits: [{}],
+        debits: [{},{}],
         credits: [{}],
     })
 
