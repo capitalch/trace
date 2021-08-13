@@ -15,6 +15,7 @@ import { usingIbuki } from '../common-utils/ibuki'
 import { utilMethods } from '../common-utils/util-methods'
 import { manageEntitiesState } from '../common-utils/esm'
 import { iconMap } from './trace-left-menu-icon-map'
+import { useEffect } from 'react'
 
 function TraceLeftMenu(props: any) {
     const { close, matches, open }: any = props

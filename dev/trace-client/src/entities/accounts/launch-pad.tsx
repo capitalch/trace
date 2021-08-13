@@ -93,7 +93,6 @@ function LaunchPad() {
             }
         )
 
-        // subs.add(subs1).add(subs2)
         return () => {
             subs.unsubscribe()
             subs1.unsubscribe()
@@ -168,6 +167,7 @@ function LaunchPad() {
             currentComponentName = currentComponent.componentName
         }
         // if finYearId is not actuated then don't try to refresh component. This is to avoid unnecessary call to server with null finYearId and branchId during initialize (init-code execution) period
+      
         if (currentComponentName) {
             if (artifacts) {
                 if (artifacts['allForms']) {

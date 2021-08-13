@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useJournalMain, useStyles } from './journal-main-hook'
-import {JournalActions} from './journal-actions'
+import { JournalActions } from './journal-actions'
 
 function JournalMain({ arbitraryData, hidden }: any) {
         const classes = useStyles()
-        const {ActionDebit, Header, meta, setRefresh,} = useJournalMain(arbitraryData)
+        const { ActionDebit, Header, meta, setRefresh, } = useJournalMain(arbitraryData)
 
         const { _,
                 accountsMessages,
@@ -82,8 +82,8 @@ function JournalMain({ arbitraryData, hidden }: any) {
                 useGeneric, } = useSharedElements()
 
         return (<div hidden={hidden}>
-               <Header arbitraryData={arbitraryData}/>
-                <ActionDebit  arbitraryData={arbitraryData} />
+                <Header arbitraryData={arbitraryData} />
+                <ActionDebit arbitraryData={arbitraryData} />
         </div>)
 }
 

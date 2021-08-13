@@ -46,7 +46,7 @@ function useSaleFooter(arbitraryData: any) {
             isLedgerSubledgerError: true,
             remarks: '',
         })
-        const allAccounts = getFromBag('allAccounts')
+        const allAccounts = getFromBag('allAccounts') || []
         const cashBankArray = ['cash', 'bank', 'card', 'ecash']
         const cashBankAccountsLedger = allAccounts.filter(
             (el: any) =>

@@ -53,7 +53,7 @@ function useSaleView(arbitraryData: any) {
     }, [])
 
     useEffect(() => {
-        const allAccounts = getFromBag('allAccounts')
+        const allAccounts = getFromBag('allAccounts') || []
         meta.current.allAccounts = allAccounts
         meta.current.ledgerAccounts = allAccounts
             .filter(

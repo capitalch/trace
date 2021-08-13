@@ -102,31 +102,21 @@ function useJournalMain(arbitraryData: any) {
 
     function Header({ arbitraryData }: any) {
         const classes = useStyles()
+        const [, setRefresh] = useState({})
         return (
             <div className={classes.contentHeader}>
-                <Typography
-                    className="header-label"
-                    variant="subtitle2"
-                    color="secondary">
-                    Header
-                </Typography>
-                <div className="header-block">
-                    <TextField
-                        className="auto-ref-no"
-                        disabled={true}
-                        label="Ref no"
-                        value={arbitraryData.autoRefNo || ''}
-                    />
+                <div className='header-line-1'>
+                    <Typography variant='body1' component='span'>Ref no:&nbsp;</Typography>
+                    <span className='auto-ref-no'>{arbitraryData.autoRefNo}</span>
+                    <SubmitButton />
+                </div>
+                <div className="header-line-2">
                     {/* date */}
                     <div className="date-block">
-                        <label className="date-label">Date</label>
+                        <label className='date-label'>Date</label>
                         <TextField
-                            // error={getDateError()}
-                            // helperText={
-                            //     getDateError()
-                            //         ? 'Date range / Audit lock error'
-                            //         : undefined
-                            // }
+                            // error={isInvalidDate(arbitraryData.body.tranDate)}
+                            // helperText={isInvalidDate(arbitraryData.body.tranDate) ? accountsMessages.dateRangeAuditLockMessage : undefined}
                             type="date"
                             onChange={(e: any) => {
                                 arbitraryData.tranDate = e.target.value
@@ -157,14 +147,13 @@ function useJournalMain(arbitraryData: any) {
                         }}
                         value={arbitraryData.commonRemarks || ''}
                     />
-
-                    <SubmitButton />
                 </div>
-            </div>
+            </div >
         )
 
         function SubmitButton() {
             const [, setRefresh] = useState({})
+            const classes = useStyles()
             useEffect(() => {
                 const subs1 = filterOn(
                     'PURCHASE-BODY-SUBMIT-REFRESH'
@@ -179,7 +168,7 @@ function useJournalMain(arbitraryData: any) {
 
             return (
                 <Button
-                    className="submit-button"
+                    className={classes.contentSubmitButton}
                     variant="contained"
                     size="small"
                     color="secondary"
@@ -201,7 +190,7 @@ function useJournalMain(arbitraryData: any) {
             return true
         }
 
-        function handleSubmit() {}
+        function handleSubmit() { }
     }
 
     function ActionDebit({ arbitraryData }: any) {
@@ -212,7 +201,7 @@ function useJournalMain(arbitraryData: any) {
                     className="debits-label"
                     variant="subtitle2"
                     component="div"
-                    color="secondary">
+                    color="primary">
                     Debits
                 </Typography>
                 <ActionList />
@@ -225,17 +214,22 @@ function useJournalMain(arbitraryData: any) {
             const debits: any[] = arbitraryData.debits
             const list: any[] = debits.map((item: any) => {
                 const ret = (
-                    <li key={incr()} className="debits-row">
+                    <div key={incr()} className="debits-row">
                         {/* Account */}
-                        <LedgerSubledger
-                            allAccounts={arbitraryData.accounts.all}
-                            // emitMessageOnChange="SALES-CROWN-REFRESH"
-                            ledgerAccounts={getMappedAccounts(
-                                arbitraryData.accounts.journal
-                            )}
-                            // onChange={onChangeLedgerSubledger}
-                            rowData={item}
-                        />
+                        <div className='ledger-subledger-box'>
+                            <Typography variant='caption'>Debit account</Typography>
+                            <LedgerSubledger
+                                className="ledger-subledger"
+                                allAccounts={arbitraryData.accounts.all}
+                                // emitMessageOnChange="SALES-CROWN-REFRESH"
+                                ledgerAccounts={getMappedAccounts(
+                                    arbitraryData.accounts.journal
+                                )}
+                                // onChange={onChangeLedgerSubledger}
+                                rowData={item}
+                            />
+                        </div>
+
                         {/* Gst rate` */}
                         <NumberFormat
                             allowNegative={false}
@@ -281,11 +275,11 @@ function useJournalMain(arbitraryData: any) {
                             value={item.amount || 0.0}
                         />
 
-                        <div style={{display:'flex',flexDirection:'column', width:'5rem',fontSize:'.8rem', rowGap:0}}>
-                        <Checkbox />
-                        <Typography>111.00</Typography>
-                        <Typography>111.00</Typography>
-                        <Typography>111.00</Typography>
+                        <div style={{ display: 'flex', flexDirection: 'column', width: '5rem', fontSize: '.8rem', rowGap: 0 }}>
+                            <Checkbox />
+                            <Typography>111.00</Typography>
+                            <Typography>111.00</Typography>
+                            <Typography>111.00</Typography>
                         </div>
 
                         {/* line ref no  */}
@@ -312,19 +306,19 @@ function useJournalMain(arbitraryData: any) {
 
                         {/* Add remove */}
                         <div>
-                            <IconButton color='secondary' size='medium' aria-label="delete" style={{margin:0,padding:0}}>
-                                <RemoveCircle style={{fontSize:'2.5rem'}} />
+                            <IconButton color='secondary' size='medium' aria-label="delete" style={{ margin: 0, padding: 0 }}>
+                                <RemoveCircle style={{ fontSize: '2.5rem' }} />
                             </IconButton>
-                            <IconButton color='secondary' aria-label="delete" style={{margin:0,padding:0}}>
-                                <AddCircle style={{fontSize:'2.5rem'}} />
+                            <IconButton color='secondary' aria-label="delete" style={{ margin: 0, padding: 0 }}>
+                                <AddCircle style={{ fontSize: '2.5rem' }} />
                             </IconButton>
                         </div>
-                    </li>
+                    </div>
                 )
                 return ret
             })
 
-            return <ul className="debits-block">{list}</ul>
+            return <div className="debits-block">{list}</div>
 
             function incr() {
                 return ind++
@@ -340,33 +334,27 @@ export { useJournalMain }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         contentHeader: {
-            '& .header-label': {
-                marginTop: theme.spacing(2),
-                // padding: theme.spacing(2),
-                // paddingBottom:0,
-            },
-            '& .header-block': {
+            '& .header-line-1': {
                 display: 'flex',
-                columnGap: theme.spacing(4),
-                // marginTop: theme.spacing(2),
-                flexWrap: 'wrap',
-                rowGap: theme.spacing(3),
-                alignItems: 'center',
-                // border: '1px solid lightgrey',
-                padding: theme.spacing(2),
-                paddingTop: 0,
+                marginTop: theme.spacing(2),
                 '& .auto-ref-no': {
-                    maxWidth: theme.spacing(19),
-                },
+                    color: theme.palette.blue.main,
+                }
+            },
+            '& .header-line-2': {
+                // marginTop: theme.spacing(2),
+                display: 'flex',
+                flexWrap: 'wrap',
+                columnGap: theme.spacing(4),
+                rowGap: theme.spacing(2),
 
                 '& .date-block': {
                     display: 'flex',
                     flexDirection: 'column',
                     '& .date-label': {
                         fontSize: '0.7rem',
-                    },
+                    }
                 },
-
                 '& .user-ref': {
                     maxWidth: '10rem',
                 },
@@ -374,13 +362,21 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     maxWidth: '20rem',
                     flexGrow: 2,
                 },
-                '& .submit-button': {
-                    marginLeft: 'auto',
-                },
             },
         },
 
+
         contentActionDebit: {
+            '& .debits-label': {
+                marginTop: theme.spacing(2),
+            },
+            // '& .ledger-subledger-box': {
+            //     marginTop:0,
+            //     '& .ledger-subledger': {
+            //         marginTop: 0,
+            //     },
+            // },
+
             '& .right-aligned-numeric': {
                 '& input': {
                     textAlign: 'end',
@@ -391,13 +387,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 width: theme.spacing(8),
             },
 
-            '& .debits-label': {
-                marginTop: theme.spacing(2),
-            },
+
             '& .debits-block': {
-                listStyle: 'none',
-                marginLeft: 0,
-                paddingLeft: 0,
+                display: 'flex',
+                flexWrap: 'wrap',
+                columnGap: theme.spacing(4),
+                rowGap: theme.spacing(2),
+                // listStyle: 'none',
+                // marginLeft: 0,
+                // paddingLeft: 0,
                 '& .debits-row': {
                     display: 'flex',
                     columnGap: theme.spacing(4),
@@ -407,6 +405,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
             },
         },
+
+        contentSubmitButton: {
+            marginLeft: 'auto'
+        }
     })
 )
 

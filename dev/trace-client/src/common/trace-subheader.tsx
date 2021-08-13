@@ -11,7 +11,7 @@ function TraceSubHeader() {
         isMounted: false,
         topMenuItem: {},
     })
-    const { filterOn } = usingIbuki()
+    const {filterOn } = usingIbuki()
     const [, setRefresh] = useState({})
     const classes = useStyles()
 
@@ -24,6 +24,7 @@ function TraceSubHeader() {
         const subs2 = filterOn('LOAD-SUBHEADER-JUST-REFRESH').subscribe((d) => {
             meta.current.isMounted && setRefresh({})
         })
+       
         // subs1.add(subs2)
         return () => {
             subs1.unsubscribe()

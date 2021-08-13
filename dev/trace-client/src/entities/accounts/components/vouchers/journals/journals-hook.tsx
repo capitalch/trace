@@ -121,9 +121,9 @@ function useJournals() {
     }
 
     function setAccounts() {
-        const allAccounts = getFromBag('allAccounts')
+        const allAccounts = getFromBag('allAccounts') || []
         arbitraryData.current.accounts.all = allAccounts
-        const jouAccounts = allAccounts.filter(
+        const jouAccounts =  allAccounts.filter(
             (el: any) =>
                 ["branch",
                 "capital",
@@ -149,10 +149,16 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                marginTop: theme.spacing(2),
                 color: theme.palette.common.white,
-                backgroundColor: 'dodgerBlue',
+                backgroundColor: theme.palette.lightBlue.light,
+                // '& .MuiTab-wrapper':{
+                //     marginLeft:-200,
+                //     padding:0,
+                //     textAlign:'left'
+                // }
             },
+            '& .tab':{
+            }
         },
     })
 )

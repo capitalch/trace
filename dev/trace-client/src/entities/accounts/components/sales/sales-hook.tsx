@@ -97,7 +97,7 @@ function useSales(saleType: string) {
 
     function setAccounts() {
         //saleAccounts
-        const allAccounts = getFromBag('allAccounts')
+        const allAccounts = getFromBag('allAccounts') ||[]
         arbitraryData.current.allAccounts = allAccounts
         const saleAccounts = allAccounts.filter(
             (el: any) =>

@@ -93,7 +93,7 @@ function Journals() {
                 indicatorColor="primary"
                 onChange={handleOnTabChange}
                 value={meta.current.tabValue}>
-                <Tab label={meta.current.tabLabel} />
+                <Tab className='tab' label={meta.current.tabLabel} />
                 <Tab label="View" />
             </Tabs>
             <JournalMain arbitraryData={arbitraryData.current} hidden = {meta.current.tabValue !==0 } />

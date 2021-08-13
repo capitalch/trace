@@ -11,7 +11,7 @@ import { usingLinkClient } from '../../common-utils/link-client'
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {
-    const { getFromBag, getLoginData, setInBag } = manageEntitiesState()
+    const { getFromBag, getLoginData,setCurrentComponent, setInBag } = manageEntitiesState()
     const { execGenericView } = utilMethods()
     const { connectToLinkServer, joinRoom, onReceiveData } = usingLinkClient()
     const { queryGraphql } = graphqlService()
@@ -26,32 +26,32 @@ function initCode() {
         const buCode = getLoginData().lastUsedBuCode
         
         //Uncomment following lines
-        emit('SHOW-LOADING-INDICATOR', true)
-        if (buCode) {
-            setInBag('buCode', buCode)
-            const branchId = brId || getLoginData().lastUsedBranchId
-            await setNowFinYearIdDatesFinYearsBranches(branchId)
-        } else {
-            emit('LOAD-MAIN-JUST-REFRESH', '')
-            emit('SHOW-MESSAGE', {
-                message: accountsMessages['selectBusinessUnit'],
-                severity: 'error',
-                duration: null,
-            })
-        }
-        emit('SHOW-LOADING-INDICATOR', false)
+        // emit('SHOW-LOADING-INDICATOR', true)
+        // if (buCode) {
+        //     setInBag('buCode', buCode)
+        //     const branchId = brId || getLoginData().lastUsedBranchId
+        //     await setNowFinYearIdDatesFinYearsBranches(branchId)
+        // } else {
+        //     emit('LOAD-MAIN-JUST-REFRESH', '')
+        //     emit('SHOW-MESSAGE', {
+        //         message: accountsMessages['selectBusinessUnit'],
+        //         severity: 'error',
+        //         duration: null,
+        //     })
+        // }
+        // emit('SHOW-LOADING-INDICATOR', false)
 
         // comment following line
-        // dummy()
+        await dummy()
     }
 
-    function dummy() {
+   async  function dummy() {
         const dateFormat = 'DD/MM/YYYY'
         setInBag('buCode', 'demounit1')
         const finYearObject: any = {
             finYearId: 2020,
-            startDate: moment('2020-04-01').format(dateFormat),
-            endDate: moment('2021-03-31').format(dateFormat),
+            startDate: moment('2021-04-01').format(dateFormat),
+            endDate: moment('2022-03-31').format(dateFormat),
         }
         setInBag('finYearObject', finYearObject)
         setInBag('dateFormat', dateFormat)
@@ -62,10 +62,17 @@ function initCode() {
             branchName: 'main',
             branchCode: 'main',
         })
-        emit('LOAD-SUBHEADER-JUST-REFRESH', '')
+        
         hotEmit('DATACACHE-SUCCESSFULLY-LOADED', datacache)
-        emit('LOAD-MAIN-JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
+         // Remove following line. This loads the journals by default
+         emit('LOAD-SUBHEADER-JUST-REFRESH', '')
+         emit('LOAD-MAIN-JUST-REFRESH', '')
+        await execDataCache()
+         emit('LOAD-MAIN-COMPONENT-NEW', {
+            componentName: 'journals', args: undefined, name: 'accounts'
+        })
+        //
     }
 
     async function setNowFinYearIdDatesFinYearsBranches(branchId: number) {

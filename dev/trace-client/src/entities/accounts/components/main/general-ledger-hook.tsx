@@ -83,7 +83,7 @@ function useGeneralLedger() {
 
     useEffect(() => {
         meta.current.isMounted = true
-        meta.current.allAccounts = getFromBag('allAccounts').map(
+        meta.current.allAccounts = (getFromBag('allAccounts')|| []).map(
             (item: any) => ({
                 label: item.accName,
                 value: item.id,

@@ -35,7 +35,7 @@ function usePurchaseView(arbitraryData: any, purchaseType: string) {
 
     useEffect(() => {
         meta.current.isMounted = true
-        const allAccounts = getFromBag('allAccounts')
+        const allAccounts = getFromBag('allAccounts') || []
         meta.current.allAccounts = allAccounts
         meta.current.ledgerAccounts = allAccounts
             .filter(

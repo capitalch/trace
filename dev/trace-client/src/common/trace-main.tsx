@@ -19,7 +19,7 @@ function TraceMain({ open }: any) {
         setCurrentComponent,
         getCurrentEntity,
     } = manageEntitiesState()
-    const { filterOn} = usingIbuki()
+    const {emit, filterOn} = usingIbuki()
     const [, setRefresh] = useState({})
     const meta = useRef({
         isMounted: false,
@@ -56,6 +56,7 @@ function TraceMain({ open }: any) {
                 : null
             meta.current.isMounted && setRefresh({})
         })
+       
         return () => {
             subs.unsubscribe()
             meta.current.isMounted = false

@@ -212,7 +212,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .body-line-one': {
                     display: 'flex',
                     flexWrap: 'wrap',
-                    columnGap: theme.spacing(2),
+                    columnGap: theme.spacing(3),
+                    rowGap:theme.spacing(2),
                     '& .common-remarks': {
                         maxWidth: '20rem',
                         width: '100%',
