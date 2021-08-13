@@ -105,15 +105,19 @@ function useJournalMain(arbitraryData: any) {
         const [, setRefresh] = useState({})
         return (
             <div className={classes.contentHeader}>
-                <div className='header-line-1'>
-                    <Typography variant='body1' component='span'>Ref no:&nbsp;</Typography>
-                    <span className='auto-ref-no'>{arbitraryData.autoRefNo}</span>
+                <div className="header-line-1">
+                    <Typography variant="body1" component="span">
+                        Ref no:&nbsp;
+                    </Typography>
+                    <span className="auto-ref-no">
+                        {arbitraryData.autoRefNo}
+                    </span>
                     <SubmitButton />
                 </div>
                 <div className="header-line-2">
                     {/* date */}
                     <div className="date-block">
-                        <label className='date-label'>Date</label>
+                        <label className="date-label">Date</label>
                         <TextField
                             // error={isInvalidDate(arbitraryData.body.tranDate)}
                             // helperText={isInvalidDate(arbitraryData.body.tranDate) ? accountsMessages.dateRangeAuditLockMessage : undefined}
@@ -148,49 +152,49 @@ function useJournalMain(arbitraryData: any) {
                         value={arbitraryData.commonRemarks || ''}
                     />
                 </div>
-            </div >
+            </div>
         )
+    }
 
-        function SubmitButton() {
-            const [, setRefresh] = useState({})
-            const classes = useStyles()
-            useEffect(() => {
-                const subs1 = filterOn(
-                    'PURCHASE-BODY-SUBMIT-REFRESH'
-                ).subscribe(() => {
-                    setRefresh({})
-                })
+    function SubmitButton() {
+        const [, setRefresh] = useState({})
+        const classes = useStyles()
+        useEffect(() => {
+            const subs1 = filterOn(
+                'PURCHASE-BODY-SUBMIT-REFRESH'
+            ).subscribe(() => {
+                setRefresh({})
+            })
 
-                return () => {
-                    subs1.unsubscribe()
+            return () => {
+                subs1.unsubscribe()
+            }
+        }, [])
+
+        return (
+            <Button
+                className={classes.contentSubmitButton}
+                variant="contained"
+                size="small"
+                color="secondary"
+                onClick={handleSubmit}
+                startIcon={
+                    getError() ? (
+                        <ErrorIcon color="error" />
+                    ) : (
+                        <CheckIcon style={{ color: 'white' }} />
+                    )
                 }
-            }, [])
-
-            return (
-                <Button
-                    className={classes.contentSubmitButton}
-                    variant="contained"
-                    size="small"
-                    color="secondary"
-                    onClick={handleSubmit}
-                    startIcon={
-                        getError() ? (
-                            <ErrorIcon color="error" />
-                        ) : (
-                            <CheckIcon style={{ color: 'white' }} />
-                        )
-                    }
-                    disabled={getError()}>
-                    Submit
-                </Button>
-            )
-        }
+                disabled={getError()}>
+                Submit
+            </Button>
+        )
 
         function getError() {
             return true
         }
 
-        function handleSubmit() { }
+        function handleSubmit() {}
     }
 
     function ActionDebit({ arbitraryData }: any) {
@@ -198,28 +202,29 @@ function useJournalMain(arbitraryData: any) {
         return (
             <div className={classes.contentActionDebit}>
                 <Typography
-                    className="debits-label"
+                    className="debit-credit-label"
                     variant="subtitle2"
                     component="div"
-                    color="primary">
+                    color="secondary">
                     Debits
                 </Typography>
-                <ActionList />
+                <DebitRows />
             </div>
         )
 
-        function ActionList() {
+        function DebitRows() {
             const [, setRefresh] = useState({})
             let ind = 0
             const debits: any[] = arbitraryData.debits
             const list: any[] = debits.map((item: any) => {
                 const ret = (
-                    <div key={incr()} className="debits-row">
+                    <div key={incr()} className="debit-credit-row">
                         {/* Account */}
-                        <div className='ledger-subledger-box'>
-                            <Typography variant='caption'>Debit account</Typography>
+                        <div>
+                            <Typography variant="caption">
+                                Debit account
+                            </Typography>
                             <LedgerSubledger
-                                className="ledger-subledger"
                                 allAccounts={arbitraryData.accounts.all}
                                 // emitMessageOnChange="SALES-CROWN-REFRESH"
                                 ledgerAccounts={getMappedAccounts(
@@ -275,11 +280,22 @@ function useJournalMain(arbitraryData: any) {
                             value={item.amount || 0.0}
                         />
 
-                        <div style={{ display: 'flex', flexDirection: 'column', width: '5rem', fontSize: '.8rem', rowGap: 0 }}>
-                            <Checkbox />
-                            <Typography>111.00</Typography>
-                            <Typography>111.00</Typography>
-                            <Typography>111.00</Typography>
+                        <div className="gst-block">
+                            <FormControlLabel
+                                value="item.isIgst"
+                                control={<Checkbox color="primary" />}
+                                label="Igst"
+                                labelPlacement="start"
+                            />
+                            <Typography className="gst" variant="body2">
+                                Cgst: {toDecimalFormat(item.cgst || 2500.12)}
+                            </Typography>
+                            <Typography className="gst" variant="body2">
+                                Sgst: {toDecimalFormat(item.sgst || 0.0)}
+                            </Typography>
+                            <Typography className="gst" variant="body2">
+                                Igst: {toDecimalFormat(item.igst || 0.0)}
+                            </Typography>
                         </div>
 
                         {/* line ref no  */}
@@ -306,10 +322,17 @@ function useJournalMain(arbitraryData: any) {
 
                         {/* Add remove */}
                         <div>
-                            <IconButton color='secondary' size='medium' aria-label="delete" style={{ margin: 0, padding: 0 }}>
+                            <IconButton
+                                color="secondary"
+                                size="medium"
+                                aria-label="delete"
+                                style={{ margin: 0, padding: 0 }}>
                                 <RemoveCircle style={{ fontSize: '2.5rem' }} />
                             </IconButton>
-                            <IconButton color='secondary' aria-label="delete" style={{ margin: 0, padding: 0 }}>
+                            <IconButton
+                                color="secondary"
+                                aria-label="delete"
+                                style={{ margin: 0, padding: 0 }}>
                                 <AddCircle style={{ fontSize: '2.5rem' }} />
                             </IconButton>
                         </div>
@@ -318,7 +341,7 @@ function useJournalMain(arbitraryData: any) {
                 return ret
             })
 
-            return <div className="debits-block">{list}</div>
+            return <Paper elevation={1} className="debit-credit-block">{list}</Paper>
 
             function incr() {
                 return ind++
@@ -326,10 +349,163 @@ function useJournalMain(arbitraryData: any) {
         }
     }
 
-    return { ActionDebit, Header, meta, setRefresh }
+    function ActionCredit({arbitraryData}: any){
+        const classes = useStyles()
+        return (
+            <div className={classes.contentActionDebit}>
+                <Typography
+                    className="debit-credit-label"
+                    variant="subtitle2"
+                    component="div"
+                    color="secondary">
+                    Credits
+                </Typography>
+                <CreditRows />
+            </div>
+        )
+
+        function CreditRows() {
+            const [, setRefresh] = useState({})
+            let ind = 0
+            const credits: any[] = arbitraryData.credits
+            const list: any[] = credits.map((item: any) => {
+                const ret = (
+                    <div key={incr()} className="debit-credit-row">
+                        {/* Account */}
+                        <div>
+                            <Typography variant="caption">
+                                Credit account
+                            </Typography>
+                            <LedgerSubledger
+                                allAccounts={arbitraryData.accounts.all}
+                                // emitMessageOnChange="SALES-CROWN-REFRESH"
+                                ledgerAccounts={getMappedAccounts(
+                                    arbitraryData.accounts.journal
+                                )}
+                                // onChange={onChangeLedgerSubledger}
+                                rowData={item}
+                            />
+                        </div>
+
+                        {/* Gst rate` */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Gst rate' }}
+                            className="right-aligned-numeric gst-rate"
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={item.amount ? false : true}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.gstRate || 0.0}
+                        />
+                        {/* Amount */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Credit amount' }}
+                            // {...matProps}
+                            className="right-aligned-numeric"
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={item.amount ? false : true}
+                            // error={()=>false}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.amount || 0.0}
+                        />
+
+                        <div className="gst-block">
+                            <FormControlLabel
+                                value="item.isIgst"
+                                control={<Checkbox color="primary" />}
+                                label="Igst"
+                                labelPlacement="start"
+                            />
+                            <Typography className="gst" variant="body2">
+                                Cgst: {toDecimalFormat(item.cgst || 2500.12)}
+                            </Typography>
+                            <Typography className="gst" variant="body2">
+                                Sgst: {toDecimalFormat(item.sgst || 0.0)}
+                            </Typography>
+                            <Typography className="gst" variant="body2">
+                                Igst: {toDecimalFormat(item.igst || 0.0)}
+                            </Typography>
+                        </div>
+
+                        {/* line ref no  */}
+                        <TextField
+                            label="Line ref"
+                            // className="user-ref"
+                            // error={getInvoiceError()}
+                            onChange={(e: any) => {
+                                arbitraryData.userRefNo = e.target.value
+                                setRefresh({})
+                            }}
+                            value={arbitraryData.lineRefNo || ''}
+                        />
+                        {/* remarks */}
+                        <TextField
+                            label="Remarks"
+                            // className="common-remarks"
+                            onChange={(e: any) => {
+                                arbitraryData.commonRemarks = e.target.value
+                                setRefresh({})
+                            }}
+                            value={arbitraryData.remarks || ''}
+                        />
+
+                        {/* Add remove */}
+                        <div>
+                            <IconButton
+                                color="secondary"
+                                size="medium"
+                                aria-label="delete"
+                                style={{ margin: 0, padding: 0 }}>
+                                <RemoveCircle style={{ fontSize: '2.5rem' }} />
+                            </IconButton>
+                            <IconButton
+                                color="secondary"
+                                aria-label="delete"
+                                style={{ margin: 0, padding: 0 }}>
+                                <AddCircle style={{ fontSize: '2.5rem' }} />
+                            </IconButton>
+                        </div>
+                    </div>
+                )
+                return ret
+            })
+
+            return <Paper elevation={1} className="debit-credit-block">{list}</Paper>
+
+            function incr() {
+                return ind++
+            }
+        }
+    }
+
+    return { ActionDebit,ActionCredit, Header, meta, setRefresh, SubmitButton }
 }
 
 export { useJournalMain }
+
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
@@ -339,7 +515,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginTop: theme.spacing(2),
                 '& .auto-ref-no': {
                     color: theme.palette.blue.main,
-                }
+                },
             },
             '& .header-line-2': {
                 // marginTop: theme.spacing(2),
@@ -353,7 +529,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     flexDirection: 'column',
                     '& .date-label': {
                         fontSize: '0.7rem',
-                    }
+                    },
                 },
                 '& .user-ref': {
                     maxWidth: '10rem',
@@ -365,50 +541,48 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
         },
 
-
         contentActionDebit: {
-            '& .debits-label': {
+            '& .debit-credit-label': {
                 marginTop: theme.spacing(2),
             },
-            // '& .ledger-subledger-box': {
-            //     marginTop:0,
-            //     '& .ledger-subledger': {
-            //         marginTop: 0,
-            //     },
-            // },
-
             '& .right-aligned-numeric': {
                 '& input': {
                     textAlign: 'end',
                 },
             },
-
             '& .gst-rate': {
                 width: theme.spacing(8),
             },
-
-
-            '& .debits-block': {
+            '& .gst-block': {
                 display: 'flex',
-                flexWrap: 'wrap',
-                columnGap: theme.spacing(4),
-                rowGap: theme.spacing(2),
-                // listStyle: 'none',
-                // marginLeft: 0,
-                // paddingLeft: 0,
-                '& .debits-row': {
-                    display: 'flex',
-                    columnGap: theme.spacing(4),
-                    flexWrap: 'wrap',
-                    rowGap: theme.spacing(3),
-                    alignItems: 'center',
+                flexDirection: 'column',
+                width: theme.spacing(15),
+                border: '1px solid lightgrey',
+                padding: theme.spacing(1),
+                '& .gst': {
+                    textAlign: 'right',
                 },
+                marginLeft: 'auto',
+            },
+            '& .debit-credit-block':{
+                padding:theme.spacing(2),
+                marginTop: theme.spacing(1)
+            },
+            '& .debit-credit-row': {
+                display: 'flex',
+                // marginTop: theme.spacing(2),
+                marginBottom: theme.spacing(1),
+                columnGap: theme.spacing(4),
+                flexWrap: 'wrap',
+                rowGap: theme.spacing(2),
+                alignItems: 'center',
+                // borderBottom:'1px solid lightgrey'
             },
         },
 
         contentSubmitButton: {
-            marginLeft: 'auto'
-        }
+            marginLeft: 'auto',
+        },
     })
 )
 

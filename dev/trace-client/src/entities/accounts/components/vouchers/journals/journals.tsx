@@ -88,12 +88,13 @@ function Journals() {
 
     return (
         <div className={classes.content}>
+            <Typography component='div' variant='subtitle1' color='secondary'>{meta.current.title}</Typography>
             <Tabs
                 className="tabs"
                 indicatorColor="primary"
                 onChange={handleOnTabChange}
                 value={meta.current.tabValue}>
-                <Tab className='tab' label={meta.current.tabLabel} />
+                <Tab className='tab' label='New / Edit' />
                 <Tab label="View" />
             </Tabs>
             <JournalMain arbitraryData={arbitraryData.current} hidden = {meta.current.tabValue !==0 } />

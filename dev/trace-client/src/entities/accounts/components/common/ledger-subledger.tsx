@@ -228,7 +228,7 @@ export { LedgerSubledger }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            minWidth: theme.spacing(40),
+            minWidth: theme.spacing(38),
             maxWidth: theme.spacing(50),
             border: (meta: any) => {
                 const isError = meta.current.getError()

@@ -90,7 +90,7 @@ function useJournals() {
 
     const meta: any = useRef({
         isMounted: false,
-        tabLabel: 'Journals',
+        title: 'Journals',
         tabValue: 0,
     })
 
@@ -150,7 +150,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             '& .tabs': {
                 color: theme.palette.common.white,
-                backgroundColor: theme.palette.lightBlue.light,
+                backgroundColor: theme.palette.grey[600],
                 // '& .MuiTab-wrapper':{
                 //     marginLeft:-200,
                 //     padding:0,
