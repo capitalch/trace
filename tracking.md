@@ -30,7 +30,6 @@
 17. Show bottom border as light grey
 18. create as generic to be used with all vouchers 
 
-
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
 {#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV
@@ -73,6 +72,7 @@
 # acivate env where pyinstaller is installed
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
 create installer from innosetup
+
 # Pending
 ## Functionality
 1.01 
@@ -150,6 +150,9 @@ create installer from innosetup
 2.06 purchase entry unable to enter gst price of an item
 2.07 In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
 2.08 In Bank recon when selected yellow backgrond with white foreground problematic.
+
+## To do
+1. Remove trace-footer. it is of no use
 
 ## Maintainance
 1.30 Github release management
