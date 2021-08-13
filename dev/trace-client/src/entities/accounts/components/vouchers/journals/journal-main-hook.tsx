@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
+import { classNames } from 'react-select/src/utils'
+import { LedgerSubledger } from '../../common/ledger-subledger'
+import { RemoveCircle } from '@material-ui/icons'
 
 function useJournalMain(arbitraryData: any) {
     const [, setRefresh] = useState({})
 
-    const { _,
+    const {
+        _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -37,6 +41,7 @@ function useJournalMain(arbitraryData: any) {
         getFormData,
         getFormObject,
         getFromBag,
+        getMappedAccounts,
         globalMessages,
         FormControlLabel,
         Icon,
@@ -77,90 +82,101 @@ function useJournalMain(arbitraryData: any) {
         traceGlobalSearch,
         TraceSearchBox,
         Typography,
-        useGeneric, } = useSharedElements()
+        useGeneric,
+    } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
-
-        return (() => {
+        const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>
+            setRefresh({})
+        )
+        return () => {
             meta.current.isMounted = false
-        })
+            subs1.unsubscribe()
+        }
     }, [])
 
     const meta: any = useRef({
         isMounted: false,
     })
 
-    function Header({arbitraryData}:any) {
+    function Header({ arbitraryData }: any) {
         const classes = useStyles()
         return (
-            <div className={classes.content}>
-                <TextField
-                    className="auto-ref-no"
-                    disabled={true}
-                    label="Ref no"
-                    value={arbitraryData.autoRefNo || ''}
-                />
-                {/* date */}
-                <div className="date-block">
-                    <label className='date-label'>Date</label>
+            <div className={classes.contentHeader}>
+                <Typography
+                    className="header-label"
+                    variant="subtitle2"
+                    color="secondary">
+                    Header
+                </Typography>
+                <div className="header-block">
                     <TextField
-                        // error={getDateError()}
-                        // helperText={
-                        //     getDateError()
-                        //         ? 'Date range / Audit lock error'
-                        //         : undefined
-                        // }
-                        type="date"
+                        className="auto-ref-no"
+                        disabled={true}
+                        label="Ref no"
+                        value={arbitraryData.autoRefNo || ''}
+                    />
+                    {/* date */}
+                    <div className="date-block">
+                        <label className="date-label">Date</label>
+                        <TextField
+                            // error={getDateError()}
+                            // helperText={
+                            //     getDateError()
+                            //         ? 'Date range / Audit lock error'
+                            //         : undefined
+                            // }
+                            type="date"
+                            onChange={(e: any) => {
+                                arbitraryData.tranDate = e.target.value
+                                setRefresh({})
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            value={arbitraryData.tranDate || ''}
+                        />
+                    </div>
+                    {/* user ref no  */}
+                    <TextField
+                        label="Use ref"
+                        className="user-ref"
+                        // error={getInvoiceError()}
                         onChange={(e: any) => {
-                            arbitraryData.tranDate = e.target.value
+                            arbitraryData.userRefNo = e.target.value
                             setRefresh({})
                         }}
-                        onFocus={(e) => e.target.select()}
-                        value={arbitraryData.tranDate || ''}
+                        value={arbitraryData.userRefNo || ''}
                     />
-                </div>
-                {/* user ref no  */}
-                <TextField
-                    label="Use ref"
-                    className="user-ref"
-                    // error={getInvoiceError()}
-                    onChange={(e: any) => {
-                        arbitraryData.userRefNo = e.target.value
-                        setRefresh({})
-                    }}
-                    value={arbitraryData.userRefNo || ''}
-                />
-                {/* remarks */}
-                <TextField
-                    label="Common remarks"
-                    className="common-remarks"
-                    onChange={(e: any) => {
-                        arbitraryData.commonRemarks = e.target.value
-                        setRefresh({})
-                    }}
-                    value={arbitraryData.commonRemarks || ''}
-                />
+                    {/* remarks */}
+                    <TextField
+                        label="Common remarks"
+                        className="common-remarks"
+                        onChange={(e: any) => {
+                            arbitraryData.commonRemarks = e.target.value
+                            setRefresh({})
+                        }}
+                        value={arbitraryData.commonRemarks || ''}
+                    />
 
-                <SubmitButton />
+                    <SubmitButton />
+                </div>
             </div>
         )
 
-                
         function SubmitButton() {
             const [, setRefresh] = useState({})
             useEffect(() => {
-                const subs1 = filterOn('PURCHASE-BODY-SUBMIT-REFRESH').subscribe(
-                    () => {
-                        setRefresh({})
-                    }
-                )
-    
+                const subs1 = filterOn(
+                    'PURCHASE-BODY-SUBMIT-REFRESH'
+                ).subscribe(() => {
+                    setRefresh({})
+                })
+
                 return () => {
                     subs1.unsubscribe()
                 }
             }, [])
-    
+
             return (
                 <Button
                     className="submit-button"
@@ -179,63 +195,218 @@ function useJournalMain(arbitraryData: any) {
                     Submit
                 </Button>
             )
-    }
-
-    
+        }
 
         function getError() {
-            return (true)
+            return true
         }
 
-        function handleSubmit() {
+        function handleSubmit() {}
+    }
 
+    function ActionDebit({ arbitraryData }: any) {
+        const classes = useStyles()
+        return (
+            <div className={classes.contentActionDebit}>
+                <Typography
+                    className="debits-label"
+                    variant="subtitle2"
+                    component="div"
+                    color="secondary">
+                    Debits
+                </Typography>
+                <ActionList />
+            </div>
+        )
 
+        function ActionList() {
+            const [, setRefresh] = useState({})
+            let ind = 0
+            const debits: any[] = arbitraryData.debits
+            const list: any[] = debits.map((item: any) => {
+                const ret = (
+                    <li key={incr()} className="debits-row">
+                        {/* Account */}
+                        <LedgerSubledger
+                            allAccounts={arbitraryData.accounts.all}
+                            // emitMessageOnChange="SALES-CROWN-REFRESH"
+                            ledgerAccounts={getMappedAccounts(
+                                arbitraryData.accounts.journal
+                            )}
+                            // onChange={onChangeLedgerSubledger}
+                            rowData={item}
+                        />
+                        {/* Gst rate` */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Gst rate' }}
+                            className="right-aligned-numeric gst-rate"
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={item.amount ? false : true}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.gstRate || 0.0}
+                        />
+                        {/* Amount */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Debit amount' }}
+                            // {...matProps}
+                            className="right-aligned-numeric"
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={item.amount ? false : true}
+                            // error={()=>false}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.amount || 0.0}
+                        />
+
+                        <div style={{display:'flex',flexDirection:'column', width:'5rem',fontSize:'.8rem', rowGap:0}}>
+                        <Checkbox />
+                        <Typography>111.00</Typography>
+                        <Typography>111.00</Typography>
+                        <Typography>111.00</Typography>
+                        </div>
+
+                        {/* line ref no  */}
+                        <TextField
+                            label="Line ref"
+                            // className="user-ref"
+                            // error={getInvoiceError()}
+                            onChange={(e: any) => {
+                                arbitraryData.userRefNo = e.target.value
+                                setRefresh({})
+                            }}
+                            value={arbitraryData.lineRefNo || ''}
+                        />
+                        {/* remarks */}
+                        <TextField
+                            label="Remarks"
+                            // className="common-remarks"
+                            onChange={(e: any) => {
+                                arbitraryData.commonRemarks = e.target.value
+                                setRefresh({})
+                            }}
+                            value={arbitraryData.remarks || ''}
+                        />
+
+                        {/* Add remove */}
+                        <div>
+                            <IconButton color='secondary' size='medium' aria-label="delete" style={{margin:0,padding:0}}>
+                                <RemoveCircle style={{fontSize:'2.5rem'}} />
+                            </IconButton>
+                            <IconButton color='secondary' aria-label="delete" style={{margin:0,padding:0}}>
+                                <AddCircle style={{fontSize:'2.5rem'}} />
+                            </IconButton>
+                        </div>
+                    </li>
+                )
+                return ret
+            })
+
+            return <ul className="debits-block">{list}</ul>
+
+            function incr() {
+                return ind++
+            }
         }
     }
 
-    return ({Header, meta, setRefresh})
-
+    return { ActionDebit, Header, meta, setRefresh }
 }
 
 export { useJournalMain }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
-        content: {
-            display: 'flex',
-            columnGap: theme.spacing(4),
-            marginTop: theme.spacing(2),
-            flexWrap: 'wrap',
-            rowGap: theme.spacing(3),
-            alignItems: 'center',
-            // border: '1px solid lightgrey',
-            // padding: theme.spacing(2),
-
-            '& .auto-ref-no': {
-                maxWidth: theme.spacing(19),
+        contentHeader: {
+            '& .header-label': {
+                marginTop: theme.spacing(2),
+                // padding: theme.spacing(2),
+                // paddingBottom:0,
             },
-
-            '& .date-block': {
+            '& .header-block': {
                 display: 'flex',
-                flexDirection: 'column',
-                '& .date-label': {
-                    fontSize: '0.7rem'
-                }
-            },
+                columnGap: theme.spacing(4),
+                // marginTop: theme.spacing(2),
+                flexWrap: 'wrap',
+                rowGap: theme.spacing(3),
+                alignItems: 'center',
+                // border: '1px solid lightgrey',
+                padding: theme.spacing(2),
+                paddingTop: 0,
+                '& .auto-ref-no': {
+                    maxWidth: theme.spacing(19),
+                },
 
-            '& .user-ref': {
-                maxWidth: '10rem',
-            },
-            '& .common-remarks': {
-                maxWidth: '20rem',
-                flexGrow:2,
-            },
-            '& .submit-button': {
-                marginLeft: 'auto',
+                '& .date-block': {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    '& .date-label': {
+                        fontSize: '0.7rem',
+                    },
+                },
+
+                '& .user-ref': {
+                    maxWidth: '10rem',
+                },
+                '& .common-remarks': {
+                    maxWidth: '20rem',
+                    flexGrow: 2,
+                },
+                '& .submit-button': {
+                    marginLeft: 'auto',
+                },
             },
         },
 
+        contentActionDebit: {
+            '& .right-aligned-numeric': {
+                '& input': {
+                    textAlign: 'end',
+                },
+            },
+
+            '& .gst-rate': {
+                width: theme.spacing(8),
+            },
+
+            '& .debits-label': {
+                marginTop: theme.spacing(2),
+            },
+            '& .debits-block': {
+                listStyle: 'none',
+                marginLeft: 0,
+                paddingLeft: 0,
+                '& .debits-row': {
+                    display: 'flex',
+                    columnGap: theme.spacing(4),
+                    flexWrap: 'wrap',
+                    rowGap: theme.spacing(3),
+                    alignItems: 'center',
+                },
+            },
+        },
     })
 )
 

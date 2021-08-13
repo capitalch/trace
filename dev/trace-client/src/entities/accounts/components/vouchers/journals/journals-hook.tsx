@@ -81,19 +81,24 @@ function useJournals() {
 
     useEffect(() => {
         meta.current.isMounted = true
-
+        setAccounts()
+        emit('JOURNAL-MAIN-REFRESH','') // refresh accounts in child
         return () => {
             meta.current.isMounted = false
         }
     }, [])
 
     const meta: any = useRef({
-        isMounted: false,        
+        isMounted: false,
         tabLabel: 'Journals',
         tabValue: 0,
     })
 
     const arbitraryData: any = useRef({
+        accounts: {
+            all: [],
+            journal: [],
+        },
         autoRefNo: undefined,
         commonRemarks: undefined,
         gstin: undefined,
@@ -102,6 +107,9 @@ function useJournals() {
         lineItems: [],
         tranDate: undefined,
         userRefNo: undefined,
+
+        debits: [{},{}],
+        credits: [{}],
     })
 
     function handleOnTabChange(e: any, newValue: number) {
@@ -110,6 +118,26 @@ function useJournals() {
         //     emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
         // }
         meta.current.isMounted && setRefresh({})
+    }
+
+    function setAccounts() {
+        const allAccounts = getFromBag('allAccounts')
+        arbitraryData.current.accounts.all = allAccounts
+        const jouAccounts = allAccounts.filter(
+            (el: any) =>
+                ["branch",
+                "capital",
+                "other",
+                "loan",
+                "iexp",
+                "dexp",
+                "dincome",
+                "iincome",
+                "creditor",
+                "debtor"].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        arbitraryData.current.accounts.journal = jouAccounts
     }
 
     return { arbitraryData, handleOnTabChange, meta, setRefresh }
@@ -121,7 +149,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                marginTop:theme.spacing(2),
+                marginTop: theme.spacing(2),
                 color: theme.palette.common.white,
                 backgroundColor: 'dodgerBlue',
             },

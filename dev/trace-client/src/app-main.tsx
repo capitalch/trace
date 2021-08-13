@@ -32,15 +32,15 @@ function AppMain() {
     useEffect(() => {
         try {
             emit('MENU-RECEIVED-FROM-SERVER', menu)
-            emit('DATABASE-SERVER-CONNECTION-RESULT', {
-                status: "success",
-                message: messages.dbServerConnected
-            })
+            // emit('DATABASE-SERVER-CONNECTION-RESULT', {
+            //     status: "success",
+            //     message: messages.dbServerConnected
+            // })
         } catch (exception) {
-            emit('DATABASE-SERVER-CONNECTION-RESULT', {
-                status: "failure",
-                message: messages.dbServerConnectionError
-            })
+            // emit('DATABASE-SERVER-CONNECTION-RESULT', {
+            //     status: "failure",
+            //     message: messages.dbServerConnectionError
+            // })
         }
         return (() => { })
     }, [])
@@ -71,10 +71,8 @@ function AppMain() {
                 {/* Subheader */}
                 <TraceSubHeader></TraceSubHeader>
             </AppBar>
-
             {/* Left */}
             <TraceLeft open={open} matches={isMediumSizeUp} handleDrawerClose={handleDrawerClose}></TraceLeft>
-
             {/* Main */}
             <TraceMain open={open}></TraceMain>
             {/* universal loading indicator */}

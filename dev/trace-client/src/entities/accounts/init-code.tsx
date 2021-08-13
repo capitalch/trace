@@ -24,6 +24,7 @@ function initCode() {
     async function setLastBuCodeFinYearIdBranchId(brId: any = undefined) {
         const userId = getLoginData().id
         const buCode = getLoginData().lastUsedBuCode
+        
         //Uncomment following lines
         emit('SHOW-LOADING-INDICATOR', true)
         if (buCode) {
@@ -38,10 +39,9 @@ function initCode() {
                 duration: null,
             })
         }
-
         emit('SHOW-LOADING-INDICATOR', false)
 
-        // remove following lines
+        // comment following line
         // dummy()
     }
 
@@ -70,13 +70,6 @@ function initCode() {
 
     async function setNowFinYearIdDatesFinYearsBranches(branchId: number) {
         const nowDate = moment().format(isoDateFormat)
-
-        // get configuration from server
-        // const q = queries['genericQueryBuilder']({
-        //     queryName: 'configuration',
-        // })
-        // const ret1 = await queryGraphql(q)
-        // setInBag('configuration', ret1?.data?.accounts?.configuration)
 
         const ret = await execGenericView({
             sqlKey: 'getJson_finYears_branches_nowFinYearIdDates_generalSettings',
@@ -212,3 +205,10 @@ function initCode() {
 }
 
 export { initCode }
+
+// get configuration from server
+// const q = queries['genericQueryBuilder']({
+//     queryName: 'configuration',
+// })
+// const ret1 = await queryGraphql(q)
+// setInBag('configuration', ret1?.data?.accounts?.configuration)
