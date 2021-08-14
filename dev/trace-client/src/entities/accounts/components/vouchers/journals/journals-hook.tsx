@@ -108,8 +108,8 @@ function useJournals() {
         tranDate: undefined,
         userRefNo: undefined,
 
-        debits: [{},{}],
-        credits: [{}],
+        debits: [{key:0},],
+        credits: [{key:0},],
     })
 
     function handleOnTabChange(e: any, newValue: number) {
