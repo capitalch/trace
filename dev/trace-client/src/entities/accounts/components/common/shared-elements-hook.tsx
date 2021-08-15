@@ -140,7 +140,7 @@ function useSharedElements() {
         execGenericView,
         toDecimalFormat,
     } = utilMethods()
-    const { hotFilterOn, emit, filterOn } = usingIbuki()
+    const {hotEmit, hotFilterOn, emit, filterOn } = usingIbuki()
     const {
         TraceDialog,
         traceGlobalSearch,
@@ -231,6 +231,7 @@ function useSharedElements() {
         getValidationFabric,
         globalMessages,
         Grid,
+        hotEmit,
         hotFilterOn,
         Icon,
         init,

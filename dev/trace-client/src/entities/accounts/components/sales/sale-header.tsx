@@ -101,7 +101,7 @@ function SaleHeader({ arbitraryData }: any) {
                         <Typography>Sale account</Typography>
                         <LedgerSubledger
                             allAccounts={arbitraryData.allAccounts}
-                            emitMessageOnChange="SALES-CROWN-REFRESH"
+                            // emitMessageOnChange="SALES-CROWN-REFRESH"
                             ledgerAccounts={getMappedAccounts(
                                 arbitraryData.ledgerAccounts
                             )}

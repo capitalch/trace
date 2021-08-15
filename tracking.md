@@ -11,19 +11,8 @@
 11. Create as XXGrid component
 
 ## Change UI
-1. Debits and UI reduce gap
-2. Debit amount reduce width
-3. GSt control: reduce font. Grey. Checkbox name as igst. Implement, recalculate. Give prefix as sgst, cgst, igst
-4. from gst control move to right
-5. Implement a reset method, which is called when change accounts
-6. onBlur of gstRate, debitAmount computeRow for gst calculations and computeall and send message to header to display debits
-7. Add delete functionality
-8. Create credit control
-9. mechanism for error for submit show
-10. Default date, correct date functionality
-11. Draw controls from arbitrarydata values
-12. Save functionality
-13. header alldebits, all credits values
+1. Validation of GSTIN no should present when gstRate is there in any of the rows
+
 14.View data
 15. edit data
 16. Show as paper or card
@@ -159,6 +148,9 @@ create installer from innosetup
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 06-08-2021 - 15-08-2021
+1. Working on GST Journals
 
 # 01-08-2021 - 5-08-2021
 1. Making the XXGrid as generic multi-place grid

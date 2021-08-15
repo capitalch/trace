@@ -7,7 +7,7 @@ import { useIbuki } from '../../../../common-utils/ibuki'
 interface LedgerSubledgerOptions {
     allAccounts: any[]
     className?: string
-    emitMessageOnChange?: string
+    // emitMessageOnChange?: string
     ledgerAccounts: any[]
     onChange?: any
     rowData: any // Object which has the final selected value as 'accId' and boolen error in 'isLedgerSubledgerError'

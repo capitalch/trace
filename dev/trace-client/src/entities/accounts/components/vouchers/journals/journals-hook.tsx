@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
+import { useLayoutEffect } from 'react'
 
 function useJournals() {
     const [, setRefresh] = useState({})
@@ -102,9 +103,10 @@ function useJournals() {
         autoRefNo: undefined,
         commonRemarks: undefined,
         gstin: undefined,
+        errorObject: {},
         id: undefined,
         isIgst: false,
-        lineItems: [],
+        // lineItems: [],
         tranDate: undefined,
         userRefNo: undefined,
 
@@ -114,9 +116,6 @@ function useJournals() {
 
     function handleOnTabChange(e: any, newValue: number) {
         meta.current.tabValue = newValue
-        // if (newValue === 1) { // to refresh view
-        //     emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
-        // }
         meta.current.isMounted && setRefresh({})
     }
 
@@ -151,11 +150,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .tabs': {
                 color: theme.palette.common.white,
                 backgroundColor: theme.palette.grey[600],
-                // '& .MuiTab-wrapper':{
-                //     marginLeft:-200,
-                //     padding:0,
-                //     textAlign:'left'
-                // }
             },
             '& .tab':{
             }
