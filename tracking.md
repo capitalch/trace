@@ -11,7 +11,8 @@
 11. Create as XXGrid component
 
 ## Change UI
-1. Validation of GSTIN no should present when gstRate is there in any of the rows
+1. Proper validation for gstin
+2. If gst checked then check gst not zero
 
 14.View data
 15. edit data

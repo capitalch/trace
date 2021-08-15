@@ -5,7 +5,8 @@ import { classNames } from 'react-select/src/utils'
 import { LedgerSubledger } from '../../common/ledger-subledger'
 import { RemoveCircle } from '@material-ui/icons'
 import { ThemeConsumer } from 'styled-components'
-import { indigo } from '@material-ui/core/colors'
+import { blue, indigo, lightBlue } from '@material-ui/core/colors'
+import { cyan } from '@material-ui/core/colors'
 
 function useJournalMain(arbitraryData: any) {
     const [, setRefresh] = useState({})
@@ -106,18 +107,16 @@ function useJournalMain(arbitraryData: any) {
         isMounted: false,
     })
 
-
-
     function Crown({ arbitraryData }: any) {
         const classes = useStyles()
         const [, setRefresh] = useState({})
         return (
-            <div className={classes.contentCrown}>
+            <Paper elevation={1} className={classes.contentCrown}>
                 <TotalDebitsTotalCredits ad={arbitraryData} />
                 <ErrorMessage />
                 <ResetButton ad={arbitraryData} />
                 <SubmitButton ad={arbitraryData} />
-            </div>
+            </Paper>
         )
 
         function TotalDebitsTotalCredits({ ad }: any) {
@@ -127,60 +126,79 @@ function useJournalMain(arbitraryData: any) {
             useEffect(() => {
                 compute()
                 setRefresh({})
-                const subs1 = filterOn('TOTAL-DEBITS-TOTAL-CREDITS-REFRESH').subscribe(() => {
+                const subs1 = filterOn(
+                    'TOTAL-DEBITS-TOTAL-CREDITS-REFRESH'
+                ).subscribe(() => {
                     compute()
                     setRefresh({})
                 })
 
-                return (() => {
+                return () => {
                     subs1.unsubscribe()
-                })
+                }
             }, [])
 
-            return (<div className='total-debits-total-credits'>
-                <Typography variant='subtitle2' component='span'>Total debits: {toDecimalFormat(ad.totalDebits || 0.00)}</Typography>&nbsp;&nbsp;
-                <Typography variant='subtitle2' component='span'>Total credits: {toDecimalFormat(ad.totalCredits || 0.00)}</Typography>
-            </div>)
+            return (
+                <div className="total-debits-total-credits">
+                    <Typography variant="subtitle2" component="span">
+                        Total debits: {toDecimalFormat(ad.totalDebits || 0.0)}
+                    </Typography>
+                    &nbsp;&nbsp;
+                    <Typography variant="subtitle2" component="span">
+                        Total credits: {toDecimalFormat(ad.totalCredits || 0.0)}
+                    </Typography>
+                </div>
+            )
 
             function compute() {
-                ad.totalDebits = ad.debits.reduce((prev: any, curr: any) => {
-                    prev.amount = prev.amount + (curr.amount || 0.0)
-                    return (prev)
-                }, { amount: 0 }).amount
-                ad.totalCredits = ad.credits.reduce((prev: any, curr: any) => {
-                    prev.amount = prev.amount + (curr.amount || 0.0)
-                    return (prev)
-                }, { amount: 0 }).amount
+                ad.totalDebits = ad.debits.reduce(
+                    (prev: any, curr: any) => {
+                        prev.amount = prev.amount + (curr.amount || 0.0)
+                        return prev
+                    },
+                    { amount: 0 }
+                ).amount
+                ad.totalCredits = ad.credits.reduce(
+                    (prev: any, curr: any) => {
+                        prev.amount = prev.amount + (curr.amount || 0.0)
+                        return prev
+                    },
+                    { amount: 0 }
+                ).amount
             }
         }
 
         function ErrorMessage() {
             const [, setRefresh] = useState({})
             const meta = useRef({
-                message: ''
+                message: '',
             })
             useEffect(() => {
                 const subs1 = filterOn('ERROR-MESSAGE').subscribe((d: any) => {
                     meta.current.message = d.data
                     setRefresh({})
                 })
-                return (() => {
+                return () => {
                     subs1.unsubscribe()
-                })
+                }
             }, [])
             return (
-                <Typography variant='subtitle2' className='error-message'>{meta.current.message}</Typography>
+                <Typography variant="subtitle2" className="error-message">
+                    {meta.current.message}
+                </Typography>
             )
         }
 
         function ResetButton({ ad }: any) {
-            return (<Button
-                className='reset-button'
-                variant='contained'
-                size='small'
-                onClick={handleReset}
-
-            >Reset</Button>)
+            return (
+                <Button
+                    className="reset-button"
+                    variant="contained"
+                    size="small"
+                    onClick={handleReset}>
+                    Reset
+                </Button>
+            )
 
             function handleReset() {
                 ad.autoRefNo = undefined
@@ -191,8 +209,8 @@ function useJournalMain(arbitraryData: any) {
                 ad.isIgst = false
                 ad.tranDate = undefined
                 ad.userRefNo = undefined
-                ad.debits = [{ key: 0 },]
-                ad.credits = [{ key: 0 },]
+                ad.debits = [{ key: 0 }]
+                ad.credits = [{ key: 0 }]
                 emit('JOURNAL-MAIN-REFRESH', '')
             }
         }
@@ -202,13 +220,11 @@ function useJournalMain(arbitraryData: any) {
             const classes = useStyles()
             const meta: any = useRef({
                 errorObject: { message: undefined },
-                errorMessage: ''
+                errorMessage: '',
             })
 
             useEffect(() => {
-                const subs1 = filterOn(
-                    'SUBMIT-REFRESH'
-                ).subscribe(() => {
+                const subs1 = filterOn('SUBMIT-REFRESH').subscribe(() => {
                     setRefresh({})
                 })
                 return () => {
@@ -245,23 +261,24 @@ function useJournalMain(arbitraryData: any) {
                 function headError() {
                     function dateError() {
                         const isDateError = isInvalidDate(ad.tranDate)
-                        mess = isDateError ? accountsMessages.dateRangeAuditLockMessage : ''
-                        return (isDateError)
+                        mess = isDateError
+                            ? accountsMessages.dateRangeAuditLockMessage
+                            : ''
+                        return isDateError
                     }
 
                     function gstinError() {
-                        const isGstinError = isInvalidGstin(
-                            arbitraryData.gstin
-                        )
+                        const isGstinError = isInvalidGstin(arbitraryData.gstin)
                         mess = isGstinError ? accountsMessages.invalidGstin : ''
                         return isGstinError
                     }
 
                     const headError = dateError() || gstinError()
-                    return (headError)
+                    return headError
                 }
 
-                function rowsError(rowsName: string) { // can be 'debits' or 'credits'
+                function rowsError(rowsName: string) {
+                    // can be 'debits' or 'credits'
                     let isRowsError = false
                     const rows: any[] = ad[rowsName]
                     for (let row of rows) {
@@ -270,70 +287,94 @@ function useJournalMain(arbitraryData: any) {
                             break
                         }
                     }
-                    return (isRowsError)
+                    return isRowsError
 
                     function rowError(row: any) {
                         function accountError() {
                             if (row.isLedgerSubledgerError) {
                                 mess = accountsMessages.selectAccountHeader
                             }
-                            return (row.isLedgerSubledgerError)
+                            return row.isLedgerSubledgerError
                         }
 
                         function amountError() {
-                            const isAmountError = (!row.amount)
-                            mess = isAmountError ? accountsMessages.errorZeroAmount : ''
-                            return (isAmountError)
+                            const isAmountError = !row.amount
+                            mess = isAmountError
+                                ? accountsMessages.errorZeroAmount
+                                : ''
+                            return isAmountError
                         }
 
                         function gstRateError() {
-                            const isGstRateError = (row.gstRate > 30)
-                            mess = isGstRateError ? accountsMessages.invalidGstRate : ''
-                            return (isGstRateError)
+                            const isGstRateError = row.gstRate > 30
+                            mess = isGstRateError
+                                ? accountsMessages.invalidGstRate
+                                : ''
+                            return isGstRateError
                         }
 
                         function hsnNotPresentError() {
                             let isHsnNotPresentError = false
-                            if (row.gstRate && (row.gstRate > 0)) {
+                            if (row.gstRate && row.gstRate > 0) {
                                 if (!row.hsn) {
                                     isHsnNotPresentError = true
+                                    mess = accountsMessages.hsnNotPresent
                                 }
                             }
-                            mess = accountsMessages.hsnNotPresent
-                            return (isHsnNotPresentError)
+
+                            return isHsnNotPresentError
                         }
 
-                        return (accountError() || amountError() || gstRateError() || hsnNotPresentError())
+                        function gstinNotPresentError() {
+                            let isError = false
+                            if (row.gstRate && row.gstRate > 0) {
+                                if (!ad.gstin) {
+                                    isError = true
+                                    mess = accountsMessages.gstinRequired
+                                }
+                            }
+                            return isError
+                        }
+
+                        return (
+                            accountError() ||
+                            amountError() ||
+                            gstRateError() ||
+                            hsnNotPresentError() ||
+                            gstinNotPresentError()
+                        )
                     }
                 }
 
                 function debitsCreditsNotEqualError() {
-                    let isError = (ad.totalDebits !== ad.totalCredits)
+                    let isError = ad.totalDebits !== ad.totalCredits
                     mess = isError ? accountsMessages.debitCreditNotEqual : ''
-                    return (isError)
+                    return isError
                 }
 
-
-                let ret = headError() || rowsError('debits') || rowsError('credits') || debitsCreditsNotEqualError()
+                let ret =
+                    headError() ||
+                    rowsError('debits') ||
+                    rowsError('credits') ||
+                    debitsCreditsNotEqualError()
 
                 meta.current.errorMessage = mess
 
-                return (ret)
+                return ret
             }
 
-            function handleSubmit() { }
+            function handleSubmit() {}
         }
-
     }
 
     function Header({ arbitraryData }: any) {
         const classes = useStyles()
         const [, setRefresh] = useState({})
         return (
-            <div className={classes.contentHeader}>
+            <Paper elevation={1} className={classes.contentHeader}>
                 <TextField
                     label="Ref no"
-                    placeholder='Auto ref no'
+                    placeholder="Auto ref no"
                     disabled
                     value={arbitraryData.autoRefNo || ''}
                 />
@@ -342,7 +383,11 @@ function useJournalMain(arbitraryData: any) {
                     <label className="date-label">Date</label>
                     <TextField
                         error={isInvalidDate(arbitraryData.tranDate)}
-                        helperText={isInvalidDate(arbitraryData.tranDate) ? accountsMessages.dateRangeAuditLockMessage : undefined}
+                        helperText={
+                            isInvalidDate(arbitraryData.tranDate)
+                                ? accountsMessages.dateRangeAuditLockMessage
+                                : undefined
+                        }
                         type="date"
                         onChange={(e: any) => {
                             arbitraryData.tranDate = e.target.value
@@ -374,11 +419,29 @@ function useJournalMain(arbitraryData: any) {
                     }}
                     value={arbitraryData.commonRemarks || ''}
                 />
+                <FormControlLabel
+                    className="gst-invoice"
+                    control={
+                        <Checkbox
+                            // checked={arbitraryData.isGst}
+                            onChange={(e: any) => {
+                                arbitraryData.isGst = e.target.checked
+                                setRefresh({})
+                            }}
+                        />
+                    }
+                    label="Gst"
+                />
+
                 {/* gstin */}
                 <TextField
                     label="Gstin no"
                     error={isInvalidGstin(arbitraryData.gstin)}
-                    helperText={isInvalidGstin(arbitraryData.gstin) ? accountsMessages.invalidGstin : undefined}
+                    helperText={
+                        isInvalidGstin(arbitraryData.gstin)
+                            ? accountsMessages.invalidGstin
+                            : undefined
+                    }
                     onChange={(e: any) => {
                         arbitraryData.gstin = e.target.value
                         emit('SUBMIT-REFRESH', '')
@@ -386,20 +449,20 @@ function useJournalMain(arbitraryData: any) {
                     }}
                     value={arbitraryData.gstin || ''}
                 />
-            </div>
+            </Paper>
         )
     }
 
     function computeGst(item: any) {
         const gstRate = item.gstRate || 0
-        const gst = ((item.amount || 0) * (gstRate / 100)) / (1 + (gstRate / 100))
+        const gst = ((item.amount || 0) * (gstRate / 100)) / (1 + gstRate / 100)
         if (item.isIgst) {
             item.igst = gst
             item.cgst = 0
             item.sgst = 0
         } else {
             item.igst = 0
-            item.cgst = gst
+            item.cgst = gst / 2
             item.sgst = item.cgst
         }
     }
@@ -407,16 +470,16 @@ function useJournalMain(arbitraryData: any) {
     function ActionDebit({ arbitraryData }: any) {
         const [, setRefresh] = useState({})
         const meta = useRef({
-            action: 'debit'
+            action: 'debit',
         })
         const classes = useStyles(meta.current)
         useEffect(() => {
             const subs1 = filterOn('DEBIT-BLOCK-REFRESH').subscribe(() => {
                 setRefresh({})
             })
-            return (() => {
+            return () => {
                 subs1.unsubscribe()
-            })
+            }
         }, [])
         return (
             <div className={classes.contentAction}>
@@ -438,7 +501,6 @@ function useJournalMain(arbitraryData: any) {
             const list: any[] = debits.map((item: any) => {
                 const ret = (
                     <div key={incr()} className="debit-credit-row">
-
                         {/* Account */}
                         <div>
                             <Typography variant="caption">
@@ -471,7 +533,7 @@ function useJournalMain(arbitraryData: any) {
                                 computeGst(item)
                                 setRefresh({})
                             }}
-                            error={(item.gstRate > 30) ? true : false}
+                            error={item.gstRate > 30 ? true : false}
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
                                 item.gstRate = floatValue || 0.0
@@ -484,7 +546,7 @@ function useJournalMain(arbitraryData: any) {
 
                         {/* HSN */}
                         <NumberFormat
-                            className='hsn'
+                            className="hsn"
                             allowNegative={false}
                             {...{ label: 'Hsn' }}
                             customInput={TextField}
@@ -532,14 +594,17 @@ function useJournalMain(arbitraryData: any) {
                         <div className="gst-block">
                             <FormControlLabel
                                 // value="item.isIgst"
-                                control={<Checkbox
-                                    // checked={item.isIgst}
-                                    onChange={(e: any) => {
-                                        item.isIgst = e.target.checked
-                                        computeGst(item)
-                                        setRefresh({})
-                                    }}
-                                    color="primary" />}
+                                control={
+                                    <Checkbox
+                                        // checked={item.isIgst}
+                                        onChange={(e: any) => {
+                                            item.isIgst = e.target.checked
+                                            computeGst(item)
+                                            setRefresh({})
+                                        }}
+                                        color="primary"
+                                    />
+                                }
                                 label="Igst"
                                 labelPlacement="start"
                             />
@@ -577,13 +642,21 @@ function useJournalMain(arbitraryData: any) {
                         />
 
                         {/* Add remove */}
-                        <AddRemoveButtons arr={arbitraryData.debits} item={item} emitMessage='DEBIT-BLOCK-REFRESH' />
+                        <AddRemoveButtons
+                            arr={arbitraryData.debits}
+                            item={item}
+                            emitMessage="DEBIT-BLOCK-REFRESH"
+                        />
                     </div>
                 )
                 return ret
             })
 
-            return <Paper elevation={1} className="debit-credit-block">{list}</Paper>
+            return (
+                <Paper elevation={1} className="debit-credit-block">
+                    {list}
+                </Paper>
+            )
 
             function incr() {
                 return ind++
@@ -609,12 +682,13 @@ function useJournalMain(arbitraryData: any) {
                     style={{ margin: 0, padding: 0 }}>
                     <AddCircle style={{ fontSize: '2.5rem' }} />
                 </IconButton>
-            </div>)
+            </div>
+        )
 
         function reIndex() {
             let ind = 0
             function incr() {
-                return (ind++)
+                return ind++
             }
             for (let it of arr) {
                 it.key = incr()
@@ -643,16 +717,16 @@ function useJournalMain(arbitraryData: any) {
 
     function ActionCredit({ arbitraryData }: any) {
         const meta = useRef({
-            action: 'credit'
+            action: 'credit',
         })
         const classes = useStyles(meta.current)
         useEffect(() => {
             const subs1 = filterOn('CREDIT-BLOCK-REFRESH').subscribe(() => {
                 setRefresh({})
             })
-            return (() => {
+            return () => {
                 subs1.unsubscribe()
-            })
+            }
         }, [])
         return (
             <div className={classes.contentAction}>
@@ -719,7 +793,7 @@ function useJournalMain(arbitraryData: any) {
 
                         {/* HSN */}
                         <NumberFormat
-                            className='hsn'
+                            className="hsn"
                             allowNegative={false}
                             {...{ label: 'Hsn' }}
                             customInput={TextField}
@@ -804,13 +878,21 @@ function useJournalMain(arbitraryData: any) {
                         />
 
                         {/* Add remove */}
-                        <AddRemoveButtons arr={arbitraryData.credits} item={item} emitMessage='CREDIT-BLOCK-REFRESH' />
+                        <AddRemoveButtons
+                            arr={arbitraryData.credits}
+                            item={item}
+                            emitMessage="CREDIT-BLOCK-REFRESH"
+                        />
                     </div>
                 )
                 return ret
             })
 
-            return <Paper elevation={1} className="debit-credit-block">{list}</Paper>
+            return (
+                <Paper elevation={1} className="debit-credit-block">
+                    {list}
+                </Paper>
+            )
             function incr() {
                 return ind++
             }
@@ -822,9 +904,9 @@ function useJournalMain(arbitraryData: any) {
 
 export { useJournalMain }
 
+
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         contentCrown: {
             display: 'flex',
             columnGap: theme.spacing(4),
@@ -833,9 +915,12 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(2),
             alignItems: 'center',
             justifyContent: 'space-between',
+            padding:theme.spacing(1),
+            backgroundColor:'#E8E8E8',
+
             '& .total-debits-total-credits': {
                 color: 'dodgerblue',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
             },
 
             '& .error-message': {
@@ -843,18 +928,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 fontWeight: 'bold',
             },
 
-            '& .submit-button': {
-
-            },
+            // '& .submit-button': {},
             '& .reset-button': {
-                backgroundColor: theme.palette.indigo.light,
-                color: theme.palette.getContrastText(indigo[400])
-            }
-        },
-
-
-        myRoot: {
-            backgroundColor: theme.palette.indigo.main
+                backgroundColor: theme.palette.blue.main,
+                color: theme.palette.getContrastText(blue[500]),
+            },
         },
 
         contentHeader: {
@@ -863,7 +941,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
             flexWrap: 'wrap',
             columnGap: theme.spacing(4),
             rowGap: theme.spacing(2),
-
+            padding:theme.spacing(1),
+            backgroundColor:'#FAF8F8',
             '& .date-block': {
                 display: 'flex',
                 flexDirection: 'column',
@@ -907,9 +986,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     textAlign: 'right',
                     fontSize: '0.8rem',
                 },
-                marginLeft: (props: any) => props.action === 'debit' ? 'auto' : 0,
+                marginLeft: (props: any) =>
+                    props.action === 'debit' ? 'auto' : 0,
             },
             '& .debit-credit-block': {
+                backgroundColor:'#FAF8F8',
                 padding: theme.spacing(1),
             },
             '& .debit-credit-row': {
@@ -920,11 +1001,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 rowGap: theme.spacing(2),
                 alignItems: 'center',
                 '& .credit-amount': {
-                    marginLeft: (props: any) => props.action === 'credit' ? 'auto' : 0,
-                }
+                    marginLeft: (props: any) =>
+                        props.action === 'credit' ? 'auto' : 0,
+                },
             },
         },
-
     })
 )
 
