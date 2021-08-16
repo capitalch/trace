@@ -113,8 +113,8 @@ function useJournalMain(arbitraryData: any) {
         return (
             <Paper elevation={1} className={classes.contentCrown}>
                 <TotalDebitsTotalCredits ad={arbitraryData} />
-                <ErrorMessage />
                 <ResetButton ad={arbitraryData} />
+                <ErrorMessage />
                 <SubmitButton ad={arbitraryData} />
             </Paper>
         )
@@ -151,6 +151,22 @@ function useJournalMain(arbitraryData: any) {
             )
 
             function compute() {
+                ad.summary={}
+                ad.summary.debits = getSummary('debits')
+                ad.summary.credits = getSummary('credits')
+
+                function getSummary(summType:string){
+                    return(ad[summType].reduce((prev: any, curr: any)=>{
+                        prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
+                        prev.igst = (prev?.igst || 0.0) + (curr?.igst || 0.0)
+                        prev.cgst = (prev?.cgst || 0.0) + (curr?.cgst || 0.0)
+                        prev.sgst = (prev?.sgst || 0.0) + (curr?.sgst || 0.0)
+                        return(prev)
+                    },{}))
+                }
+                const debitsSummary = ad.debits.reduce((prev: any, curr: any)=>{
+                    prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
+                },{})
                 ad.totalDebits = ad.debits.reduce(
                     (prev: any, curr: any) => {
                         prev.amount = prev.amount + (curr.amount || 0.0)
