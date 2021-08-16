@@ -84,8 +84,8 @@
     ]
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.1",
-    "@typescript-eslint/parser": "^4.29.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
     "css-loader": "^6.2.0",
     "eslint-plugin-react": "^7.24.0",
     "gzip": "^0.1.0",
