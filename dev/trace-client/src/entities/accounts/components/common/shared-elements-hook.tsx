@@ -73,6 +73,7 @@ import {
     ZoomIn as ZoomInIcon,
     ZoomOut as ZoomOutIcon,
     RemoveCircleOutline as MinusIcon,
+    RemoveCircle
 } from '@material-ui/icons'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
@@ -288,6 +289,7 @@ function useSharedElements() {
         ReactSelect,
         registerAccounts,
         releaseForm,
+        RemoveCircle,
         resetForm,
         resetAllFormErrors,
         // RsuiteButton,

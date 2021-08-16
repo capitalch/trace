@@ -5,7 +5,7 @@ import { JournalActions } from './journal-actions'
 
 function JournalMain({ arbitraryData, hidden }: any) {
         const classes = useStyles()
-        const { ActionDebit, ActionCredit, Crown, Header, meta, setRefresh } = useJournalMain(arbitraryData)
+        const {ActionBlock, ActionDebit, ActionCredit, Crown, Header, meta, setRefresh } = useJournalMain(arbitraryData)
 
         const { _,
                 accountsMessages,
@@ -81,12 +81,15 @@ function JournalMain({ arbitraryData, hidden }: any) {
                 Typography,
                 useGeneric, } = useSharedElements()
 
+
         //hidden prop used for tab visibility
         return (<div hidden={hidden}>
                 <Crown arbitraryData={arbitraryData} />
                 <Header arbitraryData={arbitraryData} />
-                <ActionDebit arbitraryData={arbitraryData} />
-                <ActionCredit arbitraryData={arbitraryData} />
+                <ActionBlock arbitraryData = {arbitraryData} actionType='debits' />
+                <ActionBlock arbitraryData = {arbitraryData} actionType='credits' />
+                {/* <ActionDebit arbitraryData={arbitraryData} />
+                <ActionCredit arbitraryData={arbitraryData} /> */}
                 {/* <Crown arbitraryData={arbitraryData} /> */}
 
         </div>)

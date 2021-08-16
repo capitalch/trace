@@ -106,7 +106,6 @@ function useJournals() {
         errorObject: {},
         id: undefined,
         isIgst: false,
-        // lineItems: [],
         tranDate: undefined,
         userRefNo: undefined,
 

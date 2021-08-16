@@ -136,7 +136,7 @@ const App: React.FC = () => {
           }}
         >
           <RecoilRoot>
-            <Component5></Component5>
+            <Component4></Component4>
           </RecoilRoot>
         </div>
       </ConfirmProvider>

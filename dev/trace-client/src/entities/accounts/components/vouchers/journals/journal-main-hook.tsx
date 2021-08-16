@@ -1,12 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { classNames } from 'react-select/src/utils'
 import { LedgerSubledger } from '../../common/ledger-subledger'
-import { RemoveCircle } from '@material-ui/icons'
-import { ThemeConsumer } from 'styled-components'
-import { blue, indigo, lightBlue } from '@material-ui/core/colors'
-import { cyan } from '@material-ui/core/colors'
 
 function useJournalMain(arbitraryData: any) {
     const [, setRefresh] = useState({})
@@ -15,81 +10,83 @@ function useJournalMain(arbitraryData: any) {
         _,
         accountsMessages,
         AddCircle,
-        AddIcon,
-        Avatar,
-        Big,
-        Box,
+        // AddIcon,
+        // Avatar,
+        // Big,
+        // Box,
         Button,
-        Card,
+        // Card,
         Checkbox,
         CheckIcon,
-        Chip,
-        CloseIcon,
-        confirm,
-        DataTable,
-        DeleteIcon,
-        Dialog,
-        DialogTitle,
-        DialogContent,
-        DialogActions,
-        Divider,
-        doValidateForm,
-        EditIcon,
+        // Chip,
+        // CloseIcon,
+        // confirm,
+        // DataTable,
+        // DeleteIcon,
+        // Dialog,
+        // DialogTitle,
+        // DialogContent,
+        // DialogActions,
+        // Divider,
+        // doValidateForm,
+        // EditIcon,
         emit,
         ErrorIcon,
-        execGenericView,
+        // execGenericView,
         filterOn,
-        genericUpdateMaster,
-        getCurrentEntity,
-        getFormData,
-        getFormObject,
-        getFromBag,
+        // genericUpdateMaster,
+        // getCurrentEntity,
+        // getFormData,
+        // getFormObject,
+        // getFromBag,
         getMappedAccounts,
-        globalMessages,
-        hotEmit,
-        hotFilterOn,
+        // globalMessages,
+        // hotEmit,
+        // hotFilterOn,
         FormControlLabel,
-        Icon,
+        // Icon,
         IconButton,
-        Input,
-        InputAdornment,
+        // Input,
+        // InputAdornment,
         isInvalidDate,
         isInvalidGstin,
-        isValidForm,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        MaterialTable,
-        messages,
-        moment,
-        MTableBody,
-        MTableToolbar,
-        NativeSelect,
+        // isValidForm,
+        // List,
+        // ListItem,
+        // ListItemAvatar,
+        // ListItemText,
+        // MaterialTable,
+        // MinusIcon,
+        // messages,
+        // moment,
+        // MTableBody,
+        // MTableToolbar,
+        // NativeSelect,
         NumberFormat,
         Paper,
-        PrimeColumn,
-        queries,
-        queryGraphql,
-        Radio,
-        ReactForm,
-        releaseForm,
-        resetAllFormErrors,
-        resetForm,
-        saveForm,
-        SearchIcon,
-        setFormError,
-        SyncIcon,
-        tableIcons,
+        // PrimeColumn,
+        // queries,
+        // queryGraphql,
+        // Radio,
+        // ReactForm,
+        // releaseForm,
+        RemoveCircle,
+        // resetAllFormErrors,
+        // resetForm,
+        // saveForm,
+        // SearchIcon,
+        // setFormError,
+        // SyncIcon,
+        // tableIcons,
         TextField,
-        theme,
+        // theme,
         toDecimalFormat,
-        TraceDialog,
-        TraceFullWidthSubmitButton,
-        traceGlobalSearch,
-        TraceSearchBox,
+        // TraceDialog,
+        // TraceFullWidthSubmitButton,
+        // traceGlobalSearch,
+        // TraceSearchBox,
         Typography,
-        useGeneric,
+        // useGeneric,
     } = useSharedElements()
 
     useEffect(() => {
@@ -112,18 +109,28 @@ function useJournalMain(arbitraryData: any) {
         const [, setRefresh] = useState({})
         return (
             <Paper elevation={1} className={classes.contentCrown}>
-                <TotalDebitsTotalCredits ad={arbitraryData} />
+                <SummaryDebitsCredits ad={arbitraryData} />
+                <SummaryGst ad={arbitraryData} />
                 <ResetButton ad={arbitraryData} />
                 <ErrorMessage />
                 <SubmitButton ad={arbitraryData} />
             </Paper>
         )
 
-        function useCompute({ ad }: any) {
+        function useComputeSummary(ad: any) {
+            const [, setRefresh] = useState({})
+            useEffect(() => {
+                const subs1 = filterOn('COMPUTE-SUMMARY-REFRESH').subscribe(() => {
+                    setRefresh({})
+                })
+                return (() => {
+                    subs1.unsubscribe()
+                })
+            }, [])
             ad.summary = {}
             const debitsSummary = getSummary('debits')
             const creditsSummary = getSummary('credits')
-            // console.log('D:', debitsSummary, ' C: ', creditsSummary)
+
             function getSummary(summType: string) {
                 return ad[summType].reduce((prev: any, curr: any) => {
                     prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
@@ -133,85 +140,47 @@ function useJournalMain(arbitraryData: any) {
                     return prev
                 }, {})
             }
-
-            ad.totalDebits = ad.debits.reduce(
-                (prev: any, curr: any) => {
-                    prev.amount = prev.amount + (curr.amount || 0.0)
-                    return prev
-                },
-                { amount: 0 }
-            ).amount
-            ad.totalCredits = ad.credits.reduce(
-                (prev: any, curr: any) => {
-                    prev.amount = prev.amount + (curr.amount || 0.0)
-                    return prev
-                },
-                { amount: 0 }
-            ).amount
+            const totalDebits = debitsSummary?.amount || 0.0
+            const totalCredits = creditsSummary?.amount || 0.0
+            const gstCredits = (creditsSummary?.igst || 0.0) + (creditsSummary?.cgst || 0.0) + (creditsSummary?.sgst || 0.0)
+            const gstDebits = (debitsSummary?.igst || 0.0) + (debitsSummary?.cgst || 0.0) + (debitsSummary?.sgst || 0.0)
+            ad.summary.totalDebits = totalDebits
+            ad.summary.totalCredits = totalCredits
+            ad.summary.gstDebits = gstDebits
+            ad.summary.gstCredits = gstCredits
+            return ({ totalDebits, totalCredits, gstDebits, gstCredits, })
         }
 
-        function TotalDebitsTotalCredits({ ad }: any) {
+        function SummaryDebitsCredits({ ad }: any) {
             //ad has debits and credits array
-            const [, setRefresh] = useState({})
-            const classes = useStyles()
-            useEffect(() => {
-                compute()
-                setRefresh({})
-                const subs1 = filterOn(
-                    'TOTAL-DEBITS-TOTAL-CREDITS-REFRESH'
-                ).subscribe(() => {
-                    compute()
-                    setRefresh({})
-                })
-
-                return () => {
-                    subs1.unsubscribe()
-                }
-            }, [])
-
+            const { totalDebits, totalCredits } = useComputeSummary(ad)
+            // const classes = useStyles()
             return (
-                <div className="total-debits-total-credits">
+                <div className="summary-debits-credits">
                     <Typography variant="subtitle2" component="span">
-                        Total debits: {toDecimalFormat(ad.totalDebits || 0.0)}
+                        Total debits: {toDecimalFormat(totalDebits || 0.0)}
                     </Typography>
                     &nbsp;&nbsp;
                     <Typography variant="subtitle2" component="span">
-                        Total credits: {toDecimalFormat(ad.totalCredits || 0.0)}
+                        Total credits: {toDecimalFormat(totalCredits || 0.0)}
                     </Typography>
                 </div>
             )
+        }
 
-            function compute() {
-                ad.summary = {}
-                const debitsSummary = getSummary('debits')
-                const creditsSummary = getSummary('credits')
-                // console.log('D:', debitsSummary, ' C: ', creditsSummary)
-                function getSummary(summType: string) {
-                    return ad[summType].reduce((prev: any, curr: any) => {
-                        prev.amount =
-                            (prev?.amount || 0.0) + (curr?.amount || 0.0)
-                        prev.igst = (prev?.igst || 0.0) + (curr?.igst || 0.0)
-                        prev.cgst = (prev?.cgst || 0.0) + (curr?.cgst || 0.0)
-                        prev.sgst = (prev?.sgst || 0.0) + (curr?.sgst || 0.0)
-                        return prev
-                    }, {})
-                }
-
-                ad.totalDebits = ad.debits.reduce(
-                    (prev: any, curr: any) => {
-                        prev.amount = prev.amount + (curr.amount || 0.0)
-                        return prev
-                    },
-                    { amount: 0 }
-                ).amount
-                ad.totalCredits = ad.credits.reduce(
-                    (prev: any, curr: any) => {
-                        prev.amount = prev.amount + (curr.amount || 0.0)
-                        return prev
-                    },
-                    { amount: 0 }
-                ).amount
-            }
+        function SummaryGst({ ad }: any) {
+            const { gstDebits, gstCredits } = useComputeSummary(ad)
+            return (
+                <div className="summary-gst">
+                    <Typography variant="subtitle2" component="span">
+                        Gst debits: {toDecimalFormat(gstDebits || 0.0)}
+                    </Typography>
+                    &nbsp;&nbsp;
+                    <Typography variant="subtitle2" component="span">
+                        Gst credits: {toDecimalFormat(gstCredits || 0.0)}
+                    </Typography>
+                </div>
+            )
         }
 
         function ErrorMessage() {
@@ -263,7 +232,7 @@ function useJournalMain(arbitraryData: any) {
 
         function SubmitButton({ ad }: any) {
             const [, setRefresh] = useState({})
-            const classes = useStyles()
+            // const classes = useStyles()
             const meta: any = useRef({
                 errorObject: { message: undefined },
                 errorMessage: '',
@@ -304,7 +273,8 @@ function useJournalMain(arbitraryData: any) {
 
             function getError() {
                 let mess: string = ''
-                function headError() {
+
+                function headerError() {
                     function dateError() {
                         const isDateError = isInvalidDate(ad.tranDate)
                         mess = isDateError
@@ -314,9 +284,21 @@ function useJournalMain(arbitraryData: any) {
                     }
 
                     function gstinError() {
-                        const isGstinError = isInvalidGstin(arbitraryData.gstin)
-                        mess = isGstinError ? accountsMessages.invalidGstin : ''
-                        return isGstinError
+                        let isError = false
+                        const isGst = ad.isGst
+                        mess = ''
+                        if (isGst) {
+                            if (!ad.gstin) {
+                                mess = accountsMessages.gstinRequired
+                                isError = true
+                            } else {
+                                if (isInvalidGstin(ad.gstin)) {
+                                    isError = true
+                                    mess = accountsMessages.invalidGstin
+                                }
+                            }
+                        }
+                        return isError
                     }
 
                     const headError = dateError() || gstinError()
@@ -352,64 +334,98 @@ function useJournalMain(arbitraryData: any) {
                         }
 
                         function gstRateError() {
-                            const isGstRateError = row.gstRate > 30
-                            mess = isGstRateError
-                                ? accountsMessages.invalidGstRate
-                                : ''
-                            return isGstRateError
+                            mess = ''
+                            let isError = false
+                            if (ad.isGst) {
+                                if (row.gstRate > 30) {
+                                    isError = true
+                                    mess = accountsMessages.invalidGstRate
+                                }
+                            } else {
+                                if (row.gstRate) {
+                                    isError = true
+                                    mess = accountsMessages.gstRateWronglyGiven
+                                }
+                            }
+                            return (isError)
                         }
 
                         function hsnNotPresentError() {
-                            let isHsnNotPresentError = false
+                            mess = ''
+                            let isError = false
                             if (row.gstRate && row.gstRate > 0) {
                                 if (!row.hsn) {
-                                    isHsnNotPresentError = true
+                                    isError = true
                                     mess = accountsMessages.hsnNotPresent
                                 }
                             }
 
-                            return isHsnNotPresentError
-                        }
-
-                        function gstinNotPresentError() {
-                            let isError = false
-                            if (row.gstRate && row.gstRate > 0) {
-                                if (!ad.gstin) {
-                                    isError = true
-                                    mess = accountsMessages.gstinRequired
-                                }
-                            }
-                            return isError
+                            return (isError)
                         }
 
                         return (
                             accountError() ||
                             amountError() ||
                             gstRateError() ||
-                            hsnNotPresentError() ||
-                            gstinNotPresentError()
+                            hsnNotPresentError()
                         )
                     }
                 }
 
                 function debitsCreditsNotEqualError() {
-                    let isError = ad.totalDebits !== ad.totalCredits
+                    let isError = (ad?.summary?.totalDebits || 0.0) !== (ad?.summary?.totalCredits || 0.0)
                     mess = isError ? accountsMessages.debitCreditNotEqual : ''
                     return isError
                 }
 
+                function gstError() {
+                    let isError = false
+                    mess = ''
+                    const gstDebits = ad?.summary?.gstDebits || 0.0
+                    const gstCredits = ad?.summary?.gstCredits || 0.0
+                    if (ad.isGst) {
+                        if ((!gstDebits) && (!gstCredits)) {
+                            isError = true
+                            mess = accountsMessages.gstAmountMissing
+                        }
+                    } else {
+                        if (gstDebits || gstCredits){
+                            isError = true
+                            mess = accountsMessages.gstAmountwronglyThere
+                        }
+                    }
+                    return(isError)
+                }
+
                 let ret =
-                    headError() ||
+                    headerError() ||
                     rowsError('debits') ||
                     rowsError('credits') ||
-                    debitsCreditsNotEqualError()
+                    debitsCreditsNotEqualError() ||
+                    gstError()
 
                 meta.current.errorMessage = mess
 
                 return ret
             }
 
-            function handleSubmit() {}
+            function handleSubmit() { 
+                function isDebitCreditError(){
+                    let isError  = false
+                    const totalDebits = ad?.summary?.totalDebits || 0.0
+                    const totalCredits = ad?.summary?.totalCredits || 0.0
+                    if((totalDebits !== totalCredits) || (totalDebits === 0) ){
+                        isError = true
+                    } 
+                    return(isError)
+                }
+                if(isDebitCreditError()){
+                    alert(accountsMessages.debitCreditError)
+                    return
+                } else {
+                    //proceed with submit
+                }
+            }
         }
     }
 
@@ -472,6 +488,7 @@ function useJournalMain(arbitraryData: any) {
                             // checked={arbitraryData.isGst}
                             onChange={(e: any) => {
                                 arbitraryData.isGst = e.target.checked
+                                emit('SUBMIT-REFRESH', '')
                                 setRefresh({})
                             }}
                         />
@@ -513,39 +530,39 @@ function useJournalMain(arbitraryData: any) {
         }
     }
 
-    function ActionDebit({ arbitraryData }: any) {
+    function ActionBlock({arbitraryData, actionType}: any){
         const [, setRefresh] = useState({})
         const meta = useRef({
             action: 'debit',
         })
-        const classes = useStyles(meta.current)
+        const classes = useStyles(meta)
         useEffect(() => {
-            const subs1 = filterOn('DEBIT-BLOCK-REFRESH').subscribe(() => {
+            const subs1 = filterOn('ACTION-REFRESH').subscribe(() => {
                 setRefresh({})
             })
             return () => {
                 subs1.unsubscribe()
             }
         }, [])
-        return (
+        return(
             <div className={classes.contentAction}>
                 <Typography
                     className="debit-credit-label"
                     variant="subtitle2"
                     component="div"
                     color="secondary">
-                    Debits
+                    {actionType}
                 </Typography>
-                <DebitRows />
+                <ActionRows ad={arbitraryData} actionType={actionType} />
             </div>
         )
 
-        function DebitRows() {
+        function ActionRows({ad, actionType}: any){
             const [, setRefresh] = useState({})
             let ind = 0
-            const debits: any[] = arbitraryData.debits
-            const list: any[] = debits.map((item: any) => {
-                const ret = (
+            const actionRows: any[] = ad[actionType]
+            const list: any[] = actionRows.map((item:any)=>{
+                return (
                     <div key={incr()} className="debit-credit-row">
                         {/* Account */}
                         <div>
@@ -554,7 +571,6 @@ function useJournalMain(arbitraryData: any) {
                             </Typography>
                             <LedgerSubledger
                                 allAccounts={arbitraryData.accounts.all}
-                                // emitMessageOnChange="SUBMIT-REFRESH"
                                 ledgerAccounts={getMappedAccounts(
                                     arbitraryData.accounts.journal
                                 )}
@@ -577,6 +593,8 @@ function useJournalMain(arbitraryData: any) {
                             }}
                             onBlur={() => {
                                 computeGst(item)
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
+                                emit('SUBMIT-REFRESH', '')
                                 setRefresh({})
                             }}
                             error={item.gstRate > 30 ? true : false}
@@ -625,12 +643,209 @@ function useJournalMain(arbitraryData: any) {
                                 const { floatValue } = values
                                 item.amount = floatValue || 0.0
                                 emit('SUBMIT-REFRESH', '')
-                                emit('TOTAL-DEBITS-TOTAL-CREDITS-REFRESH', '')
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
                                 // computeSummary()
                                 setRefresh({})
                             }}
                             onBlur={() => {
                                 computeGst(item)
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.amount || 0.0}
+                        />
+
+                        <div className="gst-block">
+                            <FormControlLabel
+                                // value="item.isIgst"
+                                control={
+                                    <Checkbox
+                                        // checked={item.isIgst}
+                                        onChange={(e: any) => {
+                                            item.isIgst = e.target.checked
+                                            computeGst(item)
+                                            setRefresh({})
+                                        }}
+                                        color="primary"
+                                    />
+                                }
+                                label="Igst"
+                                labelPlacement="start"
+                            />
+                            <Typography className="gst" variant="body2">
+                                Cgst: {toDecimalFormat(item.cgst || 0.0)}
+                            </Typography>
+                            <Typography className="gst" variant="body2">
+                                Sgst: {toDecimalFormat(item.sgst || 0.0)}
+                            </Typography>
+                            <Typography className="gst" variant="body2">
+                                Igst: {toDecimalFormat(item.igst || 0.0)}
+                            </Typography>
+                        </div>
+
+                        {/* line ref no  */}
+                        <TextField
+                            label="Line ref"
+                            // className="user-ref"
+                            // error={getInvoiceError()}
+                            onChange={(e: any) => {
+                                item.lineRefNo = e.target.value
+                                setRefresh({})
+                            }}
+                            value={item.lineRefNo || ''}
+                        />
+                        {/* remarks */}
+                        <TextField
+                            label="Remarks"
+                            // className="common-remarks"
+                            onChange={(e: any) => {
+                                item.remarks = e.target.value
+                                setRefresh({})
+                            }}
+                            value={item.remarks || ''}
+                        />
+
+                        {/* Add remove */}
+                        <AddRemoveButtons
+                            arr={arbitraryData.debits}
+                            item={item}
+                            emitMessage="DEBIT-BLOCK-REFRESH"
+                        />
+                    </div>
+                )
+            })
+            return (
+                <Paper elevation={1} className="debit-credit-block">
+                    {list}
+                </Paper>
+            )
+            function incr() {
+                return ind++
+            }
+        }
+    }
+
+    function ActionDebit({ arbitraryData }: any) {
+        const [, setRefresh] = useState({})
+        const meta = useRef({
+            action: 'debit',
+        })
+        const classes = useStyles(meta.current)
+        useEffect(() => {
+            const subs1 = filterOn('DEBIT-BLOCK-REFRESH').subscribe(() => {
+                setRefresh({})
+            })
+            return () => {
+                subs1.unsubscribe()
+            }
+        }, [])
+        return (
+            <div className={classes.contentAction}>
+                <Typography
+                    className="debit-credit-label"
+                    variant="subtitle2"
+                    component="div"
+                    color="secondary">
+                    Debits
+                </Typography>
+                <DebitRows />
+            </div>
+        )
+
+        function DebitRows() {
+            const [, setRefresh] = useState({})
+            let ind = 0
+            const debits: any[] = arbitraryData.debits
+            const list: any[] = debits.map((item: any) => {
+                const ret = (
+                    <div key={incr()} className="debit-credit-row">
+                        {/* Account */}
+                        <div>
+                            <Typography variant="caption">
+                                Debit account
+                            </Typography>
+                            <LedgerSubledger
+                                allAccounts={arbitraryData.accounts.all}
+                                ledgerAccounts={getMappedAccounts(
+                                    arbitraryData.accounts.journal
+                                )}
+                                onChange={() => emit('SUBMIT-REFRESH', '')}
+                                rowData={item}
+                            />
+                        </div>
+
+                        {/* Gst rate */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Gst rate' }}
+                            className="right-aligned-numeric gst-rate"
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={item.amount ? false : true}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onBlur={() => {
+                                computeGst(item)
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
+                                emit('SUBMIT-REFRESH', '')
+                                setRefresh({})
+                            }}
+                            error={item.gstRate > 30 ? true : false}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.gstRate = floatValue || 0.0
+                                emit('SUBMIT-REFRESH', '')
+                                setRefresh({})
+                            }}
+                            thousandSeparator={true}
+                            value={item.gstRate || 0.0}
+                        />
+
+                        {/* HSN */}
+                        <NumberFormat
+                            className="hsn"
+                            allowNegative={false}
+                            {...{ label: 'Hsn' }}
+                            customInput={TextField}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onChange={(e: any) => {
+                                item.hsn = e.target.value
+                                emit('SUBMIT-REFRESH', '')
+                                setRefresh({})
+                            }}
+                            value={item.hsn || 0.0}
+                        />
+
+                        {/* Amount */}
+                        <NumberFormat
+                            allowNegative={false}
+                            {...{ label: 'Debit amount' }}
+                            // {...matProps}
+                            className="right-aligned-numeric"
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={item.amount ? false : true}
+                            // error={()=>false}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.amount = floatValue || 0.0
+                                emit('SUBMIT-REFRESH', '')
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
+                                // computeSummary()
+                                setRefresh({})
+                            }}
+                            onBlur={() => {
+                                computeGst(item)
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
                                 setRefresh({})
                             }}
                             thousandSeparator={true}
@@ -756,12 +971,13 @@ function useJournalMain(arbitraryData: any) {
             arr.splice(item.key, 1)
             reIndex()
             emit(emitMessage, '')
-            emit('TOTAL-DEBITS-TOTAL-CREDITS-REFRESH', '')
+            emit('COMPUTE-SUMMARY-REFRESH', '')
             emit('SUBMIT-REFRESH', '')
         }
     }
 
     function ActionCredit({ arbitraryData }: any) {
+        const [, setRefresh] = useState({})
         const meta = useRef({
             action: 'credit',
         })
@@ -831,6 +1047,8 @@ function useJournalMain(arbitraryData: any) {
                             }}
                             onBlur={() => {
                                 computeGst(item)
+                                emit('SUBMIT-REFRESH', '')
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
                                 setRefresh({})
                             }}
                             thousandSeparator={true}
@@ -872,11 +1090,12 @@ function useJournalMain(arbitraryData: any) {
                                 const { floatValue } = values
                                 item.amount = floatValue || 0.0
                                 emit('SUBMIT-REFRESH', '')
-                                emit('TOTAL-DEBITS-TOTAL-CREDITS-REFRESH', '')
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
                                 setRefresh({})
                             }}
                             onBlur={() => {
                                 computeGst(item)
+                                emit('COMPUTE-SUMMARY-REFRESH', '')
                                 setRefresh({})
                             }}
                             thousandSeparator={true}
@@ -945,7 +1164,7 @@ function useJournalMain(arbitraryData: any) {
         }
     }
 
-    return { ActionDebit, ActionCredit, Crown, Header, meta, setRefresh }
+    return { ActionBlock, ActionDebit, ActionCredit, Crown, Header, meta, setRefresh }
 }
 
 export { useJournalMain }
@@ -963,9 +1182,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
             padding: theme.spacing(1),
             backgroundColor: '#E8E8E8',
 
-            '& .total-debits-total-credits': {
-                color: 'dodgerblue',
+            '& .summary-debits-credits': {
+                color: theme.palette.indigo.main,
                 fontWeight: 'bold',
+            },
+
+            '& .summary-gst': {
+                color: theme.palette.lime.dark,
             },
 
             '& .error-message': {
@@ -976,7 +1199,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             // '& .submit-button': {},
             '& .reset-button': {
                 backgroundColor: theme.palette.blue.main,
-                color: theme.palette.getContrastText(blue[500]),
+                color: theme.palette.getContrastText(theme.palette.blue.main),
             },
         },
 
@@ -987,7 +1210,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             columnGap: theme.spacing(4),
             rowGap: theme.spacing(2),
             padding: theme.spacing(1),
-            backgroundColor: '#FAF8F8',
+            backgroundColor: '#F6F6F4',
             '& .date-block': {
                 display: 'flex',
                 flexDirection: 'column',
@@ -1035,7 +1258,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     props.action === 'debit' ? 'auto' : 0,
             },
             '& .debit-credit-block': {
-                backgroundColor: '#FAF8F8',
+                backgroundColor: '#F6F6F4',
                 padding: theme.spacing(1),
             },
             '& .debit-credit-row': {
