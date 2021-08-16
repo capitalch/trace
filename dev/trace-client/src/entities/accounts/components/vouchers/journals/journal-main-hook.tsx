@@ -119,6 +119,37 @@ function useJournalMain(arbitraryData: any) {
             </Paper>
         )
 
+        function useCompute({ ad }: any) {
+            ad.summary = {}
+            const debitsSummary = getSummary('debits')
+            const creditsSummary = getSummary('credits')
+            // console.log('D:', debitsSummary, ' C: ', creditsSummary)
+            function getSummary(summType: string) {
+                return ad[summType].reduce((prev: any, curr: any) => {
+                    prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
+                    prev.igst = (prev?.igst || 0.0) + (curr?.igst || 0.0)
+                    prev.cgst = (prev?.cgst || 0.0) + (curr?.cgst || 0.0)
+                    prev.sgst = (prev?.sgst || 0.0) + (curr?.sgst || 0.0)
+                    return prev
+                }, {})
+            }
+
+            ad.totalDebits = ad.debits.reduce(
+                (prev: any, curr: any) => {
+                    prev.amount = prev.amount + (curr.amount || 0.0)
+                    return prev
+                },
+                { amount: 0 }
+            ).amount
+            ad.totalCredits = ad.credits.reduce(
+                (prev: any, curr: any) => {
+                    prev.amount = prev.amount + (curr.amount || 0.0)
+                    return prev
+                },
+                { amount: 0 }
+            ).amount
+        }
+
         function TotalDebitsTotalCredits({ ad }: any) {
             //ad has debits and credits array
             const [, setRefresh] = useState({})
@@ -151,22 +182,21 @@ function useJournalMain(arbitraryData: any) {
             )
 
             function compute() {
-                ad.summary={}
-                ad.summary.debits = getSummary('debits')
-                ad.summary.credits = getSummary('credits')
-
-                function getSummary(summType:string){
-                    return(ad[summType].reduce((prev: any, curr: any)=>{
-                        prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
+                ad.summary = {}
+                const debitsSummary = getSummary('debits')
+                const creditsSummary = getSummary('credits')
+                // console.log('D:', debitsSummary, ' C: ', creditsSummary)
+                function getSummary(summType: string) {
+                    return ad[summType].reduce((prev: any, curr: any) => {
+                        prev.amount =
+                            (prev?.amount || 0.0) + (curr?.amount || 0.0)
                         prev.igst = (prev?.igst || 0.0) + (curr?.igst || 0.0)
                         prev.cgst = (prev?.cgst || 0.0) + (curr?.cgst || 0.0)
                         prev.sgst = (prev?.sgst || 0.0) + (curr?.sgst || 0.0)
-                        return(prev)
-                    },{}))
+                        return prev
+                    }, {})
                 }
-                const debitsSummary = ad.debits.reduce((prev: any, curr: any)=>{
-                    prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
-                },{})
+
                 ad.totalDebits = ad.debits.reduce(
                     (prev: any, curr: any) => {
                         prev.amount = prev.amount + (curr.amount || 0.0)
@@ -920,7 +950,6 @@ function useJournalMain(arbitraryData: any) {
 
 export { useJournalMain }
 
-
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         contentCrown: {
@@ -931,8 +960,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(2),
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding:theme.spacing(1),
-            backgroundColor:'#E8E8E8',
+            padding: theme.spacing(1),
+            backgroundColor: '#E8E8E8',
 
             '& .total-debits-total-credits': {
                 color: 'dodgerblue',
@@ -957,8 +986,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
             flexWrap: 'wrap',
             columnGap: theme.spacing(4),
             rowGap: theme.spacing(2),
-            padding:theme.spacing(1),
-            backgroundColor:'#FAF8F8',
+            padding: theme.spacing(1),
+            backgroundColor: '#FAF8F8',
             '& .date-block': {
                 display: 'flex',
                 flexDirection: 'column',
@@ -1006,7 +1035,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     props.action === 'debit' ? 'auto' : 0,
             },
             '& .debit-credit-block': {
-                backgroundColor:'#FAF8F8',
+                backgroundColor: '#FAF8F8',
                 padding: theme.spacing(1),
             },
             '& .debit-credit-row': {
