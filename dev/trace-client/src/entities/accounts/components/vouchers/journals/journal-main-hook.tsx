@@ -38,7 +38,7 @@ function useJournalMain(arbitraryData: any) {
         // getCurrentEntity,
         // getFormData,
         // getFormObject,
-        // getFromBag,
+        getFromBag,
         getMappedAccounts,
         // globalMessages,
         // hotEmit,
@@ -434,7 +434,63 @@ function useJournalMain(arbitraryData: any) {
                     return
                 } else {
                     //proceed with submit
+                    transformAndSubmit()
                 }
+            }
+
+            function transformAndSubmit() {
+                const voucher: any =
+                {
+                    tableName: 'TranH',
+                    data: [],
+                }
+
+                const dataItem = {
+                    tranDate: null,
+                    userRefNo: null,
+                    remarks: null,
+                    finYearId: getFromBag('finYearObject')?.finYearId,
+                    branchId: getFromBag('branchObject')?.branchId || 1,
+                    posId: '1',
+                    details: [],
+                    tranTypeId: 0
+                }
+
+                dataItem.tranDate = ad.tranDate
+                dataItem.userRefNo = ad.userRefNo
+                dataItem.remarks = ad.commonRemarks
+                dataItem.tranTypeId = 1
+                voucher.data.push(dataItem)
+
+                const details = dataItem.details
+                const debits: any[] = ad.debits
+                const credits: any[] = ad.credits
+
+                addToDetails(debits, details, 'D')
+                addToDetails(credits, details, 'C')
+
+                function addToDetails(sourceArray: any[], destArray: any, dc: string) {
+                    for (let item of sourceArray) {
+                        const temp = {
+                            tableName: 'tranD',
+                            fkeyName:'tranHeaderId',
+                            data: {
+                                accId: item.accId,
+                                remarks: item.remarks,
+                                dc: dc,
+                                amount: item.amount,
+                                lineRefNo: item.lineRefNo,
+                                instrNo: item.instrNo,
+                                details: []
+                            }
+                        }
+                        const details = temp.data.details
+                        destArray.push(temp)
+                        // accommodate gst details etc in details
+                    }
+                }
+
+
             }
         }
     }
@@ -698,7 +754,7 @@ function useJournalMain(arbitraryData: any) {
                             arr={ad[actionType]}
                             item={item}
                             emitMessage="ACTION-BLOCK-REFRESH"
-                        />: <div style = {{width:'5rem'}}></div>}
+                        /> : <div style={{ width: '5rem' }}></div>}
                     </div>
                 )
             })
@@ -732,7 +788,7 @@ function useJournalMain(arbitraryData: any) {
                     </IconButton>
                 </div>
             )
-    
+
             function reIndex() {
                 let ind = 0
                 function incr() {
@@ -742,14 +798,14 @@ function useJournalMain(arbitraryData: any) {
                     it.key = incr()
                 }
             }
-    
+
             function add() {
                 arr.push({})
                 reIndex()
                 emit(emitMessage, '')
                 emit('SUBMIT-REFRESH', '')
             }
-    
+
             function remove() {
                 if (arr.length === 1) {
                     alert(accountsMessages.cannotDeleteOnlyEntry)

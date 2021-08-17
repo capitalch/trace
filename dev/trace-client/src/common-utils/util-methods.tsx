@@ -134,6 +134,39 @@ function utilMethods() {
     return ret
   }
 
+  interface DataOptions {
+    tableName?: string
+    updateCodeBlock?: string
+    customCodeBlock?: string
+    deletedIds?: any[]
+  }
+
+  interface DataDetailsOption {
+    tableName: string
+    fkeyName?: string
+    data: DataOptions[]
+    details?: DataDetailsOption[]
+  }
+  async function genericUpdateMasterDetails(options: DataDetailsOption[]){
+    emit('SHOW-LOADING-INDICATOR', true)
+    const json: any = escape(JSON.stringify(options))
+    const currentEntityName = getCurrentEntity()
+    let ret: any = {}
+    try {
+      const q = artifacts.graphqlQueries['genericUpdateMasterDetails'](json, currentEntityName)
+      ret = await mutateGraphql(q)
+      if (ret.error) {
+        throw new Error(ret.error)
+      }
+      emit('SHOW-MESSAGE', {})
+    } catch (e) {
+      ret.error = e.message
+      emit('SHOW-MESSAGE', { message: messages['errorInOperation'], severity: 'error', duration: null })
+    }
+    emit('SHOW-LOADING-INDICATOR', false)
+    return ret
+  }
+
   async function genericUpdateMasterNoForm(options: GenericUpdateMasterOptions) {
     let ret = false
     const currentEntityName = getCurrentEntity()
@@ -254,8 +287,6 @@ function utilMethods() {
     return ret;
   }
 
-  
-
   return {
     execGenericView,
     extractAmount,
@@ -263,6 +294,7 @@ function utilMethods() {
     getDateMaskMap,
     getSqlObjectString,
     genericUpdateMaster,
+    genericUpdateMasterDetails,
     genericUpdateMasterNoForm,
     isControlDisabled,
     objectPropsToDecimalFormat,
