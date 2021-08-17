@@ -439,8 +439,7 @@ function useJournalMain(arbitraryData: any) {
             }
 
             function transformAndSubmit() {
-                const voucher: any =
-                {
+                const voucher: any = {
                     tableName: 'TranH',
                     data: [],
                 }
@@ -453,7 +452,7 @@ function useJournalMain(arbitraryData: any) {
                     branchId: getFromBag('branchObject')?.branchId || 1,
                     posId: '1',
                     details: [],
-                    tranTypeId: 0
+                    tranTypeId: 0,
                 }
 
                 dataItem.tranDate = ad.tranDate
@@ -468,12 +467,17 @@ function useJournalMain(arbitraryData: any) {
 
                 addToDetails(debits, details, 'D')
                 addToDetails(credits, details, 'C')
+                console.log(JSON.stringify(voucher))
 
-                function addToDetails(sourceArray: any[], destArray: any, dc: string) {
+                function addToDetails(
+                    sourceArray: any[],
+                    destArray: any,
+                    dc: string
+                ) {
                     for (let item of sourceArray) {
                         const temp = {
                             tableName: 'tranD',
-                            fkeyName:'tranHeaderId',
+                            fkeyName: 'tranHeaderId',
                             data: {
                                 accId: item.accId,
                                 remarks: item.remarks,
@@ -481,16 +485,34 @@ function useJournalMain(arbitraryData: any) {
                                 amount: item.amount,
                                 lineRefNo: item.lineRefNo,
                                 instrNo: item.instrNo,
-                                details: []
-                            }
+                                details: [],
+                            },
                         }
-                        const details = temp.data.details
+                        const details: any[] = temp.data.details
+                        const detail: any = {
+                            tableName: 'ExtGstTranD',
+                            fkeyName: 'tranDetailsId',
+                        }
                         destArray.push(temp)
                         // accommodate gst details etc in details
+                        const gst: any = {}
+                        if (ad.isGst) {
+                            if (item.gstRate) {
+                                gst.gstin = ad.gstin
+                                gst.rate = item.gstRate
+                                gst.hsn = item.hsn
+                                gst.cgst = item.cgst
+                                gst.sgst = item.sgst
+                                gst.igst = item.igst
+                                gst.isInput = dc === 'D' ? true : false
+                            }
+                        }
+                        if (!_.isEmpty(gst)) {
+                            detail.data = gst
+                            details.push(detail)
+                        }
                     }
                 }
-
-
             }
         }
     }
@@ -582,7 +604,12 @@ function useJournalMain(arbitraryData: any) {
         )
     }
 
-    function ActionBlock({ arbitraryData, actionType, actionLabel, isAddRemove }: any) {
+    function ActionBlock({
+        arbitraryData,
+        actionType,
+        actionLabel,
+        isAddRemove,
+    }: any) {
         const [, setRefresh] = useState({})
         const classes = useStyles({ actionType })
         useEffect(() => {
@@ -602,7 +629,12 @@ function useJournalMain(arbitraryData: any) {
                     color="secondary">
                     {actionType}
                 </Typography>
-                <ActionRows ad={arbitraryData} actionType={actionType} actionLabel={actionLabel} isAddRemove={isAddRemove} />
+                <ActionRows
+                    ad={arbitraryData}
+                    actionType={actionType}
+                    actionLabel={actionLabel}
+                    isAddRemove={isAddRemove}
+                />
             </div>
         )
 
@@ -750,11 +782,15 @@ function useJournalMain(arbitraryData: any) {
                             value={item.remarks || ''}
                         />
                         {/* Add remove */}
-                        {isAddRemove ? <AddRemoveButtons
-                            arr={ad[actionType]}
-                            item={item}
-                            emitMessage="ACTION-BLOCK-REFRESH"
-                        /> : <div style={{ width: '5rem' }}></div>}
+                        {isAddRemove ? (
+                            <AddRemoveButtons
+                                arr={ad[actionType]}
+                                item={item}
+                                emitMessage="ACTION-BLOCK-REFRESH"
+                            />
+                        ) : (
+                            <div style={{ width: '5rem' }}></div>
+                        )}
                     </div>
                 )
             })
@@ -821,7 +857,8 @@ function useJournalMain(arbitraryData: any) {
 
         function computeGst(item: any) {
             const gstRate = item.gstRate || 0
-            const gst = ((item.amount || 0) * (gstRate / 100)) / (1 + gstRate / 100)
+            const gst =
+                ((item.amount || 0) * (gstRate / 100)) / (1 + gstRate / 100)
             if (item.isIgst) {
                 item.igst = gst
                 item.cgst = 0
