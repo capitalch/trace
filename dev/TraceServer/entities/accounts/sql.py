@@ -119,7 +119,7 @@ allSqls = {
                 join "AccM" a
                     on a."id" = d."accId"
             where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-            order by "tranDate" DESC, h."id" limit (%(no)s)
+            order by "tranDate" DESC limit (%(no)s)
     ''',
 
     'get_allTransactions1': '''

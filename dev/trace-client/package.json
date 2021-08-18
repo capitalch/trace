@@ -43,7 +43,7 @@
     "moment": "^2.29.1",
     "object-hash": "^2.2.0",
     "primeicons": "^4.1.0",
-    "primereact": "^6.5.0",
+    "primereact": "^6.5.1",
     "react": "^17.0.2",
     "react-data-table-component": "^6.11.8",
     "react-dom": "^17.0.2",
@@ -89,7 +89,7 @@
     "css-loader": "^6.2.0",
     "eslint-plugin-react": "^7.24.0",
     "gzip": "^0.1.0",
-    "sass": "^1.37.5",
+    "sass": "^1.38.0",
     "style-loader": "^3.2.1"
   }
 }

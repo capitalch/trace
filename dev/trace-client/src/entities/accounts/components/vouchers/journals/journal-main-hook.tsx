@@ -35,6 +35,7 @@ function useJournalMain(arbitraryData: any) {
         // execGenericView,
         filterOn,
         // genericUpdateMaster,
+        genericUpdateMasterDetails,
         // getCurrentEntity,
         // getFormData,
         // getFormObject,
@@ -438,7 +439,7 @@ function useJournalMain(arbitraryData: any) {
                 }
             }
 
-            function transformAndSubmit() {
+            async function transformAndSubmit() {
                 const voucher: any = {
                     tableName: 'TranH',
                     data: [],
@@ -468,6 +469,7 @@ function useJournalMain(arbitraryData: any) {
                 addToDetails(debits, details, 'D')
                 addToDetails(credits, details, 'C')
                 console.log(JSON.stringify(voucher))
+                await genericUpdateMasterDetails([voucher])
 
                 function addToDetails(
                     sourceArray: any[],
@@ -476,7 +478,7 @@ function useJournalMain(arbitraryData: any) {
                 ) {
                     for (let item of sourceArray) {
                         const temp = {
-                            tableName: 'tranD',
+                            tableName: 'TranD',
                             fkeyName: 'tranHeaderId',
                             data: {
                                 accId: item.accId,
@@ -569,14 +571,15 @@ function useJournalMain(arbitraryData: any) {
                     }}
                     value={arbitraryData.commonRemarks || ''}
                 />
+                {/* isGst */}
                 <FormControlLabel
                     className="gst-invoice"
                     control={
                         <Checkbox
-                            // checked={arbitraryData.isGst}
                             onChange={(e: any) => {
                                 arbitraryData.isGst = e.target.checked
-                                emit('SUBMIT-REFRESH', '')
+                                emit('SUBMIT-REFRESH', '') // for eval of error condition
+                                emit('ACTION-BLOCK-REFRESH', '')
                                 setRefresh({})
                             }}
                         />
@@ -611,7 +614,8 @@ function useJournalMain(arbitraryData: any) {
         isAddRemove,
     }: any) {
         const [, setRefresh] = useState({})
-        const classes = useStyles({ actionType })
+        const isGst = arbitraryData.isGst
+        const classes = useStyles({ actionType, isGst })
         useEffect(() => {
             const subs1 = filterOn('ACTION-BLOCK-REFRESH').subscribe(() => {
                 setRefresh({})
@@ -623,7 +627,7 @@ function useJournalMain(arbitraryData: any) {
         return (
             <div className={classes.contentAction}>
                 <Typography
-                    className="debit-credit-label"
+                    className="action-label"
                     variant="subtitle2"
                     component="div"
                     color="secondary">
@@ -638,22 +642,23 @@ function useJournalMain(arbitraryData: any) {
             </div>
         )
 
-        function ActionRows({ ad, actionType, actionLabel, isAddRemove }: any) {
+        function ActionRows({ ad, actionType, actionLabel, isAddRemove, }: any) {
             const [, setRefresh] = useState({})
             let ind = 0
+            const isGst = !!ad.isGst
             const actionRows: any[] = ad[actionType]
             const list: any[] = actionRows.map((item: any) => {
                 return (
-                    <div key={incr()} className="debit-credit-row">
+                    <div key={incr()} className="action-row">
                         {/* Account */}
                         <div>
                             <Typography variant="caption">
                                 {actionLabel} account
                             </Typography>
                             <LedgerSubledger
-                                allAccounts={arbitraryData.accounts.all}
+                                allAccounts={ad.accounts.all}
                                 ledgerAccounts={getMappedAccounts(
-                                    arbitraryData.accounts.journal
+                                    ad.accounts.journal
                                 )}
                                 onChange={() => emit('SUBMIT-REFRESH', '')}
                                 rowData={item}
@@ -661,7 +666,7 @@ function useJournalMain(arbitraryData: any) {
                         </div>
 
                         {/* Gst rate */}
-                        <NumberFormat
+                        {isGst && <NumberFormat
                             allowNegative={false}
                             {...{ label: 'Gst rate' }}
                             className="right-aligned-numeric gst-rate"
@@ -687,10 +692,10 @@ function useJournalMain(arbitraryData: any) {
                             }}
                             thousandSeparator={true}
                             value={item.gstRate || 0.0}
-                        />
+                        />}
 
                         {/* HSN */}
-                        <NumberFormat
+                        {isGst && <NumberFormat
                             className="hsn"
                             allowNegative={false}
                             {...{ label: 'Hsn' }}
@@ -704,7 +709,7 @@ function useJournalMain(arbitraryData: any) {
                                 setRefresh({})
                             }}
                             value={item.hsn || 0.0}
-                        />
+                        />}
 
                         {/* Amount */}
                         <NumberFormat
@@ -737,7 +742,7 @@ function useJournalMain(arbitraryData: any) {
                             value={item.amount || 0.0}
                         />
 
-                        <div className="gst-block">
+                        {isGst && <div className="gst-block">
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -761,10 +766,11 @@ function useJournalMain(arbitraryData: any) {
                             <Typography className="gst" variant="body2">
                                 Igst: {toDecimalFormat(item.igst || 0.0)}
                             </Typography>
-                        </div>
+                        </div>}
 
                         {/* line ref no  */}
                         <TextField
+                            className='line-ref'
                             label="Line ref"
                             onChange={(e: any) => {
                                 item.lineRefNo = e.target.value
@@ -774,6 +780,7 @@ function useJournalMain(arbitraryData: any) {
                         />
                         {/* remarks */}
                         <TextField
+                            className='line-remarks'
                             label="Remarks"
                             onChange={(e: any) => {
                                 item.remarks = e.target.value
@@ -795,7 +802,7 @@ function useJournalMain(arbitraryData: any) {
                 )
             })
             return (
-                <Paper elevation={1} className="debit-credit-block">
+                <Paper elevation={1} className="action-block">
                     {list}
                 </Paper>
             )
@@ -941,7 +948,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
 
         contentAction: {
-            '& .debit-credit-label': {
+            '& .action-label': {
                 marginTop: theme.spacing(2),
                 textTransform: 'capitalize',
             },
@@ -971,20 +978,26 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginLeft: ({ actionType }: any) =>
                     actionType === 'debits' ? 'auto' : 0,
             },
-            '& .debit-credit-block': {
+            '& .line-ref': {
+                // marginLeft: ({isGst, actionType}: any)=> isGst ? 0: 'auto'
+                marginLeft: ({ isGst, actionType }: any) => (actionType === 'credits') ? 0 : (isGst ? 0 : 'auto')
+            },
+            '& .line-remarks': {
+                width: ({ isGst }) => isGst ? theme.spacing(20) : theme.spacing(50),
+            },
+            '& .action-block': {
                 backgroundColor: '#F6F6F4',
                 padding: theme.spacing(1),
             },
-            '& .debit-credit-row': {
+            '& .action-row': {
                 display: 'flex',
                 marginBottom: theme.spacing(1),
+                justifyContent: 'space-between',
                 columnGap: theme.spacing(4),
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(2),
                 alignItems: 'center',
                 '& .amount': {
-                    // marginLeft: (props: any) =>
-                    //     props.action === 'credit' ? 'auto' : 0,
                     marginLeft: ({ actionType }: any) =>
                         actionType === 'credits' ? 'auto' : 0,
                 },

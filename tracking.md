@@ -140,6 +140,7 @@ create installer from innosetup
 2.06 purchase entry unable to enter gst price of an item
 2.07 In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
 2.08 In Bank recon when selected yellow backgrond with white foreground problematic.
+2.09 Last year cheques opening balance
 
 ## To do
 1. Remove trace-footer. it is of no use
