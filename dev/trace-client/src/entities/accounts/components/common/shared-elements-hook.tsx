@@ -73,7 +73,7 @@ import {
     ZoomIn as ZoomInIcon,
     ZoomOut as ZoomOutIcon,
     RemoveCircleOutline as MinusIcon,
-    RemoveCircle
+    RemoveCircle,
 } from '@material-ui/icons'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
@@ -85,10 +85,10 @@ import InputMask from 'react-input-mask'
 import { Tree } from 'primereact/tree'
 import { CascadeSelect } from 'primereact/cascadeselect'
 import { Column as PrimeColumn } from 'primereact/column'
-import { Dialog as PrimeDialog} from 'primereact/dialog'
+import { Dialog as PrimeDialog } from 'primereact/dialog'
 import { InputSwitch } from 'primereact/inputswitch'
 import { InputTextarea } from 'primereact/inputtextarea'
-import {InputNumber} from 'primereact/inputnumber'
+import { InputNumber } from 'primereact/inputnumber'
 import { usingIbuki } from '../../../../common-utils/ibuki'
 import { manageFormsState } from '../../../../react-form/core/fsm'
 import { graphqlService } from '../../../../common-utils/graphql-service'
@@ -106,8 +106,9 @@ import { map } from 'rxjs/operators'
 import { utils } from '../../utils'
 // import {  Cascader, TreePicker } from 'rsuite'
 import ReactSelect from 'react-select'
-import {LedgerSubledgerCascade} from './ledger-subledger-cascade'
+import { LedgerSubledgerCascade } from './ledger-subledger-cascade'
 import { initCode } from '../../init-code'
+import { XXGrid } from './xx-grid'
 
 function useSharedElements() {
     const theme = useTheme()
@@ -125,7 +126,7 @@ function useSharedElements() {
         releaseForm,
         getFormData,
         clearServerError,
-        getFormObject,        
+        getFormObject,
         doFormRefresh,
         getValidationFabric,
         init,
@@ -142,18 +143,15 @@ function useSharedElements() {
         execGenericView,
         toDecimalFormat,
     } = utilMethods()
-    const {hotEmit, hotFilterOn, emit, filterOn } = usingIbuki()
+    const { hotEmit, hotFilterOn, emit, filterOn } = usingIbuki()
     const {
         TraceDialog,
         traceGlobalSearch,
         TraceFullWidthSubmitButton,
         TraceSearchBox,
     } = useTraceMaterialComponents()
-    const {
-        getCurrentMediaSize,
-        isMediumSizeUp,
-        getCurrentWindowSize,
-    } = useTraceGlobal()
+    const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
+        useTraceGlobal()
     const confirm = useConfirm()
     const {
         getAccountClass,
@@ -321,6 +319,7 @@ function useSharedElements() {
         useTheme,
         useTraceMaterialComponents,
         useTraceGlobal,
+        XXGrid,
         ZoomInIcon,
         ZoomOutIcon,
     }
@@ -329,7 +328,6 @@ function useSharedElements() {
 export { useSharedElements }
 export { makeStyles, createStyles }
 export type { Theme } // this is a workaround
-
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({

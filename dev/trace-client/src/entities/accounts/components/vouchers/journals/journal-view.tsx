@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useJournalView, useStyles } from './journal-view-hook'
 
-function JournalView({hidden}:any){
-	const classes = useStyles()
-	const {meta, setRefresh} = useJournalView()
+function JournalView({ hidden }: any) {
+    const classes = useStyles()
+    const { meta, setRefresh } = useJournalView(hidden)
 
-	const { _,
+    const {
+        _,
         accountsMessages,
         AddCircle,
         AddIcon,
@@ -42,7 +43,7 @@ function JournalView({hidden}:any){
         Icon,
         IconButton,
         Input,
-        InputAdornment,        
+        InputAdornment,
         isInvalidDate,
         isInvalidGstin,
         isValidForm,
@@ -78,11 +79,23 @@ function JournalView({hidden}:any){
         traceGlobalSearch,
         TraceSearchBox,
         Typography,
-        useGeneric, } = useSharedElements()
+        useGeneric,
+        XXGrid,
+    } = useSharedElements()
 
-        return(<div className={classes.content} hidden = {hidden} >
-        	JournalView
-        </div>)
+    return (
+        <Card className={classes.content} hidden={hidden}>
+            <XXGrid
+                columns={[]}
+                summaryColNames={}
+                title="View"
+                sqlQueryId=""
+                sqlQueryArgs={}
+                specialColumns={}
+                xGridProps={{ disableSelectionOnClick: true }}
+            />
+        </Card>
+    )
 }
 
-export {JournalView}
+export { JournalView }

@@ -1,5 +1,5 @@
 import { Theme, createStyles, makeStyles } from '@material-ui/core'
-import { XXGrid } from './xx-grid'
+import { XXGrid } from '../../common/xx-grid'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
 

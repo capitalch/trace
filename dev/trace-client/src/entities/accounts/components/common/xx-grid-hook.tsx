@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Theme, createStyles, makeStyles } from '@material-ui/core'
-import { useSharedElements } from '../../common/shared-elements-hook'
+import { useSharedElements } from './shared-elements-hook'
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})

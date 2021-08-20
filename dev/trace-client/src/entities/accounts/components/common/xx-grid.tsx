@@ -26,7 +26,7 @@ import {
 //     useGridApiRef,
 //     GridCellParams,
 // } from '@material-ui/data-grid'
-import { useSharedElements } from '../../common/shared-elements-hook'
+import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
 
 interface SpecialColumnOptions {

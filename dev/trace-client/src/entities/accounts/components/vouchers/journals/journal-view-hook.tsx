@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../../common/shared-elements-hook'
 
-function useJournalView(){
+function useJournalView(hidden:boolean){
 	const [, setRefresh] = useState({})
 
     const { _,
@@ -75,7 +75,8 @@ function useJournalView(){
         traceGlobalSearch,
         TraceSearchBox,
         Typography,
-        useGeneric, } = useSharedElements()
+        useGeneric,
+    } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -85,14 +86,12 @@ function useJournalView(){
         })
     }, [])
 
+    useEffect(()=>{
+
+    })
+
     const meta: any = useRef({
         isMounted: false,
-        showDialog: false,
-        dialogConfig: {
-            title: '',
-            content: () => { },
-            actions: () => { }
-        },
     })
         
     return({meta, setRefresh})
