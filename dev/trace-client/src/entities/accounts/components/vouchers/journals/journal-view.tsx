@@ -4,7 +4,7 @@ import { useJournalView, useStyles } from './journal-view-hook'
 
 function JournalView({ hidden }: any) {
     const classes = useStyles()
-    const { meta, setRefresh } = useJournalView(hidden)
+    const { meta, setRefresh, args, columns, specialColumns, sqlQueryId, title, summaryColNames } = useJournalView(hidden)
 
     const {
         _,
@@ -86,12 +86,12 @@ function JournalView({ hidden }: any) {
     return (
         <Card className={classes.content} hidden={hidden}>
             <XXGrid
-                columns={[]}
-                summaryColNames={}
-                title="View"
-                sqlQueryId=""
-                sqlQueryArgs={}
-                specialColumns={}
+                columns={columns}
+                summaryColNames={summaryColNames}
+                title={title}
+                sqlQueryId={sqlQueryId}
+                sqlQueryArgs={args}
+                specialColumns={specialColumns}
                 xGridProps={{ disableSelectionOnClick: true }}
             />
         </Card>
