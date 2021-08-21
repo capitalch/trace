@@ -361,7 +361,9 @@ function XXGrid(gridOptions: XXGridOptions, ) {
                         <IconButton
                             size="small"
                             color="secondary"
-                            onClick={() => emit(options.editIbukiMessage, '')}
+                            onClick={() => {
+                                options.editIbukiMessage && emit(options.editIbukiMessage, params)
+                            }}
                             aria-label="Edit">
                             <EditIcon />
                         </IconButton>

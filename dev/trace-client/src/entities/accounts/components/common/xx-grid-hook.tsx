@@ -110,9 +110,9 @@ export { useXXGrid, useStyles }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: 'calc(100vh - 163px)',
-            width: '100%',
-            marginTop: '5px',
+            // height: 'calc(100vh - 163px)',
+            // width: '100%',
+            // marginTop: '5px',
             '& .delete': {
                 color: 'red',
             },

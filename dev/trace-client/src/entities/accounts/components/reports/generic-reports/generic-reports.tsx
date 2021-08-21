@@ -28,7 +28,7 @@ function GenericReports({ loadReport }: any) {
                 sqlQueryId={sqlQueryId}
                 sqlQueryArgs={args}
                 specialColumns={specialColumns}
-                // xGridProps={{disableSelectionOnClick: true}}
+                xGridProps={{ disableSelectionOnClick: true }}
             />
         </Card>
     )

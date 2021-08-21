@@ -84,6 +84,10 @@ function useJournals() {
         meta.current.isMounted = true
         setAccounts()
         emit('JOURNAL-MAIN-REFRESH','') // refresh accounts in child
+        const subs1 = filterOn('JOURNAL-CHANGE-TAB').subscribe((d:any)=>{
+            meta.current.tabValue = d.data
+            setRefresh({})
+        })
         return () => {
             meta.current.isMounted = false
         }

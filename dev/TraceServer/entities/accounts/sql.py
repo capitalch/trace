@@ -574,26 +574,6 @@ allSqls = {
                     on cte1."id" = cte2."id"
                 order by cte1."id" DESC LIMIT %(no)s
     ''',
-    
-    # "get_searchProduct1": '''
-    #     select p."id", 
-	# 	"catName",
-	# 	"brandName", "salePrice", "discount", "discountRate", "isActive",
-	# 	"hsn", "info", "label", "productCode", "upcCode", "gstRate"
-	# 	from "ProductM" p
-	# 		join "CategoryM" c
-	# 			on c."id" = p."catId"
-	# 		join "BrandM" b
-	# 			on b."id" = p."brandId"
-	# 		where "label" ILIKE '%%' || %(arg)s || '%%'
-	# 		or "catName" ILIKE '%%' || %(arg)s || '%%'
-	# 		or "brandName" ILIKE '%%' || %(arg)s || '%%'
-	# 		or c."descr" ILIKE '%%' || %(arg)s || '%%'
-	# 		or "hsn"::text ILIKE '%%' || %(arg)s || '%%'
-	# 		or "info" ILIKE '%%' || %(arg)s || '%%'
-	# 		or "productCode"::text ILIKE '%%' || %(arg)s || '%%'
-	# 		or "upcCode" ILIKE '%%' || %(arg)s || '%%'
-    # ''',
 
     "get_search_product": '''
         select p."id", 
@@ -695,6 +675,28 @@ allSqls = {
         select "jData"
             from "Settings"
                 where "key" = 'unitInfo'
+    ''',
+
+    "get_vouchers": '''
+        select h."id", "tranDate", "autoRefNo", "tags",
+             h."remarks" as "headerRemarks" , "userRefNo", "accName", "dc", d."remarks" as "lineRemarks",
+             CASE WHEN "dc" = 'D' THEN "amount" ELSE 0.00 END as "debit",
+             CASE WHEN "dc" = 'C' THEN "amount" ELSE 0.00 END as "credit",
+             "lineRefNo", d."instrNo", "clearDate", "gstin", "rate", "hsn", "cgst", "sgst", "igst", "isInput"
+            from "TranH" h 
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"				
+                join "AccM" a
+                    on a."id" = d."accId"
+                left outer join "ExtBankReconTranD" b
+					on d."id" = b."tranDetailsId"
+				left outer join "ExtGstTranD" e
+					on d."id" = e."tranDetailsId"
+		where "tranTypeId" = %(tranTypeId)s 
+            and "finYearId" = %(finYearId)s 
+            and "branchId" = %(branchId)s
+            order by "tranDate" DESC, h."id", d."id" 
+            limit %(no)s
     ''',
 
     "getJson_accountsMaster_groups_ledgers": '''

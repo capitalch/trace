@@ -17,6 +17,7 @@ function useAllTransactions() {
         { headerName: 'Id', field: 'id1', width: 90 },
         {
             headerName: 'Date',
+            type:'date',
             field: 'tranDate',
             width: 120,
             valueGetter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
