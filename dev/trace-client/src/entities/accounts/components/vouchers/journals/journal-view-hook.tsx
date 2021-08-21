@@ -78,12 +78,17 @@ function useJournalView(hidden: boolean) {
         Typography,
         useGeneric,
     } = useSharedElements()
-
+    const meta: any = useRef({
+        isMounted: false,
+        isLoadedOnce: false
+    })
     useEffect(() => {
         meta.current.isMounted = true
-        const subs1 = filterOn('JOURNAL-VIEW-REFRESH').subscribe((d:any) => {
-            console.log(d.data)
-            emit('JOURNAL-CHANGE-TAB', 0)
+
+        const subs1 = filterOn('JOURNAL-VIEW-XX-GRID-EDIT-CLICKED').subscribe((d: any) => {
+            console.log(d.data?.row)
+
+            emit('JOURNAL-CHANGE-TAB', { tranHeaderId: d.data?.row?.id1, tabValue: 0 })
             setRefresh({})
         })
         return () => {
@@ -92,13 +97,14 @@ function useJournalView(hidden: boolean) {
         }
     }, [])
 
-    // useEffect(()=>{
-    //     (!hidden) && (setRefresh({}))
-    // },[hidden])
+    useEffect(() => {
+        if ((!hidden) && (!meta.current.isLoadedOnce)) {
+            emit('XX-GRID-FETCH-DATA', null)
+            meta.current.isLoadedOnce = true
+        }
+    }, [hidden, meta.current.isLoadedOnce])
 
-    const meta: any = useRef({
-        isMounted: false,
-    })
+
 
     const columns = [
         {
@@ -215,7 +221,7 @@ function useJournalView(hidden: boolean) {
         // isRemove: true,
         isEdit: true,
         isDelete: true,
-        editIbukiMessage: 'JOURNAL-VIEW-REFRESH',
+        editIbukiMessage: 'JOURNAL-VIEW-XX-GRID-EDIT-CLICKED',
         // isDrillDown: true,
     }
     return {

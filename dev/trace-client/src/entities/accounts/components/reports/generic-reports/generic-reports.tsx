@@ -2,6 +2,7 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core'
 import { XXGrid } from '../../common/xx-grid'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
+import { useEffect } from 'react'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
@@ -16,9 +17,13 @@ function GenericReports({ loadReport }: any) {
         title,
     } = selectLogic[loadReport]()
 
-    const { _, Card } = useSharedElements()
+    const { _, Card, emit } = useSharedElements()
     const classes = useStyles()
-    console.log('rendered')
+    useEffect(() => {
+        //On demand populate data
+        emit('XX-GRID-FETCH-DATA', null)
+    }, [])
+    // console.log('rendered')
     return (
         <Card className={classes.container}>
             <XXGrid

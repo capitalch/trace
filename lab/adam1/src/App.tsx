@@ -53,6 +53,7 @@ import { Component1 } from "./components/component1";
 import { Component3 } from "./components/component3";
 import { Component4 } from "./components/component4";
 import { Component5 } from "./components/component5";
+import { Component7 } from "./components/component7";
 
 declare module "@material-ui/core/styles/createPalette" {
   interface Palette {
@@ -136,7 +137,7 @@ const App: React.FC = () => {
           }}
         >
           <RecoilRoot>
-            <Component4></Component4>
+            <Component7></Component7>
           </RecoilRoot>
         </div>
       </ConfirmProvider>

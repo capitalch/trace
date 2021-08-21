@@ -3,11 +3,9 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import makeStyles from "@material-ui/styles/makeStyles";
+import { useIbuki } from '../utils/ibuki';
 
 function Component7() {
-    function Alert(props: any) {
-        return <MuiAlert elevation={6} variant="filled" {...props} />;
-    }
 
     const useStyles = makeStyles(theme => ({
         root: {
@@ -18,37 +16,53 @@ function Component7() {
         },
     }));
 
+    const { filterOn, emit } = useIbuki()
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-
-    const handleClick = () => {
-        setOpen(true);
-    };
-
-    const handleClose = (event:any, reason:any) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpen(false);
-    };
-
+    console.log('container body')
+    useComp2()
     return (
         <div className={classes.root}>
-            <Button variant="outlined" onClick={handleClick}>
-                Open success snackbar
-            </Button>
-            <Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success">
-                    This is a success message!
-              </Alert>
-            </Snackbar>
-            {/* <Alert severity="error">This is an error message!</Alert>
-            <Alert severity="warning">This is a warning message!</Alert>
-            <Alert severity="info">This is an information message!</Alert>
-            <Alert severity="success">This is a success message!</Alert> */}
+            {<Comp1 />}
+            <Comp2 />
         </div>
     );
+
+    function Comp1() {
+        const [, setRefresh] = useState({})
+        useEffect(() => {
+
+        }, [])
+        
+        console.log('comp1 body')
+        return (<div>
+            <span>comp1</span>
+            <button
+                onClick={() => {
+                    setRefresh({})
+                }}
+            >Refresh comp1</button>
+            <button onClick={() => {
+                emit('USE-COMP2-REFRESH',null)
+            }}>Comp2 hook activated</button>
+        </div>)
+    }
+
+    function Comp2() {
+        // const x = useComp2()
+        console.log('comp2 body')
+        return (<div>Comp 2</div>)
+    }
+
+    function useComp2() {
+        const [, setRefresh] = useState({})
+        console.log('comp2 hook body')
+        useEffect(() => {
+            filterOn('USE-COMP2-REFRESH').subscribe((d: any) => {
+                setRefresh({})
+            })
+        }, [])
+        return (1)
+    }
 
 }
 

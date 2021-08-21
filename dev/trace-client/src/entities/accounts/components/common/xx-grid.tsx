@@ -28,14 +28,13 @@ import {
 // } from '@material-ui/data-grid'
 import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
+import { Box } from '@material-ui/core'
 
 interface SpecialColumnOptions {
     isEdit?: boolean
     isDelete?: boolean
     isRemove?: boolean
     isDrillDown?: boolean
-    isEditMethos?: any
-    isDeleteMethod?: any
     editIbukiMessage?: any
     deleteIbukiMessage?: any
     drillDownIbukiMessage?: any
@@ -51,10 +50,10 @@ interface XXGridOptions {
     xGridProps?: any
 }
 
-function XXGrid(gridOptions: XXGridOptions, ) {
+function XXGrid(gridOptions: XXGridOptions,) {
     const { columns, sqlQueryArgs, sqlQueryId, summaryColNames, title } =
         gridOptions
-    const apiRef:any = useGridApiRef()
+    const apiRef: any = useGridApiRef()
     const {
         fetchRows,
         meta,
@@ -65,6 +64,7 @@ function XXGrid(gridOptions: XXGridOptions, ) {
     } = useXXGrid(gridOptions)
     const {
         _,
+        Box,
         Button,
         CloseIcon,
         DeleteIcon,
@@ -81,9 +81,9 @@ function XXGrid(gridOptions: XXGridOptions, ) {
     const classes = useStyles()
     const specialColumns = gridOptions.specialColumns
     addSpecialColumns(specialColumns)
-    
+
     return (
-        <XGrid className={classes.content}
+            <XGrid className={classes.content}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}

@@ -93,19 +93,19 @@ function JournalView({ hidden }: any) {
     } = useSharedElements()
 
     return (
-        <Card className={classes.content} hidden={hidden}>
-            {
-               (!hidden) && <XXGrid
-                    columns={columns}
-                    summaryColNames={summaryColNames}
-                    title={title}
-                    sqlQueryId={sqlQueryId}
-                    sqlQueryArgs={args}
-                    specialColumns={specialColumns}
-                    xGridProps={{ disableSelectionOnClick: true }}
-                />
-            }
-        </Card>
+        <Box className={classes.content} hidden={hidden}>
+
+            <XXGrid
+                columns={columns}
+                summaryColNames={summaryColNames}
+                title={title}
+                sqlQueryId={sqlQueryId}
+                sqlQueryArgs={args}
+                specialColumns={specialColumns}
+                xGridProps={{ disableSelectionOnClick: true }}
+            />
+
+        </Box>
     )
 }
 

@@ -16,13 +16,16 @@ function useXXGrid(gridOptions: any) {
         viewLimit: 0,
     })
     
-    const { _, emit, getCurrentEntity, execGenericView } = useSharedElements()
+    const { _, emit, filterOn, getCurrentEntity, execGenericView } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
-        fetchRows(sqlQueryId, sqlQueryArgs)
+        const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe(()=>{
+            fetchRows(sqlQueryId, sqlQueryArgs)
+        })
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
     const entityName = getCurrentEntity()
@@ -101,7 +104,6 @@ function useXXGrid(gridOptions: any) {
             {}
         )
     }
-
     return {fetchRows, meta,onSelectModelChange, requestSearch,setFilteredSummary, setRefresh }
 }
 
@@ -110,8 +112,8 @@ export { useXXGrid, useStyles }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            // height: 'calc(100vh - 163px)',
-            // width: '100%',
+            height: '100%', 
+            width: '100%',
             // marginTop: '5px',
             '& .delete': {
                 color: 'red',

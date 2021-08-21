@@ -582,6 +582,7 @@ function useJournalMain(arbitraryData: any) {
                                 emit('ACTION-BLOCK-REFRESH', '')
                                 setRefresh({})
                             }}
+                            checked={arbitraryData.isgst}
                         />
                     }
                     label="Gst"
