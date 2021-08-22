@@ -86,12 +86,19 @@ function useJournals() {
         emit('JOURNAL-MAIN-REFRESH', '') // refresh accounts in child
         const subs1 = filterOn('JOURNAL-CHANGE-TAB').subscribe((d: any) => {
             const tranHeaderId = d.data?.tranHeaderId
-            fetchDataOnId(tranHeaderId)
+            fetchAndPopulateDataOnId(tranHeaderId)
             handleOnTabChange(null, d.data?.tabValue)
+        })
+        const subs2 = filterOn('JOURNAL-RESET').subscribe(() => {
+            arbitraryData.current.header = {}
+            arbitraryData.current.debits = [{ key: 0 },]
+            arbitraryData.current.credits = [{ key: 0 },]
+            setRefresh({})
         })
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
@@ -106,6 +113,7 @@ function useJournals() {
             all: [],
             journal: [],
         },
+        header: {},
         autoRefNo: undefined,
         commonRemarks: undefined,
         gstin: undefined,
@@ -121,7 +129,7 @@ function useJournals() {
         credits: [{ key: 0 },],
     })
 
-    async function fetchDataOnId(tranHeaderId: number) {
+    async function fetchAndPopulateDataOnId(tranHeaderId: number) {
         console.log('fetching data:', tranHeaderId)
         emit('SHOW-LOADING-INDICATOR', true)
         try {
@@ -143,16 +151,17 @@ function useJournals() {
         function populateData(jsonResult: any) {
             const tranDetails: any[] = jsonResult.tranDetails
             const tranHeader: any = jsonResult.tranHeader
-            console.log(tranHeader)
+            // console.log(tranHeader)
             const tranTypeId = tranHeader.tranTypeId
             const ad = arbitraryData.current
-            ad.id = tranHeader.id
-            ad.tranDate = tranHeader.tranDate
-            ad.autoRefNo = tranHeader.autoRefNo
-            ad.userRefNo = tranHeader.userRefNo
-            ad.commonRemarks = tranHeader.remarks
-            ad.tags = tranHeader.tags
-            ad.tranTypeId = tranHeader.trantypeId
+            ad.header = tranHeader
+            // ad.id = tranHeader.id
+            // ad.tranDate = tranHeader.tranDate
+            // ad.autoRefNo = tranHeader.autoRefNo
+            // ad.userRefNo = tranHeader.userRefNo
+            // ad.commonRemarks = tranHeader.remarks
+            // ad.tags = tranHeader.tags
+            // ad.tranTypeId = tranHeader.trantypeId
             // ad.isGst = true
 
             const debits: any[] = tranDetails.filter((x: any) => x.dc === 'D')
@@ -160,8 +169,8 @@ function useJournals() {
             ad.debits = debits
             ad.credits = credits
             meta.current.isMounted && setRefresh({})
-            emit('SUBMIT-REFRESH','')
-            
+            emit('SUBMIT-REFRESH', '')
+
         }
     }
 
@@ -189,11 +198,6 @@ function useJournals() {
         )
         arbitraryData.current.accounts.journal = jouAccounts
     }
-
-    // function setTab(val:number){
-    //     meta.current.tabValue = val
-    //     meta.current.isMounted && setRefresh({})
-    // }
 
     return { arbitraryData, handleOnTabChange, meta, setRefresh }
 }
