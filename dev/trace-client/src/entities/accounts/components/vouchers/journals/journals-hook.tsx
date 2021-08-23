@@ -119,7 +119,7 @@ function useJournals() {
         gstin: undefined,
         errorObject: {},
         id: undefined,
-        isIgst: false,
+        isGst: false,
         tags: undefined,
         tranDate: undefined,
         tranTypeId: 1,
@@ -151,24 +151,27 @@ function useJournals() {
         function populateData(jsonResult: any) {
             const tranDetails: any[] = jsonResult.tranDetails
             const tranHeader: any = jsonResult.tranHeader
-            // tranHeader.remarks = undefined
-            
-            // console.log(tranHeader)
             const tranTypeId = tranHeader.tranTypeId
             const ad = arbitraryData.current
             ad.header = tranHeader
-            // ad.id = tranHeader.id
-            // ad.tranDate = tranHeader.tranDate
-            // ad.autoRefNo = tranHeader.autoRefNo
-            // ad.userRefNo = tranHeader.userRefNo
-            // ad.tags = tranHeader.tags
-            // ad.tranTypeId = tranHeader.trantypeId
-            // ad.isGst = true
+            ad.debits=[]
+            ad.credits= []
+            for (let detail of tranDetails){
+                if(detail.gst){
+                    ad.isGst = true
+                    ad.gstin = detail.gst?.gstin
+                }
+                if(detail.dc === 'D'){
+                    ad.debits.push(detail)
+                } else {
+                    ad.credits.push(detail)
+                }
+            }
 
-            ad.debits = tranDetails.filter((x: any) => x.dc === 'D')
-            ad.credits = tranDetails.filter((x: any) => x.dc === 'C')
+            // ad.debits = tranDetails.filter((x: any) => x.dc === 'D')
+            // ad.credits = tranDetails.filter((x: any) => x.dc === 'C')
             meta.current.isMounted && setRefresh({})
-            emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+            // emit('JOURNAL-MAIN-CROWN-REFRESH', '')
 
         }
     }

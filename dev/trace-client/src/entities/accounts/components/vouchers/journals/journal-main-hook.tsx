@@ -43,7 +43,7 @@ function useJournalMain(arbitraryData: any) {
 
     const meta: any = useRef({
         isMounted: false,
-        errorMessage: ''
+        errorMessage: '',
     })
 
     function useCrown(meta: any) {
@@ -154,13 +154,15 @@ function useJournalMain(arbitraryData: any) {
                 const debits: any[] = ad.debits
                 const credits: any[] = ad.credits
                 for (let row of debits) {
-                    const ret = credits.findIndex((x: any) => row.accId === x.accId )
+                    const ret = credits.findIndex(
+                        (x: any) => row.accId === x.accId
+                    )
                     if (ret !== -1) {
                         m = accountsMessages.commonAccountCodesInDebitsCredits
                         break
                     }
                 }
-                return (m)
+                return m
             }
 
             function gstError() {
@@ -194,24 +196,34 @@ function useJournalMain(arbitraryData: any) {
             const creditsSummary = getSummary('credits')
 
             function getSummary(summType: string) {
-                return ad[summType].reduce((prev: any, curr: any) => {
-                    prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
-                    prev.igst = (prev?.igst || 0.0) + (curr?.igst || 0.0)
-                    prev.cgst = (prev?.cgst || 0.0) + (curr?.cgst || 0.0)
-                    prev.sgst = (prev?.sgst || 0.0) + (curr?.sgst || 0.0)
-                    return prev
-                }, {})
+                return ad[summType].reduce(
+                    (prev: any, curr: any) => {
+                        prev.amount =
+                            (prev?.amount || 0.0) + (curr?.amount || 0.0)
+                        prev.gst.igst =
+                            (prev?.gst.igst || 0.0) + (curr?.gst?.igst || 0.0)
+                        prev.gst.cgst =
+                            (prev?.gst.cgst || 0.0) + (curr?.gst?.cgst || 0.0)
+                        prev.gst.sgst =
+                            (prev?.gst.sgst || 0.0) + (curr?.gst?.sgst || 0.0)
+                        return prev
+                    },
+                    {
+                        amount: 0,
+                        gst: {}
+                    }
+                )
             }
             const totalDebits = debitsSummary?.amount || 0.0
             const totalCredits = creditsSummary?.amount || 0.0
             const gstCredits =
-                (creditsSummary?.igst || 0.0) +
-                (creditsSummary?.cgst || 0.0) +
-                (creditsSummary?.sgst || 0.0)
+                (creditsSummary?.gst?.igst || 0.0) +
+                (creditsSummary?.gst?.cgst || 0.0) +
+                (creditsSummary?.gst?.sgst || 0.0)
             const gstDebits =
-                (debitsSummary?.igst || 0.0) +
-                (debitsSummary?.cgst || 0.0) +
-                (debitsSummary?.sgst || 0.0)
+                (debitsSummary?.gst.igst || 0.0) +
+                (debitsSummary?.gst.cgst || 0.0) +
+                (debitsSummary?.gst.sgst || 0.0)
             ad.summary.totalDebits = totalDebits
             ad.summary.totalCredits = totalCredits
             ad.summary.gstDebits = gstDebits
@@ -273,7 +285,7 @@ function useJournalMain(arbitraryData: any) {
                         tableName: 'TranH',
                         data: [],
                     }
-    
+
                     const dataItem = {
                         tranDate: null,
                         userRefNo: null,
@@ -284,29 +296,29 @@ function useJournalMain(arbitraryData: any) {
                         details: [],
                         tranTypeId: 0,
                     }
-    
+
                     dataItem.tranDate = ad.header.tranDate
                     dataItem.userRefNo = ad.header.userRefNo
                     dataItem.remarks = ad.header.remarks
                     dataItem.tranTypeId = ad.header.tranType || 1
                     voucher.data.push(dataItem)
-    
+
                     const details = dataItem.details
                     const debits: any[] = ad.debits
                     const credits: any[] = ad.credits
-    
+
                     addToDetails(debits, details, 'D')
                     addToDetails(credits, details, 'C')
                     console.log(JSON.stringify(voucher))
-    
+
                     const ret = await genericUpdateMasterDetails([voucher])
-    
+
                     if (ret.error) {
                         console.log(ret.error)
                     } else {
                         emit('JOURNAL-RESET', '')
                     }
-    
+
                     function addToDetails(
                         sourceArray: any[],
                         destArray: any,
@@ -541,7 +553,7 @@ function useJournalMain(arbitraryData: any) {
                                 emit('ACTION-BLOCK-REFRESH', '')
                                 setRefresh({})
                             }}
-                            checked={arbitraryData.isgst}
+                            checked={arbitraryData.isGst}
                         />
                     }
                     label="Gst"
@@ -608,6 +620,9 @@ function useJournalMain(arbitraryData: any) {
             const isGst = !!ad.isGst
             const actionRows: any[] = ad[actionType]
             const list: any[] = actionRows.map((item: any) => {
+                if (!item.gst) {
+                    item.gst = {}
+                }
                 return (
                     <div key={incr()} className="action-row">
                         {/* Account */}
@@ -646,16 +661,16 @@ function useJournalMain(arbitraryData: any) {
                                     emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                                     setRefresh({})
                                 }}
-                                error={item.gstRate > 30 ? true : false}
+                                error={item.gst.rate > 30 ? true : false}
                                 onValueChange={(values: any) => {
                                     const { floatValue } = values
-                                    item.gstRate = floatValue || 0.0
+                                    item.gst.rate = floatValue || 0.0
                                     // emit('COMPUTE-SUMMARY-REFRESH', '')
                                     emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                                     setRefresh({})
                                 }}
                                 thousandSeparator={true}
-                                value={item.gstRate || 0.0}
+                                value={item.gst.rate || 0.0}
                             />
                         )}
 
@@ -670,11 +685,11 @@ function useJournalMain(arbitraryData: any) {
                                     e.target.select()
                                 }}
                                 onChange={(e: any) => {
-                                    item.hsn = e.target.value
+                                    item.gst.hsn = e.target.value
                                     emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                                     setRefresh({})
                                 }}
-                                value={item.hsn || 0.0}
+                                value={item.gst.hsn || 0.0}
                             />
                         )}
 
@@ -729,13 +744,16 @@ function useJournalMain(arbitraryData: any) {
                                     labelPlacement="start"
                                 />
                                 <Typography className="gst" variant="body2">
-                                    Cgst: {toDecimalFormat(item.cgst || 0.0)}
+                                    Cgst:{' '}
+                                    {toDecimalFormat(item.gst.cgst || 0.0)}
                                 </Typography>
                                 <Typography className="gst" variant="body2">
-                                    Sgst: {toDecimalFormat(item.sgst || 0.0)}
+                                    Sgst:{' '}
+                                    {toDecimalFormat(item.gst.sgst || 0.0)}
                                 </Typography>
                                 <Typography className="gst" variant="body2">
-                                    Igst: {toDecimalFormat(item.igst || 0.0)}
+                                    Igst:{' '}
+                                    {toDecimalFormat(item.gst.igst || 0.0)}
                                 </Typography>
                             </div>
                         )}
@@ -835,17 +853,17 @@ function useJournalMain(arbitraryData: any) {
         }
 
         function computeGst(item: any) {
-            const gstRate = item.gstRate || 0
+            const gstRate = item.gst.rate || 0
             const gst =
                 ((item.amount || 0) * (gstRate / 100)) / (1 + gstRate / 100)
-            if (item.isIgst) {
-                item.igst = gst
-                item.cgst = 0
-                item.sgst = 0
+            if (item.gst.isIgst) {
+                item.gst.igst = gst
+                item.gst.cgst = 0
+                item.gst.sgst = 0
             } else {
-                item.igst = 0
-                item.cgst = gst / 2
-                item.sgst = item.cgst
+                item.gst.igst = 0
+                item.gst.cgst = gst / 2
+                item.gst.sgst = item.gst.cgst
             }
         }
     }
