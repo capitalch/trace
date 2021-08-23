@@ -334,7 +334,7 @@ function XXGrid(gridOptions: XXGridOptions,) {
                             size="small"
                             color="secondary"
                             className="delete"
-                            onClick={() => emit(options.deleteIbukiMessage, '')}
+                            onClick={() => options.deleteIbukiMessage && emit(options.deleteIbukiMessage, params)}
                             aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>

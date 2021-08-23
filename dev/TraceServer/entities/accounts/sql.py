@@ -679,7 +679,7 @@ allSqls = {
 
     "get_vouchers": '''
         select h."id", "tranDate", "autoRefNo", "tags",
-             h."remarks" as "headerRemarks" , "userRefNo", "accName", "dc", d."remarks" as "lineRemarks",
+             h."remarks", "userRefNo", "accName", "dc", d."remarks" as "lineRemarks",
              CASE WHEN "dc" = 'D' THEN "amount" ELSE 0.00 END as "debit",
              CASE WHEN "dc" = 'C' THEN "amount" ELSE 0.00 END as "credit",
              "lineRefNo", d."instrNo", "clearDate", "gstin", "rate", "hsn", "cgst", "sgst", "igst", "isInput"

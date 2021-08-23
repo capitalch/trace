@@ -42,6 +42,7 @@ function useJournalView(hidden: boolean) {
         IconButton,
         Input,
         InputAdornment,
+        isDateAuditLocked,
         isInvalidGstin,
         isValidForm,
         List,
@@ -86,14 +87,22 @@ function useJournalView(hidden: boolean) {
         meta.current.isMounted = true
 
         const subs1 = filterOn('JOURNAL-VIEW-XX-GRID-EDIT-CLICKED').subscribe((d: any) => {
-            console.log(d.data?.row)
-
+            // console.log(d.data?.row)
             emit('JOURNAL-CHANGE-TAB', { tranHeaderId: d.data?.row?.id1, tabValue: 0 })
             setRefresh({})
+        })
+        const subs2 = filterOn('JOURNAL-VIEW-XX-GRID-DELETE-CLICKED').subscribe((d: any) => {
+            doDelete(d.data)
+        })
+
+        const subs3 = filterOn('JOURNAL-VIEW-REFRESH').subscribe(() => {
+            emit('XX-GRID-FETCH-DATA', null) // fetch data in xx-grid
         })
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
         }
     }, [])
 
@@ -104,7 +113,40 @@ function useJournalView(hidden: boolean) {
         }
     }, [hidden, meta.current.isLoadedOnce])
 
-
+    async function doDelete(params: any) {
+        const row = params.row
+        const tranHeaderId = row['id1']
+        const options = {
+            description: accountsMessages.transactionDelete,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        if (isDateAuditLocked(row.tranDate)) {
+            emit('SHOW-MESSAGE', {
+                severity: 'error',
+                message: accountsMessages.auditLockError,
+                duration: null,
+            })
+        } else if (row?.clearDate) {
+            // already reconciled so edit /delete not possible
+            emit('SHOW-MESSAGE', {
+                severity: 'error',
+                message: accountsMessages.reconcillationDone,
+                duration: null,
+            })
+        } else {
+            confirm(options)
+                .then(async () => {
+                    await genericUpdateMaster({
+                        deletedIds: [tranHeaderId],
+                        tableName: 'TranH',
+                    })
+                    emit('SHOW-MESSAGE', {})
+                    emit('JOURNAL-VIEW-REFRESH', '')
+                })
+                .catch(() => { }) // important to have otherwise eror
+        }
+    }
 
     const columns = [
         {
@@ -119,7 +161,8 @@ function useJournalView(hidden: boolean) {
             headerName: 'Date',
             field: 'tranDate',
             width: 120,
-            valueGetter: (params: any) =>
+            type: 'date',
+            valueFormatter: (params: any) =>
                 moment(params.value).format('DD/MM/YYYY'),
         },
         { headerName: 'Ref', field: 'autoRefNo', width: 200 },
@@ -222,6 +265,7 @@ function useJournalView(hidden: boolean) {
         isEdit: true,
         isDelete: true,
         editIbukiMessage: 'JOURNAL-VIEW-XX-GRID-EDIT-CLICKED',
+        deleteIbukiMessage: 'JOURNAL-VIEW-XX-GRID-DELETE-CLICKED'
         // isDrillDown: true,
     }
     return {

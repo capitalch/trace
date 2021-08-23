@@ -115,7 +115,7 @@ function useJournals() {
         },
         header: {},
         autoRefNo: undefined,
-        commonRemarks: undefined,
+        remarks: undefined,
         gstin: undefined,
         errorObject: {},
         id: undefined,
@@ -130,7 +130,7 @@ function useJournals() {
     })
 
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
-        console.log('fetching data:', tranHeaderId)
+        // console.log('fetching data:', tranHeaderId)
         emit('SHOW-LOADING-INDICATOR', true)
         try {
             const ret: any = await execGenericView({
@@ -141,7 +141,7 @@ function useJournals() {
                 sqlKey: 'getJson_tranHeader_details',
             })
             populateData(ret?.jsonResult)
-
+            console.log(JSON.stringify(ret.jsonResult))
         } catch (e) {
             console.log(e.message)
         } finally {
@@ -151,6 +151,8 @@ function useJournals() {
         function populateData(jsonResult: any) {
             const tranDetails: any[] = jsonResult.tranDetails
             const tranHeader: any = jsonResult.tranHeader
+            // tranHeader.remarks = undefined
+            
             // console.log(tranHeader)
             const tranTypeId = tranHeader.tranTypeId
             const ad = arbitraryData.current
@@ -159,17 +161,14 @@ function useJournals() {
             // ad.tranDate = tranHeader.tranDate
             // ad.autoRefNo = tranHeader.autoRefNo
             // ad.userRefNo = tranHeader.userRefNo
-            // ad.commonRemarks = tranHeader.remarks
             // ad.tags = tranHeader.tags
             // ad.tranTypeId = tranHeader.trantypeId
             // ad.isGst = true
 
-            const debits: any[] = tranDetails.filter((x: any) => x.dc === 'D')
-            const credits: any[] = tranDetails.filter((x: any) => x.dc === 'C')
-            ad.debits = debits
-            ad.credits = credits
+            ad.debits = tranDetails.filter((x: any) => x.dc === 'D')
+            ad.credits = tranDetails.filter((x: any) => x.dc === 'C')
             meta.current.isMounted && setRefresh({})
-            emit('SUBMIT-REFRESH', '')
+            emit('JOURNAL-MAIN-CROWN-REFRESH', '')
 
         }
     }
