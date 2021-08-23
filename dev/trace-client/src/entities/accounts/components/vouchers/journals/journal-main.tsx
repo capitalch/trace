@@ -85,10 +85,11 @@ function JournalMain({ arbitraryData, hidden }: any) {
         //hidden prop used for tab visibility
         return (<div hidden={hidden}>
                 <Crown arbitraryData={arbitraryData} />
+                {/* <Crown2 arbitraryData={arbitraryData} /> */}
                 <Header arbitraryData={arbitraryData} />
                 <ActionBlock arbitraryData = {arbitraryData} actionType='debits' actionLabel='Debit' isAddRemove={true} />
                 <ActionBlock arbitraryData = {arbitraryData} actionType='credits' actionLabel='Credit' isAddRemove={true}/>
-                {/* <Crown2 arbitraryData={arbitraryData} /> */}
+                <Crown2 arbitraryData={arbitraryData} />
                 {/* <SubmitButton ad = {arbitraryData} meta= {meta} /> */}
         </div>)
 }

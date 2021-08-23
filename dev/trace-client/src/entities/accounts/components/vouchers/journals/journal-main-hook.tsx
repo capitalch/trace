@@ -48,11 +48,9 @@ function useJournalMain(arbitraryData: any) {
 
     function useCrown(arbitraryData: any) {
         const meta = useRef({
-            errorMessage: ''
+            errorMessage: '',
         })
         const [, setRefresh] = useState({})
-
-        
 
         function checkError(ad: any) {
             function headerError() {
@@ -61,7 +59,7 @@ function useJournalMain(arbitraryData: any) {
                     if (isInvalidDate(ad.header.tranDate)) {
                         m = accountsMessages.dateRangeAuditLockMessage
                     }
-                    return (m)
+                    return m
                 }
 
                 function gstinError() {
@@ -77,7 +75,7 @@ function useJournalMain(arbitraryData: any) {
                             }
                         }
                     }
-                    return (m)
+                    return m
                 }
 
                 const headError = dateError() || gstinError()
@@ -93,7 +91,7 @@ function useJournalMain(arbitraryData: any) {
                         break
                     }
                 }
-                return (m)
+                return m
 
                 function rowError(row: any) {
                     function accountError() {
@@ -101,7 +99,7 @@ function useJournalMain(arbitraryData: any) {
                         if (row.isLedgerSubledgerError) {
                             m = accountsMessages.selectAccountHeader
                         }
-                        return (m)
+                        return m
                     }
 
                     function amountError() {
@@ -109,7 +107,7 @@ function useJournalMain(arbitraryData: any) {
                         if (!row.amount) {
                             m = accountsMessages.errorZeroAmount
                         }
-                        return (m)
+                        return m
                     }
 
                     function gstRateError() {
@@ -124,7 +122,7 @@ function useJournalMain(arbitraryData: any) {
                                 m = accountsMessages.gstRateWronglyGiven
                             }
                         }
-                        return (m)
+                        return m
                     }
 
                     function hsnNotPresentError() {
@@ -134,24 +132,24 @@ function useJournalMain(arbitraryData: any) {
                                 m = accountsMessages.hsnNotPresent
                             }
                         }
-                        return (m)
+                        return m
                     }
-                    m = accountError() ||
+                    m =
+                        accountError() ||
                         amountError() ||
                         gstRateError() ||
                         hsnNotPresentError()
-                    return (m)
+                    return m
                 }
             }
 
-            
             function debitsCreditsNotEqualError() {
                 const { totalDebits, totalCredits } = computeSummary(ad)
                 let m = ''
                 if (totalDebits !== totalCredits) {
                     m = accountsMessages.debitCreditNotEqual
                 }
-                return (m)
+                return m
             }
 
             function gstError() {
@@ -167,7 +165,7 @@ function useJournalMain(arbitraryData: any) {
                         m = accountsMessages.gstAmountwronglyThere
                     }
                 }
-                return (m)
+                return m
             }
 
             meta.current.errorMessage =
@@ -376,23 +374,44 @@ function useJournalMain(arbitraryData: any) {
             )
         }
 
-        return { checkError, ResetButton, SubmitButton, meta, setRefresh, SummaryDebitsCredits, SummaryGst }
+        return {
+            checkError,
+            ResetButton,
+            SubmitButton,
+            meta,
+            setRefresh,
+            SummaryDebitsCredits,
+            SummaryGst,
+        }
     }
 
     function Crown({ arbitraryData }: any) {
         const classes = useStyles()
-        const { checkError, ResetButton, SubmitButton, meta, setRefresh, SummaryDebitsCredits, SummaryGst } = useCrown(arbitraryData)
+        const {
+            checkError,
+            ResetButton,
+            SubmitButton,
+            meta,
+            setRefresh,
+            SummaryDebitsCredits,
+            SummaryGst,
+        } = useCrown(arbitraryData)
         useEffect(() => {
-            const subs1 = filterOn('JOURNAL-MAIN-CROWN-REFRESH').subscribe(() => {
-                meta.current.errorMessage = ''
-                checkError(arbitraryData)
-                setRefresh({})
-                
-                // emit('JOURNAL-MAIN-CROWN2-REFRESH', '')
-            })
-            return (() => {
+            const subs1 = filterOn('JOURNAL-MAIN-CROWN-REFRESH').subscribe(
+                () => {
+                    meta.current.errorMessage = ''
+                    checkError(arbitraryData)
+                    setRefresh({})
+                    // emit('JOURNAL-MAIN-REFRESH','')
+                    emit(
+                        'JOURNAL-MAIN-CROWN2-REFRESH',
+                        meta.current.errorMessage
+                    )
+                }
+            )
+            return () => {
                 subs1.unsubscribe()
-            })
+            }
         }, [])
         checkError(arbitraryData)
         return (
@@ -400,6 +419,12 @@ function useJournalMain(arbitraryData: any) {
                 <SummaryDebitsCredits ad={arbitraryData} />
                 <SummaryGst ad={arbitraryData} />
                 <ResetButton />
+                <Button
+                    onClick={() => {
+                        alert(meta.current.errorMessage)
+                    }}>
+                    Check
+                </Button>
                 <Typography variant="subtitle2" className="error-message">
                     {meta.current.errorMessage}
                 </Typography>
@@ -410,18 +435,35 @@ function useJournalMain(arbitraryData: any) {
 
     function Crown2({ arbitraryData }: any) {
         const classes = useStyles()
-        const [, setRefresh] = useState({})
-        const { checkError, ResetButton, SubmitButton, meta, SummaryDebitsCredits, SummaryGst } = useCrown(arbitraryData)
+        // const [, setRefresh] = useState({})
+        const meta = useRef({
+            isError: true,
+            errorMessage:''
+        })
+        const {
+            checkError,
+            ResetButton,
+            SubmitButton,
+            // meta,
+            setRefresh,
+            SummaryDebitsCredits,
+            SummaryGst,
+        } = useCrown(arbitraryData)
         checkError(arbitraryData)
         useEffect(() => {
-            const subs1 = filterOn('JOURNAL-MAIN-CROWN2-REFRESH').subscribe(() => {
-                meta.current.errorMessage = ''
-                checkError(arbitraryData)
-                setRefresh({})
-            })
-            return (() => {
+            const subs1 = filterOn('JOURNAL-MAIN-CROWN2-REFRESH').subscribe(
+                (d: any) => {
+                    // meta.current.errorMessage = ''
+                    // checkError(arbitraryData)
+                    meta.current.isError = d.data ? true : false
+                    meta.current.errorMessage = d.data
+                    // console.log((!d.data) && 'Empty')
+                    setRefresh({})
+                }
+            )
+            return () => {
                 subs1.unsubscribe()
-            })
+            }
         }, [])
         return (
             <Paper elevation={1} className={classes.contentCrown}>
@@ -431,7 +473,10 @@ function useJournalMain(arbitraryData: any) {
                 <Typography variant="subtitle2" className="error-message">
                     {meta.current.errorMessage}
                 </Typography>
-                <SubmitButton ad={arbitraryData} meta={meta} />
+                {/* <SubmitButton ad={arbitraryData} meta={meta} /> */}
+                <Button variant="contained" size='small' color='secondary' disabled={meta.current.isError}>
+                    Submit
+                </Button>
             </Paper>
         )
     }
@@ -439,18 +484,20 @@ function useJournalMain(arbitraryData: any) {
     function Crown1({ arbitraryData }: any) {
         const classes = useStyles()
         const meta = useRef({
-            errorMessage: ''
+            errorMessage: '',
         })
         const [, setRefresh] = useState({})
         useEffect(() => {
-            const subs1 = filterOn('JOURNAL-MAIN-CROWN-REFRESH').subscribe(() => {
-                meta.current.errorMessage = ''
-                checkError(arbitraryData)
-                setRefresh({})
-            })
-            return (() => {
+            const subs1 = filterOn('JOURNAL-MAIN-CROWN-REFRESH').subscribe(
+                () => {
+                    meta.current.errorMessage = ''
+                    checkError(arbitraryData)
+                    setRefresh({})
+                }
+            )
+            return () => {
                 subs1.unsubscribe()
-            })
+            }
         }, [])
         checkError(arbitraryData)
         return (
@@ -590,14 +637,13 @@ function useJournalMain(arbitraryData: any) {
         }
 
         function checkError(ad: any) {
-
             function headerError() {
                 function dateError() {
                     let m = ''
                     if (isInvalidDate(ad.header.tranDate)) {
                         m = accountsMessages.dateRangeAuditLockMessage
                     }
-                    return (m)
+                    return m
                 }
 
                 function gstinError() {
@@ -613,7 +659,7 @@ function useJournalMain(arbitraryData: any) {
                             }
                         }
                     }
-                    return (m)
+                    return m
                 }
 
                 const headError = dateError() || gstinError()
@@ -629,7 +675,7 @@ function useJournalMain(arbitraryData: any) {
                         break
                     }
                 }
-                return (m)
+                return m
 
                 function rowError(row: any) {
                     function accountError() {
@@ -637,7 +683,7 @@ function useJournalMain(arbitraryData: any) {
                         if (row.isLedgerSubledgerError) {
                             m = accountsMessages.selectAccountHeader
                         }
-                        return (m)
+                        return m
                     }
 
                     function amountError() {
@@ -645,7 +691,7 @@ function useJournalMain(arbitraryData: any) {
                         if (!row.amount) {
                             m = accountsMessages.errorZeroAmount
                         }
-                        return (m)
+                        return m
                     }
 
                     function gstRateError() {
@@ -660,7 +706,7 @@ function useJournalMain(arbitraryData: any) {
                                 m = accountsMessages.gstRateWronglyGiven
                             }
                         }
-                        return (m)
+                        return m
                     }
 
                     function hsnNotPresentError() {
@@ -670,13 +716,14 @@ function useJournalMain(arbitraryData: any) {
                                 m = accountsMessages.hsnNotPresent
                             }
                         }
-                        return (m)
+                        return m
                     }
-                    m = accountError() ||
+                    m =
+                        accountError() ||
                         amountError() ||
                         gstRateError() ||
                         hsnNotPresentError()
-                    return (m)
+                    return m
                 }
             }
 
@@ -688,7 +735,7 @@ function useJournalMain(arbitraryData: any) {
                 if (isError) {
                     m = accountsMessages.debitCreditNotEqual
                 }
-                return (m)
+                return m
             }
 
             function gstError() {
@@ -704,7 +751,7 @@ function useJournalMain(arbitraryData: any) {
                         m = accountsMessages.gstAmountwronglyThere
                     }
                 }
-                return (m)
+                return m
             }
 
             meta.current.errorMessage =
@@ -914,7 +961,7 @@ function useJournalMain(arbitraryData: any) {
             </div>
         )
 
-        function ActionRows({ ad, actionType, actionLabel, isAddRemove, }: any) {
+        function ActionRows({ ad, actionType, actionLabel, isAddRemove }: any) {
             const [, setRefresh] = useState({})
             let ind = 0
             const isGst = !!ad.isGst
@@ -932,57 +979,63 @@ function useJournalMain(arbitraryData: any) {
                                 ledgerAccounts={getMappedAccounts(
                                     ad.accounts.journal
                                 )}
-                                onChange={() => emit('JOURNAL-MAIN-CROWN-REFRESH', '')}
+                                onChange={() =>
+                                    emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                }
                                 rowData={item}
                             />
                         </div>
 
                         {/* Gst rate */}
-                        {isGst && <NumberFormat
-                            allowNegative={false}
-                            {...{ label: 'Gst rate' }}
-                            className="right-aligned-numeric gst-rate"
-                            customInput={TextField}
-                            decimalScale={2}
-                            // error={item.amount ? false : true}
-                            fixedDecimalScale={true}
-                            onFocus={(e) => {
-                                e.target.select()
-                            }}
-                            onBlur={() => {
-                                computeGst(item)
-                                // emit('COMPUTE-SUMMARY-REFRESH', '')
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
-                                setRefresh({})
-                            }}
-                            error={item.gstRate > 30 ? true : false}
-                            onValueChange={(values: any) => {
-                                const { floatValue } = values
-                                item.gstRate = floatValue || 0.0
-                                // emit('COMPUTE-SUMMARY-REFRESH', '')
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
-                                setRefresh({})
-                            }}
-                            thousandSeparator={true}
-                            value={item.gstRate || 0.0}
-                        />}
+                        {isGst && (
+                            <NumberFormat
+                                allowNegative={false}
+                                {...{ label: 'Gst rate' }}
+                                className="right-aligned-numeric gst-rate"
+                                customInput={TextField}
+                                decimalScale={2}
+                                // error={item.amount ? false : true}
+                                fixedDecimalScale={true}
+                                onFocus={(e) => {
+                                    e.target.select()
+                                }}
+                                onBlur={() => {
+                                    computeGst(item)
+                                    // emit('COMPUTE-SUMMARY-REFRESH', '')
+                                    emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                    setRefresh({})
+                                }}
+                                error={item.gstRate > 30 ? true : false}
+                                onValueChange={(values: any) => {
+                                    const { floatValue } = values
+                                    item.gstRate = floatValue || 0.0
+                                    // emit('COMPUTE-SUMMARY-REFRESH', '')
+                                    emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                    setRefresh({})
+                                }}
+                                thousandSeparator={true}
+                                value={item.gstRate || 0.0}
+                            />
+                        )}
 
                         {/* HSN */}
-                        {isGst && <NumberFormat
-                            className="hsn"
-                            allowNegative={false}
-                            {...{ label: 'Hsn' }}
-                            customInput={TextField}
-                            onFocus={(e) => {
-                                e.target.select()
-                            }}
-                            onChange={(e: any) => {
-                                item.hsn = e.target.value
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
-                                setRefresh({})
-                            }}
-                            value={item.hsn || 0.0}
-                        />}
+                        {isGst && (
+                            <NumberFormat
+                                className="hsn"
+                                allowNegative={false}
+                                {...{ label: 'Hsn' }}
+                                customInput={TextField}
+                                onFocus={(e) => {
+                                    e.target.select()
+                                }}
+                                onChange={(e: any) => {
+                                    item.hsn = e.target.value
+                                    emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                    setRefresh({})
+                                }}
+                                value={item.hsn || 0.0}
+                            />
+                        )}
 
                         {/* Amount */}
                         <NumberFormat
@@ -1008,7 +1061,7 @@ function useJournalMain(arbitraryData: any) {
                             }}
                             onBlur={() => {
                                 computeGst(item)
-                                // emit('COMPUTE-SUMMARY-REFRESH', '')                                
+                                // emit('COMPUTE-SUMMARY-REFRESH', '')
                                 emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                                 setRefresh({})
                             }}
@@ -1016,35 +1069,37 @@ function useJournalMain(arbitraryData: any) {
                             value={item.amount || 0.0}
                         />
 
-                        {isGst && <div className="gst-block">
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        onChange={(e: any) => {
-                                            item.isIgst = e.target.checked
-                                            computeGst(item)
-                                            setRefresh({})
-                                        }}
-                                        color="primary"
-                                    />
-                                }
-                                label="Igst"
-                                labelPlacement="start"
-                            />
-                            <Typography className="gst" variant="body2">
-                                Cgst: {toDecimalFormat(item.cgst || 0.0)}
-                            </Typography>
-                            <Typography className="gst" variant="body2">
-                                Sgst: {toDecimalFormat(item.sgst || 0.0)}
-                            </Typography>
-                            <Typography className="gst" variant="body2">
-                                Igst: {toDecimalFormat(item.igst || 0.0)}
-                            </Typography>
-                        </div>}
+                        {isGst && (
+                            <div className="gst-block">
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            onChange={(e: any) => {
+                                                item.isIgst = e.target.checked
+                                                computeGst(item)
+                                                setRefresh({})
+                                            }}
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Igst"
+                                    labelPlacement="start"
+                                />
+                                <Typography className="gst" variant="body2">
+                                    Cgst: {toDecimalFormat(item.cgst || 0.0)}
+                                </Typography>
+                                <Typography className="gst" variant="body2">
+                                    Sgst: {toDecimalFormat(item.sgst || 0.0)}
+                                </Typography>
+                                <Typography className="gst" variant="body2">
+                                    Igst: {toDecimalFormat(item.igst || 0.0)}
+                                </Typography>
+                            </div>
+                        )}
 
                         {/* line ref no  */}
                         <TextField
-                            className='line-ref'
+                            className="line-ref"
                             label="Line ref"
                             onChange={(e: any) => {
                                 item.lineRefNo = e.target.value
@@ -1054,7 +1109,7 @@ function useJournalMain(arbitraryData: any) {
                         />
                         {/* remarks */}
                         <TextField
-                            className='line-remarks'
+                            className="line-remarks"
                             label="Remarks"
                             onChange={(e: any) => {
                                 item.remarks = e.target.value
@@ -1255,10 +1310,12 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
             '& .line-ref': {
                 // marginLeft: ({isGst, actionType}: any)=> isGst ? 0: 'auto'
-                marginLeft: ({ isGst, actionType }: any) => (actionType === 'credits') ? 0 : (isGst ? 0 : 'auto')
+                marginLeft: ({ isGst, actionType }: any) =>
+                    actionType === 'credits' ? 0 : isGst ? 0 : 'auto',
             },
             '& .line-remarks': {
-                width: ({ isGst }) => isGst ? theme.spacing(20) : theme.spacing(50),
+                width: ({ isGst }) =>
+                    isGst ? theme.spacing(20) : theme.spacing(50),
             },
             '& .action-block': {
                 backgroundColor: '#F6F6F4',
