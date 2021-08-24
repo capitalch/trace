@@ -6,101 +6,36 @@ import { useLayoutEffect } from 'react'
 function useJournals() {
     const [, setRefresh] = useState({})
 
-    const {
-        _,
-        accountsMessages,
-        AddCircle,
-        AddIcon,
-        Avatar,
-        Big,
-        Box,
-        Button,
-        Card,
-        Checkbox,
-        Chip,
-        CloseIcon,
-        confirm,
-        DataTable,
-        DeleteIcon,
-        Dialog,
-        DialogTitle,
-        DialogContent,
-        DialogActions,
-        Divider,
-        doValidateForm,
-        EditIcon,
-        emit,
-        execGenericView,
-        filterOn,
-        genericUpdateMaster,
-        getCurrentEntity,
-        getFormData,
-        getFormObject,
-        getFromBag,
-        globalMessages,
-        FormControlLabel,
-        Icon,
-        IconButton,
-        Input,
-        InputAdornment,
-        isInvalidGstin,
-        isValidForm,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        MaterialTable,
-        messages,
-        moment,
-        MTableBody,
-        MTableToolbar,
-        NativeSelect,
-        NumberFormat,
-        Paper,
-        PrimeColumn,
-        queries,
-        queryGraphql,
-        Radio,
-        ReactForm,
-        releaseForm,
-        resetAllFormErrors,
-        resetForm,
-        saveForm,
-        SearchIcon,
-        setFormError,
-        SyncIcon,
-        tableIcons,
-        TextField,
-        toDecimalFormat,
-        TraceDialog,
-        TraceFullWidthSubmitButton,
-        traceGlobalSearch,
-        TraceSearchBox,
-        Typography,
-        useGeneric,
-    } = useSharedElements()
+    const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()
         emit('JOURNAL-MAIN-REFRESH', '') // refresh accounts in child
-        const subs1 = filterOn('JOURNAL-CHANGE-TAB').subscribe((d: any) => {
-            const tranHeaderId = d.data?.tranHeaderId
-            fetchAndPopulateDataOnId(tranHeaderId)
-            handleOnTabChange(null, d.data?.tabValue)
-        })
+        const subs1 = filterOn('JOURNAL-CHANGE-TAB-TO-EDIT').subscribe(
+            (d: any) => {
+                const tranHeaderId = d.data?.tranHeaderId
+                tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
+                arbitraryData.current.isGobackToEdit = true
+                handleOnTabChange(null, 0)
+            }
+        )
         const subs2 = filterOn('JOURNAL-RESET').subscribe(() => {
             arbitraryData.current.header = {}
-            arbitraryData.current.debits = [{ key: 0 },]
-            arbitraryData.current.credits = [{ key: 0 },]
+            arbitraryData.current.debits = [{ key: 0 }]
+            arbitraryData.current.credits = [{ key: 0 }]
             arbitraryData.current.deletedDetailsIds = []
             arbitraryData.current.deletedGstIds = []
             setRefresh({})
+        })
+        const subs3 = filterOn('JOURNAL-CHANGE-TAB').subscribe((d: any) => {
+            handleOnTabChange(null, d.data?.tabValue || 1)
         })
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
         }
     }, [])
 
@@ -116,14 +51,13 @@ function useJournals() {
             journal: [],
         },
         header: {},
-        deletedDetailsIds:[],
-        deletedGstIds:[],
-        debits: [{ key: 0 },],
-        credits: [{ key: 0 },],
+        deletedDetailsIds: [],
+        // deletedGstIds:[],
+        debits: [{ key: 0 }],
+        credits: [{ key: 0 }],
     })
 
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
-        // console.log('fetching data:', tranHeaderId)
         emit('SHOW-LOADING-INDICATOR', true)
         try {
             const ret: any = await execGenericView({
@@ -147,17 +81,17 @@ function useJournals() {
             // const tranTypeId = tranHeader.tranTypeId
             const ad = arbitraryData.current
             ad.header = tranHeader
-            ad.debits=[]
-            ad.credits= []
-            for (let detail of tranDetails){
-                if(detail.gst){
+            ad.debits = []
+            ad.credits = []
+            for (let detail of tranDetails) {
+                if (detail.gst) {
                     ad.header.isGst = true
                     ad.header.gstin = detail.gst?.gstin
-                    if(detail.gst.igst){
+                    if (detail.gst.igst) {
                         detail.gst.isIgst = true
                     }
                 }
-                if(detail.dc === 'D'){
+                if (detail.dc === 'D') {
                     ad.debits.push(detail)
                 } else {
                     ad.credits.push(detail)
@@ -167,12 +101,12 @@ function useJournals() {
             doReIndexKeys('credits')
             meta.current.isMounted && setRefresh({})
 
-            function doReIndexKeys(tp:string){
+            function doReIndexKeys(tp: string) {
                 let ind = 0
                 function incr() {
                     return ind++
                 }
-                for(let it of ad[tp]){
+                for (let it of ad[tp]) {
                     it.key = incr()
                 }
             }
@@ -189,16 +123,18 @@ function useJournals() {
         arbitraryData.current.accounts.all = allAccounts
         const jouAccounts = allAccounts.filter(
             (el: any) =>
-                ["branch",
-                    "capital",
-                    "other",
-                    "loan",
-                    "iexp",
-                    "dexp",
-                    "dincome",
-                    "iincome",
-                    "creditor",
-                    "debtor"].includes(el.accClass) &&
+                [
+                    'branch',
+                    'capital',
+                    'other',
+                    'loan',
+                    'iexp',
+                    'dexp',
+                    'dincome',
+                    'iincome',
+                    'creditor',
+                    'debtor',
+                ].includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
         arbitraryData.current.accounts.journal = jouAccounts
@@ -216,8 +152,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: theme.palette.common.white,
                 backgroundColor: theme.palette.grey[600],
             },
-            '& .tab': {
-            }
+            '& .tab': {},
         },
     })
 )

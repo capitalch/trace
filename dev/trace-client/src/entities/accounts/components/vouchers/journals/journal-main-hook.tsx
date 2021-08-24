@@ -210,7 +210,7 @@ function useJournalMain(arbitraryData: any) {
                     },
                     {
                         amount: 0,
-                        gst: {}
+                        gst: {},
                     }
                 )
             }
@@ -259,8 +259,7 @@ function useJournalMain(arbitraryData: any) {
                             <CheckIcon style={{ color: 'white' }} />
                         )
                     }
-                    disabled={!!meta.current.errorMessage}
-                >
+                    disabled={!!meta.current.errorMessage}>
                     Submit
                 </Button>
             )
@@ -321,6 +320,8 @@ function useJournalMain(arbitraryData: any) {
                         console.log(ret.error)
                     } else {
                         emit('JOURNAL-RESET', '')
+                        emit('JOURNAL-VIEW-RESET-IS-LOADED-ONCE', '') // next time when view tab, then fetch data takes place
+                        ad.isGobackToEdit && emit('JOURNAL-CHANGE-TAB', 1)
                     }
 
                     function addToDetails(
@@ -329,7 +330,7 @@ function useJournalMain(arbitraryData: any) {
                         dc: string
                     ) {
                         for (let item of sourceArray) {
-                            const temp:any = {
+                            const temp: any = {
                                 tableName: 'TranD',
                                 fkeyName: 'tranHeaderId',
                                 data: {
@@ -343,7 +344,10 @@ function useJournalMain(arbitraryData: any) {
                                     details: [],
                                 },
                             }
-                            if(ad.deletedDetailsIds && (ad.deletedDetailsIds.length > 0)){
+                            if (
+                                ad.deletedDetailsIds &&
+                                ad.deletedDetailsIds.length > 0
+                            ) {
                                 temp.deletedIds = ad.deletedDetailsIds
                             }
                             const details: any[] = temp.data.details
@@ -354,7 +358,8 @@ function useJournalMain(arbitraryData: any) {
                             destArray.push(temp)
                             // accommodate gst details etc in details
                             const gst: any = {}
-                            if (ad.header.isGst || item.gst.id) { // id is present when in edit mode. This allows to make GST 0.00 in edit mode
+                            if (ad.header.isGst || item.gst.id) {
+                                // id is present when in edit mode. This allows to make GST 0.00 in edit mode
                                 if (item.gst.rate || item.gst.id) {
                                     gst.id = item.gst.id || undefined
                                     gst.gstin = ad.header.gstin
@@ -738,7 +743,8 @@ function useJournalMain(arbitraryData: any) {
                                     control={
                                         <Checkbox
                                             onChange={(e: any) => {
-                                                item.gst.isIgst = e.target.checked
+                                                item.gst.isIgst =
+                                                    e.target.checked
                                                 computeGst(item)
                                                 setRefresh({})
                                             }}

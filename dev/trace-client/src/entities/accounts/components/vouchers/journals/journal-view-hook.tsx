@@ -81,33 +81,47 @@ function useJournalView(hidden: boolean) {
     } = useSharedElements()
     const meta: any = useRef({
         isMounted: false,
-        isLoadedOnce: false
+        isLoadedOnce: false,
     })
     useEffect(() => {
         meta.current.isMounted = true
 
-        const subs1 = filterOn('JOURNAL-VIEW-XX-GRID-EDIT-CLICKED').subscribe((d: any) => {
-            // console.log(d.data?.row)
-            emit('JOURNAL-CHANGE-TAB', { tranHeaderId: d.data?.row?.id1, tabValue: 0 })
-            setRefresh({})
-        })
-        const subs2 = filterOn('JOURNAL-VIEW-XX-GRID-DELETE-CLICKED').subscribe((d: any) => {
-            doDelete(d.data)
-        })
+        const subs1 = filterOn('JOURNAL-VIEW-XX-GRID-EDIT-CLICKED').subscribe(
+            (d: any) => {
+                // console.log(d.data?.row)
+                emit('JOURNAL-CHANGE-TAB-TO-EDIT', {
+                    tranHeaderId: d.data?.row?.id1,
+                })
+                setRefresh({})
+            }
+        )
+
+        const subs2 = filterOn('JOURNAL-VIEW-XX-GRID-DELETE-CLICKED').subscribe(
+            (d: any) => {
+                doDelete(d.data)
+            }
+        )
 
         const subs3 = filterOn('JOURNAL-VIEW-REFRESH').subscribe(() => {
             emit('XX-GRID-FETCH-DATA', null) // fetch data in xx-grid
         })
+
+        const subs4 = filterOn('JOURNAL-VIEW-RESET-IS-LOADED-ONCE').subscribe(
+            () => {
+                meta.current.isLoadedOnce = false
+            }
+        )
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 
     useEffect(() => {
-        if ((!hidden) && (!meta.current.isLoadedOnce)) {
+        if (!hidden && !meta.current.isLoadedOnce) {
             emit('XX-GRID-FETCH-DATA', null)
             meta.current.isLoadedOnce = true
         }
@@ -144,7 +158,7 @@ function useJournalView(hidden: boolean) {
                     emit('SHOW-MESSAGE', {})
                     emit('JOURNAL-VIEW-REFRESH', '')
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 
@@ -265,7 +279,7 @@ function useJournalView(hidden: boolean) {
         isEdit: true,
         isDelete: true,
         editIbukiMessage: 'JOURNAL-VIEW-XX-GRID-EDIT-CLICKED',
-        deleteIbukiMessage: 'JOURNAL-VIEW-XX-GRID-DELETE-CLICKED'
+        deleteIbukiMessage: 'JOURNAL-VIEW-XX-GRID-DELETE-CLICKED',
         // isDrillDown: true,
     }
     return {
