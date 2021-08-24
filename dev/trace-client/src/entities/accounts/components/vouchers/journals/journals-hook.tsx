@@ -93,6 +93,8 @@ function useJournals() {
             arbitraryData.current.header = {}
             arbitraryData.current.debits = [{ key: 0 },]
             arbitraryData.current.credits = [{ key: 0 },]
+            arbitraryData.current.deletedDetailsIds = []
+            arbitraryData.current.deletedGstIds = []
             setRefresh({})
         })
         return () => {
@@ -114,17 +116,8 @@ function useJournals() {
             journal: [],
         },
         header: {},
-        autoRefNo: undefined,
-        remarks: undefined,
-        gstin: undefined,
-        errorObject: {},
-        id: undefined,
-        isGst: false,
-        tags: undefined,
-        tranDate: undefined,
-        tranTypeId: 1,
-        userRefNo: undefined,
-
+        deletedDetailsIds:[],
+        deletedGstIds:[],
         debits: [{ key: 0 },],
         credits: [{ key: 0 },],
     })
@@ -151,15 +144,18 @@ function useJournals() {
         function populateData(jsonResult: any) {
             const tranDetails: any[] = jsonResult.tranDetails
             const tranHeader: any = jsonResult.tranHeader
-            const tranTypeId = tranHeader.tranTypeId
+            // const tranTypeId = tranHeader.tranTypeId
             const ad = arbitraryData.current
             ad.header = tranHeader
             ad.debits=[]
             ad.credits= []
             for (let detail of tranDetails){
                 if(detail.gst){
-                    ad.isGst = true
-                    ad.gstin = detail.gst?.gstin
+                    ad.header.isGst = true
+                    ad.header.gstin = detail.gst?.gstin
+                    if(detail.gst.igst){
+                        detail.gst.isIgst = true
+                    }
                 }
                 if(detail.dc === 'D'){
                     ad.debits.push(detail)
@@ -167,12 +163,19 @@ function useJournals() {
                     ad.credits.push(detail)
                 }
             }
-
-            // ad.debits = tranDetails.filter((x: any) => x.dc === 'D')
-            // ad.credits = tranDetails.filter((x: any) => x.dc === 'C')
+            doReIndexKeys('debits')
+            doReIndexKeys('credits')
             meta.current.isMounted && setRefresh({})
-            // emit('JOURNAL-MAIN-CROWN-REFRESH', '')
 
+            function doReIndexKeys(tp:string){
+                let ind = 0
+                function incr() {
+                    return ind++
+                }
+                for(let it of ad[tp]){
+                    it.key = incr()
+                }
+            }
         }
     }
 

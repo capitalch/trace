@@ -169,7 +169,7 @@ function useJournalMain(arbitraryData: any) {
                 let m = ''
                 const gstDebits = ad?.summary?.gstDebits || 0.0
                 const gstCredits = ad?.summary?.gstCredits || 0.0
-                if (ad.isGst) {
+                if (ad.header.isGst) {
                     if (!gstDebits && !gstCredits) {
                         m = accountsMessages.gstAmountMissing
                     }
@@ -237,7 +237,9 @@ function useJournalMain(arbitraryData: any) {
                     className="reset-button"
                     variant="contained"
                     size="small"
-                    onClick={() => emit('JOURNAL-RESET', '')}>
+                    onClick={() => {
+                        emit('JOURNAL-RESET', '')
+                    }}>
                     Reset
                 </Button>
             )
@@ -249,7 +251,7 @@ function useJournalMain(arbitraryData: any) {
                     variant="contained"
                     size="small"
                     color="secondary"
-                    onClick={handleSubmit}
+                    onClick={() => handleSubmit()}
                     startIcon={
                         meta.current.errorMessage ? (
                             <ErrorIcon color="error" />
@@ -257,7 +259,8 @@ function useJournalMain(arbitraryData: any) {
                             <CheckIcon style={{ color: 'white' }} />
                         )
                     }
-                    disabled={!!meta.current.errorMessage}>
+                    disabled={!!meta.current.errorMessage}
+                >
                     Submit
                 </Button>
             )
@@ -286,7 +289,7 @@ function useJournalMain(arbitraryData: any) {
                         data: [],
                     }
 
-                    const dataItem = {
+                    const dataItem: any = {
                         tranDate: null,
                         userRefNo: null,
                         remarks: null,
@@ -301,6 +304,7 @@ function useJournalMain(arbitraryData: any) {
                     dataItem.userRefNo = ad.header.userRefNo
                     dataItem.remarks = ad.header.remarks
                     dataItem.tranTypeId = ad.header.tranType || 1
+                    dataItem.id = ad.header.id || undefined
                     voucher.data.push(dataItem)
 
                     const details = dataItem.details
@@ -325,10 +329,11 @@ function useJournalMain(arbitraryData: any) {
                         dc: string
                     ) {
                         for (let item of sourceArray) {
-                            const temp = {
+                            const temp:any = {
                                 tableName: 'TranD',
                                 fkeyName: 'tranHeaderId',
                                 data: {
+                                    id: item.id || undefined,
                                     accId: item.accId,
                                     remarks: item.remarks,
                                     dc: dc,
@@ -338,6 +343,9 @@ function useJournalMain(arbitraryData: any) {
                                     details: [],
                                 },
                             }
+                            if(ad.deletedDetailsIds && (ad.deletedDetailsIds.length > 0)){
+                                temp.deletedIds = ad.deletedDetailsIds
+                            }
                             const details: any[] = temp.data.details
                             const detail: any = {
                                 tableName: 'ExtGstTranD',
@@ -346,14 +354,15 @@ function useJournalMain(arbitraryData: any) {
                             destArray.push(temp)
                             // accommodate gst details etc in details
                             const gst: any = {}
-                            if (ad.isGst) {
-                                if (item.gstRate) {
-                                    gst.gstin = ad.gstin
-                                    gst.rate = item.gstRate
-                                    gst.hsn = item.hsn
-                                    gst.cgst = item.cgst
-                                    gst.sgst = item.sgst
-                                    gst.igst = item.igst
+                            if (ad.header.isGst || item.gst.id) {
+                                if (item.gst.rate || item.gst.id) { // id is present when in edit mode. This allows to make GST 0.00 in edit mode
+                                    gst.id = item.gst.id || undefined
+                                    gst.gstin = ad.header.gstin
+                                    gst.rate = item.gst.rate
+                                    gst.hsn = item.gst.hsn
+                                    gst.cgst = item.gst.cgst
+                                    gst.sgst = item.gst.sgst
+                                    gst.igst = item.gst.igst
                                     gst.isInput = dc === 'D' ? true : false
                                 }
                             }
@@ -548,12 +557,13 @@ function useJournalMain(arbitraryData: any) {
                     control={
                         <Checkbox
                             onChange={(e: any) => {
-                                arbitraryData.isGst = e.target.checked
+                                arbitraryData.header.isGst = e.target.checked
                                 emit('JOURNAL-MAIN-CROWN-REFRESH', '') // for eval of error condition
                                 emit('ACTION-BLOCK-REFRESH', '')
                                 setRefresh({})
                             }}
-                            checked={arbitraryData.isGst}
+                            value={!!arbitraryData.header.isGst}
+                            checked={!!arbitraryData.header.isGst}
                         />
                     }
                     label="Gst"
@@ -562,18 +572,18 @@ function useJournalMain(arbitraryData: any) {
                 {/* gstin */}
                 <TextField
                     label="Gstin no"
-                    error={isInvalidGstin(arbitraryData.gstin)}
+                    error={isInvalidGstin(arbitraryData.header.gstin)}
                     helperText={
-                        isInvalidGstin(arbitraryData.gstin)
+                        isInvalidGstin(arbitraryData.header.gstin)
                             ? accountsMessages.invalidGstin
                             : undefined
                     }
                     onChange={(e: any) => {
-                        arbitraryData.gstin = e.target.value
+                        arbitraryData.header.gstin = e.target.value
                         emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                         setRefresh({})
                     }}
-                    value={arbitraryData.gstin || ''}
+                    value={arbitraryData.header.gstin || ''}
                 />
             </Paper>
         )
@@ -586,7 +596,7 @@ function useJournalMain(arbitraryData: any) {
         isAddRemove,
     }: any) {
         const [, setRefresh] = useState({})
-        const isGst = arbitraryData.isGst
+        const isGst = !!arbitraryData.header.isGst
         const classes = useStyles({ actionType, isGst })
         useEffect(() => {
             const subs1 = filterOn('ACTION-BLOCK-REFRESH').subscribe(() => {
@@ -617,7 +627,7 @@ function useJournalMain(arbitraryData: any) {
         function ActionRows({ ad, actionType, actionLabel, isAddRemove }: any) {
             const [, setRefresh] = useState({})
             let ind = 0
-            const isGst = !!ad.isGst
+            const isGst = !!ad.header.isGst
             const actionRows: any[] = ad[actionType]
             const list: any[] = actionRows.map((item: any) => {
                 if (!item.gst) {
@@ -657,15 +667,14 @@ function useJournalMain(arbitraryData: any) {
                                 }}
                                 onBlur={() => {
                                     computeGst(item)
-                                    // emit('COMPUTE-SUMMARY-REFRESH', '')
-                                    emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                    // emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                                     setRefresh({})
                                 }}
                                 error={item.gst.rate > 30 ? true : false}
                                 onValueChange={(values: any) => {
                                     const { floatValue } = values
                                     item.gst.rate = floatValue || 0.0
-                                    // emit('COMPUTE-SUMMARY-REFRESH', '')
+                                    computeGst(item)
                                     emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                                     setRefresh({})
                                 }}
@@ -710,18 +719,14 @@ function useJournalMain(arbitraryData: any) {
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
                                 item.amount = floatValue || 0.0
-                                // emit('COMPUTE-SUMMARY-REFRESH', '')
-
-                                // computeSummary()
+                                computeGst(item)
                                 setRefresh({})
                                 emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                             }}
                             onBlur={() => {
                                 computeGst(item)
-                                // emit('COMPUTE-SUMMARY-REFRESH', '')
-
                                 setRefresh({})
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                // emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                             }}
                             thousandSeparator={true}
                             value={item.amount || 0.0}
@@ -733,11 +738,13 @@ function useJournalMain(arbitraryData: any) {
                                     control={
                                         <Checkbox
                                             onChange={(e: any) => {
-                                                item.isIgst = e.target.checked
+                                                item.gst.isIgst = e.target.checked
                                                 computeGst(item)
                                                 setRefresh({})
                                             }}
                                             color="primary"
+                                            value={!!item.gst.igst}
+                                            checked={!!item.gst.igst}
                                         />
                                     }
                                     label="Igst"
@@ -781,6 +788,7 @@ function useJournalMain(arbitraryData: any) {
                         {/* Add remove */}
                         {isAddRemove ? (
                             <AddRemoveButtons
+                                ad={ad}
                                 arr={ad[actionType]}
                                 item={item}
                                 emitMessage="ACTION-BLOCK-REFRESH"
@@ -801,7 +809,7 @@ function useJournalMain(arbitraryData: any) {
             }
         }
 
-        function AddRemoveButtons({ arr, item, emitMessage }: any) {
+        function AddRemoveButtons({ ad, arr, item, emitMessage }: any) {
             return (
                 <div>
                     <IconButton
@@ -844,10 +852,12 @@ function useJournalMain(arbitraryData: any) {
                     alert(accountsMessages.cannotDeleteOnlyEntry)
                     return
                 }
+                if (item.id) {
+                    ad.deletedDetailsIds.push(item.id) // when a row is being deleted
+                }
                 arr.splice(item.key, 1)
                 reIndex()
                 emit(emitMessage, '')
-                // emit('COMPUTE-SUMMARY-REFRESH', '')
                 emit('JOURNAL-MAIN-CROWN-REFRESH', '')
             }
         }
