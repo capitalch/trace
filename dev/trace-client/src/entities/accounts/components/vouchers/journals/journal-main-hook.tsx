@@ -354,8 +354,8 @@ function useJournalMain(arbitraryData: any) {
                             destArray.push(temp)
                             // accommodate gst details etc in details
                             const gst: any = {}
-                            if (ad.header.isGst || item.gst.id) {
-                                if (item.gst.rate || item.gst.id) { // id is present when in edit mode. This allows to make GST 0.00 in edit mode
+                            if (ad.header.isGst || item.gst.id) { // id is present when in edit mode. This allows to make GST 0.00 in edit mode
+                                if (item.gst.rate || item.gst.id) {
                                     gst.id = item.gst.id || undefined
                                     gst.gstin = ad.header.gstin
                                     gst.rate = item.gst.rate
