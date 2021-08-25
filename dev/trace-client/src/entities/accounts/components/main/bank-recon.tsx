@@ -297,7 +297,7 @@ function BankRecon() {
                         fontSize: '0.8rem',
                         width: '7.0rem',
                         textAlign: 'left',
-                        backgroundColor: 'yellow',
+                        backgroundColor: 'dodgerblue',
                     }}
                     field="clearDate"
                     header="Clear date"></Column>
