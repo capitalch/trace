@@ -111,7 +111,7 @@ function useJournalMain(arbitraryData: any) {
                         let m = ''
 
                         if (ad.header.isGst) {
-                            if ((row.gst?.rate) && (row.gst?.rate > 30)) {
+                            if (row.gst?.rate && row.gst?.rate > 30) {
                                 m = accountsMessages.invalidGstRate
                             }
                         } else {
@@ -131,11 +131,36 @@ function useJournalMain(arbitraryData: any) {
                         }
                         return m
                     }
+
+                    function onlyExpIncomeCanHaveGst() {
+                        let m = ''
+                        const accId = row.accId
+                        if (accId) {
+                            const accountClass = getAccountClass(row?.accId)
+                            if (
+                                ![
+                                    'dexp',
+                                    'iexp',
+                                    'dincome',
+                                    'iincome',
+                                    'purchase',
+                                    'sale',
+                                ].includes(accountClass) &&
+                                ad.header?.isGst &&
+                                row?.gst?.rate
+                            ) {
+                                m = accountsMessages.expIncomeCanHaveGst
+                            }
+                        }
+                        return m
+                    }
+
                     m =
                         accountError() ||
                         amountError() ||
                         gstRateError() ||
-                        hsnNotPresentError()
+                        hsnNotPresentError() ||
+                        onlyExpIncomeCanHaveGst()
                     return m
                 }
             }
@@ -229,6 +254,13 @@ function useJournalMain(arbitraryData: any) {
             ad.summary.gstDebits = gstDebits
             ad.summary.gstCredits = gstCredits
             return { totalDebits, totalCredits, gstDebits, gstCredits }
+        }
+
+        function getAccountClass(accId: number) {
+            const account = arbitraryData.accounts.all.find(
+                (x: any) => x.id === accId
+            )
+            return account.accClass
         }
 
         function ResetButton() {

@@ -1,4 +1,5 @@
 {
+    "expIncomeCanHaveGst": "Only expences and incomes can have GST",
     "auditLockError": "This transaction date is locked by audit. Contact administrator",
     "dateRangeAuditLockMessage": "Date range / Audit lock error",
     "auditLockMessage": "Date is locked by audit",

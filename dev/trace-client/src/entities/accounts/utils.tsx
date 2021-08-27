@@ -613,11 +613,18 @@ function utils() {
 
     return {
         extractGst,
+        getAccountClass,
+        getAccountClassWithAutoSubledger,
+        getDebitCreditRowsCount,
+        getDebitCreditTotals,
         getGeneralLedger,
-        getTotalDebits,
+        getGloballyFilteredData,
+        getMappedAccounts,
         getTotalCredits,
-        isDateNotAuditLocked,
+        getTotalDebits,
+        getUnitHeading,
         isDateAuditLocked,
+        isDateNotAuditLocked,
         isImproperDate,
         isInvalidDate,
         isInvalidEmail,
@@ -626,14 +633,7 @@ function utils() {
         isInvalidIndiaPin,
         isInvalidStateCode,
         registerAccounts,
-        getAccountClass,
-        getAccountClassWithAutoSubledger,
-        getGloballyFilteredData,
-        getDebitCreditTotals,
-        getMappedAccounts,
         transferClosingBalances,
-        getUnitHeading,
-        getDebitCreditRowsCount,
     }
 }
 
