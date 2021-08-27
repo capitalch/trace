@@ -110,12 +110,12 @@ function useJournalMain(arbitraryData: any) {
                     function gstRateError() {
                         let m = ''
 
-                        if (ad.isGst) {
-                            if (row.gstRate > 30) {
+                        if (ad.header.isGst) {
+                            if ((row.gst?.rate) && (row.gst?.rate > 30)) {
                                 m = accountsMessages.invalidGstRate
                             }
                         } else {
-                            if (row.gstRate) {
+                            if (row.gst?.rate) {
                                 m = accountsMessages.gstRateWronglyGiven
                             }
                         }
@@ -124,8 +124,8 @@ function useJournalMain(arbitraryData: any) {
 
                     function hsnNotPresentError() {
                         let m = ''
-                        if (row.gstRate && row.gstRate > 0) {
-                            if (!row.hsn) {
+                        if (row.gst?.rate && row.gst?.rate > 0) {
+                            if (!row.gst?.hsn) {
                                 m = accountsMessages.hsnNotPresent
                             }
                         }

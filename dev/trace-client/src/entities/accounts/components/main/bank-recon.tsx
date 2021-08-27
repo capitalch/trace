@@ -17,6 +17,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    useTheme,
 } from '@material-ui/core'
 import { Close } from '@material-ui/icons'
 import RefreshIcon from '@material-ui/icons/Cached'
@@ -39,6 +40,7 @@ import { utilMethods } from '../../../../common-utils/util-methods'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
 import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
 import messages from '../../../../messages.json'
+import { ThemeConsumer } from 'styled-components'
 
 function BankRecon() {
     const [selectedItems, setSelectedItems] = useState(null)
@@ -99,7 +101,7 @@ function BankRecon() {
     const headerConfig = meta.current.headerConfig
     const classes = useStyles({ headerConfig: headerConfig })
     const { getCurrentMediaSize, getCurrentWindowSize } = useTraceGlobal()
-
+    const theme = useTheme()
     useEffect(() => {
         meta.current.isMounted = true
         utilFunc().getAllBanks()
@@ -297,7 +299,8 @@ function BankRecon() {
                         fontSize: '0.8rem',
                         width: '7.0rem',
                         textAlign: 'left',
-                        backgroundColor: 'dodgerblue',
+                        backgroundColor: theme.palette.yellow.light ,
+                        color: theme.palette.getContrastText(theme.palette.yellow.light),
                     }}
                     field="clearDate"
                     header="Clear date"></Column>
@@ -335,7 +338,8 @@ function BankRecon() {
                     editor={utilFunc().clearRemarksEditor}
                     style={{
                         textAlign: 'left',
-                        backgroundColor: 'yellow',
+                        backgroundColor: theme.palette.yellow.light ,
+                        color: theme.palette.getContrastText(theme.palette.yellow.light),
                         width: '15rem',
                     }}
                     field="clearRemarks"
