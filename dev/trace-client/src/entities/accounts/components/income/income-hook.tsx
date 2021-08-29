@@ -1,4 +1,0 @@
-function useIncome(){
-
-}
-export {useIncome}

@@ -1,112 +1,51 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useSharedElements } from '../../common/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
-function useJournalView(hidden: boolean) {
+function useVoucherView(hidden: boolean) {
     const [, setRefresh] = useState({})
 
     const {
         _,
         accountsMessages,
-        AddCircle,
-        AddIcon,
-        Avatar,
-        Big,
-        Box,
-        Button,
-        Card,
-        Checkbox,
-        Chip,
-        CloseIcon,
         confirm,
-        DataTable,
-        DeleteIcon,
-        Dialog,
-        DialogTitle,
-        DialogContent,
-        DialogActions,
-        Divider,
-        doValidateForm,
-        EditIcon,
         emit,
-        execGenericView,
         filterOn,
         genericUpdateMaster,
-        getCurrentEntity,
-        getFormData,
-        getFormObject,
-        getFromBag,
-        globalMessages,
-        FormControlLabel,
-        Icon,
-        IconButton,
-        Input,
-        InputAdornment,
         isDateAuditLocked,
-        isInvalidGstin,
-        isValidForm,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        MaterialTable,
-        messages,
         moment,
-        MTableBody,
-        MTableToolbar,
-        NativeSelect,
-        NumberFormat,
-        Paper,
-        PrimeColumn,
-        queries,
-        queryGraphql,
-        Radio,
-        ReactForm,
-        releaseForm,
-        resetAllFormErrors,
-        resetForm,
-        saveForm,
-        SearchIcon,
-        setFormError,
-        SyncIcon,
-        tableIcons,
-        TextField,
         toDecimalFormat,
-        TraceDialog,
-        TraceFullWidthSubmitButton,
-        traceGlobalSearch,
-        TraceSearchBox,
-        Typography,
-        useGeneric,
     } = useSharedElements()
     const meta: any = useRef({
         isMounted: false,
         isLoadedOnce: false,
+        tranTypeId: 1,
+        title: 'Journals'
     })
     useEffect(() => {
         meta.current.isMounted = true
 
-        const subs1 = filterOn('JOURNAL-VIEW-XX-GRID-EDIT-CLICKED').subscribe(
+        const subs1 = filterOn('VOUCHER-VIEW-XX-GRID-EDIT-CLICKED').subscribe(
             (d: any) => {
                 // console.log(d.data?.row)
-                emit('JOURNAL-CHANGE-TAB-TO-EDIT', {
+                emit('VOUCHER-CHANGE-TAB-TO-EDIT', {
                     tranHeaderId: d.data?.row?.id1,
                 })
                 setRefresh({})
             }
         )
 
-        const subs2 = filterOn('JOURNAL-VIEW-XX-GRID-DELETE-CLICKED').subscribe(
+        const subs2 = filterOn('VOUCHER-VIEW-XX-GRID-DELETE-CLICKED').subscribe(
             (d: any) => {
                 doDelete(d.data)
             }
         )
 
-        const subs3 = filterOn('JOURNAL-VIEW-REFRESH').subscribe(() => {
+        const subs3 = filterOn('VOUCHER-VIEW-REFRESH').subscribe(() => {
             emit('XX-GRID-FETCH-DATA', null) // fetch data in xx-grid
         })
 
-        const subs4 = filterOn('JOURNAL-VIEW-RESET-IS-LOADED-ONCE').subscribe(
+        const subs4 = filterOn('VOUCHER-VIEW-RESET-IS-LOADED-ONCE').subscribe(
             () => {
                 meta.current.isLoadedOnce = false
             }
@@ -156,7 +95,7 @@ function useJournalView(hidden: boolean) {
                         tableName: 'TranH',
                     })
                     emit('SHOW-MESSAGE', {})
-                    emit('JOURNAL-VIEW-REFRESH', '')
+                    emit('VOUCHER-VIEW-REFRESH', '')
                 })
                 .catch(() => {}) // important to have otherwise eror
         }
@@ -268,9 +207,8 @@ function useJournalView(hidden: boolean) {
     ]
 
     const sqlQueryId = 'get_vouchers'
-    const title = 'All journals'
     const args = {
-        tranTypeId: 1,
+        tranTypeId: meta.current.tranTypeId,
         no: null,
     }
     const summaryColNames = ['debit', 'credit']
@@ -278,29 +216,27 @@ function useJournalView(hidden: boolean) {
         // isRemove: true,
         isEdit: true,
         isDelete: true,
-        editIbukiMessage: 'JOURNAL-VIEW-XX-GRID-EDIT-CLICKED',
-        deleteIbukiMessage: 'JOURNAL-VIEW-XX-GRID-DELETE-CLICKED',
+        editIbukiMessage: 'VOUCHER-VIEW-XX-GRID-EDIT-CLICKED',
+        deleteIbukiMessage: 'VOUCHER-VIEW-XX-GRID-DELETE-CLICKED',
         // isDrillDown: true,
     }
     return {
-        meta,
-        setRefresh,
         args,
         columns,
+        meta,
         specialColumns,
         sqlQueryId,
-        title,
         summaryColNames,
     }
 }
 
-export { useJournalView }
+export { useVoucherView }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             height: 'calc(100vh - 240px)',
-            width: '100%',
+            width: '100%',           
             marginTop: '5px',
         },
     })

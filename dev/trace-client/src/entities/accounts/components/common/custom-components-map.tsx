@@ -19,9 +19,9 @@ import { CreditNotes } from '../sales/credit-notes'
 import { Purchases } from '../purchases/purchases'
 import { GeneralLedger } from '../main/general-ledger'
 import { Taxation } from '../reports/taxation'
-import { Expences } from '../expences/expences'
-import { Journals } from '../vouchers/journals/journals'
-import { Income } from '../income/income'
+// import { Expences } from '../expences/expences'
+import { Voucher } from '../vouchers/voucher'
+// import { Income } from '../income/income'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -34,20 +34,20 @@ const customComponents = {
     creditNotes: CreditNotes,
     dataView: DataView,
     debitNotes: DebitNotes,
-    expences: Expences,
-    income: Income,
+    // expences: Expences,
+    // income: Income,
     genericCRUD: GenericCRUD,
     genericDialoges: GenericDialoges,
     genericExports: GenericExports,
     genericForms: GenericForms,
     genericReports: GenericReports,
-    generalLedger: GeneralLedger,
-    journals: Journals,
+    generalLedger: GeneralLedger,    
     productsMaster: ProductsMaster,
     profitLoss: BalanceSheetProfitLoss,
     purchases: Purchases,
     sales: Sales,
     taxation: Taxation,
     trialBalance: TrialBalance,
+    vouchers: Voucher,
 }
 export { customComponents }

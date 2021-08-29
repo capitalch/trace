@@ -143,7 +143,7 @@ function useSharedCode(meta: any) {
             } else {
                 doFormRefresh(formId) // this shows validation messages
             }
-        } catch (e) {
+        } catch (e:any) {
             showServerError(meta.current.dialogConfig.formId, e.message)
         }
     }

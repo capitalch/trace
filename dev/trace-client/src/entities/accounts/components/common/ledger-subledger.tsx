@@ -204,8 +204,9 @@ function LedgerSubledger({
             meta.current.subledgerOptions = []
             rowData.accId = item.value
             setSubledgerDisabled(true)
-            onChange && onChange()
+            // onChange && onChange()
         }
+        onChange && onChange()
         meta.current.subledgerItem = { label: null, value: undefined }
         computeError()
         meta.current.isMounted && setRefresh({})

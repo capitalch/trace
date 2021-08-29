@@ -43,7 +43,18 @@
                         {
                             "name": "journalsSubMenu",
                             "label": "Journals",
-                            "componentName": "journals"
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "journal"
+                            }
+                        },
+                        {
+                            "name": "paymentsSubMenu",
+                            "label": "Payments",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "payment"
+                            }
                         }
                     ]
                 },
@@ -177,11 +188,6 @@
                             "name": "bankReconSubMenu",
                             "label": "Bank reconcillation",
                             "componentName": "bankRecon"
-                        },
-                        {
-                            "name": "expencesSubMenu",
-                            "label": "Expences",
-                            "componentName": "expences"
                         },
                         {
                             "name": "incomeSubMenu",

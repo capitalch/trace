@@ -114,7 +114,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             height: '100%', 
             width: '100%',
-            // marginTop: '5px',
             '& .delete': {
                 color: 'red',
             },

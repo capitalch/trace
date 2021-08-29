@@ -118,7 +118,7 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
         const f = footerError()
         const d = debitCreditError()
         const ret: boolean = h || i || f || d
-        console.log(errorObject)
+        // console.log(errorObject)
         return ret
     }
 

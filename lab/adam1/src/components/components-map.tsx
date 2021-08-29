@@ -12,7 +12,7 @@ import { Component11 } from './component11'
 import { Component12 } from './component12'
 import { Component13 } from './component13'
 import { Nothing } from './nothing'
-const Component8: any = React.lazy(() => import('./component8'))
+// const Component8: any = React.lazy(() => import('./component8'))
 // import  Component8 from './component8'
 
 
@@ -26,7 +26,7 @@ const componentsMap = (mname: string) => {
         component5: Component5,
         component6: Component6,
         component7: Component7,
-        component8: Component8,
+        // component8: Component8,
         component9: Component9,
         component10: Component10,
         component11:Component11,

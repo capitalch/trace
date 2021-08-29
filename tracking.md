@@ -1,24 +1,12 @@
-## Generic report XXGrid
-				1. Organize code
-				2. Genenic Summary columns
-				3. Settle selected, filtered and total
-				4. IsRemove property
-				5. Is Edit, IsDelete, IsDrillDown
-				6. Select control and its default all or last 100
-7. Subscribe to some event so that update possible through socket
-				8. Refresh icon button
-10. Custom control
-11. Create as XXGrid component
-
-## Change UI
-1. Proper validation for gstin
-2. If gst checked then check gst not zero
-
-14.View data
-15. edit data
-16. Show as paper or card
-17. Show bottom border as light grey
-18. create as generic to be used with all vouchers 
+GST
+Capital Chowr. Pvt Ltd	: 19AACCC5685L1Z3
+Capital Electronics old	: 19ADMPA9760G1Z9
+Capital Electronics 	: AA190917007566R
+CCPL					: 19AACCC5685L1Z3
+Nav technology 			: 19AEVPA1583K1Z0
+NTPL 					: 19AABCN7935M1ZU
+SSPL 					: 19AAJCS0651F1ZD
+Netwoven 				: 19AACCN3894N1ZP
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
@@ -43,20 +31,16 @@
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
-## Python Service+ tools and warranty extension program
-# prototypes
-
 # Working on
-1. Purchase sale clickaway
-2. react-widgets library cannot be upgraded to new versions. Consider discarding it
-3. Flask sockets
-4. Master reports
-5. 
-6. 
-7. Sale bill to email and sms
-8. Migration of Track+ and service+ sale
-9. 
-10. Provide a way to come out of app in mobile. Presently there is no way
+1. Journals
+2. All vouchers like journal
+3. Drill down
+4. All reports to use X-Grid
+5. Cash book with x-grid
+6. Organize code
+7. Sales purchase retain values
+8. Purchase sale clickaway
+9. Provide a way to come out of app in mobile. Presently there is no way
 
 ## pyinstaller command for tkenter
 # acivate env where pyinstaller is installed
@@ -64,92 +48,72 @@ pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.
 create installer from innosetup
 
 # Pending
+
+## Bug fixing
+	1. serial number error in purchases
+	2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
+	3. All dialog boxes title is very big font
+	4. In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert
+	5. Sales / Purchase to be mobile compliant
+	6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
+	7. In Journals Debits not equals credits being possible
+	8. In Inventory--> Brands--> edit: when you close the dialog it blows up
+	9. Seen in case of receipts same auto_ref_no generated twice
+	10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
+
+## Reorganize
+	1. Organize code for using shared components all over
+	2. Remove Figures from BS and PL which have zero closing balance
+																	3. Remove trace-footer. it is of no use
+	4. Clean up
+
 ## Functionality
-1.01 
-1.001 Try out gzip in apache server, which is not working at present
-1.002 The view in many places show multiple lines. Desirable to have single line.
-1.003 
-1.004 
-1.005 Master report mechanism to serve several reports in one page
-1.006 serial number error in purchases
-1.007 RXJS 7.x not working with ibuki
-1.008 
-1.02 Auto subledger create bill
-1.03 Purchase invoice mismatch allow saving
-1.04 GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ.
-1.05 Drill down
-1.06 Document storage of purchase bills
-1.07 Footer Trace version copyright
-1.08 Sales bill to PDF and email / print
-1.09 Rework on accounts master. It is too big and new contact save takes twice at first time
-1.10 Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled.
-1.11 Provision to input product price. At present cannot input product price
-1.1 Document upload with meta data
-1.11 Server logs
-1.5  upgradation to new versions
-1.5 Mechanism to connect to local or any other database on cloud
-1.11 Cash book
-1.12 From Voucher entry add master accounts
-1.13 Provide a writeup on how GST is taken care in Trace
-
-## Inventory
-1.0
-
-## Nice to have
-1.0 Approval of transactions
-1.01 Universally make it responsive
-1.02 Remove references to datacache for accounts and use getFromBag concept
-1.03 Database backup strategy
-1.04 Server logs
-1.07 client logs
-1.08 Bank recon opening cheque balance
-1.09 All dialog boxes title is very big font
-1.10 Remove Figures from BS and PL which have zero closing balance
-1.11 Edit from Bank Recon
-1.11 Sales / Purchase to be mobile compliant
-1.12 Organize code for using shared components all over
-1.13 Think of same user iD / email in multiple clients
-1.14 Export of PL, BL and TB should be lowest and highest levels
-1.15 Bank recon should show details of default bank
-			1.16 Flask Socket mechanism to final reports
-1.17 Independent databases
+	1. Auto subledger create bill
+	2. Drill down
+	3. 
+	4. Footer Trace version copyright
+	5. Sales bill to PDF and email / print
+	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
+	7. Provision to input product price. At present cannot input product price
+	8. Subscribe to some event so that update possible through socket
+	9. 
+	10. Universally make it responsive
+	11. Remove references to datacache for accounts and use getFromBag concept
+	12. 
+	13. Export of PL, BL and TB should be lowest and highest levels
+	14. Bank recon should show details of default bank
+	15. Show ledger balance at the time of data entry
+	16. When new account code is created that should immediately be visible at payment options
+	17. Purchase entry unable to enter gst price of an item
 
 ## New features
-1.0 Purchase invoice upload and search on metadata. Click will show invoice in PDF
-2.0 From bank reconcillation to modify voucher
-3.0 Trace database to stay in control of client facility. Possibility of local database
-4.0 Audit select multiple rows in datatable
-5.0 Show ledger balance at the time of data entry
-6.0 When new account code is created that should immediately be visible at payment options
-6.1 Bill wise payment
-6.2 Sales include price without GST
-6.3 Generic Grid for reporting purpose
-6.4 Expence entry with GST
-6.5 Drill down, edit and delete functionality from report
-6.6 First page reporting charts
+	1. Purchase invoice upload and search on metadata. Click will show invoice in PDF
+	2. Bill wise payment
+	3. Drill down, edit and delete functionality from report
+	4. First page reporting charts
+	5. Approval of transactions
+	6. Document storage of purchase bills with meta data
+	7. Edit from Bank Recon
+	8. From Voucher entry add master accounts
 
-## Bugs
-1.00 In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert.
-1.01 In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank.
-2.00 When focus change in purchase, sales waiting occurs without data changed. Check the logic of data changed. There is confusion. This is happening because onBlur event does not propagate the events. Try out clickAway event in place of onBlur event instead.
-2.01 Security is open. Needs to fix it.
-2.02 Change password not working --ujjal
-2.03 In Journals Debits not equals credits being possible
-2.04 In Inventory--> Brands--> edit: when you close the dialog it blows up
-2.05 Seen in case of receipts same auto_ref_no generated twice
-2.06 purchase entry unable to enter gst price of an item
-2.07 In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
-2.08 In Bank recon when selected yellow backgrond with white foreground problematic.
-2.09 Last year cheques opening balance
-
-## To do
-1. Remove trace-footer. it is of no use
+## Future work
+	1. Try out gzip in apache server, which is not working at present
+	2. Rework on accounts master. It is too big and new contact save takes twice at first time
+	3. Server logs, client logs
+	4. Mechanism to connect to local or any other database on cloud
+	5. Provide a writeup on how GST is taken care in Trace
+	6. Database backup strategy
+	7. Think of same user iD / email in multiple clients
+	8. Independent databases
 
 ## Maintainance
 1.30 Github release management
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 16-08-2021 - 31-08-2021
+1. GST journals
 
 # 06-08-2021 - 15-08-2021
 1. Working on GST Journals
@@ -755,7 +719,15 @@ nothing
 
 
 
-
+// find out vouchers where SUM of debits not equal to credits
+with cte1 as (
+select "autoRefNo", SUM(CASE WHEN "dc" = 'D' then "amount" else -"amount" end) as "amount"
+    from "TranD" d join "TranH" h on h."id" = d."tranHeaderId"
+        group by "autoRefNo"
+)
+select "autoRefNo", sum("amount") as "amount" from cte1 
+    where "amount" <> 0
+        group by "autoRefNo"
 
 set search_path to demounit1;
 select h."id" as "tranHeaderId", "autoRefNo", "userRefNo", h."remarks" as "commonRemarks",

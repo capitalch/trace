@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { useSharedElements } from '../../common/shared-elements-hook'
-import { useJournalView, useStyles } from './journal-view-hook'
+import { menuPortalCSS } from 'react-select/src/components/Menu'
+import { useSharedElements } from '../common/shared-elements-hook'
+import { useVoucherView, useStyles } from './voucher-view-hook'
 
-function JournalView({ hidden }: any) {
+function VoucherView({ hidden }: any) {
     const classes = useStyles()
     const {
-        meta,
-        setRefresh,
         args,
         columns,
+        meta,
         specialColumns,
         sqlQueryId,
-        title,
         summaryColNames,
-    } = useJournalView(hidden)
+    } = useVoucherView(hidden)
 
     const {
         _,
@@ -94,19 +92,17 @@ function JournalView({ hidden }: any) {
 
     return (
         <Box className={classes.content} hidden={hidden}>
-
             <XXGrid
                 columns={columns}
                 summaryColNames={summaryColNames}
-                title={title}
+                title={meta.current.title}
                 sqlQueryId={sqlQueryId}
                 sqlQueryArgs={args}
                 specialColumns={specialColumns}
                 xGridProps={{ disableSelectionOnClick: true }}
             />
-
         </Box>
     )
 }
 
-export { JournalView }
+export { VoucherView }

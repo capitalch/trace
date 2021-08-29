@@ -3,7 +3,6 @@ import { useStyles } from './xx-grid-hook'
 import {
     XGrid,
     GridToolbarFilterButton,
-    // GridToolbarDensitySelector,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
@@ -83,6 +82,7 @@ function XXGrid(gridOptions: XXGridOptions,) {
     addSpecialColumns(specialColumns)
 
     return (
+        // <div style={{height:'1280px', width: '800px'}}>
             <XGrid className={classes.content}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
@@ -111,6 +111,7 @@ function XXGrid(gridOptions: XXGridOptions,) {
             showColumnRightBorder={true}
             showCellRightBorder={true}
         />
+        // </div>
     )
 
     function CustomGridToolbar(props: any) {

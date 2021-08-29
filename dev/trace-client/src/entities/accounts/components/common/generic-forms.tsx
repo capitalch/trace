@@ -395,7 +395,7 @@ function GenericForms({ loadComponent }: any) {
         }
 
         const voucher: any = getVoucher(formId)
-        console.log(JSON.stringify(voucher))
+        // console.log(JSON.stringify(voucher))
         const ret = await saveForm({
             data: voucher,
             formId: formId,

@@ -1,79 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Theme,
-  createStyles,
-  Button,
-  Tabs,
-  Tab,
-  Paper,
-} from "@material-ui/core";
-// import { makeStyles } from "@material-ui/core/styles";
-import makeStyles from "@material-ui/styles/makeStyles";
-
-import { Child1 } from "./sub-components/child1";
-import { Child2 } from "./sub-components/child2";
-import { Child3 } from "./sub-components/child3";
-import { atom, selector } from "recoil";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { MyContext } from './my-context'
 
 function Component10() {
-  const [, setRefresh] = useState({});
-  const classes = useStyles();
-  const meta: any = useRef({
-    isMounted: false,
-    value: 0,
-  });
 
   useEffect(() => {
-    meta.current.isMounted = true;
-    return () => {
-      meta.current.isMounted = false;
-    };
+
   }, []);
-
-
+  const user: any = useContext(MyContext)
   return (
-    <Paper className={classes.content}>
-      <Child1 />
-      <Child2 />
-      <Child3 />
-    </Paper>
+    <div>
+      <div>Component 10</div>
+      <div>
+        <span>Name:{user.name}</span>
+        <span>Address:{user.address}</span>
+      </div>
+    </div >
   );
 }
 
-const myAtom = atom({
-  key: "counter",
-  default: 0,
-});
-
-const myAtomObj = atom({
-  key: "counterObj",
-  default: {
-    count: 0,
-  },
-});
-
-const myCheckCounter = selector({
-  key: "checkCounter",
-  get: ({ get }) => {
-    const cntr = get(myAtom);
-    console.log(cntr);
-  },
-});
-
-export { Component10, myAtom, myAtomObj, myCheckCounter };
-
-const useStyles: any = makeStyles((theme: Theme) =>
-  createStyles({
-    content: {
-      flexGrow: 1,
-      // width: '100%',
-      "& .view": {
-        marginLeft: "auto",
-      },
-    },
-  })
-);
-
-{
-  /* <Parent arbitraryData={meta.current} /> */
-}
+export { Component10 }

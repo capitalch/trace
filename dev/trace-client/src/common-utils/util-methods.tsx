@@ -127,7 +127,7 @@ function utilMethods() {
         ret = result.data[options.entityName || currentEntityName].genericUpdateMaster
         notIsDeleteMode && resetForm(options.formId)
       }
-    } catch (error) {
+    } catch (error:any) {
       emit('SHOW-MESSAGE', { message: error.message || messages['errorInOperation'], severity: 'error', duration: null })
       ret = { message: error.message }
     }
@@ -159,7 +159,7 @@ function utilMethods() {
         throw new Error(ret.error)
       }
       emit('SHOW-MESSAGE', {})
-    } catch (e) {
+    } catch (e:any) {
       ret.error = e.message
       emit('SHOW-MESSAGE', { message: messages['errorInOperation'], severity: 'error', duration: null })
     }
@@ -190,7 +190,7 @@ function utilMethods() {
       } else {
         throw new Error('')
       }
-    } catch (error) {
+    } catch (error:any) {
       emit('SHOW-MESSAGE', { message: error.message || messages['errorInOperation'], severity: 'error', duration: null })
     }
     return ret
@@ -262,7 +262,7 @@ function utilMethods() {
         emit('LOAD-MAIN-COMPONENT-VIEW', getCurrentComponent())
       }
       options.afterMethod()
-    } catch (e) {
+    } catch (e:any) {
       options.formId && showServerError(options.formId, e.message)
       ret.error = e.message
       emit('SHOW-MESSAGE', { message: messages['errorInOperation'], severity: 'error', duration: null })

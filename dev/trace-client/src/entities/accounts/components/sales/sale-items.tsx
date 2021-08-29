@@ -235,7 +235,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
             <PrimeColumn
                 key={incr()}
                 header="Product code / hsn"
-                style={{ maxWidth: '10rem' }}
+                style={{ width: '10rem' }}
                 body={(rowData: any) => (
                     <div>
                         <NumberFormat
@@ -292,7 +292,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
             <PrimeColumn
                 key={incr()}
                 header="Product details"
-                style={{ maxWidth: '10rem' }}
+                style={{ width: '10rem' }}
                 body={(rowData: any) => (
                     <Typography className="product-details">
                         {rowData.productDetails}

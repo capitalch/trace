@@ -55,8 +55,6 @@ function GenericReports({ loadReport }: any) {
 
     const classes = useStyles()
 
-    console.log('rendered')
-
     useEffect(() => {
         // onFilteredClick()
     }, [meta.current.rowModels !== 0])

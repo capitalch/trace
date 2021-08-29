@@ -597,7 +597,7 @@ function usePurchaseItems(arbitraryData: any) {
             <PrimeColumn
                 key={incr()}
                 header="Prod code / hsn"
-                style={{ maxWidth: '10rem' }}
+                style={{ width: '10rem' }}
                 body={(rowData: any) => (
                     <div>
                         <NumberFormat
@@ -655,7 +655,7 @@ function usePurchaseItems(arbitraryData: any) {
             <PrimeColumn
                 key={incr()}
                 header="Product details"
-                style={{ maxWidth: '10rem' }}
+                style={{ width: '10rem' }}
                 body={(rowData: any) => (
                     <Typography className="product-details">
                         {rowData.productDetails}

@@ -535,9 +535,6 @@ function utils() {
                 tranDate.isBefore(startDate) ||
                 tranDate.isAfter(endDate) ||
                 tranDate.isBetween(startDate, lockDate, undefined, '[]') // inclusive
-
-            // const isValid = !isInValidDate
-            // console.log(mDate, ':', isValid)
             return isInValidDate
         } catch (e) {
             console.log(e.message)

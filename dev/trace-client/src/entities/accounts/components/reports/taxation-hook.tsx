@@ -267,7 +267,7 @@ function useTaxation() {
                 igst: toDecimalFormat(item.igst),
             }
         })
-        console.log(JSON.stringify(meta.current.data))
+        // console.log(JSON.stringify(meta.current.data))
         meta.current.isMounted && setRefresh({})
     }
 

@@ -14,7 +14,7 @@ const { hotFilterOn } = usingIbuki()
 
 const customMethods: any = {
 
-  test2: () => console.log('test2'),
+  // test2: () => console.log('test2'),
   test1: () => {
     return [
       {

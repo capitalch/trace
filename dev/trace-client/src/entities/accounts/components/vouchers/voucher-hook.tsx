@@ -1,34 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useSharedElements } from '../../common/shared-elements-hook'
-import { useLayoutEffect } from 'react'
+import { useSharedElements } from '../common/shared-elements-hook'
+import { arbitraryData } from './arbitrary-data'
 
-function useJournals() {
+function useVoucher(loadComponent: string) {
     const [, setRefresh] = useState({})
-
     const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()
         emit('JOURNAL-MAIN-REFRESH', '') // refresh accounts in child
-        const subs1 = filterOn('JOURNAL-CHANGE-TAB-TO-EDIT').subscribe(
+        const subs1 = filterOn('VOUCHER-CHANGE-TAB-TO-EDIT').subscribe(
             (d: any) => {
                 const tranHeaderId = d.data?.tranHeaderId
                 tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
-                arbitraryData.current.isGobackToEdit = true
+                arbitraryData.isGobackToEdit = true
                 handleOnTabChange(null, 0)
             }
         )
-        const subs2 = filterOn('JOURNAL-RESET').subscribe(() => {
-            arbitraryData.current.header = {}
-            arbitraryData.current.debits = [{ key: 0 }]
-            arbitraryData.current.credits = [{ key: 0 }]
-            arbitraryData.current.deletedDetailsIds = []
-            arbitraryData.current.deletedGstIds = []
+        const subs2 = filterOn('VOUCHER-RESET').subscribe(() => {
+            arbitraryData.header = {}
+            arbitraryData.debits = [{ key: 0 }]
+            arbitraryData.credits = [{ key: 0 }]
+            arbitraryData.deletedDetailsIds = []
+            arbitraryData.deletedGstIds = []
             setRefresh({})
         })
-        const subs3 = filterOn('JOURNAL-CHANGE-TAB').subscribe((d: any) => {
+        const subs3 = filterOn('VOUCHER-CHANGE-TAB').subscribe((d: any) => {
             handleOnTabChange(null, d.data?.tabValue || 1)
         })
         return () => {
@@ -41,21 +40,19 @@ function useJournals() {
 
     const meta: any = useRef({
         isMounted: false,
-        title: 'Journals',
+        title: getTitle(),
         tabValue: 0,
     })
 
-    const arbitraryData: any = useRef({
-        accounts: {
-            all: [],
-            journal: [],
-        },
-        header: {},
-        deletedDetailsIds: [],
-        // deletedGstIds:[],
-        debits: [{ key: 0 }],
-        credits: [{ key: 0 }],
-    })
+    function getTitle() {
+        const tit: any = {
+            journal: 'Journals',
+            payment: 'Payments',
+            receipt: 'Receipts',
+            contra: 'Contra'
+        }
+        return (tit[loadComponent])
+    }
 
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -68,7 +65,6 @@ function useJournals() {
                 sqlKey: 'getJson_tranHeader_details',
             })
             populateData(ret?.jsonResult)
-            console.log(JSON.stringify(ret.jsonResult))
         } catch (e) {
             console.log(e.message)
         } finally {
@@ -78,8 +74,7 @@ function useJournals() {
         function populateData(jsonResult: any) {
             const tranDetails: any[] = jsonResult.tranDetails
             const tranHeader: any = jsonResult.tranHeader
-            // const tranTypeId = tranHeader.tranTypeId
-            const ad = arbitraryData.current
+            const ad = arbitraryData
             ad.header = tranHeader
             ad.debits = []
             ad.credits = []
@@ -120,7 +115,8 @@ function useJournals() {
 
     function setAccounts() {
         const allAccounts = getFromBag('allAccounts') || []
-        arbitraryData.current.accounts.all = allAccounts
+        // arbitraryData.current.accounts.all = allAccounts
+        arbitraryData.accounts.all = allAccounts
         const jouAccounts = allAccounts.filter(
             (el: any) =>
                 [
@@ -137,13 +133,23 @@ function useJournals() {
                 ].includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.current.accounts.journal = jouAccounts
+        arbitraryData.accounts.journal = jouAccounts
+
+        const cashBankAccounts = allAccounts.filter((el: any) =>
+            ['ecash',
+                'bank',
+                'card',
+                'cash'
+            ].includes(el.accClass) &&
+            (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        arbitraryData.accounts.cashBank = cashBankAccounts
     }
 
     return { arbitraryData, handleOnTabChange, meta, setRefresh }
 }
 
-export { useJournals }
+export { useVoucher }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
@@ -152,7 +158,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: theme.palette.common.white,
                 backgroundColor: theme.palette.grey[600],
             },
-            '& .tab': {},
         },
     })
 )

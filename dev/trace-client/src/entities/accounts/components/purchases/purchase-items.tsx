@@ -44,6 +44,7 @@ function PurchaseItems({ arbitraryData }: any) {
                 <DataTable
                     rowHover={true}
                     scrollable={true}
+                    
                     scrollHeight={meta.current.zoomIn ? '36vh' : '55vh'}                    
                     className="items"
                     value={arbitraryData.lineItems}>
