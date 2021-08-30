@@ -2,28 +2,21 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { useVoucher, useStyles } from './voucher-hook'
 import { Journal } from './voucher-type/journal'
 import { Payment } from './voucher-type/payment'
+import {Receipt} from './voucher-type/receipt'
+import {Contra} from './voucher-type/contra'
 import { VoucherView } from './voucher-view'
 
 function Voucher({ loadComponent }: any) {
     const classes = useStyles()
-    const { handleOnTabChange, meta } = useVoucher(loadComponent)
-    // console.log('loadComponent:', loadComponent)
+    const {getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent)
     const { Tab, Tabs, Typography } = useSharedElements()
 
-    function SelectedVoucherComponent({ hidden }: any) {
+    function SelectedVoucherComponent({ hidden, tranTypeId }: any) {
         const logic: any = {
-            journal: <Journal hidden={hidden} />,
-            payment: <Payment hidden={hidden} />,
-        }
-        return logic[loadComponent]
-    }
-
-    function getTranTypeId() {
-        const logic: any = {
-            journal: 1,
-            payment: 2,
-            receipt: 3,
-            contra: 6,
+            journal: <Journal hidden={hidden} tranTypeId={tranTypeId} />,
+            payment: <Payment hidden={hidden} tranTypeId={tranTypeId} />,
+            receipt: <Receipt hidden={hidden} tranTypeId={tranTypeId} />,
+            contra: <Contra hidden={hidden} tranTypeId={tranTypeId} />,
         }
         return logic[loadComponent]
     }
@@ -41,7 +34,7 @@ function Voucher({ loadComponent }: any) {
                 <Tab className="tab" label="New / Edit" />
                 <Tab label="View" />
             </Tabs>
-            <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
+            <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} tranTypeId = {getTranTypeId()} />
             <VoucherView
                 hidden={meta.current.tabValue !== 1}
                 tranTypeId={getTranTypeId()}

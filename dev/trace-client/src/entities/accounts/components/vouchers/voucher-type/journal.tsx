@@ -5,7 +5,7 @@ import { Crown, Crown1 } from '../crown'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { arbitraryData } from '../arbitrary-data'
 
-function Journal({ hidden }: any) {
+function Journal({ hidden, tranTypeId }: any) {
         const [, setRefresh] = useState({})
         const {
                 filterOn,
@@ -15,15 +15,15 @@ function Journal({ hidden }: any) {
                 isMounted: false,
                 errorMessage: '',
         })
-        arbitraryData.header.tranTypeId = 1
+        arbitraryData.header.tranTypeId = tranTypeId
         useEffect(() => {
                 meta.current.isMounted = true
-                const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>
-                        setRefresh({})
-                )
+                // const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>
+                //         setRefresh({})
+                // )
                 return () => {
                         meta.current.isMounted = false
-                        subs1.unsubscribe()
+                        // subs1.unsubscribe()
                 }
         }, [])
 

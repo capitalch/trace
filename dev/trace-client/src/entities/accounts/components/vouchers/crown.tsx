@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
-// import { LedgerSubledger } from '../../common/ledger-subledger'
 import { arbitraryData } from './arbitrary-data'
 import {useCrown} from './crown-hook'
 
@@ -58,31 +57,11 @@ function Crown1({ meta }: any) {
     const classes = useStyles()
     const [, setRefresh] = useState({})
     const {
-        _,
-        accountsMessages,
-        AddCircle,
-        Button,
-        Checkbox,
-        CheckIcon,
-        emit,
-        ErrorIcon,
         filterOn,
-        genericUpdateMasterDetails,
-        getFromBag,
-        getMappedAccounts,
-        FormControlLabel,
-        IconButton,
-        isInvalidDate,
-        isInvalidGstin,
-        NumberFormat,
         Paper,
-        RemoveCircle,
-        TextField,
-        toDecimalFormat,
         Typography,
     } = useSharedElements()
     const {
-        checkError,
         ResetButton,
         SubmitButton,
         SummaryDebitsCredits,

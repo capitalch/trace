@@ -10,7 +10,7 @@ function useVoucher(loadComponent: string) {
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()
-        emit('JOURNAL-MAIN-REFRESH', '') // refresh accounts in child
+        // emit('JOURNAL-MAIN-REFRESH', '') // refresh accounts in child
         const subs1 = filterOn('VOUCHER-CHANGE-TAB-TO-EDIT').subscribe(
             (d: any) => {
                 const tranHeaderId = d.data?.tranHeaderId
@@ -44,16 +44,6 @@ function useVoucher(loadComponent: string) {
         tabValue: 0,
     })
 
-    function getTitle() {
-        const tit: any = {
-            journal: 'Journals',
-            payment: 'Payments',
-            receipt: 'Receipts',
-            contra: 'Contra',
-        }
-        return tit[loadComponent]
-    }
-
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
         emit('SHOW-LOADING-INDICATOR', true)
         try {
@@ -65,7 +55,7 @@ function useVoucher(loadComponent: string) {
                 sqlKey: 'getJson_tranHeader_details',
             })
             populateData(ret?.jsonResult)
-        } catch (e:any) {
+        } catch (e: any) {
             console.log(e.message)
         } finally {
             emit('SHOW-LOADING-INDICATOR', false)
@@ -106,6 +96,26 @@ function useVoucher(loadComponent: string) {
                 }
             }
         }
+    }
+
+    function getTitle() {
+        const tit: any = {
+            journal: 'Journals',
+            payment: 'Payments',
+            receipt: 'Receipts',
+            contra: 'Contra',
+        }
+        return tit[loadComponent]
+    }
+
+    function getTranTypeId() {
+        const logic: any = {
+            journal: 1,
+            payment: 2,
+            receipt: 3,
+            contra: 6,
+        }
+        return logic[loadComponent]
     }
 
     function handleOnTabChange(e: any, newValue: number) {
@@ -172,7 +182,7 @@ function useVoucher(loadComponent: string) {
         )
     }
 
-    return { arbitraryData, handleOnTabChange, meta, setRefresh }
+    return { getTranTypeId, handleOnTabChange, meta }
 }
 
 export { useVoucher }

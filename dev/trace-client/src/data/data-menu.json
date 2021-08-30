@@ -55,6 +55,22 @@
                             "args": {
                                 "loadComponent": "payment"
                             }
+                        },
+                        {
+                            "name": "receiptsSubMenu",
+                            "label": "Receipts",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "receipt"
+                            }
+                        },
+                        {
+                            "name": "contraSubMenu",
+                            "label": "Contra",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "contra"
+                            }
                         }
                     ]
                 },
