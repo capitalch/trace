@@ -574,7 +574,7 @@ function AccountsMaster() {
             emit('SHOW-LOADING-INDICATOR', false)
             meta.current.isMounted && setRefresh({})
             utilFunc().applyScrollPos()
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.message)
             emit('SHOW-MESSAGE', {
                 message: messages['errorInOperation'],

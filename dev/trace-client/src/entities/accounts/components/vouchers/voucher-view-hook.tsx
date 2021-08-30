@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function useVoucherView(hidden: boolean) {
+function useVoucherView(hidden: boolean, tranTypeId: number) {
     const [, setRefresh] = useState({})
 
     const {
@@ -16,12 +16,14 @@ function useVoucherView(hidden: boolean) {
         moment,
         toDecimalFormat,
     } = useSharedElements()
+
     const meta: any = useRef({
         isMounted: false,
         isLoadedOnce: false,
-        tranTypeId: 1,
-        title: 'Journals'
+        // tranTypeId: 1,
+        title: ''
     })
+
     useEffect(() => {
         meta.current.isMounted = true
 
@@ -208,7 +210,7 @@ function useVoucherView(hidden: boolean) {
 
     const sqlQueryId = 'get_vouchers'
     const args = {
-        tranTypeId: meta.current.tranTypeId,
+        tranTypeId: tranTypeId,
         no: null,
     }
     const summaryColNames = ['debit', 'credit']

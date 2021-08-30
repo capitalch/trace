@@ -39,7 +39,7 @@ function Header({allowHeaderGst}: any) {
                     type="date"
                     onChange={(e: any) => {
                         arbitraryData.header.tranDate = e.target.value
-                        emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                        emit('CROWN-REFRESH', '')
                         setRefresh({})
                     }}
                     onFocus={(e) => e.target.select()}
@@ -78,7 +78,7 @@ function Header({allowHeaderGst}: any) {
                                 arbitraryData.header.gstin = undefined
                                 emit('ACTION-BLOCK-RESET-GST', '')
                             }
-                            emit('JOURNAL-MAIN-CROWN-REFRESH', '') // for eval of error condition
+                            emit('CROWN-REFRESH', '') // for eval of error condition
                             emit('ACTION-BLOCK-REFRESH', '')
                             setRefresh({})
                         }}
@@ -100,7 +100,7 @@ function Header({allowHeaderGst}: any) {
                 }
                 onChange={(e: any) => {
                     arbitraryData.header.gstin = e.target.value
-                    emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                    emit('CROWN-REFRESH', '')
                     setRefresh({})
                 }}
                 value={arbitraryData.header.gstin || ''}

@@ -157,7 +157,7 @@ function useProductUtils(
                     },
                 })
                 selectProduct(rowData, result)
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)
@@ -188,7 +188,7 @@ function useProductUtils(
                     },
                 })
                 selectProduct(rowData, result)
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)

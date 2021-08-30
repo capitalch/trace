@@ -155,7 +155,7 @@ function usePurchaseInvoiceNoSelect(arbitraryData: any) {
                     }
                 )
                 setRefresh({})
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)

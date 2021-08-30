@@ -24,13 +24,13 @@ function Crown({ meta }: any) {
     } = useSharedElements()
 
     useEffect(() => {
-        const subs1 = filterOn('JOURNAL-MAIN-CROWN-REFRESH').subscribe(
+        const subs1 = filterOn('CROWN-REFRESH').subscribe(
             () => {
                 meta.current.errorMessage = ''
                 checkError(arbitraryData)
                 setRefresh({})
                 emit(
-                    'JOURNAL-MAIN-CROWN2-REFRESH',
+                    'CROWN2-REFRESH',
                     meta.current.errorMessage
                 )
             }
@@ -89,7 +89,7 @@ function Crown1({ meta }: any) {
         SummaryGst,
     } = useCrown(meta)
     useEffect(() => {
-        const subs1 = filterOn('JOURNAL-MAIN-CROWN2-REFRESH').subscribe(
+        const subs1 = filterOn('CROWN2-REFRESH').subscribe(
             (d: any) => {
                 setRefresh({})
             }

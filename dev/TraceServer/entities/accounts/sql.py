@@ -682,7 +682,7 @@ allSqls = {
              h."remarks", "userRefNo", "accName", "dc", d."remarks" as "lineRemarks",
              CASE WHEN "dc" = 'D' THEN "amount" ELSE 0.00 END as "debit",
              CASE WHEN "dc" = 'C' THEN "amount" ELSE 0.00 END as "credit",
-             "lineRefNo", d."instrNo", "clearDate", "gstin", "rate", "hsn", "cgst", "sgst", "igst", "isInput"
+             "lineRefNo", d."instrNo", "clearDate", "gstin", "rate", "hsn", "cgst", "sgst", "igst", "isInput", "tranTypeId"
             from "TranH" h 
                 join "TranD" d
                     on h."id" = d."tranHeaderId"				
@@ -695,7 +695,7 @@ allSqls = {
 		where "tranTypeId" = %(tranTypeId)s 
             and "finYearId" = %(finYearId)s 
             and "branchId" = %(branchId)s
-            order by "tranDate" DESC, h."id", d."id" 
+            order by "tranDate" DESC, h."id" DESC, d."id" 
             limit %(no)s
     ''',
 

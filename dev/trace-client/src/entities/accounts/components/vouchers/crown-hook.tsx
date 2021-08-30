@@ -102,7 +102,7 @@ function useCrown(meta: any) {
                     return m
                 }
 
-                function onlyExpIncomeCanHaveGst() {
+                function onlyExpIncomePurchaseSaleCanHaveGst() {
                     let m = ''
                     const accId = row.accId
                     if (accId) {
@@ -142,7 +142,7 @@ function useCrown(meta: any) {
                     amountError() ||
                     gstRateError() ||
                     hsnNotPresentError() ||
-                    onlyExpIncomeCanHaveGst() ||
+                    onlyExpIncomePurchaseSaleCanHaveGst() ||
                     bankShouldHaveInstrNo()
                 return m
             }
@@ -318,7 +318,7 @@ function useCrown(meta: any) {
                 dataItem.tranDate = ad.header.tranDate
                 dataItem.userRefNo = ad.header.userRefNo
                 dataItem.remarks = ad.header.remarks
-                dataItem.tranTypeId = ad.header.tranType || 1
+                dataItem.tranTypeId = ad.header.tranTypeId || 1
                 dataItem.id = ad.header.id || undefined
                 voucher.data.push(dataItem)
 
@@ -328,10 +328,9 @@ function useCrown(meta: any) {
 
                 addToDetails(debits, details, 'D')
                 addToDetails(credits, details, 'C')
-                // console.log(JSON.stringify(voucher))
-
+                console.log(JSON.stringify(voucher))
                 const ret = await genericUpdateMasterDetails([voucher])
-
+                // const ret:any = {}
                 if (ret.error) {
                     console.log(ret.error)
                 } else {

@@ -88,7 +88,7 @@ function ReactForm(props: ReactFormParams) {
                     isFormErrorDisplay={true}>
                 </ErrorDisplay>
             </div>
-        } catch (e) {
+        } catch (e:any) {
             form = <div style={{ color: 'red' }}>{e.message}</div>
         }
         return form

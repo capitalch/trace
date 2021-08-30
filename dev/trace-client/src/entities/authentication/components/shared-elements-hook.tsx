@@ -101,7 +101,7 @@ function useSharedElements(meta: any = {}) {
                         duration: null,
                     })
                 }
-            } catch (error) {
+            } catch (error:any) {
                 emit('SHOW-MESSAGE', {
                     severity: 'error',
                     message: error.message || messages['errorInOperation'],
@@ -152,7 +152,7 @@ function useSharedElements(meta: any = {}) {
                             duration: null,
                         })
                     }
-                } catch (err) {
+                } catch (err:any) {
                     emit('SHOW-MESSAGE', {
                         severity: 'error',
                         message: err.message || messages['errorInOperation'],
@@ -190,7 +190,7 @@ function useSharedElements(meta: any = {}) {
             } else {
                 doFormRefresh(formId) // this shows validation messages
             }
-        } catch (e) {
+        } catch (e:any) {
             showServerError(meta.current.dialogConfig.formId, e.message)
         }
     }

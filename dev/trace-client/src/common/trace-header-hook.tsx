@@ -389,7 +389,7 @@ function useTraceHeader({ setRefresh }: any) {
                         logout()
                         closeDialog()
                     }
-                } catch (exception) {
+                } catch (exception:any) {
                     showServerError(
                         meta.current.dialogConfig.formId,
                         exception.message
@@ -415,7 +415,7 @@ function useTraceHeader({ setRefresh }: any) {
                         )
                         meta.current.isMounted && setRefresh({})
                     }
-                } catch (exception) {
+                } catch (exception:any) {
                     showServerError(
                         meta.current.dialogConfig.formId,
                         exception.message
@@ -440,7 +440,7 @@ function useTraceHeader({ setRefresh }: any) {
                         )
                         meta.current.isMounted && setRefresh({})
                     }
-                } catch (exception) {
+                } catch (exception:any) {
                     showServerError(
                         meta.current.dialogConfig.formId,
                         exception.message
@@ -465,7 +465,7 @@ function useTraceHeader({ setRefresh }: any) {
                 } else if (formId === 'forgotPwd') {
                     await processForgotPwd(data)
                 }
-            } catch (error) {
+            } catch (error:any) {
                 emit('SHOW-MESSAGE', {
                     severity: 'error',
                     message: error.message,

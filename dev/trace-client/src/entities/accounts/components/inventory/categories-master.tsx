@@ -355,7 +355,7 @@ function CategoriesMaster() {
                     }
                 }
 
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e.message)
             }
         }
@@ -545,7 +545,7 @@ function CategoriesMaster() {
                 await processTree(meta.current.data) // experimental
             }
 
-        } catch (e) {
+        } catch (e:any) {
             emit('SHOW-MESSAGE', { severity: 'error', message: messages['errorInOperation'], duration: null })
             console.log(e.message)
         }

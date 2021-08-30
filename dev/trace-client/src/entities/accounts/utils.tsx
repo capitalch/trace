@@ -536,7 +536,7 @@ function utils() {
                 tranDate.isAfter(endDate) ||
                 tranDate.isBetween(startDate, lockDate, undefined, '[]') // inclusive
             return isInValidDate
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.message)
         }
     }

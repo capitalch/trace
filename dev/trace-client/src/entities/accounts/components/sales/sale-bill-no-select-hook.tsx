@@ -105,7 +105,7 @@ function useSaleBillNoSelect() {
                     )
                 })
                 meta.current.isMounted && setRefresh({})
-            } catch (e) {
+            } catch (e:any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)

@@ -3,6 +3,7 @@ import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
 import { useSharedElements } from '../../common/shared-elements-hook'
+import { arbitraryData } from '../arbitrary-data'
 
 function Journal({ hidden }: any) {
         const [, setRefresh] = useState({})
@@ -14,7 +15,7 @@ function Journal({ hidden }: any) {
                 isMounted: false,
                 errorMessage: '',
         })
-
+        arbitraryData.header.tranTypeId = 1
         useEffect(() => {
                 meta.current.isMounted = true
                 const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>

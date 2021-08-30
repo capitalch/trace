@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { arbitraryData } from "./arbitrary-data"
+import { arbitraryData } from './arbitrary-data'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { LedgerSubledger } from '../common/ledger-subledger'
 import { useSharedElements } from '../common/shared-elements-hook'
@@ -8,9 +8,11 @@ function ActionBlock({
     actionType,
     actionLabel,
     allowAddRemove,
-    allowInstr,
+    allowInstrNo,
     allowRowGst,
-    ledgerAccounts
+    ledgerAccounts,
+    notifyOnChange,
+    allowFreeze,
 }: any) {
     const [, setRefresh] = useState({})
     const isGst = !!arbitraryData.header.isGst
@@ -40,9 +42,11 @@ function ActionBlock({
         const subs2 = filterOn('ACTION-BLOCK-RESET-GST').subscribe(() => {
             resetGst()
         })
+
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
+            // subs3.unsubscribe()
         }
     }, [])
     return (
@@ -58,17 +62,54 @@ function ActionBlock({
                 ad={arbitraryData}
                 actionType={actionType}
                 actionLabel={actionLabel}
-                allowInstr = {allowInstr}
+                allowInstrNo={allowInstrNo}
                 allowAddRemove={allowAddRemove}
                 allowRowGst={allowRowGst}
                 ledgerAccounts={ledgerAccounts}
+                notifyOnChange={notifyOnChange}
+                allowFreeze={allowFreeze}
             />
         </div>
     )
 
-    function ActionRows({ ad, actionType, actionLabel, allowAddRemove, allowInstr, allowRowGst, ledgerAccounts }: any) {
+    function ActionRows({
+        ad,
+        actionType,
+        actionLabel,
+        allowAddRemove,
+        allowInstrNo,
+        allowRowGst,
+        ledgerAccounts,
+        notifyOnChange,
+        allowFreeze,
+    }: any) {
         const [, setRefresh] = useState({})
         let ind = 0
+
+        useEffect(() => {
+            const subs1 = filterOn('ACTION-AMOUNT-CHANGED').subscribe(
+                (d: any) => {
+                    //d.data is of type {source: 'debits', target: 'credits'} or vice versa
+                    const sum: any = ad[d.data.source] //debits or credits
+                        .reduce(
+                            (prev: any, curr: any) => {
+                                prev.amount =
+                                    (prev?.amount || 0.0) +
+                                    (curr?.amount || 0.0)
+                                return prev
+                            },
+                            { amount: 0.0 }
+                        )
+                    ad[d.data.target][0].amount = sum.amount
+                    setRefresh({})
+                }
+            )
+
+            return () => {
+                subs1.unsubscribe()
+            }
+        }, [])
+
         const isGst = !!ad.header.isGst
         const actionRows: any[] = ad[actionType]
         const list: any[] = actionRows.map((item: any) => {
@@ -85,25 +126,26 @@ function ActionBlock({
                         <LedgerSubledger
                             allAccounts={ad.accounts.all}
                             ledgerAccounts={getMappedAccounts(
-                                ad.accounts[ledgerAccounts] || ''
+                                ad.accounts[ledgerAccounts] || []
                             )}
-                            onChange={() =>
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
-                            }
+                            onChange={() => emit('CROWN-REFRESH', '')}
                             rowData={item}
                         />
                     </div>
 
                     {/* Instrument */}
-                    {allowInstr && <TextField
-                        className="line-ref"
-                        label="Instr no"
-                        onChange={(e: any) => {
-                            item.instrNo = e.target.value
-                            setRefresh({})
-                        }}
-                        value={item.instrNo || ''}
-                    />}
+                    {allowInstrNo && (
+                        <TextField
+                            className="line-ref"
+                            label="Instr no"
+                            onChange={(e: any) => {
+                                item.instrNo = e.target.value
+                                emit('CROWN-REFRESH', '')
+                                setRefresh({})
+                            }}
+                            value={item.instrNo || ''}
+                        />
+                    )}
 
                     {/* Gst rate */}
                     {allowRowGst && isGst && (
@@ -120,7 +162,7 @@ function ActionBlock({
                             }}
                             onBlur={() => {
                                 computeGst(item)
-                                // emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                // emit('CROWN-REFRESH', '')
                                 setRefresh({})
                             }}
                             error={item.gst.rate > 30 ? true : false}
@@ -128,7 +170,7 @@ function ActionBlock({
                                 const { floatValue } = values
                                 item.gst.rate = floatValue || 0.0
                                 computeGst(item)
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                emit('CROWN-REFRESH', '')
                                 setRefresh({})
                             }}
                             thousandSeparator={true}
@@ -148,7 +190,7 @@ function ActionBlock({
                             }}
                             onChange={(e: any) => {
                                 item.gst.hsn = e.target.value
-                                emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                                emit('CROWN-REFRESH', '')
                                 setRefresh({})
                             }}
                             value={item.gst.hsn || 0.0}
@@ -157,6 +199,7 @@ function ActionBlock({
 
                     {/* Amount */}
                     <NumberFormat
+                        disabled={allowFreeze}
                         allowNegative={false}
                         {...{ label: `${actionLabel} amount` }}
                         // {...matProps}
@@ -173,13 +216,23 @@ function ActionBlock({
                             const { floatValue } = values
                             item.amount = floatValue || 0.0
                             computeGst(item)
+
+                            emit('CROWN-REFRESH', '')
+                            if (notifyOnChange) {
+                                emit('ACTION-AMOUNT-CHANGED', {
+                                    source: actionType,
+                                    target:
+                                        actionType === 'debits'
+                                            ? 'credits'
+                                            : 'debits',
+                                })
+                            }
                             setRefresh({})
-                            emit('JOURNAL-MAIN-CROWN-REFRESH', '')
                         }}
                         onBlur={() => {
                             computeGst(item)
                             setRefresh({})
-                            // emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+                            // emit('CROWN-REFRESH', '')
                         }}
                         thousandSeparator={true}
                         value={item.amount || 0.0}
@@ -191,8 +244,7 @@ function ActionBlock({
                                 control={
                                     <Checkbox
                                         onChange={(e: any) => {
-                                            item.gst.isIgst =
-                                                e.target.checked
+                                            item.gst.isIgst = e.target.checked
                                             computeGst(item)
                                             setRefresh({})
                                         }}
@@ -205,16 +257,13 @@ function ActionBlock({
                                 labelPlacement="start"
                             />
                             <Typography className="gst" variant="body2">
-                                Cgst:{' '}
-                                {toDecimalFormat(item.gst.cgst || 0.0)}
+                                Cgst: {toDecimalFormat(item.gst.cgst || 0.0)}
                             </Typography>
                             <Typography className="gst" variant="body2">
-                                Sgst:{' '}
-                                {toDecimalFormat(item.gst.sgst || 0.0)}
+                                Sgst: {toDecimalFormat(item.gst.sgst || 0.0)}
                             </Typography>
                             <Typography className="gst" variant="body2">
-                                Igst:{' '}
-                                {toDecimalFormat(item.gst.igst || 0.0)}
+                                Igst: {toDecimalFormat(item.gst.igst || 0.0)}
                             </Typography>
                         </div>
                     )}
@@ -298,7 +347,7 @@ function ActionBlock({
             arr.push({})
             reIndex()
             emit(emitMessage, '')
-            emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+            emit('CROWN-REFRESH', '')
         }
 
         function remove() {
@@ -312,14 +361,13 @@ function ActionBlock({
             arr.splice(item.key, 1)
             reIndex()
             emit(emitMessage, '')
-            emit('JOURNAL-MAIN-CROWN-REFRESH', '')
+            emit('CROWN-REFRESH', '')
         }
     }
 
     function computeGst(item: any) {
         const gstRate = item.gst.rate || 0
-        const gst =
-            ((item.amount || 0) * (gstRate / 100)) / (1 + gstRate / 100)
+        const gst = ((item.amount || 0) * (gstRate / 100)) / (1 + gstRate / 100)
         if (item.gst.isIgst) {
             item.gst.igst = gst
             item.gst.cgst = 0
@@ -350,7 +398,6 @@ export { ActionBlock }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         contentAction: {
             '& .action-label': {
                 marginTop: theme.spacing(2),

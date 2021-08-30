@@ -49,9 +49,9 @@ function useVoucher(loadComponent: string) {
             journal: 'Journals',
             payment: 'Payments',
             receipt: 'Receipts',
-            contra: 'Contra'
+            contra: 'Contra',
         }
-        return (tit[loadComponent])
+        return tit[loadComponent]
     }
 
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
@@ -65,7 +65,7 @@ function useVoucher(loadComponent: string) {
                 sqlKey: 'getJson_tranHeader_details',
             })
             populateData(ret?.jsonResult)
-        } catch (e) {
+        } catch (e:any) {
             console.log(e.message)
         } finally {
             emit('SHOW-LOADING-INDICATOR', false)
@@ -135,15 +135,41 @@ function useVoucher(loadComponent: string) {
         )
         arbitraryData.accounts.journal = jouAccounts
 
-        const cashBankAccounts = allAccounts.filter((el: any) =>
-            ['ecash',
-                'bank',
-                'card',
-                'cash'
-            ].includes(el.accClass) &&
-            (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        arbitraryData.accounts.cashBank = allAccounts.filter(
+            (el: any) =>
+                ['ecash', 'bank', 'card', 'cash'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.accounts.cashBank = cashBankAccounts
+        arbitraryData.accounts.paymentOther = allAccounts.filter(
+            (el: any) =>
+                [
+                    'debtor',
+                    'creditor',
+                    'dexp',
+                    'iexp',
+                    'purchase',
+                    'loan',
+                    'capital',
+                    'other',
+                ].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        arbitraryData.accounts.receiptOther = allAccounts.filter(
+            (el: any) =>
+                [
+                    'debtor',
+                    'creditor',
+                    'dexp',
+                    'iexp',
+                    'loan',
+                    'other',
+                    'capital',
+                    'iincome',
+                    'dincome',
+                    'sale',
+                ].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
     }
 
     return { arbitraryData, handleOnTabChange, meta, setRefresh }
