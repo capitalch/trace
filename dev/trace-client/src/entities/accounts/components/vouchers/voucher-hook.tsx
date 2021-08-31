@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { arbitraryData } from './arbitrary-data'
+// import { arbitraryData } from './arbitrary-data'
 
 function useVoucher(loadComponent: string) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
-
+    const { emit, execGenericView, filterOn, getFromBag} =
+        useSharedElements()
+    const arbitraryData = getFromBag(loadComponent) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()

@@ -195,7 +195,7 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('LOAD-MAIN-JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-
+        await setVouchersArbitraryData()
         function getRoom() {
             const clientId = getLoginData()?.clientId
             const buCode = getFromBag('buCode')
@@ -205,6 +205,23 @@ function initCode() {
                 clientId
             )}:${buCode}:${finYearId}:${branchId}`
             return room
+        }
+
+        async function setVouchersArbitraryData(){
+            const temp:any = {
+                accounts: {
+                    all: [],
+                    journal: [],
+                },
+                header: {},
+                deletedDetailsIds: [],
+                debits: [{ key: 0 }],
+                credits: [{ key: 0 }],
+            }
+            setInBag('journal',JSON.parse(JSON.stringify(temp)))
+            setInBag('payment', JSON.parse(JSON.stringify(temp)))
+            setInBag('receipt', JSON.parse(JSON.stringify(temp)))
+            setInBag('contra', JSON.parse(JSON.stringify(temp)))
         }
     }
 
