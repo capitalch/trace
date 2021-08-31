@@ -695,7 +695,7 @@ allSqls = {
 		where "tranTypeId" = %(tranTypeId)s 
             and "finYearId" = %(finYearId)s 
             and "branchId" = %(branchId)s
-            order by "tranDate" DESC, h."id" DESC, d."id" 
+            order by "tranDate" DESC, h."id", d."id" 
             limit %(no)s
     ''',
 

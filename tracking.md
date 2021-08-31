@@ -53,12 +53,12 @@ create installer from innosetup
 	1. serial number error in purchases
 	2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
 	3. All dialog boxes title is very big font
-	4. In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert
-	5. Sales / Purchase to be mobile compliant
+														4. In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert
+														5. Sales / Purchase to be mobile compliant
 	6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
-	7. In Journals Debits not equals credits being possible
+														7. In Journals Debits not equals credits being possible
 	8. In Inventory--> Brands--> edit: when you close the dialog it blows up
-	9. Seen in case of receipts same auto_ref_no generated twice
+														9. Seen in case of receipts same auto_ref_no generated twice
 	10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
 
 ## Reorganize
@@ -85,6 +85,7 @@ create installer from innosetup
 	15. Show ledger balance at the time of data entry
 	16. When new account code is created that should immediately be visible at payment options
 	17. Purchase entry unable to enter gst price of an item
+	18. Wherever possible auto update reports with sockets
 
 ## New features
 	1. Purchase invoice upload and search on metadata. Click will show invoice in PDF
@@ -114,6 +115,7 @@ create installer from innosetup
 
 # 16-08-2021 - 31-08-2021
 1. GST journals
+2. All vouchers in new style and with GST completed
 
 # 06-08-2021 - 15-08-2021
 1. Working on GST Journals

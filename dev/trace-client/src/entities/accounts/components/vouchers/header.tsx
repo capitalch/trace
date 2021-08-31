@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
-import { arbitraryData } from "./arbitrary-data"
+import { useState, useEffect, useRef, useContext } from 'react'
+// import { arbitraryData } from "./arbitrary-data"
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { VoucherContext } from './voucher-context'
 
 function Header({allowHeaderGst}: any) {
     const classes = useStyles()
     const [, setRefresh] = useState({})
+    const arbitraryData:any = useContext(VoucherContext)
     const {
         // _,
         accountsMessages,

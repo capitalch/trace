@@ -1,6 +1,6 @@
 import { useState, } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { arbitraryData } from './arbitrary-data'
+// import { arbitraryData } from './arbitrary-data'
 
 function useCrown(meta: any) {
     const [, setRefresh] = useState({})
@@ -137,6 +137,13 @@ function useCrown(meta: any) {
                     return (m)
                 }
 
+                function getAccountClass(accId: number) {
+                    const account = ad.accounts.all.find(
+                        (x: any) => x.id === accId
+                    )
+                    return account.accClass
+                }
+
                 m =
                     accountError() ||
                     amountError() ||
@@ -240,12 +247,7 @@ function useCrown(meta: any) {
         return { totalDebits, totalCredits, gstDebits, gstCredits }
     }
 
-    function getAccountClass(accId: number) {
-        const account = arbitraryData.accounts.all.find(
-            (x: any) => x.id === accId
-        )
-        return account.accClass
-    }
+
 
     function ResetButton() {
         return (
@@ -328,7 +330,7 @@ function useCrown(meta: any) {
 
                 addToDetails(debits, details, 'D')
                 addToDetails(credits, details, 'C')
-                console.log(JSON.stringify(voucher))
+                // console.log(JSON.stringify(voucher))
                 const ret = await genericUpdateMasterDetails([voucher])
                 // const ret:any = {}
                 if (ret.error) {

@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
-import { arbitraryData } from './arbitrary-data'
+import { useState, useEffect, useRef,useContext } from 'react'
+// import { arbitraryData } from './arbitrary-data'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { LedgerSubledger } from '../common/ledger-subledger'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { VoucherContext } from './voucher-context'
 
 function ActionBlock({
     actionType,
@@ -15,6 +16,7 @@ function ActionBlock({
     allowFreeze,
 }: any) {
     const [, setRefresh] = useState({})
+    const arbitraryData:any = useContext(VoucherContext)
     const isGst = !!arbitraryData.header.isGst
     const classes = useStyles({ actionType, isGst })
     const ad: any = arbitraryData

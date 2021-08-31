@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
-// import { arbitraryData } from './arbitrary-data'
 
 function useVoucher(loadComponent: string) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, filterOn, getFromBag} =
+    const { emit, execGenericView, filterOn, getFromBag } =
         useSharedElements()
-    const arbitraryData = getFromBag(loadComponent) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
+    const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
+    arbitraryData.header.tranTypeId = getTranTypeId()
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()
-        // emit('JOURNAL-MAIN-REFRESH', '') // refresh accounts in child
+        setRefresh({})
         const subs1 = filterOn('VOUCHER-CHANGE-TAB-TO-EDIT').subscribe(
             (d: any) => {
                 const tranHeaderId = d.data?.tranHeaderId
@@ -126,7 +126,6 @@ function useVoucher(loadComponent: string) {
 
     function setAccounts() {
         const allAccounts = getFromBag('allAccounts') || []
-        // arbitraryData.current.accounts.all = allAccounts
         arbitraryData.accounts.all = allAccounts
         const jouAccounts = allAccounts.filter(
             (el: any) =>
@@ -183,7 +182,7 @@ function useVoucher(loadComponent: string) {
         )
     }
 
-    return { getTranTypeId, handleOnTabChange, meta }
+    return { arbitraryData, getTranTypeId, handleOnTabChange, meta }
 }
 
 export { useVoucher }

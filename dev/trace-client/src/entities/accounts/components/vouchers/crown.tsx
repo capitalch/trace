@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { arbitraryData } from './arbitrary-data'
+// import { arbitraryData } from './arbitrary-data'
 import {useCrown} from './crown-hook'
+import { VoucherContext } from './voucher-context'
 
 function Crown({ meta }: any) {
     const classes = useStyles()
+    const arbitraryData = useContext(VoucherContext)
     const {
         checkError,
         ResetButton,
@@ -55,6 +57,7 @@ function Crown({ meta }: any) {
 
 function Crown1({ meta }: any) {
     const classes = useStyles()
+    const arbitraryData = useContext(VoucherContext)
     const [, setRefresh] = useState({})
     const {
         filterOn,

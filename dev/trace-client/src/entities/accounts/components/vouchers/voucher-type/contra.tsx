@@ -3,28 +3,18 @@ import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { arbitraryData } from '../arbitrary-data'
 
-function Contra({ hidden , tranTypeId}: any) {
-    const [, setRefresh] = useState({})
-    const {
-        filterOn,
-    } = useSharedElements()
+function Contra({ hidden }: any) {
 
     const meta: any = useRef({
         isMounted: false,
         errorMessage: '',
     })
 
-    arbitraryData.header.tranTypeId = tranTypeId
     useEffect(() => {
         meta.current.isMounted = true
-        // const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>
-        //     setRefresh({})
-        // )
         return () => {
             meta.current.isMounted = false
-            // subs1.unsubscribe()
         }
     }, [])
 

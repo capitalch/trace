@@ -3,9 +3,8 @@ import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { arbitraryData } from '../arbitrary-data'
 
-function Payment({ hidden, tranTypeId }: any) {
+function Payment({ hidden }: any) {
     const [, setRefresh] = useState({})
     const {
         filterOn,
@@ -16,7 +15,7 @@ function Payment({ hidden, tranTypeId }: any) {
         errorMessage: '',
     })
 
-    arbitraryData.header.tranTypeId = tranTypeId
+    // arbitraryData.header.tranTypeId = tranTypeId
     useEffect(() => {
         meta.current.isMounted = true
         // const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>

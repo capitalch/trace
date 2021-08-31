@@ -131,13 +131,18 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
             valueFormatter: (params: any) => toDecimalFormat(params.value),
         },
         {
-            // align: 'right',
             headerName: 'Credits',
             sortable: false,
             field: 'credit',
             type: 'number',
             width: 160,
             valueFormatter: (params: any) => toDecimalFormat(params.value),
+        },
+        {
+            headerName: 'User ref',
+            field: 'userRefNo',
+            width: 200,
+            sortable: false,
         },
         {
             headerName: 'Remarks',
@@ -154,6 +159,12 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         {
             headerName: 'Line remarks',
             field: 'lineRemarks',
+            width: 200,
+            sortable: false,
+        },
+        {
+            headerName: 'Instr no',
+            field: 'instrNo',
             width: 200,
             sortable: false,
         },
