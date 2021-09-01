@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef,useContext } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 // import { arbitraryData } from './arbitrary-data'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { LedgerSubledger } from '../common/ledger-subledger'
@@ -16,7 +16,7 @@ function ActionBlock({
     allowFreeze,
 }: any) {
     const [, setRefresh] = useState({})
-    const arbitraryData:any = useContext(VoucherContext)
+    const arbitraryData: any = useContext(VoucherContext)
     const isGst = !!arbitraryData.header.isGst
     const classes = useStyles({ actionType, isGst })
     const ad: any = arbitraryData
@@ -138,7 +138,7 @@ function ActionBlock({
                     {/* Instrument */}
                     {allowInstrNo && (
                         <TextField
-                            className="line-ref"
+                            className="instr-no"
                             label="Instr no"
                             onChange={(e: any) => {
                                 item.instrNo = e.target.value
@@ -164,7 +164,6 @@ function ActionBlock({
                             }}
                             onBlur={() => {
                                 computeGst(item)
-                                // emit('CROWN-REFRESH', '')
                                 setRefresh({})
                             }}
                             error={item.gst.rate > 30 ? true : false}
@@ -204,12 +203,10 @@ function ActionBlock({
                         disabled={allowFreeze}
                         allowNegative={false}
                         {...{ label: `${actionLabel} amount` }}
-                        // {...matProps}
                         className="right-aligned-numeric amount"
                         customInput={TextField}
                         decimalScale={2}
                         error={item.amount ? false : true}
-                        // error={()=>false}
                         fixedDecimalScale={true}
                         onFocus={(e) => {
                             e.target.select()
@@ -234,7 +231,6 @@ function ActionBlock({
                         onBlur={() => {
                             computeGst(item)
                             setRefresh({})
-                            // emit('CROWN-REFRESH', '')
                         }}
                         thousandSeparator={true}
                         value={item.amount || 0.0}
@@ -398,6 +394,42 @@ function ActionBlock({
 
 export { ActionBlock }
 
+function getLineRefLeftMargin(isGst: boolean, actionType: string) {
+    let ret = 'auto'
+    if (actionType === 'credits') {
+        ret = '0'
+    }
+    // else {
+    //     if (isGst) {
+    //         ret = 'auto'
+    //     } else {
+    //         ret = 'auto'
+    //     }
+    // }
+    return ret
+    // return(actionType === 'credits' ? 0 : isGst ? 0 : 'auto')
+}
+
+function getLeftMargin(actionType: string, isGst: boolean) {
+    const ret: any = {}
+    if (actionType === 'credits') {
+        ret.amount = 'auto'
+        ret.lineRef = 0
+        ret.gstBlock = 0
+    } else {
+        if (isGst) {
+            ret.amount = 0
+            ret.lineRef = 'auto'
+            ret.gstBlock = 'auto'
+        } else {
+            ret.amount = 0
+            ret.lineRef = 'auto'
+            ret.gstBlock = 0
+        }
+    }
+    return ret
+}
+
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         contentAction: {
@@ -417,6 +449,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .hsn': {
                 width: theme.spacing(10),
             },
+            '& .instr-no': {
+                width: theme.spacing(12),
+                // marginLeft: 0,
+            },
             '& .gst-block': {
                 display: 'flex',
                 flexDirection: 'column',
@@ -427,12 +463,19 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     textAlign: 'right',
                     fontSize: '0.8rem',
                 },
-                marginLeft: ({ actionType }: any) =>
-                    actionType === 'debits' ? 'auto' : 0,
+                marginLeft: ({ actionType, isGst }: any) => {
+                    // actionType === 'debits' ? 'auto' : 0,{
+                    const { gstBlock }: any = getLeftMargin(actionType, isGst)
+                    return gstBlock
+                },
             },
             '& .line-ref': {
-                marginLeft: ({ isGst, actionType }: any) =>
-                    actionType === 'credits' ? 0 : isGst ? 0 : 'auto',
+                marginLeft: ({ actionType, isGst }: any) => {
+                    const { lineRef }: any = getLeftMargin(actionType, isGst)
+                    return lineRef
+                },
+                // actionType === 'credits' ? 0 : isGst ? 0 : 'auto',
+                // getLineRefLeftMargin(isGst, actionType),
             },
             '& .line-remarks': {
                 width: ({ isGst }) =>
@@ -445,14 +488,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .action-row': {
                 display: 'flex',
                 marginBottom: theme.spacing(1),
-                justifyContent: 'space-between',
+                // justifyContent: 'space-between',
                 columnGap: theme.spacing(4),
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(2),
                 alignItems: 'center',
                 '& .amount': {
-                    marginLeft: ({ actionType }: any) =>
-                        actionType === 'credits' ? 'auto' : 0,
+                    marginLeft: ({ actionType, isGst }: any) => {
+                        const { amount }: any = getLeftMargin(actionType, isGst)
+                        return amount
+                    },
+                    // actionType === 'credits' ? 'auto' : 0,
                 },
             },
         },

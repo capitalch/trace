@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
-import { useSharedElements } from '../../common/shared-elements-hook'
+// import { useSharedElements } from '../../common/shared-elements-hook'
 
 function Payment({ hidden }: any) {
-    const [, setRefresh] = useState({})
-    const {
-        filterOn,
-    } = useSharedElements()
+    // const [, setRefresh] = useState({})
+    // const {
+    //     filterOn,
+    // } = useSharedElements()
 
     const meta: any = useRef({
         isMounted: false,

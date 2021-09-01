@@ -18,7 +18,7 @@ const accStore: any = {}
 function utils() {
     const { execGenericView, extractAmount, toDecimalFormat } = utilMethods()
     const { mutateGraphql } = graphqlService()
-    const { getFromBag, getCurrentEntity, getLoginData } = manageEntitiesState()
+    const { getFromBag, getCurrentEntity } = manageEntitiesState()
     const { emit } = usingIbuki()
 
     // const classes = useStyles()
