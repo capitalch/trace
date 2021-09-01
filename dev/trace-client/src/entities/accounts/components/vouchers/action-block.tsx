@@ -18,7 +18,8 @@ function ActionBlock({
     const [, setRefresh] = useState({})
     const arbitraryData: any = useContext(VoucherContext)
     const isGst = !!arbitraryData.header.isGst
-    const classes = useStyles({ actionType, isGst })
+    const tranTypeId = arbitraryData.header.tranTypeId
+    const classes = useStyles({ actionType, isGst, tranTypeId })
     const ad: any = arbitraryData
     const {
         _,
@@ -410,7 +411,7 @@ function getLineRefLeftMargin(isGst: boolean, actionType: string) {
     // return(actionType === 'credits' ? 0 : isGst ? 0 : 'auto')
 }
 
-function getLeftMargin(actionType: string, isGst: boolean) {
+function getLeftMargin(actionType: string, isGst: boolean, tranTypeId: number=0) {
     const ret: any = {}
     if (actionType === 'credits') {
         ret.amount = 'auto'
@@ -419,7 +420,12 @@ function getLeftMargin(actionType: string, isGst: boolean) {
     } else {
         if (isGst) {
             ret.amount = 0
-            ret.lineRef = 'auto'
+            if(tranTypeId === 3){
+                ret.lineRef = 'auto'
+            } else {
+                ret.lineRef = 0
+            }
+            
             ret.gstBlock = 'auto'
         } else {
             ret.amount = 0
@@ -470,8 +476,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
             },
             '& .line-ref': {
-                marginLeft: ({ actionType, isGst }: any) => {
-                    const { lineRef }: any = getLeftMargin(actionType, isGst)
+                marginLeft: ({ actionType, isGst, tranTypeId }: any) => {
+                    const { lineRef }: any = getLeftMargin(actionType, isGst, tranTypeId)
                     return lineRef
                 },
                 // actionType === 'credits' ? 0 : isGst ? 0 : 'auto',

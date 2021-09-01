@@ -1,7 +1,20 @@
 
 import { useStyles } from './xx-grid-hook'
+// import {
+//     XGrid,
+//     GridToolbarFilterButton,
+//     GridToolbarExport,
+//     GridToolbarContainer,
+//     GridToolbarColumnsButton,
+//     GridFooterContainer,
+//     GridRowId,
+//     GridRowData,
+//     useGridApiRef,
+//     GridCellParams,
+// } from '@material-ui/x-grid'
+
 import {
-    XGrid,
+    DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
@@ -11,23 +24,10 @@ import {
     GridRowData,
     useGridApiRef,
     GridCellParams,
-} from '@material-ui/x-grid'
-// import {
-//     DataGrid,
-//     GridToolbarFilterButton,
-//     // GridToolbarDensitySelector,
-//     GridToolbarExport,
-//     GridToolbarContainer,
-//     GridToolbarColumnsButton,
-//     GridFooterContainer,
-//     GridRowId,
-//     GridRowData,
-//     useGridApiRef,
-//     GridCellParams,
-// } from '@material-ui/data-grid'
+} from '@mui/x-data-grid-pro'
+
 import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
-import { Box } from '@material-ui/core'
 
 interface SpecialColumnOptions {
     isEdit?: boolean
@@ -83,7 +83,7 @@ function XXGrid(gridOptions: XXGridOptions,) {
 
     return (
         // <div style={{height:'1280px', width: '800px'}}>
-            <XGrid className={classes.content}
+            <DataGridPro className={classes.content}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}
