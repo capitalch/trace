@@ -395,21 +395,6 @@ function ActionBlock({
 
 export { ActionBlock }
 
-function getLineRefLeftMargin(isGst: boolean, actionType: string) {
-    let ret = 'auto'
-    if (actionType === 'credits') {
-        ret = '0'
-    }
-    // else {
-    //     if (isGst) {
-    //         ret = 'auto'
-    //     } else {
-    //         ret = 'auto'
-    //     }
-    // }
-    return ret
-    // return(actionType === 'credits' ? 0 : isGst ? 0 : 'auto')
-}
 
 function getLeftMargin(actionType: string, isGst: boolean, tranTypeId: number=0) {
     const ret: any = {}

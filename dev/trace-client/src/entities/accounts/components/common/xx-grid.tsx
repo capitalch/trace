@@ -1,4 +1,3 @@
-
 import { useStyles } from './xx-grid-hook'
 // import {
 //     XGrid,
@@ -28,8 +27,10 @@ import {
 
 import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
+import { optionCSS } from 'react-select/src/components/Option'
 
 interface SpecialColumnOptions {
+    toShowClosingBalance?: boolean
     isEdit?: boolean
     isDelete?: boolean
     isRemove?: boolean
@@ -49,7 +50,7 @@ interface XXGridOptions {
     xGridProps?: any
 }
 
-function XXGrid(gridOptions: XXGridOptions,) {
+function XXGrid(gridOptions: XXGridOptions) {
     const { columns, sqlQueryArgs, sqlQueryId, summaryColNames, title } =
         gridOptions
     const apiRef: any = useGridApiRef()
@@ -83,7 +84,8 @@ function XXGrid(gridOptions: XXGridOptions,) {
 
     return (
         // <div style={{height:'1280px', width: '800px'}}>
-            <DataGridPro className={classes.content}
+        <DataGridPro
+            className={classes.content}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}
@@ -199,6 +201,7 @@ function XXGrid(gridOptions: XXGridOptions,) {
             <GridFooterContainer className="custom-footer">
                 <SelectedMarkup />
                 <FilteredMarkup />
+                {specialColumns.toShowClosingBalance && <ClosingBalanceMarkup />}
                 <AllMarkup />
             </GridFooterContainer>
         )
@@ -230,6 +233,39 @@ function XXGrid(gridOptions: XXGridOptions,) {
                         </div>
                     )
                 })
+            }
+        }
+        function ClosingBalanceMarkup() {
+            return (
+                <div style={{ display: 'flex' }}>
+                    <div>
+                        <b>Closing</b>&nbsp;
+                    </div>
+                    <div>
+                        <b>
+                            <ClosingBalance />
+                        </b>
+                    </div>
+                </div>
+            )
+            function ClosingBalance() {
+                const clos: number =
+                    (props.allSummary['debit'] || 0.0) -
+                    (props.allSummary['credit'] || 0.0)
+                const absClos = toDecimalFormat(Math.abs(clos))
+                const suffix = clos < 0 ? 'Cr' : 'Dr'
+
+                return (
+                    <div>
+                        <span>{absClos}</span>&nbsp;
+                        <span
+                            style={{
+                                color: suffix === 'Dr' ? 'inherit' : 'red',
+                            }}>
+                            {suffix}
+                        </span>
+                    </div>
+                )
             }
         }
 
@@ -335,7 +371,10 @@ function XXGrid(gridOptions: XXGridOptions,) {
                             size="small"
                             color="secondary"
                             className="delete"
-                            onClick={() => options.deleteIbukiMessage && emit(options.deleteIbukiMessage, params)}
+                            onClick={() =>
+                                options.deleteIbukiMessage &&
+                                emit(options.deleteIbukiMessage, params)
+                            }
                             aria-label="Delete">
                             <DeleteIcon />
                         </IconButton>
@@ -363,7 +402,8 @@ function XXGrid(gridOptions: XXGridOptions,) {
                             size="small"
                             color="secondary"
                             onClick={() => {
-                                options.editIbukiMessage && emit(options.editIbukiMessage, params)
+                                options.editIbukiMessage &&
+                                    emit(options.editIbukiMessage, params)
                             }}
                             aria-label="Edit">
                             <EditIcon />

@@ -81,6 +81,7 @@ function useAllTransactions() {
 
     const summaryColNames = ['debit', 'credit']
     const specialColumns = {
+        // toShowClosingBalance: true,
         isRemove: true,
         isEdit: true,
         isDelete: true,
