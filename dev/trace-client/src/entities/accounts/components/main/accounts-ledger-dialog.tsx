@@ -10,23 +10,18 @@ import {
     createStyles,
     makeStyles,
 } from '@material-ui/core'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { manageEntitiesState } from '../../../../common-utils/esm'
 import CloseIcon from '@material-ui/icons/Close'
-import { DataTable } from 'primereact/datatable'
-// import { Column } from 'primereact/column'
 import { usingIbuki } from '../../../../common-utils/ibuki'
-// import { utilMethods } from '../../../../common-utils/util-methods'
-// import { useSharedElements } from '../common/shared-elements-hook'
 import { utils } from '../../utils'
+import { emit } from 'process'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
-    // const { emit } = usingIbuki()
-    // const { toDecimalFormat, execGenericView } = utilMethods()
     const { getFromBag } = manageEntitiesState()
-    // const { SearchIcon } = useSharedElements()
     const { getGeneralLedger } = utils()
-
+    const { emit, moment, toDecimalFormat, XXGrid } = useSharedElements()
     const meta: any = useRef({
         accId: 0,
         accName: '',
@@ -52,7 +47,8 @@ function AccountsLedgerDialog() {
         const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
             meta.current.showDialog = true
             meta.current.accId = d.data
-            await fetchData()
+            // await fetchData()
+            // emit('XX-GRID-FETCH-DATA','')
             setRefresh({})
         })
         return () => {
@@ -60,6 +56,10 @@ function AccountsLedgerDialog() {
             meta.current.isMounted = false
         }
     }, [])
+
+    // useEffect(()=>{
+    //     emit('XX-GRID-FETCH-DATA','')
+    // })
 
     function closeDialog() {
         meta.current.showDialog = false
@@ -70,8 +70,9 @@ function AccountsLedgerDialog() {
         // <div >
         <Dialog className={classes.content}
             open={meta.current.showDialog}
-            maxWidth="md"
+            maxWidth="lg"
             fullWidth={true}
+            // fullScreen={true}
             onClose={closeDialog}>
             <DialogTitle
                 disableTypography
@@ -87,12 +88,79 @@ function AccountsLedgerDialog() {
                 </IconButton>
             </DialogTitle>
             <DialogContent className={classes.dialogContent}>
-                <LedgerDataTable isScrollable={false} className='data-table' />
+                {/* <LedgerDataTable isScrollable={false} className='data-table' /> */}
+                {/* <button onClick={()=>{
+                     emit('XX-GRID-FETCH-DATA','')
+                }}>test</button> */}
+
+                <XXGrid
+                    autoFetchData={true}
+                    columns={getArtifacts().columns}
+                    summaryColNames={getArtifacts().summaryColNames}
+                    title='Ledger view'
+                    sqlQueryId='get_accountsLedger'
+                    sqlQueryArgs={getArtifacts().args}
+                    specialColumns={getArtifacts().specialColumns}
+                    xGridProps={{ disableSelectionOnClick: true }}
+                    jsonFieldPath='jsonResult.transactions'
+                />
             </DialogContent>
             <DialogActions></DialogActions>
         </Dialog>
         // </div>
     )
+
+    function getArtifacts() {
+        const columns = [{
+            headerName: 'Ind',
+            description: 'Index',
+            field: 'id',
+            width: 80,
+            disableColumnMenu: true,
+        },
+        { headerName: 'Id', field: 'id1', width: 90 },
+        {
+            headerName: 'Date',
+            field: 'tranDate',
+            width: 120,
+            type: 'date',
+            valueFormatter: (params: any) =>
+                moment(params.value).format('DD/MM/YYYY'),
+        },
+
+        {
+            headerName: 'Debits',
+            field: 'debit',
+            sortable: false,
+            type: 'number',
+            width: 160,
+            valueFormatter: (params: any) => toDecimalFormat(params.value),
+        },
+        {
+            headerName: 'Credits',
+            sortable: false,
+            field: 'credit',
+            type: 'number',
+            width: 160,
+            valueFormatter: (params: any) => toDecimalFormat(params.value),
+        },
+        ]
+        const summaryColNames = ['debit', 'credit']
+        const args = {
+            id: meta.current.accId,
+        }
+        const specialColumns = {
+            // isRemove: true,
+            isEdit: true,
+            isDelete: true,
+            editIbukiMessage: 'VOUCHER-VIEW-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage: 'VOUCHER-VIEW-XX-GRID-DELETE-CLICKED',
+            // isDrillDown: true,
+        }
+        return { columns, summaryColNames, args, specialColumns }
+    }
+
+
 }
 
 export { AccountsLedgerDialog }
@@ -118,6 +186,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     }
                 },
             },
+        },
+        dialogContent: {
+            height: 'calc(100vh - 163px)'
+            // height: '50rem'
         }
     })
 )

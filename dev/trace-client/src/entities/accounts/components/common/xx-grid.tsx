@@ -40,6 +40,7 @@ interface SpecialColumnOptions {
 }
 
 interface XXGridOptions {
+    autoFetchData?: boolean
     columns: any[]
     sqlQueryArgs?: any
     sqlQueryId?: any
@@ -47,6 +48,7 @@ interface XXGridOptions {
     title: string
     specialColumns: SpecialColumnOptions
     xGridProps?: any
+    jsonFieldPath?: any // if input is a json object then give the path of json field
 }
 
 function XXGrid(gridOptions: XXGridOptions,) {
@@ -88,7 +90,8 @@ function XXGrid(gridOptions: XXGridOptions,) {
             apiRef={apiRef}
             columns={columns}
             rows={meta.current.filteredRows}
-            rowHeight={32}
+            rowHeight={32} 
+            // autoHeight={true}
             // disableSelectionOnClick={true}
             components={{
                 Toolbar: CustomGridToolbar,

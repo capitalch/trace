@@ -20,6 +20,7 @@ function useXXGrid(gridOptions: any) {
 
     useEffect(() => {
         meta.current.isMounted = true
+        gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
         const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe(()=>{
             fetchRows(sqlQueryId, sqlQueryArgs)
         })
@@ -32,8 +33,8 @@ function useXXGrid(gridOptions: any) {
 
     async function fetchRows(queryId: string, queryArgs: any) {
         emit('SHOW-LOADING-INDICATOR', true)
-        const ret: any[] = await execGenericView({
-            isMultipleRows: true,
+        const ret1: any[] = await execGenericView({
+            isMultipleRows: gridOptions.jsonFieldPath ? false: true,
             sqlKey: queryId,
             args: queryArgs || null,
             entityName: entityName,
@@ -42,6 +43,12 @@ function useXXGrid(gridOptions: any) {
         let i = 1
         function incr() {
             return i++
+        }
+        let ret
+        if(gridOptions.jsonFieldPath){
+            ret = _.get(ret1,gridOptions.jsonFieldPath)
+        } else {
+            ret = ret1
         }
         const tot: any = {}
         const temp: any[] = ret.map((x: any) => {
@@ -112,7 +119,8 @@ export { useXXGrid, useStyles }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: '100%', 
+            height: '100%',
+            // minHeight: '30rem', 
             width: '100%',
             '& .delete': {
                 color: 'red',
