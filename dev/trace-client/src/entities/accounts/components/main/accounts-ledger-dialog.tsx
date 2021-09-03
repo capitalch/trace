@@ -47,8 +47,6 @@ function AccountsLedgerDialog() {
         const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
             meta.current.showDialog = true
             meta.current.accId = d.data
-            // await fetchData()
-            // emit('XX-GRID-FETCH-DATA','')
             setRefresh({})
         })
         return () => {
@@ -56,10 +54,6 @@ function AccountsLedgerDialog() {
             meta.current.isMounted = false
         }
     }, [])
-
-    // useEffect(()=>{
-    //     emit('XX-GRID-FETCH-DATA','')
-    // })
 
     function closeDialog() {
         meta.current.showDialog = false
@@ -92,17 +86,18 @@ function AccountsLedgerDialog() {
                 {/* <button onClick={()=>{
                      emit('XX-GRID-FETCH-DATA','')
                 }}>test</button> */}
-
                 <XXGrid
                     autoFetchData={true}
                     columns={getArtifacts().columns}
+                    hideViewLimit= {true}
                     summaryColNames={getArtifacts().summaryColNames}
                     title='Ledger view'
                     sqlQueryId='get_accountsLedger'
                     sqlQueryArgs={getArtifacts().args}
                     specialColumns={getArtifacts().specialColumns}
+                    toShowClosingBalance={true}
                     xGridProps={{ disableSelectionOnClick: true }}
-                    jsonFieldPath='jsonResult.transactions'
+                    jsonFieldPath='jsonResult.transactions' // data is available in nested jason property
                 />
             </DialogContent>
             <DialogActions></DialogActions>

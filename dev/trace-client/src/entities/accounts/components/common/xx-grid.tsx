@@ -28,11 +28,10 @@ import {
 import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
 
-interface SpecialColumnOptions {
-    toShowClosingBalance?: boolean
+interface SpecialColumnOptions {    
     isEdit?: boolean
     isDelete?: boolean
-    isRemove?: boolean
+    isHide?: boolean
     isDrillDown?: boolean
     editIbukiMessage?: any
     deleteIbukiMessage?: any
@@ -42,9 +41,11 @@ interface SpecialColumnOptions {
 interface XXGridOptions {
     autoFetchData?: boolean
     columns: any[]
+    hideViewLimit?: boolean
     sqlQueryArgs?: any
     sqlQueryId?: any
     summaryColNames: string[]
+    toShowClosingBalance?: boolean    
     title: string
     specialColumns: SpecialColumnOptions
     xGridProps?: any
@@ -144,7 +145,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     onClick={(e: any) => fetchRows(sqlQueryId, sqlQueryArgs)}>
                     <SyncIcon></SyncIcon>
                 </IconButton>
-                <div className="view-limit">
+                {(!!!gridOptions.hideViewLimit) && <div className="view-limit">
                     <span>View</span>
                     <select
                         value={meta.current.viewLimit}
@@ -166,7 +167,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                         <option value={1000}>1000</option>
                         <option value={0}>All</option>
                     </select>
-                </div>
+                </div>}
 
                 {/* global filter */}
                 <TextField
@@ -203,7 +204,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             <GridFooterContainer className="custom-footer">
                 <SelectedMarkup />
                 <FilteredMarkup />
-                {specialColumns.toShowClosingBalance && <ClosingBalanceMarkup />}
+                {gridOptions.toShowClosingBalance && <ClosingBalanceMarkup />}
                 <AllMarkup />
             </GridFooterContainer>
         )
@@ -358,7 +359,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         if (options.isDelete) {
             const deleteColumn = {
                 headerName: 'D',
-                description: 'Delete from database',
+                description: 'Delete forever',
                 disableColumnMenu: true,
                 disableExport: true,
                 disableReorder: true,
@@ -416,10 +417,10 @@ function XXGrid(gridOptions: XXGridOptions) {
             columns.unshift(editColumn)
         }
 
-        if (options.isRemove) {
+        if (options.isHide) {
             const removeColumn = {
-                headerName: 'R',
-                description: 'Remove without delete',
+                headerName: 'H',
+                description: 'Hide',
                 disableColumnMenu: true,
                 disableExport: true,
                 disableReorder: true,
@@ -434,7 +435,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             size="small"
                             color="primary"
                             onClick={() => removeRow(params)}
-                            aria-label="close">
+                            aria-label="hide">
                             <CloseIcon />
                         </IconButton>
                     )

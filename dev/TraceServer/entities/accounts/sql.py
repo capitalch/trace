@@ -47,7 +47,7 @@ allSqls = {
             , t."remarks" as "lineRemarks"
             , "lineRefNo"
             , "instrNo"
-            , h."id" as "headerId"
+            , h."id" --as "headerId"
             from "AccM" a
                 join "TranD" as t
                     on a."id" = t."accId"
