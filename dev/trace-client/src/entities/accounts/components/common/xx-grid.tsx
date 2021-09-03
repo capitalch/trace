@@ -27,7 +27,6 @@ import {
 
 import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
-import { optionCSS } from 'react-select/src/components/Option'
 
 interface SpecialColumnOptions {
     toShowClosingBalance?: boolean
