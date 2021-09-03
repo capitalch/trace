@@ -40,7 +40,7 @@ function AccountsLedgerDialog() {
     const { filterOn } = usingIbuki()
     const classes = useStyles({ meta: meta })
     meta.current.dateFormat = getFromBag('dateFormat')
-    const { fetchData, getLedgerColumns, LedgerDataTable } = getGeneralLedger(meta)
+    const { fetchData, LedgerDataTable } = getGeneralLedger(meta)
 
     useEffect(() => {
         meta.current.isMounted = true

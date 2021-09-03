@@ -7,7 +7,7 @@ function useVoucher(loadComponent: string) {
     const { emit, execGenericView, filterOn, getFromBag } =
         useSharedElements()
     const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
-    arbitraryData.header.tranTypeId = getTranTypeId()
+    arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()

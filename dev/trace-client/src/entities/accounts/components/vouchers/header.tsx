@@ -26,7 +26,7 @@ function Header({allowHeaderGst}: any) {
                 label="Ref no"
                 placeholder="Auto ref no"
                 disabled
-                value={arbitraryData.header.autoRefNo || ''}
+                value={arbitraryData?.header?.autoRefNo || ''}
             />
             {/* date */}
             <div className="date-block">
