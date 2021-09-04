@@ -45,7 +45,8 @@ interface XXGridOptions {
     sqlQueryArgs?: any
     sqlQueryId?: any
     summaryColNames: string[]
-    toShowClosingBalance?: boolean    
+    toShowClosingBalance?: boolean
+    toShowOpeningBalance?: boolean   
     title: string
     specialColumns: SpecialColumnOptions
     xGridProps?: any
@@ -204,8 +205,8 @@ function XXGrid(gridOptions: XXGridOptions) {
             <GridFooterContainer className="custom-footer">
                 <SelectedMarkup />
                 <FilteredMarkup />
-                {gridOptions.toShowClosingBalance && <ClosingBalanceMarkup />}
                 <AllMarkup />
+                {gridOptions.toShowClosingBalance && <ClosingBalanceMarkup />}
             </GridFooterContainer>
         )
 
@@ -265,7 +266,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             style={{
                                 color: suffix === 'Dr' ? 'inherit' : 'red',
                             }}>
-                            {suffix}
+                            {suffix}&nbsp;
                         </span>
                     </div>
                 )

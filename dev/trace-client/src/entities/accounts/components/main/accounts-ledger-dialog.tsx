@@ -21,7 +21,7 @@ function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
     const { getGeneralLedger } = utils()
-    const { emit, moment, toDecimalFormat, XXGrid } = useSharedElements()
+    const {getAccountName, emit, moment, toDecimalFormat, XXGrid } = useSharedElements()
     const meta: any = useRef({
         accId: 0,
         accName: '',
@@ -47,6 +47,7 @@ function AccountsLedgerDialog() {
         const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
             meta.current.showDialog = true
             meta.current.accId = d.data
+            meta.current.accName = getAccountName(d.data)
             setRefresh({})
         })
         return () => {
@@ -62,7 +63,8 @@ function AccountsLedgerDialog() {
 
     return (
         // <div >
-        <Dialog className={classes.content}
+        <Dialog
+            className={classes.content}
             open={meta.current.showDialog}
             maxWidth="lg"
             fullWidth={true}
@@ -71,8 +73,8 @@ function AccountsLedgerDialog() {
             <DialogTitle
                 disableTypography
                 id="generic-dialog-title"
-                className='dialog-title'>
-                <h5>{'Ledger: '.concat(meta.current.accName)}</h5>
+                className="dialog-title">
+                <h3>{'Account: '.concat(meta.current.accName)}</h3>
                 <IconButton
                     size="small"
                     color="default"
@@ -89,15 +91,16 @@ function AccountsLedgerDialog() {
                 <XXGrid
                     autoFetchData={true}
                     columns={getArtifacts().columns}
-                    hideViewLimit= {true}
+                    hideViewLimit={true}
                     summaryColNames={getArtifacts().summaryColNames}
-                    title='Ledger view'
-                    sqlQueryId='get_accountsLedger'
+                    title="Ledger view"
+                    sqlQueryId="get_accountsLedger"
                     sqlQueryArgs={getArtifacts().args}
                     specialColumns={getArtifacts().specialColumns}
+                    toShowOpeningBalance={true}
                     toShowClosingBalance={true}
                     xGridProps={{ disableSelectionOnClick: true }}
-                    jsonFieldPath='jsonResult.transactions' // data is available in nested jason property
+                    jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                 />
             </DialogContent>
             <DialogActions></DialogActions>
@@ -106,39 +109,76 @@ function AccountsLedgerDialog() {
     )
 
     function getArtifacts() {
-        const columns = [{
-            headerName: 'Ind',
-            description: 'Index',
-            field: 'id',
-            width: 80,
-            disableColumnMenu: true,
-        },
-        { headerName: 'Id', field: 'id1', width: 90 },
-        {
-            headerName: 'Date',
-            field: 'tranDate',
-            width: 120,
-            type: 'date',
-            valueFormatter: (params: any) =>
-                moment(params.value).format('DD/MM/YYYY'),
-        },
+        const columns = [
+            {
+                headerName: 'Ind',
+                description: 'Index',
+                field: 'id',
+                width: 80,
+                disableColumnMenu: true,
+            },
+            { headerName: 'Id', field: 'id1', width: 90 },
+            {
+                headerName: 'Date',
+                field: 'tranDate',
+                width: 120,
+                type: 'date',
+                valueFormatter: (params: any) =>
+                    moment(params.value).format('DD/MM/YYYY'),
+            },
+            { headerName: 'Ref', field: 'autoRefNo', width: 200 },
+            { headerName: 'Other accounts', field: 'otherAccounts', width: 200 },
+            {
+                headerName: 'Debits',
+                field: 'debit',
+                type: 'number',
+                width: 160,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Credits',
+                field: 'credit',
+                type: 'number',
+                width: 160,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
 
-        {
-            headerName: 'Debits',
-            field: 'debit',
-            sortable: false,
-            type: 'number',
-            width: 160,
-            valueFormatter: (params: any) => toDecimalFormat(params.value),
-        },
-        {
-            headerName: 'Credits',
-            sortable: false,
-            field: 'credit',
-            type: 'number',
-            width: 160,
-            valueFormatter: (params: any) => toDecimalFormat(params.value),
-        },
+            {
+                headerName: 'Instr',
+                field: 'instrNo',
+                width: 160,
+                sortable: false,
+            },
+            {
+                headerName: 'User ref no',
+                field: 'userRefNo',
+                width: 160,
+                sortable: false,
+            },
+            {
+                headerName: 'Remarks',
+                field: 'remarks',
+                width: 200,
+                sortable: false,
+            },
+            {
+                headerName: 'Line ref no',
+                field: 'lineRefNo',
+                width: 200,
+                sortable: false,
+            },
+            {
+                headerName: 'Line remarks',
+                field: 'lineRemarks',
+                width: 200,
+                sortable: false,
+            },
+            {
+                headerName: 'Tags',
+                field: 'tags',
+                width: 200,
+                sortable: false,
+            },
         ]
         const summaryColNames = ['debit', 'credit']
         const args = {
@@ -154,8 +194,6 @@ function AccountsLedgerDialog() {
         }
         return { columns, summaryColNames, args, specialColumns }
     }
-
-
 }
 
 export { AccountsLedgerDialog }
@@ -177,14 +215,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
                             fontSize: '0.8rem',
                             // fontWeight: 'normal',
                             color: 'dodgerBlue !important',
-                        }
-                    }
+                        },
+                    },
                 },
             },
         },
         dialogContent: {
-            height: 'calc(100vh - 163px)'
+            height: 'calc(100vh - 163px)',
             // height: '50rem'
-        }
+        },
     })
 )

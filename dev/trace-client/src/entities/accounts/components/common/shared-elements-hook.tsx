@@ -155,6 +155,7 @@ function useSharedElements() {
     const confirm = useConfirm()
     const {
         getAccountClass,
+        getAccountName,
         getAccountClassWithAutoSubledger,
         getGeneralLedger,
         getMappedAccounts,
@@ -216,6 +217,7 @@ function useSharedElements() {
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         getAccountClass,
+        getAccountName,
         getAccountClassWithAutoSubledger,
         getArtifacts,
         getCurrentComponent,

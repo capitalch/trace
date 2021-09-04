@@ -44,6 +44,7 @@ allSqls = {
 					where h."id" = t1."tranHeaderId" 
 						and "dc" <> t."dc") as "otherAccounts" 
             , "autoRefNo"
+            , "accName"
             , t."remarks" as "lineRemarks"
             , "lineRefNo"
             , "instrNo"

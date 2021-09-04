@@ -16,7 +16,7 @@ function useXXGrid(gridOptions: any) {
         viewLimit: 0,
     })
     
-    const { _, emit, filterOn, getCurrentEntity, execGenericView } = useSharedElements()
+    const { _, emit, filterOn, getCurrentEntity,getFromBag, execGenericView } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -33,7 +33,7 @@ function useXXGrid(gridOptions: any) {
 
     async function fetchRows(queryId: string, queryArgs: any) {
         emit('SHOW-LOADING-INDICATOR', true)
-        const ret1: any[] = await execGenericView({
+        const ret1: any = await execGenericView({
             isMultipleRows: gridOptions.jsonFieldPath ? false: true,
             sqlKey: queryId,
             args: queryArgs || null,
@@ -45,10 +45,24 @@ function useXXGrid(gridOptions: any) {
             return i++
         }
         let ret
+        let openingBalance = ret1?.jsonResult?.opBalance
+        
         if(gridOptions.jsonFieldPath){
             ret = _.get(ret1,gridOptions.jsonFieldPath)
         } else {
             ret = ret1
+        }
+        if(gridOptions.toShowOpeningBalance){
+            if((!openingBalance) || (_.isEmpty(openingBalance))) {
+                openingBalance = {debit:0,credit: 0, tranDate:undefined}
+            }
+            const finYearObject = getFromBag('finYearObject')
+            ret.unshift({
+                   autoRefNo: 'Opening balance',
+                   debit: openingBalance.debit,
+                   credit: openingBalance.credit,
+                   tranDate: finYearObject?.isoStartDate
+               })
         }
         const tot: any = {}
         const temp: any[] = ret.map((x: any) => {

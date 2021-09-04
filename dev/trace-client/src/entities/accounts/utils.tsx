@@ -46,6 +46,14 @@ function utils() {
         return ret
     }
 
+    function getAccountName(accId: number) {
+        let ret = undefined
+        const allAccounts: any[] = getFromBag('allAccounts') // accStore['allAccounts']
+        const account = allAccounts.find((x) => x.id === accId)
+        account && (ret = account.accName)
+        return ret
+    }
+
     function getAccountClassWithAutoSubledger(accId: number) {
         let ret = undefined
         const allAccounts: any[] = getFromBag('allAccounts')
@@ -611,6 +619,7 @@ function utils() {
     return {
         extractGst,
         getAccountClass,
+        getAccountName,
         getAccountClassWithAutoSubledger,
         getDebitCreditRowsCount,
         getDebitCreditTotals,
