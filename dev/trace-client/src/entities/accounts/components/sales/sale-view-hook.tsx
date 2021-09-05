@@ -44,7 +44,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                 loadSaleOnId(d.data, true) // isModify; 2nd arg is false for new entries in table
             }
         )
-        
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -113,13 +113,13 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                 toolTip: 'Select party',
                 name: 'selectParty',
                 isFreeAction: true, // isFreeAction puts the icon in toolbar
-                onClick: () => { }, // Reload the component for new sale entry
+                onClick: () => {}, // Reload the component for new sale entry
             },
             {
                 icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
                 name: 'select',
                 isFreeAction: true,
-                onClick: () => { }, // This empty onClick is a hack. Without this warning appears
+                onClick: () => {}, // This empty onClick is a hack. Without this warning appears
             },
             {
                 icon: () => <EditIcon color="secondary" fontSize="small" />,
@@ -133,7 +133,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             message: accountsMessages.auditLockError,
                             duration: null,
                         })
-                    } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                    } else if (rowData?.clearDate) {
+                        // already reconciled so edit /delete not possible
                         emit('SHOW-MESSAGE', {
                             severity: 'error',
                             message: accountsMessages.reconcillationDone,
@@ -162,7 +163,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             message: accountsMessages.auditLockError,
                             duration: null,
                         })
-                    } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                    } else if (rowData?.clearDate) {
+                        // already reconciled so edit /delete not possible
                         emit('SHOW-MESSAGE', {
                             severity: 'error',
                             message: accountsMessages.reconcillationDone,
@@ -182,7 +184,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                                 emit('PURCHASE-ROOT-CLEAR-ALL', null) //must clear the total purchase data
                                 fetchData()
                             })
-                            .catch(() => { }) // important to have otherwise eror
+                            .catch(() => {}) // important to have otherwise eror
                     }
                 },
             },
@@ -227,6 +229,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
 
     async function loadSaleOnId(id: number, isModify: boolean = true) {
         // isModify: if isEdit then id's of tables are there so as to enforce modify sql. Otherwise id's of table are reset to undefined, so new rows are inserted in tables
+        const ad = arbitraryData
         emit('SHOW-LOADING-INDICATOR', true)
         const ret = await execGenericView({
             isMultipleRows: false,
@@ -245,7 +248,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
 
         function prepareArbitraryData(data: any) {
             const res = data.jsonResult
-            const ad = arbitraryData
+
             loadTranH(res)
             loadExtGstTranD(res)
             loadSalePurchaseDetails(res)
@@ -277,8 +280,9 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                     upcCode: item.upcCode,
                     productCode: item.productCode,
                     productDetails: item.label
-                        ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
-                        }, ${item.info || ''}`
+                        ? `${item.catName || ''}, ${item.brandName || ''}, ${
+                              item.label || ''
+                          }, ${item.info || ''}`
                         : '',
                     productId: item.productId,
                     hsn: item.hsn,
@@ -333,14 +337,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             ad.saleVariety = 'i'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts[
-                                'debtorCreditorAccountsWithLedgers'
+                                    'debtorCreditorAccountsWithLedgers'
                                 ]
                             )
                         } else {
                             ad.saleVariety = 'r'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts[
-                                'cashBankAccountsWithSubledgers'
+                                    'cashBankAccountsWithSubledgers'
                                 ]
                             )
                         }

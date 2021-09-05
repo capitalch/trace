@@ -18,7 +18,8 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         meta.current.isMounted = true
         setAccounts()
         if (drillDownEditAttributes && (!_.isEmpty(drillDownEditAttributes))) {
-            emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', drillDownEditAttributes.tranHeaderId)
+            // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
+            drillDownEditAttributes.showChildDialog && emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', drillDownEditAttributes.tranHeaderId)
             arbitraryData.current.shouldCloseParentOnSave = true
         }
 
