@@ -34,6 +34,7 @@ allSqls = {
             , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
             , "dc"
             , "tranDate"
+            , "tranTypeId"
             , "userRefNo"
             , h."remarks"
             , (select "tranType" from "TranTypeM" where "id" = h."tranTypeId") as "tranType"
@@ -108,6 +109,7 @@ allSqls = {
     'get_allTransactions': '''
         select ROW_NUMBER() over (order by h."id" DESC) as "index"
             , h."id", h."tranDate" as "tranDate"
+            , "tranTypeId"
             , h."autoRefNo", h."userRefNo", h."remarks"
             , a."accName"
             , CASE WHEN "dc" = 'D' THEN "amount" ELSE 0.00 END as "debit"

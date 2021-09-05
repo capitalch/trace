@@ -463,7 +463,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             size="small"
                             color="primary"
                             onClick={() =>
-                                emit(options.drillDownIbukiMessage, '')
+                                emit(options.drillDownIbukiMessage, params)
                             }
                             aria-label="close">
                             <SearchIcon color="secondary" fontSize="small" />

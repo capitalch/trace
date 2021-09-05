@@ -17,13 +17,14 @@ function GenericReports({ loadReport }: any) {
         title,
     } = selectLogic[loadReport]()
 
-    const { _, Card, emit } = useSharedElements()
+    const { _, Card, emit, filterOn, } = useSharedElements()
     const classes = useStyles()
     useEffect(() => {
         //On demand populate data
         emit('XX-GRID-FETCH-DATA', null)
+
     }, [])
-    // console.log('rendered')
+    
     return (
         <Card className={classes.container}>
             <XXGrid

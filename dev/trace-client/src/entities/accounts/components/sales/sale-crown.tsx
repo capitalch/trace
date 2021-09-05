@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 
-function SaleCrown({ arbitraryData, saleType }: any) {
+function SaleCrown({ arbitraryData, saleType, drillDownEditAttributes }: any) {
     // const [, setRefresh] = useState({})
     const classes = useStyles()
     const { getError, handleSubmit, meta } = useSaleCrown(
         arbitraryData,
-        saleType
+        saleType,
+        drillDownEditAttributes
     )
 
     const {
         Button,
         CheckIcon,
+        emit,
         ErrorIcon,
         toDecimalFormat,
         Typography,
@@ -24,6 +26,9 @@ function SaleCrown({ arbitraryData, saleType }: any) {
                 <Typography variant="h6" className="crown-title">
                     {meta.current.title}
                 </Typography>
+                {/* <Button
+                onClick={()=>emit('SALE-VIEW-HOOK-GET-SALE-ON-ID',9779)}
+                >Test</Button> */}
                 <div className="crown-content">
                     <Typography variant="subtitle1">
                         Total debits:{' '}

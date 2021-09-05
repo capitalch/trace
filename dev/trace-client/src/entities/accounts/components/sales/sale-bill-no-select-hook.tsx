@@ -73,7 +73,7 @@ function useSaleBillNoSelect() {
                             onClick={
                                 (e: any) => {
                                     // saleBill.id = item.id
-                                    emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', item.id)
+                                    // emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', item.id)
                                     meta.current.showDialog = false
                                     meta.current.isMounted && setRefresh({})
                                 }

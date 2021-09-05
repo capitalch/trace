@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
+import _ from 'lodash'
 
-function useSales(saleType: string) {
+function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
     const {
+        _,
         emit,
         filterOn,
         getFromBag,
@@ -15,10 +17,16 @@ function useSales(saleType: string) {
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()
+        if (drillDownEditAttributes && (!_.isEmpty(drillDownEditAttributes))) {
+            emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', drillDownEditAttributes.tranHeaderId)
+            arbitraryData.current.shouldCloseParentOnSave = true
+        }
+
         const subs1 = filterOn('CHANGE-TAB-SALES').subscribe((d) => {
             meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
         })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -37,7 +45,7 @@ function useSales(saleType: string) {
         },
     })
 
-    const initData = {
+    const arbitraryData: any = useRef({
         accounts: {
             cashBankAccountsWithLedgers: [],
             cashBankAccountsWithSubledgers: [],
@@ -75,6 +83,7 @@ function useSales(saleType: string) {
                 getSlNoError: () => false,
             }
         },
+
         saleErrorObject: {},
 
         saleVariety: 'r',
@@ -83,10 +92,8 @@ function useSales(saleType: string) {
         totalCredits: 0.0,
         totalDebits: 0.0,
         tranDate: moment().format(isoDateFormat),
-    }
+    })
 
-    const arbitraryData: any = useRef(initData)
-    const ad = arbitraryData.current
     function handleChange(e: any, newValue: number) {
         meta.current.tabValue = newValue
         if (newValue === 3) { // view
@@ -97,7 +104,7 @@ function useSales(saleType: string) {
 
     function setAccounts() {
         //saleAccounts
-        const allAccounts = getFromBag('allAccounts') ||[]
+        const allAccounts = getFromBag('allAccounts') || []
         arbitraryData.current.allAccounts = allAccounts
         const saleAccounts = allAccounts.filter(
             (el: any) =>

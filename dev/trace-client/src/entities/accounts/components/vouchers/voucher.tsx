@@ -7,9 +7,9 @@ import { Contra } from './voucher-type/contra'
 import { VoucherView } from './voucher-view'
 import { VoucherContext } from './voucher-context'
 
-function Voucher({ loadComponent }: any) {
+function Voucher({ loadComponent, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const { arbitraryData, getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent)
+    const { arbitraryData, getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent, drillDownEditAttributes)
     const { Tab, Tabs, Typography } = useSharedElements()
 
     function SelectedVoucherComponent({ hidden }: any) {

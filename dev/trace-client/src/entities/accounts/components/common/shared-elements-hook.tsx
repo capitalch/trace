@@ -75,7 +75,7 @@ import {
     RemoveCircleOutline as MinusIcon,
     RemoveCircle,
 } from '@material-ui/icons'
-import DeleteIcon from '@material-ui/icons/Delete'
+import DeleteIcon from '@material-ui/icons/DeleteForever'
 import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
 import { useTraceGlobal } from '../../../../common-utils/trace-global'
 import { TreeTable } from 'primereact/treetable'
@@ -154,14 +154,17 @@ function useSharedElements() {
         useTraceGlobal()
     const confirm = useConfirm()
     const {
+        // deleteRow,
         getAccountClass,
         getAccountName,
         getAccountClassWithAutoSubledger,
         getGeneralLedger,
         getMappedAccounts,
+        getTranType,
         getUnitHeading,
         isDateNotAuditLocked,
         isDateAuditLocked,
+        isGoodToDelete,
         isImproperDate,
         isInvalidDate,
         isInvalidEmail,
@@ -195,6 +198,7 @@ function useSharedElements() {
         confirm,
         DataTable,
         DeleteIcon,
+        // deleteRow,
         Dialog,
         DialogActions,
         DialogContent,
@@ -230,6 +234,7 @@ function useSharedElements() {
         getGeneralLedger,
         getLoginData,
         getMappedAccounts,
+        getTranType,
         getUnitHeading,
         getValidationFabric,
         globalMessages,
@@ -242,6 +247,7 @@ function useSharedElements() {
         isControlDisabled,
         isDateAuditLocked,
         isDateNotAuditLocked,
+        isGoodToDelete,
         isMediumSizeUp,
         IconButton,
         Input,

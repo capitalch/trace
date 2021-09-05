@@ -33,7 +33,7 @@ function useSaleItems(arbitraryData: any) {
 
     useEffect(() => {
         lineItems.length === 0 && handleAddItem()
-    }, [lineItems.length])
+    })
 
     const meta: any = useRef({
         isMounted: false,

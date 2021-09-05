@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function useVoucher(loadComponent: string) {
+function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const { emit, execGenericView, filterOn, getFromBag } =
         useSharedElements()
@@ -31,13 +31,27 @@ function useVoucher(loadComponent: string) {
         const subs3 = filterOn('VOUCHER-CHANGE-TAB').subscribe((d: any) => {
             handleOnTabChange(null, d.data?.tabValue || 1)
         })
+
+        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe((d: any)=>{
+            const tranHeaderId = d.data?.tranHeaderId
+            tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
+            arbitraryData.shouldCloseParentOnSave = true
+            handleOnTabChange(null, 0)
+        })
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
+
+    useEffect(() => {
+        emit('VOUCHER-HANDLE-DRILL-DOWN-EDIT', {
+            tranHeaderId: drillDownEditAttributes?.tranHeaderId
+        })
+    }, [drillDownEditAttributes?.tranHeaderId])
 
     const meta: any = useRef({
         isMounted: false,

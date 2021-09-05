@@ -12,16 +12,57 @@ import { DataTable } from 'primereact/datatable'
 import { IconButton } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import moment from 'moment'
+import accountsMessages from '../accounts/json/accounts-messages.json'
+import { useConfirm } from 'material-ui-confirm'
+
+import { useSharedElements } from '../accounts/components/common/shared-elements-hook'
 
 const accStore: any = {}
 
 function utils() {
-    const { execGenericView, extractAmount, toDecimalFormat } = utilMethods()
+    const { execGenericView, extractAmount, genericUpdateMaster, toDecimalFormat } = utilMethods()
     const { mutateGraphql } = graphqlService()
     const { getFromBag, getCurrentEntity } = manageEntitiesState()
     const { emit } = usingIbuki()
+    // const {confirm, getFromBag, getCurrentEntity, execGenericView, extractAmount,genericUpdateMaster, toDecimalFormat} = useSharedElements()
 
-    // const classes = useStyles()
+
+    // function deleteRow(params: any){
+    //     const confirm = useConfirm()
+    //     const row = params.row
+    //     const tranHeaderId = row['id1']
+    //     const options:any = {
+    //         description: accountsMessages.transactionDelete,
+    //         confirmationText: 'Yes',
+    //         cancellationText: 'No',
+    //     }
+    //     if (isDateAuditLocked(row.tranDate)) {
+    //         emit('SHOW-MESSAGE', {
+    //             severity: 'error',
+    //             message: accountsMessages.auditLockError,
+    //             duration: null,
+    //         })
+    //     } else if (row?.clearDate) {
+    //         // already reconciled so edit /delete not possible
+    //         emit('SHOW-MESSAGE', {
+    //             severity: 'error',
+    //             message: accountsMessages.reconcillationDone,
+    //             duration: null,
+    //         })
+    //     } else {
+    //         confirm(options)
+    //             .then(async () => {
+    //                 await genericUpdateMaster({
+    //                     deletedIds: [tranHeaderId],
+    //                     tableName: 'TranH',
+    //                 })
+    //                 emit('SHOW-MESSAGE', {})
+    //                 emit('VOUCHER-VIEW-REFRESH', '')
+    //             })
+    //             .catch(() => {}) // important to have otherwise eror
+    //     }
+    // }
+
     function extractGst(x: any) {
         const clone: any = { ...x }
         clone.rate = clone.rate || '0.00'
@@ -197,8 +238,8 @@ function utils() {
                     body={(node: any) =>
                         node.tranDate
                             ? moment(node.tranDate).format(
-                                  meta.current.dateFormat
-                              )
+                                meta.current.dateFormat
+                            )
                             : ''
                     }
                     key={incr()}
@@ -255,11 +296,10 @@ function utils() {
                             </span>
                             <span
                                 style={{
-                                    color: `${
-                                        meta.current.finalBalanceType === ' Dr'
-                                            ? 'dodgerBlue'
-                                            : 'red'
-                                    }`,
+                                    color: `${meta.current.finalBalanceType === ' Dr'
+                                        ? 'dodgerBlue'
+                                        : 'red'
+                                        }`,
                                 }}>
                                 {meta.current.finalBalanceType}
                             </span>
@@ -386,14 +426,14 @@ function utils() {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -474,6 +514,22 @@ function utils() {
         return sum
     }
 
+    function getTranType(tranTypeId: number) {
+        const tranObj: any = {
+            1: 'journal',
+            2: 'payment',
+            3: 'receipt',
+            4: 'sales',
+            5: 'purchase',
+            6: 'contra',
+            7: 'debitNote',
+            8: 'creditNote',
+            9: 'saleReturn',
+            10: 'purchaseReturn'
+        }
+        return (tranObj[tranTypeId])
+    }
+
     function getUnitHeading() {
         const entityName = _.upperFirst(getCurrentEntity())
         const allSettings = getFromBag('allSettings')
@@ -511,6 +567,28 @@ function utils() {
         return ret
     }
 
+    function isGoodToDelete(params: any) {
+        const row = params.row
+        let ret = true
+        if (isDateAuditLocked(row.tranDate)) {
+            emit('SHOW-MESSAGE', {
+                severity: 'error',
+                message: accountsMessages.auditLockError,
+                duration: null,
+            })
+            ret = false
+        } else if (row?.clearDate) {
+            // already reconciled so edit /delete not possible
+            emit('SHOW-MESSAGE', {
+                severity: 'error',
+                message: accountsMessages.reconcillationDone,
+                duration: null,
+            })
+            ret = false
+        }
+        return(ret)
+    }
+
     function isImproperDate(mDate: string) {
         const momDate = moment(mDate)
         const momYear = momDate.year()
@@ -544,7 +622,7 @@ function utils() {
                 tranDate.isAfter(endDate) ||
                 tranDate.isBetween(startDate, lockDate, undefined, '[]') // inclusive
             return isInValidDate
-        } catch (e:any) {
+        } catch (e: any) {
             console.log(e.message)
         }
     }
@@ -617,6 +695,7 @@ function utils() {
     }
 
     return {
+        // deleteRow,
         extractGst,
         getAccountClass,
         getAccountName,
@@ -628,9 +707,11 @@ function utils() {
         getMappedAccounts,
         getTotalCredits,
         getTotalDebits,
+        getTranType,
         getUnitHeading,
         isDateAuditLocked,
         isDateNotAuditLocked,
+        isGoodToDelete,
         isImproperDate,
         isInvalidDate,
         isInvalidEmail,

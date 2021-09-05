@@ -12,7 +12,8 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         emit,
         filterOn,
         genericUpdateMaster,
-        isDateAuditLocked,
+        // isDateAuditLocked,
+        isGoodToDelete,
         moment,
         toDecimalFormat,
     } = useSharedElements()
@@ -20,7 +21,6 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
     const meta: any = useRef({
         isMounted: false,
         isLoadedOnce: false,
-        // tranTypeId: 1,
         title: ''
     })
 
@@ -29,7 +29,6 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
 
         const subs1 = filterOn('VOUCHER-VIEW-XX-GRID-EDIT-CLICKED').subscribe(
             (d: any) => {
-                // console.log(d.data?.row)
                 emit('VOUCHER-CHANGE-TAB-TO-EDIT', {
                     tranHeaderId: d.data?.row?.id1,
                 })
@@ -68,7 +67,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         }
     }, [hidden, meta.current.isLoadedOnce])
 
-    async function doDelete(params: any) {
+    async function doDelete(params: any) {        
         const row = params.row
         const tranHeaderId = row['id1']
         const options = {
@@ -76,20 +75,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
             confirmationText: 'Yes',
             cancellationText: 'No',
         }
-        if (isDateAuditLocked(row.tranDate)) {
-            emit('SHOW-MESSAGE', {
-                severity: 'error',
-                message: accountsMessages.auditLockError,
-                duration: null,
-            })
-        } else if (row?.clearDate) {
-            // already reconciled so edit /delete not possible
-            emit('SHOW-MESSAGE', {
-                severity: 'error',
-                message: accountsMessages.reconcillationDone,
-                duration: null,
-            })
-        } else {
+        if(isGoodToDelete(params)){
             confirm(options)
                 .then(async () => {
                     await genericUpdateMaster({

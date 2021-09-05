@@ -2,10 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function useSaleCrown(arbitraryData: any, saleType: string) {
+function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const {
+        emit,
         filterOn,
+        getCurrentComponent,
+        genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
@@ -27,8 +30,8 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
         title: saleType === 'sal' ? 'Sales' : 'Sales return',
     })
@@ -36,7 +39,7 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
     function getError() {
         const ab = arbitraryData
         const errorObject: any = ab.saleErrorObject
-        
+
         function headError() {
             function dateError() {
                 errorObject.dateError = isInvalidDate(ab.tranDate)
@@ -105,10 +108,10 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
             return errorObject.footerError
         }
 
-        function debitCreditError(){
+        function debitCreditError() {
             errorObject.debitCreditError = (Math.abs(
                 arbitraryData.footer.amount -
-                    arbitraryData.summary.amount
+                arbitraryData.summary.amount
             ) === 0) ? false : true
             return errorObject.debitCreditError
         }
@@ -122,12 +125,22 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
         return ret
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         const ad = arbitraryData
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        saveForm({ data: header })
+        const ret = await genericUpdateMasterDetails([header])
+        if (ret.error) {
+            console.log(ret.error)
+        } else {
+            if (ad.shouldCloseParentOnSave) {
+                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+            } else {
+                emit('LOAD-MAIN-COMPONENT-NEW', getCurrentComponent())
+            }
+        }
+        // saveForm({ data: header })
 
         function extractHeader() {
             const finYearId = getFromBag('finYearObject')?.finYearId
@@ -137,18 +150,18 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
                 data: [],
             }
             const item = {
-                contactsId:ad.billTo.id,
+                contactsId: ad.billTo.id,
                 id: ad.id,
                 tranDate: ad.tranDate,
                 userRefNo: ad.userRefNo,
                 remarks: ad.commonRemarks,
                 tags: undefined,
-                jData: ad.shipTo?.address1 ? JSON.stringify({shipTo: ad.shipTo}) : null,
+                jData: ad.shipTo?.address1 ? JSON.stringify({ shipTo: ad.shipTo }) : null,
                 finYearId: finYearId,
                 branchId: branchId,
                 posId: '1',
                 autoRefNo: ad.autoRefNo,
-                tranTypeId: ad.isSales ? 4: 9,
+                tranTypeId: ad.isSales ? 4 : 9,
                 details: [],
             }
             obj.data.push(item)
@@ -160,9 +173,9 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
                 tableName: 'TranD',
                 fkeyName: 'tranHeaderId',
                 deletedIds:
-                ad?.footer.deletedIds.length > 0
-                    ? [...ad.footer.deletedIds]
-                    : undefined,
+                    ad?.footer.deletedIds.length > 0
+                        ? [...ad.footer.deletedIds]
+                        : undefined,
                 data: [],
             }
 
@@ -196,7 +209,7 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
                         cgst: ad.summary.cgst,
                         sgst: ad.summary.sgst,
                         igst: ad.summary.igst,
-                        isInput: ad.isSales ? false: true,
+                        isInput: ad.isSales ? false : true,
                     },
                 ],
             }
@@ -205,10 +218,10 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
                 tableName: 'SalePurchaseDetails',
                 fkeyName: 'tranDetailsId',
                 deletedIds:
-                ad?.deletedSalePurchaseIds.length > 0
-                    ? [...ad.deletedSalePurchaseIds]
-                    : undefined,
-                data: ad.lineItems.map((item: any) => ({                   
+                    ad?.deletedSalePurchaseIds.length > 0
+                        ? [...ad.deletedSalePurchaseIds]
+                        : undefined,
+                data: ad.lineItems.map((item: any) => ({
                     id: item.id || undefined,
                     productId: item.productId,
                     qty: item.qty,
@@ -232,7 +245,6 @@ function useSaleCrown(arbitraryData: any, saleType: string) {
 
             return saleTranD
         }
-
     }
 
     return { handleSubmit, getError, meta }
@@ -260,7 +272,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     columnGap: theme.spacing(2),
                     color: theme.palette.blue.main,
                     fontWeight: 'bold',
-                    marginLeft: 'auto',                   
+                    marginLeft: 'auto',
                 },
             },
         },

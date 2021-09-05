@@ -1,13 +1,14 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleView, useStyles } from './sale-view-hook'
 
-function SaleView({ arbitraryData }: any) {
+function SaleView({ arbitraryData , drillDownEditAttributes}: any) {
     const classes = useStyles()
-    const { fetchData, getActionsList, getColumnsArray, meta } = useSaleView(arbitraryData)
+    const { fetchData, getActionsList, getColumnsArray, meta } = useSaleView(arbitraryData, drillDownEditAttributes)
 
     const {
         Box,
         Button,
+        emit,
         getFromBag,
         setInBag,
         Icon,
@@ -20,6 +21,10 @@ function SaleView({ arbitraryData }: any) {
 
     return (
         <div className={classes.content}>
+            {/* <Button onClick={()=>{
+                loadSaleOnId(9779, true)
+                // emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', 9779)
+            }}>Load</Button> */}
             <MaterialTable
                 style={{ zIndex: 0 }}
                 icons={tableIcons}

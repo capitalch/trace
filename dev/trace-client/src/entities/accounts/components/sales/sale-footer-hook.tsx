@@ -14,7 +14,7 @@ function useSaleFooter(arbitraryData: any) {
         return () => {
             meta.current.isMounted = false
         }
-    }, [])
+    })
 
     const meta: any = useRef({
         isMounted: false,

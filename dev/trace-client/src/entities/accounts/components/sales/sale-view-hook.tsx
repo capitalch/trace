@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
+import _ from 'lodash'
 
-function useSaleView(arbitraryData: any) {
+function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
 
     const meta: any = useRef({
@@ -29,7 +30,6 @@ function useSaleView(arbitraryData: any) {
         getFromBag,
         getMappedAccounts,
         isDateAuditLocked,
-        isInvalidDate,
         moment,
         toDecimalFormat,
     } = useSharedElements()
@@ -41,10 +41,10 @@ function useSaleView(arbitraryData: any) {
         })
         const subs2 = filterOn('SALE-VIEW-HOOK-GET-SALE-ON-ID').subscribe(
             (d: any) => {
-                loadSaleOnId(d.data, false) // isModify; 2nd arg is false for new entries in table
+                loadSaleOnId(d.data, true) // isModify; 2nd arg is false for new entries in table
             }
         )
-        // subs1.add(subs2)
+        
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -140,7 +140,7 @@ function useSaleView(arbitraryData: any) {
                             duration: null,
                         })
                     } else {
-                        loadSaleOnId(rowData.id, true) // isModify; 2nd arg is true for for no new entry in tables
+                        loadSaleOnId(rowData.id, true) // isModify; 2nd arg is true for no new entry in tables
                     }
                 },
             },

@@ -15,27 +15,35 @@ import { manageEntitiesState } from '../../../../common-utils/esm'
 import CloseIcon from '@material-ui/icons/Close'
 import { usingIbuki } from '../../../../common-utils/ibuki'
 import { utils } from '../../utils'
-import { emit } from 'process'
+import { Voucher } from '../vouchers/voucher'
+import { Sales } from '../sales/sales'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
     const { getGeneralLedger } = utils()
-    const {getAccountName, emit, moment, toDecimalFormat, XXGrid } = useSharedElements()
+    const { accountsMessages, confirm, emit, getAccountName, genericUpdateMaster, getTranType, isGoodToDelete, moment, toDecimalFormat, XXGrid } = useSharedElements()
     const meta: any = useRef({
         accId: 0,
         accName: '',
-        isMounted: false,
-        sum: [{ debit: 0, credit: 0 }],
-        opBalance: { debit: 0, credit: 0 },
-        transactions: [{ debit: 0, credit: 0 }],
-        showDialog: false,
-        finalBalance: 0.0,
-        finalBalanceType: ' Dr',
+        childDialogTiitle: 'Drill down edit',
         dateFormat: '',
         dialogConfig: {
             dialogWidth: '900px',
         },
+        drillDownEditAttributes: {
+            tranTypeId: undefined,
+            tranHeaderId: undefined
+        },
+        finalBalance: 0.0,
+        finalBalanceType: ' Dr',
+        isMounted: false,
+        sum: [{ debit: 0, credit: 0 }],
+        opBalance: { debit: 0, credit: 0 },
+
+        showDialog: false,
+        showChildDialog: false,
+        transactions: [{ debit: 0, credit: 0 }],
     })
     const { filterOn } = usingIbuki()
     const classes = useStyles({ meta: meta })
@@ -50,63 +58,149 @@ function AccountsLedgerDialog() {
             meta.current.accName = getAccountName(d.data)
             setRefresh({})
         })
+        const subs1 = filterOn('ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED').subscribe((d: any) => {
+            meta.current.showChildDialog = true
+            const row = d.data?.row
+            meta.current.drillDownEditAttributes.tranHeaderId = row?.id1
+            meta.current.drillDownEditAttributes.tranTypeId = row?.tranTypeId
+            // console.log(d.data)
+            setRefresh({})
+        })
+        const subs2 = filterOn('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG').subscribe(() => {
+            meta.current.showChildDialog = false
+            emit('XX-GRID-FETCH-DATA', '')
+            setRefresh({})
+        })
+        const subs3 = filterOn('ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED').subscribe((d: any) => {
+            doDelete(d.data)
+        })
+
         return () => {
             subs.unsubscribe()
+            subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
             meta.current.isMounted = false
         }
     }, [])
+
+    return (
+        <div >
+            <Dialog
+                className={classes.content}
+                open={meta.current.showDialog}
+                maxWidth="lg"
+                fullWidth={true}
+                onClose={closeDialog}>
+                <DialogTitle
+                    disableTypography
+                    id="generic-dialog-title"
+                    className="dialog-title">
+                    <h3>{'Account: '.concat(meta.current.accName)}</h3>
+                    <IconButton
+                        size="small"
+                        color="default"
+                        onClick={closeDialog}
+                        aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent className={classes.dialogContent}>
+                    {/* <LedgerDataTable isScrollable={false} className='data-table' /> */}
+                    {/* <button onClick={()=>{
+                     emit('XX-GRID-FETCH-DATA','')
+                }}>test</button> */}
+                    <XXGrid
+                        autoFetchData={true}
+                        columns={getArtifacts().columns}
+                        hideViewLimit={true}
+                        summaryColNames={getArtifacts().summaryColNames}
+                        title="Ledger view"
+                        sqlQueryId="get_accountsLedger"
+                        sqlQueryArgs={getArtifacts().args}
+                        specialColumns={getArtifacts().specialColumns}
+                        toShowOpeningBalance={true}
+                        toShowClosingBalance={true}
+                        xGridProps={{ disableSelectionOnClick: true }}
+                        jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
+                    />
+                </DialogContent>
+                <DialogActions></DialogActions>
+            </Dialog>
+            {/* Child dialog */}
+            <Dialog
+                className={classes.content}
+                open={meta.current.showChildDialog}
+                maxWidth='xl'
+                fullWidth={true}
+                onClose={closeChildDialog}
+            // fullScreen={true}
+            >
+                <DialogTitle
+                    disableTypography
+                    id="generic-child-dialog-title"
+                    className="dialog-title">
+                    <h3>{meta.current.childDialogTiitle}</h3>
+                    <IconButton
+                        size="small"
+                        color="default"
+                        onClick={closeChildDialog}
+                        aria-label="close">
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent className={classes.dialogContent}>
+                    <DrillDownEditComponent />
+                    {/* <Voucher loadComponent='journal' /> */}
+                </DialogContent>
+                <DialogActions></DialogActions>
+            </Dialog>
+        </div>
+    )
 
     function closeDialog() {
         meta.current.showDialog = false
         setRefresh({})
     }
 
-    return (
-        // <div >
-        <Dialog
-            className={classes.content}
-            open={meta.current.showDialog}
-            maxWidth="lg"
-            fullWidth={true}
-            // fullScreen={true}
-            onClose={closeDialog}>
-            <DialogTitle
-                disableTypography
-                id="generic-dialog-title"
-                className="dialog-title">
-                <h3>{'Account: '.concat(meta.current.accName)}</h3>
-                <IconButton
-                    size="small"
-                    color="default"
-                    onClick={closeDialog}
-                    aria-label="close">
-                    <CloseIcon />
-                </IconButton>
-            </DialogTitle>
-            <DialogContent className={classes.dialogContent}>
-                {/* <LedgerDataTable isScrollable={false} className='data-table' /> */}
-                {/* <button onClick={()=>{
-                     emit('XX-GRID-FETCH-DATA','')
-                }}>test</button> */}
-                <XXGrid
-                    autoFetchData={true}
-                    columns={getArtifacts().columns}
-                    hideViewLimit={true}
-                    summaryColNames={getArtifacts().summaryColNames}
-                    title="Ledger view"
-                    sqlQueryId="get_accountsLedger"
-                    sqlQueryArgs={getArtifacts().args}
-                    specialColumns={getArtifacts().specialColumns}
-                    toShowOpeningBalance={true}
-                    toShowClosingBalance={true}
-                    xGridProps={{ disableSelectionOnClick: true }}
-                    jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
-                />
-            </DialogContent>
-            <DialogActions></DialogActions>
-        </Dialog>
-        // </div>
-    )
+    function closeChildDialog() {
+        meta.current.showChildDialog = false
+        setRefresh({})
+    }
+
+    async function doDelete(params: any) {
+        const row = params.row
+        const tranHeaderId = row['id1']
+        const options = {
+            description: accountsMessages.transactionDelete,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        if (isGoodToDelete(params)) {
+            confirm(options)
+                .then(async () => {
+                    await genericUpdateMaster({
+                        deletedIds: [tranHeaderId],
+                        tableName: 'TranH',
+                    })
+                    emit('SHOW-MESSAGE', {})
+                    emit('XX-GRID-FETCH-DATA', '')
+                    setRefresh({})
+                })
+                .catch(() => { }) // important to have otherwise eror
+        }
+    }
+
+    function DrillDownEditComponent() {
+        const attrs = meta.current.drillDownEditAttributes
+        let ret = <></>
+        if ([1, 2, 3, 6].includes(attrs.tranTypeId)) { //It is voucher
+            ret = <Voucher loadComponent={getTranType(attrs.tranTypeId)} drillDownEditAttributes={attrs} />
+        } else if (attrs.tranTypeId = 4) { // 4: Sales, 9: sales return
+            ret = <Sales saleType='sal' drillDownEditAttributes={attrs} />
+        }
+        return (ret)
+    }
 
     function getArtifacts() {
         const columns = [
@@ -188,8 +282,9 @@ function AccountsLedgerDialog() {
             // isRemove: true,
             isEdit: true,
             isDelete: true,
-            editIbukiMessage: 'VOUCHER-VIEW-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage: 'VOUCHER-VIEW-XX-GRID-DELETE-CLICKED',
+            editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED',
+            // drillDownIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DRILLDOWN-CLICKED',
             // isDrillDown: true,
         }
         return { columns, summaryColNames, args, specialColumns }
