@@ -1,14 +1,14 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseView, useStyles } from './purchase-view-hook'
 
-function PurchaseView({arbitraryData, purchaseType }: any) {
+function PurchaseView({arbitraryData, purchaseType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const {
         getActionsList,
         getColumnsArray,
         fetchData,
         meta,
-    } = usePurchaseView(arbitraryData, purchaseType)
+    } = usePurchaseView(arbitraryData, purchaseType, drillDownEditAttributes)
 
     const {
         Box,

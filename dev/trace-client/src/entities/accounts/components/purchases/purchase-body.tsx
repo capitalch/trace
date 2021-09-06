@@ -383,7 +383,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 />
                 {/* date */}
                 <TextField
-                    label="Date"
+                    label={arbitraryData.tranDate ? 'Date' : undefined}
                     error={getDateError()}
                     helperText={
                         getDateError()

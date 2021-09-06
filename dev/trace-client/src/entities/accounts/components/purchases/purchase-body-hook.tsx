@@ -9,6 +9,8 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         emit,
         execGenericView,
         filterOn,
+        genericUpdateMasterDetails,
+        getCurrentComponent,
         getFromBag,
         hotFilterOn,
         isInvalidDate,
@@ -368,12 +370,22 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         return result?.gstin
     }
 
-    function submit() {
+    async function submit() {
         const header = extractHeader()
         const details = extractDetails()
 
         header.data[0].details = details
-        saveForm({ data: header })
+        // saveForm({ data: header })
+        const ret = await genericUpdateMasterDetails([header])
+        if (ret.error) {
+            console.log(ret.error)
+        } else {
+            if (ad.shouldCloseParentOnSave) {
+                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+            } else {
+                emit('LOAD-MAIN-COMPONENT-NEW', getCurrentComponent())
+            }
+        }
 
         function extractHeader() {
             const finYearId = getFromBag('finYearObject')?.finYearId

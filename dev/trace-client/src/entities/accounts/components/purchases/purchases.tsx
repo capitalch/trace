@@ -5,10 +5,10 @@ import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
 import { PurchaseBody } from './purchase-body'
 
-function Purchases({ purchaseType }: any) {
+function Purchases({ purchaseType, drillDownEditAttributes }: any) {
     const [] = useState({})
 
-    const { arbitraryData, handleOnTabChange, meta } = usePurchases()
+    const { arbitraryData, handleOnTabChange, meta } = usePurchases(drillDownEditAttributes)
     const classes = useStyles({ purchaseType })
     meta.current.purchaseTypeLabel =
         purchaseType === 'pur' ? 'Purchase' : 'Purchase return'
@@ -32,7 +32,7 @@ function Purchases({ purchaseType }: any) {
                 <PurchaseItems arbitraryData={arbitraryData.current} />
             </div>
             <div hidden={meta.current.value !== 1}>
-                <PurchaseView arbitraryData={arbitraryData.current} purchaseType={purchaseType} />
+                <PurchaseView arbitraryData={arbitraryData.current} purchaseType={purchaseType} drillDownEditAttributes={drillDownEditAttributes} />
             </div>
         </div>
     )

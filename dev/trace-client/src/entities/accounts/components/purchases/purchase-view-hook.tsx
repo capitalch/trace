@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function usePurchaseView(arbitraryData: any, purchaseType: string) {
+function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEditAttributes:any) {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
         allAccounts: [],
@@ -63,9 +63,16 @@ function usePurchaseView(arbitraryData: any, purchaseType: string) {
             loadPurchaseOnId(d.data, false) // isModify; 2nd arg is false for new entries in table
         })
 
+        const subs2 = filterOn(
+            'PURCHASE-VIEW-HOOK-GET-PURCHASE-ON-ID-DRILL-DOWN-EDIT'
+        ).subscribe((d: any) => {
+            loadPurchaseOnId(d.data, true) // isModify; 2nd arg is false for new entries in table
+        })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 

@@ -113,6 +113,9 @@ create installer from innosetup
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 01-09-2021 - 04-09-2021
+1. Drill down reports for purchase, sales, vouchers
+
 # 16-08-2021 - 31-08-2021
 1. GST journals
 2. All vouchers in new style and with GST completed

@@ -2,12 +2,17 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function usePurchases() {
+function usePurchases(drillDownEditAttributes:any) {
     const [, setRefresh] = useState({})
     const isoFormat = 'YYYY-MM-DD'
-    const { emit, filterOn, moment, } = useSharedElements()
+    const {_, emit, filterOn, moment, } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
+        if (drillDownEditAttributes && (!_.isEmpty(drillDownEditAttributes))) {
+            // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
+            drillDownEditAttributes.showChildDialog && emit('PURCHASE-VIEW-HOOK-GET-PURCHASE-ON-ID-DRILL-DOWN-EDIT', drillDownEditAttributes.tranHeaderId)
+            arbitraryData.current.shouldCloseParentOnSave = true
+        }
         const subs1 = filterOn('CHANGE-TAB-PURCHASES').subscribe((d) => {
             meta.current.value = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})

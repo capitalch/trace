@@ -227,7 +227,7 @@ function AccountsLedgerDialog() {
         } else if (attrs.tranTypeId === 9) {
             ret = <Sales saleType="ret" drillDownEditAttributes={attrs} />
         } else if(attrs.tranTypeId === 5) {
-            ret = <Purchases purchaseType='pur' />
+            ret = <Purchases purchaseType='pur' drillDownEditAttributes={attrs} />
         } else if(attrs.tranTypeId === 10){
             ret = <Purchases purchaseType='ret' />
         } else if(attrs.tranTypeId === 7){ //debit notes
