@@ -18,6 +18,7 @@ import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'
 import { Sales } from '../sales/sales'
 import {Purchases} from '../purchases/purchases'
+import {DebitNotes} from '../purchases/debit-notes'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
@@ -229,9 +230,9 @@ function AccountsLedgerDialog() {
         } else if(attrs.tranTypeId === 5) {
             ret = <Purchases purchaseType='pur' drillDownEditAttributes={attrs} />
         } else if(attrs.tranTypeId === 10){
-            ret = <Purchases purchaseType='ret' />
+            ret = <Purchases purchaseType='ret' drillDownEditAttributes={attrs}  />
         } else if(attrs.tranTypeId === 7){ //debit notes
-            ret = <Purchases purchaseType='ret' />
+            ret = <DebitNotes  drillDownEditAttributes={attrs} />
         } else if(attrs.tranTypeId === 8){ // credit notes
             ret = <Purchases purchaseType='ret' />
         } 

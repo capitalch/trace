@@ -1,10 +1,17 @@
 import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useSharedElements } from '../../../authentication/components/shared-elements-hook'
 
-function useDebitCreditNotes() {
+function useDebitCreditNotes(drillDownEditAttributes:any = {}) {
     const [, setRefresh] = useState({})
+    const {_, emit} = useSharedElements()
     useEffect(() => {
-        meta.current.isMounted = true        
+        meta.current.isMounted = true
+        if (drillDownEditAttributes && (!_.isEmpty(drillDownEditAttributes))) {
+            // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
+            drillDownEditAttributes.showChildDialog && emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-LOAD-DATA', drillDownEditAttributes.tranHeaderId)
+            // arbitraryData.current.shouldCloseParentOnSave = true
+        }    
         return (() => {
             meta.current.isMounted = false
         })

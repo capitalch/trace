@@ -4,12 +4,17 @@ import { useSharedElements } from './shared-elements-hook'
 
 function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
+    const { emit, execGenericView,filterOn, getFromBag, moment } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
         getData()
         setRefresh({})
+        const subs1 = filterOn('DEBIT-CREDIT-NOTES-VIEW-HOOK-LOAD-DATA').subscribe((d:any)=>{
+            loadData(d.data)
+        })
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -19,7 +24,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         no: 10,
     })
 
-    const { emit, execGenericView,getFromBag, moment } = useSharedElements()
+    
 
     async function getData() {
         emit('SHOW-LOADING-INDICATOR', true)

@@ -6,10 +6,9 @@ import {
 import { DebitCreditNoteBody } from '../common/debit-credit-note-body'
 import { DebitCreditNotesView } from '../common/debit-credit-notes-view'
 
-function DebitNotes() {
-    // const [, setRefresh] = useState({})
+function DebitNotes({ drillDownEditAttributes}:any={}) {
     const classes = useStyles()
-    const { handleOnChange, meta } = useDebitCreditNotes()
+    const { handleOnChange, meta } = useDebitCreditNotes( drillDownEditAttributes)
 
     const {
         Paper,
