@@ -60,6 +60,9 @@ create installer from innosetup
 	8. In Inventory--> Brands--> edit: when you close the dialog it blows up
 														9. Seen in case of receipts same auto_ref_no generated twice
 	10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
+	11. Sales / Sale return GST rate change does not calculate well
+	12. Sales return select bill does not work well
+	13. When in report filter then when returns filter does not fire
 
 ## Reorganize
 	1. Organize code for using shared components all over

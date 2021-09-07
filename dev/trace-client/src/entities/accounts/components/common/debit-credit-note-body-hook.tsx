@@ -5,7 +5,10 @@ import { useSharedElements } from './shared-elements-hook'
 function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
     const {
+        emit,
+        getCurrentComponent,
         getFromBag,
+        genericUpdateMasterDetails,
         hotFilterOn,
         isInvalidDate,
         map,
@@ -119,11 +122,21 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         return ret
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         const header = extractHeader()
         header.data[0].details.push(extractDebits())
         header.data[0].details.push(extractCredits())
-        saveForm({ data: header })
+        // saveForm({ data: header })
+        const ret = await genericUpdateMasterDetails([header])
+        if (ret.error) {
+            console.log(ret.error)
+        } else {
+            if (arbitraryData.shouldCloseParentOnSave) {
+                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+            } else {
+                emit('LOAD-MAIN-COMPONENT-NEW', getCurrentComponent())
+            }
+        }
     }
 
     function extractHeader() {

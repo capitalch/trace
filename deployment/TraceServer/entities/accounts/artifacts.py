@@ -106,6 +106,11 @@ def resolve_generic_update_master(parent, info, value):
     if updateCodeBlock is not None:
         valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
 
+    # To update the client through sockets
+    room = getRoomFromCtx(info.context)
+    if isLinkConnected():
+        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+
     id = execGenericUpdateMaster(dbName, valueDict, buCode)
     return id
 

@@ -6,9 +6,9 @@ import {
 import { DebitCreditNoteBody } from '../common/debit-credit-note-body'
 import { DebitCreditNotesView } from '../common/debit-credit-notes-view'
 
-function CreditNotes() {
+function CreditNotes({ drillDownEditAttributes }: any={}) {
     const classes = useStyles()
-    const { handleOnChange, meta } = useDebitCreditNotes()
+    const { handleOnChange, meta } = useDebitCreditNotes(drillDownEditAttributes)
     const { Paper, Tabs, Tab } = useSharedElements()
 
     return (
@@ -22,10 +22,10 @@ function CreditNotes() {
                 <Tab label="View" />
             </Tabs>
             <div hidden={meta.current.value !== 0}>
-                <DebitCreditNoteBody arbitraryData={meta.current} />
+                <DebitCreditNoteBody arbitraryData={meta.current} tranType='cn' />
             </div>
             <div hidden={meta.current.value !== 1}>
-                <DebitCreditNotesView arbitraryData={meta.current} />
+                <DebitCreditNotesView arbitraryData={meta.current} tranType='cn' />
             </div>
         </Paper>
     )
