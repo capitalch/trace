@@ -80,6 +80,7 @@ function useXXGrid(gridOptions: any) {
             meta.current.filteredRows = [...meta.current.rows]
             meta.current.allSummary = tot
             setFilteredSummary()
+            requestSearch(meta.current.searchText)
             meta.current.isMounted && setRefresh({})
         }
     }

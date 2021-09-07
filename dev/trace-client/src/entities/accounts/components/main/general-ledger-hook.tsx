@@ -97,6 +97,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .select-ledger': {
                     // position:'relative',
                     // top: '1rem',
+                    marginTop: theme.spacing(2),
                     display: 'flex',
                     flexDirection: 'column',
                     // rowGap: '0.2rem',

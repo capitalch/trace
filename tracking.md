@@ -62,7 +62,6 @@ create installer from innosetup
 	10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
 	11. Sales / Sale return GST rate change does not calculate well
 	12. Sales return select bill does not work well
-	13. When in report filter then when returns filter does not fire
 
 ## Reorganize
 	1. Organize code for using shared components all over
@@ -115,6 +114,10 @@ create installer from innosetup
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 05-09-2021 - 07-09-2021
+1. Drill down completed for Debit notes credit notes
+2. bug fix: When in report filter then when returns filter does not fire
 
 # 01-09-2021 - 04-09-2021
 1. Drill down reports for purchase, sales, vouchers

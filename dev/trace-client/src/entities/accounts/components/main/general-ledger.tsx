@@ -22,17 +22,16 @@ function GeneralLedger() {
         Typography,
     } = useSharedElements()
 
-    const { fetchData, getLedgerColumns, LedgerDataTable } = getGeneralLedger(
-        meta
-    )
+    const { fetchData, getLedgerColumns, LedgerDataTable } =
+        getGeneralLedger(meta)
     return (
         <div className={classes.content}>
+            <Typography variant="h6" className="heading" component="span">
+                {meta.current.headerConfig.title}
+            </Typography>
             <Box className="header">
-                <Typography variant="subtitle1" className="heading" component="span">
-                    {meta.current.headerConfig.title}
-                </Typography>
                 <div className="select-ledger">
-                    <Typography component="label" variant="subtitle1">
+                    <Typography component="label" variant="subtitle2">
                         Select ledger account
                     </Typography>
                     <LedgerSubledger
@@ -43,7 +42,7 @@ function GeneralLedger() {
                         onChange={async () => {
                             meta.current.accId =
                                 meta.current.ledgerSubledger.accId
-                            await fetchData()
+                                meta.current.accId && await fetchData()
                             meta.current.isMounted && setRefresh({})
                         }}
                     />
@@ -76,7 +75,6 @@ function GeneralLedger() {
                             onChange={(e: any) => {
                                 meta.current.isReverseOrder = e.target.checked
                                 handleFetchData()
-                                
                             }}
                         />
                     }
