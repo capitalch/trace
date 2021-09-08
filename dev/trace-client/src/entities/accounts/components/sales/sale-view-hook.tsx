@@ -44,11 +44,17 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                 loadSaleOnId(d.data, true) // isModify; 2nd arg is false for new entries in table
             }
         )
+        const subs3 = filterOn('SALE-VIEW-HOOK-GET-SALE-ON-ID-NEW').subscribe(
+            (d: any) => {
+                loadSaleOnId(d.data, false) // isModify; 2nd arg is false for new entries in table
+            }
+        )
 
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
         }
     }, [])
 

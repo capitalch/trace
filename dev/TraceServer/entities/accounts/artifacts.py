@@ -114,7 +114,6 @@ def resolve_generic_update_master(parent, info, value):
     id = execGenericUpdateMaster(dbName, valueDict, buCode)
     return id
 
-
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(

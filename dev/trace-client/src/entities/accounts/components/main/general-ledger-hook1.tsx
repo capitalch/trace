@@ -6,15 +6,13 @@ function useGeneralLedger() {
     const [, setRefresh] = useState({})
 
     const {
-        emit,
-        filterOn,
         getFromBag,
         getGeneralLedger,
     } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
-        meta.current.allAccounts = (getFromBag('allAccounts') || []).map(
+        meta.current.allAccounts = (getFromBag('allAccounts')|| []).map(
             (item: any) => ({
                 label: item.accName,
                 value: item.id,
@@ -31,13 +29,9 @@ function useGeneralLedger() {
                     subledgers: el.accLeaf === 'L' ? [] : null,
                 }
             })
-        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
-            emit('XX-GRID-FETCH-DATA', meta.current.sqlQueryArgs)
-        })
         setRefresh({})
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
         }
     }, [])
 
@@ -51,13 +45,16 @@ function useGeneralLedger() {
         isMounted: false,
         isReverseOrder: false,
         showDialog: false,
+        // rowCount: 0,
         transactions: [],
         ledgerSubledger: {},
-        sqlQueryArgs: null,
+        headerConfig: {
+            title: 'General ledger',
+        },
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => {},
+            actions: () => {},
         },
     })
 
@@ -89,42 +86,47 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 marginBottom: theme.spacing(4),
                 '& .heading': {
-                    fontWeight: 'bold'
+                    fontWeight:'bold'
+                    // position: 'relative',
+                    // top: '-2.5rem',
                 },
                 '& .expand': {
                     position: 'relative',
                     top: '.2rem',
                 },
                 '& .select-ledger': {
+                    // position:'relative',
+                    // top: '1rem',
                     marginTop: theme.spacing(2),
                     display: 'flex',
                     flexDirection: 'column',
+                    // rowGap: '0.2rem',
                     '& .ledger-subledger': {
                         position: 'relative',
+                        // top:'0.5rem'
                     },
                 },
             },
-            '& .data-grid': {
-                height: 'calc(100vh - 303px)'
-            }
-            // '& .data-table': {
-            //     '& .p-datatable-tfoot': {
-            //         '& tr': {
-            //             '& td': {
-            //                 fontSize: '0.8rem',
-            //                 color: 'dodgerBlue !important',
-            //             }
-            //         }
-            //     },
-            //     '& .ledger-summary': {
-            //         color: theme.palette.blue.dark,
-            //         backgroundColor: '#FFFAFA',
-            //         fontFamily: 'Lato',
-            //         fontWeight: 'bold'
-            //     }
-            // },
+            '& .data-table': {
+                '& .p-datatable-tfoot': {
+                    '& tr':{
+                        '& td': {
+                    fontSize: '0.8rem',
+                    color: 'dodgerBlue !important',
+                        }
+                    }
+                },
+                '& .ledger-summary':{
+                    color: theme.palette.blue.dark,
+                    backgroundColor: '#FFFAFA',
+                    // fontSize:'0.7rem',
+                    fontFamily:'Lato',
+                    fontWeight: 'bold'
+                    // textAlign:'right',
+                }
+            },
 
-
+           
         },
     })
 )

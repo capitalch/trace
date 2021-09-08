@@ -86,7 +86,12 @@ function AccountsLedgerDialog() {
             'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG'
         ).subscribe(() => {
             meta.current.showChildDialog = false
-            emit('XX-GRID-FETCH-DATA', '')
+            if(meta.current.showDialog){
+                emit('XX-GRID-FETCH-DATA', '') // If main dialog is open then only xx-grid fetch data
+            } else {
+                emit('ROOT-WINDOW-REFRESH','') // otherwise refresh data in root window
+            }
+            // meta.current.showDialog && 
             setRefresh({})
         })
         const subs3 = filterOn(
@@ -126,10 +131,6 @@ function AccountsLedgerDialog() {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    {/* <LedgerDataTable isScrollable={false} className='data-table' /> */}
-                    {/* <button onClick={()=>{
-                     emit('XX-GRID-FETCH-DATA','')
-                }}>test</button> */}
                     <XXGrid
                         autoFetchData={true}
                         columns={getArtifacts().columns}
@@ -345,17 +346,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 paddingBottom: '0px',
             },
 
-            '& .data-table': {
-                '& .p-datatable-tfoot': {
-                    '& tr': {
-                        '& td': {
-                            fontSize: '0.8rem',
-                            // fontWeight: 'normal',
-                            color: 'dodgerBlue !important',
-                        },
-                    },
-                },
-            },
+            // '& .data-table': {
+            //     '& .p-datatable-tfoot': {
+            //         '& tr': {
+            //             '& td': {
+            //                 fontSize: '0.8rem',
+            //                 // fontWeight: 'normal',
+            //                 color: 'dodgerBlue !important',
+            //             },
+            //         },
+            //     },
+            // },
         },
         dialogContent: {
             height: 'calc(100vh - 163px)',

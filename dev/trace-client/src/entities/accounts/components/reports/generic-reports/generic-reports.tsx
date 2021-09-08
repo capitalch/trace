@@ -20,9 +20,14 @@ function GenericReports({ loadReport }: any) {
     const { _, Card, emit, filterOn, } = useSharedElements()
     const classes = useStyles()
     useEffect(() => {
-        //On demand populate data
+        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(()=>{
+            emit('XX-GRID-FETCH-DATA', null)
+        })
         emit('XX-GRID-FETCH-DATA', null)
 
+        return(()=>{
+            subs1.unsubscribe()
+        })
     }, [])
     
     return (

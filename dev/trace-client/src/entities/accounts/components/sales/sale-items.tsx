@@ -97,14 +97,14 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
             return numb++
         }
 
-        function setPrice(rowData:any){
+        function setPrice(rowData: any) {
             const priceGst = rowData.priceGst
             const gstRate = rowData.gstRate
             const price = priceGst / (1 + (gstRate / 100))
             rowData.price = price
         }
 
-        function setPriceGst(rowData: any){
+        function setPriceGst(rowData: any) {
             const price = rowData.price
             const gstRate = rowData.gstRate
             const priceGst = price * (1 + (gstRate / 100))
@@ -316,6 +316,8 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
                                 rowData.gstRate = floatValue || 0.0
+                                computeRow(rowData)
+                                computeSummary()
                                 meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                             }}
@@ -323,13 +325,13 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
-                            onBlur={() => {
-                                if (meta.current.isDataChanged) {
-                                    computeRow(rowData)
-                                    computeSummary()
-                                    meta.current.isDataChanged = false
-                                }
-                            }}
+                            // onBlur={() => {
+                            //     if (meta.current.isDataChanged) {
+                            //         computeRow(rowData)
+                            //         computeSummary()
+                            //         meta.current.isDataChanged = false
+                            //     }
+                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
                                     meta.current.isDataChanged &&
@@ -393,6 +395,9 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 const { floatValue } = values
                                 rowData.price = floatValue || 0.0
                                 meta.current.isDataChanged = true
+                                setPriceGst(rowData)
+                                computeRow(rowData)
+                                computeSummary()
                                 // rowData.price = floatValue || 0.0
                                 meta.current.isMounted && setRefresh({})
                             }}
@@ -400,17 +405,17 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
-                            onBlur={() => {
-                                if (meta.current.isDataChanged) {
-                                    setPriceGst(rowData) // sets the priceGst based on price and gstRate
-                                    computeRow(rowData)
-                                    computeSummary()
-                                    meta.current.isDataChanged = false
-                                }
-                            }}
+                            // onBlur={() => {
+                            //     if (meta.current.isDataChanged) {
+                            //         setPriceGst(rowData) // sets the priceGst based on price and gstRate
+                            //         computeRow(rowData)
+                            //         computeSummary()
+                            //         meta.current.isDataChanged = false
+                            //     }
+                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    if(meta.current.isDataChanged) {
+                                    if (meta.current.isDataChanged) {
                                         setPriceGst(rowData)
                                         computeRow(rowData)
                                     }
@@ -444,27 +449,29 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 const { floatValue } = values
                                 rowData.priceGst = floatValue || 0.0
                                 meta.current.isDataChanged = true
-                                // rowData.price = floatValue || 0.0
+                                setPrice(rowData) // sets the price based on priceGst and gstRate
+                                computeRow(rowData)
+                                computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
-                            onBlur={() => {
-                                if (meta.current.isDataChanged) {
-                                    setPrice(rowData) // sets the price based on priceGst and gstRate
-                                    computeRow(rowData)
-                                    computeSummary()
-                                    meta.current.isDataChanged = false
-                                }
-                            }}
+                            // onBlur={() => {
+                            //     if (meta.current.isDataChanged) {
+                            //         setPrice(rowData) // sets the price based on priceGst and gstRate
+                            //         computeRow(rowData)
+                            //         computeSummary()
+                            //         meta.current.isDataChanged = false
+                            //     }
+                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    if(meta.current.isDataChanged){
+                                    if (meta.current.isDataChanged) {
                                         setPrice(rowData)
                                         computeRow(rowData)
-                                    }   
+                                    }
                                     computeSummary()
                                     meta.current.isDataChanged = false
                                 }
@@ -494,19 +501,22 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 const { floatValue } = values
                                 meta.current.isDataChanged = true
                                 rowData.discount = floatValue || 0.0
+                                computeRow(rowData)
+                                computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
-                            onBlur={() => {
-                                if (meta.current.isDataChanged) {
-                                    computeRow(rowData)
-                                    computeSummary()
-                                    meta.current.isDataChanged = false
-                                }
-                            }}
+
+                            // onBlur={() => {
+                            //     if (meta.current.isDataChanged) {
+                            //         computeRow(rowData)
+                            //         computeSummary()
+                            //         meta.current.isDataChanged = false
+                            //     }
+                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
                                     meta.current.isDataChanged &&

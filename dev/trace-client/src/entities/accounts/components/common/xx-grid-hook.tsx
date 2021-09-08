@@ -4,7 +4,7 @@ import { useSharedElements } from './shared-elements-hook'
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
-    const {sqlQueryArgs, sqlQueryId, summaryColNames} = gridOptions
+    const { sqlQueryArgs, sqlQueryId, summaryColNames } = gridOptions
     const meta: any = useRef({
         filteredRows: [],
         filteredSummary: {},
@@ -13,28 +13,41 @@ function useXXGrid(gridOptions: any) {
         rows: [],
         selectedSummary: {},
         searchText: '',
+        // sqlQueryArgs: {},
         viewLimit: 0,
     })
-    
-    const { _, emit, filterOn, getCurrentEntity,getFromBag, execGenericView } = useSharedElements()
+
+    const { _, emit, filterOn, getCurrentEntity, getFromBag, execGenericView } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
-        const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe(()=>{
-            fetchRows(sqlQueryId, sqlQueryArgs)
+        const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe((d: any) => {
+            if (d.data) {
+                fetchRows(sqlQueryId, d.data)
+            } else {
+                fetchRows(sqlQueryId, sqlQueryArgs)
+            }
+        })
+        const subs2 = filterOn('XX-GRID-RESET').subscribe(() => {
+            meta.current.filteredRows = []
+            setRefresh({})
         })
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
     const entityName = getCurrentEntity()
 
     async function fetchRows(queryId: string, queryArgs: any) {
+        if ((!queryId) || (!queryArgs)) {
+            return
+        }
         emit('SHOW-LOADING-INDICATOR', true)
         const ret1: any = await execGenericView({
-            isMultipleRows: gridOptions.jsonFieldPath ? false: true,
+            isMultipleRows: gridOptions.jsonFieldPath ? false : true,
             sqlKey: queryId,
             args: queryArgs || null,
             entityName: entityName,
@@ -46,23 +59,23 @@ function useXXGrid(gridOptions: any) {
         }
         let ret
         let openingBalance = ret1?.jsonResult?.opBalance
-        
-        if(gridOptions.jsonFieldPath){
-            ret = _.get(ret1,gridOptions.jsonFieldPath)
+
+        if (gridOptions.jsonFieldPath) {
+            ret = _.get(ret1, gridOptions.jsonFieldPath)
         } else {
             ret = ret1
         }
-        if(gridOptions.toShowOpeningBalance){
-            if((!openingBalance) || (_.isEmpty(openingBalance))) {
-                openingBalance = {debit:0,credit: 0, tranDate:undefined}
+        if (gridOptions.toShowOpeningBalance) {
+            if ((!openingBalance) || (_.isEmpty(openingBalance))) {
+                openingBalance = { debit: 0, credit: 0, tranDate: undefined }
             }
             const finYearObject = getFromBag('finYearObject')
             ret.unshift({
-                   autoRefNo: 'Opening balance',
-                   debit: openingBalance.debit,
-                   credit: openingBalance.credit,
-                   tranDate: finYearObject?.isoStartDate
-               })
+                autoRefNo: 'Opening balance',
+                debit: openingBalance.debit,
+                credit: openingBalance.credit,
+                tranDate: finYearObject?.isoStartDate
+            })
         }
         const tot: any = {}
         const temp: any[] = ret.map((x: any) => {
@@ -118,7 +131,7 @@ function useXXGrid(gridOptions: any) {
         meta.current.filteredSummary = meta.current.filteredRows.reduce(
             (prev: any, current: any) => {
                 prev.count = (prev.count || 0) + 1
-                for(let col of summaryColNames){
+                for (let col of summaryColNames) {
                     prev[col] = (prev[col] || 0.0) + (current[col] || 0.0)
                 }
                 return prev
@@ -126,7 +139,7 @@ function useXXGrid(gridOptions: any) {
             {}
         )
     }
-    return {fetchRows, meta,onSelectModelChange, requestSearch,setFilteredSummary, setRefresh }
+    return { fetchRows, meta, onSelectModelChange, requestSearch, setFilteredSummary, setRefresh }
 }
 
 export { useXXGrid, useStyles }

@@ -86,8 +86,10 @@ function useSaleItems(arbitraryData: any) {
         let amount, gst, sgst, cgst
         if (priceGst) {
             price = priceGst / (1 + (gstRate / 100))
+            rowData.price = price
         } else if (price) {
             priceGst = price * (1 + (gstRate / 100))
+            rowData.priceGst = priceGst
         }
         if (discount === 0) {
             amount = priceGst * qty
