@@ -1,6 +1,5 @@
 import { useState, } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
-// import { arbitraryData } from './arbitrary-data'
 
 function useCrown(meta: any) {
     const [, setRefresh] = useState({})
@@ -330,9 +329,7 @@ function useCrown(meta: any) {
 
                 addToDetails(debits, details, 'D')
                 addToDetails(credits, details, 'C')
-                // console.log(JSON.stringify(voucher))
                 const ret = await genericUpdateMasterDetails([voucher])
-                // const ret:any = {}
                 if (ret.error) {
                     console.log(ret.error)
                 } else {
@@ -453,7 +450,6 @@ function useCrown(meta: any) {
         checkError,
         ResetButton,
         SubmitButton,
-        // meta,
         setRefresh,
         SummaryDebitsCredits,
         SummaryGst,
