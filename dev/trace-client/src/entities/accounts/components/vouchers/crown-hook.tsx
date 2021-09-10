@@ -246,8 +246,6 @@ function useCrown(meta: any) {
         return { totalDebits, totalCredits, gstDebits, gstCredits }
     }
 
-
-
     function ResetButton() {
         return (
             <Button
@@ -333,9 +331,11 @@ function useCrown(meta: any) {
                 if (ret.error) {
                     console.log(ret.error)
                 } else {
+                    if(ad.shouldGoBackToView){
+                        emit('VOUCHER-CHANGE-TAB', 1)
+                        ad.shouldGoBackToView = false
+                    }
                     emit('VOUCHER-RESET', '')
-                    emit('VOUCHER-VIEW-RESET-IS-LOADED-ONCE', '') // next time when view tab, then fetch data takes place
-                    ad.isGobackToEdit && emit('VOUCHER-CHANGE-TAB', 1)
                     ad.shouldCloseParentOnSave && emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
                 }
 

@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { VoucherContext } from './voucher-context'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {
     const [, setRefresh] = useState({})
-
+    const arbitraryData:any = useContext(VoucherContext)
     const {
         _,
         accountsMessages,
@@ -20,13 +21,12 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
 
     const meta: any = useRef({
         isMounted: false,
-        isLoadedOnce: false,
+        // shouldViewReload: true,
         title: ''
     })
 
     useEffect(() => {
-        meta.current.isMounted = true
-
+        meta.current.isMounted = true        
         const subs1 = filterOn('VOUCHER-VIEW-XX-GRID-EDIT-CLICKED').subscribe(
             (d: any) => {
                 emit('VOUCHER-CHANGE-TAB-TO-EDIT', {
@@ -46,28 +46,29 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
             emit('XX-GRID-FETCH-DATA', null) // fetch data in xx-grid
         })
 
-        const subs4 = filterOn('VOUCHER-VIEW-RESET-IS-LOADED-ONCE').subscribe(
-            () => {
-                meta.current.isLoadedOnce = false
-            }
-        )
+        // const subs4 = filterOn('VOUCHER-VIEW-RESET-IS-LOADED-ONCE').subscribe(
+        //     () => {
+                
+        //         arbitraryData.shouldViewReload = true
+        //     }
+        // )
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
-            subs4.unsubscribe()
+            // subs4.unsubscribe()
         }
     }, [])
 
     useEffect(() => {
-        if (!hidden && !meta.current.isLoadedOnce) {
+        if ((!hidden) && arbitraryData.shouldViewReload) {
             emit('XX-GRID-FETCH-DATA', null)
-            meta.current.isLoadedOnce = true
+            arbitraryData.shouldViewReload = false
         }
-    }, [hidden, meta.current.isLoadedOnce])
+    }, [hidden, arbitraryData.shouldViewReload])
 
-    async function doDelete(params: any) {        
+    async function doDelete(params: any) {
         const row = params.row
         const tranHeaderId = row['id1']
         const options = {
@@ -75,7 +76,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
             confirmationText: 'Yes',
             cancellationText: 'No',
         }
-        if(isGoodToDelete(params)){
+        if (isGoodToDelete(params)) {
             confirm(options)
                 .then(async () => {
                     await genericUpdateMaster({
@@ -85,7 +86,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
                     emit('SHOW-MESSAGE', {})
                     emit('VOUCHER-VIEW-REFRESH', '')
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -235,7 +236,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             height: 'calc(100vh - 240px)',
-            width: '100%',           
+            width: '100%',
             marginTop: '5px',
         },
     })

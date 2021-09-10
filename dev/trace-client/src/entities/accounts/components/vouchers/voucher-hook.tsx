@@ -10,17 +10,21 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
         meta.current.isMounted = true
+        arbitraryData.shouldViewReload = true
+        arbitraryData.shouldGoBackToView = false
         setAccounts()
         setRefresh({})
         const subs1 = filterOn('VOUCHER-CHANGE-TAB-TO-EDIT').subscribe(
             (d: any) => {
                 const tranHeaderId = d.data?.tranHeaderId
                 tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
-                arbitraryData.isGobackToEdit = true
+                arbitraryData.shouldGoBackToView = true
                 handleOnTabChange(null, 0)
             }
         )
         const subs2 = filterOn('VOUCHER-RESET').subscribe(() => {
+            arbitraryData.shouldViewReload = true
+            arbitraryData.shouldGoBackToView = false
             arbitraryData.header = {}
             arbitraryData.debits = [{ key: 0 }]
             arbitraryData.credits = [{ key: 0 }]
@@ -32,7 +36,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             handleOnTabChange(null, d.data?.tabValue || 1)
         })
 
-        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe((d: any)=>{
+        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe((d: any) => {
             const tranHeaderId = d.data?.tranHeaderId
             tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
             arbitraryData.shouldCloseParentOnSave = true
