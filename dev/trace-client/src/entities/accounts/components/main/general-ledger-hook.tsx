@@ -61,19 +61,19 @@ function useGeneralLedger() {
         },
     })
 
-    const { fetchData } = getGeneralLedger(meta)
+    // const { fetchData } = getGeneralLedger(meta)
 
-    async function handleFetchData() {
-        const accId = meta.current.ledgerSubledger.accId
-        if (accId) {
-            await fetchData()
-        } else {
-            meta.current.showDialog = true
-        }
-        meta.current.isMounted && setRefresh({})
-    }
+    // async function handleFetchData() {
+    //     const accId = meta.current.ledgerSubledger.accId
+    //     if (accId) {
+    //         await fetchData()
+    //     } else {
+    //         meta.current.showDialog = true
+    //     }
+    //     meta.current.isMounted && setRefresh({})
+    // }
 
-    return { handleFetchData, meta }
+    return { meta }
 }
 
 export { useGeneralLedger }

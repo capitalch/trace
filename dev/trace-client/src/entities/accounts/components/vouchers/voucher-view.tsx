@@ -20,7 +20,7 @@ function VoucherView({ hidden, tranTypeId }: any) {
 
     return (
         <Box className={classes.content} hidden={hidden}>
-            <XXGrid
+            {(!hidden) && <XXGrid
                 columns={columns}
                 summaryColNames={summaryColNames}
                 title={meta.current.title}
@@ -28,7 +28,7 @@ function VoucherView({ hidden, tranTypeId }: any) {
                 sqlQueryArgs={args}
                 specialColumns={specialColumns}
                 xGridProps={{ disableSelectionOnClick: true }}
-            />
+            />}
         </Box>
     )
 }

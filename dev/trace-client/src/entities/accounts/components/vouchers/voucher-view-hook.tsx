@@ -13,7 +13,6 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         emit,
         filterOn,
         genericUpdateMaster,
-        // isDateAuditLocked,
         isGoodToDelete,
         moment,
         toDecimalFormat,
@@ -21,7 +20,6 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
 
     const meta: any = useRef({
         isMounted: false,
-        // shouldViewReload: true,
         title: ''
     })
 
@@ -32,7 +30,6 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
                 emit('VOUCHER-CHANGE-TAB-TO-EDIT', {
                     tranHeaderId: d.data?.row?.id1,
                 })
-                setRefresh({})
             }
         )
 
@@ -46,18 +43,11 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
             emit('XX-GRID-FETCH-DATA', null) // fetch data in xx-grid
         })
 
-        // const subs4 = filterOn('VOUCHER-VIEW-RESET-IS-LOADED-ONCE').subscribe(
-        //     () => {
-                
-        //         arbitraryData.shouldViewReload = true
-        //     }
-        // )
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
-            // subs4.unsubscribe()
         }
     }, [])
 

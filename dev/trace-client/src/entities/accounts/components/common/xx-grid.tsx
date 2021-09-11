@@ -28,7 +28,7 @@ import {
 import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
 
-interface SpecialColumnOptions {    
+interface SpecialColumnOptions {
     isEdit?: boolean
     isDelete?: boolean
     isHide?: boolean
@@ -46,7 +46,9 @@ interface XXGridOptions {
     sqlQueryId?: any
     summaryColNames: string[]
     toShowClosingBalance?: boolean
-    toShowOpeningBalance?: boolean   
+    toShowDailySummary?: boolean
+    toShowOpeningBalance?: boolean
+    toShowReverseCheckbox?: boolean
     title: string
     specialColumns: SpecialColumnOptions
     xGridProps?: any
@@ -69,10 +71,12 @@ function XXGrid(gridOptions: XXGridOptions) {
         _,
         Box,
         Button,
+        Checkbox,
         CloseIcon,
         DeleteIcon,
         EditIcon,
         emit,
+        FormControlLabel,
         IconButton,
         SearchIcon,
         SyncIcon,
@@ -93,7 +97,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             apiRef={apiRef}
             columns={columns}
             rows={meta.current.filteredRows}
-            rowHeight={32} 
+            rowHeight={32}
             // autoHeight={true}
             // disableSelectionOnClick={true}
             components={{
@@ -146,29 +150,67 @@ function XXGrid(gridOptions: XXGridOptions) {
                     onClick={(e: any) => fetchRows(sqlQueryId, sqlQueryArgs)}>
                     <SyncIcon></SyncIcon>
                 </IconButton>
-                {(!!!gridOptions.hideViewLimit) && <div className="view-limit">
-                    <span>View</span>
-                    <select
-                        value={meta.current.viewLimit}
-                        style={{
-                            fontSize: '0.8rem',
-                            width: '4rem',
-                            marginLeft: '0.1rem',
-                        }}
-                        onChange={(e) => {
-                            meta.current.viewLimit = e.target.value
-                            sqlQueryArgs['no'] =
-                                meta.current.viewLimit === '0'
-                                    ? null
-                                    : meta.current.viewLimit // null for all items in postgresql
-                            fetchRows(sqlQueryId, sqlQueryArgs)
-                            meta.current.isMounted && setRefresh({})
-                        }}>
-                        <option value={100}>100</option>
-                        <option value={1000}>1000</option>
-                        <option value={0}>All</option>
-                    </select>
-                </div>}
+                {!!!gridOptions.hideViewLimit && (
+                    <div className="view-limit">
+                        <span>View</span>
+                        <select
+                            value={meta.current.viewLimit}
+                            style={{
+                                fontSize: '0.8rem',
+                                width: '4rem',
+                                marginLeft: '0.1rem',
+                            }}
+                            onChange={(e) => {
+                                meta.current.viewLimit = e.target.value
+                                sqlQueryArgs['no'] =
+                                    meta.current.viewLimit === '0'
+                                        ? null
+                                        : meta.current.viewLimit // null for all items in postgresql
+                                fetchRows(sqlQueryId, sqlQueryArgs)
+                                meta.current.isMounted && setRefresh({})
+                            }}>
+                            <option value={100}>100</option>
+                            <option value={1000}>1000</option>
+                            <option value={0}>All</option>
+                        </select>
+                    </div>
+                )}
+                {!!gridOptions.toShowReverseCheckbox && (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={meta.current.isReverseOrder}
+                                onChange={(e: any) => {
+                                    meta.current.isReverseOrder =
+                                        e.target.checked
+                                    setRefresh({})
+                                    // fetchRows(
+                                    //     gridOptions.sqlQueryId,
+                                    //     gridOptions.sqlQueryArgs
+                                    // )
+                                }}
+                            />
+                        }
+                        label="Reverse"
+                    />
+                )}
+                {
+                    (!!gridOptions.toShowDailySummary) && <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={meta.current.isDailySummary}
+                            onChange={(e: any) => {
+                                meta.current.isDailySummary = e.target.checked
+                                fetchRows(
+                                    gridOptions.sqlQueryId,
+                                    gridOptions.sqlQueryArgs
+                                )
+                            }}
+                        />
+                    }
+                    label="Daily summary"
+                />
+                }
 
                 {/* global filter */}
                 <TextField

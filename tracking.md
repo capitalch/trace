@@ -115,6 +115,10 @@ create installer from innosetup
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 08-09-2021 - 11-09-2021
+1. Completed drill down reports and bug fixes
+2. Implemented reverseOrder in XXGrid
+
 # 05-09-2021 - 07-09-2021
 1. Drill down completed for Debit notes credit notes
 2. bug fix: When in report filter then when returns filter does not fire

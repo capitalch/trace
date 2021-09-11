@@ -6,7 +6,7 @@ import { useGeneralLedger, useStyles } from './general-ledger-hook'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const { handleFetchData, meta } = useGeneralLedger()
+    const { meta } = useGeneralLedger()
 
     const {
         _,
@@ -72,6 +72,8 @@ function GeneralLedger() {
                     specialColumns={getArtifacts().specialColumns}
                     toShowOpeningBalance={true}
                     toShowClosingBalance={true}
+                    toShowDailySummary={true}
+                    toShowReverseCheckbox={true}
                     xGridProps={{ disableSelectionOnClick: true }}
                     jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                 />

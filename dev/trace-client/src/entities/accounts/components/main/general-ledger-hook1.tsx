@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function useGeneralLedger() {
+function useGeneralLedger1() {
     const [, setRefresh] = useState({})
 
     const {
@@ -73,7 +73,7 @@ function useGeneralLedger() {
     return { handleFetchData, meta }
 }
 
-export { useGeneralLedger }
+export { useGeneralLedger1 }
 
 
 const useStyles: any = makeStyles((theme: Theme) =>

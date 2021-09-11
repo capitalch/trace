@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { useGeneralLedger, useStyles } from './general-ledger-hook'
+import { useGeneralLedger1, useStyles } from './general-ledger-hook1'
 
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const { handleFetchData, meta } = useGeneralLedger()
+    const { handleFetchData, meta } = useGeneralLedger1()
 
     const {
         _,
@@ -51,7 +51,6 @@ function GeneralLedger() {
             <Box className="header">
                 <div>
                     <IconButton
-                        // className={classes.syncIconButton}
                         size="medium"
                         color="secondary"
                         onClick={handleFetchData}>

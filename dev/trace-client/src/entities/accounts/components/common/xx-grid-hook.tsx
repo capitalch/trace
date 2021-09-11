@@ -4,30 +4,38 @@ import { useSharedElements } from './shared-elements-hook'
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
-    const { sqlQueryArgs, sqlQueryId, summaryColNames } = gridOptions
+    let { sqlQueryArgs, sqlQueryId, summaryColNames } = gridOptions
     const meta: any = useRef({
         filteredRows: [],
         filteredSummary: {},
         allSummary: {},
+        isDailySummary: false,
         isMounted: false,
+        isReverseOrder: false,
         rows: [],
         selectedSummary: {},
         searchText: '',
-        // sqlQueryArgs: {},
         viewLimit: 0,
     })
 
-    const { _, emit, filterOn, getCurrentEntity, getFromBag, execGenericView } = useSharedElements()
+    const {
+        _,
+        emit,
+        filterOn,
+        getCurrentEntity,
+        getFromBag,
+        execGenericView,
+        toDecimalFormat,
+    } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
         const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe((d: any) => {
             if (d.data) {
-                fetchRows(sqlQueryId, d.data)
-            } else {
-                fetchRows(sqlQueryId, sqlQueryArgs)
+                sqlQueryArgs = d.data
             }
+            fetchRows(sqlQueryId, sqlQueryArgs)
         })
         const subs2 = filterOn('XX-GRID-RESET').subscribe(() => {
             meta.current.filteredRows = []
@@ -39,10 +47,20 @@ function useXXGrid(gridOptions: any) {
             subs2.unsubscribe()
         }
     }, [])
+
+    useEffect(() => {
+        // if(meta.current.isReverseOrder){
+            let rows = [...meta.current.filteredRows]
+            rows.reverse()
+            meta.current.filteredRows= rows
+        // } 
+        setRefresh({})
+    }, [meta.current.isReverseOrder])
+
     const entityName = getCurrentEntity()
 
     async function fetchRows(queryId: string, queryArgs: any) {
-        if ((!queryId) || (!queryArgs)) {
+        if (!queryId || !queryArgs) {
             return
         }
         emit('SHOW-LOADING-INDICATOR', true)
@@ -65,8 +83,9 @@ function useXXGrid(gridOptions: any) {
         } else {
             ret = ret1
         }
+
         if (gridOptions.toShowOpeningBalance) {
-            if ((!openingBalance) || (_.isEmpty(openingBalance))) {
+            if (!openingBalance || _.isEmpty(openingBalance)) {
                 openingBalance = { debit: 0, credit: 0, tranDate: undefined }
             }
             const finYearObject = getFromBag('finYearObject')
@@ -74,20 +93,48 @@ function useXXGrid(gridOptions: any) {
                 autoRefNo: 'Opening balance',
                 debit: openingBalance.debit,
                 credit: openingBalance.credit,
-                tranDate: finYearObject?.isoStartDate
+                tranDate: finYearObject?.isoStartDate,
             })
         }
+
+        if (meta.current.isDailySummary) {
+            const summaryRows = getSummaryRows(ret, meta)
+            // merge transactions with summaryRows and sort
+            meta.current.transactions = ret.concat(summaryRows)
+            meta.current.transactions = _.sortBy(meta.current.transactions, [
+                'tranDate',
+            ]) // Used lodash because JavaScript sort did not work out
+            meta.current.transactions.shift(1) // remove first row which is having blank date value
+            // cleanup
+            meta.current.transactions = meta.current.transactions.map(
+                (item: any) => {
+                    return {
+                        ...item,
+                        tranType:
+                            item.tranType === 'Summary' ? '' : item.tranType,
+                    }
+                }
+            )
+        } else {
+            meta.current.transactions = ret
+        }
+
+        meta.current.isReverseOrder && ret.reverse()
+
         const tot: any = {}
-        const temp: any[] = ret.map((x: any) => {
-            x['id1'] = x.id
-            x.id = incr()
-            for (let col of summaryColNames) {
-                tot[col] = (tot[col] || 0) + x[col]
-            }
-            return x
-        })
+        const temp: any[] = !ret
+            ? []
+            : ret.map((x: any) => {
+                  x['id1'] = x.id
+                  x.id = incr()
+                  for (let col of summaryColNames) {
+                      tot[col] = (tot[col] || 0) + x[col]
+                  }
+                  return x
+              })
 
         tot.count = ret?.length
+
         if (ret) {
             meta.current.rows = temp
             meta.current.filteredRows = [...meta.current.rows]
@@ -97,6 +144,72 @@ function useXXGrid(gridOptions: any) {
             meta.current.isMounted && setRefresh({})
         }
     }
+
+    function getSummaryRows(arr: any[], meta: any) {
+        const summary: any[] = []
+        let opBalance = 0
+        if (meta.current.opBalance?.debit) {
+            opBalance = meta.current.opBalance.debit
+        } else {
+            opBalance = -meta.current.opBalance.credit
+        }
+        opBalance = opBalance || 0
+        const acc: any = {
+            tranDate: '',
+            op: opBalance,
+            otherAccounts: toOpeningDrCr(opBalance),
+            debit: 0,
+            credit: 0,
+            clos: 0,
+            autoRefNo: toClosingDrCr(opBalance), // to show closing balance
+            tranType: 'Summary',
+        }
+
+        for (let item of arr) {
+            if (item.tranDate !== acc.tranDate) {
+                //push
+                acc.clos = acc.op + acc.debit - acc.credit
+                acc.otherAccounts = toOpeningDrCr(acc.op)
+                acc.autoRefNo = toClosingDrCr(acc.clos)
+                summary.push({ ...acc })
+                acc.tranDate = item.tranDate
+                acc.op = acc.clos
+                acc.otherAccounts = toOpeningDrCr(acc.op)
+                acc.debit = item.debit
+                acc.credit = item.credit
+                acc.clos = 0
+                acc.autoRefNo = toClosingDrCr(acc.clos)
+            } else {
+                acc.debit = acc.debit + (item.debit || 0)
+                acc.credit = acc.credit + (item.credit || 0)
+            }
+        }
+
+        acc.clos = acc.op + acc.debit - acc.credit
+
+        acc.autoRefNo = toClosingDrCr(acc.clos)
+        summary.push({ ...acc })
+
+        return summary
+
+        function toOpeningDrCr(value: number) {
+            return 'Opening: '.concat(
+                String(toDecimalFormat(Math.abs(value))) +
+                    (value >= 0 ? ' Dr' : ' Cr')
+            )
+        }
+
+        function toClosingDrCr(value: number) {
+            return 'Closing: '.concat(
+                String(toDecimalFormat(Math.abs(value))) +
+                    (value >= 0 ? ' Dr' : ' Cr')
+            )
+        }
+    }
+
+    // function handleReverseOrder(checked){
+    //     meta.current.isReverseOrder = checked
+    // }
 
     function onSelectModelChange(rowIds: any) {
         const rows = meta.current.rows
@@ -139,7 +252,14 @@ function useXXGrid(gridOptions: any) {
             {}
         )
     }
-    return { fetchRows, meta, onSelectModelChange, requestSearch, setFilteredSummary, setRefresh }
+    return {
+        fetchRows,
+        meta,
+        onSelectModelChange,
+        requestSearch,
+        setFilteredSummary,
+        setRefresh,
+    }
 }
 
 export { useXXGrid, useStyles }
@@ -148,7 +268,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             height: '100%',
-            // minHeight: '30rem', 
+            // minHeight: '30rem',
             width: '100%',
             '& .delete': {
                 color: 'red',
@@ -175,11 +295,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: theme.palette.secondary.main,
                     '& select': {
                         borderColor: 'grey',
-                        color: theme.palette.primary.main
+                        color: theme.palette.primary.main,
                         // height: '1.5rem'
-                    }
-
-                }
+                    },
+                },
             },
             '& .custom-footer': {
                 display: 'flex',

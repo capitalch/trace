@@ -336,7 +336,9 @@ function useCrown(meta: any) {
                         ad.shouldGoBackToView = false
                     }
                     emit('VOUCHER-RESET', '')
-                    ad.shouldCloseParentOnSave && emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+                    if(ad.shouldCloseParentOnSave){
+                        emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+                    }
                 }
 
                 function addToDetails(

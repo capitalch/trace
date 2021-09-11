@@ -86,13 +86,13 @@ function AccountsLedgerDialog() {
             'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG'
         ).subscribe(() => {
             meta.current.showChildDialog = false
+            setRefresh({})
             if(meta.current.showDialog){
                 emit('XX-GRID-FETCH-DATA', '') // If main dialog is open then only xx-grid fetch data
-            } else {
+            } 
+            else {
                 emit('ROOT-WINDOW-REFRESH','') // otherwise refresh data in root window
             }
-            // meta.current.showDialog && 
-            setRefresh({})
         })
         const subs3 = filterOn(
             'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
