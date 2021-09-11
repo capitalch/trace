@@ -132,7 +132,7 @@ function GeneralLedger() {
             {
                 headerName: 'Instr',
                 field: 'instrNo',
-                width: 160,
+                width: 200,
                 sortable: false,
             },
             {

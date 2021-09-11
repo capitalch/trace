@@ -119,10 +119,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .ledger-summary':{
                     color: theme.palette.blue.dark,
                     backgroundColor: '#FFFAFA',
-                    // fontSize:'0.7rem',
                     fontFamily:'Lato',
                     fontWeight: 'bold'
-                    // textAlign:'right',
                 }
             },
 

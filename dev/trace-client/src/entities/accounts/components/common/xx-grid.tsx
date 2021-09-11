@@ -85,13 +85,17 @@ function XXGrid(gridOptions: XXGridOptions) {
         Typography,
     } = useSharedElements()
 
-    const classes = useStyles()
+    const classes = useStyles(meta)
     const specialColumns = gridOptions.specialColumns
     addSpecialColumns(specialColumns)
 
     return (
-        // <div style={{height:'1280px', width: '800px'}}>
+
         <DataGridPro
+            getRowClassName={(params: any) => {
+                const summ = params.row.isDailySummary ? 'ledger-summary':''
+                return (summ)
+            }}
             className={classes.content}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
@@ -196,20 +200,20 @@ function XXGrid(gridOptions: XXGridOptions) {
                 )}
                 {
                     (!!gridOptions.toShowDailySummary) && <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={meta.current.isDailySummary}
-                            onChange={(e: any) => {
-                                meta.current.isDailySummary = e.target.checked
-                                fetchRows(
-                                    gridOptions.sqlQueryId,
-                                    gridOptions.sqlQueryArgs
-                                )
-                            }}
-                        />
-                    }
-                    label="Daily summary"
-                />
+                        control={
+                            <Checkbox
+                                checked={meta.current.isDailySummary}
+                                onChange={(e: any) => {
+                                    meta.current.isDailySummary = e.target.checked
+                                    fetchRows(
+                                        gridOptions.sqlQueryId,
+                                        gridOptions.sqlQueryArgs
+                                    )
+                                }}
+                            />
+                        }
+                        label="Daily summary"
+                    />
                 }
 
                 {/* global filter */}

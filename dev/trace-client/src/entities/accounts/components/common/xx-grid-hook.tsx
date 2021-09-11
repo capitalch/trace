@@ -50,9 +50,9 @@ function useXXGrid(gridOptions: any) {
 
     useEffect(() => {
         // if(meta.current.isReverseOrder){
-            let rows = [...meta.current.filteredRows]
-            rows.reverse()
-            meta.current.filteredRows= rows
+        let rows = [...meta.current.filteredRows]
+        rows.reverse()
+        meta.current.filteredRows = rows
         // } 
         setRefresh({})
     }, [meta.current.isReverseOrder])
@@ -75,8 +75,8 @@ function useXXGrid(gridOptions: any) {
         function incr() {
             return i++
         }
-        let ret
-        let openingBalance = ret1?.jsonResult?.opBalance
+        let ret: any[]
+        let openingBalance = meta.current.opBalance = (ret1?.jsonResult?.opBalance || { debit: 0, credit: 0 })
 
         if (gridOptions.jsonFieldPath) {
             ret = _.get(ret1, gridOptions.jsonFieldPath)
@@ -84,40 +84,17 @@ function useXXGrid(gridOptions: any) {
             ret = ret1
         }
 
-        if (gridOptions.toShowOpeningBalance) {
-            if (!openingBalance || _.isEmpty(openingBalance)) {
-                openingBalance = { debit: 0, credit: 0, tranDate: undefined }
-            }
-            const finYearObject = getFromBag('finYearObject')
-            ret.unshift({
-                autoRefNo: 'Opening balance',
-                debit: openingBalance.debit,
-                credit: openingBalance.credit,
-                tranDate: finYearObject?.isoStartDate,
-            })
-        }
+        ret.unshift({
+            otherAccounts: 'Opening balance',
+            debit: toDecimalFormat(meta.current.opBalance.debit),
+            credit: toDecimalFormat(meta.current.opBalance.credit),
+            tranDate: getFromBag('finYearObject').isoStartDate
+        })
 
-        if (meta.current.isDailySummary) {
-            const summaryRows = getSummaryRows(ret, meta)
-            // merge transactions with summaryRows and sort
-            meta.current.transactions = ret.concat(summaryRows)
-            meta.current.transactions = _.sortBy(meta.current.transactions, [
-                'tranDate',
-            ]) // Used lodash because JavaScript sort did not work out
-            meta.current.transactions.shift(1) // remove first row which is having blank date value
-            // cleanup
-            meta.current.transactions = meta.current.transactions.map(
-                (item: any) => {
-                    return {
-                        ...item,
-                        tranType:
-                            item.tranType === 'Summary' ? '' : item.tranType,
-                    }
-                }
-            )
-        } else {
-            meta.current.transactions = ret
-        }
+        meta.current.rows = ret
+
+        injectDailySummary()
+        ret = meta.current.rows
 
         meta.current.isReverseOrder && ret.reverse()
 
@@ -125,13 +102,15 @@ function useXXGrid(gridOptions: any) {
         const temp: any[] = !ret
             ? []
             : ret.map((x: any) => {
-                  x['id1'] = x.id
-                  x.id = incr()
-                  for (let col of summaryColNames) {
-                      tot[col] = (tot[col] || 0) + x[col]
-                  }
-                  return x
-              })
+                if (!x.isDailySummary) {
+                    x['id1'] = x.id
+                    for (let col of summaryColNames) {
+                        tot[col] = +(tot[col] || 0) + x[col]
+                    }
+                }
+                x.id = incr()
+                return x
+            })
 
         tot.count = ret?.length
 
@@ -145,71 +124,98 @@ function useXXGrid(gridOptions: any) {
         }
     }
 
-    function getSummaryRows(arr: any[], meta: any) {
-        const summary: any[] = []
-        let opBalance = 0
-        if (meta.current.opBalance?.debit) {
-            opBalance = meta.current.opBalance.debit
-        } else {
-            opBalance = -meta.current.opBalance.credit
-        }
-        opBalance = opBalance || 0
-        const acc: any = {
-            tranDate: '',
-            op: opBalance,
-            otherAccounts: toOpeningDrCr(opBalance),
-            debit: 0,
-            credit: 0,
-            clos: 0,
-            autoRefNo: toClosingDrCr(opBalance), // to show closing balance
-            tranType: 'Summary',
-        }
+    function injectDailySummary() {
+        let rows = meta.current.rows
+        if (meta.current.isDailySummary) {
+            const summaryRows = getSummaryRows(rows)
+            // merge transactions with summaryRows and sort
+            rows = rows.concat(summaryRows)
+            rows = _.sortBy(rows, [
+                'tranDate',
+            ]) // Used lodash because JavaScript sort did not work out
+            rows.shift() // remove first row which is having blank date value
+            // cleanup
+            rows = rows.map(
+                (item: any) => {
+                    return {
+                        ...item,
+                        tranType:
+                            item.tranType === 'Summary' ? '' : item.tranType,
+                    }
+                }
+            )
+        } 
+        // else {
+        //     meta.current.filteredRows = rows
+        // }
+        meta.current.rows = rows
 
-        for (let item of arr) {
-            if (item.tranDate !== acc.tranDate) {
-                //push
-                acc.clos = acc.op + acc.debit - acc.credit
-                acc.otherAccounts = toOpeningDrCr(acc.op)
-                acc.autoRefNo = toClosingDrCr(acc.clos)
-                summary.push({ ...acc })
-                acc.tranDate = item.tranDate
-                acc.op = acc.clos
-                acc.otherAccounts = toOpeningDrCr(acc.op)
-                acc.debit = item.debit
-                acc.credit = item.credit
-                acc.clos = 0
-                acc.autoRefNo = toClosingDrCr(acc.clos)
+        function getSummaryRows(arr: any[]) {
+            const summary: any[] = []
+            let opBalance = 0
+            if (meta.current.opBalance?.debit) {
+                opBalance = +meta.current.opBalance.debit
             } else {
-                acc.debit = acc.debit + (item.debit || 0)
-                acc.credit = acc.credit + (item.credit || 0)
+                opBalance = -meta.current.opBalance.credit
+            }
+            opBalance = +opBalance || 0
+            const acc: any = {
+                tranDate: '',
+                op: +opBalance,
+
+                debit: 0,
+                credit: 0,
+                clos: +opBalance,
+                otherAccounts: toOpeningDrCr(opBalance),
+                instrNo: toClosingDrCr(opBalance),
+                tranType: 'Summary',
+                isDailySummary: true
+            }
+
+            for (let item of arr) {
+                if (item.tranDate === acc.tranDate) {
+                    acc.debit = +acc.debit + (item.debit || 0)
+                    acc.credit = +acc.credit + (item.credit || 0)
+                } else {
+                    //push
+                    acc.clos = +acc.op + acc.debit - acc.credit
+                    acc.otherAccounts = toOpeningDrCr(acc.op)
+                    acc.instrNo = toClosingDrCr(acc.clos)
+                    summary.push({ ...acc })
+
+                    acc.tranDate = item.tranDate
+                    acc.op = +acc.clos
+                    acc.otherAccounts = toOpeningDrCr(acc.op)
+                    acc.autoRefNo = 'Summary'
+                    acc.debit = +item.debit
+                    acc.credit = +item.credit
+                    acc.clos = +acc.op + acc.debit - acc.credit
+                    acc.instrNo = toClosingDrCr(acc.clos)
+                }
+            }
+
+            acc.clos = +acc.op + acc.debit - acc.credit
+
+            acc.instrNo = toClosingDrCr(acc.clos)
+            summary.push({ ...acc })
+
+            return summary
+
+            function toOpeningDrCr(value: number) {
+                return 'Opening: '.concat(
+                    String(toDecimalFormat(Math.abs(value))) +
+                    (value >= 0 ? ' Dr' : ' Cr')
+                )
+            }
+
+            function toClosingDrCr(value: number) {
+                return 'Closing: '.concat(
+                    String(toDecimalFormat(Math.abs(value))) +
+                    (value >= 0 ? ' Dr' : ' Cr')
+                )
             }
         }
-
-        acc.clos = acc.op + acc.debit - acc.credit
-
-        acc.autoRefNo = toClosingDrCr(acc.clos)
-        summary.push({ ...acc })
-
-        return summary
-
-        function toOpeningDrCr(value: number) {
-            return 'Opening: '.concat(
-                String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
-            )
-        }
-
-        function toClosingDrCr(value: number) {
-            return 'Closing: '.concat(
-                String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
-            )
-        }
     }
-
-    // function handleReverseOrder(checked){
-    //     meta.current.isReverseOrder = checked
-    // }
 
     function onSelectModelChange(rowIds: any) {
         const rows = meta.current.rows
@@ -266,10 +272,23 @@ export { useXXGrid, useStyles }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
+        // xxx: {
+        //     color: (meta:any)=>{
+        //         console.log(meta)
+        //         return('red')
+        //     }
+        // },
         content: {
             height: '100%',
-            // minHeight: '30rem',
             width: '100%',
+
+            '& .ledger-summary': {
+                color: theme.palette.blue.dark,
+                backgroundColor: '#FFFAFA',
+                fontFamily: 'Lato',
+                fontWeight: 'bold'
+            },
+
             '& .delete': {
                 color: 'red',
             },

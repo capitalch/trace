@@ -372,7 +372,7 @@ allSqls = {
             from "FinYearM"
                 where "id" = %(finYearId)s
     ''',
-
+    
     "get_generalSettings": '''
         select "jData"
             from "Settings"
