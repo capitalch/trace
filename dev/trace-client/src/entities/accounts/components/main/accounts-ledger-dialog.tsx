@@ -142,6 +142,11 @@ function AccountsLedgerDialog() {
                         specialColumns={getArtifacts().specialColumns}
                         toShowOpeningBalance={true}
                         toShowClosingBalance={true}
+
+                        // toShowColumnBalance={true}
+                        toShowDailySummary={true}
+                        toShowReverseCheckbox={true}
+
                         xGridProps={{ disableSelectionOnClick: true }}
                         jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                     />

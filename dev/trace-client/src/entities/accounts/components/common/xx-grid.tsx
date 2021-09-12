@@ -1,6 +1,6 @@
 import { useStyles } from './xx-grid-hook'
 // import {
-//     XGrid,
+//     DataGrid,
 //     GridToolbarFilterButton,
 //     GridToolbarExport,
 //     GridToolbarContainer,
@@ -10,7 +10,7 @@ import { useStyles } from './xx-grid-hook'
 //     GridRowData,
 //     useGridApiRef,
 //     GridCellParams,
-// } from '@material-ui/x-grid'
+// } from '@mui/x-data-grid'
 
 import {
     DataGridPro,
@@ -46,6 +46,7 @@ interface XXGridOptions {
     sqlQueryId?: any
     summaryColNames: string[]
     toShowClosingBalance?: boolean
+    toShowColumnBalance?: boolean
     toShowDailySummary?: boolean
     toShowOpeningBalance?: boolean
     toShowReverseCheckbox?: boolean
@@ -61,11 +62,14 @@ function XXGrid(gridOptions: XXGridOptions) {
     const apiRef: any = useGridApiRef()
     const {
         fetchRows,
+        fillColumnBalance,
+        injectDailySummary,
         meta,
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,
         setRefresh,
+        toggleReverseOrder,
     } = useXXGrid(gridOptions)
     const {
         _,
@@ -187,11 +191,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 onChange={(e: any) => {
                                     meta.current.isReverseOrder =
                                         e.target.checked
-                                    setRefresh({})
-                                    // fetchRows(
-                                    //     gridOptions.sqlQueryId,
-                                    //     gridOptions.sqlQueryArgs
-                                    // )
+                                        toggleReverseOrder()
                                 }}
                             />
                         }
@@ -205,15 +205,26 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 checked={meta.current.isDailySummary}
                                 onChange={(e: any) => {
                                     meta.current.isDailySummary = e.target.checked
-                                    fetchRows(
-                                        gridOptions.sqlQueryId,
-                                        gridOptions.sqlQueryArgs
-                                    )
+                                    injectDailySummary()
                                 }}
                             />
                         }
                         label="Daily summary"
                     />
+                }
+                {
+                    ((!!gridOptions.toShowColumnBalance) && <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={meta.current.isColumnBalance}
+                            onChange={(e: any) => {
+                                meta.current.isColumnBalance = e.target.checked
+                                fillColumnBalance()
+                            }}
+                        />
+                    }
+                    label="Col balance"
+                />)
                 }
 
                 {/* global filter */}

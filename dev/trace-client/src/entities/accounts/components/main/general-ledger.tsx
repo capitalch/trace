@@ -71,6 +71,7 @@ function GeneralLedger() {
                     sqlQueryArgs={meta.current.sqlQueryArgs}
                     specialColumns={getArtifacts().specialColumns}
                     toShowOpeningBalance={true}
+                    toShowColumnBalance={true}
                     toShowClosingBalance={true}
                     toShowDailySummary={true}
                     toShowReverseCheckbox={true}
@@ -125,6 +126,14 @@ function GeneralLedger() {
                 headerName: 'Credits',
                 field: 'credit',
                 type: 'number',
+                width: 160,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Balance',
+                field:'balance',
+                type: 'number',
+                sortable: false,
                 width: 160,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
