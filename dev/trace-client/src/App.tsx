@@ -1,4 +1,5 @@
 import React from 'react'
+import { LicenseInfo } from '@mui/x-data-grid-pro'
 import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
@@ -104,7 +105,9 @@ const App: React.FC = () => {
             },
         },
     })
-
+    LicenseInfo.setLicenseKey(
+        'x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e'
+    )
     // To disable mobile browser back
     window.history.pushState(null, 'null', window.location.href)
     window.onpopstate = function () {
