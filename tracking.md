@@ -67,12 +67,16 @@ create installer from innosetup
 	1. Organize code for using shared components all over
 	2. Remove Figures from BS and PL which have zero closing balance
 																	3. Remove trace-footer. it is of no use
-	4. Clean up
+	4. Clean up code for removed vouchers
+	5. Provide ProfGrid all over wherein other grids are being used
+	6. Rework on Sales, Purchases... etc.
+
 
 ## Functionality
 	1. Auto subledger create bill
-	2. Drill down
-	3. 
+													2. Drill down
+	3. Rework on bank recon with ProfGrid
+	3.5 
 	4. Footer Trace version copyright
 	5. Sales bill to PDF and email / print
 	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
@@ -115,9 +119,15 @@ create installer from innosetup
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 19-09-2021
+Bug fix: General ledger for null entries
+
+# 12-09-2021: Off for new-town flutter work
+
 # 08-09-2021 - 11-09-2021
 1. Completed drill down reports and bug fixes
 2. Implemented reverseOrder in XXGrid
+3. Reworked on XXGrid / ProfGrid
 
 # 05-09-2021 - 07-09-2021
 1. Drill down completed for Debit notes credit notes

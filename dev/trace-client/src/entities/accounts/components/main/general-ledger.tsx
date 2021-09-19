@@ -1,4 +1,3 @@
-import { emit } from 'process'
 import { useState } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
@@ -11,19 +10,13 @@ function GeneralLedger() {
     const {
         _,
         accountsMessages,
-        Box,
-        Checkbox,
         emit,
         getGeneralLedger,
-        FormControlLabel,
         getAccountName,
-        IconButton,
         LedgerSubledger,
         moment,
         PrimeDialog,
-        SyncIcon,
         toDecimalFormat,
-        traceGlobalSearch,
         Typography,
         XXGrid,
     } = useSharedElements()

@@ -97,7 +97,7 @@ function useXXGrid(gridOptions: any) {
                 } else {
                     ret = ret1
                 }
-
+                ret = ret || []
                 ret = ret.map((item: any) => {
                     return {
                         ...item,
@@ -112,7 +112,7 @@ function useXXGrid(gridOptions: any) {
                     tranDate: getFromBag('finYearObject').isoStartDate,
                     // id: 0
                 })
-                pre.filteredRows = ret
+                pre.filteredRows = ret || []
                 pre.allRows = [...ret]
             }
         }
@@ -120,10 +120,8 @@ function useXXGrid(gridOptions: any) {
 
     function fillColumnBalance() {
         const rows: any[] = [...pre.allRows]
-        // pre.filteredRows= []
-        // pre.isMounted && setRefresh({})
         if (pre.isColumnBalance) {            
-            let op:number = 0.0 // pre.opBalance.debit || -pre.opBalance.credit || 0.0
+            let op:number = 0.0
             for (let row of rows) {
                 row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
                 op = row.balance
@@ -133,9 +131,6 @@ function useXXGrid(gridOptions: any) {
            for(let row of rows){
                row.balance = undefined
            }           
-            // pre.filteredRows.forEach((x: any) => {
-            //     x.balance = undefined
-            // })
         }
         pre.filteredRows = rows
         pre.isMounted && setRefresh({})

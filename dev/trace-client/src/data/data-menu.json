@@ -7,39 +7,7 @@
                 {
                     "name": "vouchersMenu",
                     "label": "Vouchers",
-                    "children": [
-                        {
-                            "name": "paymentsSubMenu",
-                            "label": "Payments",
-                            "componentName": "genericForms",
-                            "args": {
-                                "loadComponent": "payments"
-                            }
-                        },
-                        {
-                            "name": "receiptsSubMenu",
-                            "label": "Receipts",
-                            "componentName": "genericForms",
-                            "args": {
-                                "loadComponent": "receipts"
-                            }
-                        },
-                        {
-                            "name": "contraSubMenu",
-                            "label": "Contra",
-                            "componentName": "genericForms",
-                            "args": {
-                                "loadComponent": "contra"
-                            }
-                        },
-                        {
-                            "name": "journalsSubMenu",
-                            "label": "Journals",
-                            "componentName": "genericForms",
-                            "args": {
-                                "loadComponent": "journals"
-                            }
-                        },
+                    "children": [                        
                         {
                             "name": "journalsSubMenu",
                             "label": "Journals",
@@ -204,12 +172,7 @@
                             "name": "bankReconSubMenu",
                             "label": "Bank reconcillation",
                             "componentName": "bankRecon"
-                        },
-                        {
-                            "name": "incomeSubMenu",
-                            "label": "Income",
-                            "componentName": "income"
-                        },
+                        },                        
                         {
                             "name": "commonUtilitiesSubMenu",
                             "label": "Common utilities",
@@ -562,3 +525,4 @@
         }
     ]
 }
+
