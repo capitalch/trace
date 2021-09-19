@@ -106,7 +106,7 @@ const App: React.FC = () => {
         },
     })
     LicenseInfo.setLicenseKey(
-        'x0jTPl0USVkVZV0SsMjM1kDNyADM5cjM2ETPZJVSQhVRsIDN0YTM6IVREJ1T0b9586ef25c9853decfa7709eee27a1e'
+        '094c13fcff99f49fe015161354d1d052T1JERVI6MjkzMjgsRVhQSVJZPTE2NjMxMjQ0NjcwMDAsS0VZVkVSU0lPTj0x'
     )
     // To disable mobile browser back
     window.history.pushState(null, 'null', window.location.href)
