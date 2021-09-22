@@ -63,6 +63,9 @@ create installer from innosetup
 	11. Sales / Sale return GST rate change does not calculate well
 	12. Sales return select bill does not work well
 
+	13. Bank Recon is pulling data from January current year
+	14. General ledger always showing 01/04/2021, irrespective to years
+
 ## Reorganize
 	1. Organize code for using shared components all over
 	2. Remove Figures from BS and PL which have zero closing balance
