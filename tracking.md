@@ -65,7 +65,7 @@ create installer from innosetup
 
 	13. Bank Recon is pulling data from January current year
 	14. General ledger always showing 01/04/2021, irrespective to years
-	15. Product new entry hangs when 1st product is entered
+	15. Product new entry hangs when 1st product is entered, when there is no leaf category
 
 ## Reorganize
 	1. Organize code for using shared components all over
