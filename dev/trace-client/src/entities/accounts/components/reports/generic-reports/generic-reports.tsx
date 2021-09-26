@@ -39,6 +39,8 @@ function GenericReports({ loadReport }: any) {
                 sqlQueryId={sqlQueryId}
                 sqlQueryArgs={args}
                 specialColumns={specialColumns}
+                toShowOpeningBalance={false}
+                toShowReverseCheckbox={true}
                 xGridProps={{ disableSelectionOnClick: true }}
             />
         </Card>

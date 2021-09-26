@@ -1,4 +1,3 @@
-import { useState,  } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useNewProduct, useStyles } from './new-product-hook'
 

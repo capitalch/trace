@@ -123,6 +123,12 @@ create installer from innosetup
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 26-09-2021
+1. Bug fix: General ledger opening balance always coming as 01/04//2021 now fixed: 30 mins
+2. Bug fix: Error when no brands and No category leaf and new product entry now fixed: 1 hr
+3. Bug fix: Bank recon: Last fin year with same current year rows were incorrectly coming now fixed: 1 hr
+4. Bug fix: All Transaction reports: Remove opening balance: 30 mins
+
 # 19-09-2021
 Bug fix: General ledger for null entries
 

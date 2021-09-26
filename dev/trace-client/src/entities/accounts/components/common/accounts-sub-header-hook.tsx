@@ -366,6 +366,8 @@ function useAccountsSubHeader() {
                     finYearObject.startDate =
                         moment(startDate).format(dateFormat)
                     finYearObject.endDate = moment(endDate).format(dateFormat)
+                    finYearObject.isoStartDate = startDate
+                    finYearObject.isoEndDate = endDate
                     setInBag('finYearObject', finYearObject)
                     emit('LOAD-SUBHEADER-JUST-REFRESH', '')
                     emit('LOAD-MAIN-JUST-REFRESH', {

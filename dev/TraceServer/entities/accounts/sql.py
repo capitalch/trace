@@ -904,7 +904,10 @@ allSqls = {
                     join "TranH" h
                         on h."id" = d."tranHeaderId"
             where "accId" = %(accId)s
-                and (("finYearId" = %(finYearId)s) or (extract('year' from x."clearDate") = %(finYearId)s))
+                and (("finYearId" = %(finYearId)s) or 
+                --(extract('year' from x."clearDate") = %(finYearId)s)
+                (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
+                )
             order by h."id" DESC
         ), 
         cte2 as (

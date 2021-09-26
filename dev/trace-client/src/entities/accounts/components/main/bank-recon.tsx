@@ -484,6 +484,8 @@ function BankRecon() {
                 args: {
                     accId: meta.current.selectedBankId,
                     nextFinYearId: nextFinYearId,
+                    isoStartDate: finYearObject.isoStartDate,
+                    isoEndDate: finYearObject.isoEndDate
                 },
             })
             if (ret) {

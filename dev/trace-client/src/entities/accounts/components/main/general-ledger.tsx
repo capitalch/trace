@@ -181,44 +181,5 @@ function GeneralLedger() {
         return { columns, summaryColNames, args, specialColumns }
     }
 
-
 }
 export { GeneralLedger }
-
-{/* <Box className="header">
-                <div>
-                    <IconButton
-                        size="medium"
-                        color="secondary"
-                        onClick={handleFetchData}>
-                        <SyncIcon></SyncIcon>
-                    </IconButton>
-                </div>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={meta.current.isDailySummary}
-                            onChange={(e: any) => {
-                                meta.current.isDailySummary = e.target.checked
-                                handleFetchData()
-                            }}
-                        />
-                    }
-                    label="Daily summary"
-                />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={meta.current.isReverseOrder}
-                            onChange={(e: any) => {
-                                meta.current.isReverseOrder = e.target.checked
-                                handleFetchData()
-                            }}
-                        />
-                    }
-                    label="Reverse order"
-                />
-
-                {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
-            </Box>
-            <LedgerDataTable isScrollable={true} className="data-table" /> */}

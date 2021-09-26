@@ -105,12 +105,11 @@ function useXXGrid(gridOptions: any) {
                     }
                 })
 
-                ret.unshift({
+                gridOptions.toShowOpeningBalance && ret.unshift({
                     otherAccounts: 'Opening balance',
                     debit: pre.opBalance.debit,
                     credit: pre.opBalance.credit,
                     tranDate: getFromBag('finYearObject').isoStartDate,
-                    // id: 0
                 })
                 pre.filteredRows = ret || []
                 pre.allRows = [...ret]

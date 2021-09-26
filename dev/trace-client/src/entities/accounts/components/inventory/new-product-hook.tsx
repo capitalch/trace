@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useState, useEffect, useRef } from 'react'
+import { makeStyles, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useNewProduct() {
@@ -23,14 +23,14 @@ function useNewProduct() {
 
     useEffect(() => {
         meta.current.isMounted = true
-        const subs1 = filterOn('NEW-PRODUCT-EDIT').subscribe((d: any)=>{
+        const subs1 = filterOn('NEW-PRODUCT-EDIT').subscribe((d: any) => {
             handleEdit(d.data)
         })
 
-        const subs2 = filterOn('NEW-PRODUCT-DELETE').subscribe((d: any)=>{
+        const subs2 = filterOn('NEW-PRODUCT-DELETE').subscribe((d: any) => {
             handleDelete(d.data)
         })
-        // subs1.add(subs2)
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -44,8 +44,8 @@ function useNewProduct() {
         dialogConfig: {
             formId: '',
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
     })
 
@@ -54,7 +54,6 @@ function useNewProduct() {
         formData.upcCode = formData.upcCode || null
         formData.info = formData.info || null
         formData.hsn = formData.hsn || null
-        // formData.label = formData.label.toUpperCase()
         const formId = meta.current.dialogConfig.formId
         resetAllFormErrors(formId)
         await doValidateForm(formId)
@@ -89,14 +88,14 @@ function useNewProduct() {
             },
         })
 
-        pre.brands = result?.jsonResult?.brands.map((x: any) => {
+        pre.brands = (result?.jsonResult?.brands || []).map((x: any) => {
             return {
                 label: x.brandName,
                 value: x.id,
             }
         })
 
-        pre.categories = result?.jsonResult?.categories.map((x: any) => {
+        pre.categories = (result?.jsonResult?.categories || []).map((x: any) => {
             return {
                 label: x.catName,
                 value: x.id,
@@ -243,7 +242,7 @@ function useNewProduct() {
                 .then(async () => {
                     await saveForm(options)
                 })
-                .catch(() => {})
+                .catch(() => { })
         } catch (e) {
             console.log(e)
         }
@@ -329,7 +328,7 @@ function getNewProductJson() {
                 label: 'Gst rate (%)',
                 htmlProps: {
                     type: 'number',
-                },               
+                },
                 validations: [],
             },
             {
