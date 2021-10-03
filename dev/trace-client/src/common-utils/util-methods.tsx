@@ -257,9 +257,9 @@ function utilMethods() {
       options.formId && resetForm(options.formId)
       const mode = getCurrentComponent().mode
       if ((mode === 'new') && (options.formRefresh === undefined)) {
-        emit('LOAD-MAIN-COMPONENT-NEW', getCurrentComponent()) // To reload the form for resetting all controls
+        emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent()) // To reload the form for resetting all controls
       } else if (mode === 'edit') {
-        emit('LOAD-MAIN-COMPONENT-VIEW', getCurrentComponent())
+        // emit('LOAD-MAIN-COMPONENT-VIEW', getCurrentComponent())
       }
       options.afterMethod()
     } catch (e:any) {

@@ -2,9 +2,9 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import {
     useDebitCreditNotes,
     useStyles,
-} from '../common/debit-credit-notes-hook'
-import { DebitCreditNoteBody } from '../common/debit-credit-note-body'
-import { DebitCreditNotesView } from '../common/debit-credit-notes-view'
+} from '../debit-credit-notes/debit-credit-notes-hook'
+import { DebitCreditNoteBody } from '../debit-credit-notes/debit-credit-note-body'
+import { DebitCreditNotesView } from '../debit-credit-notes/debit-credit-notes-view'
 
 function CreditNotes({ drillDownEditAttributes }: any={}) {
     const classes = useStyles()

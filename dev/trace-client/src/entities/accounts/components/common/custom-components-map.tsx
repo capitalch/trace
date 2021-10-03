@@ -1,14 +1,14 @@
-import { TrialBalance } from '../main/trial-balance'
-import { DataView } from './data-view'
-import { BalanceSheetProfitLoss } from '../main/balance-sheet-profit-loss'
-import { AccountsMaster } from '../main/accounts-master'
-import { AccountsOpBal } from '../main/accounts-opbal'
-import { GenericCRUD } from './generic-crud'
-import { GenericDialoges } from './generic-dialoges'
-import { BankRecon } from '../main/bank-recon'
+import { TrialBalance } from '../final-accounts/trial-balance'
+// import { DataView } from './data-view'
+import { BalanceSheetProfitLoss } from '../final-accounts/balance-sheet-profit-loss'
+import { AccountsMaster } from '../masters/accounts-master'
+import { AccountsOpBal } from '../masters/accounts-opbal'
+import { GenericCRUD } from '../masters/generic-crud'
+import { GenericDialoges } from '../masters/generic-dialoges'
+import { BankRecon } from '../options/bank-recon'
 import { GenericReports } from '../reports/generic-reports/generic-reports'
-import { GenericExports } from './generic-exports'
-import { GenericForms } from './generic-forms'
+import { GenericExports } from '../options/generic-exports'
+// import { GenericForms } from '../deprecated/generic-forms'
 import { CommonUtilities } from './common-utilities'
 import { Sales } from '../sales/sales'
 import { CategoriesMaster } from '../inventory/categories-master'
@@ -17,11 +17,9 @@ import { ProductsMaster } from '../inventory/products-master'
 import { DebitNotes } from '../purchases/debit-notes'
 import { CreditNotes } from '../sales/credit-notes'
 import { Purchases } from '../purchases/purchases'
-import { GeneralLedger } from '../main/general-ledger'
+import { GeneralLedger } from '../final-accounts/general-ledger'
 import { Taxation } from '../reports/taxation'
-// import { Expences } from '../expences/expences'
 import { Voucher } from '../vouchers/voucher'
-// import { Income } from '../income/income'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -32,14 +30,12 @@ const customComponents = {
     categoriesMaster: CategoriesMaster,
     commonUtilities: CommonUtilities,
     creditNotes: CreditNotes,
-    dataView: DataView,
+    // dataView: DataView,
     debitNotes: DebitNotes,
-    // expences: Expences,
-    // income: Income,
     genericCRUD: GenericCRUD,
     genericDialoges: GenericDialoges,
     genericExports: GenericExports,
-    genericForms: GenericForms,
+    // genericForms: GenericForms,
     genericReports: GenericReports,
     generalLedger: GeneralLedger,    
     productsMaster: ProductsMaster,

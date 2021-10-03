@@ -19,7 +19,7 @@ function TraceMain({ open }: any) {
         setCurrentComponent,
         getCurrentEntity,
     } = manageEntitiesState()
-    const {emit, filterOn} = usingIbuki()
+    const { filterOn} = usingIbuki()
     const [, setRefresh] = useState({})
     const meta = useRef({
         isMounted: false,
@@ -46,7 +46,7 @@ function TraceMain({ open }: any) {
             accounts: <LaunchPadAccounts></LaunchPadAccounts>,
             authentication: <LaunchPadAuthentication></LaunchPadAuthentication>,
         }
-        const subs = filterOn('LOAD-MAIN-JUST-REFRESH').subscribe((d) => {
+        const subs = filterOn('TRACE-MAIN:JUST-REFRESH').subscribe((d) => {
             const currentEntity = getCurrentEntity()
             if (d.data === 'reset') {
                 setCurrentComponent({})

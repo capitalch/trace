@@ -3,44 +3,31 @@ import clsx from 'clsx';
 import 'fontsource-roboto'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import {
-   CssBaseline, AppBar
+    CssBaseline, AppBar
 } from '@material-ui/core'
-
 import { useTraceGlobal } from './common-utils/trace-global'
-import menu from './data/data-menu.json'
 import { TraceHeader } from './common/trace-header'
 import { TraceLeft } from './common/trace-left'
 import { TraceMain } from './common/trace-main'
 import { TraceSubHeader } from './common/trace-subheader'
 import { usingIbuki } from './common-utils/ibuki'
-import messages from './messages.json'
-import {TraceLoadingIndicator} from './common/trace-loading-indicator'
-// import {clientId, socket} from './common-utils/socket'
+import { TraceLoadingIndicator } from './common/trace-loading-indicator'
 
 function AppMain() {
-    // let cId = clientId // just to initialize socket
     const { emit } = usingIbuki()
     const classes = useStyles()
     const [open, setOpen] = useState(false)
-    const { setInGlobalBag, isMediumSizeUp} = useTraceGlobal()
-    
+    const { setInGlobalBag, isMediumSizeUp } = useTraceGlobal()
+
     useEffect(() => {
         setInGlobalBag('isDrawyerOpen', isMediumSizeUp)
         setOpen(isMediumSizeUp)
     }, [isMediumSizeUp])
-    
+
     useEffect(() => {
         try {
-            emit('MENU-RECEIVED-FROM-SERVER', menu)
-            // emit('DATABASE-SERVER-CONNECTION-RESULT', {
-            //     status: "success",
-            //     message: messages.dbServerConnected
-            // })
+            emit('TRACE-HEADER-LOAD-MENU', null)
         } catch (exception) {
-            // emit('DATABASE-SERVER-CONNECTION-RESULT', {
-            //     status: "failure",
-            //     message: messages.dbServerConnectionError
-            // })
         }
         return (() => { })
     }, [])

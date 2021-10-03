@@ -3,7 +3,7 @@ import { usingIbuki } from '../../common-utils/ibuki'
 import { manageEntitiesState } from '../../common-utils/esm'
 import { utilMethods } from '../../common-utils/util-methods'
 import accountsMessages from './json/accounts-messages.json'
-import datacache from '../../data/datacache.json'
+// import datacache from '../../data/datacache.json'
 import queries from './artifacts/graphql-queries-mutations'
 import { graphqlService } from '../../common-utils/graphql-service'
 // import { test } from '../accounts/test/functions'
@@ -32,7 +32,7 @@ function initCode() {
             const branchId = brId || getLoginData().lastUsedBranchId
             await setNowFinYearIdDatesFinYearsBranches(branchId)
         } else {
-            emit('LOAD-MAIN-JUST-REFRESH', '')
+            emit('TRACE-MAIN:JUST-REFRESH', '')
             emit('SHOW-MESSAGE', {
                 message: accountsMessages['selectBusinessUnit'],
                 severity: 'error',
@@ -63,15 +63,15 @@ function initCode() {
             branchCode: 'main',
         })
         
-        hotEmit('DATACACHE-SUCCESSFULLY-LOADED', datacache)
+        // hotEmit('DATACACHE-SUCCESSFULLY-LOADED', datacache)
         emit('LOAD-LEFT-MENU', '')
          // Remove following line. This loads the journals by default
-         emit('LOAD-SUBHEADER-JUST-REFRESH', '')
-         emit('LOAD-MAIN-JUST-REFRESH', '')
+         emit('TRACE-SUBHEADER:JUST-REFRESH', '')
+         emit('TRACE-MAIN:JUST-REFRESH', '')
         await execDataCache()
-         emit('LOAD-MAIN-COMPONENT-NEW', {
-            componentName: 'journals', args: undefined, name: 'accounts'
-        })
+        //  emit('LAUNCH-PAD:LOAD-COMPONENT', {
+        //     componentName: 'journals', args: undefined, name: 'accounts'
+        // })
         //
     }
 
@@ -135,7 +135,7 @@ function initCode() {
                 branchName: branchName,
                 branchCode: branchCode,
             })
-            emit('LOAD-SUBHEADER-JUST-REFRESH', '')
+            emit('TRACE-SUBHEADER:JUST-REFRESH', '')
             await execDataCache()
         } else {
             emit('SHOW-MESSAGE', {
@@ -193,7 +193,7 @@ function initCode() {
         setInBag('allAccounts', allAccounts)
         hotEmit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
-        emit('LOAD-MAIN-JUST-REFRESH', '')
+        emit('TRACE-MAIN:JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
         setVouchersArbitraryData()
         function getRoom() {
@@ -229,10 +229,3 @@ function initCode() {
 }
 
 export { initCode }
-
-// get configuration from server
-// const q = queries['genericQueryBuilder']({
-//     queryName: 'configuration',
-// })
-// const ret1 = await queryGraphql(q)
-// setInBag('configuration', ret1?.data?.accounts?.configuration)

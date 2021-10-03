@@ -21,7 +21,7 @@ function TraceSubHeader() {
             meta.current.topMenuItem = d.data
             meta.current.isMounted && setRefresh({})
         })
-        const subs2 = filterOn('LOAD-SUBHEADER-JUST-REFRESH').subscribe((d) => {
+        const subs2 = filterOn('TRACE-SUBHEADER:JUST-REFRESH').subscribe((d) => {
             meta.current.isMounted && setRefresh({})
         })
        

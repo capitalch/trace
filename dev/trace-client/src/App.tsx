@@ -22,7 +22,6 @@ import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
-// import 'rsuite/dist/styles/rsuite-default.css'
 declare module '@material-ui/core/styles/createPalette' {
     interface Palette {
         neutral: Palette['primary']
@@ -66,7 +65,6 @@ const App: React.FC = () => {
                 dark: blueGrey[900],
                 light: blueGrey[100],
             },
-            // secondary: { main: blueGrey[500] },
             neutral: { main: cyan[500], dark: cyan[900], light: cyan[400] },
             purple: {
                 main: purple['A700'],

@@ -33,11 +33,6 @@ function test() {
 
     function testIsInvalidDate() {
         isInvalidDate('24/03/2022')
-        // isInvalidDate1('31/03/2021')
-        // isInvalidDate1('01/04/2021')
-        // isInvalidDate1('31/12/2020')
-        // isInvalidDate1('01/01/2021')
-        // isInvalidDate1('01/01/2020')
     }
 
     return {

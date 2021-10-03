@@ -52,7 +52,6 @@ const iconMap: any = {
 
     , optionsMenu: <IconExtension></IconExtension>
     , bankReconSubMenu: <IconReorder></IconReorder>
-    , expencesSubMenu: <IconLibraryBooks></IconLibraryBooks>
     , incomeSubMenu: <MoneyIcon></MoneyIcon>
     , genericExportsSubMenu: <IconExports></IconExports>
     , commonUtilitiesSubMenu: <IconUtilities></IconUtilities>

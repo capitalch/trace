@@ -51,7 +51,7 @@ function TraceLeftMenu(props: any) {
                             meta.current.openArray[index] = !currentItemIndex
                             setRefresh({})
                         } else {
-                            emit('LOAD-MAIN-COMPONENT-NEW', {
+                            emit('LAUNCH-PAD:LOAD-COMPONENT', {
                                 componentName: item.componentName, args: item.args, name: getCurrentEntity()
                             })
                             //to automatically close the drawyer when less than medium device (up to 959 px)

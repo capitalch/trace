@@ -173,8 +173,8 @@ function useAccountsSubHeader() {
                 if (ret === true || ret?.length <= 9) {
                     setInBag('branchObject', branchObject)
                     emit('SHOW-MESSAGE', {})
-                    emit('LOAD-SUBHEADER-JUST-REFRESH', '')
-                    emit('LOAD-MAIN-JUST-REFRESH', {
+                    emit('TRACE-SUBHEADER:JUST-REFRESH', '')
+                    emit('TRACE-MAIN:JUST-REFRESH', {
                         mainHeading: getUnitHeading(),
                     })
                     meta.current.showDialog = false
@@ -258,8 +258,8 @@ function useAccountsSubHeader() {
                     dateFormat
                 )
                 emit('SHOW-MESSAGE', {})
-                emit('LOAD-SUBHEADER-JUST-REFRESH', '')
-                emit('LOAD-MAIN-JUST-REFRESH', {
+                emit('TRACE-SUBHEADER:JUST-REFRESH', '')
+                emit('TRACE-MAIN:JUST-REFRESH', {
                     mainHeading: getUnitHeading(),
                 })
                 meta.current.showDialog = false
@@ -369,8 +369,8 @@ function useAccountsSubHeader() {
                     finYearObject.isoStartDate = startDate
                     finYearObject.isoEndDate = endDate
                     setInBag('finYearObject', finYearObject)
-                    emit('LOAD-SUBHEADER-JUST-REFRESH', '')
-                    emit('LOAD-MAIN-JUST-REFRESH', {
+                    emit('TRACE-SUBHEADER:JUST-REFRESH', '')
+                    emit('TRACE-MAIN:JUST-REFRESH', {
                         mainHeading: getUnitHeading(),
                     })
                 }

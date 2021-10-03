@@ -137,7 +137,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             if (ad.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
             } else {
-                emit('LOAD-MAIN-COMPONENT-NEW', getCurrentComponent())
+                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
         }
         // saveForm({ data: header })

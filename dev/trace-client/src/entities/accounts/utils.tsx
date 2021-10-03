@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { useState } from 'react'
-// import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { utilMethods } from '../../common-utils/util-methods'
 import { manageFormsState } from '../../react-form/core/fsm'
 import { graphqlQueries } from '../../shared-artifacts/graphql-queries-mutations'
@@ -13,9 +12,6 @@ import { IconButton } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import moment from 'moment'
 import accountsMessages from '../accounts/json/accounts-messages.json'
-import { useConfirm } from 'material-ui-confirm'
-
-import { useSharedElements } from '../accounts/components/common/shared-elements-hook'
 
 const accStore: any = {}
 
@@ -24,44 +20,6 @@ function utils() {
     const { mutateGraphql } = graphqlService()
     const { getFromBag, getCurrentEntity } = manageEntitiesState()
     const { emit } = usingIbuki()
-    // const {confirm, getFromBag, getCurrentEntity, execGenericView, extractAmount,genericUpdateMaster, toDecimalFormat} = useSharedElements()
-
-
-    // function deleteRow(params: any){
-    //     const confirm = useConfirm()
-    //     const row = params.row
-    //     const tranHeaderId = row['id1']
-    //     const options:any = {
-    //         description: accountsMessages.transactionDelete,
-    //         confirmationText: 'Yes',
-    //         cancellationText: 'No',
-    //     }
-    //     if (isDateAuditLocked(row.tranDate)) {
-    //         emit('SHOW-MESSAGE', {
-    //             severity: 'error',
-    //             message: accountsMessages.auditLockError,
-    //             duration: null,
-    //         })
-    //     } else if (row?.clearDate) {
-    //         // already reconciled so edit /delete not possible
-    //         emit('SHOW-MESSAGE', {
-    //             severity: 'error',
-    //             message: accountsMessages.reconcillationDone,
-    //             duration: null,
-    //         })
-    //     } else {
-    //         confirm(options)
-    //             .then(async () => {
-    //                 await genericUpdateMaster({
-    //                     deletedIds: [tranHeaderId],
-    //                     tableName: 'TranH',
-    //                 })
-    //                 emit('SHOW-MESSAGE', {})
-    //                 emit('VOUCHER-VIEW-REFRESH', '')
-    //             })
-    //             .catch(() => {}) // important to have otherwise eror
-    //     }
-    // }
 
     function extractGst(x: any) {
         const clone: any = { ...x }

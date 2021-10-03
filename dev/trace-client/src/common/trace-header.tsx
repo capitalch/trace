@@ -9,9 +9,10 @@ import {
     , Button, IconButton, Chip
     , Dialog, useTheme
 } from '@material-ui/core'
-import { useIdleTimer } from 'react-idle-timer'
+// import { useIdleTimer } from 'react-idle-timer'
 import { usingIbuki } from '../common-utils/ibuki'
 import { manageEntitiesState } from '../common-utils/esm'
+import menu from '../data/data-menu.json'
 import '../entities/authentication/initialize-react-form'
 import { useTraceHeader } from './trace-header-hook'
 import { useTraceGlobal } from '../common-utils/trace-global'
@@ -29,7 +30,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         handleClose,
         handleEntityClicked,
         isUserLoggedIn,
-        logout,
+        // logout,
         meta,
         shortCircuit,
         showDialogMenu,
@@ -37,7 +38,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         submitDialog,
     } = useTraceHeader({ setRefresh })
     const theme = useTheme()
-    
+
     //Inactivity timeout auto log out
     const generalSettings = getFromBag('generalSettings')
     const autoLogoutTime = generalSettings?.['autoLogoutTimeInMins']
@@ -61,18 +62,18 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
 
     useEffect(() => {
         meta.current.isMounted = true
-
-        const subs:any = filterOn('MENU-RECEIVED-FROM-SERVER').subscribe((d:any) => {
-            meta.current.menuHead = d.data
-            shortCircuit() // This line is for doing autologin in development environment
+        meta.current.menuHead = menu
+        const subs: any = filterOn('TRACE-HEADER-LOAD-MENU').subscribe(() => {
+            meta.current.menuHead = menu
+            shortCircuit() // This line is for doing autologin for demo mode
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs1:any = filterOn('LOGIN-SUCCESSFUL').subscribe((d:any) => {
+        const subs1: any = filterOn('LOGIN-SUCCESSFUL').subscribe((d: any) => {
             meta.current.uid = d.data
             meta.current.isMounted && setRefresh({})
         })
-        const subs2:any = filterOn('SHOW-MESSAGE').subscribe((d:any) => {
+        const subs2: any = filterOn('SHOW-MESSAGE').subscribe((d: any) => {
             snackbar.current.open = true
             snackbar.current.severity = d.data.severity || 'success'
             snackbar.current.message = d.data.message || 'Operation was successful'
@@ -80,12 +81,10 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs3:any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(d => {
+        const subs3: any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(d => {
             // Only doing refresh, because by now the datacache is already loaded. This code is for autoLogout execution. The autoLogoutTimeInMins is tal=ken from generalSettings of global bag which is populated in initcode datacache
             setRefresh({})
         })
-
-        // subs.add(subs1).add(subs2).add(subs3)
 
         return (() => {
             meta.current.isMounted = false
@@ -101,7 +100,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         setCurrentEntity('authentication')
         resetBag()
 
-        emit('LOAD-MAIN-JUST-REFRESH', 'reset')
+        emit('TRACE-MAIN:JUST-REFRESH', 'reset')
         emit('LOAD-LEFT-JUST-REFRESH', '')
         emit('TOP-MENU-ITEM-CLICKED', item)
         meta.current.showDialog = true
@@ -185,14 +184,13 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 onKeyDown={(e) => {
                     if (e.key === 'Escape') {
                         closeDialog()
-                    } else if(e.key === 'Enter'){
+                    } else if (e.key === 'Enter') {
                         submitDialog()
                     }
                 }}
-                // disableBackdropClick={true} //deprecated
                 open={meta.current.showDialog}
                 onClose={(event, reason) => {
-                    if(reason !== 'backdropClick'){
+                    if (reason !== 'backdropClick') {
                         closeDialog()
                     }
                 }}>
@@ -243,7 +241,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
         loginButton: { // to place loginButton to right side
             marginLeft: 'auto'
         },
-        //As per documentation of material the "rule" paper can be overridden. This is actual the dialog box.
+        //As per documentation of material the "rule" paper can be overridden. This is actually the dialog box.
         dialogPaper: {
             width: ({ loginScreenSize }: any) => loginScreenSize
         }

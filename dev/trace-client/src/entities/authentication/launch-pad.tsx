@@ -14,7 +14,7 @@ function LaunchPad() {
 
     useEffect(() => {
         meta.current.isMounted = true
-        const subs = filterOn('LOAD-MAIN-COMPONENT-NEW').subscribe((d: any) => {
+        const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe((d: any) => {
             if (d.data) {
                 setInBag('currentComponent', d.data)
             }

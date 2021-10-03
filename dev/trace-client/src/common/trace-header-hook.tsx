@@ -485,7 +485,7 @@ function useTraceHeader({ setRefresh }: any) {
         setCurrentEntity('authentication')
         resetBag()
 
-        emit('LOAD-MAIN-JUST-REFRESH', 'reset')
+        emit('TRACE-MAIN:JUST-REFRESH', 'reset')
         emit('LOAD-LEFT-JUST-REFRESH', '')
         emit('TOP-MENU-ITEM-CLICKED', item)
 
