@@ -1,0 +1,197 @@
+{
+    "title": "Employee Performance Survey",
+    "class": "basic-grid-1",
+    "validations": [],
+    "items": [
+        {
+            "type": "Select",
+            "name": "performanceRecommend",
+            "label": "1. How likely is it that you will recommend this employee to a colleague ?",
+            "options": {
+                "methodName": "numericZeroToTen",
+                "labelName": "label",
+                "valueName": "value"
+            },
+            "style":{"width":"150px"},
+            "validations": [
+                {
+                    "name": "required",
+                    "message": "Please select a value"
+                }
+            ]
+        },
+        {
+            "type": "Radio",
+            "name": "performanceQuality",
+            "label": "2. How good is the quality of this employee's work ?",
+            "options": [
+                {
+                    "label": "Extremely good",
+                    "value": "4"
+                },{
+                    "label": "Very good",
+                    "value": "3"
+                },{
+                    "label": "Somewhat good",
+                    "value": "2"
+                },{
+                    "label": "Not so good",
+                    "value": "1"
+                },{
+                    "label": "Not at all good",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "performanceProductivity",
+            "label": "3. How productive is this employee ?",
+            "options": [
+                {
+                    "label": "Extremely productive",
+                    "value": "4"
+                },{
+                    "label": "Very productive",
+                    "value": "3"
+                },{
+                    "label": "Somewhat productive",
+                    "value": "2"
+                },{
+                    "label": "Not so productive",
+                    "value": "1"
+                },{
+                    "label": "Not at all productive",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "performanceTeamWork",
+            "label": "4. How well does this employee work with others ?",
+            "options": [
+                {
+                    "label": "Extremely well",
+                    "value": "4"
+                },{
+                    "label": "Very well",
+                    "value": "3"
+                },{
+                    "label": "Somewhat well",
+                    "value": "2"
+                },{
+                    "label": "Not so well",
+                    "value": "1"
+                },{
+                    "label": "Not at all well",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "performanceIndependentProblemSolver",
+            "label": "5. How well does this employee solves problem independently ?",
+            "options": [
+                {
+                    "label": "Extremely well",
+                    "value": "4"
+                },{
+                    "label": "Very well",
+                    "value": "3"
+                },{
+                    "label": "Somewhat well",
+                    "value": "2"
+                },{
+                    "label": "Not so well",
+                    "value": "1"
+                },{
+                    "label": "Not at all well",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "performanceTeamWork",
+            "label": "6. How proactive is this employee ?",
+            "options": [
+                {
+                    "label": "Extremely proactive",
+                    "value": "4"
+                },{
+                    "label": "Very proactive",
+                    "value": "3"
+                },{
+                    "label": "Somewhat proactive",
+                    "value": "2"
+                },{
+                    "label": "Not so proactive",
+                    "value": "1"
+                },{
+                    "label": "Not at all proactive",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "performanceCriticism",
+            "label": "7. How well does this employee handle criticism at work ?",
+            "options": [
+                {
+                    "label": "Extremely well",
+                    "value": "4"
+                },{
+                    "label": "Very well",
+                    "value": "3"
+                },{
+                    "label": "Somewhat well",
+                    "value": "2"
+                },{
+                    "label": "Not so well",
+                    "value": "1"
+                },{
+                    "label": "Not at all well",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Radio",
+            "name": "performanceCriticism",
+            "label": "8. How well does this employee adjust to changing priorities ?",
+            "options": [
+                {
+                    "label": "Extremely well",
+                    "value": "4"
+                },{
+                    "label": "Very well",
+                    "value": "3"
+                },{
+                    "label": "Somewhat well",
+                    "value": "2"
+                },{
+                    "label": "Not so well",
+                    "value": "1"
+                },{
+                    "label": "Not at all well",
+                    "value": "0"
+                }
+            ]
+        },{
+            "type": "Textarea",
+            "name": "performanceStrengths",
+            "placeholder": "",
+            "label": "9. Please list any areas where this employee is doing particulaly well",
+            "validations": []
+        },{
+            "type": "Textarea",
+            "name": "performanceImprovements",
+            "placeholder": "",
+            "label": "10. Please list any areas for improvement for this employee",
+            "validations": []
+        },{
+            "type": "Submit",
+            "action": "submitForm1",
+            "className": "x-submit",
+            "label": "Submit",
+            "methodName": "submitForm1"
+        }
+    ]
+}

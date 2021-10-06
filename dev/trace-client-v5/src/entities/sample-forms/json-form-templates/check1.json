@@ -1,0 +1,112 @@
+{
+    "title": "Sample Form 1",
+    "class": "basic-grid-1",
+    "items": [
+        {
+            "type": "Wizard",
+            "name": "Wizard1",
+            "methodName":"submitForm1",
+            "items": [
+                {
+                    "type": "Set",
+                    "label": "My Page 1",
+                    "name": "wizardPage1",                    
+                    "methodName":"wizard1save",
+                    "validations": [],
+                    "items": [
+                        {
+                            "type": "Text",
+                            "name": "firstName",
+                            "label": "First Name",
+                            "placeholder": "First Name",
+                            "validations": [
+                                {
+                                    "name": "required",
+                                    "message": "First name is required"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Text",
+                            "name": "lastName",
+                            "label": "Last Name",
+                            "placeholder": "Last Name",
+                            "validations": [
+                                {
+                                    "name": "required",
+                                    "message": "Last name is required"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "My Page 2",
+                    "name": "wizardPage2",
+                    "methodName":"wizard2save",
+                    "validations": [],
+                    "items": [
+                        {
+                            "type": "Text",
+                            "name": "addr1",
+                            "label": "Address 1",
+                            "placeholder": "Address1",
+                            "validations": [
+                                {
+                                    "name": "required",
+                                    "message": "Address1 is required"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Text",
+                            "name": "address2",
+                            "label": "Address2",
+                            "placeholder": "Address2",
+                            "validations": [
+                                {
+                                    "name": "required",
+                                    "message": "Address2 is required"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "Set",
+                    "label": "My Page 3",
+                    "name": "wizardPage3",
+                    "saveMethodName":"wizard3save",
+                    "validations": [],
+                    "items": [
+                        {
+                            "type": "Text",
+                            "name": "address3",
+                            "label": "Address 3",
+                            "placeholder": "Address3",
+                            "validations": [
+                                {
+                                    "name": "required",
+                                    "message": "Address3 is required"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Text",
+                            "name": "address4",
+                            "label": "Address4",
+                            "placeholder": "Address4",
+                            "validations": [
+                                {
+                                    "name": "required",
+                                    "message": "Address4 is required"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
