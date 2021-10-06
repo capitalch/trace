@@ -58,6 +58,7 @@ declare module '@material-ui/core/styles/createPalette' {
 const App: React.FC = () => {
     const theme = createTheme({
         palette: {
+            
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
             blueGrey: {

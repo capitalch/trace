@@ -1,7 +1,6 @@
-// import React from 'react';
-// import logo from './logo.svg';
+/** @jsxImportSource @emotion/react */
 import './App.scss'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { createTheme, ThemeProvider } from '@mui/material'
 import { CompA } from './components/compA'
 import { UserProfileProvider } from './components/common/user-profile-provider'
 
@@ -16,6 +15,7 @@ declare module '@mui/material/styles' {
     // allow configuration using `createTheme`
     interface PaletteOptions {
         neutral: PaletteOptions['primary']
+        purple: PaletteOptions['primary']
         status?: {
             danger?: string
             neutral?: string
@@ -23,6 +23,7 @@ declare module '@mui/material/styles' {
     }
     interface Palette {
         neutral: Palette['primary']
+        purple: Palette['primary']
     }
 }
 
@@ -43,6 +44,9 @@ function App() {
             neutral: {
                 main: '#5e5e25',
             },
+            purple: {
+
+            }
         },
     })
 
