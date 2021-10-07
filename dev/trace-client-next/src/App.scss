@@ -1,38 +1,182 @@
-.App {
-  text-align: center;
+html {
+    scroll-behavior: smooth;
+    body {
+        font-size: 16px;
+    }
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+// To appear all paginators of prime react at left side
+.p-paginator {
+    text-align: left !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+// In mobile device disable page refresh from pull down scroll
+body {
+    overscroll-behavior-y: contain;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.generic-dialog {
+    font-size: 0.8rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    // material textfield label's top margin
+    // .MuiFormLabel-root {
+    // margin-top : 8px;
+    // }
+
+    .select-fin-year {
+        margin-top: 0.3rem;
+        width: 95%;
+        color: gray;
+        font-size: 0.8rem;
+    }
+    // .rw-widget-input and .rw-combobox are react-widgets.Combobx classes. These changes are necessary to compensate the input margin-top:0.2rem
+    .rw-widget-input {
+        margin-top: 0;
+    }
+
+    .rw-list {
+        max-height: 10rem;
+    }
+
+    .rw-combobox {
+        margin-top: 0.2rem;
+        // color:red;
+    }
+
+    .x-set-title {
+        color: blue;
+        font-size: 1rem;
+    }
+
+    input[type='checkbox'] {
+        width: 1.2em;
+    }
+
+    input,
+    select {
+        width: 100%;
+        margin-top: 0.3rem;
+        height: 2rem;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .x-error {
+        margin: 0;
+        small {
+            color: red;
+
+            ul {
+                min-height: 15px;
+                margin: 0px;
+                padding-top: 3px;
+                padding-left: 1.5em;
+            }
+        }
+    }
+
+    label {
+        font-weight: bold;
+    }
 }
 
-.App-link {
-  color: #61dafb;
+.common-text-select {
+    input,
+    select {
+        // width: 100%;
+        margin-top: 0.3rem;
+        height: 2rem;
+    }
+}
+// label + .MuiInput-formControl {
+//   margin-top: 16px!important;
+// }
+
+// .MuiTextField-root {
+//   padding-top: 0px!important;
+// }
+
+// Following works in PrimeReact
+.p-treetable-tbody,
+.p-datatable-tbody {
+    tr {
+        td {
+            padding: 6px !important;
+            padding-right: 8px !important;
+            padding-left: 4px !important;
+            font-size: 0.8rem !important;
+
+            // font-family: 'lato'; // good font for numeric
+            // font-size: 0.9rem;
+
+            // border-top: 1px solid lightgrey!important;
+            border: 0px transparent lightgray;
+            i {
+                color: dodgerblue;
+                font-size: 0.5rem !important;
+            }
+            button {
+                // height: 10px!important;
+                max-height: 12px !important;
+            }
+        }
+    }
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+// .p-datatable-tfoot{
+//   tr {
+//     td {
+//       color: red;
+//       font-size: 0.8rem;
+//     }
+    
+//   }
+// }
+
+.p-inputnumber-input {
+    width: 100%;
+    text-align: end;
+    background-color: transparent!important;
+    border-top: none!important;
+    border-left: none!important;
+    border-right: none!important;
 }
+
+//All material-table reports
+.MuiTableCell-root {
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+    padding: 0px !important;
+    padding-left: 8px !important;
+    padding-right: 4px !important;
+    border: 0.5px solid lightgrey;
+    font-size: 0.8rem !important;
+}
+
+// material table header background color
+th.MuiTableCell-root.MuiTableCell-head {
+    color: white;
+    background-color: dodgerblue;
+}
+
+// Reducing left gap in all toolbars in material-table
+.MuiToolbar-gutters {
+    padding-left: 8px !important;
+}
+
+// .testClass {
+//     color: red;
+//     background-color: yellow;
+// }
+
+//Does alternate grey color
+// body .p-datatable .p-datatable-tbody > tr:nth-child(even) {
+//     background-color: #f9f9f9;
+// }
+
+// In general ledger, daily balace the row of datatable needs to be highlighted. Writing this line of code does some sort of override
+// and allows to change background color of row. If following code is not used then alternate rows are highlighted.
+// .ui-datatable tbody > tr.ui-widget-content.ledger-summary { 
+//     background-color: #808080; /* This is only a placeholder color */
+// }
