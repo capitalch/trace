@@ -1,16 +1,9 @@
-import { useState} from "react"
-import { ProgressSpinner } from 'primereact/progressspinner'
+import {_, ProgressSpinner, useState } from '../imports/regular-imports'
+import {componentStore,getArtifacts, graphqlService,manageEntitiesState, manageFormsState,ReactForm, useIbuki } from '../imports/trace-imports'
+
 import styled from 'styled-components'
-import _ from 'lodash'
-import { manageFormsState } from '../react-form/core/fsm'
 import { utilMethods } from './util-methods'
-import { usingIbuki } from './ibuki'
 import messages from '../messages.json'
-import { graphqlService } from './graphql-service'
-import ReactForm from '../react-form/react-form'
-import { manageEntitiesState } from './esm'
-import { componentStore } from '../react-form/component-store/html-core'
-import { getArtifacts } from '../react-form/common/react-form-hook'
 
 
 function useSharedCode(meta: any) {
@@ -22,7 +15,7 @@ function useSharedCode(meta: any) {
     const { getSqlObjectString } = utilMethods()
     const { mutateGraphql } = graphqlService()
     const { getCurrentEntity } = manageEntitiesState()
-    const { emit } = usingIbuki()
+    const { emit } = useIbuki()
     function closeDialog(): void {
         meta.current.isMounted && (meta.current.showDialog = false)
         resetForm(meta.current.dialogConfig.formId)

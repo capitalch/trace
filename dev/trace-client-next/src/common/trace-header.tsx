@@ -14,11 +14,10 @@ import {
 } from '../imports/gui-imports'
 
 import { ArrowDropDown, MenuIcon } from '../imports/icons-import'
-import {manageEntitiesState, useIbuki } from '../imports/trace-imports'
+import {manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import menu from '../data/data-menu.json'
 import '../entities/authentication/initialize-react-form'
 import { useTraceHeader } from './trace-header-hook'
-import { useTraceGlobal } from '../common-utils/trace-global'
 
 function TraceHeader({ open, handleDrawerOpen }: any) {
     const { filterOn, emit } = useIbuki()

@@ -1,6 +1,5 @@
-import { useState } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { CascadeSelect } from 'primereact/cascadeselect'
+import {CascadeSelect, useState } from '../../../../imports/regular-imports'
+import { makeStyles, createStyles } from '../../../../imports/gui-imports'
 
 interface LedgerSubledgerCascadeOptions {
     allAccounts: any[]
@@ -68,7 +67,7 @@ function LedgerSubledgerCascade({
 
 export { LedgerSubledgerCascade }
 
-const useStyles: any = makeStyles((theme: Theme) =>
+const useStyles: any = makeStyles((theme) =>
     createStyles({
         content: {
             '& .p-cascadeselect': {

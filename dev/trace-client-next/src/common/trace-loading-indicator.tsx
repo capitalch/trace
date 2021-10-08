@@ -1,17 +1,13 @@
-import { useEffect, useState, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import {
-    Backdrop
-} from '@material-ui/core'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { usingIbuki } from '../common-utils/ibuki'
+import { useEffect, useState, useRef } from '../imports/regular-imports'
+import {Backdrop,CircularProgress, makeStyles, createStyles } from '../imports/gui-imports'
+import {useIbuki} from '../imports/trace-imports'
 
 function TraceLoadingIndicator() {
     const meta = useRef({
         isMounted: false,
         isLoading: false,
     })
-    const { filterOn } = usingIbuki()
+    const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
     const classes = useStyles()
 
@@ -39,7 +35,7 @@ function TraceLoadingIndicator() {
 
 export { TraceLoadingIndicator }
 
-const useStyles: any = makeStyles((theme: Theme) =>
+const useStyles: any = makeStyles((theme) =>
     createStyles({
         backdrop: {
             zIndex: 9999, // less than this does not work

@@ -1,9 +1,7 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from '../imports/regular-imports'
 import { AccountsSubHeader } from '../entities/accounts/components/common/accounts-sub-header'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import { Toolbar } from '@material-ui/core'
-
-import { usingIbuki } from '../common-utils/ibuki'
+import { makeStyles, createStyles, Toolbar } from '../imports/gui-imports'
+import {useIbuki } from '../imports/trace-imports'
 
 // Subheader displays controls based on entity. For accounts entity it will be different than payroll entity
 function TraceSubHeader() {
@@ -11,7 +9,7 @@ function TraceSubHeader() {
         isMounted: false,
         topMenuItem: {},
     })
-    const {filterOn } = usingIbuki()
+    const {filterOn } = useIbuki()
     const [, setRefresh] = useState({})
     const classes = useStyles()
 
@@ -56,7 +54,7 @@ function TraceSubHeader() {
 }
 export { TraceSubHeader }
 
-const useStyles: any = makeStyles((theme: Theme) =>
+const useStyles: any = makeStyles((theme) =>
     createStyles({
         toolbarSubHeader: {
             backgroundColor: theme.palette.secondary.light,

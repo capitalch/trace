@@ -1,5 +1,4 @@
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import useTheme from '@material-ui/core/styles/useTheme'
+import { useMediaQuery, useTheme} from '../imports/gui-imports'
 const traceGlobal: any = {}
 
 function useTraceGlobal() {

@@ -1,14 +1,16 @@
-import moment from 'moment'
+import { moment } from '../../../imports/regular-imports'
 import { utils } from '../utils'
 import messages from '../json/accounts-messages.json'
-import { manageEntitiesState } from '../../../common-utils/esm'
-import { manageFormsState } from '../../../react-form/core/fsm'
+import {
+    manageEntitiesState,
+    manageFormsState,
+} from '../../../imports/trace-imports'
 
 const itemLevelValidators: any = {
     paymentVoucherGst: (a: any, value: any, putErrors: any) => {
         let ret: any = a.message || 'Should have one special char'
         const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/
-            ; (value.length === 0 || format.test(value)) && (ret = undefined)
+        ;(value.length === 0 || format.test(value)) && (ret = undefined)
         putErrors(a.name, ret)
     },
 
@@ -28,8 +30,8 @@ const itemLevelValidators: any = {
         const startDate = moment(finYearObject.startDate, dateFormat)
         const endDate = moment(finYearObject.endDate, dateFormat)
         const tranDate = moment(value, dateValidatorFormat) //,dateFormat
-        if (tranDate.isBetween(startDate, endDate, undefined, '[]')) // from and to dates are included
-        {
+        if (tranDate.isBetween(startDate, endDate, undefined, '[]')) {
+            // from and to dates are included
             ret = undefined
         }
         putErrors(a.name, ret)
@@ -38,7 +40,7 @@ const itemLevelValidators: any = {
     dateInFinYear: (a: any, value: any, putErrors: any) => {
         const { getFromBag } = manageEntitiesState()
         const { getDateValidatorFormat } = manageFormsState()
-        const {isDateAuditLocked} = utils()
+        const { isDateAuditLocked } = utils()
 
         const dateFormat = getFromBag('dateFormat')
         const isoDateFormat = 'YYYY-MM-DD'
@@ -51,14 +53,14 @@ const itemLevelValidators: any = {
         const finYearObject = getFromBag('finYearObject')
         const startDate = moment(finYearObject.startDate, dateFormat)
         const endDate = moment(finYearObject.endDate, dateFormat)
-        const tranDate = moment(value) //, dateValidatorFormat) 
-        if (tranDate.isBetween(startDate, endDate, undefined, '[]')) // from and to dates are included
-        {
-            if(isDateAuditLocked(value)){
+        const tranDate = moment(value) //, dateValidatorFormat)
+        if (tranDate.isBetween(startDate, endDate, undefined, '[]')) {
+            // from and to dates are included
+            if (isDateAuditLocked(value)) {
                 ret = messages.auditLockMessage
             } else {
                 ret = undefined
-            }         
+            }
         }
         putErrors(a.name, ret)
     },
@@ -77,7 +79,7 @@ const itemLevelValidators: any = {
         const startDate = moment(finYearObject.startDate, dateFormat)
         const endDate = moment(finYearObject.endDate, dateFormat)
         const tranDate = moment(value, dateValidatorFormat) //,dateFormat
-        if ((!value) || (tranDate >= startDate && tranDate <= endDate)) {
+        if (!value || (tranDate >= startDate && tranDate <= endDate)) {
             ret = undefined
         }
         putErrors(a.name, ret)
@@ -95,8 +97,8 @@ const itemLevelValidators: any = {
             value === '' || value === undefined || value === null
                 ? true
                 : /^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$/.test(
-                    value
-                )
+                      value
+                  )
         isValid && (ret = undefined)
         putErrors(a.name, ret)
     },
@@ -113,7 +115,8 @@ const itemLevelValidators: any = {
         if (!gst.gstin) {
             ret = messages['gstinRequired']
         } else {
-            const gstinformat = /^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$/
+            const gstinformat =
+                /^([0][1-9]|[1-2][0-9]|[3][0-7])([A-Z]{5})([0-9]{4})([A-Z]{1}[1-9A-Z]{1})([Z]{1})([0-9A-Z]{1})+$/
             if (!gstinformat.test(gst.gstin)) {
                 ret = messages['invalidGstin']
             }

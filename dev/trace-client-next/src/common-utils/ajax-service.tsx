@@ -1,7 +1,5 @@
-import urlJoin from 'url-join'
-import axios from 'axios'
-import moment from 'moment'
-import { manageEntitiesState } from './esm'
+import {axios, moment, urlJoin } from '../imports/regular-imports'
+import { manageEntitiesState} from '../imports/trace-imports'
 import { config } from '../config'
 
 function ajaxService() {

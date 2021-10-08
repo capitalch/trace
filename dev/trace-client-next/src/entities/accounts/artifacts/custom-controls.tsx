@@ -1,26 +1,32 @@
-import { useState, useEffect, useRef } from 'react'
+import {
+    Combobox,
+    InputMask,
+    moment,
+    NumberFormat,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../imports/regular-imports'
+
+import {
+    componentStore,
+    manageEntitiesState,
+    manageFormsState,
+    usingIbuki,
+} from '../../../imports/trace-imports'
 import { map } from 'rxjs/operators'
 import {
     Box,
     useTheme,
-    Theme,
     createStyles,
     makeStyles,
     TextField,
     Checkbox,
     Card,
-} from '@material-ui/core'
-import moment from 'moment'
-import InputMask from 'react-input-mask'
+} from '../../../imports/gui-imports'
 import { useGeneric } from '../../../react-form/core/generic-item'
-import { manageFormsState } from '../../../react-form/core/fsm'
-import { manageEntitiesState } from '../../../common-utils/esm'
-import { usingIbuki } from '../../../common-utils/ibuki'
 import { utilMethods } from '../../../common-utils/util-methods'
 import { utils } from '../utils'
-import NumberFormat from 'react-number-format'
-import { componentStore } from '../../../react-form/component-store/html-core'
-import { Combobox } from 'react-widgets'
 
 const customControls = {
     DateMask: (props: any) => {
@@ -785,7 +791,7 @@ const customControls = {
 
 export default customControls
 
-const useStyles: any = makeStyles((theme: Theme) =>
+const useStyles: any = makeStyles((theme) =>
     createStyles({
         xAmount: {
             marginTop: '-0.2rem',

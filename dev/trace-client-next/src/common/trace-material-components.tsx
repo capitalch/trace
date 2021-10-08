@@ -1,6 +1,4 @@
-import { useState } from 'react'
-import clsx from 'clsx'
-import messages from '../messages.json'
+import { clsx, useConfirm, useState } from '../imports/regular-imports'
 import {
     Button,
     IconButton,
@@ -11,15 +9,17 @@ import {
     DialogContent,
     makeStyles,
     createStyles,
-    Theme,
     TextField,
     InputAdornment,
-} from '@material-ui/core'
-import SaveIcon from '@material-ui/icons/Save'
-import SearchIcon from '@material-ui/icons/Search'
-import CloseIcon from '@material-ui/icons/Close'
-import { PageviewTwoTone } from '@material-ui/icons'
-import { useConfirm } from 'material-ui-confirm'
+} from '../imports/gui-imports'
+
+import {
+    SaveIcon,
+    SearchIcon,
+    CloseIcon,
+    PageviewTwoTone,
+} from '../imports/icons-import'
+import messages from '../messages.json'
 
 function useTraceMaterialComponents() {
     const classes = useStyles()
@@ -253,7 +253,7 @@ function useTraceMaterialComponents() {
 }
 export { useTraceMaterialComponents }
 
-const useStyles: any = makeStyles((theme: Theme) =>
+const useStyles: any = makeStyles((theme) =>
     createStyles({
         content: {},
 

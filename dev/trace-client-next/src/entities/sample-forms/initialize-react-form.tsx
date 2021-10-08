@@ -1,4 +1,4 @@
-import customMethods from './artifacts/custom-methods'
+// import customMethods from './artifacts/custom-methods'
 import customControls from './artifacts/custom-controls'
 import graphqlQueries from './artifacts/graphql-queries-mutations'
 import formLevelValidators from './artifacts/form-level-validators'
@@ -57,7 +57,7 @@ initialize({
     }
     , customControls: customControls
     , customForms: {} // you can add your custom created complete forms here. They will be available in artifacts.allForms
-    , customMethods: customMethods
+    // , customMethods: customMethods
     , formLevelValidators: formLevelValidators
     , itemLevelValidators: itemLevelValidators
     , setLevelValidators: setLevelValidators

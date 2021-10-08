@@ -1,15 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
-import { Drawer, Box, Typography, Divider, IconButton } from '@material-ui/core'
+import { useState, useEffect, useRef } from '../imports/regular-imports'
 import {
+    Drawer,
+    Box,
+    Typography,
+    Divider,
+    IconButton,
     makeStyles,
     useTheme,
     createStyles,
-} from '@material-ui/core/styles'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import { usingIbuki } from '../common-utils/ibuki'
+} from '../imports/gui-imports'
+import {globalMessages, useIbuki} from '../imports/trace-imports'
+import {ChevronLeftIcon, ChevronRightIcon} from '../imports/icons-import'
 import { utilMethods } from '../common-utils/util-methods'
-import globalMessages from '../messages.json'
 import { TraceLeftMenu } from './trace-left-menu'
 
 function TraceLeft({ open, matches, handleDrawerClose }: any) {
@@ -18,7 +20,7 @@ function TraceLeft({ open, matches, handleDrawerClose }: any) {
         data1: {},
     })
     const [, setRefresh] = useState({})
-    const { filterOn, emit } = usingIbuki()
+    const { filterOn, emit } = useIbuki()
     const { getDashedEntityName } = utilMethods()
     const classes = useStyles()
 

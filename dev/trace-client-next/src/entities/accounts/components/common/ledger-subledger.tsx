@@ -1,8 +1,8 @@
-import clsx from 'clsx'
+import { clsx,  useState, useEffect, useRef} from '../../../../imports/regular-imports'
+
 import Select, { components } from 'react-select'
-import { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useIbuki } from '../../../../common-utils/ibuki'
+import { makeStyles, createStyles } from '../../../../imports/gui-imports'
+import { useIbuki } from '../../../../imports/trace-imports'
 
 interface LedgerSubledgerOptions {
     allAccounts: any[]
@@ -226,7 +226,7 @@ function LedgerSubledger({
 export { LedgerSubledger }
 
 
-const useStyles: any = makeStyles((theme: Theme) =>
+const useStyles: any = makeStyles((theme) =>
     createStyles({
         content: {
             minWidth: theme.spacing(30),

@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloLink, InMemoryCache, HttpLink } from 'apollo-boost'
-import urlJoin from 'url-join'
-import { manageEntitiesState } from './esm'
+import { urlJoin } from '../imports/regular-imports'
+import { manageEntitiesState } from '../imports/trace-imports'
 import { config } from '../config'
 
 const clientStore: any = {}
@@ -9,16 +9,12 @@ const graphqlService = () => {
 
     const getUrl = () => {
         let ur
-        // const win: any = window
-        // const config = win.config
         const env: any = process.env.NODE_ENV
         if (env === 'development') {
             ur = config.graphql[env]
         } else {
             ur = window.location.href
         }
-        // const graphql: any = config.graphql
-        // const url = urlJoin(graphql[env], graphql.endPoint)
         const url = urlJoin(ur, 'graphql')
         return url
     }
