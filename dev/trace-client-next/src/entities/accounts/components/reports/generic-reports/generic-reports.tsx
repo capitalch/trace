@@ -1,8 +1,8 @@
-import { Theme, createStyles, makeStyles } from '@material-ui/core'
-import { XXGrid } from '../../common/xx-grid'
+import { Theme, createStyles, makeStyles } from '../../../../../imports/gui-imports'
+import { XXGrid } from '../../../../../imports/trace-imports'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
-import { useEffect } from 'react'
+import { useEffect } from '../../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {

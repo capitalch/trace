@@ -1,4 +1,4 @@
-import { useState, useEffect, } from 'react'
+import { useState, useEffect, } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useBrandsMaster, useStyles } from './brands-master-hook'
 

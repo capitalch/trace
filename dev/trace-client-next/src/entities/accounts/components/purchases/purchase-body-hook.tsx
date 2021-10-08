@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseBody(arbitraryData: any, purchaseType: string) {

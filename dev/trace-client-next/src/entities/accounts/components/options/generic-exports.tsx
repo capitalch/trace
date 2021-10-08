@@ -1,7 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
-// import { Grid } from '@material-ui/core'
-import MaterialTable from 'material-table'
-import { SplitButton } from 'primereact/splitbutton'
+import {MaterialTable,SplitButton, useEffect, useRef, useState } from '../../../../imports/regular-imports'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import { ajaxService } from '../../../../common-utils/ajax-service'
 import { tableIcons } from '../common/material-table-icons'

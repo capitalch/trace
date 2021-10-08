@@ -1,85 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useTaxation, useStyles } from './taxation-hook'
 
 function Taxation() {
         const [, setRefresh] = useState({})
         const classes = useStyles()
-        const {GstReport1, handleFetchData, meta } = useTaxation()
+        const { GstReport1, handleFetchData, meta } = useTaxation()
 
-        const { _,
-                accountsMessages,
-                AddCircle,
-                AddIcon,
-                Avatar,
-                Big,
+        const {
                 Box,
-                Button,
-                Card,
-                Checkbox,
-                CheckIcon,
-                Chip,
-                CloseIcon,
-                confirm,
-                DataTable,
-                DeleteIcon,
-                Dialog,
-                DialogTitle,
-                DialogContent,
-                DialogActions,
-                Divider,
-                doValidateForm,
-                EditIcon,
-                emit,
-                ErrorIcon,
-                execGenericView,
-                genericUpdateMaster,
-                getCurrentEntity,
-                getFormData,
-                getFormObject,
-                getFromBag,
-                globalMessages,
-                FormControlLabel,
-                Icon,
                 IconButton,
-                Input,
-                InputAdornment,
-                isInvalidDate,
-                isInvalidGstin,
-                isValidForm,
-                List,
-                ListItem,
-                ListItemAvatar,
-                ListItemText,
-                MaterialTable,
-                messages,
-                moment,
-                MTableBody,
-                MTableToolbar,
-                NativeSelect,
-                NumberFormat,
-                Paper,
-                PrimeColumn,
-                queries,
-                queryGraphql,
-                Radio,
-                ReactForm,
-                releaseForm,
-                resetAllFormErrors,
-                resetForm,
-                saveForm,
-                SearchIcon,
-                setFormError,
                 SyncIcon,
-                tableIcons,
                 TextField,
-                toDecimalFormat,
-                TraceDialog,
-                TraceFullWidthSubmitButton,
-                traceGlobalSearch,
-                TraceSearchBox,
-                Typography,
-                useGeneric, } = useSharedElements()
+                Typography, } = useSharedElements()
 
         return (<div className={classes.content}>
 
@@ -87,12 +20,6 @@ function Taxation() {
                         <Typography variant='h6' component='span'>Gst report</Typography>
                         <TextField
                                 label="From date"
-                                // error={isInvalidDate(arbitraryData.tranDate)}
-                                // helperText={
-                                //     isInvalidDate(arbitraryData.tranDate)
-                                //         ? accountsMessages.dateRangeAuditLockMessage
-                                //         : ''
-                                // }
                                 type="date"
                                 InputLabelProps={{ shrink: true }}
                                 onChange={(e: any) => {

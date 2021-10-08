@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useRef } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useProductsMaster() {

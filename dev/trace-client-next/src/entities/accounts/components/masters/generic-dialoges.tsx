@@ -1,27 +1,15 @@
-import { useEffect, useState, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import { _, useEffect, useState, useRef } from '../../../../imports/regular-imports'
 import {
-    IconButton,
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions,
-} from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/CloseSharp'
-// import moment from 'moment'
-import _ from 'lodash'
-import { usingIbuki } from '../../../../common-utils/ibuki'
-import { manageFormsState } from '../../../../react-form/core/fsm'
-
-import { manageEntitiesState } from '../../../../common-utils/esm'
-import ReactForm from '../../../../react-form/react-form'
+    DialogActions, IconButton, makeStyles, Theme, createStyles
+} from '../../../../imports/gui-imports'
+import { CloseIcon } from '../../../../imports/icons-import'
+import { manageEntitiesState, ReactForm, manageFormsState, useIbuki, useTraceMaterialComponents, useTraceGlobal } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../common-utils/util-methods'
-// import { utils } from '../../utils'
 import { initCode } from '../../init-code'
 import messages from '../../../../messages.json'
-// import accountMessages from '../../json/accounts-messages.json'
-import { useTraceGlobal } from '../../../../common-utils/trace-global'
-import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
 
 function GenericDialoges({ loadDialog }: any) {
     const meta: any = useRef({
@@ -56,7 +44,7 @@ function GenericDialoges({ loadDialog }: any) {
         // getFromBag,
         setCurrentComponent,
     } = manageEntitiesState()
-    const { emit } = usingIbuki()
+    const { emit } = useIbuki()
     const [, setRefresh] = useState({})
     const {
         execGenericView,

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles, Typography } from '@material-ui/core'
+import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles, Typography } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleBillNoSelect() {

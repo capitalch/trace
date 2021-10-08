@@ -1,9 +1,6 @@
-import { useState } from 'react'
-import { IconButton } from '@material-ui/core'
-import CloseIcon from '@material-ui/icons/Close'
-import Settings from '@material-ui/icons/Settings'
-import _ from 'lodash'
-import { Column } from 'primereact/column'
+import { _, PrimeColumn, useState } from '../../../imports/regular-imports'
+import { IconButton } from '../../../imports/gui-imports'
+import { CloseIcon, IconGeneralSettings } from '../../../imports/icons-import'
 import { useSharedElements } from './shared-elements-hook'
 
 function useAllocateUsersToEntities(meta: any) {
@@ -104,28 +101,28 @@ function useAllocateUsersToEntities(meta: any) {
             return ++numb
         }
         return [
-            <Column
+            <PrimeColumn
                 key={incr()}
                 style={{ width: '4rem' }}
                 field="id"
                 header={<div className={classes.columnHeaderLeft}>Id</div>}
             />,
-            <Column
+            <PrimeColumn
                 key={incr()}
                 style={{ minWidth: '4rem' }}
                 className={classes.bodyBreak}
                 header={<div className={classes.columnHeaderLeft}>Uid</div>}
                 field="uid"
             />,
-            <Column
+            <PrimeColumn
                 key={incr()}
                 className={classes.bodyBreak}
                 style={{ minWidth: '10rem' }}
                 header={
                     <div className={classes.columnHeaderLeft}>User email</div>
                 }
-                field="userEmail"></Column>,
-            <Column
+                field="userEmail"></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 style={{ width: '8rem', textAlign: 'center' }}
                 header={<div>Permission</div>}
@@ -150,18 +147,18 @@ function useAllocateUsersToEntities(meta: any) {
                             meta.current.dialogConfig.title = 'User permissions'
                             meta.current.isMounted && setRefresh({})
                         }}>
-                        <Settings></Settings>
+                        <IconGeneralSettings></IconGeneralSettings>
                     </IconButton>
-                )}></Column>,
-            <Column
+                )}></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 style={{ minWidth: '6rem' }}
                 className={classes.bodyBreak}
                 header={
                     <div className={classes.columnHeaderLeft}>Entity name</div>
                 }
-                field="entityName"></Column>,
-            <Column
+                field="entityName"></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 className={classes.bodyBreak}
                 header={
@@ -169,8 +166,8 @@ function useAllocateUsersToEntities(meta: any) {
                         Database name
                     </div>
                 }
-                field="dbName"></Column>,
-            <Column
+                field="dbName"></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 style={{ width: '4rem' }}
                 header={<div>Delete</div>}
@@ -183,7 +180,7 @@ function useAllocateUsersToEntities(meta: any) {
                         }>
                         <CloseIcon></CloseIcon>
                     </IconButton>
-                )}></Column>,
+                )}></PrimeColumn>,
         ]
     }
 

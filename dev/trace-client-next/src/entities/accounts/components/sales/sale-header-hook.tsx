@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     makeStyles,
     Theme,
     createStyles,
-} from '@material-ui/core'
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleHeader(arbitraryData: any) {

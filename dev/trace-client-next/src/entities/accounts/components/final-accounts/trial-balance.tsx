@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { _, Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     IconButton,
     Typography,
@@ -6,26 +6,15 @@ import {
     Theme,
     createStyles,
     makeStyles,
-} from '@material-ui/core'
-import SyncIcon from '@material-ui/icons/SyncSharp'
-import SearchIcon from '@material-ui/icons/Search'
-import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
-import { useTraceGlobal } from '../../../../common-utils/trace-global'
+} from '../../../../imports/gui-imports'
+import { SearchIcon, SyncIcon } from '../../../../imports/icons-import'
+import { graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import styled from 'styled-components'
-import Big from 'big.js'
-import queries from '../../artifacts/graphql-queries-mutations'
-import { graphqlService } from '../../../../common-utils/graphql-service'
 import { utilMethods } from '../../../../common-utils/util-methods'
-import { usingIbuki } from '../../../../common-utils/ibuki'
-import { TreeTable } from 'primereact/treetable'
-import { Column } from 'primereact/column'
-import { InputSwitch } from 'primereact/inputswitch'
 import messages from '../../../../messages.json'
-import { manageEntitiesState } from '../../../../common-utils/esm'
-import _ from 'lodash'
 
 function TrialBalance() {
-    const { emit, filterOn } = usingIbuki()
+    const { emit, filterOn } = useIbuki()
     const [, setRefresh] = useState({})
     const { toDecimalFormat } = utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
@@ -280,13 +269,13 @@ function TrialBalance() {
             return String(numb++)
         }
         const columns = [
-            <Column
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 selectionMode="multiple"
                 style={{ width: '3rem', textAlign: 'center' }}
             />,
-            <Column
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 field="accName"
@@ -296,8 +285,8 @@ function TrialBalance() {
                 footer={<TDiv align="left">Total</TDiv>}
                 body={(node: any) => {
                     return <span>{node.data.accName}</span>
-                }}></Column>,
-            <Column
+                }}></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 style={{ width: '10rem' }}
@@ -327,8 +316,8 @@ function TrialBalance() {
                         dc: node.data.opening_dc,
                         accLeaf: node.data.accLeaf,
                     })
-                }></Column>,
-            <Column
+                }></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 style={{ width: '10rem' }}
@@ -347,8 +336,8 @@ function TrialBalance() {
                         amt: node.data.debit,
                         accLeaf: node.data.accLeaf,
                     })
-                }></Column>,
-            <Column
+                }></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 style={{ width: '10rem' }}
@@ -367,8 +356,8 @@ function TrialBalance() {
                         amt: node.data.credit,
                         accLeaf: node.data.accLeaf,
                     })
-                }></Column>,
-            <Column
+                }></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 style={{ width: '10rem' }}
@@ -398,8 +387,8 @@ function TrialBalance() {
                         isOpeningClosing: true,
                         accLeaf: node.data.accLeaf,
                     })
-                }></Column>,
-            <Column
+                }></PrimeColumn>,
+            <PrimeColumn
                 key={incr()}
                 columnKey={incr()}
                 style={{ width: '5rem' }}
@@ -415,8 +404,8 @@ function TrialBalance() {
                     return (
                         <TDiv align="left">{logic[node.data.accType]}</TDiv>
                     )
-                }}></Column>,
-            <Column key={incr()} columnKey={incr()} body={actionTemplate} style={{ width: '4rem' }} />
+                }}></PrimeColumn>,
+            <PrimeColumn key={incr()} columnKey={incr()} body={actionTemplate} style={{ width: '4rem' }} />
         ]
         return (columns)
     }

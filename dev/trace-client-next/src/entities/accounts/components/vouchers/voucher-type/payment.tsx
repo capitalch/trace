@@ -1,29 +1,18 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from '../../../../../imports/regular-imports'
 import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
-// import { useSharedElements } from '../../common/shared-elements-hook'
 
 function Payment({ hidden }: any) {
-    // const [, setRefresh] = useState({})
-    // const {
-    //     filterOn,
-    // } = useSharedElements()
-
     const meta: any = useRef({
         isMounted: false,
         errorMessage: '',
     })
 
-    // arbitraryData.header.tranTypeId = tranTypeId
     useEffect(() => {
         meta.current.isMounted = true
-        // const subs1 = filterOn('JOURNAL-MAIN-REFRESH').subscribe(() =>
-        //     setRefresh({})
-        // )
         return () => {
             meta.current.isMounted = false
-            // subs1.unsubscribe()
         }
     }, [])
 

@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
-import hash from 'object-hash'
+import { hash, InputSwitch, NumberFormat, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     IconButton,
@@ -7,27 +6,17 @@ import {
     Theme,
     createStyles,
     makeStyles,
-} from '@material-ui/core'
-import SyncIcon from '@material-ui/icons/SyncSharp'
-import SaveIcon from '@material-ui/icons/Save'
-import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
-import { useTraceGlobal } from '../../../../common-utils/trace-global'
+} from '../../../../imports/gui-imports'
+import { SaveIcon, SyncIcon } from '../../../../imports/icons-import'
+import { globalMessages, graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import styled from 'styled-components'
-import { TreeTable } from 'primereact/treetable'
-import { InputSwitch } from 'primereact/inputswitch'
-import NumberFormat from 'react-number-format'
-import { Column } from 'primereact/column'
-import { usingIbuki } from '../../../../common-utils/ibuki'
-import { graphqlService } from '../../../../common-utils/graphql-service'
-import queries from '../../artifacts/graphql-queries-mutations'
-import { manageEntitiesState } from '../../../../common-utils/esm'
+import { } from '../../../../common-utils/esm'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import messages from '../../json/accounts-messages.json'
-import globalMessages from '../../../../messages.json'
 
 function AccountsOpBal() {
     const [, setRefresh] = useState({})
-    const { emit } = usingIbuki()
+    const { emit } = useIbuki()
     const meta: any = useRef({
         isMounted: false,
         windowWidth: '',
@@ -231,7 +220,7 @@ function AccountsOpBal() {
                     setRefresh({})
                 }}
                 globalFilter={meta.current.globalFilter}>
-                <Column
+                <PrimeColumn
                     expander
                     style={{ width: tableConfig.expanderColumn }}
                     field="accName"
@@ -242,8 +231,8 @@ function AccountsOpBal() {
                                 Account name
                             </label>
                         </div>
-                    }></Column>
-                <Column
+                    }></PrimeColumn>
+                <PrimeColumn
                     field="debit"
                     editor={debitCreditEditor}
                     header={<div style={{ textAlign: 'right' }}>Debit</div>}
@@ -252,8 +241,8 @@ function AccountsOpBal() {
                             <div
                                 style={{
                                     backgroundColor: `${['Y', 'S'].includes(node.data.accLeaf)
-                                            ? 'yellow'
-                                            : 'white'
+                                        ? 'yellow'
+                                        : 'white'
                                         }`,
                                 }}>
                                 {toDecimalFormat(node.data.debit)}
@@ -265,8 +254,8 @@ function AccountsOpBal() {
                             {toDecimalFormat(meta.current.footer['debits'])}
                         </div>
                     }
-                    style={{ width: '8rem', textAlign: 'right' }}></Column>
-                <Column
+                    style={{ width: '8rem', textAlign: 'right' }}></PrimeColumn>
+                <PrimeColumn
                     field="credit"
                     editor={debitCreditEditor}
                     header={<div style={{ textAlign: 'right' }}>Credit</div>}
@@ -275,8 +264,8 @@ function AccountsOpBal() {
                             <div
                                 style={{
                                     backgroundColor: `${['Y', 'S'].includes(node.data.accLeaf)
-                                            ? 'yellow'
-                                            : 'white'
+                                        ? 'yellow'
+                                        : 'white'
                                         }`,
                                 }}>
                                 {toDecimalFormat(node.data.credit)}
@@ -288,8 +277,8 @@ function AccountsOpBal() {
                             {toDecimalFormat(meta.current.footer['credits'])}
                         </div>
                     }
-                    style={{ width: '8rem', textAlign: 'right' }}></Column>
-                <Column
+                    style={{ width: '8rem', textAlign: 'right' }}></PrimeColumn>
+                <PrimeColumn
                     field="accType"
                     header={<div style={{ textAlign: 'left' }}>Type</div>}
                     style={{ width: '5rem', color: 'blue', fontWeight: 'bold' }}
@@ -302,8 +291,8 @@ function AccountsOpBal() {
                         }
                         const ret = mType[node.data.accType]
                         return ret
-                    }}></Column>
-                <Column
+                    }}></PrimeColumn>
+                <PrimeColumn
                     field="className"
                     header={<div style={{ textAlign: 'left' }}>Level</div>}
                     body={(e: any) => {
@@ -315,7 +304,7 @@ function AccountsOpBal() {
                         }
                         return trace[e.data.accLeaf]
                     }}
-                    style={{ width: '8rem' }}></Column>
+                    style={{ width: '8rem' }}></PrimeColumn>
             </TreeTable>
         </div>
     )

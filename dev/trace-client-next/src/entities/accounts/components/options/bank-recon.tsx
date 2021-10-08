@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
-import clsx from 'clsx'
+import { _,clsx, DataTable, hash, InputMask, InputText, moment,PrimeColumn, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     Button,
@@ -18,33 +17,16 @@ import {
     ListItem,
     ListItemText,
     useTheme,
-} from '@material-ui/core'
-import { Close } from '@material-ui/icons'
-import RefreshIcon from '@material-ui/icons/Cached'
-import RearrangeIcon from '@material-ui/icons/FlipToFront'
-import SubmitIcon from '@material-ui/icons/Save'
-import OpeningBalanceIcon from '@material-ui/icons/AccountBalance'
-import _ from 'lodash'
-import moment from 'moment'
-import { DataTable } from 'primereact/datatable'
-import { InputText } from 'primereact/inputtext'
-import InputMask from 'react-input-mask'
-import hash from 'object-hash'
-import { Column } from 'primereact/column'
-import { usingIbuki } from '../../../../common-utils/ibuki'
-import ReactForm from '../../../../react-form/react-form'
-import { componentStore } from '../../../../react-form/component-store/html-core'
-import { manageEntitiesState } from '../../../../common-utils/esm'
-import { manageFormsState } from '../../../../react-form/core/fsm'
+} from '../../../../imports/gui-imports'
+import { CloseIcon, IconAccountBalance, RearrangeIcon, RefreshIcon, SaveIcon } from '../../../../imports/icons-import'
+
+import {componentStore,manageEntitiesState,manageFormsState,ReactForm, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../common-utils/util-methods'
-import { useTraceGlobal } from '../../../../common-utils/trace-global'
-import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
 import messages from '../../../../messages.json'
-import { ThemeConsumer } from 'styled-components'
 
 function BankRecon() {
     const [selectedItems, setSelectedItems] = useState(null)
-    const { emit } = usingIbuki()
+    const { emit } = useIbuki()
     const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const {
         resetForm,
@@ -201,7 +183,7 @@ function BankRecon() {
                         color="primary"
                         startIcon={
                             headerConfig.isButtonsIcon && (
-                                <OpeningBalanceIcon></OpeningBalanceIcon>
+                                <IconAccountBalance></IconAccountBalance>
                             )
                         }
                         disabled={!meta.current.selectedBankId}
@@ -248,7 +230,7 @@ function BankRecon() {
                         className={clsx(classes.buttons, classes.submit)}
                         startIcon={
                             headerConfig.isButtonsIcon && (
-                                <SubmitIcon></SubmitIcon>
+                                <SaveIcon></SaveIcon>
                             )
                         }
                         onClick={utilFunc().submitBankRecon}
@@ -265,103 +247,103 @@ function BankRecon() {
                 selection={selectedItems}
                 onSelectionChange={(e) => setSelectedItems(e.value)}
                 scrollHeight="calc(100vh - 20rem)">
-                <Column
+                <PrimeColumn
                     selectionMode="multiple"
                     style={{ width: '3rem', textAlign: 'center' }}
                 />
                 {/* id */}
-                <Column
+                <PrimeColumn
                     style={{ width: '4rem', textAlign: 'left' }}
                     field="id"
-                    header="Id"></Column>
+                    header="Id"></PrimeColumn>
 
                 {/* tran Date */}
-                <Column
+                <PrimeColumn
                     header="Tran date"
                     style={{ width: '7rem', textAlign: 'left' }}
-                    field={'tranDate'}></Column>
+                    field={'tranDate'}></PrimeColumn>
 
                 {/* instr no  */}
-                <Column
+                <PrimeColumn
                     style={{
                         width: '7rem',
                         textAlign: 'left',
                         wordWrap: 'break-word',
                     }}
                     field="instrNo"
-                    header="Instr no"></Column>
+                    header="Instr no"></PrimeColumn>
 
                 {/* clear date ------------------------------------  */}
-                <Column
+                <PrimeColumn
                     editor={utilFunc().clearDateEditor}
                     style={{
                         height: '2rem',
                         fontSize: '0.8rem',
                         width: '7.0rem',
                         textAlign: 'left',
-                        backgroundColor: theme.palette.yellow.light ,
+                        backgroundColor: theme.palette.yellow.light,
                         color: theme.palette.getContrastText(theme.palette.yellow.light),
                     }}
                     field="clearDate"
-                    header="Clear date"></Column>
+                    header="Clear date"></PrimeColumn>
 
                 {/* debit */}
-                <Column
+                <PrimeColumn
                     style={{ width: '8rem', textAlign: 'right' }}
                     body={(node: any) => toDecimalFormat(node.debit)}
-                    header="Debit"></Column>
+                    header="Debit"></PrimeColumn>
 
                 {/* credit */}
-                <Column
+                <PrimeColumn
                     style={{ width: '8rem', textAlign: 'right' }}
                     body={(node: any) => toDecimalFormat(node.credit)}
-                    header="Credit"></Column>
+                    header="Credit"></PrimeColumn>
 
                 {/* balance  */}
-                <Column
+                <PrimeColumn
                     style={{ width: '8rem', textAlign: 'right' }}
                     body={(node: any) => toDecimalFormat(node.balance)}
-                    header="Balance"></Column>
+                    header="Balance"></PrimeColumn>
 
                 {/* autoRefNo */}
-                <Column
+                <PrimeColumn
                     style={{
                         overflow: 'hidden',
                         textAlign: 'left',
                         width: '10rem',
                     }}
                     field="autoRefNo"
-                    header="Auto ref no"></Column>
+                    header="Auto ref no"></PrimeColumn>
 
                 {/* clear remarks ----------------------------------------*/}
-                <Column
+                <PrimeColumn
                     editor={utilFunc().clearRemarksEditor}
                     style={{
                         textAlign: 'left',
-                        backgroundColor: theme.palette.yellow.light ,
+                        backgroundColor: theme.palette.yellow.light,
                         color: theme.palette.getContrastText(theme.palette.yellow.light),
                         width: '15rem',
                     }}
                     field="clearRemarks"
-                    header="Clear remarks"></Column>
+                    header="Clear remarks"></PrimeColumn>
 
                 {/* Account name */}
-                <Column
+                <PrimeColumn
                     style={{ width: '8rem', textAlign: 'left' }}
                     field="accNames"
-                    header="Accounts"></Column>
+                    header="Accounts"></PrimeColumn>
 
                 {/* line ref no */}
-                <Column
+                <PrimeColumn
                     style={{ textAlign: 'left', width: '10rem' }}
                     field="lineRefNo"
-                    header="Line ref no"></Column>
+                    header="Line ref no"></PrimeColumn>
 
                 {/* line remarks */}
-                <Column
+                <PrimeColumn
                     style={{ textAlign: 'left', width: '15rem' }}
                     field="lineRemarks"
-                    header="Line remarks"></Column>
+                    header="Line remarks"></PrimeColumn>
             </DataTable>
 
             <Dialog //material-ui dialog
@@ -377,7 +359,7 @@ function BankRecon() {
                         color="default"
                         onClick={utilFunc().closeDialog}
                         aria-label="close">
-                        <Close />
+                        <CloseIcon />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
@@ -828,5 +810,5 @@ const opClosJson: any = {
 }
 
 /*
-   
+
 */

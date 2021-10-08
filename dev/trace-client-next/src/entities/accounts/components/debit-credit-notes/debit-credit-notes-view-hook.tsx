@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import { makeStyles, createStyles } from '@material-ui/core'
+import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { makeStyles, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useDebitCreditNotesView(arbitraryData: any, tranType: string) {

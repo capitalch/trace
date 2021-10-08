@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react'
-import { Theme, createStyles, makeStyles } from '@material-ui/core'
+import {useEffect, useState, useRef} from '../../../../imports/regular-imports'
+import { Theme, createStyles, makeStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
 
 function useXXGrid(gridOptions: any) {

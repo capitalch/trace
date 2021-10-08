@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import {_, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import _ from 'lodash'
 
 function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})

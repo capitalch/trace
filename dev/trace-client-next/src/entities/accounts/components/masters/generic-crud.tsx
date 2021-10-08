@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
-import moment from 'moment'
+import {DataTable, moment,PrimeColumn, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     DialogTitle,
@@ -7,22 +6,12 @@ import {
     Box,
     Dialog
     , DialogActions, DialogContent, Theme, useTheme, createStyles, makeStyles
-} from '@material-ui/core'
-import SyncIcon from '@material-ui/icons/SyncSharp'
-import AddIcon from '@material-ui/icons/Add'
-import EditIcon from '@material-ui/icons/Edit'
-import CloseIcon from '@material-ui/icons/Close'
-import { useTraceMaterialComponents } from '../../../../common/trace-material-components'
-import { DataTable } from 'primereact/datatable'
-import { Column } from "primereact/column"
-import { manageEntitiesState } from '../../../../common-utils/esm'
-import { manageFormsState } from '../../../../react-form/core/fsm'
+} from '../../../../imports/gui-imports'
+import {AddIcon,CloseIcon, EditIcon,  SyncIcon} from '../../../../imports/icons-import'
+import {manageFormsState,ReactForm, manageEntitiesState,useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../common-utils/util-methods'
 import messages from '../../../../messages.json'
 import { useSharedCode } from '../../../../common-utils/use-shared-code'
-import { usingIbuki } from '../../../../common-utils/ibuki'
-import ReactForm from '../../../../react-form/react-form'  //react-form/react-form'
-import { useTraceGlobal } from '../../../../common-utils/trace-global'
 
 function GenericCRUD({ loadComponent }: any) {
     const meta: any = useRef({
@@ -49,7 +38,7 @@ function GenericCRUD({ loadComponent }: any) {
     const { resetForm, getFormData, resetAllValidators, clearServerError, getValidationFabric } = manageFormsState()
     const { doValidateForm, isValidForm } = getValidationFabric()
     const { execGenericView, genericUpdateMaster } = utilMethods()
-    const { emit } = usingIbuki()
+    const { emit } = useIbuki()
     const entityName = getCurrentEntity()
 
     const { ColumnHeaderLeftDiv, Spinner, TableHeaderDiv, closeDialog } = useSharedCode(meta)
@@ -204,15 +193,15 @@ function GenericCRUD({ loadComponent }: any) {
         function incr() {
             return ++numb
         }
-        return [<Column key={incr()} header={<ColumnHeaderLeftDiv>Id</ColumnHeaderLeftDiv>}
+        return [<PrimeColumn key={incr()} header={<ColumnHeaderLeftDiv>Id</ColumnHeaderLeftDiv>}
             field="id"
             style={{ width: '4rem' }}
-        ></Column>,
+        ></PrimeColumn>,
 
-        <Column key={incr()} header={<ColumnHeaderLeftDiv>Branch name</ColumnHeaderLeftDiv>}
+        <PrimeColumn key={incr()} header={<ColumnHeaderLeftDiv>Branch name</ColumnHeaderLeftDiv>}
             field="branchName"
-        ></Column>,
-        <Column key={incr()} header={<div>Edit</div>}
+        ></PrimeColumn>,
+        <PrimeColumn key={incr()} header={<div>Edit</div>}
             body={(node: any) =>
                 <IconButton
                     size='medium'
@@ -222,8 +211,8 @@ function GenericCRUD({ loadComponent }: any) {
                 </IconButton>
             }
             style={{ 'width': '6rem', 'textAlign': 'center' }}
-        ></Column>,
-        <Column key={incr()} style={{ width: '4.5rem' }}
+        ></PrimeColumn>,
+        <PrimeColumn key={incr()} style={{ width: '4.5rem' }}
             header={<ColumnHeaderLeftDiv>Delete</ColumnHeaderLeftDiv>}
             body={(node: any) =>
                 <IconButton
@@ -233,7 +222,7 @@ function GenericCRUD({ loadComponent }: any) {
                     <CloseIcon></CloseIcon>
                 </IconButton>
             }
-        ></Column>].map((x, index) => {
+        ></PrimeColumn>].map((x, index) => {
             return x
         })
     }
@@ -243,19 +232,19 @@ function GenericCRUD({ loadComponent }: any) {
         function incr() {
             return ++numb
         }
-        return [<Column key={incr()} header={<ColumnHeaderLeftDiv>Financial year</ColumnHeaderLeftDiv>}
+        return [<PrimeColumn key={incr()} header={<ColumnHeaderLeftDiv>Financial year</ColumnHeaderLeftDiv>}
             field="id"
             style={{ width: '5rem' }}
-        ></Column>,
-        <Column key={incr()} header={<ColumnHeaderLeftDiv>Start date</ColumnHeaderLeftDiv>}
+        ></PrimeColumn>,
+        <PrimeColumn key={incr()} header={<ColumnHeaderLeftDiv>Start date</ColumnHeaderLeftDiv>}
             field="startDate"
             style={{ width: '6rem' }}
-        ></Column>,
-        <Column key={incr()} header={<ColumnHeaderLeftDiv>End date</ColumnHeaderLeftDiv>}
+        ></PrimeColumn>,
+        <PrimeColumn key={incr()} header={<ColumnHeaderLeftDiv>End date</ColumnHeaderLeftDiv>}
             field="endDate"
             style={{ width: '6rem' }}
-        ></Column>,
-        <Column key={incr()} header={<div>Edit</div>}
+        ></PrimeColumn>,
+        <PrimeColumn key={incr()} header={<div>Edit</div>}
             body={(node: any) =>
                 <IconButton
                     size='medium'
@@ -265,8 +254,8 @@ function GenericCRUD({ loadComponent }: any) {
                 </IconButton>
             }
             style={{ 'width': '6rem', 'textAlign': 'center' }}
-        ></Column>,
-        <Column key={incr()} style={{ width: '4.5rem' }}
+        ></PrimeColumn>,
+        <PrimeColumn key={incr()} style={{ width: '4.5rem' }}
             header={<ColumnHeaderLeftDiv>Delete</ColumnHeaderLeftDiv>}
             body={(node: any) =>
                 <IconButton
@@ -277,7 +266,7 @@ function GenericCRUD({ loadComponent }: any) {
                     <CloseIcon></CloseIcon>
                 </IconButton>
             }
-        ></Column>].map((x, index) => {
+        ></PrimeColumn>].map((x, index) => {
             return x
         })
     }

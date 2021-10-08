@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import {_, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     IconButton,
@@ -6,20 +6,14 @@ import {
     useTheme,
     createStyles,
     makeStyles,
-} from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
+} from '../../../../imports/gui-imports'
+import { SearchIcon } from '../../../../imports/icons-import'
 import styled from 'styled-components'
-import { TreeTable } from 'primereact/treetable'
-import { Column } from 'primereact/column'
-import { InputSwitch } from 'primereact/inputswitch'
+// import { InputSwitch } from 'primereact/inputswitch'
 import { graphqlService } from '../../../../common-utils/graphql-service'
-import queries from '../../artifacts/graphql-queries-mutations'
-import { manageEntitiesState } from '../../../../common-utils/esm'
-import { utilMethods } from '../../../../common-utils/util-methods'
-import { usingIbuki } from '../../../../common-utils/ibuki'
+import { queries } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
 import { useSharedElements } from '../common/shared-elements-hook'
-import _ from 'lodash'
 
 function BalanceSheetProfitLoss() {
     const [, setRefresh] = useState({})
@@ -271,13 +265,13 @@ function BalanceSheetProfitLoss() {
                                 <Span>Expand</Span>
                             </HeaderDiv>
                         }>
-                        <Column
+                        <PrimeColumn
                             columnKey='0'
                             field="accName"
                             header={<TDiv align="left">Account names</TDiv>}
                             footer={<TDiv align="left">Total</TDiv>}
-                            expander></Column>
-                        <Column
+                            expander></PrimeColumn>
+                        <PrimeColumn
                             columnKey='1'
                             field="amount"
                             header={<TDiv align="right">Amount</TDiv>}
@@ -293,8 +287,8 @@ function BalanceSheetProfitLoss() {
                                     )}
                                 </TDiv>
                             }
-                            body={amountTemplate}></Column>
-                        <Column
+                            body={amountTemplate}></PrimeColumn>
+                        <PrimeColumn
                             columnKey='2'
                             body={actionTemplate}
                             style={{ width: '3rem' }}
@@ -377,12 +371,12 @@ function BalanceSheetProfitLoss() {
                                 <Span>Expand</Span>
                             </HeaderDiv>
                         }>
-                        <Column
+                        <PrimeColumn
                             field="accName"
                             header={<TDiv align="left">Account names</TDiv>}
                             footer={<TDiv align="left">Total</TDiv>}
-                            expander></Column>
-                        <Column
+                            expander></PrimeColumn>
+                        <PrimeColumn
                             field="amount"
                             header={<TDiv align="right">Amount</TDiv>}
                             style={{
@@ -398,8 +392,8 @@ function BalanceSheetProfitLoss() {
                                     )}
                                 </TDiv>
                             }
-                            body={amountTemplate}></Column>
-                        <Column
+                            body={amountTemplate}></PrimeColumn>
+                        <PrimeColumn
                             body={actionTemplate}
                             style={{ width: '3rem' }}
                         />

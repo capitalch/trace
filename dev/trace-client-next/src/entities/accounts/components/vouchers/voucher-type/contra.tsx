@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from '../../../../../imports/regular-imports'
 import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'

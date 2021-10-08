@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import styled from 'styled-components'
 
 import { useSharedElements, useStyles } from '../common/shared-elements-hook'

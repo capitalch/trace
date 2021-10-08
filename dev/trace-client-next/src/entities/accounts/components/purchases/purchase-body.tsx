@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
-import { LedgerSubledger } from '../common/ledger-subledger'
+import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
-import { ClearAll } from '@material-ui/icons'
+import { ClearAll } from '../../../../imports/icons-import'
 
 function PurchaseBody({ arbitraryData, purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return

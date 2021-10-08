@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useContext } from 'react'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { useState, useEffect, useContext } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-// import { arbitraryData } from './arbitrary-data'
-import {useCrown} from './crown-hook'
+import { useCrown } from './crown-hook'
 import { VoucherContext } from './voucher-context'
 
 function Crown({ meta }: any) {
@@ -93,7 +92,7 @@ function Crown1({ meta }: any) {
     )
 }
 
-export{Crown, Crown1}
+export { Crown, Crown1 }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({

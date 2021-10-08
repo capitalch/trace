@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef, useContext } from 'react'
-// import { arbitraryData } from './arbitrary-data'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { LedgerSubledger } from '../common/ledger-subledger'
+import { useState, useEffect, useContext } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
@@ -396,7 +395,7 @@ function ActionBlock({
 export { ActionBlock }
 
 
-function getLeftMargin(actionType: string, isGst: boolean, tranTypeId: number=0) {
+function getLeftMargin(actionType: string, isGst: boolean, tranTypeId: number = 0) {
     const ret: any = {}
     if (actionType === 'credits') {
         ret.amount = 'auto'
@@ -405,12 +404,12 @@ function getLeftMargin(actionType: string, isGst: boolean, tranTypeId: number=0)
     } else {
         if (isGst) {
             ret.amount = 0
-            if(tranTypeId === 3){
+            if (tranTypeId === 3) {
                 ret.lineRef = 'auto'
             } else {
                 ret.lineRef = 0
             }
-            
+
             ret.gstBlock = 'auto'
         } else {
             ret.amount = 0

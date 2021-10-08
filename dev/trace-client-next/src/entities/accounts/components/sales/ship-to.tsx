@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useShipTo, useStyles } from './ship-to-hook'
 

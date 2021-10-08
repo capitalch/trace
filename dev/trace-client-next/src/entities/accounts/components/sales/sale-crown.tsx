@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useRef } from 'react'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 

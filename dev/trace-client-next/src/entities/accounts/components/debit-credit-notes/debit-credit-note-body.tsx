@@ -1,5 +1,5 @@
-import { useState, } from 'react'
-import { LedgerSubledger } from '../common/ledger-subledger'
+import { useState, } from '../../../../imports/regular-imports'
+import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useDebitCreditNoteBody, useStyles } from './debit-credit-note-body-hook'
 

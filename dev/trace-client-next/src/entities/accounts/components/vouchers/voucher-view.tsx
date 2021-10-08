@@ -1,4 +1,3 @@
-// import { menuPortalCSS } from 'react-select/src/components/Menu'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useVoucherView, useStyles } from './voucher-view-hook'
 

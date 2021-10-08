@@ -1,6 +1,6 @@
-import  { useRef } from 'react'
+import  { useRef } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { makeStyles, Theme, createStyles } from '@material-ui/core'
+import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 
 function useCategoriesMaster() {
     const meta: any = useRef({

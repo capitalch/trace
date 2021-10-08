@@ -1,6 +1,6 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { utilMethods } from '../../../../../common-utils/util-methods'
-import moment from 'moment'
+import { moment } from '../../../../../imports/regular-imports'
 // import { useState } from 'react'
 
 function useAllTransactions() {
@@ -17,7 +17,7 @@ function useAllTransactions() {
         { headerName: 'Id', field: 'id1', width: 90 },
         {
             headerName: 'Date',
-            type:'date',
+            type: 'date',
             field: 'tranDate',
             width: 120,
             valueGetter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
@@ -86,7 +86,7 @@ function useAllTransactions() {
         isEdit: true,
         isDelete: true,
         editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
-        deleteIbukiMessage:'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
+        deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
         // isDrillDown: true,
     }
     return { args, columns, specialColumns, sqlQueryId, title, summaryColNames }

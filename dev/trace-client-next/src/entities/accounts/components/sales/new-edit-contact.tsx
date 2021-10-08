@@ -1,4 +1,4 @@
-import { useNewEditContact, useStyles } from './new-edit-contact-hook'
+import { useNewEditContact} from './new-edit-contact-hook'
 
 function NewEditContact({arbitraryData}: any){
 	const {Form} = useNewEditContact(arbitraryData)
