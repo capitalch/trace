@@ -1,7 +1,7 @@
 import { clsx,  useState, useEffect, useRef} from '../../../../imports/regular-imports'
 
 import Select, { components } from 'react-select'
-import { makeStyles, createStyles } from '../../../../imports/gui-imports'
+import { makeStyles, createStyles, Theme } from '../../../../imports/gui-imports'
 import { useIbuki } from '../../../../imports/trace-imports'
 
 interface LedgerSubledgerOptions {
@@ -226,7 +226,7 @@ function LedgerSubledger({
 export { LedgerSubledger }
 
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:Theme) =>
     createStyles({
         content: {
             minWidth: theme.spacing(30),

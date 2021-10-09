@@ -1,5 +1,7 @@
-import { createStyles, makeStyles, useTheme } from '@material-ui/core/styles'
+import { createStyles, makeStyles, useTheme } from '@mui/styles' //'@material-ui/core/styles'
+import { StyledEngineProvider } from '@mui/styled-engine'
 import {
+    Alert,
     AppBar,
     Avatar,
     Badge,
@@ -47,12 +49,9 @@ import {
     Toolbar,
     Typography,
     useMediaQuery,
-} from '@material-ui/core'
-
-import { Alert as MuiAlert } from '@material-ui/lab'
-import { type } from 'os'
+} from '@mui/material' 
 export { createStyles, makeStyles, useTheme }
-export { MuiAlert }
+export { Alert }
 export type { Theme }
 export {
     AppBar,
@@ -93,6 +92,7 @@ export {
     Radio,
     RadioGroup,
     Snackbar,
+    StyledEngineProvider,
     Switch,
     Tab,
     Tabs,

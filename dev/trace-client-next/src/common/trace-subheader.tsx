@@ -54,7 +54,7 @@ function TraceSubHeader() {
 }
 export { TraceSubHeader }
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:any) =>
     createStyles({
         toolbarSubHeader: {
             backgroundColor: theme.palette.secondary.light,

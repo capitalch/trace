@@ -28,6 +28,7 @@ function PurchaseInvoiceNoSelect({ arbitraryData }: any) {
         <div className={classes.content}>
             <TextField
                 className="purchase-invoice"
+                variant='standard'
                 label="Purchase invoice"
                 disabled={true}
                 InputProps={{

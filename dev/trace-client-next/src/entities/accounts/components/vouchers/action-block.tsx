@@ -139,6 +139,7 @@ function ActionBlock({
                     {allowInstrNo && (
                         <TextField
                             className="instr-no"
+                            variant='standard'
                             label="Instr no"
                             onChange={(e: any) => {
                                 item.instrNo = e.target.value
@@ -201,6 +202,7 @@ function ActionBlock({
                     {/* Amount */}
                     <NumberFormat
                         disabled={allowFreeze}
+                        variant='standard'
                         allowNegative={false}
                         {...{ label: `${actionLabel} amount` }}
                         className="right-aligned-numeric amount"
@@ -269,6 +271,7 @@ function ActionBlock({
                     {/* line ref no  */}
                     <TextField
                         className="line-ref"
+                        variant='standard'
                         label="Line ref"
                         onChange={(e: any) => {
                             item.lineRefNo = e.target.value
@@ -279,6 +282,7 @@ function ActionBlock({
                     {/* remarks */}
                     <TextField
                         className="line-remarks"
+                        variant='standard'
                         label="Remarks"
                         onChange={(e: any) => {
                             item.remarks = e.target.value
@@ -468,7 +472,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 // getLineRefLeftMargin(isGst, actionType),
             },
             '& .line-remarks': {
-                width: ({ isGst }) =>
+                width: ({ isGst }:any) =>
                     isGst ? theme.spacing(20) : theme.spacing(50),
             },
             '& .action-block': {

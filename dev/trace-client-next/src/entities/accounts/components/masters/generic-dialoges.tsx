@@ -87,7 +87,7 @@ function GenericDialoges({ loadDialog }: any) {
                     closeDialog()
                 }}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h2>{meta.current.dialogConfig.title}</h2>

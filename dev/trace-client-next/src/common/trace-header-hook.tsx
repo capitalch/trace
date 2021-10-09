@@ -13,7 +13,8 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    MuiAlert,
+    Alert,
+    Theme,
 } from '../imports/gui-imports'
 import {
     ChangePasswordicon,
@@ -35,7 +36,6 @@ import {
     useTraceMaterialComponents,
     utilMethods
 } from '../imports/trace-imports'
-// import { usingIbuki } from '../common-utils/ibuki'
 import '../entities/authentication/initialize-react-form'
 import messages from '../entities/authentication/messages.json'
 
@@ -91,7 +91,7 @@ function useTraceHeader({ setRefresh }: any) {
 
     // for material snackbar
     function Alert(props: any) {
-        return <MuiAlert elevation={6} variant="filled" {...props} />
+        return <Alert elevation={6} variant="filled" {...props} />
     }
 
     // for closing snackbar
@@ -154,7 +154,7 @@ function useTraceHeader({ setRefresh }: any) {
     function getDialogTitle() {
         return (
             <DialogTitle
-                disableTypography
+                // disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
                 <h2>{meta.current.dialogConfig.title}</h2>
@@ -548,7 +548,7 @@ function useTraceHeader({ setRefresh }: any) {
 
 export { useTraceHeader }
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:Theme) =>
     createStyles({
         dialogContent: {
             paddingTop: '0px',

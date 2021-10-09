@@ -38,6 +38,7 @@ function BillTo({ arbitraryData }: any) {
                 <div className="bill-to">
                     <TextField
                         autoFocus={true}
+                        variant='standard'
                         className="search-box"
                         placeholder="Search on mobile, email, name"
                         id="search-field"
@@ -102,6 +103,7 @@ function BillTo({ arbitraryData }: any) {
 
                     <TextField
                         className="gstin"
+                        variant='standard'
                         placeholder="Gstin"
                         error={gstinError()}
                         value={arbitraryData.billTo.gstin || ''}

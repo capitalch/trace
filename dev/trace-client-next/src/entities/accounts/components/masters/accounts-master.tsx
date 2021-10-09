@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from '../../../../imports/regular-imports
 import styled from 'styled-components'
 
 import { useSharedElements, useStyles } from '../common/shared-elements-hook'
+import { useTheme } from '../../../../imports/gui-imports'
 
 function AccountsMaster() {
     const [, setRefresh] = useState({})
@@ -55,13 +56,13 @@ function AccountsMaster() {
         setFormError,
         Switch,
         SyncIcon,
-        theme,
+        // theme,
         TraceFullWidthSubmitButton,
         traceGlobalSearch,
         TreeTable,
         Typography,
     } = useSharedElements()
-
+    const theme: any = useTheme()
     const [data, setData]: any[] = useState([])
     const accClassRef = useRef(JSON.parse(JSON.stringify(accClassAddition)))
 
@@ -499,7 +500,7 @@ function AccountsMaster() {
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>
@@ -528,7 +529,7 @@ function AccountsMaster() {
                 fullWidth={true}
                 className={classes.addressEntry}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-address-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.addressDialogConfig.title}</h3>

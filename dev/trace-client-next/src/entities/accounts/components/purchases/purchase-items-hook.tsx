@@ -385,7 +385,7 @@ function usePurchaseItems(arbitraryData: any) {
                     <TextareaAutosize
                         autoFocus={true}
                         className="serial-number"
-                        rowsMin={5}
+                        // rowsMin={5}
                         onChange={(e: any) => {
                             met.current.slNo = e.target.value
                             processCount()
@@ -528,6 +528,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* product search */}
                         <TextField
                             autoFocus={true}
+                            variant='standard'
                             style={{ maxWidth: '12rem' }}
                             placeholder="Product(abc, def,...)"
                             value={rowData.searchFilter || ''}
@@ -560,6 +561,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
+                            variant='standard'
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
                                 rowData.upcCode = e.target.value
@@ -995,6 +997,7 @@ function usePurchaseItems(arbitraryData: any) {
                             </Badge>
                             <TextField
                                 placeholder="Remarks"
+                                variant='standard'
                                 value={rowData.remarks || ''}
                                 onChange={(e: any) => {
                                     rowData.remarks = e.target.value

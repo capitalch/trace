@@ -67,7 +67,7 @@ function LedgerSubledgerCascade({
 
 export { LedgerSubledgerCascade }
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:any) =>
     createStyles({
         content: {
             '& .p-cascadeselect': {

@@ -56,6 +56,7 @@ function SaleHeader({ arbitraryData }: any) {
                     {/* auto ref no */}
                     <TextField
                         className="auto-ref-no"
+                        variant='standard'
                         disabled={true}
                         label="Ref no"
                         value={arbitraryData.autoRefNo || ''}
@@ -64,6 +65,7 @@ function SaleHeader({ arbitraryData }: any) {
                     {/* date */}
                     <TextField
                         label="Date"
+                        variant='standard'
                         error={isInvalidDate(arbitraryData.tranDate)}
                         helperText={
                             isInvalidDate(arbitraryData.tranDate)
@@ -86,6 +88,7 @@ function SaleHeader({ arbitraryData }: any) {
                     {/* remarks */}
                     <TextField
                         label="Common remarks"
+                        variant='standard'
                         className="common-remarks"
                         onChange={(e: any) => {
                             arbitraryData.commonRemarks = e.target.value

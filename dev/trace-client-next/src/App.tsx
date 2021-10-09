@@ -1,6 +1,6 @@
 import React from 'react'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
-import { ThemeProvider, createTheme } from '@material-ui/core/styles'
+import { ThemeProvider, createTheme } from '@mui/material/styles' // '@material-ui/core/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
     purple,
@@ -16,15 +16,17 @@ import {
     orange,
     blue,
     lightBlue,
-} from '@material-ui/core/colors'
+} from '@mui/material/colors' //'@material-ui/core/colors'
+import { StyledEngineProvider } from './imports/gui-imports'
 import './App.scss'
 import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
-declare module '@material-ui/core/styles/createPalette' {
+
+declare module '@mui/material/styles/createPalette' {
     interface Palette {
-        neutral: Palette['primary']
+        neutral?: Palette['primary']
         purple: Palette['primary']
         deepPurple: Palette['primary']
         teal: Palette['primary']
@@ -39,7 +41,7 @@ declare module '@material-ui/core/styles/createPalette' {
         lightBlue: Palette['primary']
     }
     interface PaletteOptions {
-        neutral: PaletteOptions['primary']
+        neutral?: PaletteOptions['primary']
         purple: PaletteOptions['primary']
         deepPurple: PaletteOptions['primary']
         teal: PaletteOptions['primary']
@@ -54,13 +56,45 @@ declare module '@material-ui/core/styles/createPalette' {
         lightBlue: PaletteOptions['primary']
     }
 }
+// declare module '@material-ui/core/styles/createPalette' {
+//     interface Palette {
+//         neutral?: Palette['primary']
+//         purple: Palette['primary']
+//         deepPurple: Palette['primary']
+//         teal: Palette['primary']
+//         lime: Palette['primary']
+//         yellow: Palette['primary']
+//         amber: Palette['primary']
+//         orange: Palette['primary']
+//         indigo: Palette['primary']
+//         blueGrey: Palette['primary']
+//         blue: Palette['primary']
+//         cyan: Palette['primary']
+//         lightBlue: Palette['primary']
+//     }
+//     interface PaletteOptions {
+//         neutral?: PaletteOptions['primary']
+//         purple: PaletteOptions['primary']
+//         deepPurple: PaletteOptions['primary']
+//         teal: PaletteOptions['primary']
+//         lime: PaletteOptions['primary']
+//         yellow: PaletteOptions['primary']
+//         amber: PaletteOptions['primary']
+//         orange: PaletteOptions['primary']
+//         indigo: PaletteOptions['primary']
+//         blueGrey: PaletteOptions['primary']
+//         blue: PaletteOptions['primary']
+//         cyan: PaletteOptions['primary']
+//         lightBlue: PaletteOptions['primary']
+//     }
+// }
 
 const App: React.FC = () => {
     const theme = createTheme({
         palette: {
-            
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
+
             blueGrey: {
                 main: blueGrey[500],
                 dark: blueGrey[900],
@@ -114,13 +148,15 @@ const App: React.FC = () => {
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <ConfirmProvider>
-                {' '}
-                {/* confirm dialog box all over the application */}
-                <AppMain></AppMain>
-            </ConfirmProvider>
-        </ThemeProvider>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+                <ConfirmProvider>
+                    {' '}
+                    {/* confirm dialog box all over the application */}
+                    <AppMain></AppMain>
+                </ConfirmProvider>
+            </ThemeProvider>
+        </StyledEngineProvider>
     )
 }
 

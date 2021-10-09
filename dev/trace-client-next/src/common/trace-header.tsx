@@ -10,6 +10,7 @@ import {
     IconButton,
     Chip,
     Dialog,
+    Theme,
     useTheme,
 } from '../imports/gui-imports'
 
@@ -239,7 +240,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
 }
 export { TraceHeader }
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         menuButton: {
             marginRight: theme.spacing(2),

@@ -20,6 +20,7 @@ function Taxation() {
                         <Typography variant='h6' component='span'>Gst report</Typography>
                         <TextField
                                 label="From date"
+                                variant='standard'
                                 type="date"
                                 InputLabelProps={{ shrink: true }}
                                 onChange={(e: any) => {
@@ -32,6 +33,7 @@ function Taxation() {
 
                         <TextField
                                 type='date'
+                                variant='standard'
                                 InputLabelProps={{ shrink: true }}
                                 label='To date'
                                 onFocus={(e) => e.target.select()}

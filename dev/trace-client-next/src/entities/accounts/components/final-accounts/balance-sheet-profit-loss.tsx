@@ -10,7 +10,7 @@ import {
 import { SearchIcon } from '../../../../imports/icons-import'
 import styled from 'styled-components'
 // import { InputSwitch } from 'primereact/inputswitch'
-import { graphqlService } from '../../../../common-utils/graphql-service'
+// import { graphqlService } from '../../../../common-utils/graphql-service'
 import { queries } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
 import { useSharedElements } from '../common/shared-elements-hook'
@@ -43,7 +43,7 @@ function BalanceSheetProfitLoss() {
         setInBag,
         toDecimalFormat,
     } = useSharedElements()
-    const theme = useTheme()
+    const theme:Theme = useTheme()
 
     useEffect(() => {
         meta.current.isMounted = true

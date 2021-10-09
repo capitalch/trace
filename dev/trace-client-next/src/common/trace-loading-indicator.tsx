@@ -35,7 +35,7 @@ function TraceLoadingIndicator() {
 
 export { TraceLoadingIndicator }
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:any) =>
     createStyles({
         backdrop: {
             zIndex: 9999, // less than this does not work

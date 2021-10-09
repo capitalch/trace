@@ -104,6 +104,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* auto ref no */}
                 <TextField
                     className="auto-ref-no"
+                    variant='standard'
                     disabled={true}
                     label="Ref no"
                     value={arbitraryData.autoRefNo || ''}
@@ -111,6 +112,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* date */}
                 <TextField
                     label={arbitraryData.tranDate ? 'Date' : undefined}
+                    variant='standard'
                     error={getDateError()}
                     helperText={
                         getDateError()
@@ -128,6 +130,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* invoice no  */}
                 <TextField
                     label="Invoice no"
+                    variant='standard'
                     className="invoice-no"
                     error={getInvoiceError()}
                     onChange={(e: any) => {
@@ -139,6 +142,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
+                    variant='standard'
                     className="common-remarks"
                     onChange={(e: any) => {
                         arbitraryData.commonRemarks = e.target.value
@@ -214,6 +218,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* gstin */}
                 <TextField
                     className="gstin"
+                    variant='standard'
                     label="Gstin no"
                     error={getGstinError()}
                     onChange={(e: any) => {
@@ -377,6 +382,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* auto ref no */}
                 <TextField
                     className="auto-ref-no"
+                    variant='standard'
                     disabled={true}
                     label="Ref no"
                     value={arbitraryData.autoRefNo || ''}
@@ -384,6 +390,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* date */}
                 <TextField
                     label={arbitraryData.tranDate ? 'Date' : undefined}
+                    variant='standard'
                     error={getDateError()}
                     helperText={
                         getDateError()
@@ -402,6 +409,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
+                    variant='standard'
                     className="common-remarks"
                     onChange={(e: any) => {
                         arbitraryData.commonRemarks = e.target.value
@@ -473,6 +481,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 {/* gstin */}
                 <TextField
                     className="gstin"
+                    variant='standard'
                     label="Gstin no"
                     error={getGstinError()}
                     onChange={(e: any) => {

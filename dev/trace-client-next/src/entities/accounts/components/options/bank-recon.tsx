@@ -83,7 +83,7 @@ function BankRecon() {
     const headerConfig = meta.current.headerConfig
     const classes = useStyles({ headerConfig: headerConfig })
     const { getCurrentMediaSize, getCurrentWindowSize } = useTraceGlobal()
-    const theme = useTheme()
+    const theme:Theme = useTheme()
     useEffect(() => {
         meta.current.isMounted = true
         utilFunc().getAllBanks()
@@ -350,7 +350,7 @@ function BankRecon() {
                 open={meta.current.showDialog}
                 onClose={utilFunc().closeDialog}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>
@@ -733,9 +733,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
         header: {
             display: 'flex',
-            flexDirection: ({ headerConfig }): any =>
+            flexDirection: ({ headerConfig }:any): any =>
                 headerConfig.flexDirection,
-            alignItems: ({ headerConfig }): any => headerConfig.alignItems,
+            alignItems: ({ headerConfig }:any): any => headerConfig.alignItems,
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '1rem',

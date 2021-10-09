@@ -226,7 +226,7 @@ function GenericExports() {
         const gstReports = meta.current.gstReports
         const [, setRefresh] = useState({})
         return (
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" variant='standard'>
                 <RadioGroup row>
                     <DateSelect />
                     <QuarterSelect />
@@ -251,6 +251,7 @@ function GenericExports() {
                     />
                     <TextField
                         style={{ marginLeft: '1rem' }}
+                        variant='standard'
                         type="date"
                         disabled={gstReports.selectionMode !== 'date'}
                         onChange={(e) => {
@@ -262,6 +263,7 @@ function GenericExports() {
                         value={gstReports.startDate || ''}
                     />
                     <TextField
+                        variant='standard'
                         disabled={gstReports.selectionMode !== 'date'}
                         style={{ marginTop: '0.5rem', marginLeft: '1rem' }}
                         type="date"

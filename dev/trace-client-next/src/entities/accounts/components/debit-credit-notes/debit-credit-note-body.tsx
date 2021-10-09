@@ -30,6 +30,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
             <div className='body-line-one'>
                 <TextField
                     label="Date"
+                    variant='standard'
                     error={isInvalidDate(arbitraryData.body.tranDate)}
                     helperText={isInvalidDate(arbitraryData.body.tranDate) ? accountsMessages.dateRangeAuditLockMessage : undefined}
                     type='date'
@@ -41,6 +42,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                     value={arbitraryData.body.tranDate || ''} />
                 <TextField
                     label='User ref no'
+                    variant='standard'
                     onChange={(e: any) => {
                         arbitraryData.body.userRefNo = e.target.value
                         meta.current.isMounted && setRefresh({})
@@ -48,6 +50,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                     value={arbitraryData.body.userRefNo || ''} />
                 <NumberFormat
                     label='Amount'
+                    variant='standard'
                     allowNegative={false}
                     className='right-aligned-numeric'
                     customInput={TextField}
@@ -65,6 +68,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                 />
                 <TextField
                     className='common-remarks'
+                    variant='standard'
                     label='Common remarks'
                     onChange={(e: any) => {
                         arbitraryData.body.commonRemarks = e.target.value
@@ -87,6 +91,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                 </div>
                 <TextField
                     className='common-text'
+                    variant='standard'
                     label='Line ref no'
                     onChange={(e: any) => {
                         arbitraryData.body.lineRefNoDebit = e.target.value
@@ -95,6 +100,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                     value={arbitraryData.body.lineRefNoDebit || ''} />
                 <TextField
                     className='common-text remarks'
+                    variant='standard'
                     label='Line remarks'
                     onChange={(e: any) => {
                         arbitraryData.body.lineRemarksDebit = e.target.value
@@ -118,6 +124,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                 </div>
                 <TextField
                     className='common-text'
+                    variant='standard'
                     label='Line ref no'
                     onChange={(e: any) => {
                         arbitraryData.body.lineRefNoCredit = e.target.value
@@ -126,6 +133,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                     value={arbitraryData.body.lineRefNoCredit || ''} />
                 <TextField
                     className='common-text remarks'
+                    variant='standard'
                     label='Line remarks'
                     onChange={(e: any) => {
                         arbitraryData.body.lineRemarksCredit = e.target.value

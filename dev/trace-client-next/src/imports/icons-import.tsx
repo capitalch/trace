@@ -38,7 +38,7 @@ import {
     SystemUpdate as IconExports,
     ViewListSharp as IconAllTransactions,
     Menu as MenuIcon,
-} from '@material-ui/icons'
+} from '@mui/icons-material' // '@material-ui/icons'
 
 import {
     DeleteForever,
@@ -64,7 +64,7 @@ import {
     Category as Categories,
     AccountTree,
     LibraryBooks,
-} from '@material-ui/icons'
+} from '@mui/icons-material' // '@material-ui/icons'
 
 import {
     Add as AddIcon,
@@ -92,8 +92,7 @@ import {
     ViewColumn,
     ZoomIn as ZoomInIcon,
     ZoomOut as ZoomOutIcon
-} from '@material-ui/icons'
-
+} from '@mui/icons-material' // '@material-ui/icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 

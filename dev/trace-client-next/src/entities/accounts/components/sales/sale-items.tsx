@@ -170,6 +170,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                         {/* product search */}
                         <TextField
                             autoFocus={true}
+                            variant='standard'
                             style={{ maxWidth: '12rem' }}
                             placeholder="Product(abc, def,...)"
                             value={rowData.searchFilter || ''}
@@ -202,6 +203,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
+                            variant='standard'
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
                                 rowData.upcCode = e.target.value
@@ -594,6 +596,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             </Badge>
                             <TextField
                                 placeholder="Remarks"
+                                variant='standard'
                                 value={rowData.remarks || ''}
                                 onChange={(e: any) => {
                                     rowData.remarks = e.target.value

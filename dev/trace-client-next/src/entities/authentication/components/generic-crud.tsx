@@ -1,5 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
-import hash from 'object-hash'
+import {
+    _,
+    DataTable,
+    hash,
+    MaterialTable,
+    MTableToolbar,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../imports/regular-imports'
+
 import {
     Chip,
     Typography,
@@ -10,18 +19,15 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-} from '@material-ui/core'
-import MaterialTable, { MTableToolbar, MTableFilterRow } from 'material-table'
-import SyncIcon from '@material-ui/icons/SyncSharp'
-import AddIcon from '@material-ui/icons/Add'
-import CloseIcon from '@material-ui/icons/Close'
-import _ from 'lodash'
-import { useTraceMaterialComponents } from '../../../common/trace-material-components'
-import { DataTable } from 'primereact/datatable'
-import { manageEntitiesState } from '../../../common-utils/esm'
-import { manageFormsState } from '../../../react-form/core/fsm'
-import ReactForm from '../../../react-form/react-form'
-import { useTraceGlobal } from '../../../common-utils/trace-global'
+} from '../../../imports/gui-imports'
+import { AddIcon, CloseIcon, SyncIcon } from '../../../imports/icons-import'
+import {
+    manageFormsState,
+    manageEntitiesState,
+    ReactForm,
+    useTraceGlobal,
+    useTraceMaterialComponents,
+} from '../../../imports/trace-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { useManageUsers } from './manage-users'
 import { useAssociateAdminUserWithClientAndEntity } from './associate-admin-user-with-client-and-entity'
@@ -74,15 +80,13 @@ function GenericCRUD({ loadComponent }: any) {
     const { useStyles, closeDialog, theme } = useSharedElements(meta)
     const classes = useStyles({ meta: meta })
     const { manageUsers } = useManageUsers(meta)
-    const {
-        associateAdminUserWithClientAndEntity,
-    } = useAssociateAdminUserWithClientAndEntity(meta)
+    const { associateAdminUserWithClientAndEntity } =
+        useAssociateAdminUserWithClientAndEntity(meta)
     const { manageClients, manageEntities } = useManageClientsEntities(meta)
     const { manageBu } = useManageBu(meta)
     const { manageRoles } = useManageRoles(meta)
-    const {
-        associateBusinessUsersWithRolesAndBu,
-    } = useAssociateBusinessUsersWithRolesAndBu(meta)
+    const { associateBusinessUsersWithRolesAndBu } =
+        useAssociateBusinessUsersWithRolesAndBu(meta)
 
     if (isMediumSizeUp) {
         dialogConfig.dialogWidth = '350px'
@@ -106,9 +110,11 @@ function GenericCRUD({ loadComponent }: any) {
             manageBu: manageBu,
             manageClients: manageClients,
             manageEntities: manageEntities,
-            associateAdminUserWithClientAndEntity: associateAdminUserWithClientAndEntity,
+            associateAdminUserWithClientAndEntity:
+                associateAdminUserWithClientAndEntity,
             manageRoles: manageRoles,
-            associateBusinessUsersWithRolesAndBu: associateBusinessUsersWithRolesAndBu,
+            associateBusinessUsersWithRolesAndBu:
+                associateBusinessUsersWithRolesAndBu,
         }
         return logic
     }
@@ -157,7 +163,7 @@ function GenericCRUD({ loadComponent }: any) {
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>
@@ -216,11 +222,12 @@ function GenericCRUD({ loadComponent }: any) {
                                         ).isActive
                                     }
                                     onClick={() => {
-                                        const item = meta.current.dialogConfig.permissionConfig.data.find(
-                                            (item: any) =>
-                                                item.controlId ===
-                                                rowData.controlId
-                                        )
+                                        const item =
+                                            meta.current.dialogConfig.permissionConfig.data.find(
+                                                (item: any) =>
+                                                    item.controlId ===
+                                                    rowData.controlId
+                                            )
                                         item.isActive = !item.isActive
                                         setRefresh({}) // local setRefresh
                                     }}></Checkbox>

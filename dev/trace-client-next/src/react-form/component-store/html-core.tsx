@@ -149,6 +149,7 @@ const componentStore: any = {
                 <TextField
                     InputLabelProps={{ shrink: true }} // the label is now fixed; not moving
                     className={classes.textField}
+                    variant='standard'
                     label={item.label}
                     inputProps={{
                         style: {
@@ -198,6 +199,7 @@ const componentStore: any = {
                 <TextField
                     InputLabelProps={{ shrink: true }} // the label is now fixed; not moving
                     className={classes.textField}
+                    variant='standard'
                     label={item.label}
                     inputProps={{
                         style: {
@@ -772,6 +774,7 @@ const componentStore: any = {
             <>
                 <TextField
                     error={meta.current.isError}
+                    variant='standard'
                     size="small"
                     helperText={meta.current.errorNode}
                     type="text"

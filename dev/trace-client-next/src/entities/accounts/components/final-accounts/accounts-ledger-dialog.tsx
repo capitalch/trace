@@ -116,7 +116,7 @@ function AccountsLedgerDialog() {
                 fullWidth={true}
                 onClose={closeDialog}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
                     <h3>{'Account: '.concat(meta.current.accName)}</h3>
@@ -161,7 +161,7 @@ function AccountsLedgerDialog() {
                 // fullScreen={true}
             >
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-child-dialog-title"
                     className="dialog-title">
                     <h3>{meta.current.childDialogTiitle}</h3>

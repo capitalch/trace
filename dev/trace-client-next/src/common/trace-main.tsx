@@ -75,7 +75,7 @@ function TraceMain({ open }: any) {
 export { TraceMain }
 
 const drawerWidth = 260
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:any) =>
     createStyles({
         content: {
             transition: theme.transitions.create('margin', {

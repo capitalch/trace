@@ -261,7 +261,7 @@ function useSaleItems(arbitraryData: any) {
                     <TextareaAutosize
                         autoFocus={true}
                         className="serial-number"
-                        rowsMin={5}
+                        // rowsMin={5}
                         onChange={(e: any) => {
                             met.current.slNo = e.target.value
                             processCount()

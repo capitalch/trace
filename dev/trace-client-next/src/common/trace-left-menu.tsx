@@ -1,5 +1,5 @@
 import { useState, useRef } from '../imports/regular-imports'
-import { ClickAwayListener,Collapse,Divider, List, ListItem,ListItemText, useTheme } from '../imports/gui-imports'
+import { ClickAwayListener,Collapse,Divider, List, ListItem,ListItemText,Theme, useTheme } from '../imports/gui-imports'
 import {manageEntitiesState, useIbuki} from '../imports/trace-imports'
 import {IconExpandLess, IconExpandMore} from '../imports/icons-import'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -11,7 +11,7 @@ function TraceLeftMenu(props: any) {
     const [, setRefresh] = useState({})
     const rootChildren = props?.value?.children
     const { emit } = useIbuki()
-    const theme = useTheme()
+    const theme:Theme = useTheme()
     const { isControlDisabled } = utilMethods()
     const { getCurrentEntity } = manageEntitiesState()
     const meta: any = useRef({

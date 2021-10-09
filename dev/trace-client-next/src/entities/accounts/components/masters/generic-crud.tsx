@@ -316,7 +316,9 @@ function GenericCRUD({ loadComponent }: any) {
             classes={{ paper: classes.dialogPaper }} // Adjust dialog width as per device
             open={meta.current.showDialog}
             onClose={closeDialog}>
-            <DialogTitle disableTypography id="generic-dialog-title"
+            <DialogTitle 
+            // disableTypography 
+            id="generic-dialog-title"
                 className={classes.dialogTitle}>
                 <h3>
                     {meta.current.dialogConfig.title}

@@ -115,6 +115,7 @@ function SaleFooter({ arbitraryData }: any) {
                 key={4}
                 body={(rowData: any) => (
                     <TextField
+                        variant="standard"
                         onChange={(e) => {
                             rowData.instrNo = e.target.value
                             meta.current.isMounted && setRefresh({})
@@ -130,6 +131,7 @@ function SaleFooter({ arbitraryData }: any) {
                 key={5}
                 body={(rowData: any) => (
                     <TextField
+                        variant="standard"
                         fullWidth={true}
                         onChange={(e) => {
                             rowData.remarks = e.target.value

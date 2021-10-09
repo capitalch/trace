@@ -46,7 +46,7 @@ function useTraceMaterialComponents() {
                 open={options.meta.current.showDialog}
                 onClose={options.onClose || handleClose}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
                     <h4>{pre.title}</h4>
@@ -253,7 +253,7 @@ function useTraceMaterialComponents() {
 }
 export { useTraceMaterialComponents }
 
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme:any) =>
     createStyles({
         content: {},
 

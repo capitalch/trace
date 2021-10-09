@@ -6,7 +6,7 @@ function SaleBillNoSelect({ value }: any) {
     const { Button, CloseIcon, emit, FormControl, IconButton, Input, InputAdornment, SearchIcon, TraceDialog } = useSharedElements()
     const classes = useStyles()
     return (<div className={classes.content}>
-        <FormControl>
+        <FormControl variant='standard'>
             <Input
                 className="input"
                 placeholder='Sale bill no'

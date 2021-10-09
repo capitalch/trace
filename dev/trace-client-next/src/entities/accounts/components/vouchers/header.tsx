@@ -23,6 +23,7 @@ function Header({allowHeaderGst}: any) {
         <Paper elevation={1} className={classes.contentHeader}>
             <TextField
                 label="Ref no"
+                variant='standard'
                 placeholder="Auto ref no"
                 disabled
                 value={arbitraryData?.header?.autoRefNo || ''}
@@ -32,6 +33,7 @@ function Header({allowHeaderGst}: any) {
                 <label className="date-label">Date</label>
                 <TextField
                     error={isInvalidDate(arbitraryData.header.tranDate)}
+                    variant='standard'
                     helperText={
                         isInvalidDate(arbitraryData.header.tranDate)
                             ? accountsMessages.dateRangeAuditLockMessage
@@ -51,6 +53,7 @@ function Header({allowHeaderGst}: any) {
             <TextField
                 label="User ref"
                 className="user-ref"
+                variant='standard'
                 // error={getInvoiceError()}
                 onChange={(e: any) => {
                     arbitraryData.header.userRefNo = e.target.value
@@ -61,6 +64,7 @@ function Header({allowHeaderGst}: any) {
             {/* remarks */}
             <TextField
                 label="Common remarks"
+                variant='standard'
                 className="common-remarks"
                 onChange={(e: any) => {
                     arbitraryData.header.remarks = e.target.value
@@ -93,6 +97,7 @@ function Header({allowHeaderGst}: any) {
             {/* gstin */}
             {arbitraryData.header.isGst && <TextField
                 label="Gstin no"
+                variant='standard'
                 error={
                     !!getHeaderInvalidGstin()
                 }

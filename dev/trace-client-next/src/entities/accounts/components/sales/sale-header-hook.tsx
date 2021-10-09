@@ -219,7 +219,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 display: 'flex',
                 flexWrap: 'wrap',
                 columnGap: theme.spacing(3),
-                gridRowGap: theme.spacing(1),
+                rowGap: theme.spacing(1),
                 '& .sale-variety': {
                     display: 'flex',
                     flexDirection: 'column',

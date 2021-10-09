@@ -8,6 +8,7 @@ import {
     makeStyles,
     useTheme,
     createStyles,
+    Theme,
 } from '../imports/gui-imports'
 import {globalMessages, useIbuki} from '../imports/trace-imports'
 import {ChevronLeftIcon, ChevronRightIcon} from '../imports/icons-import'
@@ -24,7 +25,7 @@ function TraceLeft({ open, matches, handleDrawerClose }: any) {
     const { getDashedEntityName } = utilMethods()
     const classes = useStyles()
 
-    const theme = useTheme()
+    const theme:Theme = useTheme()
     async function loadEntity(entityName: string) {
         try {
             // camel case to dashed case
@@ -116,7 +117,7 @@ function TraceLeft({ open, matches, handleDrawerClose }: any) {
 export { TraceLeft }
 
 const drawerWidth = 260
-const useStyles: any = makeStyles((theme) =>
+const useStyles: any = makeStyles((theme: any) =>
     createStyles({
         root: {
             display: 'flex',

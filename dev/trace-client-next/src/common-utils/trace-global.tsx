@@ -1,8 +1,8 @@
-import { useMediaQuery, useTheme} from '../imports/gui-imports'
+import {Theme, useMediaQuery, useTheme} from '../imports/gui-imports'
 const traceGlobal: any = {}
 
 function useTraceGlobal() {
-    const theme = useTheme()
+    const theme:Theme = useTheme()
     const smEquals = useMediaQuery(theme.breakpoints.only('sm') , {noSsr: true})
     const mdEquals = useMediaQuery(theme.breakpoints.only('md'), { noSsr: true })
     const lgEquals = useMediaQuery(theme.breakpoints.only('lg'), { noSsr: true })

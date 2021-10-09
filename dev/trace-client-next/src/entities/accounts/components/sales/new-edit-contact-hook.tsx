@@ -1,5 +1,13 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'
@@ -207,6 +215,7 @@ function useNewEditContact(arbitraryData: any) {
                     {() => (
                         <TextField
                             label="Mobile"
+                            variant="standard"
                             error={isInvalidIndiaMobile(
                                 arbitraryData.billTo.mobileNumber
                             )}
@@ -219,6 +228,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Contact name */}
                 <TextField
                     label="Contact name"
+                    variant="standard"
                     className="text-field"
                     error={!arbitraryData.billTo.contactName}
                     value={arbitraryData.billTo.contactName || ''}
@@ -231,6 +241,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Other mobile number */}
                 <TextField
                     label="Other mobile numbers"
+                    variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.otherMobileNumber || ''}
                     onChange={(e) => {
@@ -242,6 +253,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Land phone  */}
                 <TextField
                     label="Land phone"
+                    variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.landPhone || ''}
                     onChange={(e) => {
@@ -253,6 +265,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Email */}
                 <TextField
                     label="Email"
+                    variant="standard"
                     className="text-field"
                     error={isInvalidEmail(arbitraryData.billTo.email)}
                     value={arbitraryData.billTo.email || ''}
@@ -265,6 +278,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Address1 */}
                 <TextField
                     label="Address1"
+                    variant="standard"
                     className="text-field"
                     error={!arbitraryData.billTo.address1}
                     value={arbitraryData.billTo.address1 || ''}
@@ -277,6 +291,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Address2 */}
                 <TextField
                     label="Address2"
+                    variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.address2 || ''}
                     onChange={(e) => {
@@ -329,6 +344,7 @@ function useNewEditContact(arbitraryData: any) {
                     value={billTo.pin || ''}>
                     {() => (
                         <TextField
+                            variant="standard"
                             label="Pin"
                             error={isInvalidIndiaPin(arbitraryData.billTo.pin)}
                             className="short-text-field"
@@ -347,6 +363,7 @@ function useNewEditContact(arbitraryData: any) {
                     {() => (
                         <TextField
                             label="State code"
+                            variant='standard'
                             error={isInvalidStateCode(billTo?.state?.stateCode)}
                             className="short-text-field"
                         />
@@ -356,6 +373,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Gstin */}
                 <TextField
                     label="Gstin"
+                    variant='standard'
                     className="text-field"
                     error={isInvalidGstin(arbitraryData.billTo.gstin)}
                     value={arbitraryData.billTo.gstin || ''}
@@ -368,6 +386,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Date of birth */}
                 <TextField
                     label="Date of birth"
+                    variant='standard'
                     type="date"
                     error={isImproperDate(arbitraryData.billTo.dateOfBirth)}
                     className="text-field"
@@ -381,6 +400,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Anniversary date */}
                 <TextField
                     label="AnniversaryDate"
+                    variant='standard'
                     type="date"
                     error={isImproperDate(billTo.anniversaryDate)}
                     className="text-field"
@@ -394,6 +414,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Description */}
                 <TextField
                     label="Description"
+                    variant='standard'
                     className="text-field"
                     value={arbitraryData.billTo.descr || ''}
                     onChange={(e) => {
