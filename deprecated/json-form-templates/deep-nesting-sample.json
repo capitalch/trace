@@ -1,0 +1,280 @@
+{
+    "title": "Deeply Nested Form",
+    "class": "basic-grid-1",
+    "validations": [],
+    "items": [
+        {
+            "type": "Range",
+            "name": "array1",
+            "label": "array1",
+            "pattern": {
+                "type": "Set",
+                "label": "set1",
+                "name": "set1",
+                "items": [
+                    {
+                        "type": "Password",
+                        "name": "text1",
+                        "placeholder": "text1",
+                        "label": "text1",
+                        "validations": [
+                        ]
+                    },{
+                        "type": "Select",
+                        "name": "select1",
+                        "label": "select1",
+                        "options": {
+                            "methodName": "numericZeroToTen",
+                            "labelName": "label",
+                            "valueName": "value"
+                        },
+                        "style":{"width":"150px"},
+                        "validations": [
+                            {
+                                "name": "required",
+                                "message": "Please select a value"
+                            }
+                        ]
+                    },{
+                        "type": "Range",
+                        "name": "array2",
+                        "label": "array2",
+                        "pattern": {
+                            "type": "Set",
+                            "label": "set2",
+                            "name": "set2",
+                            "items": [
+                                {
+                                    "type": "Datepicker",
+                                    "name": "date2",
+                                    "placeholder": "date2",
+                                    "label": "date2",
+                                    "validations": [
+                                        {
+                                            "name": "required",
+                                            "message": "date2 is required"
+                                        }
+                                    ]
+                                },{
+                                    "type": "Radio",
+                                    "name": "radio2",
+                                    "label": "radio2",
+                                    "options": [
+                                        {
+                                            "label": "Value 1",
+                                            "value": "1"
+                                        },{
+                                            "label": "Value 2",
+                                            "value": "2"
+                                        },{
+                                            "label": "Value 3",
+                                            "value": "3"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "Range",
+                                    "name": "array3",
+                                    "label": "array3",
+                                    "pattern": {
+                                        "type": "Set",
+                                        "label": "set3",
+                                        "name": "set3",
+                                        "items": [
+                                            {
+                                                "type": "Text",
+                                                "label": "text3",
+                                                "name": "text3",
+                                                "placeholder": "text3",
+                                                "validations": [
+                                                ]
+                                            },
+                                            {
+                                                "type": "Range",
+                                                "name": "array4",
+                                                "label": "array4",
+                                                "pattern": {
+                                                    "type": "Set",
+                                                    "label": "set4",
+                                                    "name": "set4",
+                                                    "items": [
+                                                        {
+                                                            "type": "Select",
+                                                            "name": "select4",
+                                                            "label": "select4",
+                                                            "options": {
+                                                                "methodName": "numericZeroToTen",
+                                                                "labelName": "label",
+                                                                "valueName": "value"
+                                                            },
+                                                            "style":{"width":"150px"},
+                                                            "validations": [
+                                                                {
+                                                                    "name": "required",
+                                                                    "message": "Please select a value"
+                                                                }
+                                                            ]
+                                                        },{
+                                                            "type": "Radio",
+                                                            "name": "radio4",
+                                                            "label": "radio4",
+                                                            "options": [
+                                                                {
+                                                                    "label": "Value 1",
+                                                                    "value": "1"
+                                                                },{
+                                                                    "label": "Value 2",
+                                                                    "value": "2"
+                                                                },{
+                                                                    "label": "Value 3",
+                                                                    "value": "3"
+                                                                }
+                                                            ]
+                                                        },{
+                                                            "type": "Range",
+                                                            "name": "array5",
+                                                            "label": "array5",
+                                                            "pattern": {
+                                                                "type": "Set",
+                                                                "label": "set5",
+                                                                "name": "set5",
+                                                                "items": [
+                                                                    {
+                                                                        "type": "Text",
+                                                                        "label": "text5",
+                                                                        "name": "text5",
+                                                                        "placeholder": "text5",
+                                                                        "validations": [
+                                                                            {
+                                                                                "name": "required",
+                                                                                "message": "text5 is required"
+                                                                            }
+                                                                        ]
+                                                                    },{
+                                                                        "type": "Datepicker",
+                                                                        "name": "date5",
+                                                                        "placeholder": "date5",
+                                                                        "label": "date5",
+                                                                        "validations": [
+                                                                            {
+                                                                                "name": "required",
+                                                                                "message": "date5 is required"
+                                                                            }
+                                                                        ]
+                                                                    },{
+                                                                        "type": "Range",
+                                                                        "name": "array6",
+                                                                        "label": "array6",
+                                                                        "pattern": {
+                                                                            "type": "Set",
+                                                                            "label": "set6",
+                                                                            "name": "set6",
+                                                                            "items": [
+                                                                                {
+                                                                                    "type": "Radio",
+                                                                                    "name": "radio6",
+                                                                                    "label": "radio6",
+                                                                                    "options": [
+                                                                                        {
+                                                                                            "label": "Value 1",
+                                                                                            "value": "1"
+                                                                                        },{
+                                                                                            "label": "Value 2",
+                                                                                            "value": "2"
+                                                                                        },{
+                                                                                            "label": "Value 3",
+                                                                                            "value": "3"
+                                                                                        }
+                                                                                    ]
+                                                                                },{
+                                                                                    "type": "Range",
+                                                                                    "name": "array7",
+                                                                                    "label": "array7",
+                                                                                    "pattern": {
+                                                                                        "type": "Set",
+                                                                                        "label": "set7",
+                                                                                        "name": "set7",
+                                                                                        "items": [
+                                                                                            {
+                                                                                                "type": "Text",
+                                                                                                "label": "text7",
+                                                                                                "name": "text7",
+                                                                                                "placeholder": "text7",
+                                                                                                "validations": [
+                                                                                                    {
+                                                                                                        "name": "required",
+                                                                                                        "message": "text7 is required"
+                                                                                                    }
+                                                                                                ]
+                                                                                            },{
+                                                                                                "type": "Datepicker",
+                                                                                                "name": "date7",
+                                                                                                "placeholder": "date7",
+                                                                                                "label": "date7",
+                                                                                                "validations": [
+                                                                                                    {
+                                                                                                        "name": "required",
+                                                                                                        "message": "date7 is required"
+                                                                                                    }
+                                                                                                ]
+                                                                                            },{
+                                                                                                "type": "Select",
+                                                                                                "name": "select7",
+                                                                                                "label": "select7",
+                                                                                                "options": {
+                                                                                                    "methodName": "numericZeroToTen",
+                                                                                                    "labelName": "label",
+                                                                                                    "valueName": "value"
+                                                                                                },
+                                                                                                "style":{"width":"150px"},
+                                                                                                "validations": [
+                                                                                                    {
+                                                                                                        "name": "required",
+                                                                                                        "message": "Please select a value"
+                                                                                                    }
+                                                                                                ]
+                                                                                            },{
+                                                                                                "type": "Radio",
+                                                                                                "name": "radio7",
+                                                                                                "label": "radio7",
+                                                                                                "options": [
+                                                                                                    {
+                                                                                                        "label": "Value 1",
+                                                                                                        "value": "1"
+                                                                                                    },{
+                                                                                                        "label": "Value 2",
+                                                                                                        "value": "2"
+                                                                                                    },{
+                                                                                                        "label": "Value 3",
+                                                                                                        "value": "3"
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Submit",
+            "label": "Submit",
+            "methodName": "submitForm1"
+        }
+    ]
+}

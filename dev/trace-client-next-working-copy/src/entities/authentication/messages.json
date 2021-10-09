@@ -1,0 +1,10 @@
+{
+    "buCodeExists": "Business unit already exists for your client and entity",
+    "changePwdFail": "Change of password could not be done due to failure at server side. Please contact administrator",   
+    
+    "invalidUidOrPassword": "Invalid user id or password",
+    "passwordsShouldBeSame":"Two passwords given by you must be same",
+    "userBuRoleAssociationExists": "Association of this user account, business unit and role already exists",
+    "userEmailExists": "User with this email already exists. Please try another email"
+    
+}

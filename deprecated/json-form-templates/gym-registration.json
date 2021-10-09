@@ -1,0 +1,108 @@
+{
+    "title": "Gym Registration",
+    "class": "basic-grid-1",
+    "validations": [],
+    "items": [{
+            "type": "Text",
+            "name": "gymFirstName",
+            "placeholder": "First Name",
+            "label": "First Name",
+            "validations": []
+        },
+        {
+            "type": "Text",
+            "name": "gymLastName",
+            "placeholder": "Last Name",
+            "label": "Last Name",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Text",
+            "name": "gymGuardianName",
+            "placeholder": "Guardian's Name",
+            "label": "Guardian's Name",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Text",
+            "name": "gymContactNo",
+            "placeholder": "Contact No.",
+            "label": "Contact No.",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Radio",
+            "name": "gymGender",
+            "label": "Gender",
+            "value": "other",
+            "options": [{
+                "label": "Male",
+                "value": "male"
+            }, {
+                "label": "Female",
+                "value": "female"
+            }, {
+                "label": "Other",
+                "value": "other"
+            }]
+        }, {
+            "type": "Text",
+            "name": "gymHeight",
+            "placeholder": "Height",
+            "label": "Height",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Text",
+            "name": "gymWeight",
+            "placeholder": "Weight",
+            "label": "Weight",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Datepicker",
+            "name": "gymDOB",
+            "placeholder": "Date of Birth",
+            "label": "Date of Birth",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Text",
+            "name": "gymNationality",
+            "placeholder": "Nationality",
+            "label": "Nationality",
+            "validations": [
+
+            ]
+        }, {
+            "type": "Radio",
+            "name": "gymMembershipDuration",
+            "label": "Membership Duration",
+            "options": [{
+                "label": "1 month",
+                "value": "1"
+            }, {
+                "label": "6 month",
+                "value": "6"
+            }, {
+                "label": "1 year",
+                "value": "12"
+            }],
+            "validations": [
+
+            ]
+        }, {
+            "type": "Submit",
+            "action": "submitForm1",
+            "className": "x-submit",
+            "label": "Submit",
+            "methodName": "submitForm1"
+        }
+    ]
+}
