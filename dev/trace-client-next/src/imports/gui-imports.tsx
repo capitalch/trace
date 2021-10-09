@@ -1,7 +1,8 @@
-import { createStyles, makeStyles, useTheme } from '@mui/styles' //'@material-ui/core/styles'
+import { createStyles, makeStyles, useTheme } from '@material-ui/core/styles'  //'@mui/styles'// 
 import { StyledEngineProvider } from '@mui/styled-engine'
+
 import {
-    Alert,
+    // Alert,
     AppBar,
     Avatar,
     Badge,
@@ -49,7 +50,8 @@ import {
     Toolbar,
     Typography,
     useMediaQuery,
-} from '@mui/material' 
+} from  '@material-ui/core' //'@mui/material' 
+import {Alert } from '@material-ui/lab'
 export { createStyles, makeStyles, useTheme }
 export { Alert }
 export type { Theme }

@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import { manageEntitiesState } from '../common-utils/esm'
+import { manageEntitiesState } from '../global-utils/esm'
 
 const { getCurrentEntity } = manageEntitiesState()
 const graphqlQueries: any = {

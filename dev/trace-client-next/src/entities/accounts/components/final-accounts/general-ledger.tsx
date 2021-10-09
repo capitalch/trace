@@ -1,5 +1,7 @@
-import { useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { _, PrimeDialog, moment, useState } from '../../../../imports/regular-imports'
+import { Typography, } from '../../../../imports/gui-imports'
+import { XXGrid } from '../../../../imports/trace-imports'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
 
 function GeneralLedger() {
@@ -8,17 +10,12 @@ function GeneralLedger() {
     const { meta } = useGeneralLedger()
 
     const {
-        _,
         accountsMessages,
         emit,
         getGeneralLedger,
         getAccountName,
         LedgerSubledger,
-        moment,
-        PrimeDialog,
         toDecimalFormat,
-        Typography,
-        XXGrid,
     } = useSharedElements()
 
     const { fetchData, getLedgerColumns, LedgerDataTable } =
@@ -42,7 +39,7 @@ function GeneralLedger() {
                             meta.current.accId =
                                 meta.current.ledgerSubledger.accId
                             meta.current.accName = getAccountName(meta.current.accId)
-                            meta.current.sqlQueryArgs = {id:  meta.current.accId}
+                            meta.current.sqlQueryArgs = { id: meta.current.accId }
                             if (meta.current.accId) {
                                 emit('XX-GRID-FETCH-DATA', meta.current.sqlQueryArgs)
                             } else {
@@ -124,7 +121,7 @@ function GeneralLedger() {
             },
             {
                 headerName: 'Balance',
-                field:'balance',
+                field: 'balance',
                 type: 'number',
                 sortable: false,
                 width: 160,

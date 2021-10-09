@@ -1,4 +1,4 @@
-import {useEffect, useState, useRef} from '../../../../imports/regular-imports'
+import {_, useEffect, useState, useRef} from '../../../../imports/regular-imports'
 import { Theme, createStyles, makeStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
 
@@ -21,7 +21,6 @@ function useXXGrid(gridOptions: any) {
     })
 
     const {
-        _,
         emit,
         filterOn,
         getCurrentEntity,

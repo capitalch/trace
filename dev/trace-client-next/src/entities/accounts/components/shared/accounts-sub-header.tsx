@@ -1,6 +1,14 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from './shared-elements-hook'
 import { useAccountsSubHeader, useStyles } from './accounts-sub-header-hook'
-
+import {
+    Avatar,
+    Box, IconButton,
+    Chip,
+} from '../../../../imports/gui-imports'
+import {
+    AddIcon, FontAwesomeIcon, faSpinner, MinusIcon,
+    SyncIcon,
+} from '../../../../imports/icons-import'
 function AccountsSubHeader() {
     const classes = useStyles()
     const {
@@ -13,19 +21,10 @@ function AccountsSubHeader() {
     } = useAccountsSubHeader()
 
     const {
-        AddIcon,
-        Avatar,
-        Box,
-        Chip,
         emit,
-        faSpinner,
-        FontAwesomeIcon,
         getCurrentMediaSize,
-        IconButton,
         initCode,
         isControlDisabled,
-        MinusIcon,
-        SyncIcon,
         TraceDialog,
     } = useSharedElements()
 
@@ -97,9 +96,9 @@ function AccountsSubHeader() {
                     clickable={true}
                     avatar={<Avatar>BR</Avatar>}
                     label={exhibitLogic[currentMediaSize || 'md']().br}
-                    color="secondary"                    
+                    color="secondary"
                     onClick={handleSelectBranch}
-                    ></Chip>
+                ></Chip>
 
                 {/* Refresh cache */}
                 {exhibitLogic[currentMediaSize || 'md']().refreshCache && (

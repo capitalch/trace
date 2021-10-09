@@ -1,5 +1,13 @@
-import { useState, useEffect } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { NumberFormat, useState, useEffect } from '../../../../imports/regular-imports'
+import {
+    Button, Typography,
+    Checkbox, FormControlLabel,
+    InputAdornment,
+    Radio,
+    TextField,
+} from '../../../../imports/gui-imports'
+import { ErrorIcon, Check } from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
@@ -32,19 +40,12 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
 
     const {
         accountsMessages,
-        Button,
-        Checkbox,
-        CheckIcon,
+
         emit,
-        ErrorIcon,
+
         filterOn,
-        FormControlLabel,
-        InputAdornment,
-        NumberFormat,
-        Radio,
-        TextField,
+
         TraceDialog,
-        Typography,
     } = useSharedElements()
 
     return (
@@ -88,7 +89,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                     getError() ? (
                         <ErrorIcon color="error" />
                     ) : (
-                        <CheckIcon style={{ color: 'white' }} />
+                        <Check style={{ color: 'white' }} />
                     )
                 }
                 disabled={getError()}>

@@ -1,5 +1,7 @@
+// import { Button } from '@material-ui/core'
+import { Box, } from '../../../../imports/gui-imports'
 import { useState, useEffect, } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useBrandsMaster, useStyles } from './brands-master-hook'
 
 function BrandsMaster() {
@@ -38,7 +40,7 @@ function BrandsMaster() {
         TraceFullWidthSubmitButton,
     }: any = useSharedElements()
 
-    return <Paper className={classes.content}>
+    return <Box className={classes.content}>
         <MaterialTable
             actions={getActionsList()}
             columns={getColumns()}
@@ -55,7 +57,7 @@ function BrandsMaster() {
 
         ></MaterialTable>
         <TraceDialog meta={meta} />
-    </Paper>
+    </Box>
 
     function getActionsList() {
         return ([

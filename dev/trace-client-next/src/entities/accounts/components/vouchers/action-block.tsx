@@ -1,7 +1,10 @@
-import { useState, useEffect, useContext } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import { NumberFormat, useState, useEffect, useContext } from '../../../../imports/regular-imports'
+import {
+    Checkbox, IconButton, makeStyles, Paper, TextField, Theme, Typography, createStyles, FormControlLabel
+} from '../../../../imports/gui-imports'
+import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
 function ActionBlock({
@@ -21,21 +24,11 @@ function ActionBlock({
     const classes = useStyles({ actionType, isGst, tranTypeId })
     const ad: any = arbitraryData
     const {
-        _,
         accountsMessages,
-        AddCircle,
-        Checkbox,
         emit,
         filterOn,
         getMappedAccounts,
-        FormControlLabel,
-        IconButton,
-        NumberFormat,
-        Paper,
-        RemoveCircle,
-        TextField,
         toDecimalFormat,
-        Typography,
     } = useSharedElements()
     useEffect(() => {
         const subs1 = filterOn('ACTION-BLOCK-REFRESH').subscribe(() => {
@@ -472,7 +465,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 // getLineRefLeftMargin(isGst, actionType),
             },
             '& .line-remarks': {
-                width: ({ isGst }:any) =>
+                width: ({ isGst }: any) =>
                     isGst ? theme.spacing(20) : theme.spacing(50),
             },
             '& .action-block': {

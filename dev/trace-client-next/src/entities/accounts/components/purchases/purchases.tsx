@@ -1,5 +1,5 @@
 import { useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { usePurchases, useStyles } from './purchases-hook'
 import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'

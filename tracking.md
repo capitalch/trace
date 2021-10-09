@@ -31,54 +31,55 @@ Netwoven 				: 19AACCN3894N1ZP
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
-# Working on
-1. Journals
-2. All vouchers like journal
-3. Drill down
-4. All reports to use X-Grid
-5. Cash book with x-grid
-6. Organize code
-7. Sales purchase retain values
-8. Purchase sale clickaway
-9. Provide a way to come out of app in mobile. Presently there is no way
-
 ## pyinstaller command for tkenter
 # acivate env where pyinstaller is installed
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
 create installer from innosetup
 
+## Notes
+1. 09-10-2021: 1st attempt to transfer to Material-UI version 5.x failed because xgrid breaks the UI
+2. Reverted back, Can redo by:
+a) replace with @mui in imports
+b) Some work in App.tsx
+c) In all Typography comment out disableTypography
+
 # Pending
 
+# Working on
+1. Fix up bugs originated from reorganizing the code
+1.5. All dialog boxes to originate from same place. At present there are many
+2. Remove unnecessary commented code
+3. Reorganize more for imports mecanism
+4. All reports to use X-Grid
+7. Sales purchase to retain values
+8. Purchase sale clickaway
+9. Provide a way to come out of app in mobile. Presently there is no way
+10. Branch master, finYear master rework
+
+5. 
 ## Bug fixing
 	1. serial number error in purchases
 	2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
-	3. All dialog boxes title is very big font
-														4. In Payments entry voucher you cannot modify the gst details. You have only options for delete then insert
-														5. Sales / Purchase to be mobile compliant
+	3. All dialog boxes title is very big font	
 	6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
-														7. In Journals Debits not equals credits being possible
+														
 	8. In Inventory--> Brands--> edit: when you close the dialog it blows up
-														9. Seen in case of receipts same auto_ref_no generated twice
+									
 	10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
 	11. Sales / Sale return GST rate change does not calculate well
 	12. Sales return select bill does not work well
 
-	13. Bank Recon is pulling data from January current year
-	14. General ledger always showing 01/04/2021, irrespective to years
 	15. Product new entry hangs when 1st product is entered, when there is no leaf category
 
 ## Reorganize
 	1. Organize code for using shared components all over
 	2. Remove Figures from BS and PL which have zero closing balance
-																	3. Remove trace-footer. it is of no use
-	4. Clean up code for removed vouchers
 	5. Provide ProfGrid all over wherein other grids are being used
 	6. Rework on Sales, Purchases... etc.
 
 
 ## Functionality
 	1. Auto subledger create bill
-													2. Drill down
 	3. Rework on bank recon with ProfGrid
 	3.5 
 	4. Footer Trace version copyright
@@ -128,6 +129,12 @@ create installer from innosetup
 2. Bug fix: Error when no brands and No category leaf and new product entry now fixed: 1 hr
 3. Bug fix: Bank recon: Last fin year with same current year rows were incorrectly coming now fixed: 1 hr
 4. Bug fix: All Transaction reports: Remove opening balance: 30 mins
+
+# 05-10-2021 to 09-10-2021
+1. Working on Material uI migration from V4.x to 5.x
+
+# 20-09-2021 to 4-10-2021
+Other work
 
 # 19-09-2021
 Bug fix: General ledger for null entries

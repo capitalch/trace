@@ -1,5 +1,5 @@
 import { useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
 import { ShipTo } from './ship-to'

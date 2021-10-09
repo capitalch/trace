@@ -12,7 +12,7 @@ import {
 } from '../imports/gui-imports'
 import {globalMessages, useIbuki} from '../imports/trace-imports'
 import {ChevronLeftIcon, ChevronRightIcon} from '../imports/icons-import'
-import { utilMethods } from '../common-utils/util-methods'
+import { utilMethods } from '../global-utils/misc-utils'
 import { TraceLeftMenu } from './trace-left-menu'
 
 function TraceLeft({ open, matches, handleDrawerClose }: any) {

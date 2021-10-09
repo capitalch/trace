@@ -10,8 +10,8 @@ import {
 import { SaveIcon, SyncIcon } from '../../../../imports/icons-import'
 import { globalMessages, graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import styled from 'styled-components'
-import { } from '../../../../common-utils/esm'
-import { utilMethods } from '../../../../common-utils/util-methods'
+import { } from '../../../../global-utils/esm'
+import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../json/accounts-messages.json'
 
 function AccountsOpBal() {

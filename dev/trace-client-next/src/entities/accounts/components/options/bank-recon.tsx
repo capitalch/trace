@@ -21,7 +21,7 @@ import {
 import { CloseIcon, IconAccountBalance, RearrangeIcon, RefreshIcon, SaveIcon } from '../../../../imports/icons-import'
 
 import {componentStore,manageEntitiesState,manageFormsState,ReactForm, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
-import { utilMethods } from '../../../../common-utils/util-methods'
+import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../../../messages.json'
 
 function BankRecon() {
@@ -350,7 +350,7 @@ function BankRecon() {
                 open={meta.current.showDialog}
                 onClose={utilFunc().closeDialog}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>

@@ -1,5 +1,4 @@
 import { TrialBalance } from '../final-accounts/trial-balance'
-// import { DataView } from './data-view'
 import { BalanceSheetProfitLoss } from '../final-accounts/balance-sheet-profit-loss'
 import { AccountsMaster } from '../masters/accounts-master'
 import { AccountsOpBal } from '../masters/accounts-opbal'
@@ -8,8 +7,7 @@ import { GenericDialoges } from '../masters/generic-dialoges'
 import { BankRecon } from '../options/bank-recon'
 import { GenericReports } from '../reports/generic-reports/generic-reports'
 import { GenericExports } from '../options/generic-exports'
-// import { GenericForms } from '../deprecated/generic-forms'
-import { CommonUtilities } from './common-utilities'
+import { CommonUtilities } from '../options/common-utilities'
 import { Sales } from '../sales/sales'
 import { CategoriesMaster } from '../inventory/categories-master'
 import { BrandsMaster } from '../inventory/brands-master'
@@ -30,12 +28,10 @@ const customComponents = {
     categoriesMaster: CategoriesMaster,
     commonUtilities: CommonUtilities,
     creditNotes: CreditNotes,
-    // dataView: DataView,
     debitNotes: DebitNotes,
     genericCRUD: GenericCRUD,
     genericDialoges: GenericDialoges,
     genericExports: GenericExports,
-    // genericForms: GenericForms,
     genericReports: GenericReports,
     generalLedger: GeneralLedger,    
     productsMaster: ProductsMaster,

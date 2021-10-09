@@ -1,21 +1,20 @@
-import { useState, } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { _, useState, } from '../../../../imports/regular-imports'
+import {
+    Button, Typography,
+} from '../../../../imports/gui-imports'
+import { ErrorIcon, Check } from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useCrown(meta: any) {
     const [, setRefresh] = useState({})
     const {
-        _,
         accountsMessages,
-        Button,
-        CheckIcon,
         emit,
-        ErrorIcon,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         toDecimalFormat,
-        Typography,
     } = useSharedElements()
 
     function checkError(ad: any) {
@@ -271,7 +270,7 @@ function useCrown(meta: any) {
                     meta.current.errorMessage ? (
                         <ErrorIcon color="error" />
                     ) : (
-                        <CheckIcon style={{ color: 'white' }} />
+                        <Check style={{ color: 'white' }} />
                     )
                 }
                 disabled={!!meta.current.errorMessage}>
@@ -331,12 +330,12 @@ function useCrown(meta: any) {
                 if (ret.error) {
                     console.log(ret.error)
                 } else {
-                    if(ad.shouldGoBackToView){
+                    if (ad.shouldGoBackToView) {
                         emit('VOUCHER-CHANGE-TAB', 1)
                         ad.shouldGoBackToView = false
                     }
                     emit('VOUCHER-RESET', '')
-                    if(ad.shouldCloseParentOnSave){
+                    if (ad.shouldCloseParentOnSave) {
                         emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
                     }
                 }

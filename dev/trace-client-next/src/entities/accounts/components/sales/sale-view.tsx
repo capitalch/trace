@@ -1,4 +1,4 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleView, useStyles } from './sale-view-hook'
 
 function SaleView({ arbitraryData , drillDownEditAttributes}: any) {

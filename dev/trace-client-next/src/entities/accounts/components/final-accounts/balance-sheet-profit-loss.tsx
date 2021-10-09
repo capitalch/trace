@@ -1,4 +1,4 @@
-import {_, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {_,Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     IconButton,
@@ -9,11 +9,9 @@ import {
 } from '../../../../imports/gui-imports'
 import { SearchIcon } from '../../../../imports/icons-import'
 import styled from 'styled-components'
-// import { InputSwitch } from 'primereact/inputswitch'
-// import { graphqlService } from '../../../../common-utils/graphql-service'
 import { queries } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function BalanceSheetProfitLoss() {
     const [, setRefresh] = useState({})
@@ -33,8 +31,6 @@ function BalanceSheetProfitLoss() {
     })
 
     const {
-        _,
-        Big,
         emit,
         filterOn,
         getCurrentComponent,

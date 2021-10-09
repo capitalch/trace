@@ -1,35 +1,28 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
-import { useProductUtils } from '../common/product-utils-hook'
+import {Big, InputNumber,NumberFormat, PrimeColumn, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { makeStyles, Theme, createStyles, 
+    Badge,
+    TextField,
+    IconButton,
+    TextareaAutosize,
+    Button,   Typography,
+    Checkbox,
+    Chip, } from '../../../../imports/gui-imports'
+import {AddCircle,Clear, SearchIcon,
+    CloseIcon,} from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
+import { useProductUtils } from '../shared/product-utils-hook'
 import { NewProduct } from '../inventory/new-product'
 
 function usePurchaseItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const al = arbitraryData.lineItems
     const {
-        AddCircle,
-        Badge,
-        Big,
-        Button,
-        Checkbox,
-        Chip,
-        Clear,
-        CloseIcon,
         confirm,
         emit,
         extractAmount,
         filterOn,
-        IconButton,
-        InputNumber,
         messages,
-        NumberFormat,
-        PrimeColumn,
-        SearchIcon,
-        TextareaAutosize,
-        TextField,
         toDecimalFormat,
-        Typography,
     } = useSharedElements()
 
     useEffect(() => {

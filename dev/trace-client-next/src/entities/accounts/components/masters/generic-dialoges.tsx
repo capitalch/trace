@@ -7,7 +7,7 @@ import {
 } from '../../../../imports/gui-imports'
 import { CloseIcon } from '../../../../imports/icons-import'
 import { manageEntitiesState, ReactForm, manageFormsState, useIbuki, useTraceMaterialComponents, useTraceGlobal } from '../../../../imports/trace-imports'
-import { utilMethods } from '../../../../common-utils/util-methods'
+import { utilMethods } from '../../../../global-utils/misc-utils'
 import { initCode } from '../../init-code'
 import messages from '../../../../messages.json'
 
@@ -87,7 +87,7 @@ function GenericDialoges({ loadDialog }: any) {
                     closeDialog()
                 }}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h2>{meta.current.dialogConfig.title}</h2>

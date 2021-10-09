@@ -1,7 +1,9 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { MaterialTable, } from '../../../../imports/regular-imports'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { usePurchaseView, useStyles } from './purchase-view-hook'
+import { Box, Icon, IconButton, NativeSelect, Typography, } from '../../../../imports/gui-imports'
 
-function PurchaseView({arbitraryData, purchaseType, drillDownEditAttributes }: any) {
+function PurchaseView({ arbitraryData, purchaseType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const {
         getActionsList,
@@ -11,16 +13,10 @@ function PurchaseView({arbitraryData, purchaseType, drillDownEditAttributes }: a
     } = usePurchaseView(arbitraryData, purchaseType, drillDownEditAttributes)
 
     const {
-        Box,
         getFromBag,
-        Icon,
-        IconButton,
         LedgerSubledgerCascade,
-        MaterialTable,
-        NativeSelect,
         setInBag,
         tableIcons,
-        Typography,
     } = useSharedElements()
 
     return (
@@ -54,7 +50,7 @@ function PurchaseView({arbitraryData, purchaseType, drillDownEditAttributes }: a
                             </IconButton>
                         )
                         if (props.action.name === 'select') {
-                            const label = purchaseType==='pur' ? 'purchaseTran' : 'purchaseretTran'
+                            const label = purchaseType === 'pur' ? 'purchaseTran' : 'purchaseretTran'
                             ret = (
                                 <Box className="select-last" component="span">
                                     <Typography
@@ -68,7 +64,7 @@ function PurchaseView({arbitraryData, purchaseType, drillDownEditAttributes }: a
                                             width: '3.3rem',
                                             marginLeft: '0.1rem',
                                         }}
-                                        onChange={(e) => {                                            
+                                        onChange={(e) => {
                                             setInBag(label, e.target.value)
                                             fetchData()
                                         }}>

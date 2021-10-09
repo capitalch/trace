@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { usingIbuki } from '../../common-utils/ibuki'
-import { manageEntitiesState } from '../../common-utils/esm'
+import { usingIbuki } from '../../global-utils/ibuki'
+import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
 
 function LaunchPad() {

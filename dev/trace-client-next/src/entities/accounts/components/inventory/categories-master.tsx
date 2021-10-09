@@ -1,5 +1,5 @@
 import { useState, useEffect } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useCategoriesMaster, useStyles } from './categories-master-hook'
 
 

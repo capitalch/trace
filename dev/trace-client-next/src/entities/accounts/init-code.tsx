@@ -1,13 +1,13 @@
 import moment from 'moment'
-import { usingIbuki } from '../../common-utils/ibuki'
-import { manageEntitiesState } from '../../common-utils/esm'
-import { utilMethods } from '../../common-utils/util-methods'
+import { usingIbuki } from '../../global-utils/ibuki'
+import { manageEntitiesState } from '../../global-utils/esm'
+import { utilMethods } from '../../global-utils/misc-utils'
 import accountsMessages from './json/accounts-messages.json'
 // import datacache from '../../data/datacache.json'
 import queries from './artifacts/graphql-queries-mutations'
-import { graphqlService } from '../../common-utils/graphql-service'
+import { graphqlService } from '../../global-utils/graphql-service'
 // import { test } from '../accounts/test/functions'
-import { usingLinkClient } from '../../common-utils/link-client'
+import { usingLinkClient } from '../../global-utils/link-client'
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {

@@ -1,4 +1,13 @@
 import { useStyles } from './xx-grid-hook'
+import {_} from '../../../../imports/regular-imports'
+import {Box,FormControlLabel,
+    IconButton,  Typography,
+    Button, TextField,
+    Checkbox,} from '../../../../imports/gui-imports'
+import { CloseIcon,
+    DeleteIcon, SearchIcon,
+    SyncIcon,
+    EditIcon,} from '../../../../imports/icons-import'
 // import {
 //     DataGrid,
 //     GridToolbarFilterButton,
@@ -72,21 +81,8 @@ function XXGrid(gridOptions: XXGridOptions) {
         toggleReverseOrder,
     } = useXXGrid(gridOptions)
     const {
-        _,
-        Box,
-        Button,
-        Checkbox,
-        CloseIcon,
-        DeleteIcon,
-        EditIcon,
         emit,
-        FormControlLabel,
-        IconButton,
-        SearchIcon,
-        SyncIcon,
-        TextField,
         toDecimalFormat,
-        Typography,
     } = useSharedElements()
 
     const classes = useStyles(meta)
@@ -128,6 +124,9 @@ function XXGrid(gridOptions: XXGridOptions) {
             onSelectionModelChange={onSelectModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
+
+            // onPageChange= {()=>{}}
+            // onRowsPerPageChange={()=>{}}
         />
         // </div>
     )

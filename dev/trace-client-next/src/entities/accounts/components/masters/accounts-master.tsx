@@ -1,7 +1,20 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { _, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import styled from 'styled-components'
-
-import { useSharedElements, useStyles } from '../common/shared-elements-hook'
+import {
+    Avatar,
+    Box,
+    Button, Dialog,
+    DialogActions, IconButton,
+    DialogContent, Switch, Typography,
+    DialogTitle,
+    Chip,
+} from '../../../../imports/gui-imports'
+import {
+    AddIcon,
+    EditIcon, SyncIcon,
+    CloseIcon,
+} from '../../../../imports/icons-import'
+import { useSharedElements, useStyles } from '../shared/shared-elements-hook'
 import { useTheme } from '../../../../imports/gui-imports'
 
 function AccountsMaster() {
@@ -9,22 +22,9 @@ function AccountsMaster() {
     const formIdRef: any = useRef('accounts-master') // I am fixing formId for this form
 
     const {
-        _,
-        accountsMessages,
-        AddIcon,
-        Avatar,
-        Box,
-        Button,
-        Chip,
-        CloseIcon,
         clearServerError,
-        Dialog,
-        DialogActions,
-        DialogContent,
-        DialogTitle,
         doFormRefresh,
         doValidateForm,
-        EditIcon,
         emit,
         execGenericView,
         genericUpdateMaster,
@@ -32,7 +32,6 @@ function AccountsMaster() {
         getArtifacts,
         getCurrentEntity,
         getCurrentMediaSize,
-        getCurrentWindowSize,
         getFromBag,
         getFormData,
         getFormObject,
@@ -40,27 +39,19 @@ function AccountsMaster() {
         hotFilterOn,
         init,
         isMediumSizeUp,
-        IconButton,
-        InputSwitch,
         isControlDisabled,
         isValidForm,
         messages,
         queries,
         queryGraphql,
-        PrimeColumn,
         ReactForm,
         resetForm,
         resetAllFormErrors,
         saveForm,
         setInBag,
         setFormError,
-        Switch,
-        SyncIcon,
-        // theme,
         TraceFullWidthSubmitButton,
         traceGlobalSearch,
-        TreeTable,
-        Typography,
     } = useSharedElements()
     const theme: any = useTheme()
     const [data, setData]: any[] = useState([])
@@ -163,8 +154,8 @@ function AccountsMaster() {
     return (
         <div
             className={classes.content}
-            // style={{ width: getCurrentWindowSize() }}
-            >
+        // style={{ width: getCurrentWindowSize() }}
+        >
             <Box className={classes.header}>
                 <Typography
                     color="primary"
@@ -338,7 +329,7 @@ function AccountsMaster() {
                                                         deletedIds: [id],
                                                         tableName: 'AccM',
                                                     }
-                                                )                                                
+                                                )
                                                 if (ret?.length <= 10) { // it cannot be an error message
                                                     emit('SHOW-MESSAGE', {})
                                                     getData()
@@ -500,7 +491,7 @@ function AccountsMaster() {
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>
@@ -529,7 +520,7 @@ function AccountsMaster() {
                 fullWidth={true}
                 className={classes.addressEntry}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-address-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.addressDialogConfig.title}</h3>
@@ -570,7 +561,7 @@ function AccountsMaster() {
             emit('SHOW-LOADING-INDICATOR', false)
             meta.current.isMounted && setRefresh({})
             utilFunc().applyScrollPos()
-        } catch (e:any) {
+        } catch (e: any) {
             console.log(e.message)
             emit('SHOW-MESSAGE', {
                 message: messages['errorInOperation'],

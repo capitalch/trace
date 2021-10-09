@@ -1,7 +1,7 @@
 import messages from '../messages.json'
 import queries from './graphql-queries-mutations'
-import { graphqlService } from '../../../common-utils/graphql-service'
-import { utilMethods } from '../../../common-utils/util-methods'
+import { graphqlService } from '../../../global-utils/graphql-service'
+import { utilMethods } from '../../../global-utils/misc-utils'
 const formLevelValidators: any = {
     buCodeExists: async (a: any, formData: any, putErrors: any) => {
         const { execGenericView } = utilMethods()

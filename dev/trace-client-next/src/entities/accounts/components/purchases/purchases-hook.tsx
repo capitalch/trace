@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {_, moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function usePurchases(drillDownEditAttributes:any) {
     const [, setRefresh] = useState({})
     const isoFormat = 'YYYY-MM-DD'
-    const {_, emit, filterOn, moment, } = useSharedElements()
+    const {emit, filterOn, } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
         if (drillDownEditAttributes && (!_.isEmpty(drillDownEditAttributes))) {

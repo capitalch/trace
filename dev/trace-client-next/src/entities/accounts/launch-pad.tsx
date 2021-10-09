@@ -3,7 +3,7 @@ import { makeStyles, Theme,Typography, createStyles } from '../../imports/gui-im
 import {  } from '@material-ui/core'
 import { usingIbuki, manageEntitiesState } from '../../imports/trace-imports'
 import { getArtifacts } from '../../react-form/common/react-form-hook'
-import {  } from '../../common-utils/esm'
+import {  } from '../../global-utils/esm'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 import { utils } from './utils'
 

@@ -1,6 +1,15 @@
-import { useState, } from '../../../../imports/regular-imports'
+import { NumberFormat, useState, } from '../../../../imports/regular-imports'
+import {
+    Button,
+    TextField,
+    Typography,
+} from '../../../../imports/gui-imports'
+import {
+    Check,
+    ErrorIcon,
+} from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useDebitCreditNoteBody, useStyles } from './debit-credit-note-body-hook'
 
 function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
@@ -8,22 +17,18 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
     const classes = useStyles()
     const { getError, handleSubmit, meta } = useDebitCreditNoteBody(arbitraryData, tranType)
 
-    const { 
+    const {
         accountsMessages,
-        Button,
-        CheckIcon,
-        ErrorIcon,
+
         isInvalidDate,
-        NumberFormat,
-        TextField,
-        Typography, } = useSharedElements()
+    } = useSharedElements()
 
     return (<div className={classes.content}>
         <div className='header'>
             <Typography variant='body1' component='span'>Ref no: &nbsp;</Typography>
             <span className='no'>{arbitraryData.body.autoRefNo}</span>
             <Button className='submit' variant='contained' size='small' color='secondary'
-                onClick={handleSubmit} startIcon={getError() ? <ErrorIcon color="error" /> : <CheckIcon style={{ color: 'white' }} />}
+                onClick={handleSubmit} startIcon={getError() ? <ErrorIcon color="error" /> : <Check style={{ color: 'white' }} />}
                 disabled={getError()}>Submit</Button>
         </div>
         <div className='body'>
@@ -78,11 +83,11 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
             </div>
             <div className='body-line-two-three'>
                 <div className='ledger-subledger-box'>
-                    <Typography variant='caption'>{tranType === 'dn'? 'Debit (Debtor / Creditor)': 'Debit (Sale)'}</Typography>
+                    <Typography variant='caption'>{tranType === 'dn' ? 'Debit (Debtor / Creditor)' : 'Debit (Sale)'}</Typography>
                     <LedgerSubledger
                         allAccounts={meta.current.allAccounts}
                         className="ledger-subledger"
-                        ledgerAccounts={tranType==='dn'? meta.current.debtorCreditorLedgerAccounts: meta.current.saleLedgerAccounts}
+                        ledgerAccounts={tranType === 'dn' ? meta.current.debtorCreditorLedgerAccounts : meta.current.saleLedgerAccounts}
                         onChange={() => {// for registering error
                             meta.current.isMounted && setRefresh({})
                         }}
@@ -110,12 +115,12 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
             </div>
             <div className='body-line-two-three'>
                 <div className='ledger-subledger-box'>
-                    <Typography variant='caption'>{tranType === 'dn'? 'Credit (Purchase)' : 'Credit (Debtor / Creditor)'}</Typography>
+                    <Typography variant='caption'>{tranType === 'dn' ? 'Credit (Purchase)' : 'Credit (Debtor / Creditor)'}</Typography>
                     {/* Purchase */}
                     <LedgerSubledger
                         allAccounts={meta.current.allAccounts}
                         className="ledger-subledger"
-                        ledgerAccounts={tranType==='dn'? meta.current.purchaseLedgerAccounts: meta.current.debtorCreditorLedgerAccounts}
+                        ledgerAccounts={tranType === 'dn' ? meta.current.purchaseLedgerAccounts : meta.current.debtorCreditorLedgerAccounts}
                         onChange={() => {// for registering error
                             meta.current.isMounted && setRefresh({})
                         }}
@@ -142,7 +147,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                     value={arbitraryData.body.lineRemarksCredit || ''} />
                 <Button className='submit' variant='contained' size='small' color='secondary' disabled={getError()}
                     onClick={handleSubmit}
-                    startIcon={getError() ? <ErrorIcon color="error" /> : <CheckIcon style={{ color: 'white' }} />}
+                    startIcon={getError() ? <ErrorIcon color="error" /> : <Check style={{ color: 'white' }} />}
                 >Submit</Button>
             </div>
             <div className='gutter'></div>

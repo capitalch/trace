@@ -154,7 +154,7 @@ function useTraceHeader({ setRefresh }: any) {
     function getDialogTitle() {
         return (
             <DialogTitle
-                // disableTypography
+                disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
                 <h2>{meta.current.dialogConfig.title}</h2>

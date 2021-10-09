@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {moment,useConfirm, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     IconButton,
     Dialog,
@@ -10,7 +10,7 @@ import {
     makeStyles,
 } from '../../../../imports/gui-imports'
 import {CloseIcon} from '../../../../imports/icons-import'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { manageEntitiesState , useIbuki} from '../../../../imports/trace-imports'
 import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'
@@ -23,15 +23,16 @@ function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
     const { getGeneralLedger } = utils()
+    const confirm = useConfirm()
     const {
         accountsMessages,
-        confirm,
+        // confirm,
         emit,
         getAccountName,
         genericUpdateMaster,
         getTranType,
         isGoodToDelete,
-        moment,
+        // moment,
         toDecimalFormat,
         XXGrid,
     } = useSharedElements()
@@ -116,7 +117,7 @@ function AccountsLedgerDialog() {
                 fullWidth={true}
                 onClose={closeDialog}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
                     <h3>{'Account: '.concat(meta.current.accName)}</h3>
@@ -161,7 +162,7 @@ function AccountsLedgerDialog() {
                 // fullScreen={true}
             >
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-child-dialog-title"
                     className="dialog-title">
                     <h3>{meta.current.childDialogTiitle}</h3>

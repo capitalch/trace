@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
@@ -12,7 +12,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         hotFilterOn,
         isInvalidDate,
         map,
-        moment,
+        // moment,
         // saveForm,
     } = useSharedElements()
     const isoFormat = 'YYYY-MM-DD'

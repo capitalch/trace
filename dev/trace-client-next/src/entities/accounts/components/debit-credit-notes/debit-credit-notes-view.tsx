@@ -1,4 +1,8 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { Box, Icon, IconButton, NativeSelect, Typography } from '../../../../imports/gui-imports'
+import { AddIcon, DeleteIcon, EditIcon } from '../../../../imports/icons-import'
+import { MaterialTable, moment, useConfirm } from '../../../../imports/regular-imports'
+import { } from '../../../../imports/trace-imports'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useDebitCreditNotesView } from './debit-credit-notes-view-hook'
 
 function DebitCreditNotesView({ arbitraryData, tranType }: any) {
@@ -6,26 +10,17 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
         arbitraryData,
         tranType
     )
+    const confirm = useConfirm()
     const {
         accountsMessages,
-        AddIcon,
-        Box,
-        confirm,
-        DeleteIcon,
-        EditIcon,
         emit,
         genericUpdateMaster,
         getFromBag,
-        Icon,
-        IconButton,
         isDateAuditLocked,
-        MaterialTable,
-        moment,
-        NativeSelect,
         setInBag,
         tableIcons,
         toDecimalFormat,
-        Typography,
+
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
     return (
@@ -97,7 +92,7 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
                 icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
                 name: 'select',
                 isFreeAction: true,
-                onClick: () => {}, // This empty onClick is a hack. Without this warning appears
+                onClick: () => { }, // This empty onClick is a hack. Without this warning appears
             },
             {
                 icon: () => <EditIcon color="primary" />,

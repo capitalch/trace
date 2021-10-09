@@ -4,7 +4,7 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSaleHeader(arbitraryData: any) {
     const [, setRefresh] = useState({})

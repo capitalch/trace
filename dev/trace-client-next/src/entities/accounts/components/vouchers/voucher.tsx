@@ -1,4 +1,4 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { Tab, Tabs, Typography } from '../../../../imports/gui-imports'
 import { useVoucher, useStyles } from './voucher-hook'
 import { Journal } from './voucher-type/journal'
 import { Payment } from './voucher-type/payment'
@@ -10,14 +10,13 @@ import { VoucherContext } from './voucher-context'
 function Voucher({ loadComponent, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const { arbitraryData, getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent, drillDownEditAttributes)
-    const { Tab, Tabs, Typography } = useSharedElements()
 
     function SelectedVoucherComponent({ hidden }: any) {
         const logic: any = {
             journal: <Journal hidden={hidden} />,
-            payment: <Payment hidden={hidden}  />,
-            receipt: <Receipt hidden={hidden}  />,
-            contra: <Contra hidden={hidden}  />,
+            payment: <Payment hidden={hidden} />,
+            receipt: <Receipt hidden={hidden} />,
+            contra: <Contra hidden={hidden} />,
         }
         return logic[loadComponent]
     }

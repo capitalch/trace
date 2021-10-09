@@ -1,4 +1,4 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSales, useStyles } from './sales-hook'
 import { SaleCrown } from './sale-crown'
 import { SaleHeader } from './sale-header'

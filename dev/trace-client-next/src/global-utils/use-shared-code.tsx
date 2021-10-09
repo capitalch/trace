@@ -2,7 +2,7 @@ import {_, ProgressSpinner, useState } from '../imports/regular-imports'
 import {componentStore,getArtifacts, graphqlService,manageEntitiesState, manageFormsState,ReactForm, useIbuki } from '../imports/trace-imports'
 
 import styled from 'styled-components'
-import { utilMethods } from './util-methods'
+import { utilMethods } from './misc-utils'
 import messages from '../messages.json'
 
 

@@ -1,20 +1,18 @@
-import { useState, useEffect, useRef, useContext } from '../../../../imports/regular-imports'
+import {_, moment, useState, useEffect, useRef, useContext } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {
     const [, setRefresh] = useState({})
     const arbitraryData:any = useContext(VoucherContext)
     const {
-        _,
         accountsMessages,
         confirm,
         emit,
         filterOn,
         genericUpdateMaster,
         isGoodToDelete,
-        moment,
         toDecimalFormat,
     } = useSharedElements()
 

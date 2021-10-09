@@ -1,4 +1,4 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleBillNoSelect, useStyles } from './sale-bill-no-select-hook'
 
 function SaleBillNoSelect({ value }: any) {

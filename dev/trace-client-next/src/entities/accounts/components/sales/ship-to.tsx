@@ -1,4 +1,4 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useShipTo, useStyles } from './ship-to-hook'
 
 function ShipTo({ arbitraryData }: any) {

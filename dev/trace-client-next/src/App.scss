@@ -18,10 +18,6 @@ body {
 .generic-dialog {
     font-size: 0.8rem;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    // material textfield label's top margin
-    // .MuiFormLabel-root {
-    // margin-top : 8px;
-    // }
 
     .select-fin-year {
         margin-top: 0.3rem;
@@ -90,13 +86,6 @@ body {
         height: 2rem;
     }
 }
-// label + .MuiInput-formControl {
-//   margin-top: 16px!important;
-// }
-
-// .MuiTextField-root {
-//   padding-top: 0px!important;
-// }
 
 // Following works in PrimeReact
 .p-treetable-tbody,
@@ -108,10 +97,6 @@ body {
             padding-left: 4px !important;
             font-size: 0.8rem !important;
 
-            // font-family: 'lato'; // good font for numeric
-            // font-size: 0.9rem;
-
-            // border-top: 1px solid lightgrey!important;
             border: 0px transparent lightgray;
             i {
                 color: dodgerblue;
@@ -124,16 +109,6 @@ body {
         }
     }
 }
-
-// .p-datatable-tfoot{
-//   tr {
-//     td {
-//       color: red;
-//       font-size: 0.8rem;
-//     }
-    
-//   }
-// }
 
 .p-inputnumber-input {
     width: 100%;
@@ -164,19 +139,3 @@ th.MuiTableCell-root.MuiTableCell-head {
 .MuiToolbar-gutters {
     padding-left: 8px !important;
 }
-
-// .testClass {
-//     color: red;
-//     background-color: yellow;
-// }
-
-//Does alternate grey color
-// body .p-datatable .p-datatable-tbody > tr:nth-child(even) {
-//     background-color: #f9f9f9;
-// }
-
-// In general ledger, daily balace the row of datatable needs to be highlighted. Writing this line of code does some sort of override
-// and allows to change background color of row. If following code is not used then alternate rows are highlighted.
-// .ui-datatable tbody > tr.ui-widget-content.ledger-summary { 
-//     background-color: #808080; /* This is only a placeholder color */
-// }

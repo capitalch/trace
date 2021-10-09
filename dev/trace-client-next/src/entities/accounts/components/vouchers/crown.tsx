@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import {
+    makeStyles, Theme, createStyles, Paper,
+    Typography,
+} from '../../../../imports/gui-imports'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useCrown } from './crown-hook'
 import { VoucherContext } from './voucher-context'
 
@@ -19,8 +22,6 @@ function Crown({ meta }: any) {
     const {
         emit,
         filterOn,
-        Paper,
-        Typography,
     } = useSharedElements()
 
     useEffect(() => {
@@ -60,8 +61,7 @@ function Crown1({ meta }: any) {
     const [, setRefresh] = useState({})
     const {
         filterOn,
-        Paper,
-        Typography,
+       
     } = useSharedElements()
     const {
         ResetButton,

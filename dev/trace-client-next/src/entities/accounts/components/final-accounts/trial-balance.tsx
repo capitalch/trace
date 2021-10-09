@@ -10,7 +10,7 @@ import {
 import { SearchIcon, SyncIcon } from '../../../../imports/icons-import'
 import { graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import styled from 'styled-components'
-import { utilMethods } from '../../../../common-utils/util-methods'
+import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../../../messages.json'
 
 function TrialBalance() {

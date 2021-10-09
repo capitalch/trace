@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { AddIcon, DeleteIcon, EditIcon, } from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
-function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEditAttributes:any) {
+function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
         allAccounts: [],
@@ -18,10 +19,7 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
 
     const {
         accountsMessages,
-        AddIcon,
         confirm,
-        DeleteIcon,
-        EditIcon,
         emit,
         execGenericView,
         filterOn,
@@ -29,7 +27,6 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
         getAccountClass,
         getFromBag,
         isDateAuditLocked,
-        moment,
         toDecimalFormat,
     } = useSharedElements()
 

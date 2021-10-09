@@ -1,6 +1,6 @@
 import { NativeSelect } from '../../../../imports/gui-imports'
 import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useProductsMaster, useStyles } from './products-master-hook'
 import { NewProduct } from './new-product'
 

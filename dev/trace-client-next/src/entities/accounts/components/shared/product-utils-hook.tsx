@@ -1,24 +1,23 @@
-import {  useState, } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
-
+import { _, useState, } from '../../../../imports/regular-imports'
+import { useSharedElements } from './shared-elements-hook'
+import {
+    Avatar, List, Typography,
+    ListItem,
+    ListItemText,
+    ListItemAvatar,
+} from '../../../../imports/gui-imports'
+import { } from '../../../../imports/icons-import'
 function useProductUtils(
-    meta: any,    
-    afterSelectProduct: any = () => {},
-    setError = () => {},
+    meta: any,
+    afterSelectProduct: any = () => { },
+    setError = () => { },
 ) {
     const [, setRefresh] = useState({})
     const {
-        _,
-        Avatar,
         confirm,
         emit,
         execGenericView,
-        List,
-        ListItem,
-        ListItemText,
-        ListItemAvatar,
         messages,
-        Typography,
         queries,
         queryGraphql,
     } = useSharedElements()
@@ -42,7 +41,7 @@ function useProductUtils(
                 if (products?.length === 1) {
                     const product: any = products[0]
                     selectProduct(rowData, product)
-                } else if (products?.length > 1) {                   
+                } else if (products?.length > 1) {
                     meta.current.dialogConfig.content = FilteredProductsList
                 } else {
                     meta.current.searchResult = 'Product not found'
@@ -157,7 +156,7 @@ function useProductUtils(
                     },
                 })
                 selectProduct(rowData, result)
-            } catch (e:any) {
+            } catch (e: any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)
@@ -188,7 +187,7 @@ function useProductUtils(
                     },
                 })
                 selectProduct(rowData, result)
-            } catch (e:any) {
+            } catch (e: any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)
@@ -198,9 +197,8 @@ function useProductUtils(
     function selectProduct(rowData: any, product: any) {
         _.isEmpty(product) && (product = {})
         rowData.productDetails = product.label
-            ? `${product.catName || ''}, ${product.brandName || ''}, ${
-                  product.label || ''
-              }, ${product.info || ''}`
+            ? `${product.catName || ''}, ${product.brandName || ''}, ${product.label || ''
+            }, ${product.info || ''}`
             : ''
         rowData.upcCode = product.upcCode || ''
         rowData.productCode = product.productCode || ''
@@ -213,16 +211,16 @@ function useProductUtils(
             rowData.discount = product.purDiscount || 0.0
         } else {
             // consider when salePriceGst, salePrice exists / not exists
-            if(product.salePriceGst){
-                rowData.priceGst = product.salePriceGst 
+            if (product.salePriceGst) {
+                rowData.priceGst = product.salePriceGst
                 rowData.price = product.salePriceGst / (1 + ((product.gstRate || 0.0) / 100))
-            } else if( product.salePrice){
+            } else if (product.salePrice) {
                 rowData.price = product.salePrice
                 rowData.priceGst = product.salePrice * (1 + ((product.gstRate || 0.0) / 100))
             } else {
                 rowData.price = 0.0
                 rowData.priceGst = 0.0
-            }            
+            }
         }
 
         rowData.cgst = 0.0
@@ -231,9 +229,9 @@ function useProductUtils(
         rowData.productId = product.id
         rowData.serialNumbers = ''
         meta.current.showDialog = false
-        
+
         afterSelectProduct(rowData)
-        
+
         meta.current.isMounted && setRefresh({})
     }
 

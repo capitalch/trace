@@ -1,6 +1,6 @@
 import {  useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useBrandsMaster() {
     const meta:any = useRef({
@@ -43,7 +43,6 @@ export { useBrandsMaster }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         content: {
             '& .add-icon': {
                 color: theme.palette.lightBlue.main,
@@ -54,11 +53,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 fontSize: '1.7rem'
             }
         },
-
-        dialog: {
-
-        },
-
     })
 )
 

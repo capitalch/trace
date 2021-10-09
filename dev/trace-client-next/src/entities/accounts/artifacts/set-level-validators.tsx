@@ -1,5 +1,5 @@
 import { utils } from '../utils'
-import { utilMethods } from '../../../common-utils/util-methods'
+import { utilMethods } from '../../../global-utils/misc-utils'
 import messages from '../../accounts/json/accounts-messages.json'
 const setLevelValidators: any = {
     gstPaymentVoucherValidation: (a: any, dataObject: any, putErrors: any) => {

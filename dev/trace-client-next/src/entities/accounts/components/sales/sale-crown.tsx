@@ -1,4 +1,4 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 
 function SaleCrown({ arbitraryData, saleType, drillDownEditAttributes }: any) {

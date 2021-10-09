@@ -1,6 +1,6 @@
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useVoucherView, useStyles } from './voucher-view-hook'
-
+import {Box,} from '../../../../imports/gui-imports'
 function VoucherView({ hidden, tranTypeId }: any) {
     const classes = useStyles()
     const {
@@ -13,7 +13,6 @@ function VoucherView({ hidden, tranTypeId }: any) {
     } = useVoucherView(hidden, tranTypeId)
 
     const {
-        Box,
         XXGrid,
     } = useSharedElements()
 

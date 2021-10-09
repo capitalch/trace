@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView,filterOn, getFromBag, moment } = useSharedElements()
+    const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
         getData()
         setRefresh({})
-        const subs1 = filterOn('DEBIT-CREDIT-NOTES-VIEW-HOOK-LOAD-DATA').subscribe((d:any)=>{
+        const subs1 = filterOn('DEBIT-CREDIT-NOTES-VIEW-HOOK-LOAD-DATA').subscribe((d: any) => {
             loadData(d.data)
         })
         return () => {
@@ -24,11 +24,11 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         no: 10,
     })
 
-    
+
 
     async function getData() {
         emit('SHOW-LOADING-INDICATOR', true)
-        const label = tranType==='dn' ? 'debitNotesTran' : 'creditNotesTran'
+        const label = tranType === 'dn' ? 'debitNotesTran' : 'creditNotesTran'
         let no = getFromBag(label)
         no = no ?? meta.current.no
         const ret = await execGenericView({

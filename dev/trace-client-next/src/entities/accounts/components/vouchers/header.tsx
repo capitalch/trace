@@ -1,23 +1,26 @@
 import { useState, useContext } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import {
+    Checkbox, FormControlLabel, Paper,
+    TextField, makeStyles, Theme, createStyles
+} from '../../../../imports/gui-imports'
+import { } from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
-function Header({allowHeaderGst}: any) {
+function Header({ allowHeaderGst }: any) {
     const classes = useStyles()
     const [, setRefresh] = useState({})
-    const arbitraryData:any = useContext(VoucherContext)
+    const arbitraryData: any = useContext(VoucherContext)
     const {
         // _,
         accountsMessages,
-        Checkbox,
+
         emit,
-        FormControlLabel,
+
         isInvalidDate,
         isInvalidGstin,
         // NumberFormat,
-        Paper,
-        TextField,
+
     } = useSharedElements()
     return (
         <Paper elevation={1} className={classes.contentHeader}>

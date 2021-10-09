@@ -1,6 +1,8 @@
-import { useState} from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { DataTable, useState } from '../../../../imports/regular-imports'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { usePurchaseItems, useStyles } from './purchase-items-hook'
+import { Badge, } from '../../../../imports/gui-imports'
+import { ZoomInIcon, ZoomOutIcon, } from '../../../../imports/icons-import'
 
 function PurchaseItems({ arbitraryData }: any) {
     const [, setRefresh] = useState({})
@@ -11,11 +13,9 @@ function PurchaseItems({ arbitraryData }: any) {
     } = usePurchaseItems(arbitraryData)
     const classes = useStyles(meta)
     const {
-        Badge,
-        DataTable,
+
         TraceDialog,
-        ZoomInIcon,
-        ZoomOutIcon,
+
     } = useSharedElements()
 
     return (
@@ -44,8 +44,8 @@ function PurchaseItems({ arbitraryData }: any) {
                 <DataTable
                     rowHover={true}
                     scrollable={true}
-                    
-                    scrollHeight={meta.current.zoomIn ? '36vh' : '55vh'}                    
+
+                    scrollHeight={meta.current.zoomIn ? '36vh' : '55vh'}
                     className="items"
                     value={arbitraryData.lineItems}>
                     {getColumns()}

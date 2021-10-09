@@ -3,7 +3,7 @@ import { ClickAwayListener,Collapse,Divider, List, ListItem,ListItemText,Theme, 
 import {manageEntitiesState, useIbuki} from '../imports/trace-imports'
 import {IconExpandLess, IconExpandMore} from '../imports/icons-import'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import { utilMethods } from '../common-utils/util-methods'
+import { utilMethods } from '../global-utils/misc-utils'
 import { iconMap } from './trace-left-menu-icon-map'
 
 function TraceLeftMenu(props: any) {

@@ -1,6 +1,12 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {
+    Avatar, makeStyles, Theme, createStyles, List,
+    ListItem,
+    ListItemAvatar, Typography,
+    ListItemText,
+} from '../../../../imports/gui-imports'
+import { } from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function usePurchaseInvoiceNoSelect(arbitraryData: any) {
     const [, setRefresh] = useState({})
@@ -28,18 +34,11 @@ function usePurchaseInvoiceNoSelect(arbitraryData: any) {
     })
 
     const {
-        Avatar,
         emit,
         execGenericView,
         getFromBag,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        moment,
         toDecimalFormat,
         TraceSearchBox,
-        Typography,
     } = useSharedElements()
 
     function handleClear() {
@@ -101,7 +100,7 @@ function usePurchaseInvoiceNoSelect(arbitraryData: any) {
                                     )
                                     arbitraryData.userRefNo = item.userRefNo
                                     meta.current.showDialog = false
-                                    meta.current.isMounted && setRefresh({})                                   
+                                    meta.current.isMounted && setRefresh({})
                                 }}
                                 button={true}>
                                 <ListItemAvatar>
@@ -155,7 +154,7 @@ function usePurchaseInvoiceNoSelect(arbitraryData: any) {
                     }
                 )
                 setRefresh({})
-            } catch (e:any) {
+            } catch (e: any) {
                 console.log(e.message)
             }
             emit('SHOW-LOADING-INDICATOR', false)

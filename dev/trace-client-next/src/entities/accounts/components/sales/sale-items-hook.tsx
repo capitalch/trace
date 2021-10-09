@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useProductUtils } from '../common/product-utils-hook'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useProductUtils } from '../shared/product-utils-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})

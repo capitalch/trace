@@ -5,10 +5,10 @@ import { initialize } from '../../react-form/common/react-form-hook'
 import itemLevelValidators from './artifacts/item-level-validators'
 import formLevelValidators from './artifacts/form-level-validators'
 import setLevelValidators from './artifacts/set-level-validators'
-import { manageEntitiesState } from '../../common-utils/esm'
-import { usingIbuki } from '../../common-utils/ibuki'
+import { manageEntitiesState } from '../../global-utils/esm'
+import { usingIbuki } from '../../global-utils/ibuki'
 import { sharedArtifacts } from '../../shared-artifacts/shared-artifacts-map'
-import { customComponents } from './components/common/custom-components-map'
+import { customComponents } from './components/shared/custom-components-map'
 import {initCode} from './init-code'
 
 const { getCurrentEntity } = manageEntitiesState()

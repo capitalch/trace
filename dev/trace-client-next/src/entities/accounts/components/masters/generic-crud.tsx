@@ -9,9 +9,9 @@ import {
 } from '../../../../imports/gui-imports'
 import {AddIcon,CloseIcon, EditIcon,  SyncIcon} from '../../../../imports/icons-import'
 import {manageFormsState,ReactForm, manageEntitiesState,useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
-import { utilMethods } from '../../../../common-utils/util-methods'
+import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../../../messages.json'
-import { useSharedCode } from '../../../../common-utils/use-shared-code'
+import { useSharedCode } from '../../../../global-utils/use-shared-code'
 
 function GenericCRUD({ loadComponent }: any) {
     const meta: any = useRef({
@@ -317,7 +317,7 @@ function GenericCRUD({ loadComponent }: any) {
             open={meta.current.showDialog}
             onClose={closeDialog}>
             <DialogTitle 
-            // disableTypography 
+            disableTypography 
             id="generic-dialog-title"
                 className={classes.dialogTitle}>
                 <h3>

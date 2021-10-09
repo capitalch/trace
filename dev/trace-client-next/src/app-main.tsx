@@ -2,7 +2,7 @@ import { clsx, useEffect, useState } from './imports/regular-imports'
 import 'fontsource-roboto'
 import { createStyles, makeStyles } from './imports/gui-imports'
 import { Theme } from '@material-ui/core/styles'
-import { CssBaseline, AppBar } from './imports/gui-imports'
+import {Box,  CssBaseline, AppBar } from './imports/gui-imports'
 import {
     TraceLoadingIndicator,
     useIbuki,
@@ -12,6 +12,7 @@ import { TraceHeader } from './common/trace-header'
 import { TraceLeft } from './common/trace-left'
 import { TraceMain } from './common/trace-main'
 import { TraceSubHeader } from './common/trace-subheader'
+
 
 function AppMain() {
     const { emit } = useIbuki()
@@ -42,7 +43,7 @@ function AppMain() {
     }
 
     return (
-        <div className={classes.root}>
+        <Box className={classes.root}>
             <CssBaseline />
             {/* header */}
             <AppBar
@@ -67,7 +68,7 @@ function AppMain() {
             <TraceMain open={open}></TraceMain>
             {/* universal loading indicator */}
             <TraceLoadingIndicator></TraceLoadingIndicator>
-        </div>
+        </Box>
     )
 }
 

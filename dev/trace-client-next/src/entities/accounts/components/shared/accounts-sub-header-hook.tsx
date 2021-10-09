@@ -1,15 +1,19 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles,  createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { _, moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText, Avatar, makeStyles, createStyles
+} from '../../../../imports/gui-imports'
+import { } from '../../../../imports/icons-import'
+import { useSharedElements } from './shared-elements-hook'
 import { initCode } from '../../init-code'
 
 function useAccountsSubHeader() {
     const [, setRefresh] = useState({})
     const { setLastBuCodeFinYearIdBranchId } = initCode()
     const {
-        _,
         accountsMessages,
-        Avatar,
         emit,
         execGenericView,
         genericUpdateMasterNoForm,
@@ -17,11 +21,6 @@ function useAccountsSubHeader() {
         getFromBag,
         getLoginData,
         getUnitHeading,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        moment,
         setInBag,
     } = useSharedElements()
 
@@ -38,7 +37,7 @@ function useAccountsSubHeader() {
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => {},
+            actions: () => { },
         },
     })
 

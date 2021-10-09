@@ -1,5 +1,5 @@
 import { useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleItems, useStyles } from './sale-items-hook'
 
 function SaleItems({ arbitraryData }: any): JSX.Element {

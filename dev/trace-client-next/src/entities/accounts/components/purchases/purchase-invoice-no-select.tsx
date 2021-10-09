@@ -1,5 +1,14 @@
 import { useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import {
+    Button, TextField,
+    IconButton,
+    InputAdornment,
+} from '../../../../imports/gui-imports'
+import {
+    CloseIcon,
+    SearchIcon,
+} from '../../../../imports/icons-import'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import {
     usePurchaseInvoiceNoSelect,
     useStyles,
@@ -15,12 +24,6 @@ function PurchaseInvoiceNoSelect({ arbitraryData }: any) {
     } = usePurchaseInvoiceNoSelect(arbitraryData)
 
     const {
-        Button,
-        CloseIcon,
-        IconButton,
-        InputAdornment,
-        SearchIcon,
-        TextField,
         TraceDialog,
     } = useSharedElements()
 

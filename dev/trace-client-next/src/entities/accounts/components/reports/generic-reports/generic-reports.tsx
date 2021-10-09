@@ -1,6 +1,6 @@
 import { Theme, createStyles, makeStyles } from '../../../../../imports/gui-imports'
 import { XXGrid } from '../../../../../imports/trace-imports'
-import { useSharedElements } from '../../common/shared-elements-hook'
+import { useSharedElements } from '../../shared/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
 import { useEffect } from '../../../../../imports/regular-imports'
 

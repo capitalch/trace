@@ -1,5 +1,5 @@
 import  { useRef } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { useSharedElements } from '../shared/shared-elements-hook'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 
 function useCategoriesMaster() {
@@ -48,7 +48,6 @@ export { useCategoriesMaster }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         content: {
             minWidth: '45rem',
             '& .header': {
@@ -60,7 +59,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
 
             '& .add-category': {
-                backgroundColor: theme.palette.blue.main,
+                backgroundColor: theme.palette.indigo.main,
                 color: theme.palette.common.white
             },
 
@@ -101,9 +100,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 minWidth: '30rem',
                 maxHeight: '60vh'
             }
-        },
-
-        iconButton: {
         },
     })
 )
