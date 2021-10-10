@@ -1,4 +1,5 @@
 import { useSharedElements } from '../shared/shared-elements-hook'
+import {  Paper, Tabs, Tab} from '../../../../imports/gui-imports'
 import {
     useDebitCreditNotes,
     useStyles,
@@ -9,7 +10,7 @@ import { DebitCreditNotesView } from '../debit-credit-notes/debit-credit-notes-v
 function CreditNotes({ drillDownEditAttributes }: any={}) {
     const classes = useStyles()
     const { handleOnChange, meta } = useDebitCreditNotes(drillDownEditAttributes)
-    const { Paper, Tabs, Tab } = useSharedElements()
+    const { } = useSharedElements()
 
     return (
         <Paper>

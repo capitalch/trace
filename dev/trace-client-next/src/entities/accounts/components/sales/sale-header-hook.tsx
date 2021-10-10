@@ -1,25 +1,25 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {
+    _,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
 import {
     makeStyles,
     Theme,
+    Avatar,
     createStyles,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSaleHeader(arbitraryData: any) {
     const [, setRefresh] = useState({})
 
-    const {
-        _,
-        Avatar,
-        emit,
-        execGenericView,
-        getMappedAccounts,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-    } = useSharedElements()
+    const { emit, execGenericView, getMappedAccounts } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -30,7 +30,7 @@ function useSaleHeader(arbitraryData: any) {
             meta.current.isMounted = false
         }
     }, [])
-   
+
     const meta: any = useRef({
         isMounted: false,
         showDialog: false,
@@ -165,9 +165,8 @@ function useSaleHeader(arbitraryData: any) {
 
     function setFooterRow(ledgerAccounts: any[]) {
         if (arbitraryData?.footer?.items?.length > 0) {
-            arbitraryData.footer.items[0].ledgerAccounts = getMappedAccounts(
-                ledgerAccounts
-            )
+            arbitraryData.footer.items[0].ledgerAccounts =
+                getMappedAccounts(ledgerAccounts)
         }
     }
 

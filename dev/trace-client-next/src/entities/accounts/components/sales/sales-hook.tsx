@@ -1,16 +1,15 @@
-import {_, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {_,moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
     const {
-        _,
         emit,
         filterOn,
         getFromBag,
-        moment,
     } = useSharedElements()
 
     useEffect(() => {

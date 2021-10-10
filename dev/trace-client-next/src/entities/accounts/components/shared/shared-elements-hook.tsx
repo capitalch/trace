@@ -165,8 +165,6 @@ function useSharedElements() {
 }
 
 export { useSharedElements }
-// export { makeStyles, createStyles }
-// export type { Theme } // this is a workaround
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({

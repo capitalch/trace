@@ -1,6 +1,6 @@
-// import { Button } from '@material-ui/core'
-import { Box, } from '../../../../imports/gui-imports'
-import { useState, useEffect, } from '../../../../imports/regular-imports'
+import {  Paper,} from '../../../../imports/gui-imports'
+import { AddCircle,DeleteIcon, EditIcon, SyncIcon,} from '../../../../imports/icons-import'
+import { useState,MaterialTable, useEffect, } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useBrandsMaster, useStyles } from './brands-master-hook'
 
@@ -18,29 +18,23 @@ function BrandsMaster() {
     }, [])
 
     const {
-        AddCircle,
         confirm,
-        DeleteIcon,
         doValidateForm,
-        EditIcon,
         emit,
         execGenericView,
         getCurrentEntity,
         getFormData,
         isValidForm,
-        MaterialTable,
         messages,
-        Paper,
         ReactForm,
         resetForm,
         saveForm,
-        SyncIcon,
         tableIcons,
         TraceDialog,
         TraceFullWidthSubmitButton,
     }: any = useSharedElements()
 
-    return <Box className={classes.content}>
+    return <Paper className={classes.content}>
         <MaterialTable
             actions={getActionsList()}
             columns={getColumns()}
@@ -57,7 +51,7 @@ function BrandsMaster() {
 
         ></MaterialTable>
         <TraceDialog meta={meta} />
-    </Box>
+    </Paper>
 
     function getActionsList() {
         return ([

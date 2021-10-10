@@ -1,5 +1,6 @@
 import { useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { Tab, Tabs } from '../../../../imports/gui-imports'
+import {} from '../../../../imports/icons-import'
 import { usePurchases, useStyles } from './purchases-hook'
 import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
@@ -8,12 +9,12 @@ import { PurchaseBody } from './purchase-body'
 function Purchases({ purchaseType, drillDownEditAttributes }: any) {
     const [] = useState({})
 
-    const { arbitraryData, handleOnTabChange, meta } = usePurchases(drillDownEditAttributes)
+    const { arbitraryData, handleOnTabChange, meta } = usePurchases(
+        drillDownEditAttributes
+    )
     const classes = useStyles({ purchaseType })
     meta.current.purchaseTypeLabel =
         purchaseType === 'pur' ? 'Purchase' : 'Purchase return'
-    const { Tab, Tabs } = useSharedElements()
-
     return (
         <div className={classes.content}>
             <Tabs
@@ -24,7 +25,7 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
                 <Tab label={meta.current.purchaseTypeLabel} />
                 <Tab label="View" />
             </Tabs>
-            <div className='purchase-body' hidden={meta.current.value !== 0}>
+            <div className="purchase-body" hidden={meta.current.value !== 0}>
                 <PurchaseBody
                     arbitraryData={arbitraryData.current}
                     purchaseType={purchaseType}
@@ -32,7 +33,11 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
                 <PurchaseItems arbitraryData={arbitraryData.current} />
             </div>
             <div hidden={meta.current.value !== 1}>
-                <PurchaseView arbitraryData={arbitraryData.current} purchaseType={purchaseType} drillDownEditAttributes={drillDownEditAttributes} />
+                <PurchaseView
+                    arbitraryData={arbitraryData.current}
+                    purchaseType={purchaseType}
+                    drillDownEditAttributes={drillDownEditAttributes}
+                />
             </div>
         </div>
     )

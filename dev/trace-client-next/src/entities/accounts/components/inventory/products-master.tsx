@@ -1,5 +1,23 @@
-import { NativeSelect } from '../../../../imports/gui-imports'
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {
+    NativeSelect,
+    Box,
+    Icon,
+    IconButton,
+    Paper,
+    Typography,
+    Button,
+} from '../../../../imports/gui-imports'
+import {
+    useState,
+    useEffect,
+    MaterialTable,
+} from '../../../../imports/regular-imports'
+import {
+    AddCircle,
+    DeleteIcon,
+    SyncIcon,
+    EditIcon,
+} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useProductsMaster, useStyles } from './products-master-hook'
 import { NewProduct } from './new-product'
@@ -18,23 +36,12 @@ function ProductsMaster() {
     }, [])
 
     const {
-        AddCircle,
-        Box,
-        Button,
-        DeleteIcon,
-        EditIcon,
         emit,
         execGenericView,
         getFromBag,
-        Icon,
-        IconButton,
-        MaterialTable,
-        Paper,
         setInBag,
-        SyncIcon,
         tableIcons,
         TraceDialog,
-        Typography,
     } = useSharedElements()
 
     return (
@@ -67,9 +74,7 @@ function ProductsMaster() {
                                     }></Button>
                             )
                         } else if (props.action.name === 'add') {
-                            ret = (
-                                <NewProduct isIconButton={true} />
-                            )
+                            ret = <NewProduct isIconButton={true} />
                         } else if (props.action.name === 'refresh') {
                             ret = (
                                 <IconButton
@@ -88,14 +93,18 @@ function ProductsMaster() {
                                     </Typography>
                                     <NativeSelect
                                         value={
-                                            getFromBag('allProducts') ?? meta.current.no // if undefined or null then 10
+                                            getFromBag('allProducts') ??
+                                            meta.current.no // if undefined or null then 10
                                         }
                                         style={{
                                             width: '3.3rem',
                                             marginLeft: '0.1rem',
                                         }}
                                         onChange={(e) => {
-                                            setInBag('allProducts', e.target.value)
+                                            setInBag(
+                                                'allProducts',
+                                                e.target.value
+                                            )
                                             fetchData()
                                         }}>
                                         <option value={10}>10</option>
@@ -131,30 +140,30 @@ function ProductsMaster() {
             {
                 icon: () => <EditIcon />,
                 name: 'edit',
-                onClick: () => { },
+                onClick: () => {},
             },
             {
                 icon: () => <DeleteIcon />,
                 name: 'delete',
-                onClick: () => { },
+                onClick: () => {},
             },
             {
                 icon: () => <SyncIcon />,
                 name: 'refresh',
                 isFreeAction: true,
-                onClick: () => { },
+                onClick: () => {},
             },
             {
                 icon: () => <AddCircle />,
                 name: 'add',
                 isFreeAction: true,
-                onClick: () => { },
+                onClick: () => {},
             },
             {
                 icon: () => <Icon />,
                 name: 'select',
                 isFreeAction: true,
-                onClick: () => { },
+                onClick: () => {},
             },
         ]
     }
@@ -180,7 +189,7 @@ function ProductsMaster() {
             isMultipleRows: true,
             sqlKey: 'get_products',
             args: {
-                no: (getFromBag('allProducts') ?? meta.current.no) || null
+                no: (getFromBag('allProducts') ?? meta.current.no) || null,
             },
         })
         emit('SHOW-LOADING-INDICATOR', false)

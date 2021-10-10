@@ -1,4 +1,12 @@
 import { useState } from '../../../../imports/regular-imports'
+import {
+    FormControlLabel,
+    Paper,
+    Radio,
+    Typography,
+    TextField,
+} from '../../../../imports/gui-imports'
+import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
@@ -20,15 +28,12 @@ function SaleHeader({ arbitraryData }: any) {
     const {
         accountsMessages,
         emit,
-        FormControlLabel,
+
         getMappedAccounts,
         isInvalidDate,
         LedgerSubledger,
-        Paper,
-        Radio,
-        TextField,
+
         TraceDialog,
-        Typography,
     } = useSharedElements()
 
     return (
@@ -56,7 +61,7 @@ function SaleHeader({ arbitraryData }: any) {
                     {/* auto ref no */}
                     <TextField
                         className="auto-ref-no"
-                        variant='standard'
+                        variant="standard"
                         disabled={true}
                         label="Ref no"
                         value={arbitraryData.autoRefNo || ''}
@@ -65,7 +70,7 @@ function SaleHeader({ arbitraryData }: any) {
                     {/* date */}
                     <TextField
                         label="Date"
-                        variant='standard'
+                        variant="standard"
                         error={isInvalidDate(arbitraryData.tranDate)}
                         helperText={
                             isInvalidDate(arbitraryData.tranDate)
@@ -88,7 +93,7 @@ function SaleHeader({ arbitraryData }: any) {
                     {/* remarks */}
                     <TextField
                         label="Common remarks"
-                        variant='standard'
+                        variant="standard"
                         className="common-remarks"
                         onChange={(e: any) => {
                             arbitraryData.commonRemarks = e.target.value

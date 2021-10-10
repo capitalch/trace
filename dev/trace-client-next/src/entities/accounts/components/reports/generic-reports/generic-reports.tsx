@@ -1,8 +1,8 @@
-import { Theme, createStyles, makeStyles } from '../../../../../imports/gui-imports'
+import { Card, Theme, createStyles, makeStyles } from '../../../../../imports/gui-imports'
 import { XXGrid } from '../../../../../imports/trace-imports'
 import { useSharedElements } from '../../shared/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
-import { useEffect } from '../../../../../imports/regular-imports'
+import {_,  useEffect } from '../../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
@@ -17,7 +17,7 @@ function GenericReports({ loadReport }: any) {
         title,
     } = selectLogic[loadReport]()
 
-    const { _, Card, emit, filterOn, } = useSharedElements()
+    const {  emit, filterOn, } = useSharedElements()
     const classes = useStyles()
     useEffect(() => {
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(()=>{

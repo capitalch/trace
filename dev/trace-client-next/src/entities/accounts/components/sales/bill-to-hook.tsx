@@ -1,5 +1,21 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    Avatar,
+    makeStyles,
+    Theme,
+    createStyles,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Typography,
+} from '../../../../imports/gui-imports'
+import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { NewEditContact } from './new-edit-contact'
 import countries from '../../../../data/countries.json'
@@ -9,19 +25,12 @@ import cities from '../../../../data/cities.json'
 function useBillTo(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const {
-        _,
         accountsMessages,
-        Avatar,
         confirm,
         emit,
         execGenericView,
         filterOn,
         isInvalidGstin,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        Typography,
     } = useSharedElements()
 
     useEffect(() => {
@@ -48,8 +57,8 @@ function useBillTo(arbitraryData: any) {
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => {},
+            actions: () => {},
             isSearchBox: true,
             searchBoxFilter: '',
         },
@@ -128,7 +137,7 @@ function useBillTo(arbitraryData: any) {
         function setSearchDialog() {
             pre.title = 'Select contact from following'
             pre.content = ContactList
-            pre.actions = () => { }
+            pre.actions = () => {}
             pre.searchBoxFilter = ''
             meta.current.showDialog = true
         }
@@ -280,7 +289,6 @@ function useBillTo(arbitraryData: any) {
 export { useBillTo }
 
 const useStyles: any = makeStyles((theme: Theme) =>
-    
     createStyles({
         content: {
             marginTop: theme.spacing(1),
@@ -297,19 +305,19 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         let ret = 'none'
                         if ('ra'.includes(arbitraryData.saleVariety)) {
                             // if (arbitraryData.isSales) {
-                                ret = 'auto'
+                            ret = 'auto'
                             // }
                         }
-                        return (ret)                        
+                        return ret
                     },
                     opacity: (arbitraryData: any) => {
                         let ret = '0.4'
                         if ('ra'.includes(arbitraryData.saleVariety)) {
                             // if (arbitraryData.isSales) {
-                                ret = '1'
+                            ret = '1'
                             // }
                         }
-                        return (ret)                       
+                        return ret
                     },
                     '& .search-box': {
                         width: '35ch',

@@ -1,10 +1,10 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {Big, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSaleFooter(arbitraryData: any) {
     const [, setRefresh] = useState({})
-    const { Big, emit, getFromBag, getMappedAccounts } = useSharedElements()
+    const { emit, getFromBag, getMappedAccounts } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true

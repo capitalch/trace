@@ -1,19 +1,18 @@
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useShipTo, useStyles } from './ship-to-hook'
-
+import {
+    Button,
+    IconButton,
+    Typography,
+    Paper,
+} from '../../../../imports/gui-imports'
+import { CloseIcon } from '../../../../imports/icons-import'
 function ShipTo({ arbitraryData }: any) {
     const classes = useStyles()
     const shipTo = arbitraryData.shipTo
-    const {handleClear, handleNewEdit, meta } = useShipTo(arbitraryData)
+    const { handleClear, handleNewEdit, meta } = useShipTo(arbitraryData)
 
-    const {
-        Button,
-        CloseIcon,
-        IconButton,
-        Paper,
-        TraceDialog,
-        Typography,
-    } = useSharedElements()
+    const { TraceDialog } = useSharedElements()
     return (
         <Paper elevation={2} className={classes.content}>
             <Typography variant="subtitle1" component="div" color="primary">
@@ -24,7 +23,7 @@ function ShipTo({ arbitraryData }: any) {
                 onClick={handleNewEdit}
                 variant="contained"
                 color="primary"
-                disabled = {arbitraryData.isSalesReturn}
+                disabled={arbitraryData.isSalesReturn}
                 className="new-button">
                 New / Edit
             </Button>
@@ -43,7 +42,7 @@ function ShipTo({ arbitraryData }: any) {
                 </label>
                 <label>
                     <span>Address2:</span> {shipTo.address2}
-                </label>                
+                </label>
                 <label>
                     <span>Country:</span> {shipTo.country}
                 </label>
@@ -59,7 +58,7 @@ function ShipTo({ arbitraryData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled = {arbitraryData.isSalesReturn}
+                    disabled={arbitraryData.isSalesReturn}
                     onClick={handleClear}>
                     <CloseIcon />
                 </IconButton>

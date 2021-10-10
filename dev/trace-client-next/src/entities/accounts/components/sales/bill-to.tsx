@@ -1,4 +1,13 @@
 import { useState } from '../../../../imports/regular-imports'
+import {
+    Button,
+    IconButton,
+    TextField,
+    InputAdornment,
+    Typography,
+    Paper,
+} from '../../../../imports/gui-imports'
+import { CloseIcon, SearchIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useBillTo, useStyles } from './bill-to-hook'
 
@@ -15,18 +24,7 @@ function BillTo({ arbitraryData }: any) {
         onSearchBoxFilter,
     } = useBillTo(arbitraryData)
 
-    const {
-        Button,
-        CloseIcon,
-        emit,
-        IconButton,
-        InputAdornment,
-        Paper,
-        SearchIcon,
-        TextField,
-        TraceDialog,
-        Typography,
-    } = useSharedElements()
+    const { emit, TraceDialog } = useSharedElements()
 
     const { billToError, gstinError } = allErrors()
     return (
@@ -38,7 +36,7 @@ function BillTo({ arbitraryData }: any) {
                 <div className="bill-to">
                     <TextField
                         autoFocus={true}
-                        variant='standard'
+                        variant="standard"
                         className="search-box"
                         placeholder="Search on mobile, email, name"
                         id="search-field"
@@ -103,7 +101,7 @@ function BillTo({ arbitraryData }: any) {
 
                     <TextField
                         className="gstin"
-                        variant='standard'
+                        variant="standard"
                         placeholder="Gstin"
                         error={gstinError()}
                         value={arbitraryData.billTo.gstin || ''}
@@ -114,8 +112,6 @@ function BillTo({ arbitraryData }: any) {
                         }}
                     />
                 </div>
-
-
             </div>
 
             <div className="bill-to-address">

@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {Avatar, List, ListItem, ListItemAvatar,  ListItemText,} from '../../../../imports/gui-imports'
 import { makeStyles, Theme, createStyles, Typography } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
@@ -16,7 +17,7 @@ function useSaleBillNoSelect() {
         },
         saleBillsList: [],
     })
-    const { Avatar, emit, execGenericView, getFromBag, List, ListItem, ListItemAvatar, ListItemText, moment, toDecimalFormat, TraceSearchBox } = useSharedElements()
+    const {  emit, execGenericView, getFromBag, toDecimalFormat, TraceSearchBox } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
 

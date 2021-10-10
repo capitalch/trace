@@ -1,87 +1,28 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    moment,
+    PrimeColumn,
+    DataTable,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    IconButton,
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
+import { SearchIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useTaxation() {
     const [, setRefresh] = useState({})
-
-    const {
-        _,
-        accountsMessages,
-        AddCircle,
-        AddIcon,
-        Avatar,
-        Big,
-        Box,
-        Button,
-        Card,
-        Checkbox,
-        Chip,
-        CloseIcon,
-        confirm,
-        DataTable,
-        DeleteIcon,
-        Dialog,
-        DialogTitle,
-        DialogContent,
-        DialogActions,
-        Divider,
-        doValidateForm,
-        EditIcon,
-        emit,
-        execGenericView,
-        filterOn,
-        genericUpdateMaster,
-        getCurrentEntity,
-        getFormData,
-        getFormObject,
-        getFromBag,
-        globalMessages,
-        FormControlLabel,
-        Icon,
-        IconButton,
-        Input,
-        InputAdornment,
-        isInvalidGstin,
-        isValidForm,
-        List,
-        ListItem,
-        ListItemAvatar,
-        ListItemText,
-        MaterialTable,
-        messages,
-        moment,
-        MTableBody,
-        MTableToolbar,
-        NativeSelect,
-        NumberFormat,
-        Paper,
-        PrimeColumn,
-        queries,
-        queryGraphql,
-        Radio,
-        ReactForm,
-        releaseForm,
-        resetAllFormErrors,
-        resetForm,
-        saveForm,
-        SearchIcon,
-        setFormError,
-        SyncIcon,
-        tableIcons,
-        TextField,
-        toDecimalFormat,
-        TraceDialog,
-        TraceFullWidthSubmitButton,
-        traceGlobalSearch,
-        TraceSearchBox,
-        Typography,
-        useGeneric,
-    } = useSharedElements()
+    const { emit, execGenericView, getFromBag, toDecimalFormat } =
+        useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
-
         return () => {
             meta.current.isMounted = false
         }
@@ -113,7 +54,6 @@ function useTaxation() {
                 rowHover={true}
                 scrollable={true}
                 scrollHeight="calc(100vh - 24rem)"
-                
                 value={meta.current.data}>
                 {getColumns()}
             </DataTable>
@@ -137,7 +77,7 @@ function useTaxation() {
                     style={{ width: '10rem' }}
                     field="autoRefNo"
                     footer="Rows:"
-                    footerClassName= 'footer'
+                    footerClassName="footer"
                 />,
                 <PrimeColumn
                     header="Date"
@@ -149,7 +89,7 @@ function useTaxation() {
                             ? meta.current.data.length
                             : 0
                     }
-                    footerClassName= 'footer'
+                    footerClassName="footer"
                 />,
                 <PrimeColumn
                     header="Account name"
@@ -171,7 +111,7 @@ function useTaxation() {
                     style={{ width: '6rem', textAlign: 'right' }}
                     field="amount"
                     footer={toDecimalFormat(summ.amount)}
-                    footerClassName= 'footer'
+                    footerClassName="footer"
                 />,
                 <PrimeColumn
                     header="Cgst"
@@ -179,7 +119,7 @@ function useTaxation() {
                     style={{ width: '6rem', textAlign: 'right' }}
                     field="cgst"
                     footer={toDecimalFormat(summ.cgst)}
-                    footerClassName= 'footer'
+                    footerClassName="footer"
                 />,
                 <PrimeColumn
                     header="Sgst"
@@ -187,7 +127,7 @@ function useTaxation() {
                     style={{ width: '6rem', textAlign: 'right' }}
                     field="sgst"
                     footer={toDecimalFormat(summ.sgst)}
-                    footerClassName= 'footer'
+                    footerClassName="footer"
                 />,
                 <PrimeColumn
                     header="Igst"
@@ -195,7 +135,7 @@ function useTaxation() {
                     style={{ width: '6rem', textAlign: 'right' }}
                     field="igst"
                     footer={toDecimalFormat(summ.igst)}
-                    footerClassName= 'footer'
+                    footerClassName="footer"
                 />,
                 <PrimeColumn
                     header="User ref"
@@ -299,7 +239,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     fontWeight: 'normal',
                     // marginRight: '-1rem'
                     // position: 'relative',
-                    
                 },
                 // '& .right-aligned': {
                 //     textAlign: 'right'

@@ -1,5 +1,19 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    Big,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    Button,
+    Badge,
+    makeStyles,
+    Theme,
+    createStyles,
+    TextareaAutosize,
+} from '../../../../imports/gui-imports'
+import {} from '../../../../imports/icons-import'
 import { useProductUtils } from '../shared/product-utils-hook'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
@@ -7,17 +21,7 @@ function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const lineItems = arbitraryData.lineItems
 
-    const {
-        _,
-        Badge,
-        Big,
-        Button,
-        confirm,
-        emit,
-        filterOn,
-        messages,
-        TextareaAutosize,
-    } = useSharedElements()
+    const { confirm, emit, filterOn, messages } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -41,7 +45,7 @@ function useSaleItems(arbitraryData: any) {
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => { },
+            actions: () => {},
         },
     })
 
@@ -85,18 +89,18 @@ function useSaleItems(arbitraryData: any) {
         const qty = rowData.qty
         let amount, gst, sgst, cgst
         if (priceGst) {
-            price = priceGst / (1 + (gstRate / 100))
+            price = priceGst / (1 + gstRate / 100)
             rowData.price = price
         } else if (price) {
-            priceGst = price * (1 + (gstRate / 100))
+            priceGst = price * (1 + gstRate / 100)
             rowData.priceGst = priceGst
         }
         if (discount === 0) {
             amount = priceGst * qty
             gst = (priceGst - price) * qty
         } else {
-            amount = (price - discount) * qty * (1 + (gstRate / 100))
-            gst = amount - ((price - discount) * qty)
+            amount = (price - discount) * qty * (1 + gstRate / 100)
+            gst = amount - (price - discount) * qty
         }
         cgst = _.round(gst / 2, 2)
         sgst = cgst
@@ -141,8 +145,10 @@ function useSaleItems(arbitraryData: any) {
             )
             arbitraryData.summary.count = arbitraryData.lineItems.length
             arbitraryData.backCalulateAmount = arbitraryData.summary.amount
-            if (arbitraryData.footer.items.length === 1) { // if footer has one row then set its amount
-                arbitraryData.footer.items[0].amount = arbitraryData.summary.amount
+            if (arbitraryData.footer.items.length === 1) {
+                // if footer has one row then set its amount
+                arbitraryData.footer.items[0].amount =
+                    arbitraryData.summary.amount
             }
         }
         meta.current.isMounted && setRefresh({})
@@ -199,10 +205,9 @@ function useSaleItems(arbitraryData: any) {
             item.priceGst = item.priceGst - (item.discount || 0)
             item.discount = 0.0
             item.priceGst = item.priceGst * factor
-            item.price = _.round(item.priceGst / (1 + (item.gstRate/100)),2)
+            item.price = _.round(item.priceGst / (1 + item.gstRate / 100), 2)
         }
-        arbitraryData.backCalulateAmount =
-            arbitraryData.summary.amount
+        arbitraryData.backCalulateAmount = arbitraryData.summary.amount
         computeAllRows() // Does the entire calculation on each row
         computeSummary()
     }
@@ -341,7 +346,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     alignItems: 'center',
                     justifyContent: 'flex-start',
                     '& .index': {
-                        marginLeft: '0.2rem'
+                        marginLeft: '0.2rem',
                     },
                     '& .add-box': {
                         position: 'relative',
@@ -350,7 +355,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         '& .add-icon': {
                             fontSize: '2.2rem',
                             color: theme.palette.secondary.main,
-
                         },
                     },
                 },
@@ -405,10 +409,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     '& input': {
                         fontWeight: 'bold',
                         fontSize: '1rem',
-                        color: 'dodgerBlue'
-                    }
-
-                }
+                        color: 'dodgerBlue',
+                    },
+                },
             },
         },
     })

@@ -1,16 +1,12 @@
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useNewProduct, useStyles } from './new-product-hook'
-
-function NewProduct({ isIconButton }: any) {    
+import { Button, IconButton } from '../../../../imports/gui-imports'
+import { AddCircle } from '../../../../imports/icons-import'
+function NewProduct({ isIconButton }: any) {
     const classes = useStyles()
     const { handleAdd, meta } = useNewProduct()
 
-    const {
-        AddCircle,
-        Button,
-        IconButton,
-        TraceDialog,
-    } = useSharedElements()
+    const { TraceDialog } = useSharedElements()
 
     return (
         <span className={classes.content}>

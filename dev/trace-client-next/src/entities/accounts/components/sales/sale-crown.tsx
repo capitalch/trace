@@ -1,5 +1,7 @@
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
+import { Button,  Typography,} from '../../../../imports/gui-imports'
+import {  Check, ErrorIcon,} from '../../../../imports/icons-import'
 
 function SaleCrown({ arbitraryData, saleType, drillDownEditAttributes }: any) {
     // const [, setRefresh] = useState({})
@@ -11,12 +13,7 @@ function SaleCrown({ arbitraryData, saleType, drillDownEditAttributes }: any) {
     )
 
     const {
-        Button,
-        CheckIcon,
-        emit,
-        ErrorIcon,
         toDecimalFormat,
-        Typography,
     } = useSharedElements()
 
     return (
@@ -65,7 +62,7 @@ function SaleCrown({ arbitraryData, saleType, drillDownEditAttributes }: any) {
                             getError() ? (
                                 <ErrorIcon color="error" />
                             ) : (
-                                <CheckIcon style={{ color: 'white' }} />
+                                <Check style={{ color: 'white' }} />
                             )
                         }
                         disabled={getError()}>

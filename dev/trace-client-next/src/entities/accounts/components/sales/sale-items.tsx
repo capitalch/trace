@@ -1,4 +1,13 @@
-import { useState } from '../../../../imports/regular-imports'
+import {  clsx,  NumberFormat,  PrimeColumn,
+    DataTable,useState } from '../../../../imports/regular-imports'
+import {  Badge, Paper,
+    Button,
+    Checkbox, IconButton,TextField,
+    Typography,
+    Chip,} from '../../../../imports/gui-imports'
+import { AddCircle,  Clear,
+    SearchIcon,
+    CloseIcon,} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleItems, useStyles } from './sale-items-hook'
 
@@ -23,25 +32,9 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
     const lineItems = arbitraryData.lineItems
 
     const {
-        AddCircle,
-        Badge,
-        Button,
-        Checkbox,
-        Chip,
-        Clear,
-        CloseIcon,
-        clsx,
-        DataTable,
         emit,
-        IconButton,
-        NumberFormat,
-        Paper,
-        PrimeColumn,
-        SearchIcon,
-        TextField,
         toDecimalFormat,
         TraceDialog,
-        Typography,
     } = useSharedElements()
 
     return (

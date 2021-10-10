@@ -1,22 +1,27 @@
 import { useSharedElements } from '../shared/shared-elements-hook'
+import { MaterialTable } from '../../../../imports/regular-imports'
 import { useSaleView, useStyles } from './sale-view-hook'
-
-function SaleView({ arbitraryData , drillDownEditAttributes}: any) {
+import {
+    Box,
+    Icon,
+    NativeSelect,
+    Typography,
+    Button,
+} from '../../../../imports/gui-imports'
+import {} from '../../../../imports/icons-import'
+function SaleView({ arbitraryData, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const { fetchData, getActionsList, getColumnsArray, meta } = useSaleView(arbitraryData, drillDownEditAttributes)
+    const { fetchData, getActionsList, getColumnsArray, meta } = useSaleView(
+        arbitraryData,
+        drillDownEditAttributes
+    )
 
     const {
-        Box,
-        Button,
         emit,
         getFromBag,
         setInBag,
-        Icon,
         LedgerSubledgerCascade,
-        MaterialTable,
-        NativeSelect,
         tableIcons,
-        Typography,
     } = useSharedElements()
 
     return (
@@ -48,16 +53,18 @@ function SaleView({ arbitraryData , drillDownEditAttributes}: any) {
                         // If it is edit or delete retain the functionality defined in action
                         let ret: any = (
                             <Button
-                                size='small'
+                                size="small"
                                 onClick={(event: any) =>
                                     props.action.onClick(event, props.data)
                                 }>
                                 <Icon>{props.action.icon()}</Icon>
                             </Button>
                         )
-                        if (props.action.name === 'select') {          
-                            const label = arbitraryData.isSales ? 'salesTran' : 'salesRetTran'                  
-                            ret = (                                
+                        if (props.action.name === 'select') {
+                            const label = arbitraryData.isSales
+                                ? 'salesTran'
+                                : 'salesRetTran'
+                            ret = (
                                 <Box className="select-last" component="span">
                                     <Typography
                                         variant="caption"
@@ -72,7 +79,7 @@ function SaleView({ arbitraryData , drillDownEditAttributes}: any) {
                                             width: '3.3rem',
                                             marginLeft: '0.1rem',
                                         }}
-                                        onChange={(e) => {                                            
+                                        onChange={(e) => {
                                             setInBag(label, e.target.value)
                                             fetchData()
                                         }}>

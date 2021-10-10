@@ -1,5 +1,17 @@
-import {_, useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    moment,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
+import {} from '../../../../imports/gui-imports'
+import { AddIcon, DeleteIcon, EditIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
@@ -17,10 +29,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
 
     const {
         accountsMessages,
-        AddIcon,
         confirm,
-        DeleteIcon,
-        EditIcon,
         emit,
         execGenericView,
         filterOn,
@@ -29,7 +38,6 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         getFromBag,
         getMappedAccounts,
         isDateAuditLocked,
-        moment,
         toDecimalFormat,
     } = useSharedElements()
 

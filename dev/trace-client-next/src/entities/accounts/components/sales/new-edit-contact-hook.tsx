@@ -1,12 +1,16 @@
 import {
     useState,
     useEffect,
+    ReactSelect,
     useRef,
+    InputMask,
 } from '../../../../imports/regular-imports'
 import {
     makeStyles,
+    Button,
     Theme,
     createStyles,
+    TextField,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import countries from '../../../../data/countries.json'
@@ -27,18 +31,14 @@ function useNewEditContact(arbitraryData: any) {
     }, [])
 
     const {
-        Button,
         emit,
         genericUpdateMasterNoForm,
-        InputMask,
         isImproperDate,
         isInvalidEmail,
         isInvalidGstin,
         isInvalidIndiaMobile,
         isInvalidIndiaPin,
         isInvalidStateCode,
-        ReactSelect,
-        TextField,
     } = useSharedElements()
 
     const meta: any = useRef({
@@ -363,7 +363,7 @@ function useNewEditContact(arbitraryData: any) {
                     {() => (
                         <TextField
                             label="State code"
-                            variant='standard'
+                            variant="standard"
                             error={isInvalidStateCode(billTo?.state?.stateCode)}
                             className="short-text-field"
                         />
@@ -373,7 +373,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Gstin */}
                 <TextField
                     label="Gstin"
-                    variant='standard'
+                    variant="standard"
                     className="text-field"
                     error={isInvalidGstin(arbitraryData.billTo.gstin)}
                     value={arbitraryData.billTo.gstin || ''}
@@ -386,7 +386,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Date of birth */}
                 <TextField
                     label="Date of birth"
-                    variant='standard'
+                    variant="standard"
                     type="date"
                     error={isImproperDate(arbitraryData.billTo.dateOfBirth)}
                     className="text-field"
@@ -400,7 +400,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Anniversary date */}
                 <TextField
                     label="AnniversaryDate"
-                    variant='standard'
+                    variant="standard"
                     type="date"
                     error={isImproperDate(billTo.anniversaryDate)}
                     className="text-field"
@@ -414,7 +414,7 @@ function useNewEditContact(arbitraryData: any) {
                 {/* Description */}
                 <TextField
                     label="Description"
-                    variant='standard'
+                    variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.descr || ''}
                     onChange={(e) => {

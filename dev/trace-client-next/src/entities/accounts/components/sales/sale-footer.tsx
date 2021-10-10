@@ -1,4 +1,11 @@
-import { useState } from '../../../../imports/regular-imports'
+import {
+    useState,
+    NumberFormat,
+    PrimeColumn,
+    DataTable,
+} from '../../../../imports/regular-imports'
+import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
+import { AddCircle, CloseIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
 
@@ -13,18 +20,7 @@ function SaleFooter({ arbitraryData }: any) {
         onChangeLedgerSubledger,
     } = useSaleFooter(arbitraryData)
 
-    const {
-        AddCircle,
-        CloseIcon,
-        DataTable,
-        IconButton,
-        LedgerSubledger,
-        NumberFormat,
-        Paper,
-        PrimeColumn,
-        TextField,
-        toDecimalFormat,
-    } = useSharedElements()
+    const { LedgerSubledger, toDecimalFormat } = useSharedElements()
 
     return (
         <Paper elevation={2} className={classes.content}>
