@@ -5,7 +5,7 @@ import {
     DataTable,
 } from '../../../../imports/regular-imports'
 import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
-import { AddCircle, CloseIcon } from '../../../../imports/icons-import'
+import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
 
@@ -57,7 +57,7 @@ function SaleFooter({ arbitraryData }: any) {
                             size="small"
                             disabled={arbitraryData.footer.items.length === 1}
                             onClick={(e: any) => handleDeleteItem(e, rowData)}>
-                            <CloseIcon className="delete-icon" />
+                            <CloseSharp className="delete-icon" />
                         </IconButton>
                     </span>
                 )}

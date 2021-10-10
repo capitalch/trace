@@ -1,7 +1,7 @@
 import { useState, useRef } from '../imports/regular-imports'
 import { ClickAwayListener,Collapse,Divider, List, ListItem,ListItemText,Theme, useTheme } from '../imports/gui-imports'
 import {manageEntitiesState, useIbuki} from '../imports/trace-imports'
-import {IconExpandLess, IconExpandMore} from '../imports/icons-import'
+import {ExpandLess, ExpandMore} from '../imports/icons-import'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import { utilMethods } from '../global-utils/misc-utils'
 import { iconMap } from './trace-left-menu-icon-map'
@@ -22,9 +22,9 @@ function TraceLeftMenu(props: any) {
         let ret = undefined
         if (item.children) {
             ret = meta.current.openArray[index] ? (
-                <IconExpandLess></IconExpandLess>
+                <ExpandLess></ExpandLess>
             ) : (
-                <IconExpandMore></IconExpandMore>
+                <ExpandMore></ExpandMore>
             )
         }
         return ret

@@ -6,8 +6,8 @@ import {
     Chip,
 } from '../../../../imports/gui-imports'
 import {
-    AddIcon, FontAwesomeIcon, faSpinner, MinusIcon,
-    SyncIcon,
+    Add, FontAwesomeIcon, faSpinner, RemoveCircleOutline,
+    SyncSharp,
 } from '../../../../imports/icons-import'
 function AccountsSubHeader() {
     const classes = useStyles()
@@ -58,7 +58,7 @@ function AccountsSubHeader() {
                         onClick={() => {
                             utilFunc().changeFinYear(1)
                         }}>
-                        <AddIcon></AddIcon>
+                        <Add></Add>
                     </IconButton>
                     <Chip
                         disabled={isControlDisabled('finYearChange')}
@@ -80,7 +80,7 @@ function AccountsSubHeader() {
                         onClick={() => {
                             utilFunc().changeFinYear(-1)
                         }}>
-                        <MinusIcon></MinusIcon>
+                        <RemoveCircleOutline></RemoveCircleOutline>
                     </IconButton>
                 </Box>
 
@@ -110,7 +110,7 @@ function AccountsSubHeader() {
                             await execDataCache()
                             emit('SHOW-LOADING-INDICATOR', false)
                         }}>
-                        <SyncIcon></SyncIcon>
+                        <SyncSharp></SyncSharp>
                     </IconButton>
                 )}
 

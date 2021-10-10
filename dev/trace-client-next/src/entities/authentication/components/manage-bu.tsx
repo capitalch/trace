@@ -4,10 +4,10 @@ import { useSharedElements } from './shared-elements-hook'
 function useManageBu(meta: any) {
     const [, setRefresh] = useState({})
     const {
-        CloseIcon,
+        CloseSharp,
         Column,
         emit,
-        EditIcon,
+        Edit,
         execGenericView,
         getFormData,
         IconButton,
@@ -134,7 +134,7 @@ function useManageBu(meta: any) {
                         size="medium"
                         color="secondary"
                         onClick={() => manageBu.update(node)}>
-                        <EditIcon></EditIcon>
+                        <Edit></Edit>
                     </IconButton>
                 )}
                 style={{ width: '4rem', textAlign: 'center' }}></Column>,
@@ -147,7 +147,7 @@ function useManageBu(meta: any) {
                         size="medium"
                         color="secondary"
                         onClick={(e) => deleteRow(node, manageBu.read)}>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,
         ]

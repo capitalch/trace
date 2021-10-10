@@ -7,7 +7,7 @@ import {
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
-import { SearchIcon } from '../../../../imports/icons-import'
+import { Search } from '../../../../imports/icons-import'
 import styled from 'styled-components'
 import { queries } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
@@ -65,7 +65,7 @@ function BalanceSheetProfitLoss() {
                     size="small"
                     color="secondary"
                     onClick={(e: any) => emit('SHOW-LEDGER', node.data.id)}>
-                    <SearchIcon></SearchIcon>
+                    <Search></Search>
                 </IconButton>
             )
         }

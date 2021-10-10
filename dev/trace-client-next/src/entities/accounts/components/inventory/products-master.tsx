@@ -14,13 +14,14 @@ import {
 } from '../../../../imports/regular-imports'
 import {
     AddCircle,
-    DeleteIcon,
-    SyncIcon,
-    EditIcon,
+    DeleteForever,
+    SyncSharp,
+    Edit,
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useProductsMaster, useStyles } from './products-master-hook'
 import { NewProduct } from './new-product'
+import { DeleteSharp } from '@material-ui/icons'
 
 function ProductsMaster() {
     const [, setRefresh] = useState({})
@@ -57,7 +58,7 @@ function ProductsMaster() {
                                 <Button
                                     color="secondary"
                                     size="small"
-                                    startIcon={<EditIcon />}
+                                    startIcon={<Edit />}
                                     onClick={() => {
                                         emit('NEW-PRODUCT-EDIT', props.data)
                                     }}
@@ -68,7 +69,7 @@ function ProductsMaster() {
                                 <Button
                                     className="delete-button"
                                     size="small"
-                                    startIcon={<DeleteIcon />}
+                                    startIcon={<DeleteForever/>}
                                     onClick={() =>
                                         emit('NEW-PRODUCT-DELETE', props.data)
                                     }></Button>
@@ -80,7 +81,7 @@ function ProductsMaster() {
                                 <IconButton
                                     className="refresh-button"
                                     onClick={fetchData}>
-                                    <SyncIcon style={{ fontSize: '2rem' }} />
+                                    <SyncSharp style={{ fontSize: '2rem' }} />
                                 </IconButton>
                             )
                         } else if (props.action.name === 'select') {
@@ -138,17 +139,17 @@ function ProductsMaster() {
     function getActionsList() {
         return [
             {
-                icon: () => <EditIcon />,
+                icon: () => <Edit />,
                 name: 'edit',
                 onClick: () => {},
             },
             {
-                icon: () => <DeleteIcon />,
+                icon: () => <DeleteSharp />,
                 name: 'delete',
                 onClick: () => {},
             },
             {
-                icon: () => <SyncIcon />,
+                icon: () => <SyncSharp />,
                 name: 'refresh',
                 isFreeAction: true,
                 onClick: () => {},

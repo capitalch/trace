@@ -1,12 +1,12 @@
 import { Box, Icon, IconButton, NativeSelect, Typography } from '../../../../imports/gui-imports'
-import { AddIcon, DeleteIcon, EditIcon } from '../../../../imports/icons-import'
+import { Add, DeleteForever, Edit } from '../../../../imports/icons-import'
 import { MaterialTable, moment, useConfirm } from '../../../../imports/regular-imports'
 import { } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
-import { useDebitCreditNotesView } from './debit-credit-notes-view-hook'
+import { useDebitFlightTakeoffView } from './debit-credit-notes-view-hook'
 
-function DebitCreditNotesView({ arbitraryData, tranType }: any) {
-    const { getData, loadData, meta } = useDebitCreditNotesView(
+function DebitFlightTakeoffView({ arbitraryData, tranType }: any) {
+    const { getData, loadData, meta } = useDebitFlightTakeoffView(
         arbitraryData,
         tranType
     )
@@ -53,8 +53,8 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
                     if (props.action.name === 'select') {
                         const label =
                             tranType === 'dn'
-                                ? 'debitNotesTran'
-                                : 'creditNotesTran'
+                                ? 'flightLandTran'
+                                : 'flightTakeoffTran'
                         ret = (
                             <Box component="span">
                                 <Typography variant="caption" component="span">
@@ -89,13 +89,13 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
     function getActionsList() {
         return [
             {
-                icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
+                icon: () => <Add />, // Here the <Add> is placeholder. It is later customized to select control
                 name: 'select',
                 isFreeAction: true,
                 onClick: () => { }, // This empty onClick is a hack. Without this warning appears
             },
             {
-                icon: () => <EditIcon color="primary" />,
+                icon: () => <Edit color="primary" />,
                 toolTip: 'Edit transaction',
                 name: 'edit',
                 onClick: async (e: any, rowData: any) => {
@@ -112,7 +112,7 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
                 },
             },
             {
-                icon: () => <DeleteIcon color="error"></DeleteIcon>,
+                icon: () => <DeleteForever color="error"></DeleteForever>,
                 toolTip: 'Delete transaction',
                 name: 'delete',
                 onClick: async (e: any, rowData: any) => {
@@ -182,4 +182,4 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
     }
 }
 
-export { DebitCreditNotesView }
+export { DebitFlightTakeoffView }

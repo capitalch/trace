@@ -6,7 +6,7 @@ import {
     Radio,
     TextField,
 } from '../../../../imports/gui-imports'
-import { ErrorIcon, Check } from '../../../../imports/icons-import'
+import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
@@ -53,12 +53,12 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
             {purchaseType === 'pur' ? (
                 <PurchaseBodyLine1 />
             ) : (
-                <PurchaseReturnBodyLine1 />
+                <AssignmentReturnedBodyLine1 />
             )}
             {purchaseType === 'pur' ? (
                 <PurchaseBodyLine2 />
             ) : (
-                <PurchaseReturnBodyLine2 />
+                <AssignmentReturnedBodyLine2 />
             )}
             <TraceDialog meta={meta} />
         </div>
@@ -87,7 +87,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
                 onClick={handleSubmit}
                 startIcon={
                     getError() ? (
-                        <ErrorIcon color="error" />
+                        <Error color="error" />
                     ) : (
                         <Check style={{ color: 'white' }} />
                     )
@@ -376,7 +376,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
         )
     }
 
-    function PurchaseReturnBodyLine1() {
+    function AssignmentReturnedBodyLine1() {
         const [, setRefresh] = useState({})
         return (
             <div className="body-line-1">
@@ -441,7 +441,7 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
         )
     }
 
-    function PurchaseReturnBodyLine2() {
+    function AssignmentReturnedBodyLine2() {
         const [, setRefresh] = useState({})
         return (
             <div className="body-line-2">

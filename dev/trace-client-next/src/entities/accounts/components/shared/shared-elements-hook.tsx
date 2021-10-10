@@ -233,7 +233,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(1),
         },
 
-        syncIconButton: {
+        syncSharpButton: {
             paddingRight: theme.spacing(2),
         },
 

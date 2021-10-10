@@ -20,7 +20,7 @@ import {
     DialogActions,
     DialogContent,
 } from '../../../imports/gui-imports'
-import { AddIcon, CloseIcon, SyncIcon } from '../../../imports/icons-import'
+import { Add, CloseSharp, SyncSharp } from '../../../imports/icons-import'
 import {
     manageFormsState,
     manageEntitiesState,
@@ -130,14 +130,14 @@ function GenericCRUD({ loadComponent }: any) {
                 </Typography>
                 <Box component="span" className={classes.RefreshAdd}>
                     <IconButton
-                        className={classes.syncIconButton}
+                        className={classes.syncSharpButton}
                         size="medium"
                         color="secondary"
                         onClick={() => selectLogic()[loadComponent].read()}>
-                        <SyncIcon></SyncIcon>
+                        <SyncSharp></SyncSharp>
                     </IconButton>
                     <IconButton
-                        className={classes.syncIconButton}
+                        className={classes.syncSharpButton}
                         size="medium"
                         color="secondary"
                         onClick={() =>
@@ -145,7 +145,7 @@ function GenericCRUD({ loadComponent }: any) {
                                 meta.current.dialogConfig.formId
                             ].create()
                         }>
-                        <AddIcon></AddIcon>
+                        <Add></Add>
                     </IconButton>
                 </Box>
             </Box>
@@ -172,7 +172,7 @@ function GenericCRUD({ loadComponent }: any) {
                         color="default"
                         onClick={closeDialog}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>

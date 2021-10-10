@@ -88,7 +88,7 @@ function SaleHeader({ arbitraryData }: any) {
                         value={arbitraryData.tranDate || ''}
                     />
 
-                    {arbitraryData.isSalesReturn && SaleBillNoSelect('')}
+                    {arbitraryData.isAssignmentReturn && SaleBillNoSelect('')}
 
                     {/* remarks */}
                     <TextField

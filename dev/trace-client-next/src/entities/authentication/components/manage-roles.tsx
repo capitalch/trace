@@ -5,10 +5,10 @@ function useManageRoles(meta: any) {
     const [, setRefresh] = useState({})
     const {
         _,
-        CloseIcon,
+        CloseSharp,
         closeDialog,
         Column,
-        EditIcon,
+        Edit,
         getFormData,
         getLoginData,
         emit,
@@ -199,7 +199,7 @@ function useManageRoles(meta: any) {
                         size="medium"
                         color="secondary"
                         onClick={() => manageRoles.update(node)}>
-                        <EditIcon></EditIcon>
+                        <Edit></Edit>
                     </IconButton>
                 )}
                 style={{ width: '4rem', textAlign: 'center' }}></Column>,
@@ -212,7 +212,7 @@ function useManageRoles(meta: any) {
                         size="medium"
                         color="secondary"
                         onClick={(e) => deleteRow(node, manageRoles.read)}>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,
         ]

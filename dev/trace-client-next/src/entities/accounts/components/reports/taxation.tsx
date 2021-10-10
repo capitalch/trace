@@ -5,7 +5,7 @@ import {
     Typography,
     IconButton,
 } from '../../../../imports/gui-imports'
-import { SyncIcon } from '../../../../imports/icons-import'
+import { SyncSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useTaxation, useStyles } from './taxation-hook'
 
@@ -50,7 +50,7 @@ function Taxation() {
                     size="medium"
                     color="secondary"
                     onClick={handleFetchData}>
-                    <SyncIcon></SyncIcon>
+                    <SyncSharp></SyncSharp>
                 </IconButton>
             </Box>
             <GstReport1 />

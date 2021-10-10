@@ -2,7 +2,7 @@ import { DataTable, useState } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { usePurchaseItems, useStyles } from './purchase-items-hook'
 import { Badge, } from '../../../../imports/gui-imports'
-import { ZoomInIcon, ZoomOutIcon, } from '../../../../imports/icons-import'
+import { ZoomIn, ZoomOut, } from '../../../../imports/icons-import'
 
 function PurchaseItems({ arbitraryData }: any) {
     const [, setRefresh] = useState({})
@@ -24,7 +24,7 @@ function PurchaseItems({ arbitraryData }: any) {
                 className="badge-extender"
                 badgeContent={
                     meta.current.zoomIn ? (
-                        <ZoomInIcon
+                        <ZoomIn
                             onClick={() => {
                                 meta.current.zoomIn = false
                                 meta.current.isMounted && setRefresh({})
@@ -32,7 +32,7 @@ function PurchaseItems({ arbitraryData }: any) {
                             cursor="pointer"
                         />
                     ) : (
-                        <ZoomOutIcon
+                        <ZoomOut
                             onClick={() => {
                                 meta.current.zoomIn = true
                                 meta.current.isMounted && setRefresh({})

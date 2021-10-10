@@ -6,7 +6,7 @@ import {
     Typography,
     Paper,
 } from '../../../../imports/gui-imports'
-import { CloseIcon } from '../../../../imports/icons-import'
+import { CloseSharp } from '../../../../imports/icons-import'
 function ShipTo({ arbitraryData }: any) {
     const classes = useStyles()
     const shipTo = arbitraryData.shipTo
@@ -23,7 +23,7 @@ function ShipTo({ arbitraryData }: any) {
                 onClick={handleNewEdit}
                 variant="contained"
                 color="primary"
-                disabled={arbitraryData.isSalesReturn}
+                disabled={arbitraryData.isAssignmentReturn}
                 className="new-button">
                 New / Edit
             </Button>
@@ -58,9 +58,9 @@ function ShipTo({ arbitraryData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled={arbitraryData.isSalesReturn}
+                    disabled={arbitraryData.isAssignmentReturn}
                     onClick={handleClear}>
-                    <CloseIcon />
+                    <CloseSharp />
                 </IconButton>
             </div>
             <TraceDialog meta={meta} />

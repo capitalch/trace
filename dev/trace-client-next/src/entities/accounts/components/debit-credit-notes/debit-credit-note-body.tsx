@@ -6,7 +6,7 @@ import {
 } from '../../../../imports/gui-imports'
 import {
     Check,
-    ErrorIcon,
+    Error,
 } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
@@ -28,7 +28,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
             <Typography variant='body1' component='span'>Ref no: &nbsp;</Typography>
             <span className='no'>{arbitraryData.body.autoRefNo}</span>
             <Button className='submit' variant='contained' size='small' color='secondary'
-                onClick={handleSubmit} startIcon={getError() ? <ErrorIcon color="error" /> : <Check style={{ color: 'white' }} />}
+                onClick={handleSubmit} startIcon={getError() ? <Error color="error" /> : <Check style={{ color: 'white' }} />}
                 disabled={getError()}>Submit</Button>
         </div>
         <div className='body'>
@@ -147,7 +147,7 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
                     value={arbitraryData.body.lineRemarksCredit || ''} />
                 <Button className='submit' variant='contained' size='small' color='secondary' disabled={getError()}
                     onClick={handleSubmit}
-                    startIcon={getError() ? <ErrorIcon color="error" /> : <Check style={{ color: 'white' }} />}
+                    startIcon={getError() ? <Error color="error" /> : <Check style={{ color: 'white' }} />}
                 >Submit</Button>
             </div>
             <div className='gutter'></div>

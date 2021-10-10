@@ -1,7 +1,7 @@
 import { MaterialTable, useEffect, useState, useRef } from '../../../../imports/regular-imports'
 import { Button } from '../../../../imports/gui-imports'
 import { usingIbuki } from '../../../../imports/trace-imports'
-import { SendIcon } from '../../../../imports/icons-import'
+import { Send } from '../../../../imports/icons-import'
 import { tableIcons } from '../shared/material-table-icons'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import { utils } from '../../utils'
@@ -55,7 +55,7 @@ function CommonUtilities() {
                                 disabled={isControlDisabled(
                                     'transferAccountsBalances'
                                 )}
-                                endIcon={<SendIcon></SendIcon>}
+                                endIcon={<Send></Send>}
                                 variant="contained"
                                 color="secondary"
                                 onClick={async (e) => {

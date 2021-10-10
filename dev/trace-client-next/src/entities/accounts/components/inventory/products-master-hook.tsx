@@ -11,7 +11,7 @@ function useProductsMaster() {
         showDialog: false,
         dialogConfig: {
             brands: null,
-            categories: null,
+          category: null,
             formId: '',
             title: '',
             content: () => { },

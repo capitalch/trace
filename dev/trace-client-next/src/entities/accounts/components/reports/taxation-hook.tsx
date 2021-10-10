@@ -13,7 +13,7 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { SearchIcon } from '../../../../imports/icons-import'
+import { Search } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useTaxation() {
@@ -163,11 +163,11 @@ function useTaxation() {
                             // closeDialog()
                         }}>
                         {node.headerId && (
-                            <SearchIcon
+                            <Search
                                 style={{
                                     fontSize: '1rem',
                                     marginLeft: '-0.5rem',
-                                }}></SearchIcon>
+                                }}></Search>
                         )}
                     </IconButton>
                 )

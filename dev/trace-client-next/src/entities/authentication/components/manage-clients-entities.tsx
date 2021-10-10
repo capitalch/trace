@@ -5,9 +5,9 @@ function useManageClientsEntities(meta:any){
     const [, setRefresh] = useState({})
     const {
         Checkbox,
-        CloseIcon,
+        CloseSharp,
         Column,
-        EditIcon,
+        Edit,
         emit,
         execGenericView,
         IconButton,
@@ -164,7 +164,7 @@ function useManageClientsEntities(meta:any){
                         color='secondary'                        
                         onClick = {()=>manageClients.update(node)}
                     >
-                        <EditIcon></EditIcon>
+                        <Edit></Edit>
                     </IconButton>
                 }
                 style={{ 'width': '4rem', 'textAlign': 'center' }}
@@ -178,7 +178,7 @@ function useManageClientsEntities(meta:any){
                         size='medium'
                         color='secondary'
                         onClick={e => deleteRow(node, manageClients.read)}>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 }
             ></Column>
@@ -206,7 +206,7 @@ function useManageClientsEntities(meta:any){
                         size='medium'
                         color='secondary'                        
                         onClick={()=> manageEntities.update(node)}>
-                        <EditIcon></EditIcon>
+                        <Edit></Edit>
                     </IconButton>
                 }
                 style={{ 'width': '4rem', 'textAlign': 'center' }}
@@ -220,7 +220,7 @@ function useManageClientsEntities(meta:any){
                         size='medium'
                         color='secondary'
                         onClick={e => deleteRow(node, manageEntities.read)}>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 }
             ></Column>

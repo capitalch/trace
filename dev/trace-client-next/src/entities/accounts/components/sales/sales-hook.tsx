@@ -68,7 +68,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         },
         id: undefined,
         isIgst: false,
-        isSalesReturn: saleType === 'ret',
+        isAssignmentReturn: saleType === 'ret',
         isSales: saleType === 'sal',
         ledgerAccounts: [],
         lineItems: [], // for product details of SalePurchaseDetails table

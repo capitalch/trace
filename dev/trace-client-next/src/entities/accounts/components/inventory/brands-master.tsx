@@ -1,5 +1,5 @@
 import {  Paper,} from '../../../../imports/gui-imports'
-import { AddCircle,DeleteIcon, EditIcon, SyncIcon,} from '../../../../imports/icons-import'
+import { AddCircle,DeleteForever, Edit, SyncSharp,} from '../../../../imports/icons-import'
 import { useState,MaterialTable, useEffect, } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useBrandsMaster, useStyles } from './brands-master-hook'
@@ -56,19 +56,19 @@ function BrandsMaster() {
     function getActionsList() {
         return ([
             {
-                icon: () => <EditIcon color='primary' />,
+                icon: () => <Edit color='primary' />,
                 toolTip: 'Edit',
                 name: 'edit',
                 onClick: handleEdit
             },
             {
-                icon: () => <DeleteIcon color='error' />,
+                icon: () => <DeleteForever color='error' />,
                 toolTip: 'Delete',
                 name: 'delete',
                 onClick: handleDelete
             },
             {
-                icon: () => <SyncIcon className="refresh-icon" />,
+                icon: () => <SyncSharp className="refresh-icon" />,
                 toolTip: 'Refresh',
                 name: 'refresh',
                 isFreeAction: true,

@@ -4,10 +4,10 @@ import {Box,FormControlLabel,
     IconButton,  Typography,
     Button, TextField,
     Checkbox,} from '../../../../imports/gui-imports'
-import { CloseIcon,
-    DeleteIcon, SearchIcon,
-    SyncIcon,
-    EditIcon,} from '../../../../imports/icons-import'
+import { CloseSharp,
+    DeleteForever, Search,
+    SyncSharp,
+    Edit,} from '../../../../imports/icons-import'
 // import {
 //     DataGrid,
 //     GridToolbarFilterButton,
@@ -151,11 +151,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                     Filtered
                 </Button>
                 <IconButton
-                    className={classes.syncIconButton}
+                    className={classes.syncSharpButton}
                     size="medium"
                     color="secondary"
                     onClick={(e: any) => fetchRows(sqlQueryId, sqlQueryArgs)}>
-                    <SyncIcon></SyncIcon>
+                    <SyncSharp></SyncSharp>
                 </IconButton>
                 {!!!gridOptions.hideViewLimit && (
                     <div className="view-limit">
@@ -235,7 +235,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     placeholder="Search…"
                     className="global-search"
                     InputProps={{
-                        startAdornment: <SearchIcon fontSize="small" />,
+                        startAdornment: <Search fontSize="small" />,
                         endAdornment: (
                             <IconButton
                                 title="Clear"
@@ -247,7 +247,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                         : 'hidden',
                                 }}
                                 onClick={props.clearSearch}>
-                                <CloseIcon fontSize="small" />
+                                <CloseSharp fontSize="small" />
                             </IconButton>
                         ),
                     }}
@@ -436,7 +436,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 emit(options.deleteIbukiMessage, params)
                             }
                             aria-label="Delete">
-                            <DeleteIcon />
+                            <DeleteForever />
                         </IconButton>
                     )
                 },
@@ -466,7 +466,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     emit(options.editIbukiMessage, params)
                             }}
                             aria-label="Edit">
-                            <EditIcon />
+                            <Edit />
                         </IconButton>
                     )
                 },
@@ -493,7 +493,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             color="primary"
                             onClick={() => removeRow(params)}
                             aria-label="hide">
-                            <CloseIcon />
+                            <CloseSharp />
                         </IconButton>
                     )
                 },
@@ -522,7 +522,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 emit(options.drillDownIbukiMessage, params)
                             }
                             aria-label="close">
-                            <SearchIcon color="secondary" fontSize="small" />
+                            <Search color="secondary" fontSize="small" />
                         </IconButton>
                     )
                 },

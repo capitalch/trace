@@ -14,7 +14,7 @@ import {
     useTheme,
 } from '../imports/gui-imports'
 
-import { ArrowDropDown, MenuIcon } from '../imports/icons-import'
+import { ArrowDropDownSharp, Menu } from '../imports/icons-import'
 import {manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import menu from '../data/data-menu.json'
 import '../entities/authentication/initialize-react-form'
@@ -159,7 +159,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     variant="outlined"
                     color="inherit"
                     classes={{ endIcon: classes.loginButtonEndIcon }} //this is over riding. endIcon name is taken from material api documentation of Button
-                    endIcon={<ArrowDropDown></ArrowDropDown>}
+                    endIcon={<ArrowDropDownSharp></ArrowDropDownSharp>}
                     onClick={handleLoginClick}>
                     {meta.current.uid ? (
                         <Chip
@@ -194,7 +194,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 onClick={handleDrawerOpen}
                 edge="start"
                 className={clsx(classes.menuButton, open && classes.hide)}>
-                <MenuIcon />
+                <Menu />
             </IconButton>
             <Labels menuHead={meta.current.menuHead}></Labels>
             <Dialog
