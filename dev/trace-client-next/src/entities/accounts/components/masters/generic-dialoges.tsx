@@ -117,9 +117,6 @@ function GenericDialoges({ loadDialog }: any) {
 
     function dialogSelectLogic() {
         const entityName = getCurrentEntity()
-        // const authEntityName = 'authentication'
-        // const loginData = getLoginData()
-        // const dateFormat: string = getFromBag('dateFormat')
         const logic: any = {
             unitInfo: {
                 read: async () => {

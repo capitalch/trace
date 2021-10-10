@@ -47,6 +47,8 @@ c) In all Typography comment out disableTypography
 
 # Working on
 1. Fix up bugs originated from reorganizing the code
+1.1 When change company, UI freezes
+1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5. All dialog boxes to originate from same place. At present there are many
 2. Remove unnecessary commented code
 3. Reorganize more for imports mecanism
@@ -56,7 +58,6 @@ c) In all Typography comment out disableTypography
 9. Provide a way to come out of app in mobile. Presently there is no way
 10. Branch master, finYear master rework
 
-5. 
 ## Bug fixing
 	1. serial number error in purchases
 	2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
@@ -124,14 +125,18 @@ c) In all Typography comment out disableTypography
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 19-10-2021
+1. Reorganized code
+2. In all transaction reports date wise reverse + id sort
+
+# 05-10-2021 to 09-10-2021
+1. Working on Material uI migration from V4.x to 5.x
+
 # 26-09-2021
 1. Bug fix: General ledger opening balance always coming as 01/04//2021 now fixed: 30 mins
 2. Bug fix: Error when no brands and No category leaf and new product entry now fixed: 1 hr
 3. Bug fix: Bank recon: Last fin year with same current year rows were incorrectly coming now fixed: 1 hr
 4. Bug fix: All Transaction reports: Remove opening balance: 30 mins
-
-# 05-10-2021 to 09-10-2021
-1. Working on Material uI migration from V4.x to 5.x
 
 # 20-09-2021 to 4-10-2021
 Other work
