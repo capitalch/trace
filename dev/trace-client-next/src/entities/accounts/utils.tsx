@@ -9,7 +9,7 @@ import { usingIbuki } from '../../global-utils/ibuki'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
 import { IconButton } from '@material-ui/core'
-import SearchIcon from '@material-ui/icons/Search'
+import Search from '@material-ui/icons/Search'
 import moment from 'moment'
 import accountsMessages from '../accounts/json/accounts-messages.json'
 
@@ -303,11 +303,11 @@ function utils() {
                             // closeDialog()
                         }}>
                         {node.headerId && (
-                            <SearchIcon
+                            <Search
                                 style={{
                                     fontSize: '1rem',
                                     marginLeft: '-0.5rem',
-                                }}></SearchIcon>
+                                }}></Search>
                         )}
                     </IconButton>
                 )
@@ -483,7 +483,7 @@ function utils() {
             7: 'debitNote',
             8: 'creditNote',
             9: 'saleReturn',
-            10: 'purchaseReturn'
+            10: 'assignmentReturned'
         }
         return (tranObj[tranTypeId])
     }

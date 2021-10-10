@@ -2,7 +2,7 @@ import { moment, useState, useEffect, useRef } from '../../../../imports/regular
 import { makeStyles, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
-function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
+function useDebitFlightTakeoffView(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
     const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
     useEffect(() => {
@@ -28,7 +28,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
 
     async function getData() {
         emit('SHOW-LOADING-INDICATOR', true)
-        const label = tranType === 'dn' ? 'debitNotesTran' : 'creditNotesTran'
+        const label = tranType === 'dn' ? 'flightLandTran' : 'flightTakeoffTran'
         let no = getFromBag(label)
         no = no ?? meta.current.no
         const ret = await execGenericView({
@@ -90,7 +90,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
     return { getData, loadData, meta }
 }
 
-export { useDebitCreditNotesView }
+export { useDebitFlightTakeoffView }
 
 const useStyles: any = makeStyles(() =>
     createStyles({

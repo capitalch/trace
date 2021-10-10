@@ -5,8 +5,8 @@ import {
     InputAdornment,
 } from '../../../../imports/gui-imports'
 import {
-    CloseIcon,
-    SearchIcon,
+    CloseSharp,
+    Search,
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import {
@@ -39,7 +39,7 @@ function PurchaseInvoiceNoSelect({ arbitraryData }: any) {
                         <>
                             <InputAdornment position="end">
                                 <IconButton size="small" onClick={handleClear}>
-                                    {<CloseIcon></CloseIcon>}
+                                    {<CloseSharp></CloseSharp>}
                                 </IconButton>
                             </InputAdornment>
                             <InputAdornment position="end">
@@ -48,7 +48,7 @@ function PurchaseInvoiceNoSelect({ arbitraryData }: any) {
                                     color="secondary"
                                     size="small"
                                     onClick={handleSearchInvoice}>
-                                    <SearchIcon /> Select
+                                    <Search /> Select
                                 </Button>
                             </InputAdornment>
                         </>

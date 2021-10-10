@@ -7,7 +7,7 @@ import {
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
-import { SearchIcon, SyncIcon } from '../../../../imports/icons-import'
+import { Search, SyncSharp } from '../../../../imports/icons-import'
 import { graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import styled from 'styled-components'
 import { utilMethods } from '../../../../global-utils/misc-utils'
@@ -155,7 +155,7 @@ function TrialBalance() {
                     size="small"
                     color="secondary"
                     onClick={(e: any) => emit('SHOW-LEDGER', node.data.id)}>
-                    <SearchIcon></SearchIcon>
+                    <Search></Search>
                 </IconButton>
             )
         }
@@ -236,7 +236,7 @@ function TrialBalance() {
                         size="medium"
                         color="secondary"
                         onClick={(e: any) => getData()}>
-                        <SyncIcon></SyncIcon>
+                        <SyncSharp></SyncSharp>
                     </IconButton>
                 </Box>
                 {/* </Box> */}

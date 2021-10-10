@@ -13,11 +13,11 @@ import {
     Switch,
 } from '../../../../imports/gui-imports'
 import {
-    AddIcon,
-    DeleteIcon,
-    EditIcon,
-    LinkIcon,
-    SyncIcon,
+    Add,
+    DeleteForever,
+    Edit,
+    Link,
+    SyncSharp,
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useCategoriesMaster, useStyles } from './categories-master-hook'
@@ -94,11 +94,11 @@ function CategoriesMaster() {
                         </Grid>
                         <Grid>
                             <IconButton
-                                className={classes.syncIconButton}
+                                className={classes.syncSharpButton}
                                 size="medium"
                                 color="secondary"
                                 onClick={getData}>
-                                <SyncIcon></SyncIcon>
+                                <SyncSharp />
                             </IconButton>
                         </Grid>
                     </Grid>
@@ -133,7 +133,7 @@ function CategoriesMaster() {
                             color="secondary"
                             size="small"
                             onClick={handleAddRootcategory}
-                            startIcon={<AddIcon />}>
+                            startIcon={<Add />}>
                             Add root category
                         </Button>
                     }
@@ -148,7 +148,7 @@ function CategoriesMaster() {
                                     // variant="contained"
                                     color="primary"
                                     size="small"
-                                    startIcon={<EditIcon />}
+                                    startIcon={<Edit />}
                                     onClick={() => handleEditSelf(node)}>
                                     Edit self
                                 </Button>
@@ -159,7 +159,7 @@ function CategoriesMaster() {
                                         // variant="contained"
                                         color="secondary"
                                         size="small"
-                                        startIcon={<AddIcon />}
+                                        startIcon={<Add />}
                                         onClick={() => handleAddChild(node)}>
                                         Add Child
                                     </Button>
@@ -170,7 +170,7 @@ function CategoriesMaster() {
                                     <Button
                                         size="small"
                                         onClick={() => handleChangeParent(node)}
-                                        startIcon={<LinkIcon />}>
+                                        startIcon={<Link />}>
                                         Change parent
                                     </Button>
                                 )}
@@ -182,7 +182,7 @@ function CategoriesMaster() {
                                         onClick={() => handleDelete(node)}
                                         className="delete-category"
                                         aria-label="delete">
-                                        <DeleteIcon />
+                                        <DeleteForever />
                                     </IconButton>
                                 )}
                             </div>

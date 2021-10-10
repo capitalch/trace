@@ -11,7 +11,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import {} from '../../../../imports/gui-imports'
-import { AddIcon, DeleteIcon, EditIcon } from '../../../../imports/icons-import'
+import { Add, DeleteForever, Edit } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
@@ -122,20 +122,20 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
     function getActionsList() {
         return [
             {
-                icon: () => <AddIcon />,
+                icon: () => <Add />,
                 toolTip: 'Select party',
                 name: 'selectParty',
                 isFreeAction: true, // isFreeAction puts the icon in toolbar
                 onClick: () => {}, // Reload the component for new sale entry
             },
             {
-                icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
+                icon: () => <Add />, // Here the <Add> is placeholder. It is later customized to select control
                 name: 'select',
                 isFreeAction: true,
                 onClick: () => {}, // This empty onClick is a hack. Without this warning appears
             },
             {
-                icon: () => <EditIcon color="secondary" fontSize="small" />,
+                icon: () => <Edit color="secondary" fontSize="small" />,
                 toolTip: 'Edit transaction',
                 name: 'edit',
                 onClick: (e: any, rowData: any) => {
@@ -160,7 +160,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             },
             {
                 icon: () => (
-                    <DeleteIcon color="error" fontSize="small"></DeleteIcon>
+                    <DeleteForever color="error" fontSize="small"></DeleteForever>
                 ),
                 toolTip: 'Delete transaction',
                 name: 'delete',

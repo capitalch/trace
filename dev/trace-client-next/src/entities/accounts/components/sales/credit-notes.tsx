@@ -1,15 +1,15 @@
 import { useSharedElements } from '../shared/shared-elements-hook'
 import {  Paper, Tabs, Tab} from '../../../../imports/gui-imports'
 import {
-    useDebitCreditNotes,
+    useDebitFlightTakeoff,
     useStyles,
 } from '../debit-credit-notes/debit-credit-notes-hook'
 import { DebitCreditNoteBody } from '../debit-credit-notes/debit-credit-note-body'
-import { DebitCreditNotesView } from '../debit-credit-notes/debit-credit-notes-view'
+import { DebitFlightTakeoffView } from '../debit-credit-notes/debit-credit-notes-view'
 
-function CreditNotes({ drillDownEditAttributes }: any={}) {
+function FlightTakeoff({ drillDownEditAttributes }: any={}) {
     const classes = useStyles()
-    const { handleOnChange, meta } = useDebitCreditNotes(drillDownEditAttributes)
+    const { handleOnChange, meta } = useDebitFlightTakeoff(drillDownEditAttributes)
     const { } = useSharedElements()
 
     return (
@@ -26,10 +26,10 @@ function CreditNotes({ drillDownEditAttributes }: any={}) {
                 <DebitCreditNoteBody arbitraryData={meta.current} tranType='cn' />
             </div>
             <div hidden={meta.current.value !== 1}>
-                <DebitCreditNotesView arbitraryData={meta.current} tranType='cn' />
+                <DebitFlightTakeoffView arbitraryData={meta.current} tranType='cn' />
             </div>
         </Paper>
     )
 }
 
-export { CreditNotes }
+export { FlightTakeoff }

@@ -5,9 +5,9 @@ function useManageUsers(meta: any) {
     const [, setRefresh] = useState({})
     const {
         Checkbox,
-        CloseIcon,
+        CloseSharp,
         Column,
-        EditIcon,
+        Edit,
         emit,
         getFormData,
         getLoginData,
@@ -151,7 +151,7 @@ function useManageUsers(meta: any) {
                         size="medium"
                         color="secondary"
                         onClick={() => manageUsers.update(node)}>
-                        <EditIcon></EditIcon>
+                        <Edit></Edit>
                     </IconButton>
                 )}
                 style={{ width: '4rem', textAlign: 'center' }}></Column>,
@@ -164,7 +164,7 @@ function useManageUsers(meta: any) {
                         size="medium"
                         color="secondary"
                         onClick={(e) => deleteRow(node, manageUsers.read)}>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,
         ]

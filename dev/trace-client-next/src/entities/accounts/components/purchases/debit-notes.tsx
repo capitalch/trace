@@ -3,15 +3,15 @@ import {Paper,
     Tab,} from '../../../../imports/gui-imports'
 import {} from '../../../../imports/icons-import'
 import {
-    useDebitCreditNotes,
+    useDebitFlightTakeoff,
     useStyles,
 } from '../debit-credit-notes/debit-credit-notes-hook'
 import { DebitCreditNoteBody } from '../debit-credit-notes/debit-credit-note-body'
-import { DebitCreditNotesView } from '../debit-credit-notes/debit-credit-notes-view'
+import { DebitFlightTakeoffView } from '../debit-credit-notes/debit-credit-notes-view'
 
-function DebitNotes({ drillDownEditAttributes}:any={}) {
+function FlightLand({ drillDownEditAttributes}:any={}) {
     const classes = useStyles()
-    const { handleOnChange, meta } = useDebitCreditNotes( drillDownEditAttributes)
+    const { handleOnChange, meta } = useDebitFlightTakeoff( drillDownEditAttributes)
 
     return (
         <Paper>
@@ -30,7 +30,7 @@ function DebitNotes({ drillDownEditAttributes}:any={}) {
                 />
             </div>
             <div hidden={meta.current.value !== 1}>
-                <DebitCreditNotesView
+                <DebitFlightTakeoffView
                     arbitraryData={meta.current}
                     tranType="dn"
                 />
@@ -39,4 +39,4 @@ function DebitNotes({ drillDownEditAttributes}:any={}) {
     )
 }
 
-export { DebitNotes }
+export { FlightLand }

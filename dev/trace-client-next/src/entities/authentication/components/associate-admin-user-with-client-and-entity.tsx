@@ -4,7 +4,7 @@ import { useSharedElements } from './shared-elements-hook'
 function useAssociateAdminUserWithClientAndEntity(meta: any) {
     const [, setRefresh] = useState({})
     const {
-        CloseIcon,
+        CloseSharp,
         Column,
         emit,
         execGenericView,
@@ -167,7 +167,7 @@ function useAssociateAdminUserWithClientAndEntity(meta: any) {
                                 associateAdminUserWithClientAndEntity.read
                             )
                         }>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,
         ]

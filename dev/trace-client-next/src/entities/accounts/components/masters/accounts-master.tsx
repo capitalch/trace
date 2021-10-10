@@ -10,9 +10,9 @@ import {
     Chip,
 } from '../../../../imports/gui-imports'
 import {
-    AddIcon,
-    EditIcon, SyncIcon,
-    CloseIcon,
+    Add,
+    Edit, SyncSharp,
+    CloseSharp,
 } from '../../../../imports/icons-import'
 import { useSharedElements, useStyles } from '../shared/shared-elements-hook'
 import { useTheme } from '../../../../imports/gui-imports'
@@ -186,11 +186,11 @@ function AccountsMaster() {
                             meta.current.isMounted && setRefresh({})
                         }}></InputSwitch>
                     <IconButton
-                        className={classes.syncIconButton}
+                        className={classes.syncSharpButton}
                         size="medium"
                         color="secondary"
                         onClick={(e: any) => getData()}>
-                        <SyncIcon></SyncIcon>
+                        <SyncSharp />
                     </IconButton>
                 </Box>
                 {traceGlobalSearch({
@@ -247,7 +247,7 @@ function AccountsMaster() {
                                         className={classes.addButton}
                                         color="inherit"
                                         size="small"
-                                        startIcon={<AddIcon></AddIcon>}
+                                        startIcon={<Add></Add>}
                                         onClick={() => {
                                             utilFunc().saveScrollPos()
                                             const accName = node.data.accName
@@ -278,7 +278,7 @@ function AccountsMaster() {
                                         )}
                                         size="small"
                                         color="secondary"
-                                        startIcon={<EditIcon></EditIcon>}
+                                        startIcon={<Edit></Edit>}
                                         onClick={() => {
                                             utilFunc().saveScrollPos()
                                             const accName = node.data.accName
@@ -317,7 +317,7 @@ function AccountsMaster() {
                                         size="small"
                                         style={{ width: theme.spacing(3) }}
                                         className={classes.deleteButton}
-                                        startIcon={<CloseIcon></CloseIcon>}
+                                        startIcon={<CloseSharp />}
                                         onClick={async () => {
                                             const id = node.data.id
                                             const toDelete = window.confirm(
@@ -347,7 +347,7 @@ function AccountsMaster() {
                             color="primary"
                             disabled={isControlDisabled('accountsMasterEdit')}
                             className={classes.addButton}
-                            startIcon={<AddIcon></AddIcon>}
+                            startIcon={<Add />}
                             onClick={() => {
                                 dialogConfig.entryType = 'newGroup'
                                 dialogConfig.title = 'New group account as root'
@@ -500,7 +500,7 @@ function AccountsMaster() {
                         color="default"
                         onClick={closeDialog}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
@@ -529,7 +529,7 @@ function AccountsMaster() {
                         color="default"
                         onClick={closeAddressDialog}
                         aria-label="closeAddress">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>

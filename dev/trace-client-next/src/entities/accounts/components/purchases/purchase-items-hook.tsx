@@ -7,8 +7,8 @@ import { makeStyles, Theme, createStyles,
     Button,   Typography,
     Checkbox,
     Chip, } from '../../../../imports/gui-imports'
-import {AddCircle,Clear, SearchIcon,
-    CloseIcon,} from '../../../../imports/icons-import'
+import {AddCircle,Clear, Search,
+    CloseSharp,} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useProductUtils } from '../shared/product-utils-hook'
 import { NewProduct } from '../inventory/new-product'
@@ -488,7 +488,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 meta.current.isMounted && setRefresh({})
                             }}
                             disabled={al.length === 1 ? true : false}>
-                            <CloseIcon className="delete-icon" />
+                            <CloseSharp className="delete-icon" />
                         </IconButton>
                         {rowData.index}
                         <IconButton
@@ -545,7 +545,7 @@ function usePurchaseItems(arbitraryData: any) {
                                             onClick={() =>
                                                 handleSearchOnProduct(rowData)
                                             }>
-                                            <SearchIcon />
+                                            <Search />
                                         </IconButton>
                                     </>
                                 ),

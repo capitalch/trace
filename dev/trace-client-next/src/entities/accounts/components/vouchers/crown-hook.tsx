@@ -2,7 +2,7 @@ import { _, useState, } from '../../../../imports/regular-imports'
 import {
     Button, Typography,
 } from '../../../../imports/gui-imports'
-import { ErrorIcon, Check } from '../../../../imports/icons-import'
+import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function useCrown(meta: any) {
@@ -268,7 +268,7 @@ function useCrown(meta: any) {
                 onClick={() => handleSubmit()}
                 startIcon={
                     meta.current.errorMessage ? (
-                        <ErrorIcon color="error" />
+                        <Error color="error" />
                     ) : (
                         <Check style={{ color: 'white' }} />
                     )

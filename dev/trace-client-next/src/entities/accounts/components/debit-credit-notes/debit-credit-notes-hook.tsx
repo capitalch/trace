@@ -3,7 +3,7 @@ import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports
 import { useIbuki } from '../../../../imports/trace-imports'
 // import { useSharedElements } from '../../../authentication/components/shared-elements-hook'
 
-function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
+function useDebitFlightTakeoff(drillDownEditAttributes: any = {}) {
     const [, setRefresh] = useState({})
     const { emit } = useIbuki()
     const meta: any = useRef({
@@ -34,7 +34,7 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
     return ({ handleOnChange, meta })
 }
 
-export { useDebitCreditNotes }
+export { useDebitFlightTakeoff }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({

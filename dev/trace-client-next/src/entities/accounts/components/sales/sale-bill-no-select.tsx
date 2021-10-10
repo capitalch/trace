@@ -7,7 +7,7 @@ import {
     Input,
     InputAdornment,
 } from '../../../../imports/gui-imports'
-import { CloseIcon, SearchIcon } from '../../../../imports/icons-import'
+import { CloseSharp, Search } from '../../../../imports/icons-import'
 
 function SaleBillNoSelect({ value }: any) {
     const { handleSelect, meta } = useSaleBillNoSelect()
@@ -29,7 +29,7 @@ function SaleBillNoSelect({ value }: any) {
                                         emit('SALE-BILL-NO-CLEARED', '')
                                     }}>
                                     {/* don't show icon when less than medium device */}
-                                    {<CloseIcon></CloseIcon>}
+                                    {<CloseSharp></CloseSharp>}
                                 </IconButton>
                             </InputAdornment>
                             <InputAdornment position="end">
@@ -42,7 +42,7 @@ function SaleBillNoSelect({ value }: any) {
                                     onClick={handleSelect}>
                                     {' '}
                                     Select bill{' '}
-                                    <SearchIcon className="search-icon" />
+                                    <Search className="search-icon" />
                                 </Button>
                             </InputAdornment>
                         </div>

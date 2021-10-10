@@ -13,16 +13,16 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    Alert,
+    MuiAlert,
     Theme,
 } from '../imports/gui-imports'
 import {
-    ChangePasswordicon,
-    ChangeUidIcon,
-    CloseIcon,
-    LogoutIcon,
-    SuperAdminIcon,
-    SupervisorIcon,
+    VerifiedUserSharp,
+    SecuritySharp,
+    CloseSharp,
+    ExitToAppSharp,
+    AccountCircleSharp,
+    SupervisorAccount,
 } from '../imports/icons-import'
 import {
     componentStore,
@@ -91,7 +91,7 @@ function useTraceHeader({ setRefresh }: any) {
 
     // for material snackbar
     function Alert(props: any) {
-        return <Alert elevation={6} variant="filled" {...props} />
+        return <MuiAlert elevation={6} variant="filled" {...props} />
     }
 
     // for closing snackbar
@@ -163,7 +163,7 @@ function useTraceHeader({ setRefresh }: any) {
                     color="default"
                     onClick={closeDialog}
                     aria-label="close">
-                    <CloseIcon />
+                    <CloseSharp />
                 </IconButton>
             </DialogTitle>
         )
@@ -191,7 +191,7 @@ function useTraceHeader({ setRefresh }: any) {
                     }}>
                     <ListItemAvatar>
                         <Avatar>
-                            <SupervisorIcon color="primary" />
+                            <SupervisorAccount color="primary" />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="Super admin menu"></ListItemText>
@@ -209,7 +209,7 @@ function useTraceHeader({ setRefresh }: any) {
                     }}>
                     <ListItemAvatar>
                         <Avatar>
-                            <SuperAdminIcon color="action" />
+                            <AccountCircleSharp color="action" />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="Admin menu"></ListItemText>
@@ -234,7 +234,7 @@ function useTraceHeader({ setRefresh }: any) {
                     }}>
                     <ListItemAvatar>
                         <Avatar>
-                            <ChangeUidIcon color="secondary" />
+                            <SecuritySharp color="secondary" />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="Change uid"></ListItemText>
@@ -260,7 +260,7 @@ function useTraceHeader({ setRefresh }: any) {
                     }}>
                     <ListItemAvatar>
                         <Avatar>
-                            <ChangePasswordicon color="primary" />
+                            <VerifiedUserSharp color="primary" />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="Change password"></ListItemText>
@@ -277,7 +277,7 @@ function useTraceHeader({ setRefresh }: any) {
                     }}>
                     <ListItemAvatar>
                         <Avatar>
-                            <LogoutIcon color="secondary" />
+                            <ExitToAppSharp color="secondary" />
                         </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary="Log out"></ListItemText>

@@ -5,9 +5,9 @@ function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
     const [, setRefresh] = useState({})
     const {
         _,
-        CloseIcon,
+        CloseSharp,
         Column,
-        EditIcon,
+        Edit,
         emit,
         execGenericView,
         getLoginData,
@@ -175,7 +175,7 @@ function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
                         color='secondary'
                         onClick={() => associateBusinessUsersWithRolesAndBu.update(node)}
                     >
-                        <EditIcon></EditIcon>
+                        <Edit></Edit>
                     </IconButton>
                 }
                 style={{ 'width': '4rem', 'textAlign': 'center' }}
@@ -189,7 +189,7 @@ function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
                         size='medium'
                         color='secondary'
                         onClick={e => deleteRow(node, associateBusinessUsersWithRolesAndBu.read)}>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 }
             ></Column>

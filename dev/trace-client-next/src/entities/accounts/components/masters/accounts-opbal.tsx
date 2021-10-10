@@ -7,7 +7,7 @@ import {
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
-import { SaveIcon, SyncIcon } from '../../../../imports/icons-import'
+import { Save, SyncSharp } from '../../../../imports/icons-import'
 import { globalMessages, graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import styled from 'styled-components'
 import { } from '../../../../global-utils/esm'
@@ -192,7 +192,7 @@ function AccountsOpBal() {
                                 }
                             }
                         }}>
-                        <SaveIcon></SaveIcon>
+                        <Save></Save>
                     </IconButton>
 
                     <IconButton
@@ -200,7 +200,7 @@ function AccountsOpBal() {
                         size="medium"
                         color="secondary"
                         onClick={(e: any) => getData()}>
-                        <SyncIcon></SyncIcon>
+                        <SyncSharp></SyncSharp>
                     </IconButton>
                 </Box>
                 {/* </Box> */}

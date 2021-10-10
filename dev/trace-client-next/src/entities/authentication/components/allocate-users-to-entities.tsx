@@ -1,6 +1,6 @@
 import { _, PrimeColumn, useState } from '../../../imports/regular-imports'
 import { IconButton } from '../../../imports/gui-imports'
-import { CloseIcon, IconGeneralSettings } from '../../../imports/icons-import'
+import { CloseSharp, Settings } from '../../../imports/icons-import'
 import { useSharedElements } from './shared-elements-hook'
 
 function useAllocateUsersToEntities(meta: any) {
@@ -147,7 +147,7 @@ function useAllocateUsersToEntities(meta: any) {
                             meta.current.dialogConfig.title = 'User permissions'
                             meta.current.isMounted && setRefresh({})
                         }}>
-                        <IconGeneralSettings></IconGeneralSettings>
+                        <Settings></Settings>
                     </IconButton>
                 )}></PrimeColumn>,
             <PrimeColumn
@@ -178,7 +178,7 @@ function useAllocateUsersToEntities(meta: any) {
                         onClick={(e) =>
                             deleteRow(node, allocateUsersToEntities.read)
                         }>
-                        <CloseIcon></CloseIcon>
+                        <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></PrimeColumn>,
         ]

@@ -50,6 +50,8 @@ c) In all Typography comment out disableTypography
 1.1 When change company, UI freezes
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5. All dialog boxes to originate from same place. At present there are many
+1.6 Branch edit, Fy Year edit is not being possible. It is throwing server side error
+1.7 Vouchers view is not filled 2nd time
 2. Remove unnecessary commented code
 3. Reorganize more for imports mecanism
 4. All reports to use X-Grid

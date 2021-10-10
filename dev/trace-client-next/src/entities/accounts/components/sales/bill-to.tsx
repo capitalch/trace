@@ -7,7 +7,7 @@ import {
     Typography,
     Paper,
 } from '../../../../imports/gui-imports'
-import { CloseIcon, SearchIcon } from '../../../../imports/icons-import'
+import { CloseSharp, Search } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useBillTo, useStyles } from './bill-to-hook'
 
@@ -45,7 +45,7 @@ function BillTo({ arbitraryData }: any) {
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <SearchIcon />
+                                    <Search />
                                 </InputAdornment>
                             ),
                             endAdornment: (
@@ -57,7 +57,7 @@ function BillTo({ arbitraryData }: any) {
                                             meta.current.isMounted &&
                                                 setRefresh({})
                                         }}>
-                                        <CloseIcon></CloseIcon>
+                                        <CloseSharp></CloseSharp>
                                     </IconButton>
                                 </InputAdornment>
                             ),
@@ -155,9 +155,9 @@ function BillTo({ arbitraryData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled={arbitraryData.isSalesReturn}
+                    disabled={arbitraryData.isAssignmentReturn}
                     onClick={handleClear}>
-                    <CloseIcon />
+                    <CloseSharp />
                 </IconButton>
             </div>
             <TraceDialog meta={meta} onSearchBoxFilter={onSearchBoxFilter} />

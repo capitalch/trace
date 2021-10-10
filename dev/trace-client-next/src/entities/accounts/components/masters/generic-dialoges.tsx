@@ -5,7 +5,7 @@ import {
     DialogContent,
     DialogActions, IconButton, makeStyles, Theme, createStyles
 } from '../../../../imports/gui-imports'
-import { CloseIcon } from '../../../../imports/icons-import'
+import { CloseSharp } from '../../../../imports/icons-import'
 import { manageEntitiesState, ReactForm, manageFormsState, useIbuki, useTraceMaterialComponents, useTraceGlobal } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import { initCode } from '../../init-code'
@@ -96,7 +96,7 @@ function GenericDialoges({ loadDialog }: any) {
                         color="default"
                         onClick={closeDialog}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>

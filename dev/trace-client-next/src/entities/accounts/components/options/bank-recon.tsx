@@ -18,7 +18,7 @@ import {
     ListItemText,
     useTheme,
 } from '../../../../imports/gui-imports'
-import { CloseIcon, IconAccountBalance, RearrangeIcon, RefreshIcon, SaveIcon } from '../../../../imports/icons-import'
+import { CloseSharp, AccountBalance, FlipToFront, Cached, Save } from '../../../../imports/icons-import'
 
 import {componentStore,manageEntitiesState,manageFormsState,ReactForm, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
@@ -183,7 +183,7 @@ function BankRecon() {
                         color="primary"
                         startIcon={
                             headerConfig.isButtonsIcon && (
-                                <IconAccountBalance></IconAccountBalance>
+                                <AccountBalance></AccountBalance>
                             )
                         }
                         disabled={!meta.current.selectedBankId}
@@ -197,7 +197,7 @@ function BankRecon() {
                         size={meta.current.headerConfig.buttonSize}
                         startIcon={
                             headerConfig.isButtonsIcon && (
-                                <RearrangeIcon></RearrangeIcon>
+                                <FlipToFront></FlipToFront>
                             )
                         }
                         onClick={async (e: any) => {
@@ -215,7 +215,7 @@ function BankRecon() {
                         className={clsx(classes.buttons, classes.refresh)}
                         startIcon={
                             headerConfig.isButtonsIcon && (
-                                <RefreshIcon></RefreshIcon>
+                                <Cached></Cached>
                             )
                         }
                         onClick={(e: any) => utilFunc().fetchBankRecon()}
@@ -230,7 +230,7 @@ function BankRecon() {
                         className={clsx(classes.buttons, classes.submit)}
                         startIcon={
                             headerConfig.isButtonsIcon && (
-                                <SaveIcon></SaveIcon>
+                                <Save></Save>
                             )
                         }
                         onClick={utilFunc().submitBankRecon}
@@ -359,7 +359,7 @@ function BankRecon() {
                         color="default"
                         onClick={utilFunc().closeDialog}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>

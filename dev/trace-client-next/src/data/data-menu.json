@@ -55,7 +55,7 @@
                             }
                         },
                         {
-                            "name": "salesReturnSubMenu",
+                            "name": "assignmentReturnSubMenu",
                             "label": "Sales return",
                             "componentName": "sales",
                             "args":{
@@ -71,7 +71,7 @@
                             }
                         },
                         {
-                            "name": "purchaseReturnSubMenu",
+                            "name": "assignmentReturnedSubMenu",
                             "label": "Purchase return",
                             "componentName": "purchases",
                             "args": {
@@ -79,14 +79,14 @@
                             }
                         },
                         {
-                            "name": "debitNotesSubMenu",
+                            "name": "flightLandSubMenu",
                             "label": "Debit notes",
-                            "componentName": "debitNotes"
+                            "componentName": "flightLand"
                         },
                         {
-                            "name": "creditNotesSubMenu",
+                            "name": "flightTakeoffSubMenu",
                             "label": "Credit notes",
-                            "componentName": "creditNotes"
+                            "componentName": "flightTakeoff"
                         }
                     ]
                 },

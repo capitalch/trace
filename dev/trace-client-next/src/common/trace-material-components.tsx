@@ -14,9 +14,9 @@ import {
 } from '../imports/gui-imports'
 
 import {
-    SaveIcon,
-    SearchIcon,
-    CloseIcon,
+    Save,
+    Search,
+    CloseSharp,
     PageviewTwoTone,
 } from '../imports/icons-import'
 import messages from '../messages.json'
@@ -55,7 +55,7 @@ function useTraceMaterialComponents() {
                         color="default"
                         onClick={options.onClose || handleClose}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
@@ -76,7 +76,7 @@ function useTraceMaterialComponents() {
                             }}
                             startAdornment={
                                 <InputAdornment position="end">
-                                    <SearchIcon />
+                                    <Search />
                                 </InputAdornment>
                             }
                             endAdornment={
@@ -89,7 +89,7 @@ function useTraceMaterialComponents() {
                                         setRefresh({})
                                     }}>
                                     {/* don't show icon when less than medium device */}
-                                    {<CloseIcon></CloseIcon>}
+                                    {<CloseSharp></CloseSharp>}
                                 </IconButton>
                             }
                         />
@@ -120,7 +120,7 @@ function useTraceMaterialComponents() {
                 disabled={disabled}
                 fullWidth
                 variant="contained"
-                startIcon={<SaveIcon></SaveIcon>}
+                startIcon={<Save></Save>}
                 className={classes.submitButtonStyle}
                 color="secondary"
                 onClick={onClick}>
@@ -140,7 +140,7 @@ function useTraceMaterialComponents() {
                 InputProps={{
                     startAdornment: (
                         <InputAdornment position="start">
-                            <SearchIcon />
+                            <Search />
                         </InputAdornment>
                     ),
                     endAdornment: (
@@ -152,7 +152,7 @@ function useTraceMaterialComponents() {
                                     meta.current.isMounted && setRefresh({})
                                 }}>
                                 {/* don't show icon when less than medium device */}
-                                {isMediumSizeUp && <CloseIcon></CloseIcon>}
+                                {isMediumSizeUp && <CloseSharp></CloseSharp>}
                             </IconButton>
                         </InputAdornment>
                     ),
@@ -198,7 +198,7 @@ function useTraceMaterialComponents() {
                     InputProps={{
                         startAdornment: (
                             <InputAdornment position="end">
-                                <SearchIcon />
+                                <Search />
                             </InputAdornment>
                         ),
                         endAdornment: (
@@ -212,7 +212,7 @@ function useTraceMaterialComponents() {
                                         options.onClear && options.onClear()
                                     }}>
                                     {/* don't show icon when less than medium device */}
-                                    {<CloseIcon></CloseIcon>}
+                                    {<CloseSharp></CloseSharp>}
                                 </IconButton>
                             </InputAdornment>
                         ),

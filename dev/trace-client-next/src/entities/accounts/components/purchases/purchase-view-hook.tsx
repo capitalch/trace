@@ -1,6 +1,6 @@
 import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { AddIcon, DeleteIcon, EditIcon, } from '../../../../imports/icons-import'
+import { Add, DeleteForever, Edit, } from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 
 function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEditAttributes: any) {
@@ -87,20 +87,20 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
     function getActionsList() {
         return [
             {
-                icon: () => <AddIcon />,
+                icon: () => <Add />,
                 toolTip: 'Select party',
                 name: 'selectParty',
                 isFreeAction: true, // isFreeAction puts the icon in toolbar
                 onClick: () => { }, // Reload the component for new entry
             },
             {
-                icon: () => <AddIcon />, // Here the <Addicon> is placeholder. It is later customized to select control
+                icon: () => <Add />, // Here the <Add> is placeholder. It is later customized to select control
                 name: 'select',
                 isFreeAction: true,
                 onClick: () => { }, // This empty onClick is a hack. Without this warning appears
             },
             {
-                icon: () => <EditIcon color="primary" />,
+                icon: () => <Edit color="primary" />,
                 toolTip: 'Edit transaction',
                 name: 'edit',
                 onClick: async (e: any, rowData: any) => {
@@ -124,7 +124,7 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
                 },
             },
             {
-                icon: () => <DeleteIcon color="error"></DeleteIcon>,
+                icon: () => <DeleteForever color="error"></DeleteForever>,
                 toolTip: 'Delete transaction',
                 name: 'delete',
                 onClick: async (e: any, rowData: any) => {

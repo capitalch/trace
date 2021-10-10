@@ -7,7 +7,7 @@ import {
     Dialog
     , DialogActions, DialogContent, Theme, useTheme, createStyles, makeStyles
 } from '../../../../imports/gui-imports'
-import {AddIcon,CloseIcon, EditIcon,  SyncIcon} from '../../../../imports/icons-import'
+import {Add,CloseSharp, Edit,  SyncSharp} from '../../../../imports/icons-import'
 import {manageFormsState,ReactForm, manageEntitiesState,useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../../../messages.json'
@@ -41,7 +41,7 @@ function GenericCRUD({ loadComponent }: any) {
     const { emit } = useIbuki()
     const entityName = getCurrentEntity()
 
-    const { ColumnHeaderLeftDiv, Spinner, TableHeaderDiv, closeDialog } = useSharedCode(meta)
+    const { ColumnHeaderLeftDiv, closeDialog } = useSharedCode(meta)
     const isoDateFormat = 'YYYY-MM-DD'
 
     const { TraceFullWidthSubmitButton } = useTraceMaterialComponents()
@@ -207,7 +207,7 @@ function GenericCRUD({ loadComponent }: any) {
                     size='medium'
                     color='secondary'
                     onClick={() => selectLogic()[meta.current.dialogConfig.formId].update(node)}>
-                    <EditIcon></EditIcon>
+                    <Edit></Edit>
                 </IconButton>
             }
             style={{ 'width': '6rem', 'textAlign': 'center' }}
@@ -219,7 +219,7 @@ function GenericCRUD({ loadComponent }: any) {
                     size='medium'
                     color='secondary'
                     onClick={e => deleteRow(node)}>
-                    <CloseIcon></CloseIcon>
+                    <CloseSharp></CloseSharp>
                 </IconButton>
             }
         ></PrimeColumn>].map((x, index) => {
@@ -250,7 +250,7 @@ function GenericCRUD({ loadComponent }: any) {
                     size='medium'
                     color='secondary'
                     onClick={() => selectLogic()[meta.current.dialogConfig.formId].update(node)}>
-                    <EditIcon></EditIcon>
+                    <Edit></Edit>
                 </IconButton>
             }
             style={{ 'width': '6rem', 'textAlign': 'center' }}
@@ -259,11 +259,11 @@ function GenericCRUD({ loadComponent }: any) {
             header={<ColumnHeaderLeftDiv>Delete</ColumnHeaderLeftDiv>}
             body={(node: any) =>
                 <IconButton
-                    className={classes.syncIconButton}
+                    className={classes.syncSharpButton}
                     size='medium'
                     color='secondary'
                     onClick={e => deleteRow(node)}>
-                    <CloseIcon></CloseIcon>
+                    <CloseSharp></CloseSharp>
                 </IconButton>
             }
         ></PrimeColumn>].map((x, index) => {
@@ -290,18 +290,18 @@ function GenericCRUD({ loadComponent }: any) {
             >{headerConfig.title}</Typography>
             <Box component='span' className={classes.RefreshAdd}>
                 <IconButton
-                    className={classes.syncIconButton}
+                    className={classes.syncSharpButton}
                     size='medium'
                     color='secondary'
                     onClick={() => selectLogic()[loadComponent].read()}>
-                    <SyncIcon></SyncIcon>
+                    <SyncSharp></SyncSharp>
                 </IconButton>
                 <IconButton
-                    className={classes.syncIconButton}
+                    className={classes.syncSharpButton}
                     size='medium'
                     color='secondary'
                     onClick={() => selectLogic()[meta.current.dialogConfig.formId].create()}>
-                    <AddIcon></AddIcon>
+                    <Add></Add>
                 </IconButton>
 
             </Box>
@@ -325,7 +325,7 @@ function GenericCRUD({ loadComponent }: any) {
                 </h3>
                 <IconButton size='small' color="default"
                     onClick={closeDialog} aria-label="close">
-                    <CloseIcon />
+                    <CloseSharp />
                 </IconButton>
             </DialogTitle>
             <DialogContent className={classes.dialogContent}>

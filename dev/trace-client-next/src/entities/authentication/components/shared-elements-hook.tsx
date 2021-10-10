@@ -9,8 +9,8 @@ import {
     makeStyles,
 } from '@material-ui/core'
 
-import EditIcon from '@material-ui/icons/Edit'
-import CloseIcon from '@material-ui/icons/Close'
+import Edit from '@material-ui/icons/Edit'
+import CloseSharp from '@material-ui/icons/Close'
 import Settings from '@material-ui/icons/Settings'
 import _ from 'lodash'
 import { useTraceMaterialComponents } from '../../../common/trace-material-components'
@@ -198,7 +198,7 @@ function useSharedElements(meta: any = {}) {
     return {
         _,
         clearServerError,
-        CloseIcon,
+        CloseSharp,
         Column,
         Checkbox,
         closeDialog,
@@ -206,7 +206,7 @@ function useSharedElements(meta: any = {}) {
         deleteRow,
         doValidateForm,
         doFormRefresh,
-        EditIcon,
+        Edit,
         emit,
         execGenericView,
         genericUpdateMaster,

@@ -9,15 +9,15 @@ import {
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
-import {CloseIcon} from '../../../../imports/icons-import'
+import {CloseSharp} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { manageEntitiesState , useIbuki} from '../../../../imports/trace-imports'
 import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'
 import { Sales } from '../sales/sales'
 import {Purchases} from '../purchases/purchases'
-import {DebitNotes} from '../purchases/debit-notes'
-import {CreditNotes} from '../sales/credit-notes'
+import {FlightLand} from '../purchases/debit-notes'
+import {FlightTakeoff} from '../sales/credit-notes'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
@@ -126,7 +126,7 @@ function AccountsLedgerDialog() {
                         color="default"
                         onClick={closeDialog}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
@@ -171,7 +171,7 @@ function AccountsLedgerDialog() {
                         color="default"
                         onClick={closeChildDialog}
                         aria-label="close">
-                        <CloseIcon />
+                        <CloseSharp />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
@@ -238,9 +238,9 @@ function AccountsLedgerDialog() {
         } else if(attrs.tranTypeId === 10){
             ret = <Purchases purchaseType='ret' drillDownEditAttributes={attrs}  />
         } else if(attrs.tranTypeId === 7){ //debit notes
-            ret = <DebitNotes  drillDownEditAttributes={attrs} />
+            ret = <FlightLand  drillDownEditAttributes={attrs} />
         } else if(attrs.tranTypeId === 8){ // credit notes
-            ret = <CreditNotes drillDownEditAttributes={attrs} />
+            ret = <FlightTakeoff drillDownEditAttributes={attrs} />
         } 
         return ret
     }

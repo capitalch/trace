@@ -6,8 +6,8 @@ import {  Badge, Paper,
     Typography,
     Chip,} from '../../../../imports/gui-imports'
 import { AddCircle,  Clear,
-    SearchIcon,
-    CloseIcon,} from '../../../../imports/icons-import'
+    Search,
+    CloseSharp,} from '../../../../imports/icons-import'
 import { useSharedElements } from '../shared/shared-elements-hook'
 import { useSaleItems, useStyles } from './sale-items-hook'
 
@@ -131,7 +131,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 meta.current.isMounted && setRefresh({})
                             }}
                             disabled={lineItems.length === 1 ? true : false}>
-                            <CloseIcon className="delete-icon" />
+                            <CloseSharp className="delete-icon" />
                         </IconButton>
                         <IconButton
                             size="small"
@@ -187,7 +187,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                             onClick={() =>
                                                 handleSearchOnProduct(rowData)
                                             }>
-                                            <SearchIcon />
+                                            <Search />
                                         </IconButton>
                                     </>
                                 ),
