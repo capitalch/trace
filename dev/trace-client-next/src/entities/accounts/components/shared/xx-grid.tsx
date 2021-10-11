@@ -1,13 +1,20 @@
 import { useStyles } from './xx-grid-hook'
-import {_} from '../../../../imports/regular-imports'
-import {Box,FormControlLabel,
-    IconButton,  Typography,
-    Button, TextField,
-    Checkbox,} from '../../../../imports/gui-imports'
-import { CloseSharp,
-    DeleteForever, Search,
+import { _ } from '../../../../imports/regular-imports'
+import {
+    FormControlLabel,
+    IconButton,
+    Typography,
+    Button,
+    TextField,
+    Checkbox,
+} from '../../../../imports/gui-imports'
+import {
+    CloseSharp,
+    DeleteForever,
+    Search,
     SyncSharp,
-    Edit,} from '../../../../imports/icons-import'
+    Edit,
+} from '../../../../imports/icons-import'
 // import {
 //     DataGrid,
 //     GridToolbarFilterButton,
@@ -63,11 +70,19 @@ interface XXGridOptions {
     specialColumns: SpecialColumnOptions
     xGridProps?: any
     jsonFieldPath?: any // if input is a json object then give the path of json field
+    viewLimit?: number
 }
 
 function XXGrid(gridOptions: XXGridOptions) {
-    const { columns, sqlQueryArgs, sqlQueryId, summaryColNames, title } =
-        gridOptions
+    const {
+        columns,
+        specialColumns,
+        sqlQueryArgs,
+        sqlQueryId,
+        summaryColNames,
+        title,
+        viewLimit=0,
+    } = gridOptions
     const apiRef: any = useGridApiRef()
     const {
         fetchRows,
@@ -80,21 +95,17 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleReverseOrder,
     } = useXXGrid(gridOptions)
-    const {
-        emit,
-        toDecimalFormat,
-    } = useSharedElements()
-
+    const { emit, toDecimalFormat } = useSharedElements()
+    meta.current.viewLimit = viewLimit || null
     const classes = useStyles(meta)
-    const specialColumns = gridOptions.specialColumns
+    // const specialColumns = gridOptions.specialColumns
     addSpecialColumns(specialColumns)
 
     return (
-
         <DataGridPro
             getRowClassName={(params: any) => {
-                const summ = params.row.isDailySummary ? 'ledger-summary':''
-                return (summ)
+                const summ = params.row.isDailySummary ? 'ledger-summary' : ''
+                return summ
             }}
             className={classes.content}
             {...gridOptions.xGridProps}
@@ -161,7 +172,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     <div className="view-limit">
                         <span>View</span>
                         <select
-                            value={meta.current.viewLimit}
+                            value={meta.current.viewLimit || 0}
                             style={{
                                 fontSize: '0.8rem',
                                 width: '4rem',
@@ -169,10 +180,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                             }}
                             onChange={(e) => {
                                 meta.current.viewLimit = e.target.value
-                                sqlQueryArgs['no'] =
-                                    meta.current.viewLimit === '0'
-                                        ? null
-                                        : meta.current.viewLimit // null for all items in postgresql
+                                // sqlQueryArgs['no'] =
+                                //     meta.current.viewLimit 
+                                //     === 0
+                                //         ? null
+                                //         : meta.current.viewLimit // null for all items in postgresql
                                 fetchRows(sqlQueryId, sqlQueryArgs)
                                 meta.current.isMounted && setRefresh({})
                             }}>
@@ -190,41 +202,43 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 onChange={(e: any) => {
                                     meta.current.isReverseOrder =
                                         e.target.checked
-                                        toggleReverseOrder()
+                                    toggleReverseOrder()
                                 }}
                             />
                         }
                         label="Reverse"
                     />
                 )}
-                {
-                    (!!gridOptions.toShowDailySummary) && <FormControlLabel
+                {!!gridOptions.toShowDailySummary && (
+                    <FormControlLabel
                         control={
                             <Checkbox
                                 checked={meta.current.isDailySummary}
                                 onChange={(e: any) => {
-                                    meta.current.isDailySummary = e.target.checked
+                                    meta.current.isDailySummary =
+                                        e.target.checked
                                     injectDailySummary()
                                 }}
                             />
                         }
                         label="Daily summary"
                     />
-                }
-                {
-                    ((!!gridOptions.toShowColumnBalance) && <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={meta.current.isColumnBalance}
-                            onChange={(e: any) => {
-                                meta.current.isColumnBalance = e.target.checked
-                                fillColumnBalance()
-                            }}
-                        />
-                    }
-                    label="Col balance"
-                />)
-                }
+                )}
+                {!!gridOptions.toShowColumnBalance && (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={meta.current.isColumnBalance}
+                                onChange={(e: any) => {
+                                    meta.current.isColumnBalance =
+                                        e.target.checked
+                                    fillColumnBalance()
+                                }}
+                            />
+                        }
+                        label="Col balance"
+                    />
+                )}
 
                 {/* global filter */}
                 <TextField

@@ -46,14 +46,14 @@ c) In all Typography comment out disableTypography
 # Pending
 
 # Working on
-1. Fix up bugs originated from reorganizing the code
-1.1 When change company, UI freezes
+1. Dropdown cascade not working for parties
+1.1 
 1.2 All transactions, default is reverse, so let the checkbox be checked
-1.5. All dialog boxes to originate from same place. At present there are many
-1.6 Branch edit, Fy Year edit is not being possible. It is throwing server side error
-1.7 Vouchers view is not filled 2nd time
-2. Remove unnecessary commented code
-3. Reorganize more for imports mecanism
+1.5 All dialog boxes to originate from same place. At present there are many
+1.6 
+
+2. 
+3. 
 4. All reports to use X-Grid
 7. Sales purchase to retain values
 8. Purchase sale clickaway
@@ -127,9 +127,14 @@ c) In all Typography comment out disableTypography
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 19-10-2021
+# 10-10-2021
 1. Reorganized code
 2. In all transaction reports date wise reverse + id sort
+3. Vouchers view is not filled 2nd time, corrected
+4. XXGrid viewLimit incorporated
+6. Fix up bugs originated from reorganizing the code
+7. When change company, UI freezes
+8. Branch edit, Fy Year edit is not being possible. It is throwing server side error
 
 # 05-10-2021 to 09-10-2021
 1. Working on Material uI migration from V4.x to 5.x

@@ -38,6 +38,7 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
                 <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
                 <VoucherView
                     hidden={meta.current.tabValue !== 1}
+                    // hidden={false}
                     tranTypeId={getTranTypeId()}
                 />
             </VoucherContext.Provider>

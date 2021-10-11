@@ -42,6 +42,7 @@ function GenericReports({ loadReport }: any) {
                 toShowOpeningBalance={false}
                 toShowReverseCheckbox={true}
                 xGridProps={{ disableSelectionOnClick: true }}
+                viewLimit={1000}
             />
         </Card>
     )

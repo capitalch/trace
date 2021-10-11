@@ -451,7 +451,7 @@ function GenericCRUD({ loadComponent }: any) {
             , data: formData
             , idInsert: options.idInsert
         })
-        if ((ret === true) || (ret?.length <= 9)) {
+        if ((ret === true) || (ret?.length <= 9) || ((typeof ret) === 'number')) {
             met.current.dialogConfig.isEditMode = false
 
             resetForm(met.current.dialogConfig.formId)

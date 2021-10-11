@@ -1,5 +1,14 @@
-import {_, useEffect, useState, useRef} from '../../../../imports/regular-imports'
-import { Theme, createStyles, makeStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    useEffect,
+    useState,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    Theme,
+    createStyles,
+    makeStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
 
 function useXXGrid(gridOptions: any) {
@@ -64,6 +73,8 @@ function useXXGrid(gridOptions: any) {
         if (!queryId || !queryArgs) {
             return
         }
+        queryArgs['no'] =
+            meta.current.viewLimit === 0 ? null : meta.current.viewLimit // null for all items in postgresql
         await fetch()
         setAllSummary()
         if (pre.isDailySummary) {
@@ -74,7 +85,8 @@ function useXXGrid(gridOptions: any) {
 
         pre.isMounted && setRefresh({})
 
-        async function fetch() { // populates meta.current.filteredRows
+        async function fetch() {
+            // populates meta.current.filteredRows
             pre.isReverseOrder = false
             pre.isDailySummary = false
             pre.isColumnBalance = false
@@ -89,7 +101,10 @@ function useXXGrid(gridOptions: any) {
             injectOpBalance(ret1)
 
             function injectOpBalance(ret1: any) {
-                pre.opBalance = (ret1?.jsonResult?.opBalance || { debit: 0, credit: 0 })
+                pre.opBalance = ret1?.jsonResult?.opBalance || {
+                    debit: 0,
+                    credit: 0,
+                }
                 let ret: any[]
                 if (gridOptions.jsonFieldPath) {
                     ret = _.get(ret1, gridOptions.jsonFieldPath)
@@ -100,16 +115,17 @@ function useXXGrid(gridOptions: any) {
                 ret = ret.map((item: any) => {
                     return {
                         ...item,
-                        balance: 0
+                        balance: 0,
                     }
                 })
 
-                gridOptions.toShowOpeningBalance && ret.unshift({
-                    otherAccounts: 'Opening balance',
-                    debit: pre.opBalance.debit,
-                    credit: pre.opBalance.credit,
-                    tranDate: getFromBag('finYearObject').isoStartDate,
-                })
+                gridOptions.toShowOpeningBalance &&
+                    ret.unshift({
+                        otherAccounts: 'Opening balance',
+                        debit: pre.opBalance.debit,
+                        credit: pre.opBalance.credit,
+                        tranDate: getFromBag('finYearObject').isoStartDate,
+                    })
                 pre.filteredRows = ret || []
                 pre.allRows = [...ret]
             }
@@ -118,17 +134,16 @@ function useXXGrid(gridOptions: any) {
 
     function fillColumnBalance() {
         const rows: any[] = [...pre.allRows]
-        if (pre.isColumnBalance) {            
-            let op:number = 0.0
+        if (pre.isColumnBalance) {
+            let op: number = 0.0
             for (let row of rows) {
                 row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
                 op = row.balance
             }
-            
         } else {
-           for(let row of rows){
-               row.balance = undefined
-           }           
+            for (let row of rows) {
+                row.balance = undefined
+            }
         }
         pre.filteredRows = rows
         pre.isMounted && setRefresh({})
@@ -143,11 +158,8 @@ function useXXGrid(gridOptions: any) {
         if (pre.isDailySummary) {
             const summaryRows = getSummaryRows(rows)
             rows = rows.concat(summaryRows)
-            rows = _.sortBy(rows, [
-                'tranDate',
-            ]) // Used lodash because JavaScript sort did not work out
+            rows = _.sortBy(rows, ['tranDate']) // Used lodash because JavaScript sort did not work out
             rows.shift() // remove first row which is having blank date value
-
         } else {
             pre.isReverseOrder = false
         }
@@ -175,7 +187,7 @@ function useXXGrid(gridOptions: any) {
                 otherAccounts: toOpeningDrCr(opBalance),
                 instrNo: toClosingDrCr(opBalance),
                 tranType: 'Summary',
-                isDailySummary: true
+                isDailySummary: true,
             }
 
             for (let item of arr) {
@@ -183,7 +195,7 @@ function useXXGrid(gridOptions: any) {
                     // if(item.id1){
                     acc.debit = +acc.debit + (item.debit || 0)
                     acc.credit = +acc.credit + (item.credit || 0)
-                    // }                    
+                    // }
                 } else {
                     //push
                     acc.clos = (item.id1 ? +acc.op : 0) + acc.debit - acc.credit // This iif was necessary to skip initial opbalance which is already taken in debit or credit
@@ -210,14 +222,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -319,7 +331,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: theme.palette.blue.dark,
                 backgroundColor: '#FFFAFA',
                 fontFamily: 'Lato',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
             },
 
             '& .delete': {
@@ -378,68 +390,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
-
-// async function fetchRows1(queryId: string, queryArgs: any) {
-//     if (!queryId || !queryArgs) {
-//         return
-//     }
-//     emit('SHOW-LOADING-INDICATOR', true)
-//     const ret1: any = await execGenericView({
-//         isMultipleRows: gridOptions.jsonFieldPath ? false : true,
-//         sqlKey: queryId,
-//         args: queryArgs || null,
-//         entityName: entityName,
-//     })
-//     emit('SHOW-LOADING-INDICATOR', false)
-//     let i = 1
-//     function incr() {
-//         return i++
-//     }
-//     let ret: any[]
-//     meta.current.opBalance = (ret1?.jsonResult?.opBalance || { debit: 0, credit: 0 })
-
-//     if (gridOptions.jsonFieldPath) {
-//         ret = _.get(ret1, gridOptions.jsonFieldPath)
-//     } else {
-//         ret = ret1
-//     }
-
-//     ret.unshift({
-//         otherAccounts: 'Opening balance',
-//         debit: meta.current.opBalance.debit,
-//         credit: meta.current.opBalance.credit,
-//         tranDate: getFromBag('finYearObject').isoStartDate
-//     })
-
-//     meta.current.rows = ret
-
-//     injectDailySummary()
-//     ret = meta.current.rows
-
-//     meta.current.isReverseOrder && ret.reverse()
-
-//     const tot: any = {}
-//     const temp: any[] = !ret
-//         ? []
-//         : ret.map((x: any) => {
-//             if (!x.isDailySummary) {
-//                 x['id1'] = x.id
-//                 for (let col of summaryColNames) {
-//                     tot[col] = +(tot[col] || 0) + x[col]
-//                 }
-//             }
-//             x.id = incr()
-//             return x
-//         })
-
-//     tot.count = ret?.length
-
-//     if (ret) {
-//         meta.current.rows = temp
-//         meta.current.filteredRows = [...meta.current.rows]
-//         meta.current.allSummary = tot
-//         setFilteredSummary()
-//         requestSearch(meta.current.searchText)
-//         meta.current.isMounted && setRefresh({})
-//     }
-// }
