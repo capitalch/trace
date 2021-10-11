@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from '../imports/regular-imports'
-import { AccountsSubHeader } from '../entities/accounts/components/shared/accounts-sub-header'
+import { AccountsSubHeader } from '../entities/accounts/components/common/accounts-sub-header'
 import { makeStyles, createStyles, Toolbar } from '../imports/gui-imports'
 import {useIbuki } from '../imports/trace-imports'
 

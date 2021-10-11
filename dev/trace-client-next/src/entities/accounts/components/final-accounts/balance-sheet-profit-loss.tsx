@@ -11,7 +11,7 @@ import { Search } from '../../../../imports/icons-import'
 import styled from 'styled-components'
 import { queries } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function BalanceSheetProfitLoss() {
     const [, setRefresh] = useState({})

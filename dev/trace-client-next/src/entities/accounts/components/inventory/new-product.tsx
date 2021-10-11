@@ -1,4 +1,4 @@
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useNewProduct, useStyles } from './new-product-hook'
 import { Button, IconButton } from '../../../../imports/gui-imports'
 import { AddCircle } from '../../../../imports/icons-import'

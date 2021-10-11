@@ -12,7 +12,7 @@ import {
     createStyles,
     TextField,
 } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'
 import cities from '../../../../data/cities.json'

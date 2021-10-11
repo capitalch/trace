@@ -2,7 +2,7 @@ import { MaterialTable, useEffect, useState, useRef } from '../../../../imports/
 import { Button } from '../../../../imports/gui-imports'
 import { usingIbuki } from '../../../../imports/trace-imports'
 import { Send } from '../../../../imports/icons-import'
-import { tableIcons } from '../shared/material-table-icons'
+import { tableIcons } from '../common/material-table-icons'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import { utils } from '../../utils'
 import accountsMessages from '../../json/accounts-messages.json'

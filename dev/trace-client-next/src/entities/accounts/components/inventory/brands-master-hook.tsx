@@ -1,6 +1,6 @@
 import {  useRef } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useBrandsMaster() {
     const meta:any = useRef({

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {Button, makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     const [, setRefresh] = useState({})

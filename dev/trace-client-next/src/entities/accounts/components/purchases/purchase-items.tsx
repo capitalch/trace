@@ -1,5 +1,5 @@
 import { DataTable, useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseItems, useStyles } from './purchase-items-hook'
 import { Badge, } from '../../../../imports/gui-imports'
 import { ZoomIn, ZoomOut, } from '../../../../imports/icons-import'

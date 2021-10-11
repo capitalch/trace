@@ -1,4 +1,4 @@
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import {  Paper, Tabs, Tab} from '../../../../imports/gui-imports'
 import {
     useDebitFlightTakeoff,

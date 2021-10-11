@@ -1,6 +1,6 @@
 import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useDebitFlightTakeoffView(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})

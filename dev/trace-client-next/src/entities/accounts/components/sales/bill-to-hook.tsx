@@ -16,7 +16,7 @@ import {
     Typography,
 } from '../../../../imports/gui-imports'
 import {} from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { NewEditContact } from './new-edit-contact'
 import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'

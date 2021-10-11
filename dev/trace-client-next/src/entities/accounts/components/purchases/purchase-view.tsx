@@ -1,5 +1,5 @@
 import { MaterialTable, } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseView, useStyles } from './purchase-view-hook'
 import { Box, Icon, IconButton, NativeSelect, Typography, } from '../../../../imports/gui-imports'
 
@@ -82,7 +82,7 @@ function PurchaseView({ arbitraryData, purchaseType, drillDownEditAttributes }: 
                                 <LedgerSubledgerCascade
                                     allAccounts={meta.current.allAccounts}
                                     ledgerAccounts={meta.current.ledgerAccounts}
-                                    onChange={fetchData}
+                                    onSelectionChange={fetchData}
                                     rowData={meta.current}
                                 />
                             )

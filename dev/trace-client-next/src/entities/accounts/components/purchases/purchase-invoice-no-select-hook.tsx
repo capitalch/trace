@@ -6,7 +6,7 @@ import {
     ListItemText,
 } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseInvoiceNoSelect(arbitraryData: any) {
     const [, setRefresh] = useState({})

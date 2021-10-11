@@ -6,7 +6,7 @@ import {
 } from '../../../../imports/regular-imports'
 import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
 import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
 
 function SaleFooter({ arbitraryData }: any) {

@@ -4,7 +4,7 @@ import {
 } from '../../../../imports/gui-imports'
 import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
 function ActionBlock({

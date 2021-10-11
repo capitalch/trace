@@ -8,7 +8,7 @@ import {
     CloseSharp,
     Search,
 } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import {
     usePurchaseInvoiceNoSelect,
     useStyles,

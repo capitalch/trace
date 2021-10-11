@@ -9,8 +9,8 @@ import { makeStyles, Theme, createStyles,
     Chip, } from '../../../../imports/gui-imports'
 import {AddCircle,Clear, Search,
     CloseSharp,} from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
-import { useProductUtils } from '../shared/product-utils-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
+import { useProductUtils } from '../common/product-utils-hook'
 import { NewProduct } from '../inventory/new-product'
 
 function usePurchaseItems(arbitraryData: any) {

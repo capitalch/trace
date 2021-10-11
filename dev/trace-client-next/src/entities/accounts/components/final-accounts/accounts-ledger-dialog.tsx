@@ -10,7 +10,7 @@ import {
     makeStyles,
 } from '../../../../imports/gui-imports'
 import {CloseSharp} from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { manageEntitiesState , useIbuki} from '../../../../imports/trace-imports'
 import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'

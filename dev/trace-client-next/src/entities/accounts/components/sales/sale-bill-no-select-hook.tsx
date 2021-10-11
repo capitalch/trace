@@ -1,7 +1,7 @@
 import {moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {Avatar, List, ListItem, ListItemAvatar,  ListItemText,} from '../../../../imports/gui-imports'
 import { makeStyles, Theme, createStyles, Typography } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleBillNoSelect() {
     const [, setRefresh] = useState({})

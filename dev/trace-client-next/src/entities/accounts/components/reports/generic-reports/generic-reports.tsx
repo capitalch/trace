@@ -1,6 +1,6 @@
 import { Card, Theme, createStyles, makeStyles } from '../../../../../imports/gui-imports'
 import { XXGrid } from '../../../../../imports/trace-imports'
-import { useSharedElements } from '../../shared/shared-elements-hook'
+import { useSharedElements } from '../../common/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
 import {_,  useEffect } from '../../../../../imports/regular-imports'
 
@@ -19,6 +19,7 @@ function GenericReports({ loadReport }: any) {
 
     const {  emit, filterOn, } = useSharedElements()
     const classes = useStyles()
+    
     useEffect(() => {
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(()=>{
             emit('XX-GRID-FETCH-DATA', null)

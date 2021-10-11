@@ -2,7 +2,7 @@ import { Box, Icon, IconButton, NativeSelect, Typography } from '../../../../imp
 import { Add, DeleteForever, Edit } from '../../../../imports/icons-import'
 import { MaterialTable, moment, useConfirm } from '../../../../imports/regular-imports'
 import { } from '../../../../imports/trace-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useDebitFlightTakeoffView } from './debit-credit-notes-view-hook'
 
 function DebitFlightTakeoffView({ arbitraryData, tranType }: any) {

@@ -7,7 +7,7 @@ import {
     TextField,
 } from '../../../../imports/gui-imports'
 import { Error, Check } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'

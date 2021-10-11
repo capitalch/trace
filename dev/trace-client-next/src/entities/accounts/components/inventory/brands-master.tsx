@@ -1,7 +1,7 @@
 import {  Paper,} from '../../../../imports/gui-imports'
 import { AddCircle,DeleteForever, Edit, SyncSharp,} from '../../../../imports/icons-import'
 import { useState,MaterialTable, useEffect, } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useBrandsMaster, useStyles } from './brands-master-hook'
 
 function BrandsMaster() {

@@ -6,7 +6,7 @@ import {
     IconButton,
 } from '../../../../imports/gui-imports'
 import { SyncSharp } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useTaxation, useStyles } from './taxation-hook'
 
 function Taxation() {

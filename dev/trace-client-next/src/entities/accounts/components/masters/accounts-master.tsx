@@ -14,7 +14,7 @@ import {
     Edit, SyncSharp,
     CloseSharp,
 } from '../../../../imports/icons-import'
-import { useSharedElements, useStyles } from '../shared/shared-elements-hook'
+import { useSharedElements, useStyles } from '../common/shared-elements-hook'
 import { useTheme } from '../../../../imports/gui-imports'
 
 function AccountsMaster() {

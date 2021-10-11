@@ -1,7 +1,7 @@
 import { _, PrimeDialog, moment, useState } from '../../../../imports/regular-imports'
 import { Typography, } from '../../../../imports/gui-imports'
 import { XXGrid } from '../../../../imports/trace-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
 
 function GeneralLedger() {

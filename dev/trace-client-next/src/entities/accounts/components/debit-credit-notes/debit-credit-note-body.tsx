@@ -9,7 +9,7 @@ import {
     Error,
 } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useDebitCreditNoteBody, useStyles } from './debit-credit-note-body-hook'
 
 function DebitCreditNoteBody({ arbitraryData, tranType }: any) {

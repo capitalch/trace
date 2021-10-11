@@ -1,7 +1,7 @@
 import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { Add, DeleteForever, Edit, } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})

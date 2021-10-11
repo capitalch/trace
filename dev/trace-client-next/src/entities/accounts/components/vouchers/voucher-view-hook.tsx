@@ -1,6 +1,6 @@
 import {_, moment, useState, useEffect, useRef, useContext } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {

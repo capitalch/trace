@@ -8,7 +8,7 @@ import {
     Paper,
 } from '../../../../imports/gui-imports'
 import { CloseSharp, Search } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useBillTo, useStyles } from './bill-to-hook'
 
 function BillTo({ arbitraryData }: any) {

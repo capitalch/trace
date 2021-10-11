@@ -5,17 +5,18 @@ interface LedgerSubledgerCascadeOptions {
     allAccounts: any[]
     className?: string
     ledgerAccounts: any[]
-    onChange?: any
+    onSelectionChange?: any
     rowData: any
 }
 function LedgerSubledgerCascade({
     allAccounts,
     ledgerAccounts,
-    onChange,
+    onSelectionChange,
     rowData,
 }: LedgerSubledgerCascadeOptions) {
     const [, setRefresh] = useState({})
     const classes = useStyles()
+    
     return (
         <span className={classes.content}>
             <CascadeSelect                
@@ -31,13 +32,13 @@ function LedgerSubledgerCascade({
                     } else {
                         rowData.selectedAccount = e.value
                     }
-                    onChange && onChange()
+                    onSelectionChange && onSelectionChange()
                     setRefresh({})
                 }}
                 onGroupChange={(e: any) => {
                     if (e.value?.accLeaf === 'Y') {
                         rowData.selectedAccount = e.value
-                        onChange && onChange()
+                        onSelectionChange && onSelectionChange()
                         setRefresh({})
                     } else {
                         e.value.subledgers = getSubledgers(e.value.id)

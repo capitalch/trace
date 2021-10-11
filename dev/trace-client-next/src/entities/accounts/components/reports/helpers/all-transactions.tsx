@@ -1,4 +1,4 @@
-import { useSharedElements } from '../../shared/shared-elements-hook'
+import { useSharedElements } from '../../common/shared-elements-hook'
 import { utilMethods } from '../../../../../global-utils/misc-utils'
 import { moment } from '../../../../../imports/regular-imports'
 

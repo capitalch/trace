@@ -19,7 +19,7 @@ import {
     Link,
     SyncSharp,
 } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useCategoriesMaster, useStyles } from './categories-master-hook'
 
 function CategoriesMaster() {

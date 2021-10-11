@@ -1,4 +1,4 @@
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { MaterialTable } from '../../../../imports/regular-imports'
 import { useSaleView, useStyles } from './sale-view-hook'
 import {
@@ -8,7 +8,7 @@ import {
     Typography,
     Button,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
+
 function SaleView({ arbitraryData, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const { fetchData, getActionsList, getColumnsArray, meta } = useSaleView(
@@ -17,7 +17,6 @@ function SaleView({ arbitraryData, drillDownEditAttributes }: any) {
     )
 
     const {
-        emit,
         getFromBag,
         setInBag,
         LedgerSubledgerCascade,
@@ -26,10 +25,6 @@ function SaleView({ arbitraryData, drillDownEditAttributes }: any) {
 
     return (
         <div className={classes.content}>
-            {/* <Button onClick={()=>{
-                loadSaleOnId(9779, true)
-                // emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', 9779)
-            }}>Load</Button> */}
             <MaterialTable
                 style={{ zIndex: 0 }}
                 icons={tableIcons}
@@ -97,7 +92,7 @@ function SaleView({ arbitraryData, drillDownEditAttributes }: any) {
                                 <LedgerSubledgerCascade
                                     allAccounts={meta.current.allAccounts}
                                     ledgerAccounts={meta.current.ledgerAccounts}
-                                    onChange={fetchData}
+                                    onSelectionChange={fetchData}
                                     rowData={meta.current}
                                 />
                             )

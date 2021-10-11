@@ -12,7 +12,7 @@ import {
 } from '../../../../imports/gui-imports'
 import {} from '../../../../imports/gui-imports'
 import { Add, DeleteForever, Edit } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})

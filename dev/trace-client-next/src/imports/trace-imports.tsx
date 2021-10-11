@@ -11,9 +11,9 @@ import queries from '../entities/authentication/artifacts/graphql-queries-mutati
 import { graphqlService } from '../global-utils/graphql-service'
 import { utilMethods } from '../global-utils/misc-utils'
 import { getArtifacts } from '../react-form/common/react-form-hook'
-import { LedgerSubledger } from '../entities/accounts/components/shared/ledger-subledger'
-import { LedgerSubledgerCascade } from '../entities/accounts/components/shared/ledger-subledger-cascade'
-import {XXGrid} from '../entities/accounts/components/shared/xx-grid'
+import { LedgerSubledger } from '../entities/accounts/components/common/ledger-subledger'
+import { LedgerSubledgerCascade } from '../entities/accounts/components/common/ledger-subledger-cascade'
+import {XXGrid} from '../entities/accounts/components/common/xx-grid'
 export {
     componentStore,
     getArtifacts,

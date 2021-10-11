@@ -1,6 +1,6 @@
 import {_, moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchases(drillDownEditAttributes:any) {
     const [, setRefresh] = useState({})

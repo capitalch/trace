@@ -4,7 +4,7 @@ import {
     TextField, makeStyles, Theme, createStyles
 } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
 
 function Header({ allowHeaderGst }: any) {

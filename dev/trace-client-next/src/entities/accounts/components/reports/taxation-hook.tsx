@@ -14,7 +14,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { Search } from '../../../../imports/icons-import'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useTaxation() {
     const [, setRefresh] = useState({})

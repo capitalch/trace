@@ -9,8 +9,8 @@ import {
 
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import { ajaxService } from '../../../../global-utils/ajax-service'
-import { tableIcons } from '../shared/material-table-icons'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { tableIcons } from '../common/material-table-icons'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function GenericExports() {
     const { isControlDisabled } = utilMethods()

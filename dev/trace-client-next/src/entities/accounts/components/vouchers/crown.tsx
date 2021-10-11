@@ -3,7 +3,7 @@ import {
     makeStyles, Theme, createStyles, Paper,
     Typography,
 } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrown } from './crown-hook'
 import { VoucherContext } from './voucher-context'
 

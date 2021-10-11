@@ -14,8 +14,8 @@ import {
     TextareaAutosize,
 } from '../../../../imports/gui-imports'
 import {} from '../../../../imports/icons-import'
-import { useProductUtils } from '../shared/product-utils-hook'
-import { useSharedElements } from '../shared/shared-elements-hook'
+import { useProductUtils } from '../common/product-utils-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
