@@ -7,7 +7,7 @@ import { makeStyles, Theme, createStyles,
     Button,   Typography,
     Checkbox,
     Chip, } from '../../../../imports/gui-imports'
-import {AddCircle,Clear, Search,
+import {AddCircle,Clear, Search, ClearAll,
     CloseSharp,} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useProductUtils } from '../common/product-utils-hook'
@@ -496,7 +496,7 @@ function usePurchaseItems(arbitraryData: any) {
                             onClick={() => {
                                 clearRow(rowData)
                             }}>
-                            <Clear className="clear-icon" />
+                            <ClearAll className="clear-icon" />
                         </IconButton>
                     </span>
                 )}
