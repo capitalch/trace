@@ -83,7 +83,8 @@ function useBillTo(arbitraryData: any) {
         arbitraryData.billTo = {}
         meta.current.searchFilter = ''
         meta.current.isMounted && setRefresh({})
-        emit('SALES-CROWN-REFRESH', null)
+        arbitraryData.salesCrownRefresh()
+        // emit('SALES-CROWN-REFRESH', null)
     }
 
     function handleNewEdit() {
@@ -162,7 +163,8 @@ function useBillTo(arbitraryData: any) {
                                     meta.current.showDialog = false
                                     setCountryStateCityValuesFromLabels()
                                     meta.current.isMounted && setRefresh({})
-                                    emit('SALES-CROWN-REFRESH', null)
+                                    arbitraryData.salesCrownRefresh()
+                                    // emit('SALES-CROWN-REFRESH', null)
                                 }}
                                 key={index}
                                 dense={true}

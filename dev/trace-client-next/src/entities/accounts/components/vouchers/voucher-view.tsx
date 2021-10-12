@@ -25,8 +25,8 @@ function VoucherView({ hidden, tranTypeId }: any) {
                 sqlQueryId={sqlQueryId}
                 sqlQueryArgs={args}
                 specialColumns={specialColumns}
-                xGridProps={{ disableSelectionOnClick: true }}
-                viewLimit={100}
+                // xGridProps={{ disableSelectionOnClick: true }}
+                viewLimit='100'
             />}
         </Box>
     )

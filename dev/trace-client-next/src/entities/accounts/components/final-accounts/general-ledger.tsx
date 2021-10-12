@@ -65,7 +65,7 @@ function GeneralLedger() {
                     toShowClosingBalance={true}
                     toShowDailySummary={true}
                     toShowReverseCheckbox={true}
-                    xGridProps={{ disableSelectionOnClick: true }}
+                    // xGridProps={{ disableSelectionOnClick: true }}
                     jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                 />
             </div>

@@ -1,4 +1,4 @@
-import { useState } from '../../../../imports/regular-imports'
+import { useState, useContext } from '../../../../imports/regular-imports'
 import {
     FormControlLabel,
     Paper,
@@ -12,9 +12,11 @@ import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
 import { ShipTo } from './ship-to'
 import { SaleBillNoSelect } from './sale-bill-no-select'
+import { SalesContext } from './sales-provider'
 
-function SaleHeader({ arbitraryData }: any) {
+function SaleHeader() {
     const classes = useStyles()
+    const arbitraryData:any = useContext(SalesContext)
     const {
         handleAutoSubledgerSales,
         handleInstitutionSales,
@@ -27,12 +29,9 @@ function SaleHeader({ arbitraryData }: any) {
 
     const {
         accountsMessages,
-        emit,
-
         getMappedAccounts,
         isInvalidDate,
         LedgerSubledger,
-
         TraceDialog,
     } = useSharedElements()
 
@@ -71,7 +70,7 @@ function SaleHeader({ arbitraryData }: any) {
                     <TextField
                         label="Date"
                         variant="standard"
-                        error={isInvalidDate(arbitraryData.tranDate)}
+                        error={isInvalidDate(arbitraryData.tranDate) || (! arbitraryData.tranDate)}
                         helperText={
                             isInvalidDate(arbitraryData.tranDate)
                                 ? accountsMessages.dateRangeAuditLockMessage
@@ -82,7 +81,8 @@ function SaleHeader({ arbitraryData }: any) {
                         onChange={(e: any) => {
                             arbitraryData.tranDate = e.target.value
                             setRefresh({})
-                            emit('SALES-CROWN-REFRESH', null)
+                            arbitraryData.salesCrownRefresh()
+                            // emit('SALES-CROWN-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         value={arbitraryData.tranDate || ''}
@@ -108,8 +108,7 @@ function SaleHeader({ arbitraryData }: any) {
                     <div>
                         <Typography>Sale account</Typography>
                         <LedgerSubledger
-                            allAccounts={arbitraryData.allAccounts}
-                            // emitMessageOnChange="SALES-CROWN-REFRESH"
+                            allAccounts={arbitraryData.allAccounts}                            
                             ledgerAccounts={getMappedAccounts(
                                 arbitraryData.ledgerAccounts
                             )}

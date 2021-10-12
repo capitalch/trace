@@ -69,19 +69,21 @@ interface XXGridOptions {
     title: string
     specialColumns: SpecialColumnOptions
     xGridProps?: any
+    disableSelectionOnClick?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
-    viewLimit?: number
+    viewLimit?: string
 }
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
         columns,
+        disableSelectionOnClick,
         specialColumns,
         sqlQueryArgs,
         sqlQueryId,
         summaryColNames,
         title,
-        viewLimit=0,
+        viewLimit,
     } = gridOptions
     const apiRef: any = useGridApiRef()
     const {
@@ -96,9 +98,8 @@ function XXGrid(gridOptions: XXGridOptions) {
         toggleReverseOrder,
     } = useXXGrid(gridOptions)
     const { emit, toDecimalFormat } = useSharedElements()
-    meta.current.viewLimit = viewLimit || null
+    meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     const classes = useStyles(meta)
-    // const specialColumns = gridOptions.specialColumns
     addSpecialColumns(specialColumns)
 
     return (
@@ -107,6 +108,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
             }}
+            disableSelectionOnClick= {disableSelectionOnClick || true}
             className={classes.content}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
@@ -172,7 +174,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     <div className="view-limit">
                         <span>View</span>
                         <select
-                            value={meta.current.viewLimit || 0}
+                            value={meta.current.viewLimit || null}
                             style={{
                                 fontSize: '0.8rem',
                                 width: '4rem',
@@ -188,9 +190,9 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 fetchRows(sqlQueryId, sqlQueryArgs)
                                 meta.current.isMounted && setRefresh({})
                             }}>
-                            <option value={100}>100</option>
-                            <option value={1000}>1000</option>
-                            <option value={0}>All</option>
+                            <option value={'100'}>100</option>
+                            <option value={'1000'}>1000</option>
+                            <option value={'0'}>All</option>
                         </select>
                     </div>
                 )}

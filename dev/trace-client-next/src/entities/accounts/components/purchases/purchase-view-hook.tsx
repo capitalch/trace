@@ -1,6 +1,5 @@
 import { moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import { Add, DeleteForever, Edit, } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEditAttributes: any) {
@@ -53,7 +52,16 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
             accName: 'All parties',
             id: undefined,
         })
+        return () => {
+            meta.current.isMounted = false
+        }
+    }, [])
 
+    useEffect(() => {
+        
+        const subs = filterOn('PURCHASE-VIEW-HOOK-FETCH-DATA').subscribe((d:any)=>{
+            emit('XX-GRID-FETCH-DATA', null)
+        })
         const subs1 = filterOn(
             'PURCHASE-VIEW-HOOK-GET-PURCHASE-ON-ID'
         ).subscribe((d: any) => {
@@ -66,203 +74,147 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
             loadPurchaseOnId(d.data, true) // isModify; 2nd arg is false for new entries in table
         })
 
+        const subs3 = filterOn('PURCHASE-VIEW-HOOK-XX-GRID-EDIT-CLICKED').subscribe((d: any) => {
+            const rowData = d.data?.row
+            const tranDate = rowData.tranDate
+            if (isDateAuditLocked(tranDate)) {
+                emit('SHOW-MESSAGE', {
+                    severity: 'error',
+                    message: accountsMessages.auditLockError,
+                    duration: null,
+                })
+            } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                emit('SHOW-MESSAGE', {
+                    severity: 'error',
+                    message: accountsMessages.reconcillationDone,
+                    duration: null,
+                })
+            } else {
+                arbitraryData.isViewBack = true
+                loadPurchaseOnId(rowData.id1, true) // modify
+                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+            }
+        })
+
+
         return () => {
-            meta.current.isMounted = false
+            subs.unsubscribe()
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
         }
-    }, [])
-
-    useEffect(() => {
-        const subs1 = filterOn('PURCHASE-VIEW-HOOK-FETCH-DATA').subscribe(
-            () => {
-                fetchData()
-            }
-        )
-        return () => subs1.unsubscribe()
     }, [])
 
     const dateFormat = getFromBag('dateFormat')
 
-    function getActionsList() {
-        return [
+    function getXXGridParams() {
+        const columns = [
             {
-                icon: () => <Add />,
-                toolTip: 'Select party',
-                name: 'selectParty',
-                isFreeAction: true, // isFreeAction puts the icon in toolbar
-                onClick: () => { }, // Reload the component for new entry
+                headerName: 'Ind',
+                description: 'Index',
+                field: 'id',
+                width: 80,
+                disableColumnMenu: true,
             },
             {
-                icon: () => <Add />, // Here the <Add> is placeholder. It is later customized to select control
-                name: 'select',
-                isFreeAction: true,
-                onClick: () => { }, // This empty onClick is a hack. Without this warning appears
+                headerName: 'Id',
+                description: 'Id',
+                field: 'id1',
+                width: 90,
             },
             {
-                icon: () => <Edit color="primary" />,
-                toolTip: 'Edit transaction',
-                name: 'edit',
-                onClick: async (e: any, rowData: any) => {
-                    const tranDate = rowData.tranDate
-                    if (isDateAuditLocked(tranDate)) {
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.auditLockError,
-                            duration: null,
-                        })
-                    } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.reconcillationDone,
-                            duration: null,
-                        })
-                    } else {
-                        await loadPurchaseOnId(rowData.id, true) // modify
-                        emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                    }
-                },
-            },
-            {
-                icon: () => <DeleteForever color="error"></DeleteForever>,
-                toolTip: 'Delete transaction',
-                name: 'delete',
-                onClick: async (e: any, rowData: any) => {
-                    const options = {
-                        description: accountsMessages.transactionDelete,
-                        confirmationText: 'Yes',
-                        cancellationText: 'No',
-                    }
-                    if (isDateAuditLocked(rowData.tranDate)) {
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.auditLockError,
-                            duration: null,
-                        })
-                    } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.reconcillationDone,
-                            duration: null,
-                        })
-                    } else {
-                        confirm(options)
-                            .then(async () => {
-                                const id = rowData['id']
-                                emit('SHOW-LOADING-INDICATOR', true)
-                                await genericUpdateMaster({
-                                    deletedIds: [id],
-                                    tableName: 'TranH',
-                                })
-                                emit('SHOW-LOADING-INDICATOR', false)
-                                emit('SHOW-MESSAGE', {})
-                                fetchData()
-                            })
-                            .catch(() => { }) // important to have otherwise eror
-                    }
-                },
-            },
-        ]
-    }
-
-    function getColumnsArray(): any[] {
-        return [
-            { title: 'Index', field: 'index', width: '4px' },
-            { title: 'Id', field: 'id' },
-            { title: 'Ref no', field: 'autoRefNo' },
-            {
-                title: 'Date',
+                headerName: 'Date',
+                description: 'Date',
                 field: 'tranDate',
+                width: 110,
                 type: 'date',
-                render: (rowData: any) =>
-                    moment(rowData.tranDate).format(dateFormat),
+                valueFormatter: (params: any) =>
+                    moment(params.value).format(dateFormat),
             },
             {
-                title: 'Account',
+                headerName: 'Ref no',
+                description: 'Ref no',
+                field: 'autoRefNo',
+                width: 200,
+            },
+            {
+                headerName: 'Account',
                 field: 'accounts',
+                width: 200
             },
-            { title: 'Invoice no', field: 'userRefNo' },
             {
-                title: "Aggr",
+                headerName: 'Aggr',
                 field: 'aggr',
-                align: 'right',
-                type: 'numeric',
-                render: (rowData: any) => toDecimalFormat(rowData.aggr)
+                sortable: false,
+                type: 'number',
+                width: 160,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                title: "Cgst",
+                headerName: 'Cgst',
                 field: 'cgst',
-                align: 'right',
-                type: 'numeric',
-                render: (rowData: any) => toDecimalFormat(rowData.cgst)
+                sortable: false,
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                title: "Sgst",
+                headerName: 'Sgst',
                 field: 'sgst',
-                align: 'right',
-                type: 'numeric',
-                render: (rowData: any) => toDecimalFormat(rowData.sgst)
+                sortable: false,
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                title: "Igst",
+                headerName: 'Igst',
                 field: 'igst',
-                align: 'right',
-                type: 'numeric',
-                render: (rowData: any) => toDecimalFormat(rowData.igst)
+                sortable: false,
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                title: 'Amount',
+                headerName: 'Amount',
                 field: 'amount',
-                align: 'right',
-                type: 'numeric',
-                render: (rowData: any) => toDecimalFormat(rowData.amount),
+                sortable: false,
+                type: 'number',
+                width: 160,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
-            { title: 'Labels', field: 'labels' },
             {
-                title: 'Remarks',
+                headerName: 'Labels',
+                field: 'labels',
+                width: 200
+            },
+            {
+                headerName: 'Remarks',
                 field: 'remarks',
+                width: 200
             },
             {
-                title: "Serial no's",
+                headerName: "Serial no's",
                 field: 'serialNumbers',
+                width: 160
             },
         ]
-    }
-
-    async function fetchData() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        const label =
-            purchaseType === 'pur' ? 'purchaseTran' : 'purchaseRetTran'
-        let no = getFromBag(label)
-        no = no ?? meta.current.no // new operator; if null or undefined then meta.current.no
-        const ret = await execGenericView({
-            isMultipleRows: true,
-            sqlKey: 'get_sale_purchase_headers',
-            args: {
-                tranTypeId: purchaseType === 'pur' ? 5 : 10,
-                no: no || null,
-                accId: meta.current.selectedAccount?.id
-                    ? meta.current.selectedAccount.id + ''
-                    : '%',
-                tranDc: purchaseType === 'pur' ? 'D' : 'C',
-            },
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-        if (ret) {
-            let index = 1
-            for (let item of ret) {
-                item.index = index++
-                item.serialNumbers = smoothOut(item.serialNumbers) //item.serialNumbers.split(',').filter(Boolean).toString()
-            }
-            meta.current.data = ret
+        const queryId = 'get_sale_purchase_headers'
+        const queryArgs = {
+            tranTypeId: purchaseType === 'pur' ? 5 : 10,
+            no: 100,
+            accId: meta.current.selectedAccount?.id
+                ? meta.current.selectedAccount.id + ''
+                : '%',
+            tranDc: purchaseType === 'pur' ? 'D' : 'C',
         }
-        meta.current.isMounted && setRefresh({})
-        function smoothOut(sl: any) {
-            let ret = sl.split(',').map((x: string) => x.trim()) // removes space
-            ret = ret.filter(Boolean) // removes empty items in array
-            ret = ret.join() // comma separated string out from array
-            return (ret)
+        const summaryColNames: string[] = ['aggr', "cgst", "sgst", "igst", "amount"]
+        const specialColumns = {
+            isEdit: true,
+            isDelete: true,
+            editIbukiMessage: 'PURCHASE-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage: 'PURCHASE-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
         }
+        return { columns, queryId, queryArgs, summaryColNames, specialColumns }
     }
 
     async function loadPurchaseOnId(id: number, isModify: boolean = true) {
@@ -279,7 +231,7 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
             prepareArbitraryData(ret)
-            emit('CHANGE-TAB-PURCHASES', 0) // change to tab 0 for new entry
+            emit('PURCHASES-HOOK-CHANGE-TAB', 0) // change to tab 0 for new entry
         }
         emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
         emit("PURCHASE-ITEMS-REFRESH", null)
@@ -419,7 +371,7 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
         }
     }
 
-    return { getActionsList, getColumnsArray, fetchData, meta }
+    return { meta, getXXGridParams }
 }
 
 export { usePurchaseView }
@@ -427,11 +379,195 @@ export { usePurchaseView }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            '& .select-last': {
-                marginLeft: theme.spacing(2),
-            },
+            height: 'calc(100vh - 245px)',
+            width: '100%',
+            marginTop: '5px',
+            // '& .select-last': {
+            //     marginLeft: theme.spacing(2),
+            // },
         },
     })
 )
 
 export { useStyles }
+
+// function getActionsList() {
+//     return [
+//         {
+//             icon: () => <Add />,
+//             toolTip: 'Select party',
+//             name: 'selectParty',
+//             isFreeAction: true, // isFreeAction puts the icon in toolbar
+//             onClick: () => { }, // Reload the component for new entry
+//         },
+//         {
+//             icon: () => <Add />, // Here the <Add> is placeholder. It is later customized to select control
+//             name: 'select',
+//             isFreeAction: true,
+//             onClick: () => { }, // This empty onClick is a hack. Without this warning appears
+//         },
+//         {
+//             icon: () => <Edit color="primary" />,
+//             toolTip: 'Edit transaction',
+//             name: 'edit',
+//             onClick: async (e: any, rowData: any) => {
+            //     const tranDate = rowData.tranDate
+            //     if (isDateAuditLocked(tranDate)) {
+            //         emit('SHOW-MESSAGE', {
+            //             severity: 'error',
+            //             message: accountsMessages.auditLockError,
+            //             duration: null,
+            //         })
+            //     } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+            //         emit('SHOW-MESSAGE', {
+            //             severity: 'error',
+            //             message: accountsMessages.reconcillationDone,
+            //             duration: null,
+            //         })
+            //     } else {
+            //         await loadPurchaseOnId(rowData.id, true) // modify
+            //         emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+            //     }
+            // },
+//         },
+//         {
+//             icon: () => <DeleteForever color="error"></DeleteForever>,
+//             toolTip: 'Delete transaction',
+//             name: 'delete',
+//             onClick: async (e: any, rowData: any) => {
+//                 const options = {
+//                     description: accountsMessages.transactionDelete,
+//                     confirmationText: 'Yes',
+//                     cancellationText: 'No',
+//                 }
+//                 if (isDateAuditLocked(rowData.tranDate)) {
+//                     emit('SHOW-MESSAGE', {
+//                         severity: 'error',
+//                         message: accountsMessages.auditLockError,
+//                         duration: null,
+//                     })
+//                 } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+//                     emit('SHOW-MESSAGE', {
+//                         severity: 'error',
+//                         message: accountsMessages.reconcillationDone,
+//                         duration: null,
+//                     })
+//                 } else {
+//                     confirm(options)
+//                         .then(async () => {
+//                             const id = rowData['id']
+//                             emit('SHOW-LOADING-INDICATOR', true)
+//                             await genericUpdateMaster({
+//                                 deletedIds: [id],
+//                                 tableName: 'TranH',
+//                             })
+//                             emit('SHOW-LOADING-INDICATOR', false)
+//                             emit('SHOW-MESSAGE', {})
+//                             fetchData()
+//                         })
+//                         .catch(() => { }) // important to have otherwise eror
+//                 }
+//             },
+//         },
+//     ]
+// }
+
+// function getColumnsArray(): any[] {
+//     return [
+//         { title: 'Index', field: 'index', width: '4px' },
+//         { title: 'Id', field: 'id' },
+//         { title: 'Ref no', field: 'autoRefNo' },
+//         {
+//             title: 'Date',
+//             field: 'tranDate',
+//             type: 'date',
+//             render: (rowData: any) =>
+//                 moment(rowData.tranDate).format(dateFormat),
+//         },
+//         {
+//             title: 'Account',
+//             field: 'accounts',
+//         },
+//         { title: 'Invoice no', field: 'userRefNo' },
+//         {
+//             title: "Aggr",
+//             field: 'aggr',
+//             align: 'right',
+//             type: 'numeric',
+//             render: (rowData: any) => toDecimalFormat(rowData.aggr)
+//         },
+//         {
+//             title: "Cgst",
+//             field: 'cgst',
+//             align: 'right',
+//             type: 'numeric',
+//             render: (rowData: any) => toDecimalFormat(rowData.cgst)
+//         },
+//         {
+//             title: "Sgst",
+//             field: 'sgst',
+//             align: 'right',
+//             type: 'numeric',
+//             render: (rowData: any) => toDecimalFormat(rowData.sgst)
+//         },
+//         {
+//             title: "Igst",
+//             field: 'igst',
+//             align: 'right',
+//             type: 'numeric',
+//             render: (rowData: any) => toDecimalFormat(rowData.igst)
+//         },
+//         {
+//             title: 'Amount',
+//             field: 'amount',
+//             align: 'right',
+//             type: 'numeric',
+//             render: (rowData: any) => toDecimalFormat(rowData.amount),
+//         },
+//         { title: 'Labels', field: 'labels' },
+//         {
+//             title: 'Remarks',
+//             field: 'remarks',
+//         },
+//         {
+//             title: "Serial no's",
+//             field: 'serialNumbers',
+//         },
+//     ]
+// }
+
+// async function fetchData() {
+//     emit('SHOW-LOADING-INDICATOR', true)
+//     const label =
+//         purchaseType === 'pur' ? 'purchaseTran' : 'purchaseRetTran'
+//     let no = getFromBag(label)
+//     no = no ?? meta.current.no // new operator; if null or undefined then meta.current.no
+//     const ret = await execGenericView({
+//         isMultipleRows: true,
+//         sqlKey: 'get_sale_purchase_headers',
+//         args: {
+//             tranTypeId: purchaseType === 'pur' ? 5 : 10,
+//             no: no || null,
+//             accId: meta.current.selectedAccount?.id
+//                 ? meta.current.selectedAccount.id + ''
+//                 : '%',
+//             tranDc: purchaseType === 'pur' ? 'D' : 'C',
+//         },
+//     })
+//     emit('SHOW-LOADING-INDICATOR', false)
+//     if (ret) {
+//         let index = 1
+//         for (let item of ret) {
+//             item.index = index++
+//             item.serialNumbers = smoothOut(item.serialNumbers) //item.serialNumbers.split(',').filter(Boolean).toString()
+//         }
+//         meta.current.data = ret
+//     }
+//     meta.current.isMounted && setRefresh({})
+//     function smoothOut(sl: any) {
+//         let ret = sl.split(',').map((x: string) => x.trim()) // removes space
+//         ret = ret.filter(Boolean) // removes empty items in array
+//         ret = ret.join() // comma separated string out from array
+//         return (ret)
+//     }
+// }

@@ -108,7 +108,8 @@ function BillTo({ arbitraryData }: any) {
                         onChange={(e) => {
                             arbitraryData.billTo.gstin = e.target.value
                             meta.current.isMounted && setRefresh({})
-                            emit('SALES-CROWN-REFRESH', null)
+                            arbitraryData.salesCrownRefresh()
+                            // emit('SALES-CROWN-REFRESH', null)
                         }}
                     />
                 </div>

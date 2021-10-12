@@ -1,19 +1,27 @@
-import {  clsx,  NumberFormat,  PrimeColumn,
-    DataTable,useState } from '../../../../imports/regular-imports'
-import {  Badge, Paper,
+import {
+    clsx, NumberFormat, PrimeColumn, useContext,
+    DataTable, useState
+} from '../../../../imports/regular-imports'
+import {
+    Badge, Paper,
     Button,
-    Checkbox, IconButton,TextField,
+    Checkbox, IconButton, TextField,
     Typography,
-    Chip,} from '../../../../imports/gui-imports'
-import { AddCircle,  Clear,
+    Chip,
+} from '../../../../imports/gui-imports'
+import {
+    AddCircle, Clear, ClearAll,
     Search,
-    CloseSharp,} from '../../../../imports/icons-import'
+    CloseSharp,
+} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleItems, useStyles } from './sale-items-hook'
+import { SalesContext } from './sales-provider'
 
-function SaleItems({ arbitraryData }: any): JSX.Element {
+function SaleItems() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
+    const arbitraryData:any = useContext(SalesContext)
     const {
         clearRow,
         computeAllRows,
@@ -32,7 +40,6 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
     const lineItems = arbitraryData.lineItems
 
     const {
-        emit,
         toDecimalFormat,
         TraceDialog,
     } = useSharedElements()
@@ -138,7 +145,7 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                             onClick={() => {
                                 clearRow(rowData)
                             }}>
-                            <Clear className="clear-icon" />
+                            <ClearAll className="clear-icon" />
                         </IconButton>
                     </span>
                 )}
@@ -243,7 +250,8 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 rowData.productCode = value
                                 meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
-                                emit('SALES-CROWN-REFRESH', null)
+                                arbitraryData.salesCrownRefresh()
+                                // emit('SALES-CROWN-REFRESH', null)
                             }}
                             onFocus={(e) => {
                                 meta.current.isDataChanged = false
@@ -274,7 +282,8 @@ function SaleItems({ arbitraryData }: any): JSX.Element {
                                 const { value } = values
                                 rowData.hsn = value
                                 meta.current.isMounted && setRefresh({})
-                                emit('SALES-CROWN-REFRESH', null)
+                                arbitraryData.salesCrownRefresh()
+                                // emit('SALES-CROWN-REFRESH', null)
                             }}
                             value={rowData.hsn || ''}
                             onFocus={(e) => e.target.select()}

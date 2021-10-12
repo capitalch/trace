@@ -62,8 +62,7 @@ function useSaleHeader(arbitraryData: any) {
                             button={true}
                             onClick={async () => {
                                 arbitraryData.saleVarietyAccId = item.id
-                                arbitraryData.saleVarietyAccName = item.accName
-                                // arbitraryData.footer.items[0].rowData = {accId: arbitraryData.saleVarietyAccId}
+                                arbitraryData.saleVarietyAccName = item.accName                                
                                 arbitraryData.footer.items[0].accId =
                                     arbitraryData.saleVarietyAccId
                                 emit('SALE-FOOTER-REFRESH', null)

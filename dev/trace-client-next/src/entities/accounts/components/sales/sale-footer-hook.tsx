@@ -34,7 +34,7 @@ function useSaleFooter(arbitraryData: any) {
             },
             { amount: 0 }
         ).amount
-        emit('SALES-CROWN-REFRESH', null)
+        arbitraryData.salesCrownRefresh()
     }
 
     function handleAddItem() {
@@ -80,7 +80,7 @@ function useSaleFooter(arbitraryData: any) {
         const accName = allAccounts.find((x: any) => x.id === rowData.accId)
             ?.accName
         arbitraryData.saleVarietyAccName = accName
-        emit('SALES-CROWN-REFRESH', null)
+        arbitraryData.salesCrownRefresh()
     }
 
     return {

@@ -1,4 +1,4 @@
-import { NumberFormat, useState, useEffect } from '../../../../imports/regular-imports'
+import { NumberFormat, useState, useEffect, useContext } from '../../../../imports/regular-imports'
 import {
     Button, Typography,
     Checkbox, FormControlLabel,
@@ -12,11 +12,13 @@ import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
 import { ClearAll } from '../../../../imports/icons-import'
+import { PurchasesContext } from './purchases-provider'
 
-function PurchaseBody({ arbitraryData, purchaseType }: any) {
+function PurchaseBody({ purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return
     const [, setRefresh] = useState({})
     const classes = useStyles()
+    const arbitraryData: any = useContext(PurchasesContext)
     const {
         allErrorMethods,
         getError,
@@ -40,11 +42,8 @@ function PurchaseBody({ arbitraryData, purchaseType }: any) {
 
     const {
         accountsMessages,
-
         emit,
-
         filterOn,
-
         TraceDialog,
     } = useSharedElements()
 

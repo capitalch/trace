@@ -1,10 +1,11 @@
 import { useState } from '../../../../imports/regular-imports'
 import { Tab, Tabs } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
+import { } from '../../../../imports/icons-import'
 import { usePurchases, useStyles } from './purchases-hook'
 import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
 import { PurchaseBody } from './purchase-body'
+import { PurchasesProvider } from './purchases-provider'
 
 function Purchases({ purchaseType, drillDownEditAttributes }: any) {
     const [] = useState({})
@@ -17,28 +18,28 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
         purchaseType === 'pur' ? 'Purchase' : 'Purchase return'
     return (
         <div className={classes.content}>
-            <Tabs
-                className="tabs"
-                indicatorColor="primary"
-                onChange={handleOnTabChange}
-                value={meta.current.value}>
-                <Tab label={meta.current.purchaseTypeLabel} />
-                <Tab label="View" />
-            </Tabs>
-            <div className="purchase-body" hidden={meta.current.value !== 0}>
-                <PurchaseBody
-                    arbitraryData={arbitraryData.current}
-                    purchaseType={purchaseType}
-                />
-                <PurchaseItems arbitraryData={arbitraryData.current} />
-            </div>
-            <div hidden={meta.current.value !== 1}>
-                <PurchaseView
-                    arbitraryData={arbitraryData.current}
-                    purchaseType={purchaseType}
-                    drillDownEditAttributes={drillDownEditAttributes}
-                />
-            </div>
+            <PurchasesProvider value={arbitraryData.current}>
+                <Tabs
+                    className="tabs"
+                    indicatorColor="primary"
+                    onChange={handleOnTabChange}
+                    value={meta.current.value}>
+                    <Tab label={meta.current.purchaseTypeLabel} />
+                    <Tab label="View" />
+                </Tabs>
+                <div className="purchase-body" hidden={meta.current.value !== 0}>
+                    <PurchaseBody                        
+                        purchaseType={purchaseType}
+                    />
+                    <PurchaseItems arbitraryData={arbitraryData.current} />
+                </div>
+                <div hidden={meta.current.value !== 1}>
+                    <PurchaseView
+                        purchaseType={purchaseType}
+                        drillDownEditAttributes={drillDownEditAttributes}
+                    />
+                </div>
+            </PurchasesProvider>
         </div>
     )
 }

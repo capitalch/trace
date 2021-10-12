@@ -74,7 +74,7 @@ function useXXGrid(gridOptions: any) {
             return
         }
         queryArgs['no'] =
-            meta.current.viewLimit === 0 ? null : meta.current.viewLimit // null for all items in postgresql
+            meta.current.viewLimit === '0' ? null : meta.current.viewLimit // null for all items in postgresql
         await fetch()
         setAllSummary()
         if (pre.isDailySummary) {

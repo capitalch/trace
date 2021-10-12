@@ -1,4 +1,4 @@
-import {CascadeSelect, useState } from '../../../../imports/regular-imports'
+import { CascadeSelect, useState } from '../../../../imports/regular-imports'
 import { makeStyles, createStyles } from '../../../../imports/gui-imports'
 
 interface LedgerSubledgerCascadeOptions {
@@ -16,10 +16,10 @@ function LedgerSubledgerCascade({
 }: LedgerSubledgerCascadeOptions) {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    
+
     return (
         <span className={classes.content}>
-            <CascadeSelect                
+            <CascadeSelect
                 options={ledgerAccounts}
                 optionLabel={'accName'}
                 optionGroupLabel={'accName'}
@@ -35,11 +35,12 @@ function LedgerSubledgerCascade({
                     onSelectionChange && onSelectionChange()
                     setRefresh({})
                 }}
-                onGroupChange={(e: any) => {
+                onGroupChange={async (e: any) => {
                     if (e.value?.accLeaf === 'Y') {
-                        rowData.selectedAccount = e.value
+                        rowData.selectedAccount = e.value                        
+                        e.value.subledgers = getSubledgers(e.value.id)
                         onSelectionChange && onSelectionChange()
-                        setRefresh({})
+                        // setRefresh({})
                     } else {
                         e.value.subledgers = getSubledgers(e.value.id)
                     }
@@ -68,7 +69,7 @@ function LedgerSubledgerCascade({
 
 export { LedgerSubledgerCascade }
 
-const useStyles: any = makeStyles((theme:any) =>
+const useStyles: any = makeStyles((theme: any) =>
     createStyles({
         content: {
             '& .p-cascadeselect': {

@@ -61,18 +61,19 @@ c) In all Typography comment out disableTypography
 10. Branch master, finYear master rework
 
 ## Bug fixing
-	1. serial number error in purchases
-	2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
-	3. All dialog boxes title is very big font	
-	6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
-														
-	8. In Inventory--> Brands--> edit: when you close the dialog it blows up
-									
-	10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
-	11. Sales / Sale return GST rate change does not calculate well
-	12. Sales return select bill does not work well
+0.1 Server side sometimes if wrong value of data specially null when null not allowed, the program breaks without gracefully reporting error
+1. serial number error in purchases
+2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
+3. All dialog boxes title is very big font	
+6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
+													
+8. In Inventory--> Brands--> edit: when you close the dialog it blows up
+								
+10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
+11. Sales / Sale return GST rate change does not calculate well
+12. Sales return select bill does not work well
 
-	15. Product new entry hangs when 1st product is entered, when there is no leaf category
+15. Product new entry hangs when 1st product is entered, when there is no leaf category
 
 ## Reorganize
 	1. Organize code for using shared components all over

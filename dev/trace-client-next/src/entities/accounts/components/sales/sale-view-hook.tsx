@@ -1,7 +1,6 @@
 import {
-    _,
+    _,   
     moment,
-    useState,
     useEffect,
     useRef,
 } from '../../../../imports/regular-imports'
@@ -10,13 +9,9 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/gui-imports'
-import { Add, DeleteForever, Edit } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
-    const [, setRefresh] = useState({})
-
     const meta: any = useRef({
         allAccounts: [],
         data: [],
@@ -26,7 +21,6 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         selectedAccount: undefined,
         title: '',
     })
-
     const {
         accountsMessages,
         confirm,
@@ -40,12 +34,12 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         isDateAuditLocked,
         toDecimalFormat,
     } = useSharedElements()
+    const dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
         meta.current.isMounted = true
-        const subs1 = filterOn('SALE-VIEW-HOOK-FETCH-DATA').subscribe(() => {
-            fetchData()
-        })
+        arbitraryData.saleViewHookFetchData = () => emit('XX-GRID-FETCH-DATA', null)
+
         const subs2 = filterOn('SALE-VIEW-HOOK-GET-SALE-ON-ID').subscribe(
             (d: any) => {
                 loadSaleOnId(d.data, true) // isModify; 2nd arg is false for new entries in table
@@ -57,188 +51,157 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             }
         )
 
+        const subs4 = filterOn('SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED').subscribe(
+            (d: any) => {
+                const rowData = d.data?.row
+                const tranDate = rowData.tranDate
+                if (isDateAuditLocked(tranDate)) {
+                    emit('SHOW-MESSAGE', {
+                        severity: 'error',
+                        message: accountsMessages.auditLockError,
+                        duration: null,
+                    })
+                } else if (rowData?.clearDate) {
+                    // already reconciled so edit /delete not possible
+                    emit('SHOW-MESSAGE', {
+                        severity: 'error',
+                        message: accountsMessages.reconcillationDone,
+                        duration: null,
+                    })
+                } else {
+                    arbitraryData.isViewBack = true // go back to sale view
+                    loadSaleOnId(rowData.id1, true) // isModify; 2nd arg is true for no new entry in tables
+                }
+            }
+        )
+        const subs5 = filterOn('SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED').subscribe(
+            (d:any)=>{
+                const options:any = {
+                    description: accountsMessages.transactionDelete,
+                    confirmationText: 'Yes',
+                    cancellationText: 'No',
+                }
+                const rowData = d.data?.row
+                const tranDate = rowData.tranDate
+                if (isDateAuditLocked(tranDate)) {
+                    emit('SHOW-MESSAGE', {
+                        severity: 'error',
+                        message: accountsMessages.auditLockError,
+                        duration: null,
+                    })
+                } else if (rowData?.clearDate) {
+                    // already reconciled so edit /delete not possible
+                    emit('SHOW-MESSAGE', {
+                        severity: 'error',
+                        message: accountsMessages.reconcillationDone,
+                        duration: null,
+                    })
+                } else {
+                    confirm(options)
+                        .then(async () => {
+                            const id = rowData['id1']
+                            emit('SHOW-LOADING-INDICATOR', true)
+                            await genericUpdateMaster({
+                                deletedIds: [id],
+                                tableName: 'TranH',
+                            })
+                            emit('SHOW-LOADING-INDICATOR', false)
+                            emit('SHOW-MESSAGE', {})
+                            emit('PURCHASE-ROOT-CLEAR-ALL', null) //must clear the total purchase data
+                            arbitraryData.saleViewHookFetchData()
+                        })
+                        .catch(() => {}) // important to have otherwise eror
+                }
+            }
+        )
+
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
-    useEffect(() => {
-        const allAccounts = getFromBag('allAccounts') || []
-        meta.current.allAccounts = allAccounts
-        meta.current.ledgerAccounts = allAccounts
-            .filter(
-                (el: any) =>
-                    ['debtor', 'creditor'].includes(el.accClass) &&
-                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                    !el.isAutoSubledger
-            )
-            .map((el: any) => {
-                return {
-                    accName: el.accName,
-                    id: el.id,
-                    accLeaf: el.accLeaf,
-                    subledgers: el.accLeaf === 'L' ? [] : null,
-                }
-            })
-        meta.current.ledgerAccounts.unshift({
-            accName: 'All parties',
-            id: undefined,
-        })
-    }, [])
-
-    const dateFormat = getFromBag('dateFormat')
-
-    async function fetchData() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        const label = arbitraryData.isSales ? 'salesTran' : 'salesRetTran'
-        let no = getFromBag(label)
-        no = no ?? meta.current.no
-        const ret = await execGenericView({
-            isMultipleRows: true,
-            sqlKey: 'get_sale_purchase_headers',
-            args: {
-                tranTypeId: arbitraryData.isSales ? 4 : 9,
-                no: no || null,
-                accId: meta.current.selectedAccount?.id
-                    ? meta.current.selectedAccount.id + ''
-                    : '%',
-                tranDc: arbitraryData.isSales ? 'C' : 'D',
-            },
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-        if (ret) {
-            let index = 1
-            for (let item of ret) {
-                item.index = index++
-            }
-            meta.current.data = ret
-        }
-        meta.current.isMounted && setRefresh({})
-    }
-
-    function getActionsList() {
-        return [
+    function getXXGridParams() {
+        const columns = [
             {
-                icon: () => <Add />,
-                toolTip: 'Select party',
-                name: 'selectParty',
-                isFreeAction: true, // isFreeAction puts the icon in toolbar
-                onClick: () => {}, // Reload the component for new sale entry
+                headerName: 'Ind',
+                description: 'Index',
+                field: 'id',
+                width: 80,
+                disableColumnMenu: true,
             },
             {
-                icon: () => <Add />, // Here the <Add> is placeholder. It is later customized to select control
-                name: 'select',
-                isFreeAction: true,
-                onClick: () => {}, // This empty onClick is a hack. Without this warning appears
+                headerName: 'Id',
+                description: 'Id',
+                field: 'id1',
+                width: 90,
             },
             {
-                icon: () => <Edit color="secondary" fontSize="small" />,
-                toolTip: 'Edit transaction',
-                name: 'edit',
-                onClick: (e: any, rowData: any) => {
-                    const tranDate = rowData.tranDate
-                    if (isDateAuditLocked(tranDate)) {
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.auditLockError,
-                            duration: null,
-                        })
-                    } else if (rowData?.clearDate) {
-                        // already reconciled so edit /delete not possible
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.reconcillationDone,
-                            duration: null,
-                        })
-                    } else {
-                        loadSaleOnId(rowData.id, true) // isModify; 2nd arg is true for no new entry in tables
-                    }
-                },
-            },
-            {
-                icon: () => (
-                    <DeleteForever color="error" fontSize="small"></DeleteForever>
-                ),
-                toolTip: 'Delete transaction',
-                name: 'delete',
-                onClick: async (e: any, rowData: any) => {
-                    const options = {
-                        description: accountsMessages.transactionDelete,
-                        confirmationText: 'Yes',
-                        cancellationText: 'No',
-                    }
-                    if (isDateAuditLocked(rowData.tranDate)) {
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.auditLockError,
-                            duration: null,
-                        })
-                    } else if (rowData?.clearDate) {
-                        // already reconciled so edit /delete not possible
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: accountsMessages.reconcillationDone,
-                            duration: null,
-                        })
-                    } else {
-                        confirm(options)
-                            .then(async () => {
-                                const id = rowData['id']
-                                emit('SHOW-LOADING-INDICATOR', true)
-                                await genericUpdateMaster({
-                                    deletedIds: [id],
-                                    tableName: 'TranH',
-                                })
-                                emit('SHOW-LOADING-INDICATOR', false)
-                                emit('SHOW-MESSAGE', {})
-                                emit('PURCHASE-ROOT-CLEAR-ALL', null) //must clear the total purchase data
-                                fetchData()
-                            })
-                            .catch(() => {}) // important to have otherwise eror
-                    }
-                },
-            },
-        ]
-    }
-
-    function getColumnsArray(): any[] {
-        return [
-            { title: 'Index', field: 'index', width: '4px' },
-            { title: 'Id', field: 'id' },
-            { title: 'Ref no', field: 'autoRefNo' },
-            {
-                title: 'Date',
+                headerName: 'Date',
+                description: 'Date',
                 field: 'tranDate',
+                width: 120,
                 type: 'date',
-                render: (rowData: any) =>
-                    moment(rowData.tranDate).format(dateFormat),
+                valueFormatter: (params: any) =>
+                    moment(params.value).format(dateFormat),
             },
             {
-                title: 'Account',
+                headerName: 'Ref no',
+                description: 'Ref no',
+                field: 'autoRefNo',
+                width: 200,
+            },
+            {
+                headerName: 'Account',
                 field: 'accounts',
+                width: 200
             },
-            // { title: 'Invoice no', field: 'userRefNo' },
             {
-                title: 'Amount',
+                headerName: 'Amount',
                 field: 'amount',
-                align: 'right',
-                type: 'numeric',
-                render: (rowData: any) => toDecimalFormat(rowData.amount),
+                sortable: false,
+                type: 'number',
+                width: 160,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
-            { title: 'Labels', field: 'labels' },
             {
-                title: 'Remarks',
+                headerName: 'Labels',
+                field: 'labels',
+                width: 200
+            },
+            {
+                headerName: 'Remarks',
                 field: 'remarks',
+                width: 200
             },
             {
-                title: "Serial no's",
+                headerName: "Serial no's",
                 field: 'serialNumbers',
+                width: 160
             },
         ]
+        const queryId = 'get_sale_purchase_headers'
+        const queryArgs = {
+            tranTypeId: arbitraryData.isSales ? 4 : 9,
+            no: 100,
+            accId: meta.current.selectedAccount?.id
+                ? meta.current.selectedAccount.id + ''
+                : '%',
+            tranDc: arbitraryData.isSales ? 'C' : 'D',
+        }
+        const summaryColNames: string[] = ['amount']
+        const specialColumns = {
+            isEdit: true,
+            isDelete: true,
+            editIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
+        }
+        return { columns, queryId, queryArgs, summaryColNames, specialColumns }
     }
+
 
     async function loadSaleOnId(id: number, isModify: boolean = true) {
         // isModify: if isEdit then id's of tables are there so as to enforce modify sql. Otherwise id's of table are reset to undefined, so new rows are inserted in tables
@@ -252,21 +215,20 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             },
         })
         emit('SHOW-LOADING-INDICATOR', false)
-        // console.log('Sale:', ret)
         if (ret) {
-            prepareArbitraryData(ret)
-            emit('SALE-ITEMS-REFRESH', null)
-            emit('CHANGE-TAB-SALES', 0) // change to tab 0 for new entry
+            prepareArbitraryData(ret)           
+            arbitraryData.saleItemsRefresh()
+            arbitraryData.salesHookChangeTab(0)
         }
 
         function prepareArbitraryData(data: any) {
             const res = data.jsonResult
-
             loadTranH(res)
             loadExtGstTranD(res)
             loadSalePurchaseDetails(res)
             loadTranD(res)
-
+            ad.salesCrownRefresh()
+            
             function loadExtGstTranD(res: any) {
                 const extGstTranD = res.extGstTranD
                 ad.billTo.gstin = extGstTranD.gstin
@@ -293,9 +255,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                     upcCode: item.upcCode,
                     productCode: item.productCode,
                     productDetails: item.label
-                        ? `${item.catName || ''}, ${item.brandName || ''}, ${
-                              item.label || ''
-                          }, ${item.info || ''}`
+                        ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
+                        }, ${item.info || ''}`
                         : '',
                     productId: item.productId,
                     hsn: item.hsn,
@@ -350,14 +311,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             ad.saleVariety = 'i'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts[
-                                    'debtorCreditorAccountsWithLedgers'
+                                'debtorCreditorAccountsWithLedgers'
                                 ]
                             )
                         } else {
                             ad.saleVariety = 'r'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts[
-                                    'cashBankAccountsWithSubledgers'
+                                'cashBankAccountsWithSubledgers'
                                 ]
                             )
                         }
@@ -372,7 +333,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                 const billTo = res.billTo || res.businessContacts || {}
                 ad.id = isModify ? tranH.id : undefined
                 ad.autoRefNo = tranH.autoRefNo
-                ad.tranDate = tranH.tranDate
+                ad.tranDate = isModify ? tranH.tranDate : null
                 ad.userRefNo = tranH.userRefNo
                 ad.commonRemarks = tranH.remarks
                 ad.billTo = billTo
@@ -383,7 +344,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         }
     }
 
-    return { fetchData, getActionsList, getColumnsArray, meta }
+    return { getXXGridParams, meta }
 }
 
 export { useSaleView }
@@ -391,6 +352,9 @@ export { useSaleView }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
+            height: 'calc(100vh - 245px)',
+            width: '100%',
+            marginTop: '5px',
             '& .select-last': {
                 marginLeft: theme.spacing(2),
             },

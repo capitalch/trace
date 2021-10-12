@@ -13,7 +13,7 @@ function usePurchases(drillDownEditAttributes:any) {
             drillDownEditAttributes.showChildDialog && emit('PURCHASE-VIEW-HOOK-GET-PURCHASE-ON-ID-DRILL-DOWN-EDIT', drillDownEditAttributes.tranHeaderId)
             arbitraryData.current.shouldCloseParentOnSave = true
         }
-        const subs1 = filterOn('CHANGE-TAB-PURCHASES').subscribe((d) => {
+        const subs1 = filterOn('PURCHASES-HOOK-CHANGE-TAB').subscribe((d) => {
             meta.current.value = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
         })
@@ -54,6 +54,7 @@ function usePurchases(drillDownEditAttributes:any) {
         summary: {},
         tranDate: undefined,
         userRefNo: '',
+        isViewBack: false,
     }
     const arbitraryData: any = useRef(JSON.parse(JSON.stringify(initData)))
     const ad = arbitraryData.current

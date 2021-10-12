@@ -146,7 +146,7 @@ function AccountsLedgerDialog() {
                         toShowDailySummary={true}
                         toShowReverseCheckbox={true}
 
-                        xGridProps={{ disableSelectionOnClick: true }}
+                        // xGridProps={{ disableSelectionOnClick: true }}
                         jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                     />
                 </DialogContent>

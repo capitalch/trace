@@ -6,22 +6,17 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
     const [, setRefresh] = useState({})
     const {
         emit,
-        filterOn,
         getCurrentComponent,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
-        saveForm,
     } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
-        const subs1 = filterOn('SALES-CROWN-REFRESH').subscribe(() => {
-            setRefresh({})
-        })
+        arbitraryData.salesCrownRefresh = () => setRefresh({})
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
         }
     }, [])
 
@@ -42,7 +37,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
 
         function headError() {
             function dateError() {
-                errorObject.dateError = isInvalidDate(ab.tranDate)
+                errorObject.dateError = isInvalidDate(ab.tranDate) || (!ab.tranDate)
                 return errorObject.dateError
             }
             function saleAccountError() {
@@ -136,9 +131,15 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         } else {
             if (ad.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-            } else {
+            } else if (ad.isViewBack) {
+                arbitraryData.salesHookResetData()
+                arbitraryData.salesHookChangeTab(3)
+                arbitraryData.saleViewHookFetchData()
+            }
+            else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
+            ad.isViewBack = false // no go back to view
         }
         // saveForm({ data: header })
 

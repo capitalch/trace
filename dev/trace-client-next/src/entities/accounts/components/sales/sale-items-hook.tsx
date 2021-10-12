@@ -26,12 +26,9 @@ function useSaleItems(arbitraryData: any) {
     useEffect(() => {
         meta.current.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
-        const subs1 = filterOn('SALE-ITEMS-REFRESH').subscribe(() => {
-            setRefresh({})
-        })
+        arbitraryData.saleItemsRefresh = ()=>{setRefresh({})}        
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
         }
     }, [])
 
@@ -152,7 +149,8 @@ function useSaleItems(arbitraryData: any) {
             }
         }
         meta.current.isMounted && setRefresh({})
-        emit('SALES-CROWN-REFRESH', null)
+        arbitraryData.salesCrownRefresh()
+        // emit('SALES-CROWN-REFRESH', null)
     }
 
     function getEmptyRowData() {

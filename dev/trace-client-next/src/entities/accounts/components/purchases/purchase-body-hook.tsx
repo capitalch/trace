@@ -373,14 +373,19 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         const details = extractDetails()
 
         header.data[0].details = details
-        // saveForm({ data: header })
+        
         const ret = await genericUpdateMasterDetails([header])
         if (ret.error) {
             console.log(ret.error)
         } else {
             if (ad.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-            } else {
+            }  else if(ad.isViewBack){
+                emit('PURCHASES-HOOK-CHANGE-TAB', 1)
+                emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
+            }
+            
+            else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
         }

@@ -2,16 +2,18 @@ import {
     useState,
     NumberFormat,
     PrimeColumn,
-    DataTable,
+    DataTable, useContext
 } from '../../../../imports/regular-imports'
 import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
 import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
+import { SalesContext } from './sales-provider'
 
-function SaleFooter({ arbitraryData }: any) {
+function SaleFooter() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
+    const arbitraryData:any = useContext(SalesContext)
     const {
         computeSummary,
         handleAddItem,

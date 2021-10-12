@@ -1,4 +1,4 @@
-import {_,moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { _, moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
@@ -21,14 +21,18 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             arbitraryData.current.shouldCloseParentOnSave = true
         }
 
-        const subs1 = filterOn('CHANGE-TAB-SALES').subscribe((d) => {
-            meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
+        arbitraryData.current.salesHookChangeTab = (tabValue: number)=>{
+            meta.current.tabValue = tabValue // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
-        })
+        }
+       
+        arbitraryData.current.salesHookResetData = ()=>{
+            resetArbitraryData()
+        }
+        
 
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
         }
     }, [])
 
@@ -91,12 +95,17 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         totalCredits: 0.0,
         totalDebits: 0.0,
         tranDate: moment().format(isoDateFormat),
+        isViewBack: false
     })
 
-    function handleChange(e: any, newValue: number) {
-        meta.current.tabValue = newValue
+    function resetArbitraryData(){
+        arbitraryData.current.autoRefNo = undefined
+    }
+
+    function handleChangeTab(e: any, newValue: number) {
+        meta.current.tabValue = newValue        
         if (newValue === 3) { // view
-            emit('SALE-VIEW-HOOK-FETCH-DATA', null)
+            arbitraryData.current.saleViewHookFetchData()        
         }
         meta.current.isMounted && setRefresh({})
     }
@@ -164,7 +173,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         arbitraryData.current.accounts.autoSubledgerAccounts = autoSubledgerAccounts
     }
 
-    return { arbitraryData, handleChange, meta }
+    return { arbitraryData, handleChangeTab, meta }
 }
 
 export { useSales }
