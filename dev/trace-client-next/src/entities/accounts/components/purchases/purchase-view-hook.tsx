@@ -96,12 +96,50 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
             }
         })
 
+        const subs4 = filterOn('PURCHASE-VIEW-HOOK-XX-GRID-DELETE-CLICKED').subscribe((d:any)=>{
+            const rowData = d.data?.row
+            const tranDate = rowData.tranDate
+            const options = {
+                description: accountsMessages.transactionDelete,
+                confirmationText: 'Yes',
+                cancellationText: 'No',
+            }
+            if (isDateAuditLocked(tranDate)) {
+                emit('SHOW-MESSAGE', {
+                    severity: 'error',
+                    message: accountsMessages.auditLockError,
+                    duration: null,
+                })
+            } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                emit('SHOW-MESSAGE', {
+                    severity: 'error',
+                    message: accountsMessages.reconcillationDone,
+                    duration: null,
+                })
+            } else {
+                confirm(options)
+                    .then(async () => {
+                        const id = rowData['id1']
+                        emit('SHOW-LOADING-INDICATOR', true)
+                        await genericUpdateMaster({
+                            deletedIds: [id],
+                            tableName: 'TranH',
+                        })
+                        emit('SHOW-LOADING-INDICATOR', false)
+                        emit('SHOW-MESSAGE', {})
+                        emit('PURCHASE-VIEW-HOOK-FETCH-DATA',null)
+                    })
+                    .catch(() => { }) // important to have otherwise eror
+            }
+        })
+
 
         return () => {
             subs.unsubscribe()
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 
@@ -435,38 +473,38 @@ export { useStyles }
 //             toolTip: 'Delete transaction',
 //             name: 'delete',
 //             onClick: async (e: any, rowData: any) => {
-//                 const options = {
-//                     description: accountsMessages.transactionDelete,
-//                     confirmationText: 'Yes',
-//                     cancellationText: 'No',
-//                 }
-//                 if (isDateAuditLocked(rowData.tranDate)) {
-//                     emit('SHOW-MESSAGE', {
-//                         severity: 'error',
-//                         message: accountsMessages.auditLockError,
-//                         duration: null,
-//                     })
-//                 } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
-//                     emit('SHOW-MESSAGE', {
-//                         severity: 'error',
-//                         message: accountsMessages.reconcillationDone,
-//                         duration: null,
-//                     })
-//                 } else {
-//                     confirm(options)
-//                         .then(async () => {
-//                             const id = rowData['id']
-//                             emit('SHOW-LOADING-INDICATOR', true)
-//                             await genericUpdateMaster({
-//                                 deletedIds: [id],
-//                                 tableName: 'TranH',
-//                             })
-//                             emit('SHOW-LOADING-INDICATOR', false)
-//                             emit('SHOW-MESSAGE', {})
-//                             fetchData()
-//                         })
-//                         .catch(() => { }) // important to have otherwise eror
-//                 }
+                // const options = {
+                //     description: accountsMessages.transactionDelete,
+                //     confirmationText: 'Yes',
+                //     cancellationText: 'No',
+                // }
+                // if (isDateAuditLocked(rowData.tranDate)) {
+                //     emit('SHOW-MESSAGE', {
+                //         severity: 'error',
+                //         message: accountsMessages.auditLockError,
+                //         duration: null,
+                //     })
+                // } else if (rowData?.clearDate) { // already reconciled so edit /delete not possible
+                //     emit('SHOW-MESSAGE', {
+                //         severity: 'error',
+                //         message: accountsMessages.reconcillationDone,
+                //         duration: null,
+                //     })
+                // } else {
+                //     confirm(options)
+                //         .then(async () => {
+                //             const id = rowData['id']
+                //             emit('SHOW-LOADING-INDICATOR', true)
+                //             await genericUpdateMaster({
+                //                 deletedIds: [id],
+                //                 tableName: 'TranH',
+                //             })
+                //             emit('SHOW-LOADING-INDICATOR', false)
+                //             emit('SHOW-MESSAGE', {})
+                //             fetchData()
+                //         })
+                //         .catch(() => { }) // important to have otherwise eror
+                // }
 //             },
 //         },
 //     ]

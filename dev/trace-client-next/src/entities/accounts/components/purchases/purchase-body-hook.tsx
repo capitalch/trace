@@ -383,6 +383,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             }  else if(ad.isViewBack){
                 emit('PURCHASES-HOOK-CHANGE-TAB', 1)
                 emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
+                emit('PURCHASE-HOOK-RESET-DATA', null)
             }
             
             else {
