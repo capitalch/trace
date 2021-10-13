@@ -16,6 +16,7 @@ function usePurchases(drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoFormat = 'YYYY-MM-DD'
     const { emit, filterOn } = useSharedElements()
+
     useEffect(() => {
         meta.current.isMounted = true
         if (drillDownEditAttributes && !_.isEmpty(drillDownEditAttributes)) {
@@ -35,14 +36,14 @@ function usePurchases(drillDownEditAttributes: any) {
             arbitraryData.current = JSON.parse(JSON.stringify(initData))
             meta.current.isMounted && setRefresh({})
         })
-        const subs3 = filterOn('PURCHASE-HOOK-RESET-DATA').subscribe(() => {
-            resetData()
-        })
+        // const subs3 = filterOn('PURCHASE-HOOK-RESET-DATA').subscribe(() => {
+        //     resetData()
+        // })
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
-            subs3.unsubscribe()
+            // subs3.unsubscribe()
         }
     }, [])
 
@@ -57,6 +58,7 @@ function usePurchases(drillDownEditAttributes: any) {
         cgst: 0.0,
         commonRemarks: undefined,
         deletedSalePurchaseIds: [],
+        // extGstTranDId: undefined,
         gstin: undefined,
         id: undefined,
         igst: 0.0,
@@ -75,12 +77,14 @@ function usePurchases(drillDownEditAttributes: any) {
         isViewBack: false,
     }
     const arbitraryData: any = useRef(JSON.parse(JSON.stringify(initData)))
-    
 
-    function resetData() {
-        const ad = arbitraryData.current
-        Object.assign(ad,initData)
-    }
+
+    // function resetData() {
+    //     // const ad = arbitraryData.current
+    //     // Object.assign(ad,initData)
+    //     arbitraryData.current = initData
+    //     // Object.assign(arbitraryData.current, initData)
+    // }
 
     function handleOnTabChange(e: any, newValue: number) {
         meta.current.value = newValue

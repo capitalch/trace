@@ -218,7 +218,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         if (ret) {
             prepareArbitraryData(ret)           
             arbitraryData.saleItemsRefresh()
-            arbitraryData.salesHookChangeTab(0)
+            // arbitraryData.salesHookChangeTab(0)
+            emit('SALES-HOOK-CHANGE-TAB', 0)
         }
 
         function prepareArbitraryData(data: any) {

@@ -379,11 +379,12 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             console.log(ret.error)
         } else {
             if (ad.shouldCloseParentOnSave) {
-                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', null)
             }  else if(ad.isViewBack){
+                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('PURCHASES-HOOK-CHANGE-TAB', 1)
                 emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
-                emit('PURCHASE-HOOK-RESET-DATA', null)
+                // emit('PURCHASE-HOOK-RESET-DATA', null)
             }
             
             else {

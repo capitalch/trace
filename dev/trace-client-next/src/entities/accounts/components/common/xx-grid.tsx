@@ -54,7 +54,15 @@ interface SpecialColumnOptions {
     drillDownIbukiMessage?: any
 }
 
+interface ActionsOptions {
+    fetchIbukiMessage?: string
+    editIbukiMessage?: string
+    deleteIbukiMessage?: string
+    drillDownIbukiMessage?: string
+}
+
 interface XXGridOptions {
+    actions?: ActionsOptions
     autoFetchData?: boolean
     columns: any[]
     hideViewLimit?: boolean

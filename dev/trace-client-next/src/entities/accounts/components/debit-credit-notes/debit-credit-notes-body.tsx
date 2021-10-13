@@ -10,9 +10,9 @@ import {
 } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { useDebitCreditNoteBody, useStyles } from './debit-credit-note-body-hook'
+import { useDebitCreditNoteBody, useStyles } from './debit-credit-notes-body-hook'
 
-function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
+function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
     const [, setRefresh] = useState({})
     const classes = useStyles()
     const { getError, handleSubmit, meta } = useDebitCreditNoteBody(arbitraryData, tranType)
@@ -156,4 +156,4 @@ function DebitCreditNoteBody({ arbitraryData, tranType }: any) {
     </div>)
 }
 
-export { DebitCreditNoteBody }
+export { DebitCreditNotesBody }

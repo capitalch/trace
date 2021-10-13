@@ -1,5 +1,14 @@
-import {moment, useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    moment,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
@@ -12,9 +21,8 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         hotFilterOn,
         isInvalidDate,
         map,
-        // moment,
-        // saveForm,
     } = useSharedElements()
+
     const isoFormat = 'YYYY-MM-DD'
     const meta: any = useRef({
         isMounted: false,
@@ -40,6 +48,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         tranHeaderIdDebit: undefined,
         tranHeaderIdCredit: undefined,
         userRefNo: undefined,
+        isViewBack: false,
     }
 
     useEffect(() => {
@@ -116,9 +125,11 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     }, [])
 
     function getError() {
-        const ret = arbitraryData.body.ledgerSubledgerDebit.isLedgerSubledgerError ||
-        arbitraryData.body.ledgerSubledgerCredit.isLedgerSubledgerError ||
-        (!arbitraryData.body.amount) || (isInvalidDate(arbitraryData.body.tranDate))
+        const ret =
+            arbitraryData.body.ledgerSubledgerDebit.isLedgerSubledgerError ||
+            arbitraryData.body.ledgerSubledgerCredit.isLedgerSubledgerError ||
+            !arbitraryData.body.amount ||
+            isInvalidDate(arbitraryData.body.tranDate)
         return ret
     }
 
@@ -129,12 +140,40 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         const ret = await genericUpdateMasterDetails([header])
         if (ret.error) {
             console.log(ret.error)
+        } else if (arbitraryData.body.isViewBack) {
+            // resetData()
+            emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+            // arbitraryData.body.isViewBack = false
+            emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 1)
+            emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA',null)
         } else {
             if (arbitraryData.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
+        }
+    }
+
+    function resetData() {
+        arbitraryData.body = {
+            amount: 0.0,
+            autoRefNo: undefined,
+            commonRemarks: undefined,
+            ledgerSubledgerCredit: {},
+            ledgerSubledgerDebit: {},
+            lineRefNoDebit: undefined,
+            lineRefNoCredit: undefined,
+            lineRemarksDebit: undefined,
+            lineRemarksCredit: undefined,
+            tranDate:
+                arbitraryData?.body?.tranDate || moment().format(isoFormat),
+            tranDetailsIdDebit: undefined,
+            tranDetailsIdCredit: undefined,
+            tranHeaderIdDebit: undefined,
+            tranHeaderIdCredit: undefined,
+            userRefNo: undefined,
+            isViewBack: false,
         }
     }
 
@@ -156,7 +195,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         item.branchId = branchId
         item.remarks = arbitraryData.body.commonRemarks
         item.tranTypeId = tranType === 'dn' ? 7 : 8
-        item.id = arbitraryData.body.tranHeaderId || undefined
+        item.id = arbitraryData.body.id || undefined
         item.userRefNo = arbitraryData.body.userRefNo || undefined
         obj.data.push(item)
         return obj
@@ -225,7 +264,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     display: 'flex',
                     flexWrap: 'wrap',
                     columnGap: theme.spacing(3),
-                    rowGap:theme.spacing(2),
+                    rowGap: theme.spacing(2),
                     '& .common-remarks': {
                         maxWidth: '20rem',
                         width: '100%',

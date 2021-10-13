@@ -57,8 +57,7 @@ function usePurchaseView(arbitraryData: any, purchaseType: string, drillDownEdit
         }
     }, [])
 
-    useEffect(() => {
-        
+    useEffect(() => {        
         const subs = filterOn('PURCHASE-VIEW-HOOK-FETCH-DATA').subscribe((d:any)=>{
             emit('XX-GRID-FETCH-DATA', null)
         })

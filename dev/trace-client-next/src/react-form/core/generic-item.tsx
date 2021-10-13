@@ -147,7 +147,7 @@ const useGeneric = (props: any) => {
             const valueName = itemOptions.valueName
             let method = itemOptions.httpmethod
             method = method || 'httpPost'
-            let temp
+            let temp:any
             if (method === 'httpPost') {
                 temp = await httpPost(itemOptions.url, {})
             } else {

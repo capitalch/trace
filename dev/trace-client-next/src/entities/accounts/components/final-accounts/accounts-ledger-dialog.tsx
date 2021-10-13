@@ -1,4 +1,10 @@
-import {moment,useConfirm, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {
+    moment,
+    useConfirm,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
 import {
     IconButton,
     Dialog,
@@ -9,15 +15,18 @@ import {
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
-import {CloseSharp} from '../../../../imports/icons-import'
+import { CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { manageEntitiesState , useIbuki} from '../../../../imports/trace-imports'
+import {
+    manageEntitiesState,
+    useIbuki,
+} from '../../../../imports/trace-imports'
 import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'
 import { Sales } from '../sales/sales'
-import {Purchases} from '../purchases/purchases'
-import {FlightLand} from '../purchases/debit-notes'
-import {FlightTakeoff} from '../sales/credit-notes'
+import { Purchases } from '../purchases/purchases'
+import { DebitNotes } from '../debit-credit-notes/debit-notes'
+import { CreditNotes } from '../debit-credit-notes/credit-notes'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
@@ -32,7 +41,6 @@ function AccountsLedgerDialog() {
         genericUpdateMaster,
         getTranType,
         isGoodToDelete,
-        // moment,
         toDecimalFormat,
         XXGrid,
     } = useSharedElements()
@@ -61,7 +69,7 @@ function AccountsLedgerDialog() {
     const { filterOn } = useIbuki()
     const classes = useStyles({ meta: meta })
     meta.current.dateFormat = getFromBag('dateFormat')
-    const { fetchData, LedgerDataTable } = getGeneralLedger(meta)
+    // const { fetchData, LedgerDataTable } = getGeneralLedger(meta)
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -78,7 +86,6 @@ function AccountsLedgerDialog() {
             const row = d.data?.row
             meta.current.drillDownEditAttributes.tranHeaderId = row?.id1
             meta.current.drillDownEditAttributes.tranTypeId = row?.tranTypeId
-            // console.log(d.data)
             setRefresh({})
         })
         const subs2 = filterOn(
@@ -86,11 +93,10 @@ function AccountsLedgerDialog() {
         ).subscribe(() => {
             meta.current.showChildDialog = false
             setRefresh({})
-            if(meta.current.showDialog){
+            if (meta.current.showDialog) {
                 emit('XX-GRID-FETCH-DATA', '') // If main dialog is open then only xx-grid fetch data
-            } 
-            else {
-                emit('ROOT-WINDOW-REFRESH','') // otherwise refresh data in root window
+            } else {
+                emit('ROOT-WINDOW-REFRESH', '') // otherwise refresh data in root window
             }
         })
         const subs3 = filterOn(
@@ -141,11 +147,9 @@ function AccountsLedgerDialog() {
                         specialColumns={getArtifacts().specialColumns}
                         toShowOpeningBalance={true}
                         toShowClosingBalance={true}
-
                         // toShowColumnBalance={true}
                         toShowDailySummary={true}
                         toShowReverseCheckbox={true}
-
                         // xGridProps={{ disableSelectionOnClick: true }}
                         jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                     />
@@ -233,15 +237,21 @@ function AccountsLedgerDialog() {
             ret = <Sales saleType="sal" drillDownEditAttributes={attrs} />
         } else if (attrs.tranTypeId === 9) {
             ret = <Sales saleType="ret" drillDownEditAttributes={attrs} />
-        } else if(attrs.tranTypeId === 5) {
-            ret = <Purchases purchaseType='pur' drillDownEditAttributes={attrs} />
-        } else if(attrs.tranTypeId === 10){
-            ret = <Purchases purchaseType='ret' drillDownEditAttributes={attrs}  />
-        } else if(attrs.tranTypeId === 7){ //debit notes
-            ret = <FlightLand  drillDownEditAttributes={attrs} />
-        } else if(attrs.tranTypeId === 8){ // credit notes
-            ret = <FlightTakeoff drillDownEditAttributes={attrs} />
-        } 
+        } else if (attrs.tranTypeId === 5) {
+            ret = (
+                <Purchases purchaseType="pur" drillDownEditAttributes={attrs} />
+            )
+        } else if (attrs.tranTypeId === 10) {
+            ret = (
+                <Purchases purchaseType="ret" drillDownEditAttributes={attrs} />
+            )
+        } else if (attrs.tranTypeId === 7) {
+            //debit notes
+            ret = <DebitNotes drillDownEditAttributes={attrs} />
+        } else if (attrs.tranTypeId === 8) {
+            // credit notes
+            ret = <CreditNotes drillDownEditAttributes={attrs} />
+        }
         return ret
     }
 

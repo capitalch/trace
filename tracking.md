@@ -46,8 +46,8 @@ c) In all Typography comment out disableTypography
 # Pending
 
 # Working on
-1. Dropdown cascade not working for parties
-1.1 
+1. Purchase horizontal alignment
+1.1 Purchase write label Purchase and purchase return at top
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5 All dialog boxes to originate from same place. At present there are many
 1.6 
@@ -127,6 +127,9 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 11-10-2021 - 12-10-2021
+1. Sales and purchases provided xx-grid
 
 # 10-10-2021
 1. Reorganized code

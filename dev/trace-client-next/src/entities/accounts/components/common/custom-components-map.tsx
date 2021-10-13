@@ -12,8 +12,8 @@ import { Sales } from '../sales/sales'
 import { CategoriesMaster } from '../inventory/categories-master'
 import { BrandsMaster } from '../inventory/brands-master'
 import { ProductsMaster } from '../inventory/products-master'
-import { FlightLand } from '../purchases/debit-notes'
-import { FlightTakeoff } from '../sales/credit-notes'
+import { DebitNotes } from '../debit-credit-notes/debit-notes'
+import { CreditNotes } from '../debit-credit-notes/credit-notes'
 import { Purchases } from '../purchases/purchases'
 import { GeneralLedger } from '../final-accounts/general-ledger'
 import { Taxation } from '../reports/taxation'
@@ -27,8 +27,8 @@ const customComponents = {
     brandsMaster: BrandsMaster,
     categoriesMaster: CategoriesMaster,
     commonUtilities: CommonUtilities,
-    flightTakeoff: FlightTakeoff,
-    flightLand: FlightLand,
+    creditNotes: CreditNotes,
+    debitNotes: DebitNotes,
     genericCRUD: GenericCRUD,
     genericDialoges: GenericDialoges,
     genericExports: GenericExports,

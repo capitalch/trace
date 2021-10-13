@@ -132,8 +132,10 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             if (ad.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
             } else if (ad.isViewBack) {
-                arbitraryData.salesHookResetData()
-                arbitraryData.salesHookChangeTab(3)
+                // arbitraryData.salesHookResetData()
+                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+                emit('SALES-HOOK-CHANGE-TAB', 3)
+                // arbitraryData.salesHookChangeTab(3)
                 arbitraryData.saleViewHookFetchData()
             }
             else {
@@ -141,7 +143,6 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             }
             ad.isViewBack = false // no go back to view
         }
-        // saveForm({ data: header })
 
         function extractHeader() {
             const finYearId = getFromBag('finYearObject')?.finYearId
@@ -263,7 +264,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 backgroundColor: theme.palette.grey[100],
                 '& .crown-title': {
-                    // marginLeft: theme.spacing(1),
+                    color: theme.palette.secondary.main
                 },
                 '& .crown-content': {
                     display: 'flex',

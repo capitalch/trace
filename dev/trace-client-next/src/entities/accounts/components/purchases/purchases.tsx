@@ -1,4 +1,3 @@
-import { useState } from '../../../../imports/regular-imports'
 import { Tab, Tabs } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
 import { usePurchases, useStyles } from './purchases-hook'
@@ -8,7 +7,6 @@ import { PurchaseBody } from './purchase-body'
 import { PurchasesProvider } from './purchases-provider'
 
 function Purchases({ purchaseType, drillDownEditAttributes }: any) {
-    const [] = useState({})
 
     const { arbitraryData, handleOnTabChange, meta } = usePurchases(
         drillDownEditAttributes

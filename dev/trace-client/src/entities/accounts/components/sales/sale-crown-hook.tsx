@@ -261,9 +261,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 columnGap: theme.spacing(1),
                 alignItems: 'center',
                 backgroundColor: theme.palette.grey[100],
-                '& .crown-title': {
-                    // marginLeft: theme.spacing(1),
-                },
                 '& .crown-content': {
                     display: 'flex',
                     flexWrap: 'wrap',

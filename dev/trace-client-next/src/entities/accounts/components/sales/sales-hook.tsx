@@ -31,17 +31,23 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             arbitraryData.current.shouldCloseParentOnSave = true
         }
 
-        arbitraryData.current.salesHookChangeTab = (tabValue: number) => {
-            meta.current.tabValue = tabValue // changes the tab. if d.data is 0 then new purchase tab is selected
+        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d:any)=>{
+            meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
-        }
+        })
 
-        arbitraryData.current.salesHookResetData = () => {
-            resetArbitraryData()
-        }
+        // arbitraryData.current.salesHookChangeTab = (tabValue: number) => {
+        //     meta.current.tabValue = tabValue // changes the tab. if d.data is 0 then new purchase tab is selected
+        //     setRefresh({})
+        // }
+
+        // arbitraryData.current.salesHookResetData = () => {
+        //     resetArbitraryData()
+        // }
 
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -107,55 +113,58 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         isViewBack: false,
     })
 
-    function resetArbitraryData() {
-        const ad = arbitraryData.current
-        Object.assign(ad, {
-            accounts: {
-                cashBankAccountsWithLedgers: [],
-                cashBankAccountsWithSubledgers: [],
-                debtorCreditorAccountsWithLedgers: [],
-                debtorCreditorAccountsWithSubledgers: [],
-                autoSubledgerAccounts: [],
-            },
-            allAccounts: [],
-            autoRefNo: undefined,
-            backCalulateAmount: 0.0,
-            billTo: {
-                id: undefined,
-            },
+    // function resetArbitraryData() {
+    //     const accounts = {...arbitraryData.current.accounts}
+    //     arbitraryData.current = {
+    //         accounts: {
+    //             cashBankAccountsWithLedgers: [],
+    //             cashBankAccountsWithSubledgers: [],
+    //             debtorCreditorAccountsWithLedgers: [],
+    //             debtorCreditorAccountsWithSubledgers: [],
+    //             autoSubledgerAccounts: [],
+    //         },
+    //         allAccounts: [],
+    //         autoRefNo: undefined,
+    //         backCalulateAmount: 0.0,
+    //         billTo: {
+    //             id: undefined,
+    //         },
+    //         commonRemarks: undefined,
+    //         deletedSalePurchaseIds: [],
+    //         // extGstTranDId: undefined,
+    //         footer: {
+    //             items: [], // for TranD table
+    //             deletedIds: [],
+    //         },
+    //         id: undefined,
+    //         isIgst: false,
+    //         isAssignmentReturn: saleType === 'ret',
+    //         isSales: saleType === 'sal',
+    //         ledgerAccounts: [],
+    //         lineItems: [], // for product details of SalePurchaseDetails table
+    //         rowData: {},
+    //         saleErrorMethods: {
+    //             headError: () => false,
+    //             itemsError: () => false,
+    //             footerError: () => false,
+    //             errorMethods: {
+    //                 getSlNoError: () => false,
+    //             },
+    //         },
+    //         salesCrownRefresh: () => {},
 
-            commonRemarks: undefined,
-            deletedSalePurchaseIds: [],
-            footer: {
-                items: [], // for TranD table
-                deletedIds: [],
-            },
-            id: undefined,
-            isIgst: false,
-            isAssignmentReturn: saleType === 'ret',
-            isSales: saleType === 'sal',
-            ledgerAccounts: [],
-            lineItems: [], // for product details of SalePurchaseDetails table
-            rowData: {},
-            saleErrorMethods: {
-                headError: () => false,
-                itemsError: () => false,
-                footerError: () => false,
-                errorMethods: {
-                    getSlNoError: () => false,
-                },
-            },
 
-            saleErrorObject: {},
-            saleVariety: 'r',
-            shipTo: {},
-            summary: {},
-            totalCredits: 0.0,
-            totalDebits: 0.0,
-            tranDate: moment().format(isoDateFormat),
-            isViewBack: false,
-        })
-    }
+    //         saleErrorObject: {},
+    //         saleVariety: 'r',
+    //         shipTo: {},
+    //         summary: {},
+    //         totalCredits: 0.0,
+    //         totalDebits: 0.0,
+    //         tranDate: moment().format(isoDateFormat),
+    //         isViewBack: false,
+    //     }
+    //     Object.assign(arbitraryData.current.accounts, accounts)
+    // }
 
     function handleChangeTab(e: any, newValue: number) {
         meta.current.tabValue = newValue

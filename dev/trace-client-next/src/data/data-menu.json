@@ -79,14 +79,14 @@
                             }
                         },
                         {
-                            "name": "flightLandSubMenu",
+                            "name": "debitNotesSubMenu",
                             "label": "Debit notes",
-                            "componentName": "flightLand"
+                            "componentName": "debitNotes"
                         },
                         {
-                            "name": "flightTakeoffSubMenu",
+                            "name": "creditNotesSubMenu",
                             "label": "Credit notes",
-                            "componentName": "flightTakeoff"
+                            "componentName": "creditNotes"
                         }
                     ]
                 },

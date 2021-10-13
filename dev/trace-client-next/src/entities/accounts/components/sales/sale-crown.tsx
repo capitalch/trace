@@ -22,7 +22,7 @@ function SaleCrown({
     return (
         <div className={classes.content}>
             <div className="sales-crown">
-                <Typography variant="h6" className="crown-title">
+                <Typography variant="subtitle1" className="crown-title">
                     {meta.current.title}
                 </Typography>
                 <div className="crown-content">

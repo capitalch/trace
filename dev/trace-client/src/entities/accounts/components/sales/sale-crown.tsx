@@ -23,7 +23,7 @@ function SaleCrown({ arbitraryData, saleType, drillDownEditAttributes }: any) {
     return (
         <div className={classes.content}>
             <div className="sales-crown">
-                <Typography variant="h6" className="crown-title">
+                <Typography variant="h6">
                     {meta.current.title}
                 </Typography>
                 <div className="crown-content">
