@@ -6,14 +6,18 @@ import {
 } from '../../../../imports/regular-imports'
 import { makeStyles, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { getArtifacts } from '../../../../imports/trace-imports'
 
 function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
     const {
+        confirm,
         emit,
         execGenericView,
         filterOn,
         getFromBag,
+        genericUpdateMaster,
+        isAllowedUpdate,
         isDateAuditLocked,
         accountsMessages,
         toDecimalFormat,
@@ -22,48 +26,18 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
 
     useEffect(() => {
         meta.current.isMounted = true
-        // getData()
-        setRefresh({})
-        // const subs1 = filterOn(
-        //     'DEBIT-CREDIT-NOTES-VIEW-HOOK-LOAD-DATA'
-        // ).subscribe((d: any) => {
-        //     loadData(d.data)
-        // })
-        return () => {
-            meta.current.isMounted = false
-            // subs1.unsubscribe()
-        }
-    }, [])
-
-    useEffect(() => {
         const subs1 = filterOn(
             'DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA'
         ).subscribe(() => {
-            emit('XX-GRID-FETCH-DATA', null)
+            emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
         })
         const subs2 = filterOn(
-            'DEBIT-CREDIT-NOTES-VIEW-HOOK-XX-GRID-EDIT-CLICKED'
+            getXXGridParams().gridActionMessages.editIbukiMessage
         ).subscribe((d: any) => {
-            const rowData = d.data?.row
-            const tranDate = rowData.tranDate
-            if (isDateAuditLocked(tranDate)) {
-                emit('SHOW-MESSAGE', {
-                    severity: 'error',
-                    message: accountsMessages.auditLockError,
-                    duration: null,
-                })
-            } else if (rowData?.clearDate) {
-                // already reconciled so edit /delete not possible
-                emit('SHOW-MESSAGE', {
-                    severity: 'error',
-                    message: accountsMessages.reconcillationDone,
-                    duration: null,
-                })
-            } else {
+            const { tranDate, clearDate, id1 } = d.data?.row
+            if (isAllowedUpdate({ tranDate, clearDate })) {
                 arbitraryData.isViewBack = true
-                loadDataOnId(rowData.id1)
-                // loadPurchaseOnId(rowData.id1, true) // modify
-                // emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                loadDataOnId(id1)
             }
         })
         const subs3 = filterOn(
@@ -71,10 +45,37 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         ).subscribe((d: any) => {
             loadDataOnId(d.data)
         })
+        const subs4 = filterOn(
+            getXXGridParams().gridActionMessages.deleteIbukiMessage
+        ).subscribe((d: any) => {
+            const { tranDate, clearDate, id1 } = d.data?.row
+            const options = {
+                description: accountsMessages.transactionDelete,
+                confirmationText: 'Yes',
+                cancellationText: 'No',
+            }
+            if (isAllowedUpdate({ tranDate, clearDate })) {
+                confirm(options)
+                    .then(async () => {
+                        const id = id1
+                        emit('SHOW-LOADING-INDICATOR', true)
+                        await genericUpdateMaster({
+                            deletedIds: [id],
+                            tableName: 'TranH',
+                        })
+                        emit('SHOW-LOADING-INDICATOR', false)
+                        emit('SHOW-MESSAGE', {})
+                        emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA', null)
+                    })
+                    .catch(() => {}) // important to have otherwise eror
+            }
+        })
         return () => {
+            meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 
@@ -163,6 +164,9 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         const specialColumns = {
             isEdit: true,
             isDelete: true,
+        }
+        const gridActionMessages = {
+            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-DEBIT-CREDIT-NOTES-DATA',
             editIbukiMessage:
                 'DEBIT-CREDIT-NOTES-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage:
@@ -170,6 +174,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         }
         return {
             columns,
+            gridActionMessages,
             queryId,
             queryArgs,
             summaryColNames,
@@ -177,30 +182,6 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
             title,
         }
     }
-
-    // async function getData() {
-    //     emit('SHOW-LOADING-INDICATOR', true)
-    //     const label = tranType === 'dn' ? 'flightLandTran' : 'flightTakeoffTran'
-    //     let no = getFromBag(label)
-    //     no = no ?? meta.current.no
-    //     const ret = await execGenericView({
-    //         isMultipleRows: true,
-    //         sqlKey: 'get_all_debit_credit_notes',
-    //         args: {
-    //             tranTypeId: tranType === 'dn' ? 7 : 8,
-    //             no: no || null,
-    //         },
-    //     })
-    //     emit('SHOW-LOADING-INDICATOR', false)
-    //     if (ret) {
-    //         let index = 1
-    //         for (let item of ret) {
-    //             item.index = index++
-    //         }
-    //         meta.current.data = ret
-    //         meta.current.isMounted && setRefresh({})
-    //     }
-    // }
 
     async function loadDataOnId(id: number) {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -250,7 +231,6 @@ const useStyles: any = makeStyles(() =>
         content: {
             height: 'calc(100vh - 245px)',
             width: '100%',
-            // marginTop: '5px',
         },
     })
 )

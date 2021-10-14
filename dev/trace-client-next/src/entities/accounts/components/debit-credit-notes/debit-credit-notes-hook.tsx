@@ -18,7 +18,6 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
         isMounted: false,
         setRefresh: setRefresh,
         value: 0,
-        // isViewBack: false,
     })
     useEffect(() => {
         meta.current.isMounted = true

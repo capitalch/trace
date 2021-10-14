@@ -105,14 +105,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             // marginTop: theme.spacing(2),
             '& .tabs': {
-                color: ({ purchaseType }: any) =>
-                    purchaseType === 'pur'
-                        ? theme.palette.common.white
-                        : theme.palette.blue.dark, // theme.palette.common.white,
-                backgroundColor: ({ purchaseType }: any) =>
-                    purchaseType === 'pur'
-                        ? 'dodgerBlue'
-                        : theme.palette.warning.dark,
+                backgroundColor: 'dodgerBlue',
+                color: theme.palette.common.white,
+                marginTop: theme.spacing(0.5),
+                // color: ({ purchaseType }: any) =>
+                //     purchaseType === 'pur'
+                //         ? theme.palette.common.white
+                //         : theme.palette.blue.dark, // theme.palette.common.white,
+                // backgroundColor: ({ purchaseType }: any) =>
+                //     purchaseType === 'pur'
+                //         ? 'dodgerBlue'
+                //         : theme.palette.warning.dark,
             },
 
             '& .purchase-body': {

@@ -14,12 +14,19 @@ function PurchaseView({ purchaseType, drillDownEditAttributes }: any) {
 
     const { XXGrid } = useSharedElements()
 
-    const { columns, queryArgs, queryId, specialColumns, summaryColNames } =
-        getXXGridParams()
+    const {
+        columns,
+        gridActionMessages,
+        queryArgs,
+        queryId,
+        specialColumns,
+        summaryColNames,
+    } = getXXGridParams()
 
     return (
         <div className={classes.content}>
             <XXGrid
+                gridActionMessages={gridActionMessages}
                 columns={columns}
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}

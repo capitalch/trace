@@ -41,7 +41,9 @@ function useXXGrid(gridOptions: any) {
     useEffect(() => {
         meta.current.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
-        const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe((d: any) => {
+        const fetchIbukiMessage = gridOptions?.gridActionMessages?.fetchIbukiMessage || 'XX-GRID-FETCH-DATA'
+        // const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe((d: any) => {
+        const subs1 = filterOn(fetchIbukiMessage).subscribe((d: any) => {
             if (d.data) {
                 sqlQueryArgs = d.data
             }

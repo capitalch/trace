@@ -18,6 +18,7 @@ import { Purchases } from '../purchases/purchases'
 import { GeneralLedger } from '../final-accounts/general-ledger'
 import { Taxation } from '../reports/taxation'
 import { Voucher } from '../vouchers/voucher'
+import { Branches } from '../masters/branches'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -25,6 +26,7 @@ const customComponents = {
     balanceSheet: BalanceSheetProfitLoss,
     bankRecon: BankRecon,
     brandsMaster: BrandsMaster,
+    branches: Branches,
     categoriesMaster: CategoriesMaster,
     commonUtilities: CommonUtilities,
     creditNotes: CreditNotes,

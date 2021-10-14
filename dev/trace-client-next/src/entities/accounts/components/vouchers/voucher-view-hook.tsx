@@ -1,44 +1,60 @@
-import {_, moment, useState, useEffect, useRef, useContext } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    moment,
+    useState,
+    useEffect,
+    useRef,
+    useContext,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
+import { getArtifacts } from '../../../../imports/trace-imports'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {
     const [, setRefresh] = useState({})
-    const arbitraryData:any = useContext(VoucherContext)
+    const arbitraryData: any = useContext(VoucherContext)
     const {
         accountsMessages,
         confirm,
         emit,
         filterOn,
         genericUpdateMaster,
+        isAllowedUpdate,
         isGoodToDelete,
         toDecimalFormat,
     } = useSharedElements()
 
     const meta: any = useRef({
         isMounted: false,
-        title: ''
+        title: '',
     })
 
     useEffect(() => {
-        meta.current.isMounted = true        
-        const subs1 = filterOn('VOUCHER-VIEW-XX-GRID-EDIT-CLICKED').subscribe(
+        meta.current.isMounted = true
+        const subs1 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {
-                emit('VOUCHER-CHANGE-TAB-TO-EDIT', {
-                    tranHeaderId: d.data?.row?.id1,
-                })
+                const { tranDate, clearDate } = d.data?.row
+                if (isAllowedUpdate({ tranDate, clearDate })) {
+                    emit('VOUCHER-CHANGE-TAB-TO-EDIT', {
+                        tranHeaderId: d.data?.row?.id1,
+                    })
+                }
             }
         )
 
-        const subs2 = filterOn('VOUCHER-VIEW-XX-GRID-DELETE-CLICKED').subscribe(
+        const subs2 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe(
             (d: any) => {
                 doDelete(d.data)
             }
         )
 
         const subs3 = filterOn('VOUCHER-VIEW-REFRESH').subscribe(() => {
-            emit('XX-GRID-FETCH-DATA', null) // fetch data in xx-grid
+            emit(gridActionMessages.fetchIbukiMessage, null)
         })
 
         return () => {
@@ -50,8 +66,9 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
     }, [])
 
     useEffect(() => {
-        if ((!hidden) && arbitraryData.shouldViewReload) {
-            emit('XX-GRID-FETCH-DATA', null)
+        if (!hidden && arbitraryData.shouldViewReload) {
+            // emit('XX-GRID-FETCH-DATA', null)
+            emit(gridActionMessages.fetchIbukiMessage, null)
             arbitraryData.shouldViewReload = false
         }
     }, [hidden, arbitraryData.shouldViewReload])
@@ -74,7 +91,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
                     emit('SHOW-MESSAGE', {})
                     emit('VOUCHER-VIEW-REFRESH', '')
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 
@@ -204,13 +221,17 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         // isRemove: true,
         isEdit: true,
         isDelete: true,
+        // isDrillDown: true,
+    }
+    const gridActionMessages = {
+        fetchIbukiMessage: 'XX-GRID-VIEW-FETCH-VOUCHER-DATA',
         editIbukiMessage: 'VOUCHER-VIEW-XX-GRID-EDIT-CLICKED',
         deleteIbukiMessage: 'VOUCHER-VIEW-XX-GRID-DELETE-CLICKED',
-        // isDrillDown: true,
     }
     return {
         args,
         columns,
+        gridActionMessages,
         meta,
         specialColumns,
         sqlQueryId,

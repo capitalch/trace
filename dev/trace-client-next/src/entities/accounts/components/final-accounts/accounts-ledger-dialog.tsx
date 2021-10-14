@@ -27,19 +27,20 @@ import { Sales } from '../sales/sales'
 import { Purchases } from '../purchases/purchases'
 import { DebitNotes } from '../debit-credit-notes/debit-notes'
 import { CreditNotes } from '../debit-credit-notes/credit-notes'
+import { truncateSync } from 'fs'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
-    const { getGeneralLedger } = utils()
-    const confirm = useConfirm()
+    // const confirm = useConfirm()
     const {
         accountsMessages,
-        // confirm,
+        confirm,
         emit,
         getAccountName,
         genericUpdateMaster,
         getTranType,
+        isAllowedUpdate,
         isGoodToDelete,
         toDecimalFormat,
         XXGrid,
@@ -69,7 +70,6 @@ function AccountsLedgerDialog() {
     const { filterOn } = useIbuki()
     const classes = useStyles({ meta: meta })
     meta.current.dateFormat = getFromBag('dateFormat')
-    // const { fetchData, LedgerDataTable } = getGeneralLedger(meta)
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -80,13 +80,15 @@ function AccountsLedgerDialog() {
             setRefresh({})
         })
         const subs1 = filterOn(
-            'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED'
+            getArtifacts().gridActionMessages.editIbukiMessage
         ).subscribe((d: any) => {
-            meta.current.showChildDialog = true
-            const row = d.data?.row
-            meta.current.drillDownEditAttributes.tranHeaderId = row?.id1
-            meta.current.drillDownEditAttributes.tranTypeId = row?.tranTypeId
-            setRefresh({})
+            const { tranDate, clearDate, id1, tranTypeId } = d.data?.row
+            if (isAllowedUpdate({ tranDate, clearDate })) {
+                meta.current.showChildDialog = true
+                meta.current.drillDownEditAttributes.tranHeaderId = id1
+                meta.current.drillDownEditAttributes.tranTypeId = tranTypeId
+                setRefresh({})
+            }
         })
         const subs2 = filterOn(
             'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG'
@@ -94,13 +96,13 @@ function AccountsLedgerDialog() {
             meta.current.showChildDialog = false
             setRefresh({})
             if (meta.current.showDialog) {
-                emit('XX-GRID-FETCH-DATA', '') // If main dialog is open then only xx-grid fetch data
+                emit(getArtifacts().gridActionMessages.fetchIbukiMessage, null) // If main dialog is open then only xx-grid fetch data
             } else {
                 emit('ROOT-WINDOW-REFRESH', '') // otherwise refresh data in root window
             }
         })
         const subs3 = filterOn(
-            'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
+            getArtifacts().gridActionMessages.deleteIbukiMessage
         ).subscribe((d: any) => {
             doDelete(d.data)
         })
@@ -137,6 +139,7 @@ function AccountsLedgerDialog() {
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <XXGrid
+                        gridActionMessages={getArtifacts().gridActionMessages}
                         autoFetchData={true}
                         columns={getArtifacts().columns}
                         hideViewLimit={true}
@@ -213,7 +216,10 @@ function AccountsLedgerDialog() {
                         tableName: 'TranH',
                     })
                     emit('SHOW-MESSAGE', {})
-                    emit('XX-GRID-FETCH-DATA', '')
+                    emit(
+                        getArtifacts().gridActionMessages.fetchIbukiMessage,
+                        null
+                    )
                     setRefresh({})
                 })
                 .catch(() => {}) // important to have otherwise eror
@@ -335,16 +341,22 @@ function AccountsLedgerDialog() {
         const args = {
             id: meta.current.accId,
         }
-        const specialColumns = {
-            // isRemove: true,
+        const specialColumns: any = {
             isEdit: true,
-            isDelete: true,
+            isDelete: truncateSync,
+        }
+        const gridActionMessages = {
+            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ACCOUNTS-LEDGER-DATA',
             editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED',
-            // drillDownIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DRILLDOWN-CLICKED',
-            // isDrillDown: true,
         }
-        return { columns, summaryColNames, args, specialColumns }
+        return {
+            columns,
+            gridActionMessages,
+            summaryColNames,
+            args,
+            specialColumns,
+        }
     }
 }
 
@@ -359,22 +371,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 paddingBottom: '0px',
             },
-
-            // '& .data-table': {
-            //     '& .p-datatable-tfoot': {
-            //         '& tr': {
-            //             '& td': {
-            //                 fontSize: '0.8rem',
-            //                 // fontWeight: 'normal',
-            //                 color: 'dodgerBlue !important',
-            //             },
-            //         },
-            //     },
-            // },
         },
         dialogContent: {
             height: 'calc(100vh - 163px)',
-            // height: '50rem'
         },
     })
 )

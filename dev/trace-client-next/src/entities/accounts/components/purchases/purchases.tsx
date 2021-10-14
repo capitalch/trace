@@ -1,5 +1,4 @@
-import { Tab, Tabs } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
+import { Tab, Tabs, Typography } from '../../../../imports/gui-imports'
 import { usePurchases, useStyles } from './purchases-hook'
 import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
@@ -14,15 +13,17 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
     const classes = useStyles({ purchaseType })
     meta.current.purchaseTypeLabel =
         purchaseType === 'pur' ? 'Purchase' : 'Purchase return'
+        
     return (
         <div className={classes.content}>
             <PurchasesProvider value={arbitraryData.current}>
+                <Typography color='secondary' variant='subtitle1' component='div'>{(purchaseType==='pur') ? 'Purchase': 'Purchase return'}</Typography>
                 <Tabs
                     className="tabs"
                     indicatorColor="primary"
                     onChange={handleOnTabChange}
                     value={meta.current.value}>
-                    <Tab label={meta.current.purchaseTypeLabel} />
+                    <Tab label="Main" />
                     <Tab label="View" />
                 </Tabs>
                 <div className="purchase-body" hidden={meta.current.value !== 0}>

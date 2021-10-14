@@ -1,5 +1,5 @@
 import {
-    _,   
+    _,
     moment,
     useEffect,
     useRef,
@@ -31,14 +31,15 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         getAccountClassWithAutoSubledger,
         getFromBag,
         getMappedAccounts,
-        isDateAuditLocked,
+        isAllowedUpdate,
         toDecimalFormat,
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
         meta.current.isMounted = true
-        arbitraryData.saleViewHookFetchData = () => emit('XX-GRID-FETCH-DATA', null)
+        arbitraryData.saleViewHookFetchData = () =>
+            emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
 
         const subs2 = filterOn('SALE-VIEW-HOOK-GET-SALE-ON-ID').subscribe(
             (d: any) => {
@@ -51,69 +52,41 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             }
         )
 
-        const subs4 = filterOn('SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED').subscribe(
-            (d: any) => {
-                const rowData = d.data?.row
-                const tranDate = rowData.tranDate
-                if (isDateAuditLocked(tranDate)) {
-                    emit('SHOW-MESSAGE', {
-                        severity: 'error',
-                        message: accountsMessages.auditLockError,
-                        duration: null,
-                    })
-                } else if (rowData?.clearDate) {
-                    // already reconciled so edit /delete not possible
-                    emit('SHOW-MESSAGE', {
-                        severity: 'error',
-                        message: accountsMessages.reconcillationDone,
-                        duration: null,
-                    })
-                } else {
-                    arbitraryData.isViewBack = true // go back to sale view
-                    loadSaleOnId(rowData.id1, true) // isModify; 2nd arg is true for no new entry in tables
-                }
+        const subs4 = filterOn(
+            getXXGridParams().gridActionMessages.editIbukiMessage
+        ).subscribe((d: any) => {
+            const { tranDate, clearDate, id1 } = d.data?.row
+            if (isAllowedUpdate({ tranDate, clearDate })) {
+                arbitraryData.isViewBack = true // go back to sale view
+                loadSaleOnId(id1, true) // isModify; 2nd arg is true for no new entry in tables
             }
-        )
-        const subs5 = filterOn('SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED').subscribe(
-            (d:any)=>{
-                const options:any = {
-                    description: accountsMessages.transactionDelete,
-                    confirmationText: 'Yes',
-                    cancellationText: 'No',
-                }
-                const rowData = d.data?.row
-                const tranDate = rowData.tranDate
-                if (isDateAuditLocked(tranDate)) {
-                    emit('SHOW-MESSAGE', {
-                        severity: 'error',
-                        message: accountsMessages.auditLockError,
-                        duration: null,
-                    })
-                } else if (rowData?.clearDate) {
-                    // already reconciled so edit /delete not possible
-                    emit('SHOW-MESSAGE', {
-                        severity: 'error',
-                        message: accountsMessages.reconcillationDone,
-                        duration: null,
-                    })
-                } else {
-                    confirm(options)
-                        .then(async () => {
-                            const id = rowData['id1']
-                            emit('SHOW-LOADING-INDICATOR', true)
-                            await genericUpdateMaster({
-                                deletedIds: [id],
-                                tableName: 'TranH',
-                            })
-                            emit('SHOW-LOADING-INDICATOR', false)
-                            emit('SHOW-MESSAGE', {})
-                            emit('PURCHASE-ROOT-CLEAR-ALL', null) //must clear the total purchase data
-                            arbitraryData.saleViewHookFetchData()
+        })
+
+        const subs5 = filterOn(
+            getXXGridParams().gridActionMessages.deleteIbukiMessage
+        ).subscribe((d: any) => {
+            const options: any = {
+                description: accountsMessages.transactionDelete,
+                confirmationText: 'Yes',
+                cancellationText: 'No',
+            }
+            const { tranDate, clearDate, id1 } = d.data?.row
+            if (isAllowedUpdate({ tranDate, clearDate })) {
+                confirm(options)
+                    .then(async () => {
+                        const id = id1
+                        emit('SHOW-LOADING-INDICATOR', true)
+                        await genericUpdateMaster({
+                            deletedIds: [id],
+                            tableName: 'TranH',
                         })
-                        .catch(() => {}) // important to have otherwise eror
-                }
+                        emit('SHOW-LOADING-INDICATOR', false)
+                        emit('SHOW-MESSAGE', {})
+                        arbitraryData.saleViewHookFetchData()
+                    })
+                    .catch(() => {}) // important to have otherwise eror
             }
-        )
+        })
 
         return () => {
             meta.current.isMounted = false
@@ -157,7 +130,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             {
                 headerName: 'Account',
                 field: 'accounts',
-                width: 200
+                width: 200,
             },
             {
                 headerName: 'Amount',
@@ -170,17 +143,17 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             {
                 headerName: 'Labels',
                 field: 'labels',
-                width: 200
+                width: 200,
             },
             {
                 headerName: 'Remarks',
                 field: 'remarks',
-                width: 200
+                width: 200,
             },
             {
                 headerName: "Serial no's",
                 field: 'serialNumbers',
-                width: 160
+                width: 160,
             },
         ]
         const queryId = 'get_sale_purchase_headers'
@@ -196,12 +169,21 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         const specialColumns = {
             isEdit: true,
             isDelete: true,
+        }
+        const gridActionMessages = {
+            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-SALES-DATA',
             editIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
         }
-        return { columns, queryId, queryArgs, summaryColNames, specialColumns }
+        return {
+            columns,
+            gridActionMessages,
+            queryId,
+            queryArgs,
+            summaryColNames,
+            specialColumns,
+        }
     }
-
 
     async function loadSaleOnId(id: number, isModify: boolean = true) {
         // isModify: if isEdit then id's of tables are there so as to enforce modify sql. Otherwise id's of table are reset to undefined, so new rows are inserted in tables
@@ -216,7 +198,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
-            prepareArbitraryData(ret)           
+            prepareArbitraryData(ret)
             arbitraryData.saleItemsRefresh()
             // arbitraryData.salesHookChangeTab(0)
             emit('SALES-HOOK-CHANGE-TAB', 0)
@@ -229,7 +211,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
             loadSalePurchaseDetails(res)
             loadTranD(res)
             ad.salesCrownRefresh()
-            
+
             function loadExtGstTranD(res: any) {
                 const extGstTranD = res.extGstTranD
                 ad.billTo.gstin = extGstTranD.gstin
@@ -256,8 +238,9 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                     upcCode: item.upcCode,
                     productCode: item.productCode,
                     productDetails: item.label
-                        ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
-                        }, ${item.info || ''}`
+                        ? `${item.catName || ''}, ${item.brandName || ''}, ${
+                              item.label || ''
+                          }, ${item.info || ''}`
                         : '',
                     productId: item.productId,
                     hsn: item.hsn,
@@ -312,14 +295,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             ad.saleVariety = 'i'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts[
-                                'debtorCreditorAccountsWithLedgers'
+                                    'debtorCreditorAccountsWithLedgers'
                                 ]
                             )
                         } else {
                             ad.saleVariety = 'r'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts[
-                                'cashBankAccountsWithSubledgers'
+                                    'cashBankAccountsWithSubledgers'
                                 ]
                             )
                         }

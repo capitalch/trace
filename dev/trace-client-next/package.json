@@ -23,7 +23,7 @@
     "@types/jest": "^27.0.2",
     "@types/lodash": "^4.14.175",
     "@types/moment": "^2.13.0",
-    "@types/node": "^16.10.4",
+    "@types/node": "^16.10.9",
     "@types/object-hash": "^2.2.1",
     "@types/react": "^17.0.29",
     "@types/react-dom": "^17.0.9",
@@ -94,7 +94,7 @@
     "css-loader": "^6.4.0",
     "eslint-plugin-react": "^7.26.1",
     "gzip": "^0.1.0",
-    "sass": "^1.42.1",
+    "sass": "^1.43.2",
     "style-loader": "^3.3.0"
   }
 }

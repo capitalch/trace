@@ -83,12 +83,15 @@ function useAllTransactions() {
         // toShowClosingBalance: true,
         isHide: true,
         isEdit: true,
-        isDelete: true,
-        editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
-        deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
+        isDelete: true,        
         // isDrillDown: true,
     }
-    return { args, columns, specialColumns, sqlQueryId, title, summaryColNames }
+    const actionMessages = {
+        fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ALL-TRANSACTIONS',
+        editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
+        deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
+    }
+    return {actionMessages, args, columns, specialColumns, sqlQueryId, title, summaryColNames }
 }
 
 export { useAllTransactions }

@@ -123,10 +123,7 @@
                         {
                             "name": "branchesSubMenu",
                             "label": "Branches",
-                            "componentName": "genericCRUD",
-                            "args": {
-                                "loadComponent": "branchMaster"
-                            }
+                            "componentName": "branches"                            
                         },
                         {
                             "name": "financialYearsSubMenu",

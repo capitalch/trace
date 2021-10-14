@@ -1,5 +1,10 @@
-import { _, PrimeDialog, moment, useState } from '../../../../imports/regular-imports'
-import { Typography, } from '../../../../imports/gui-imports'
+import {
+    _,
+    PrimeDialog,
+    moment,
+    useState,
+} from '../../../../imports/regular-imports'
+import { Typography } from '../../../../imports/gui-imports'
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
@@ -7,22 +12,23 @@ import { useGeneralLedger, useStyles } from './general-ledger-hook'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const { meta } = useGeneralLedger()
+    const { meta } = useGeneralLedger(getArtifacts)
 
     const {
         accountsMessages,
         emit,
-        getGeneralLedger,
+        // getGeneralLedger,
         getAccountName,
         LedgerSubledger,
         toDecimalFormat,
     } = useSharedElements()
 
-    const { fetchData, getLedgerColumns, LedgerDataTable } =
-        getGeneralLedger(meta)
+    // const { fetchData, getLedgerColumns, LedgerDataTable } =
+    //     getGeneralLedger(meta)
+
     return (
         <div className={classes.content}>
-            <div className='header'>
+            <div className="header">
                 <Typography variant="h6" className="heading" component="span">
                     {meta.current.accName}
                 </Typography>
@@ -38,10 +44,18 @@ function GeneralLedger() {
                         onChange={() => {
                             meta.current.accId =
                                 meta.current.ledgerSubledger.accId
-                            meta.current.accName = getAccountName(meta.current.accId)
-                            meta.current.sqlQueryArgs = { id: meta.current.accId }
+                            meta.current.accName = getAccountName(
+                                meta.current.accId
+                            )
+                            meta.current.sqlQueryArgs = {
+                                id: meta.current.accId,
+                            }
                             if (meta.current.accId) {
-                                emit('XX-GRID-FETCH-DATA', meta.current.sqlQueryArgs)
+                                emit(
+                                    // 'XX-GRID-FETCH-DATA',
+                                    getArtifacts().gridActionMessages.fetchIbukiMessage,
+                                    meta.current.sqlQueryArgs
+                                )
                             } else {
                                 emit('XX-GRID-RESET', null)
                             }
@@ -50,8 +64,9 @@ function GeneralLedger() {
                     />
                 </div>
             </div>
-            <div className='data-grid'>
+            <div className="data-grid">
                 <XXGrid
+                    gridActionMessages={getArtifacts().gridActionMessages}
                     autoFetchData={false}
                     columns={getArtifacts().columns}
                     hideViewLimit={true}
@@ -172,11 +187,20 @@ function GeneralLedger() {
         const specialColumns = {
             isEdit: true,
             isDelete: true,
+            
+        }
+        const gridActionMessages = {
+            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-GENERAL-LEDGER-DATA',
             editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED',
         }
-        return { columns, summaryColNames, args, specialColumns }
+        return {
+            columns,
+            gridActionMessages,
+            summaryColNames,
+            args,
+            specialColumns,
+        }
     }
-
 }
 export { GeneralLedger }

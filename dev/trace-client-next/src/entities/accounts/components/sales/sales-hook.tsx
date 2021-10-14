@@ -113,59 +113,6 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         isViewBack: false,
     })
 
-    // function resetArbitraryData() {
-    //     const accounts = {...arbitraryData.current.accounts}
-    //     arbitraryData.current = {
-    //         accounts: {
-    //             cashBankAccountsWithLedgers: [],
-    //             cashBankAccountsWithSubledgers: [],
-    //             debtorCreditorAccountsWithLedgers: [],
-    //             debtorCreditorAccountsWithSubledgers: [],
-    //             autoSubledgerAccounts: [],
-    //         },
-    //         allAccounts: [],
-    //         autoRefNo: undefined,
-    //         backCalulateAmount: 0.0,
-    //         billTo: {
-    //             id: undefined,
-    //         },
-    //         commonRemarks: undefined,
-    //         deletedSalePurchaseIds: [],
-    //         // extGstTranDId: undefined,
-    //         footer: {
-    //             items: [], // for TranD table
-    //             deletedIds: [],
-    //         },
-    //         id: undefined,
-    //         isIgst: false,
-    //         isAssignmentReturn: saleType === 'ret',
-    //         isSales: saleType === 'sal',
-    //         ledgerAccounts: [],
-    //         lineItems: [], // for product details of SalePurchaseDetails table
-    //         rowData: {},
-    //         saleErrorMethods: {
-    //             headError: () => false,
-    //             itemsError: () => false,
-    //             footerError: () => false,
-    //             errorMethods: {
-    //                 getSlNoError: () => false,
-    //             },
-    //         },
-    //         salesCrownRefresh: () => {},
-
-
-    //         saleErrorObject: {},
-    //         saleVariety: 'r',
-    //         shipTo: {},
-    //         summary: {},
-    //         totalCredits: 0.0,
-    //         totalDebits: 0.0,
-    //         tranDate: moment().format(isoDateFormat),
-    //         isViewBack: false,
-    //     }
-    //     Object.assign(arbitraryData.current.accounts, accounts)
-    // }
-
     function handleChangeTab(e: any, newValue: number) {
         meta.current.tabValue = newValue
         if (newValue === 3) {

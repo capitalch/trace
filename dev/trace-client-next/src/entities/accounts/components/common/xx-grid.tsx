@@ -1,5 +1,5 @@
 import { useStyles } from './xx-grid-hook'
-import { _ } from '../../../../imports/regular-imports'
+import { _, clsx } from '../../../../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -49,22 +49,24 @@ interface SpecialColumnOptions {
     isDelete?: boolean
     isHide?: boolean
     isDrillDown?: boolean
-    editIbukiMessage?: any
-    deleteIbukiMessage?: any
+    // editIbukiMessage?: any
+    // deleteIbukiMessage?: any
     drillDownIbukiMessage?: any
 }
 
-interface ActionsOptions {
-    fetchIbukiMessage?: string
-    editIbukiMessage?: string
-    deleteIbukiMessage?: string
-    drillDownIbukiMessage?: string
+interface GridActionMessagesOptions {
+    fetchIbukiMessage?: any
+    editIbukiMessage?: any
+    deleteIbukiMessage?: any
+    drillDownIbukiMessage?: any
+    resetIbukiMessage?: any
 }
 
 interface XXGridOptions {
-    actions?: ActionsOptions
+    gridActionMessages?: GridActionMessagesOptions
     autoFetchData?: boolean
     columns: any[]
+    className?: string
     hideViewLimit?: boolean
     sqlQueryArgs?: any
     sqlQueryId?: any
@@ -74,7 +76,7 @@ interface XXGridOptions {
     toShowDailySummary?: boolean
     toShowOpeningBalance?: boolean
     toShowReverseCheckbox?: boolean
-    title: string
+    title?: string
     specialColumns: SpecialColumnOptions
     xGridProps?: any
     disableSelectionOnClick?: boolean
@@ -84,6 +86,7 @@ interface XXGridOptions {
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
+        gridActionMessages,
         columns,
         disableSelectionOnClick,
         specialColumns,
@@ -92,7 +95,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         summaryColNames,
         title,
         viewLimit,
-    } = gridOptions
+    }: any = gridOptions
     const apiRef: any = useGridApiRef()
     const {
         fetchRows,
@@ -108,7 +111,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     const { emit, toDecimalFormat } = useSharedElements()
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     const classes = useStyles(meta)
-    addSpecialColumns(specialColumns)
+    addSpecialColumns(specialColumns, gridActionMessages)
 
     return (
         <DataGridPro
@@ -116,8 +119,8 @@ function XXGrid(gridOptions: XXGridOptions) {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
             }}
-            disableSelectionOnClick= {disableSelectionOnClick || true}
-            className={classes.content}
+            disableSelectionOnClick={disableSelectionOnClick || true}
+            className={clsx((gridOptions.className || ''), classes.content)}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}
@@ -191,7 +194,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             onChange={(e) => {
                                 meta.current.viewLimit = e.target.value
                                 // sqlQueryArgs['no'] =
-                                //     meta.current.viewLimit 
+                                //     meta.current.viewLimit
                                 //     === 0
                                 //         ? null
                                 //         : meta.current.viewLimit // null for all items in postgresql
@@ -436,7 +439,10 @@ function XXGrid(gridOptions: XXGridOptions) {
         meta.current.isMounted && setRefresh({})
     }
 
-    function addSpecialColumns(options: SpecialColumnOptions) {
+    function addSpecialColumns(
+        options: SpecialColumnOptions,
+        gridActionMessages: GridActionMessagesOptions
+    ) {
         if (options.isDelete) {
             const deleteColumn = {
                 headerName: 'D',
@@ -456,8 +462,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                             color="secondary"
                             className="delete"
                             onClick={() =>
-                                options.deleteIbukiMessage &&
-                                emit(options.deleteIbukiMessage, params)
+                                gridActionMessages.deleteIbukiMessage &&
+                                emit(
+                                    gridActionMessages.deleteIbukiMessage,
+                                    params
+                                )
                             }
                             aria-label="Delete">
                             <DeleteForever />
@@ -486,8 +495,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                             size="small"
                             color="secondary"
                             onClick={() => {
-                                options.editIbukiMessage &&
-                                    emit(options.editIbukiMessage, params)
+                                gridActionMessages.editIbukiMessage &&
+                                    emit(
+                                        gridActionMessages.editIbukiMessage,
+                                        params
+                                    )
                             }}
                             aria-label="Edit">
                             <Edit />

@@ -1,33 +1,35 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useVoucherView, useStyles } from './voucher-view-hook'
-import {Box,} from '../../../../imports/gui-imports'
+import { Box } from '../../../../imports/gui-imports'
 function VoucherView({ hidden, tranTypeId }: any) {
     const classes = useStyles()
     const {
         args,
         columns,
+        gridActionMessages,
         meta,
         specialColumns,
         sqlQueryId,
         summaryColNames,
     } = useVoucherView(hidden, tranTypeId)
 
-    const {
-        XXGrid,
-    } = useSharedElements()
+    const { XXGrid } = useSharedElements()
     // (!hidden) &&
     return (
-        <Box className={classes.content} hidden={hidden} >
-            { <XXGrid
-                columns={columns}
-                summaryColNames={summaryColNames}
-                title={meta.current.title}
-                sqlQueryId={sqlQueryId}
-                sqlQueryArgs={args}
-                specialColumns={specialColumns}
-                // xGridProps={{ disableSelectionOnClick: true }}
-                viewLimit='100'
-            />}
+        <Box className={classes.content} hidden={hidden}>
+            {
+                <XXGrid
+                    gridActionMessages={gridActionMessages}
+                    columns={columns}
+                    summaryColNames={summaryColNames}
+                    title={meta.current.title}
+                    sqlQueryId={sqlQueryId}
+                    sqlQueryArgs={args}
+                    specialColumns={specialColumns}
+                    // xGridProps={{ disableSelectionOnClick: true }}
+                    viewLimit="100"
+                />
+            }
         </Box>
     )
 }

@@ -38,6 +38,7 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
     const dateFormat = getFromBag('dateFormat')
     const {
         columns,
+        gridActionMessages,
         queryId,
         queryArgs,
         specialColumns,
@@ -47,6 +48,7 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
     return (
         <div className={classes.content}>
             <XXGrid
+                gridActionMessages={gridActionMessages}
                 columns={columns}
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}

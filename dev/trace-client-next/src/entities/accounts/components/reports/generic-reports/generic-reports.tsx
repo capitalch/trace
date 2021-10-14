@@ -1,14 +1,20 @@
-import { Card, Theme, createStyles, makeStyles } from '../../../../../imports/gui-imports'
+import {
+    Card,
+    Theme,
+    createStyles,
+    makeStyles,
+} from '../../../../../imports/gui-imports'
 import { XXGrid } from '../../../../../imports/trace-imports'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useAllTransactions } from '../helpers/all-transactions'
-import {_,  useEffect } from '../../../../../imports/regular-imports'
+import { _, useEffect } from '../../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
         allTransactions: useAllTransactions,
     }
     const {
+        actionMessages,
         args,
         columns,
         specialColumns,
@@ -17,23 +23,24 @@ function GenericReports({ loadReport }: any) {
         title,
     } = selectLogic[loadReport]()
 
-    const {  emit, filterOn, } = useSharedElements()
+    const { emit, filterOn } = useSharedElements()
     const classes = useStyles()
-    
-    useEffect(() => {
-        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(()=>{
-            emit('XX-GRID-FETCH-DATA', null)
-        })
-        emit('XX-GRID-FETCH-DATA', null)
 
-        return(()=>{
-            subs1.unsubscribe()
+    useEffect(() => {
+        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
+            emit(actionMessages.fetchIbukiMessage, null)
         })
+        emit(actionMessages.fetchIbukiMessage, null)
+
+        return () => {
+            subs1.unsubscribe()
+        }
     }, [])
-    
+
     return (
         <Card className={classes.container}>
             <XXGrid
+                gridActionMessages={actionMessages}
                 columns={columns}
                 summaryColNames={summaryColNames}
                 title={title}
@@ -43,7 +50,7 @@ function GenericReports({ loadReport }: any) {
                 toShowOpeningBalance={false}
                 toShowReverseCheckbox={true}
                 // xGridProps={{ disableSelectionOnClick: true }}
-                viewLimit='1000'
+                viewLimit="1000"
             />
         </Card>
     )

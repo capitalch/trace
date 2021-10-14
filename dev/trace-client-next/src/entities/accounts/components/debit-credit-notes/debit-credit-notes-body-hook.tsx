@@ -140,15 +140,14 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         const ret = await genericUpdateMasterDetails([header])
         if (ret.error) {
             console.log(ret.error)
-        } else if (arbitraryData.body.isViewBack) {
-            // resetData()
-            emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-            // arbitraryData.body.isViewBack = false
-            emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 1)
-            emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA',null)
         } else {
             if (arbitraryData.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+            } else if (arbitraryData.body.isViewBack) {
+                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+                // arbitraryData.body.isViewBack = false
+                emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 1)
+                emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA', null)
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }

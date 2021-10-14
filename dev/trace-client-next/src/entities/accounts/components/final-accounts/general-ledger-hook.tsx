@@ -1,15 +1,23 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function useGeneralLedger() {
+function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
 
     const {
         emit,
         filterOn,
         getFromBag,
-        getGeneralLedger,
+        isAllowedUpdate,
     } = useSharedElements()
 
     useEffect(() => {
@@ -32,7 +40,10 @@ function useGeneralLedger() {
                 }
             })
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
-            emit('XX-GRID-FETCH-DATA', meta.current.sqlQueryArgs)
+            emit(
+                getArtifacts().gridActionMessages.fetchIbukiMessage,
+                meta.current.sqlQueryArgs
+            )
         })
         setRefresh({})
         return () => {
@@ -56,28 +67,15 @@ function useGeneralLedger() {
         sqlQueryArgs: null,
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => {},
+            actions: () => {},
         },
     })
-
-    // const { fetchData } = getGeneralLedger(meta)
-
-    // async function handleFetchData() {
-    //     const accId = meta.current.ledgerSubledger.accId
-    //     if (accId) {
-    //         await fetchData()
-    //     } else {
-    //         meta.current.showDialog = true
-    //     }
-    //     meta.current.isMounted && setRefresh({})
-    // }
 
     return { meta }
 }
 
 export { useGeneralLedger }
-
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
@@ -89,7 +87,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 marginBottom: theme.spacing(4),
                 '& .heading': {
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
                 },
                 '& .expand': {
                     position: 'relative',
@@ -105,8 +103,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
             },
             '& .data-grid': {
-                height: 'calc(100vh - 303px)'
-            }
+                height: 'calc(100vh - 303px)',
+            },
             // '& .data-table': {
             //     '& .p-datatable-tfoot': {
             //         '& tr': {
@@ -123,8 +121,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
             //         fontWeight: 'bold'
             //     }
             // },
-
-
         },
     })
 )
