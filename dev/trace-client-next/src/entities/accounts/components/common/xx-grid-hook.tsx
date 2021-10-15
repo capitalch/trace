@@ -346,25 +346,39 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 columnGap: '1.5rem',
                 borderBottom: '1px solid lightgrey',
-                '& .toolbar-title': {
-                    color: 'dodgerblue',
-                    fontSize: '1.2rem',
-                    fontWeight: 'bold',
+                justifyContent:'space-between',
+
+                '& .toolbar-left-items': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    
+                    '& .toolbar-title': {
+                        color: 'dodgerblue',
+                        fontSize: '1.2rem',
+                        fontWeight: 'bold',
+                    },
+                    '& .view-limit': {
+                        display: 'flex',
+                        columnGap: '0.5rem',
+                        color: theme.palette.secondary.main,
+                        '& select': {
+                            borderColor: 'grey',
+                            color: theme.palette.primary.main,
+                            // height: '1.5rem'
+                        },
+                    },
                 },
+
+                
                 '& .global-search': {
                     marginLeft: 'auto',
                     marginRight: '1rem',
                 },
-                '& .view-limit': {
-                    display: 'flex',
-                    columnGap: '0.5rem',
-                    color: theme.palette.secondary.main,
-                    '& select': {
-                        borderColor: 'grey',
-                        color: theme.palette.primary.main,
-                        // height: '1.5rem'
-                    },
-                },
+                
+                '& .add-button':{
+                    // marginLeft: 'auto',
+                    marginRight: theme.spacing(1),
+                }
             },
             '& .custom-footer': {
                 display: 'flex',

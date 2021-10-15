@@ -1,9 +1,9 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { Box, Typography } from '../../../../imports/gui-imports'
-import { useBranches, useStyles } from './branches-hook'
+import { useFinancialYears, useStyles } from './financial-years-hook'
 
-function Branches() {
-    const { getXXGridParams, handleCloseDialog, meta } = useBranches()
+function FinancialYears() {
+    const { getXXGridParams, handleCloseDialog, meta } = useFinancialYears()
     const classes = useStyles()
     const { TraceDialog, XXGrid } = useSharedElements()
 
@@ -19,7 +19,7 @@ function Branches() {
     return (
         <Box className={classes.content}>
             <Typography variant="subtitle1" component="div" color="secondary">
-                Branches
+                Financial years
             </Typography>
             <XXGrid
                 gridActionMessages={gridActionMessages}
@@ -37,4 +37,4 @@ function Branches() {
         </Box>
     )
 }
-export { Branches }
+export { FinancialYears }

@@ -67,7 +67,6 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
 
     useEffect(() => {
         if (!hidden && arbitraryData.shouldViewReload) {
-            // emit('XX-GRID-FETCH-DATA', null)
             emit(gridActionMessages.fetchIbukiMessage, null)
             arbitraryData.shouldViewReload = false
         }

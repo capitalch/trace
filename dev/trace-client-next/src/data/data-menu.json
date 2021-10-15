@@ -128,10 +128,7 @@
                         {
                             "name": "financialYearsSubMenu",
                             "label": "Financial years",
-                            "componentName": "genericCRUD",
-                            "args": {
-                                "loadComponent": "finYearMaster"
-                            }
+                            "componentName": "financialYears"
                         }
                     ]
                 },

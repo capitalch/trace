@@ -52,7 +52,6 @@ function GeneralLedger() {
                             }
                             if (meta.current.accId) {
                                 emit(
-                                    // 'XX-GRID-FETCH-DATA',
                                     getArtifacts().gridActionMessages.fetchIbukiMessage,
                                     meta.current.sqlQueryArgs
                                 )

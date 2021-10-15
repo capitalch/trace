@@ -2,7 +2,7 @@ import { TrialBalance } from '../final-accounts/trial-balance'
 import { BalanceSheetProfitLoss } from '../final-accounts/balance-sheet-profit-loss'
 import { AccountsMaster } from '../masters/accounts-master'
 import { AccountsOpBal } from '../masters/accounts-opbal'
-import { GenericCRUD } from '../masters/generic-crud'
+// import { GenericCRUD } from '../masters/generic-crud'
 import { GenericDialoges } from '../masters/generic-dialoges'
 import { BankRecon } from '../options/bank-recon'
 import { GenericReports } from '../reports/generic-reports/generic-reports'
@@ -19,6 +19,7 @@ import { GeneralLedger } from '../final-accounts/general-ledger'
 import { Taxation } from '../reports/taxation'
 import { Voucher } from '../vouchers/voucher'
 import { Branches } from '../masters/branches'
+import {FinancialYears} from '../masters/financial-years'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -31,7 +32,8 @@ const customComponents = {
     commonUtilities: CommonUtilities,
     creditNotes: CreditNotes,
     debitNotes: DebitNotes,
-    genericCRUD: GenericCRUD,
+    financialYears: FinancialYears,
+    // genericCRUD: GenericCRUD,
     genericDialoges: GenericDialoges,
     genericExports: GenericExports,
     genericReports: GenericReports,

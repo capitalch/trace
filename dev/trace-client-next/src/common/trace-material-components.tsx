@@ -49,7 +49,7 @@ function useTraceMaterialComponents() {
                     disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
-                    <h4>{pre.title}</h4>
+                    <h3>{pre.title}</h3>
                     <IconButton
                         size="small"
                         color="default"
@@ -264,7 +264,7 @@ const useStyles: any = makeStyles((theme:any) =>
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingBottom: '0px',
-                paddingRight: theme.spacing(0.5),
+                paddingRight: theme.spacing(2.0),
             },
 
             '& .MuiInputBase-root': {

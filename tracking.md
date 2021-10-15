@@ -50,7 +50,7 @@ c) In all Typography comment out disableTypography
 1.1 Purchase write label Purchase and purchase return at top
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5 All dialog boxes to originate from same place. At present there are many
-1.6 
+1.6 Provide debounce in search event of all XX-grid
 
 2. 
 3. 
