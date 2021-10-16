@@ -281,7 +281,7 @@ allSqls = {
 
     "get_brands": '''
         select  ROW_NUMBER() over(order by "brandName") as "index", "id", "brandName", "remarks"
-	        from "BrandM"
+	        from "BrandM" order by "brandName"
     ''',
 
     "get_branches": '''

@@ -11,15 +11,15 @@ import {
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrudUtils } from '../common/crud-utils-hook'
 
-function useBranches() {
+function useBrands() {
     const [, setRefresh] = useState({})
-    const FETCH_DATA_MESSAGE = 'BRANCHES-HOOK-FETCH-DATA'
+    const FETCH_DATA_MESSAGE = 'BRANDS-HOOK-FETCH-DATA'
     const meta: any = useRef({
         showDialog: false,
         dialogConfig: {
             title: '',
-            tableName: 'BranchM',
-            formId: 'trace-branch-master',
+            tableName: 'BrandM',
+            formId: 'trace-brand-master',
             ibukiFetchDataMessage:FETCH_DATA_MESSAGE,
             actions: () => {},
             content: () => <></>,
@@ -52,17 +52,17 @@ function useBranches() {
         ).subscribe((d: any) => {
             //edit
             const pre = meta.current.dialogConfig
-            const { id, id1, branchName, branchCode } = d.data?.row
+            const { id, id1, brandName, remarks } = d.data?.row
             meta.current.showDialog = true
             pre.isEditMode = true
-            pre.title = 'Edit branch'
+            pre.title = 'Edit brand'
             pre.id = id1
             pre.idInsert = undefined
             pre.codeBlock = undefined
             resetAllValidators(pre.formId)
-            const jsonObj = JSON.parse(JSON.stringify(branchMasterJson))
-            jsonObj.items[0].value = branchCode
-            jsonObj.items[1].value = branchName
+            const jsonObj = JSON.parse(JSON.stringify(brandMasterJson))
+            jsonObj.items[0].value = brandName
+            jsonObj.items[1].value = remarks
             pre.content = getReactFormContent(JSON.stringify(jsonObj))
             pre.actions = () => (
                 <TraceFullWidthSubmitButton onClick={handleSubmit} />
@@ -85,13 +85,10 @@ function useBranches() {
             const pre = meta.current.dialogConfig
             meta.current.showDialog = true
             pre.isEditMode = false
-            pre.title = 'New branch'
-            // pre.formId = 'trace-branch-master'
-            pre.idInsert = true
-            pre.codeBlock = 'create_branch'
+            pre.title = 'New brand'
             pre.id = undefined
             resetAllValidators(pre.formId)
-            pre.content = getReactFormContent(JSON.stringify(branchMasterJson))
+            pre.content = getReactFormContent(JSON.stringify(brandMasterJson))
             pre.actions = () => (
                 <TraceFullWidthSubmitButton onClick={handleSubmit} />
             )
@@ -122,13 +119,18 @@ function useBranches() {
                 width: 90,
             },
             {
-                headerName: 'Branch name',
-                field: 'branchName',
+                headerName: 'Brand name',
+                field: 'brandName',
+                flex: 1, // to occupy whole space
+            },
+            {
+                headerName: 'Remarks',
+                field: 'remarks',
                 flex: 1, // to occupy whole space
             },
         ]
 
-        const queryId = 'get_branches'
+        const queryId = 'get_brands'
         const queryArgs = {}
         const summaryColNames: string[] = []
         const specialColumns = {
@@ -136,10 +138,10 @@ function useBranches() {
             isDelete: true,
         }
         const gridActionMessages = {
-            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-BRANCHES',
-            editIbukiMessage: 'BRANCHES-HOOK-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage: 'BRANCHES-HOOK-XX-GRID-DELETE-CLICKED',
-            addIbukiMessage: 'BRANCHES-HOOK-XX-GRID-ADD-BUTTON-CLICKED',
+            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-BRANDS',
+            editIbukiMessage: 'BRANDS-HOOK-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage: 'BRANDS-HOOK-XX-GRID-DELETE-CLICKED',
+            addIbukiMessage: 'BRANDS-HOOK-XX-GRID-ADD-BUTTON-CLICKED',
         }
 
         return {
@@ -155,7 +157,7 @@ function useBranches() {
     return { getXXGridParams, handleCloseDialog, meta }
 }
 
-export { useBranches }
+export { useBrands }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
@@ -171,37 +173,23 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 export { useStyles }
 
-const branchMasterJson: any = {
-    class: 'generic-dialog',
-    items: [
+const brandMasterJson: any = {
+    "class": "generic-dialog",
+    "style": { width: '100%' },
+    "items": [
         {
-            type: 'Text',
-            name: 'branchCode',
-            placeholder: 'Branch code',
-            label: 'Branch code',
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Branch code is required',
-                },
-                {
-                    name: 'noWhiteSpaceOrSpecialChar',
-                    message:
-                        'White space or special characters are not allowed inside branch code',
-                },
-            ],
+            "type": "Text",
+            "name": "brandName",
+            "label": "Brand name",
+            "validations": [{
+                "name": "required",
+                "message": "Brand name is required"
+            }]
         },
         {
-            type: 'Text',
-            name: 'branchName',
-            placeholder: 'Branch name',
-            label: 'Branch name',
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Branch name is required',
-                },
-            ],
+            "type": "Text",
+            "name": "remarks",
+            "label": "Remarks",
         },
-    ],
+    ]
 }

@@ -210,12 +210,12 @@
                         {
                             "name": "brandsSubMenu",
                             "label": "Brands",
-                            "componentName": "brandsMaster"
+                            "componentName": "brands"
                         },
                         {
                             "name": "productsSubMenu",
                             "label": "Products",
-                            "componentName": "productsMaster"
+                            "componentName": "products"
                         }
                     ]
                 }

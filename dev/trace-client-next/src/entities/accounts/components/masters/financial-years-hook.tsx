@@ -14,13 +14,14 @@ import { useCrudUtils } from '../common/crud-utils-hook'
 
 function useFinancialYears() {
     const [, setRefresh] = useState({})
+    const FINANCIAL_YEARS_FETCH_DATA = 'FINANCIAL-YEARS-HOOK-FETCH-DATA'
     const isoDateFormat = 'YYYY-MM-DD'
     const meta: any = useRef({
         showDialog: false,
         dialogConfig: {
             title: '',
             formId: 'trace-financial-year-master',
-            ibukiFetchDataMessage: 'FINANCIAL-YEARS-HOOK-FETCH-DATA',
+            ibukiFetchDataMessage: FINANCIAL_YEARS_FETCH_DATA,
             tableName: 'FinYearM',
             actions: () => {},
             content: () => <></>,
@@ -46,7 +47,7 @@ function useFinancialYears() {
     const dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
-        const subs1 = filterOn('FINANCIAL-YEARS-HOOK-FETCH-DATA').subscribe(
+        const subs1 = filterOn(FINANCIAL_YEARS_FETCH_DATA).subscribe(
             () => {
                 emit(
                     getXXGridParams().gridActionMessages.fetchIbukiMessage,
