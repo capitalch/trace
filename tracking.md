@@ -43,49 +43,37 @@ a) replace with @mui in imports
 b) Some work in App.tsx
 c) In all Typography comment out disableTypography
 
+3. On 17-10-2021 2nd attempt to migrate to v5 in folder trace-client-v5: failed
+	a) Everything worked fine in those screens where x-grid-prof is not there
+	b) In components where x-grid-prof is existing, the css does not work correctly, Colors changes and spacing issues occured
+	c) even upgraded @mui/x-data-grid-pro@next whcich installed version '5.0.0-beta.4', this also not worked
+
 # Pending
 
 # Working on
-1. Purchase horizontal alignment
-1.1 Purchase write label Purchase and purchase return at top
+1. Retain values of purchases and sales when screen expanded. At present a refresh of data is done and original inserted values are lost
+1.1 Bank recon rework
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5 All dialog boxes to originate from same place. At present there are many
 1.6 Provide debounce in search event of all XX-grid
-
-2. 
-3. 
-4. All reports to use X-Grid
-7. Sales purchase to retain values
-8. Purchase sale clickaway
-9. Provide a way to come out of app in mobile. Presently there is no way
-10. Branch master, finYear master rework
+1.7 
+1.8 Convert sales and purchases to div and remove table, to make them more responsive
+2. Thorough checkup required
+3. Purchase sale clickaway
+4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
-0.1 Server side sometimes if wrong value of data specially null when null not allowed, the program breaks without gracefully reporting error
 1. serial number error in purchases
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
-3. All dialog boxes title is very big font	
+3. 	Sales / Sale return GST rate change does not calculate well
 6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
-													
-8. In Inventory--> Brands--> edit: when you close the dialog it blows up
-								
-10. In Purchase cascading menu, if it is ledger account such as goods creditor, service creditor then OK, otherwise if group / leaf then error
-11. Sales / Sale return GST rate change does not calculate well
-12. Sales return select bill does not work well
-
-15. Product new entry hangs when 1st product is entered, when there is no leaf category
+7. Sales return select bill does not work well	
 
 ## Reorganize
-	1. Organize code for using shared components all over
-	2. Remove Figures from BS and PL which have zero closing balance
-	5. Provide ProfGrid all over wherein other grids are being used
-	6. Rework on Sales, Purchases... etc.
-
 
 ## Functionality
 	1. Auto subledger create bill
 	3. Rework on bank recon with ProfGrid
-	3.5 
 	4. Footer Trace version copyright
 	5. Sales bill to PDF and email / print
 	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
@@ -105,7 +93,7 @@ c) In all Typography comment out disableTypography
 ## New features
 	1. Purchase invoice upload and search on metadata. Click will show invoice in PDF
 	2. Bill wise payment
-	3. Drill down, edit and delete functionality from report
+	3. 
 	4. First page reporting charts
 	5. Approval of transactions
 	6. Document storage of purchase bills with meta data
@@ -128,8 +116,22 @@ c) In all Typography comment out disableTypography
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 17-10-2021
+1. Removed material table from all over in accounts
+2. Rework on generic exports and common utilities
+3. In mobile device, the title is way too close to header: corrected
+
+# 13-10-2021 - 16-10-2021
+1. Purchase horizontal alignment
+2. All screens in accounts provided xx-grid and removed material table
+3. All reports of accounts entity now use X-Grid
+4. Branch master, finYear master rework
+5. Brands and products reworked
+6. Organize code for using shared components all over
+
 # 11-10-2021 - 12-10-2021
 1. Sales and purchases provided xx-grid
+2. Product new entry hangs when 1st product is entered, when there is no leaf category
 
 # 10-10-2021
 1. Reorganized code
@@ -141,7 +143,7 @@ c) In all Typography comment out disableTypography
 8. Branch edit, Fy Year edit is not being possible. It is throwing server side error
 
 # 05-10-2021 to 09-10-2021
-1. Working on Material uI migration from V4.x to 5.x
+1. Working on Material uI migration from V4.x to 5.x: failed
 
 # 26-09-2021
 1. Bug fix: General ledger opening balance always coming as 01/04//2021 now fixed: 30 mins

@@ -99,7 +99,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         title: {
             color: theme.palette.primary.dark,
-            marginTop: theme.spacing(0.2),
+            marginTop: theme.spacing(1),
             marginBottom: theme.spacing(0.2),
         },
     })

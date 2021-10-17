@@ -10,13 +10,13 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
+import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
-    const { emit, filterOn, getFromBag } = useSharedElements()
+    const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -31,23 +31,19 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             arbitraryData.current.shouldCloseParentOnSave = true
         }
 
-        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d:any)=>{
+        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {
             meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
         })
 
-        // arbitraryData.current.salesHookChangeTab = (tabValue: number) => {
-        //     meta.current.tabValue = tabValue // changes the tab. if d.data is 0 then new purchase tab is selected
-        //     setRefresh({})
-        // }
-
-        // arbitraryData.current.salesHookResetData = () => {
-        //     resetArbitraryData()
-        // }
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+            setInBag('salesArbitraryData', arbitraryData.current)
+        })
 
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
@@ -58,12 +54,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         tabValue: 0,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
     })
 
-    const arbitraryData: any = useRef({
+    // let arbitraryData: any
+    const ard = getFromBag('salesArbitraryData')
+    let  arbitraryData:any = useRef({
         accounts: {
             cashBankAccountsWithLedgers: [],
             cashBankAccountsWithSubledgers: [],
@@ -112,6 +110,10 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         tranDate: moment().format(isoDateFormat),
         isViewBack: false,
     })
+    if (ard) {
+        arbitraryData.current = ard
+        setInBag('salesArbitraryData', null)
+    }
 
     function handleChangeTab(e: any, newValue: number) {
         meta.current.tabValue = newValue

@@ -477,8 +477,8 @@ allSqls = {
     ''',
 
     "get_products": '''
-        select ROW_NUMBER() over(order by p."id" DESC) as "index", p."id"  as "id" , c."id" as "catId", u."id" as "unitId", b."id" as "brandId",
-        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode", "upcCode"
+        select ROW_NUMBER() over(order by "catName", "brandName", "label") as "index", p."id"  as "id" , c."id" as "catId", u."id" as "unitId", b."id" as "brandId",
+        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode"
         from "ProductM" p
             join "CategoryM" c
                 on c."id" = p."catId"
@@ -486,7 +486,7 @@ allSqls = {
                 on u."id" = p."unitId"
             join "BrandM" b
                 on b."id" = p."brandId"
-            order by p."id" DESC 
+            order by "catName", "brandName", "label" 
             limit (%(no)s)
     ''',
 

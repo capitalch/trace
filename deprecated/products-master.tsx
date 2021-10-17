@@ -20,7 +20,7 @@ import {
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useProductsMaster, useStyles } from './products-master-hook'
-import { NewProduct } from './new-product'
+// import { NewProduct } from './new-product'
 import { DeleteSharp } from '@material-ui/icons'
 
 function ProductsMaster() {

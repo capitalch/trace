@@ -128,19 +128,7 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <ConfirmProvider>
-        <div
-          style={{
-            display: "inline-block",
-            marginTop: "1.2rem",
-            width: "100%",
-          }}
-        >
-          <RecoilRoot>
-            <Component7></Component7>
-          </RecoilRoot>
-        </div>
-      </ConfirmProvider>
+      <Component7 />
     </ThemeProvider>
   );
 };
