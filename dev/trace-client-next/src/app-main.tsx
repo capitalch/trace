@@ -34,6 +34,7 @@ function AppMain() {
 
     function handleDrawerOpen() {
         setInGlobalBag('isDrawyerOpen', true)
+        emit('DRAWER-STATUS-CHANGED', null)
         setOpen(true)
     }
 

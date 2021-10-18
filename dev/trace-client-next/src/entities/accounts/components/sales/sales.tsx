@@ -16,7 +16,7 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
 
     return (
         <div className={classes.content}>
-            <SalesProvider value={arbitraryData.current}>
+            <SalesProvider value={arbitraryData}>
                 <SaleCrown                    
                     saleType={saleType}
                     drillDownEditAttributes={drillDownEditAttributes}
