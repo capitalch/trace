@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 // import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
@@ -8,51 +8,60 @@ import { Component8 } from './component8'
 import { MyContext } from './my-context'
 import { Box, Button, Paper, Theme, useTheme, Typography, Table, TableContainer, TableFooter, TableBody, TableRow, TableCell, TableHead } from '@material-ui/core'
 import { border } from '@material-ui/system'
+import { UserProfileProvider, UserProfileContext, CounterContext } from './user-profile-provider'
 // import { red } from '@material-ui/core/colors'
 // import { TableFooter } from 'material-ui'
 
 function Component7() {
-    const [counter, setCounter] = useState(0)
-    const theme = useTheme()
+    const [, setRefresh] = useState({})
+    let userProfile = {
+        name: 'Sushant',
+        address: '92/2A Bidhannagar Road'
+    }
+    const { emit } = useIbuki()
+    let myValue = 1
     return (
-        // <Box sx={style}>
+        <CounterContext.Provider value={myValue}>
+            <Box sx={{ p: 2 }}>
+                <Button variant='contained'
+                    onClick={() => {
+                        myValue = myValue+1
+                        // userProfile = {
+                        //     name: 'Prashant',
+                        //     address: 'VIP'
+                        // }
 
-        <TableContainer sx={style}   >
-            <Table className='table' size='medium'>
-                <TableHead>
-                    <TableRow className='header-row' >
-                        <TableCell >
-                            <Typography >Index</Typography>
-                        </TableCell>
-                        <TableCell><Typography >Label</Typography>
-                        </TableCell>
-                        <TableCell><Typography >Arguments</Typography>
-                        </TableCell>
-                        <TableCell><Typography >Exports</Typography></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {[1, 2, 3].map((item: any, index: number) => {
-                        const obj: any = <TableRow key={index}>
-                            <TableCell>
-                                {index + 1}
-                            </TableCell>
-                            <TableCell>
-                                <Button>Test</Button>
-                            </TableCell>
-                        </TableRow>
-                        return (obj)
-                    })}
-                </TableBody>
-                {/* <TableFooter>
-                    <TableRow>
-                        <TableCell>Count:</TableCell>
-                    </TableRow>
-                </TableFooter> */}
-            </Table>
-        </TableContainer>
-        // </Box>
+                        // emit('REFRESH', null)
+                    }}
+                >Change name</Button>
+                <SubComp7 />
+            </Box>
+        </CounterContext.Provider>
     )
+}
+
+function SubComp7() {
+    const [, setRefresh] = useState({})
+    // const userProfile: any = useContext(UserProfileContext)
+    const counter = useContext(CounterContext)
+    const { filterOn } = useIbuki()
+
+    // useEffect(() => {
+    //     const subs1 = filterOn('REFRESH').subscribe(() => {
+    //         setRefresh({})
+    //     })
+    //     return (() => {
+    //         subs1.unsubscribe()
+    //     })
+    // }, [])
+
+    return (<Box>
+        <span>{counter}</span>
+        {/* <CounterContext.Consumer>
+            {(value:any)=><div>{value.name}</div>}
+            
+        </CounterContext.Consumer> */}
+    </Box>)
 }
 
 
@@ -61,14 +70,14 @@ const style = {
     padding: 2,
     '& .table': {
         margin: 4,
-        border:'1px solid grey'
+        border: '1px solid grey'
     },
     '& .header-row': {
-        height:2,
-        border:'1px solid grey'
+        height: 2,
+        border: '1px solid grey'
     },
-    '& .MuiTableCell-root':{
-        border:'1px solid grey'
+    '& .MuiTableCell-root': {
+        border: '1px solid grey'
     }
 }
 

@@ -56,8 +56,9 @@ c) In all Typography comment out disableTypography
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5 All dialog boxes to originate from same place. At present there are many
 1.6 Provide debounce in search event of all XX-grid
-1.7 
+1.7 Change all reports date field valueGetter to valueFormatter
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
+1.9 In xx-grid the Reverse is way too close to View select box
 2. Thorough checkup required
 3. Purchase sale clickaway
 4. Provide a way to come out of app in mobile. Presently there is no way
