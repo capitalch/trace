@@ -10,7 +10,7 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
+import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
@@ -28,7 +28,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                     'SALE-VIEW-HOOK-GET-SALE-ON-ID',
                     drillDownEditAttributes.tranHeaderId
                 )
-            arbitraryData.shouldCloseParentOnSave = true
+            arbitraryData.current.shouldCloseParentOnSave = true
         }
 
         const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {
@@ -36,14 +36,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setRefresh({})
         })
 
-        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
-            setInBag('salesArbitraryData', arbitraryData)
-        })
+        // const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+        //     setInBag('salesArbitraryData', arbitraryData)
+        // })
 
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
-            subs2.unsubscribe()
+            // subs2.unsubscribe()
         }
     }, [])
 
@@ -54,17 +54,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         tabValue: 0,
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => {},
+            actions: () => {},
         },
     })
 
     // let arbitraryData: any
     const ard = getFromBag('salesArbitraryData')
-    let  arbitraryData:any = 
-    // useRef(
-        
-        {
+    const arbitraryData: any = useRef({
         accounts: {
             cashBankAccountsWithLedgers: [],
             cashBankAccountsWithSubledgers: [],
@@ -85,6 +82,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         footer: {
             items: [], // for TranD table
             deletedIds: [],
+            amount: 0,
         },
         id: undefined,
         isIgst: false,
@@ -112,8 +110,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         totalDebits: 0.0,
         tranDate: moment().format(isoDateFormat),
         isViewBack: false,
-    }
-    // )
+    })
     // if (ard) {
     //     arbitraryData = ard
     //     setInBag('salesArbitraryData', null)
@@ -123,7 +120,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         meta.current.tabValue = newValue
         if (newValue === 3) {
             // view
-            arbitraryData.saleViewHookFetchData()
+            arbitraryData.current.saleViewHookFetchData()
         }
         meta.current.isMounted && setRefresh({})
     }
@@ -131,13 +128,13 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     function setAccounts() {
         //saleAccounts
         const allAccounts = getFromBag('allAccounts') || []
-        arbitraryData.allAccounts = allAccounts
+        arbitraryData.current.allAccounts = allAccounts
         const saleAccounts = allAccounts.filter(
             (el: any) =>
                 ['sale'].includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.ledgerAccounts = saleAccounts
+        arbitraryData.current.ledgerAccounts = saleAccounts
 
         // Cash bank accounts
         const cashBankArray = ['cash', 'bank', 'card', 'ecash']
@@ -146,7 +143,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 cashBankArray.includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.accounts.cashBankAccountsWithLedgers =
+        arbitraryData.current.accounts.cashBankAccountsWithLedgers =
             cashBankAccountsWithLedgers
 
         const cashBankAccountsWithSubledgers = allAccounts.filter(
@@ -154,7 +151,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 cashBankArray.includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'S')
         )
-        arbitraryData.accounts.cashBankAccountsWithSubledgers =
+        arbitraryData.current.accounts.cashBankAccountsWithSubledgers =
             cashBankAccountsWithSubledgers
         // Debtors creditors accounts
         const debtorCreditorAccountsWithLedgers = allAccounts
@@ -169,7 +166,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.accounts.debtorCreditorAccountsWithLedgers =
+            arbitraryData.current.accounts.debtorCreditorAccountsWithLedgers =
             debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
@@ -183,7 +180,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.accounts.debtorCreditorAccountsWithSubledgers =
+            arbitraryData.current.accounts.debtorCreditorAccountsWithSubledgers =
             debtorCreditorAccountsWithSubledgers
         // auto subledger accounts
         const autoSubledgerAccounts = allAccounts.filter(
@@ -192,8 +189,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 el.isAutoSubledger
         )
-        arbitraryData.accounts.autoSubledgerAccounts =
-            autoSubledgerAccounts
+        arbitraryData.current.accounts.autoSubledgerAccounts = autoSubledgerAccounts
     }
 
     return { arbitraryData, handleChangeTab, meta }
