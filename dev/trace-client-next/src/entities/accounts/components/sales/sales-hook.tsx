@@ -10,7 +10,7 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
+import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
@@ -36,14 +36,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setRefresh({})
         })
 
-        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
-            setInBag('salesArbitraryData', arbitraryData.current)
-        })
+        // const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+        //     setInBag('salesArbitraryData', arbitraryData)
+        // })
 
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
-            subs2.unsubscribe()
+            // subs2.unsubscribe()
         }
     }, [])
 
@@ -54,14 +54,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         tabValue: 0,
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => {},
+            actions: () => {},
         },
     })
 
     // let arbitraryData: any
     const ard = getFromBag('salesArbitraryData')
-    let  arbitraryData:any = useRef({
+    const arbitraryData: any = useRef({
         accounts: {
             cashBankAccountsWithLedgers: [],
             cashBankAccountsWithSubledgers: [],
@@ -82,6 +82,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         footer: {
             items: [], // for TranD table
             deletedIds: [],
+            amount: 0,
         },
         id: undefined,
         isIgst: false,
@@ -110,10 +111,10 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         tranDate: moment().format(isoDateFormat),
         isViewBack: false,
     })
-    if (ard) {
-        arbitraryData.current = ard
-        setInBag('salesArbitraryData', null)
-    }
+    // if (ard) {
+    //     arbitraryData = ard
+    //     setInBag('salesArbitraryData', null)
+    // }
 
     function handleChangeTab(e: any, newValue: number) {
         meta.current.tabValue = newValue
@@ -165,7 +166,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.current.accounts.debtorCreditorAccountsWithLedgers =
+            arbitraryData.current.accounts.debtorCreditorAccountsWithLedgers =
             debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
@@ -179,7 +180,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.current.accounts.debtorCreditorAccountsWithSubledgers =
+            arbitraryData.current.accounts.debtorCreditorAccountsWithSubledgers =
             debtorCreditorAccountsWithSubledgers
         // auto subledger accounts
         const autoSubledgerAccounts = allAccounts.filter(
@@ -188,8 +189,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 el.isAutoSubledger
         )
-        arbitraryData.current.accounts.autoSubledgerAccounts =
-            autoSubledgerAccounts
+        arbitraryData.current.accounts.autoSubledgerAccounts = autoSubledgerAccounts
     }
 
     return { arbitraryData, handleChangeTab, meta }
