@@ -56,9 +56,9 @@ c) In all Typography comment out disableTypography
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5 All dialog boxes to originate from same place. At present there are many
 1.6 Provide debounce in search event of all XX-grid
-1.7 Change all reports date field valueGetter to valueFormatter
+1.7 
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
-1.9 In xx-grid the Reverse is way too close to View select box
+1.9 
 2. Thorough checkup required
 3. Purchase sale clickaway
 4. Provide a way to come out of app in mobile. Presently there is no way
@@ -116,6 +116,11 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 18-102021
+1. Working on sales values disappear when drawyer status changes
+2. Change all reports date field valueGetter to valueFormatter
+3. In xx-grid the Reverse is way too close to View select box
 
 # 17-10-2021
 1. Removed material table from all over in accounts

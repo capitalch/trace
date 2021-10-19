@@ -351,7 +351,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .toolbar-left-items': {
                     display: 'flex',
                     alignItems: 'center',
-                    
                     '& .toolbar-title': {
                         color: 'dodgerblue',
                         fontSize: '1.2rem',
@@ -361,10 +360,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         display: 'flex',
                         columnGap: '0.5rem',
                         color: theme.palette.secondary.main,
+                        marginRight: '1rem',
                         '& select': {
                             borderColor: 'grey',
                             color: theme.palette.primary.main,
-                            // height: '1.5rem'
                         },
                     },
                 },
