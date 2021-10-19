@@ -225,8 +225,10 @@ def graphql_server():
         schema,
         data,
         context_value=contextValue(request),
-        debug=app.debug
+        # debug=app.debug
     )
+    
+
     status_code = 200 if success else 400  # This is python ternary operator
     res = json.dumps(result, default=str)
 

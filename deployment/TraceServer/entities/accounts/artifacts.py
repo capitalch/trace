@@ -88,7 +88,7 @@ def resolve_configuration(parent, info):
     env = cfg['env']
     configuration = {'url': cfg[env]['url'],
                      'linkServerUrl': cfg[env]['linkServerUrl'],
-                     'linkServerKey':cfg['linkServerKey']
+                     'linkServerKey': cfg['linkServerKey']
                      }
     return(configuration)
 
@@ -113,6 +113,7 @@ def resolve_generic_update_master(parent, info, value):
 
     id = execGenericUpdateMaster(dbName, valueDict, buCode)
     return id
+
 
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
