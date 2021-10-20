@@ -38,7 +38,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setRefresh({})
         })
 
-        const subs2 = filterOn('DRAWYER-STATUS-CHANGED').subscribe(()=>{
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(()=>{
             setInBag('salesData', multiData.sales)
         })
 

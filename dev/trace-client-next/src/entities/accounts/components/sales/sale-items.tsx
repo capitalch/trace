@@ -16,12 +16,13 @@ import {
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleItems, useStyles } from './sale-items-hook'
-import { SalesContext } from './sales-provider'
+import { MultiDataContext } from '../common/multi-data-util'
 
 function SaleItems() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const arbitraryData:any = useContext(SalesContext)
+    const multiData: any = useContext(MultiDataContext)
+    const arbitraryData: any = multiData.sales
     const {
         clearRow,
         computeAllRows,

@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Chrome",
-            "type": "chrome",
+            "type": "pwa-chrome",
             "request": "launch",
-            "url": "http://localhost:3001",     // create-react-app's default port 3000
-            "webRoot": "${workspaceRoot}/src"
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
         }
     ]
 }

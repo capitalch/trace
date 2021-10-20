@@ -5,7 +5,6 @@ import { SaleHeader } from './sale-header'
 import { SaleItems } from './sale-items'
 import { SaleFooter } from './sale-footer'
 import { SaleView } from './sale-view'
-import { SalesProvider } from './sales-provider'
 
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
@@ -16,7 +15,6 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
 
     return (
         <div className={classes.content}>
-            <SalesProvider value={multiData.sales}>
                 <SaleCrown                    
                     saleType={saleType}
                     drillDownEditAttributes={drillDownEditAttributes}
@@ -46,7 +44,7 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                         drillDownEditAttributes={drillDownEditAttributes}
                     />
                 </div>
-            </SalesProvider>
+            {/* </SalesProvider> */}
         </div>
     )
 }

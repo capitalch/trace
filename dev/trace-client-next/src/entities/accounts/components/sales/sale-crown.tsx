@@ -1,23 +1,22 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
-import { Button,  Typography,} from '../../../../imports/gui-imports'
-import {  Check, Error,} from '../../../../imports/icons-import'
-import { SalesContext } from './sales-provider'
+import { Button, Typography } from '../../../../imports/gui-imports'
+import { Check, Error } from '../../../../imports/icons-import'
+// import { SalesContext } from './sales-provider'
+import { MultiDataContext } from '../common/multi-data-util'
 import { useContext } from '../../../../imports/regular-imports'
 
-function SaleCrown({ 
-    saleType, drillDownEditAttributes }: any) {
+function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const arbitraryData:any = useContext(SalesContext)
+    const multiData: any = useContext(MultiDataContext)
+    const arbitraryData: any = multiData.sales
     const { getError, handleSubmit, meta } = useSaleCrown(
         arbitraryData,
         saleType,
         drillDownEditAttributes
     )
 
-    const {
-        toDecimalFormat,
-    } = useSharedElements()
+    const { toDecimalFormat } = useSharedElements()
 
     return (
         <div className={classes.content}>

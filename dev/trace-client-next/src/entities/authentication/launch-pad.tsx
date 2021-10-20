@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
-import { MultiDataContext, getSalesArbitraryData } from '../accounts/components/common/multi-data-util'
 
 function LaunchPad() {
     const meta: any = useRef({
@@ -15,12 +14,14 @@ function LaunchPad() {
 
     useEffect(() => {
         meta.current.isMounted = true
-        const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe((d: any) => {
-            if (d.data) {
-                setInBag('currentComponent', d.data)
+        const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
+            (d: any) => {
+                if (d.data) {
+                    setInBag('currentComponent', d.data)
+                }
+                meta.current.isMounted && setRefresh({})
             }
-            meta.current.isMounted && setRefresh({})
-        })
+        )
         return () => {
             subs.unsubscribe()
             meta.current.isMounted = false
@@ -40,12 +41,8 @@ function LaunchPad() {
             ))
         return ret
     }
-    const currCompArg: string = getCurrentComponent().args
-    const salesData = getSalesArbitraryData(currCompArg)
-    return (
-        <MultiDataContext.Provider value={{ sales: salesData }}>
-            <Comp></Comp>
-        </MultiDataContext.Provider>)
+
+    return <Comp></Comp>
 }
 
 export { LaunchPad }

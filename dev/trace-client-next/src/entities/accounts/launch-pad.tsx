@@ -11,6 +11,10 @@ import { getArtifacts } from '../../react-form/common/react-form-hook'
 import {} from '../../global-utils/esm'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 import { utils } from './utils'
+import {
+    MultiDataContext,
+    getSalesArbitraryData,
+} from '../accounts/components/common/multi-data-util'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -50,12 +54,17 @@ function LaunchPad() {
         }
     }, [])
 
+    const currCompArgs: any = getCurrentComponent()?.args
+    const salesData = currCompArgs ? getSalesArbitraryData(currCompArgs.saleType) : {}
+
     return (
         <>
             <Typography variant="h6" className={classes.title}>
                 {meta.current.mainHeading}
             </Typography>
-            <Comp></Comp>
+            <MultiDataContext.Provider value={{ sales: salesData }}>
+                <Comp></Comp>
+            </MultiDataContext.Provider>
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>
     )

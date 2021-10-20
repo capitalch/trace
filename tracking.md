@@ -65,13 +65,13 @@ c) In all Typography comment out disableTypography
 
 # Working on
 1. Retain values of purchases and sales when screen expanded. At present a refresh of data is done and original inserted values are lost
-1.1 Bank recon rework
+1.1 Bank recon rework, drill down etc
 1.2 All transactions, default is reverse, so let the checkbox be checked
 1.5 All dialog boxes to originate from same place. At present there are many
 1.6 Provide debounce in search event of all XX-grid
 1.7 Provide reset in sales / purchases...
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
-1.9 
+1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
 2. Thorough checkup required
 3. Purchase sale clickaway
 4. Provide a way to come out of app in mobile. Presently there is no way
@@ -130,7 +130,10 @@ c) In all Typography comment out disableTypography
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 18-102021
+# 19-10-2021 - 20-10-2021
+1. Sales data persistent
+
+# 18-10-2021
 1. Working on sales values disappear when drawyer status changes
 2. Change all reports date field valueGetter to valueFormatter
 3. In xx-grid the Reverse is way too close to View select box

@@ -12,11 +12,12 @@ import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
 import { ShipTo } from './ship-to'
 import { SaleBillNoSelect } from './sale-bill-no-select'
-import { SalesContext } from './sales-provider'
+import { MultiDataContext } from '../common/multi-data-util'
 
 function SaleHeader() {
     const classes = useStyles()
-    const arbitraryData:any = useContext(SalesContext)
+    const multiData: any = useContext(MultiDataContext)
+    const arbitraryData: any = multiData.sales
     const {
         handleAutoSubledgerSales,
         handleInstitutionSales,

@@ -11,10 +11,10 @@ import { CloseSharp, Search } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useBillTo, useStyles } from './bill-to-hook'
 
-function BillTo({ multiData }: any) {
+function BillTo({ arbitraryData }: any) {
     const [, setRefresh] = useState({})
-    const classes = useStyles(multiData.sales)
-    const pre: any = multiData.sales.billTo
+    const classes = useStyles(arbitraryData)
+    const pre: any = arbitraryData.billTo
     const {
         allErrors,
         handleClear,
@@ -22,7 +22,7 @@ function BillTo({ multiData }: any) {
         handleSearch,
         meta,
         onSearchBoxFilter,
-    } = useBillTo(multiData.sales)
+    } = useBillTo(arbitraryData)
 
     const { emit, TraceDialog } = useSharedElements()
 
@@ -104,11 +104,11 @@ function BillTo({ multiData }: any) {
                         variant="standard"
                         placeholder="Gstin"
                         error={gstinError()}
-                        value={multiData.sales.billTo.gstin || ''}
+                        value={arbitraryData.billTo.gstin || ''}
                         onChange={(e) => {
-                            multiData.sales.billTo.gstin = e.target.value
+                            arbitraryData.billTo.gstin = e.target.value
                             meta.current.isMounted && setRefresh({})
-                            multiData.sales.salesCrownRefresh()
+                            arbitraryData.salesCrownRefresh()
                             // emit('SALES-CROWN-REFRESH', null)
                         }}
                     />
@@ -156,7 +156,7 @@ function BillTo({ multiData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled={multiData.sales.isAssignmentReturn}
+                    disabled={arbitraryData.isAssignmentReturn}
                     onClick={handleClear}>
                     <CloseSharp />
                 </IconButton>

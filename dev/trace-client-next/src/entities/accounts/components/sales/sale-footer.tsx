@@ -8,12 +8,13 @@ import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
 import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
-import { SalesContext } from './sales-provider'
+import { MultiDataContext } from '../common/multi-data-util'
 
 function SaleFooter() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const arbitraryData:any = useContext(SalesContext)
+    const multiData: any = useContext(MultiDataContext)
+    const arbitraryData: any = multiData.sales
     const {
         computeSummary,
         handleAddItem,
