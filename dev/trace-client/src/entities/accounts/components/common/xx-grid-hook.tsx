@@ -240,15 +240,16 @@ function useXXGrid(gridOptions: any) {
 
     function requestSearch(searchValue: string) {
         meta.current.searchText = searchValue
-        const searchRegex = new RegExp(searchValue, 'i')
+        // const searchRegex = new RegExp(searchValue, 'i')
         meta.current.filteredRows = meta.current.allRows.filter((row: any) => {
             return Object.keys(row).some((field) => {
-                const temp = row[field] ? row[field].toString() : ''
-                return searchRegex.test(temp)
+                
+                const temp:string = row[field] ? row[field].toString() : ''
+                return temp.toLowerCase().includes(searchValue.toLowerCase())
+                // return searchRegex.test(temp)
             })
         })
         pre.isReverseOrder = false
-        // pre.isDailySummary = false
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
     }

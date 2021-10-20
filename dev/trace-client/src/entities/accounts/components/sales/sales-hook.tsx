@@ -1,11 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 import _ from 'lodash'
+import {MultiDataContext} from '../common/multi-data-context'
+import {getSalesArbitraryData} from '../common/arbitrary-data'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
+    const multiData:any = useContext(MultiDataContext)
     const {
         _,
         emit,
@@ -20,7 +23,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         if (drillDownEditAttributes && (!_.isEmpty(drillDownEditAttributes))) {
             // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
             drillDownEditAttributes.showChildDialog && emit('SALE-VIEW-HOOK-GET-SALE-ON-ID', drillDownEditAttributes.tranHeaderId)
-            arbitraryData.current.shouldCloseParentOnSave = true
+            multiData.sales.shouldCloseParentOnSave = true
         }
 
         const subs1 = filterOn('CHANGE-TAB-SALES').subscribe((d) => {
@@ -46,54 +49,55 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         },
     })
 
-    const arbitraryData: any = useRef({
-        accounts: {
-            cashBankAccountsWithLedgers: [],
-            cashBankAccountsWithSubledgers: [],
-            debtorCreditorAccountsWithLedgers: [],
-            debtorCreditorAccountsWithSubledgers: [],
-            autoSubledgerAccounts: [],
-        },
+    multiData.sales = getSalesArbitraryData(saleType)
+    // const arbitraryData: any = useRef({
+    //     accounts: {
+    //         cashBankAccountsWithLedgers: [],
+    //         cashBankAccountsWithSubledgers: [],
+    //         debtorCreditorAccountsWithLedgers: [],
+    //         debtorCreditorAccountsWithSubledgers: [],
+    //         autoSubledgerAccounts: [],
+    //     },
 
-        allAccounts: [],
-        autoRefNo: undefined,
-        backCalulateAmount: 0.0,
-        billTo: {
-            id: undefined
-        },
+    //     allAccounts: [],
+    //     autoRefNo: undefined,
+    //     backCalulateAmount: 0.0,
+    //     billTo: {
+    //         id: undefined
+    //     },
 
-        commonRemarks: undefined,
-        deletedSalePurchaseIds: [],
-        footer: {
-            items: [], // for TranD table
-            deletedIds: [],
-        },
-        id: undefined,
-        isIgst: false,
-        isSalesReturn: saleType === 'ret',
-        isSales: saleType === 'sal',
-        ledgerAccounts: [],
-        lineItems: [], // for product details of SalePurchaseDetails table
-        rowData: {},
+    //     commonRemarks: undefined,
+    //     deletedSalePurchaseIds: [],
+    //     footer: {
+    //         items: [], // for TranD table
+    //         deletedIds: [],
+    //     },
+    //     id: undefined,
+    //     isIgst: false,
+    //     isSalesReturn: saleType === 'ret',
+    //     isSales: saleType === 'sal',
+    //     ledgerAccounts: [],
+    //     lineItems: [], // for product details of SalePurchaseDetails table
+    //     rowData: {},
 
-        saleErrorMethods: {
-            headError: () => false,
-            itemsError: () => false,
-            footerError: () => false,
-            errorMethods: {
-                getSlNoError: () => false,
-            }
-        },
+    //     saleErrorMethods: {
+    //         headError: () => false,
+    //         itemsError: () => false,
+    //         footerError: () => false,
+    //         errorMethods: {
+    //             getSlNoError: () => false,
+    //         }
+    //     },
 
-        saleErrorObject: {},
+    //     saleErrorObject: {},
 
-        saleVariety: 'r',
-        shipTo: {},
-        summary: {},
-        totalCredits: 0.0,
-        totalDebits: 0.0,
-        tranDate: moment().format(isoDateFormat),
-    })
+    //     saleVariety: 'r',
+    //     shipTo: {},
+    //     summary: {},
+    //     totalCredits: 0.0,
+    //     totalDebits: 0.0,
+    //     tranDate: moment().format(isoDateFormat),
+    // })
 
     function handleChange(e: any, newValue: number) {
         meta.current.tabValue = newValue
@@ -106,13 +110,13 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     function setAccounts() {
         //saleAccounts
         const allAccounts = getFromBag('allAccounts') || []
-        arbitraryData.current.allAccounts = allAccounts
+        multiData.sales.allAccounts = allAccounts
         const saleAccounts = allAccounts.filter(
             (el: any) =>
                 ['sale'].includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.current.ledgerAccounts = saleAccounts
+        multiData.sales.ledgerAccounts = saleAccounts
 
         // Cash bank accounts
         const cashBankArray = ['cash', 'bank', 'card', 'ecash']
@@ -121,14 +125,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 cashBankArray.includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.current.accounts.cashBankAccountsWithLedgers = cashBankAccountsWithLedgers
+        multiData.sales.accounts.cashBankAccountsWithLedgers = cashBankAccountsWithLedgers
 
         const cashBankAccountsWithSubledgers = allAccounts.filter(
             (el: any) =>
                 cashBankArray.includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'S')
         )
-        arbitraryData.current.accounts.cashBankAccountsWithSubledgers = cashBankAccountsWithSubledgers
+        multiData.sales.accounts.cashBankAccountsWithSubledgers = cashBankAccountsWithSubledgers
         // Debtors creditors accounts
         const debtorCreditorAccountsWithLedgers = allAccounts
             .filter(
@@ -142,7 +146,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.current.accounts.debtorCreditorAccountsWithLedgers = debtorCreditorAccountsWithLedgers
+            multiData.sales.accounts.debtorCreditorAccountsWithLedgers = debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
                 (el: any) =>
@@ -155,7 +159,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.current.accounts.debtorCreditorAccountsWithSubledgers = debtorCreditorAccountsWithSubledgers
+            multiData.sales.accounts.debtorCreditorAccountsWithSubledgers = debtorCreditorAccountsWithSubledgers
         // auto subledger accounts
         const autoSubledgerAccounts = allAccounts.filter(
             (el: any) =>
@@ -163,10 +167,10 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 el.isAutoSubledger
         )
-        arbitraryData.current.accounts.autoSubledgerAccounts = autoSubledgerAccounts
+        multiData.sales.accounts.autoSubledgerAccounts = autoSubledgerAccounts
     }
 
-    return { arbitraryData, handleChange, meta }
+    return { multiData, handleChange, meta }
 }
 
 export { useSales }

@@ -10,7 +10,6 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {

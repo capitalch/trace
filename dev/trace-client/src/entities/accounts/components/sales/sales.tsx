@@ -9,7 +9,7 @@ import {SaleView} from './sale-view'
 
 function Sales({ saleType, drillDownEditAttributes}: any) {
     const classes = useStyles()
-    const { arbitraryData, handleChange, meta } = useSales(saleType, drillDownEditAttributes)
+    const { multiData, handleChange, meta } = useSales(saleType, drillDownEditAttributes)
 
     const {
         Tabs,
@@ -18,7 +18,7 @@ function Sales({ saleType, drillDownEditAttributes}: any) {
 
     return (
         <div className={classes.content}>
-            <SaleCrown arbitraryData={arbitraryData.current} saleType={saleType} drillDownEditAttributes = {drillDownEditAttributes} />
+            <SaleCrown arbitraryData={multiData.sales} saleType={saleType} drillDownEditAttributes = {drillDownEditAttributes} />
             <Tabs
                 className="tabs"
                 indicatorColor="primary"
@@ -30,17 +30,17 @@ function Sales({ saleType, drillDownEditAttributes}: any) {
                 <Tab label="View" />
             </Tabs>
             <div hidden={meta.current.tabValue !== 0}>
-                <SaleHeader arbitraryData={arbitraryData.current} />
+                <SaleHeader arbitraryData={multiData.sales} />
             </div>
 
             <div hidden={meta.current.tabValue !== 1}>
-                <SaleItems arbitraryData={arbitraryData.current}/>
+                <SaleItems arbitraryData={multiData.sales}/>
             </div>
             <div hidden={meta.current.tabValue !== 2}>
-                <SaleFooter arbitraryData={arbitraryData.current} />
+                <SaleFooter arbitraryData={multiData.sales} />
             </div>
             <div hidden={meta.current.tabValue !== 3}>
-                <SaleView arbitraryData={arbitraryData.current} drillDownEditAttributes={drillDownEditAttributes} />
+                <SaleView arbitraryData={multiData.sales} drillDownEditAttributes={drillDownEditAttributes} />
             </div>
         </div>
     )
