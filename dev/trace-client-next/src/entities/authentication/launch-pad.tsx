@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
+import { MultiDataContext, getSalesArbitraryData } from '../accounts/components/common/multi-data-util'
 
 function LaunchPad() {
     const meta: any = useRef({
@@ -9,7 +10,7 @@ function LaunchPad() {
         output: () => null,
     })
     const [, setRefresh] = useState({})
-    const { getFromBag, setInBag } = manageEntitiesState()
+    const { getCurrentComponent, getFromBag, setInBag } = manageEntitiesState()
     const { filterOn, emit } = usingIbuki()
 
     useEffect(() => {
@@ -39,7 +40,12 @@ function LaunchPad() {
             ))
         return ret
     }
-    return <Comp></Comp>
+    const currCompArg: string = getCurrentComponent().args
+    const salesData = getSalesArbitraryData(currCompArg)
+    return (
+        <MultiDataContext.Provider value={{ sales: salesData }}>
+            <Comp></Comp>
+        </MultiDataContext.Provider>)
 }
 
 export { LaunchPad }

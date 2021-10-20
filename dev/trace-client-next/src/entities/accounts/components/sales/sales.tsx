@@ -9,14 +9,14 @@ import { SalesProvider } from './sales-provider'
 
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const { arbitraryData, handleChangeTab, meta } = useSales(
+    const { multiData, handleChangeTab, meta } = useSales(
         saleType,
         drillDownEditAttributes
     )
 
     return (
         <div className={classes.content}>
-            <SalesProvider value={arbitraryData.current}>
+            <SalesProvider value={multiData.sales}>
                 <SaleCrown                    
                     saleType={saleType}
                     drillDownEditAttributes={drillDownEditAttributes}

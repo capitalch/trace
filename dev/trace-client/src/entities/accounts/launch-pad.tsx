@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import { usingIbuki } from '../../common-utils/ibuki'
@@ -9,6 +9,8 @@ import { MultiDataContext } from './components/common/multi-data-context'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 // import { utilMethods } from '../../common-utils/util-methods'
 import { utils } from './utils'
+import { getSalesArbitraryData } from './components/common/arbitrary-data'
+import { useSharedElements } from './components/common/shared-elements-hook'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -23,6 +25,7 @@ function LaunchPad() {
     const currentEntityName = getCurrentEntity()
     const artifacts = getArtifacts(currentEntityName)
     const [, setRefresh] = useState({})
+    const { setInBag, getFromBag } = useSharedElements()
     // const { execGenericView } = utilMethods()
     // const { setFormData, resetAllFormErrors } = manageFormsState()
     const meta: any = useRef({
@@ -55,12 +58,15 @@ function LaunchPad() {
         }
     }, [])
 
+    // const multiData = useContext(MultiDataContext)
+    const comp = getCurrentComponent()
+    const salesData = getSalesArbitraryData('sal')
     return (
         <>
             <Typography variant="h6" className={classes.title}>
                 {meta.current.mainHeading}
             </Typography>
-            <MultiDataContext.Provider value={{}}>
+            <MultiDataContext.Provider value={{ sales: salesData }}>
                 <Comp></Comp>
             </MultiDataContext.Provider>
 

@@ -2,18 +2,19 @@ import { useState, useEffect, useRef, useContext } from 'react'
 import { makeStyles, Theme, createStyles } from '@material-ui/core'
 import { useSharedElements } from '../common/shared-elements-hook'
 import _ from 'lodash'
-import {MultiDataContext} from '../common/multi-data-context'
-import {getSalesArbitraryData} from '../common/arbitrary-data'
+import { MultiDataContext } from '../common/multi-data-context'
+import { getSalesArbitraryData } from '../common/arbitrary-data'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
-    const multiData:any = useContext(MultiDataContext)
+    const multiData: any = useContext(MultiDataContext)
     const {
         _,
         emit,
         filterOn,
         getFromBag,
+        setInBag,
         moment,
     } = useSharedElements()
 
@@ -31,9 +32,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setRefresh({})
         })
 
+        const subs2 = filterOn('DRAWYER-STATUS-CHANGED').subscribe(()=>{
+            setInBag('salesData', multiData.sales)
+        })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
@@ -49,7 +55,13 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         },
     })
 
-    multiData.sales = getSalesArbitraryData(saleType)
+    const salesData  = getFromBag('salesData')
+    if(salesData){
+        multiData.sales = salesData
+        setInBag('salesData', undefined)
+    }
+
+    // multiData.sales = getSalesArbitraryData(saleType)
     // const arbitraryData: any = useRef({
     //     accounts: {
     //         cashBankAccountsWithLedgers: [],
@@ -146,7 +158,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-            multiData.sales.accounts.debtorCreditorAccountsWithLedgers = debtorCreditorAccountsWithLedgers
+        multiData.sales.accounts.debtorCreditorAccountsWithLedgers = debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
                 (el: any) =>
@@ -159,7 +171,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-            multiData.sales.accounts.debtorCreditorAccountsWithSubledgers = debtorCreditorAccountsWithSubledgers
+        multiData.sales.accounts.debtorCreditorAccountsWithSubledgers = debtorCreditorAccountsWithSubledgers
         // auto subledger accounts
         const autoSubledgerAccounts = allAccounts.filter(
             (el: any) =>
