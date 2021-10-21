@@ -964,7 +964,7 @@ function usePurchaseItems(arbitraryData: any) {
             <PrimeColumn
                 key={incr()}
                 header="Serial / remarks"
-                style={{ width: '8rem' }}
+                // style={{ width: '8rem' }}
                 body={(rowData: any) => {
                     return (
                         <>

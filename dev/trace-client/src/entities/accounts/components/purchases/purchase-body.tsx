@@ -1,7 +1,14 @@
-import { NumberFormat, useState, useEffect, useContext } from '../../../../imports/regular-imports'
 import {
-    Button, Typography,
-    Checkbox, FormControlLabel,
+    NumberFormat,
+    useState,
+    useEffect,
+    useContext,
+} from '../../../../imports/regular-imports'
+import {
+    Button,
+    Typography,
+    Checkbox,
+    FormControlLabel,
     InputAdornment,
     Radio,
     TextField,
@@ -11,20 +18,20 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
-import { ClearAll } from '../../../../imports/icons-import'
+// import { ClearAll } from '../../../../imports/icons-import'
 // import { PurchasesContext } from './purchases-provider'
-import { MultiDataContext } from '../common/multi-data-bridge' 
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function PurchaseBody({ purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return
     const [, setRefresh] = useState({})
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
-    
+
     const {
         allErrorMethods,
         getError,
-        handleClear,
+        // handleClear,
         handleIsGstInvoice,
         handlePurchaseCashCredit,
         handleSubmit,
@@ -42,12 +49,8 @@ function PurchaseBody({ purchaseType }: any) {
         getQtyError,
     } = allErrorMethods()
 
-    const {
-        accountsMessages,
-        emit,
-        filterOn,
-        TraceDialog,
-    } = useSharedElements()
+    const { accountsMessages, emit, filterOn, TraceDialog } =
+        useSharedElements()
 
     return (
         <div className={classes.content}>
@@ -106,7 +109,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* auto ref no */}
                 <TextField
                     className="auto-ref-no"
-                    variant='standard'
+                    variant="standard"
                     disabled={true}
                     label="Ref no"
                     value={multiData.purchases.autoRefNo || ''}
@@ -114,7 +117,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* date */}
                 <TextField
                     label={multiData.purchases.tranDate ? 'Date' : undefined}
-                    variant='standard'
+                    variant="standard"
                     error={getDateError()}
                     helperText={
                         getDateError()
@@ -132,7 +135,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* invoice no  */}
                 <TextField
                     label="Invoice no"
-                    variant='standard'
+                    variant="standard"
                     className="invoice-no"
                     error={getInvoiceError()}
                     onChange={(e: any) => {
@@ -144,7 +147,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
-                    variant='standard'
+                    variant="standard"
                     className="common-remarks"
                     onChange={(e: any) => {
                         multiData.purchases.commonRemarks = e.target.value
@@ -183,196 +186,203 @@ function PurchaseBody({ purchaseType }: any) {
         const [, setRefresh] = useState({})
         return (
             <div className="body-line-2">
-                <div>
-                    <Typography variant="caption">Purchase a/c</Typography>
-                    {/* purchase */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.purchaseLedgerAccounts}
-                        onChange={() => {
-                            getPurchaseAccountError()
+                <div className="left">
+                    <div>
+                        <Typography variant="caption">Purchase a/c</Typography>
+                        {/* purchase */}
+                        <LedgerSubledger
+                            allAccounts={meta.current.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={meta.current.purchaseLedgerAccounts}
+                            onChange={() => {
+                                getPurchaseAccountError()
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={
+                                multiData.purchases.ledgerSubledgerPurchase
+                            }
+                        />
+                    </div>
+                    <div>
+                        <Typography variant="caption">Credit a/c</Typography>
+                        {/* credit account */}
+                        <LedgerSubledger
+                            allAccounts={meta.current.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={meta.current.ledgerAccounts}
+                            onChange={async () => {
+                                getOtherAccountError()
+                                const gstin: string = await queryGstin(
+                                    multiData.purchases.ledgerSubledgerOther
+                                        ?.accId
+                                )
+                                multiData.purchases.gstin = gstin
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={multiData.purchases.ledgerSubledgerOther}
+                        />
+                    </div>
+                    {/* gstin */}
+                    <TextField
+                        className="gstin"
+                        variant="standard"
+                        label="Gstin no"
+                        error={getGstinError()}
+                        onChange={(e: any) => {
+                            multiData.purchases.gstin = e.target.value
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={multiData.purchases.ledgerSubledgerPurchase}
+                        value={multiData.purchases.gstin || ''}
                     />
                 </div>
-                <div>
-                    <Typography variant="caption">Credit a/c</Typography>
-                    {/* credit account */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.ledgerAccounts}
-                        onChange={async () => {
-                            getOtherAccountError()
-                            const gstin: string = await queryGstin(
-                                multiData.purchases.ledgerSubledgerOther?.accId
-                            )
-                            multiData.purchases.gstin = gstin
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        rowData={multiData.purchases.ledgerSubledgerOther}
-                    />
-                </div>
-                {/* gstin */}
-                <TextField
-                    className="gstin"
-                    variant='standard'
-                    label="Gstin no"
-                    error={getGstinError()}
-                    onChange={(e: any) => {
-                        multiData.purchases.gstin = e.target.value
-                        setRefresh({})
-                        emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                    }}
-                    value={multiData.purchases.gstin || ''}
-                />
-                <div className="invoice">
-                    {/* Invoice amount */}
-                    <NumberFormat
-                        className="total-amount"
-                        label="Invoice amount"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getInvoiceAmountError()}
-                        fixedDecimalScale={true}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            //using onChange event stores formatted value
-                            const { floatValue } = values
-                            multiData.purchases.invoiceAmount = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={multiData.purchases.invoiceAmount || 0.0}
-                    />
-                    <NumberFormat
-                        label="Total qty"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getQtyError()}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            multiData.purchases.qty = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={multiData.purchases.qty || 0}
-                    />
-                </div>
+                <div className = 'right'>
+                    <div className="invoice">
+                        {/* Invoice amount */}
+                        <NumberFormat
+                            className="total-amount"
+                            label="Invoice amount"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={getInvoiceAmountError()}
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                //using onChange event stores formatted value
+                                const { floatValue } = values
+                                multiData.purchases.invoiceAmount = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={multiData.purchases.invoiceAmount || 0.0}
+                        />
+                        <NumberFormat
+                            label="Total qty"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={getQtyError()}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                multiData.purchases.qty = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={multiData.purchases.qty || 0}
+                        />
+                    </div>
 
-                <div className="gst">
-                    {/* cgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Cgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            multiData.purchases.cgst = floatValue
-                            multiData.purchases.sgst = floatValue
-                            multiData.purchases.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={multiData.purchases.cgst || 0.0}
-                    />
-                    {/* sgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Sgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            multiData.purchases.cgst = floatValue
-                            multiData.purchases.sgst = floatValue
-                            multiData.purchases.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={multiData.purchases.sgst || 0.0}
-                    />
-                    {/* igst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Igst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            multiData.purchases.cgst = 0.0
-                            multiData.purchases.sgst = 0.0
-                            multiData.purchases.igst = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={multiData.purchases.igst || 0.0}
-                    />
+                    <div className="gst">
+                        {/* cgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={getGstError()}
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Cgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                multiData.purchases.cgst = floatValue
+                                multiData.purchases.sgst = floatValue
+                                multiData.purchases.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            thousandSeparator={true}
+                            value={multiData.purchases.cgst || 0.0}
+                        />
+                        {/* sgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={getGstError()}
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Sgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                multiData.purchases.cgst = floatValue
+                                multiData.purchases.sgst = floatValue
+                                multiData.purchases.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            thousandSeparator={true}
+                            value={multiData.purchases.sgst || 0.0}
+                        />
+                        {/* igst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={getGstError()}
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Igst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                multiData.purchases.cgst = 0.0
+                                multiData.purchases.sgst = 0.0
+                                multiData.purchases.igst = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            thousandSeparator={true}
+                            value={multiData.purchases.igst || 0.0}
+                        />
+                    </div>
                 </div>
-                <Button
+                {/* <Button
                     className="reset"
                     size="small"
                     color="secondary"
                     onClick={handleClear}
                     startIcon={<ClearAll />}>
                     Clear all
-                </Button>
+                </Button> */}
             </div>
         )
     }
@@ -384,7 +394,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* auto ref no */}
                 <TextField
                     className="auto-ref-no"
-                    variant='standard'
+                    variant="standard"
                     disabled={true}
                     label="Ref no"
                     value={multiData.purchases.autoRefNo || ''}
@@ -392,7 +402,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* date */}
                 <TextField
                     label={multiData.purchases.tranDate ? 'Date' : undefined}
-                    variant='standard'
+                    variant="standard"
                     error={getDateError()}
                     helperText={
                         getDateError()
@@ -411,7 +421,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
-                    variant='standard'
+                    variant="standard"
                     className="common-remarks"
                     onChange={(e: any) => {
                         multiData.purchases.commonRemarks = e.target.value
@@ -483,7 +493,7 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* gstin */}
                 <TextField
                     className="gstin"
-                    variant='standard'
+                    variant="standard"
                     label="Gstin no"
                     error={getGstinError()}
                     onChange={(e: any) => {
@@ -628,14 +638,14 @@ function PurchaseBody({ purchaseType }: any) {
                         value={multiData.purchases.igst || 0.0}
                     />
                 </div>
-                <Button
+                {/* <Button
                     className="reset"
                     size="small"
                     color="secondary"
                     onClick={handleClear}
                     startIcon={<ClearAll />}>
                     Clear all
-                </Button>
+                </Button> */}
             </div>
         )
     }
@@ -652,7 +662,8 @@ function PurchaseBody({ purchaseType }: any) {
                             size="small"
                             color="secondary"
                             checked={
-                                multiData.purchases.purchaseCashCredit === 'credit'
+                                multiData.purchases.purchaseCashCredit ===
+                                'credit'
                             }
                         />
                     }
@@ -668,7 +679,8 @@ function PurchaseBody({ purchaseType }: any) {
                             size="small"
                             color="secondary"
                             checked={
-                                multiData.purchases.purchaseCashCredit === 'cash'
+                                multiData.purchases.purchaseCashCredit ===
+                                'cash'
                             }
                         />
                     }

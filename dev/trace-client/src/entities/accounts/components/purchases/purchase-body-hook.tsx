@@ -1,6 +1,16 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import {Button, makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    Button,
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { useFlexLayout } from 'react-table'
 
 function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     const [, setRefresh] = useState({})
@@ -227,7 +237,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
 
     function checkIfValidInvoice() {
         const errorAllowed = 0.99
-        const amountErrorAllowed = arbitraryData.invoiceAmount * 0.5/100 // 0.5 % error in total amount is allowed
+        const amountErrorAllowed = (arbitraryData.invoiceAmount * 0.5) / 100 // 0.5 % error in total amount is allowed
         meta.current.amountQtyGstErrors = {}
         const errorObject: any = meta.current.amountQtyGstErrors
         if (
@@ -285,9 +295,9 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         return ret
     }
 
-    function handleClear() {
-        emit('PURCHASE-CLEAR-ALL', null)
-    }
+    // function handleClear() {
+    //     emit('LAUNCH-PAD:LOAD-COMPONENT', null)
+    // }
 
     function handleIsGstInvoice(e: any) {
         ad.isGstInvoice = e.target.checked
@@ -373,21 +383,22 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         const details = extractDetails()
 
         header.data[0].details = details
-        
+
         const ret = await genericUpdateMasterDetails([header])
         if (ret.error) {
             console.log(ret.error)
         } else {
             if (ad.shouldCloseParentOnSave) {
-                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', null)
-            }  else if(ad.isViewBack){
+                emit(
+                    'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG',
+                    null
+                )
+            } else if (ad.isViewBack) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('PURCHASES-HOOK-CHANGE-TAB', 1)
                 emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
                 // emit('PURCHASE-HOOK-RESET-DATA', null)
-            }
-            
-            else {
+            } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
         }
@@ -498,7 +509,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     return {
         allErrorMethods,
         getError,
-        handleClear,
+        // handleClear,
         handleIsGstInvoice,
         handlePurchaseCashCredit,
         handleSubmit,
@@ -541,35 +552,50 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
 
             '& .body-line-2': {
-                marginTop: theme.spacing(1),
+                marginTop: theme.spacing(3),
                 alignItems: 'center',
                 display: 'flex',
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(2),
                 columnGap: theme.spacing(4),
+                justifyContent: 'space-between',
 
-                '& .ledger-subledger': {
-                    marginTop: theme.spacing(0.2),
-                },
-
-                '& .reset': {
-                    marginLeft: 'auto',
-                },
-                '& .invoice': {
+                '& .left': {
                     display: 'flex',
-                    flexDirection: 'column',
-                    rowGap: theme.spacing(0.5),
-                    maxWidth: '9rem',
-                    '& input': {
-                        textAlign: 'end',
+                    flexWrap: 'wrap',
+                    rowGap: theme.spacing(2),
+                    columnGap: theme.spacing(4),
+                    '& .ledger-subledger': {
+                        marginTop: theme.spacing(0.2),
                     },
                 },
-                '& .gst': {
+
+                '& .right': {
+                    // marginLeft: 'auto',
                     display: 'flex',
-                    flexDirection: 'column',
-                    maxWidth: '8rem',
-                    '& input': {
-                        textAlign: 'end',
+                    rowGap: theme.spacing(2),
+                    columnGap: theme.spacing(4),
+                    backgroundColor: theme.palette.grey[100],
+                    // border: '1px solid grey',
+                    // padding: theme.spacing(4),
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    '& .invoice': {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        rowGap: theme.spacing(0.5),
+                        maxWidth: '9rem',
+                        '& input': {
+                            textAlign: 'end',
+                        },
+                    },
+                    '& .gst': {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        maxWidth: '8rem',
+                        '& input': {
+                            textAlign: 'end',
+                        },
                     },
                 },
             },

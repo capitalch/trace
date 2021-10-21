@@ -33,10 +33,10 @@ function usePurchases(drillDownEditAttributes: any) {
             meta.current.value = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
         })
-        const subs2 = filterOn('PURCHASE-CLEAR-ALL').subscribe(() => {
+        // const subs2 = filterOn('PURCHASE-CLEAR-ALL').subscribe(() => {
             // arbitraryData.current = JSON.parse(JSON.stringify(initData))
             // meta.current.isMounted && setRefresh({})
-        })
+        // })
         const subs3 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
             setInBag('purchasesData', multiData.purchases)
         })
@@ -44,7 +44,7 @@ function usePurchases(drillDownEditAttributes: any) {
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
-            subs2.unsubscribe()
+            // subs2.unsubscribe()
             subs3.unsubscribe()
         }
     }, [])
@@ -107,6 +107,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 backgroundColor: 'dodgerBlue',
                 color: theme.palette.common.white,
                 marginTop: theme.spacing(0.5),
+
+                '& .reset':{
+                    backgroundColor: theme.palette.primary.dark,
+                    color: theme.palette.primary.contrastText,
+                    height: theme.spacing(4),
+                    marginTop:'auto',
+                    marginBottom: 'auto'
+                }
                 // color: ({ purchaseType }: any) =>
                 //     purchaseType === 'pur'
                 //         ? theme.palette.common.white

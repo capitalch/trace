@@ -1,8 +1,10 @@
-import { Tab, Tabs, Typography } from '../../../../imports/gui-imports'
+import {Button, Tab, Tabs, Typography } from '../../../../imports/gui-imports'
+import {useSharedElements} from '../common/shared-elements-hook'
 import { usePurchases, useStyles } from './purchases-hook'
 import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
 import { PurchaseBody } from './purchase-body'
+
 // import { PurchasesProvider } from './purchases-provider'
 
 function Purchases({ purchaseType, drillDownEditAttributes }: any) {
@@ -11,6 +13,7 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
         drillDownEditAttributes
     )
     const classes = useStyles({ purchaseType })
+    const {emit} = useSharedElements()
     meta.current.purchaseTypeLabel =
         purchaseType === 'pur' ? 'Purchase' : 'Purchase return'
         
@@ -25,6 +28,7 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
                     value={meta.current.value}>
                     <Tab label="Main" />
                     <Tab label="View" />
+                    <Button color='secondary' className='reset' variant='contained' onClick={()=>emit('LAUNCH-PAD:LOAD-COMPONENT',null)}>Reset</Button>
                 </Tabs>
                 <div className="purchase-body" hidden={meta.current.value !== 0}>
                     <PurchaseBody                        
