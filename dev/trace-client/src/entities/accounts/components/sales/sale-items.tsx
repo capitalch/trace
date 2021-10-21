@@ -16,7 +16,7 @@ import {
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleItems, useStyles } from './sale-items-hook'
-import { MultiDataContext } from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function SaleItems() {
     const [, setRefresh] = useState({})

@@ -12,13 +12,15 @@ import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
 import { ClearAll } from '../../../../imports/icons-import'
-import { PurchasesContext } from './purchases-provider'
+// import { PurchasesContext } from './purchases-provider'
+import { MultiDataContext } from '../common/multi-data-bridge' 
 
 function PurchaseBody({ purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const arbitraryData: any = useContext(PurchasesContext)
+    const multiData: any = useContext(MultiDataContext)
+    
     const {
         allErrorMethods,
         getError,
@@ -28,7 +30,7 @@ function PurchaseBody({ purchaseType }: any) {
         handleSubmit,
         meta,
         queryGstin,
-    } = usePurchaseBody(arbitraryData, purchaseType)
+    } = usePurchaseBody(multiData.purchases, purchaseType)
     const {
         getDateError,
         getGstError,
@@ -107,11 +109,11 @@ function PurchaseBody({ purchaseType }: any) {
                     variant='standard'
                     disabled={true}
                     label="Ref no"
-                    value={arbitraryData.autoRefNo || ''}
+                    value={multiData.purchases.autoRefNo || ''}
                 />
                 {/* date */}
                 <TextField
-                    label={arbitraryData.tranDate ? 'Date' : undefined}
+                    label={multiData.purchases.tranDate ? 'Date' : undefined}
                     variant='standard'
                     error={getDateError()}
                     helperText={
@@ -121,11 +123,11 @@ function PurchaseBody({ purchaseType }: any) {
                     }
                     type="date"
                     onChange={(e: any) => {
-                        arbitraryData.tranDate = e.target.value
+                        multiData.purchases.tranDate = e.target.value
                         setRefresh({})
                     }}
                     onFocus={(e) => e.target.select()}
-                    value={arbitraryData.tranDate || ''}
+                    value={multiData.purchases.tranDate || ''}
                 />
                 {/* invoice no  */}
                 <TextField
@@ -134,10 +136,10 @@ function PurchaseBody({ purchaseType }: any) {
                     className="invoice-no"
                     error={getInvoiceError()}
                     onChange={(e: any) => {
-                        arbitraryData.userRefNo = e.target.value
+                        multiData.purchases.userRefNo = e.target.value
                         setRefresh({})
                     }}
-                    value={arbitraryData.userRefNo || ''}
+                    value={multiData.purchases.userRefNo || ''}
                 />
                 {/* remarks */}
                 <TextField
@@ -145,10 +147,10 @@ function PurchaseBody({ purchaseType }: any) {
                     variant='standard'
                     className="common-remarks"
                     onChange={(e: any) => {
-                        arbitraryData.commonRemarks = e.target.value
+                        multiData.purchases.commonRemarks = e.target.value
                         setRefresh({})
                     }}
-                    value={arbitraryData.commonRemarks || ''}
+                    value={multiData.purchases.commonRemarks || ''}
                 />
 
                 <PurchaseCashCredit />
@@ -158,7 +160,7 @@ function PurchaseBody({ purchaseType }: any) {
                     className="gst-invoice"
                     control={
                         <Checkbox
-                            checked={arbitraryData.isGstInvoice}
+                            checked={multiData.purchases.isGstInvoice}
                             onChange={
                                 handleIsGstInvoice
                                 // (
@@ -193,7 +195,7 @@ function PurchaseBody({ purchaseType }: any) {
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={arbitraryData.ledgerSubledgerPurchase}
+                        rowData={multiData.purchases.ledgerSubledgerPurchase}
                     />
                 </div>
                 <div>
@@ -206,13 +208,13 @@ function PurchaseBody({ purchaseType }: any) {
                         onChange={async () => {
                             getOtherAccountError()
                             const gstin: string = await queryGstin(
-                                arbitraryData.ledgerSubledgerOther?.accId
+                                multiData.purchases.ledgerSubledgerOther?.accId
                             )
-                            arbitraryData.gstin = gstin
+                            multiData.purchases.gstin = gstin
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={arbitraryData.ledgerSubledgerOther}
+                        rowData={multiData.purchases.ledgerSubledgerOther}
                     />
                 </div>
                 {/* gstin */}
@@ -222,11 +224,11 @@ function PurchaseBody({ purchaseType }: any) {
                     label="Gstin no"
                     error={getGstinError()}
                     onChange={(e: any) => {
-                        arbitraryData.gstin = e.target.value
+                        multiData.purchases.gstin = e.target.value
                         setRefresh({})
                         emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                     }}
-                    value={arbitraryData.gstin || ''}
+                    value={multiData.purchases.gstin || ''}
                 />
                 <div className="invoice">
                     {/* Invoice amount */}
@@ -244,12 +246,12 @@ function PurchaseBody({ purchaseType }: any) {
                         onValueChange={(values: any) => {
                             //using onChange event stores formatted value
                             const { floatValue } = values
-                            arbitraryData.invoiceAmount = floatValue
+                            multiData.purchases.invoiceAmount = floatValue
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         thousandSeparator={true}
-                        value={arbitraryData.invoiceAmount || 0.0}
+                        value={multiData.purchases.invoiceAmount || 0.0}
                     />
                     <NumberFormat
                         label="Total qty"
@@ -262,12 +264,12 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.qty = floatValue
+                            multiData.purchases.qty = floatValue
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         thousandSeparator={true}
-                        value={arbitraryData.qty || 0}
+                        value={multiData.purchases.qty || 0}
                     />
                 </div>
 
@@ -292,15 +294,15 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
+                            multiData.purchases.cgst = floatValue
+                            multiData.purchases.sgst = floatValue
+                            multiData.purchases.igst = 0.0
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         thousandSeparator={true}
-                        value={arbitraryData.cgst || 0.0}
+                        value={multiData.purchases.cgst || 0.0}
                     />
                     {/* sgst */}
                     <NumberFormat
@@ -322,15 +324,15 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
+                            multiData.purchases.cgst = floatValue
+                            multiData.purchases.sgst = floatValue
+                            multiData.purchases.igst = 0.0
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         thousandSeparator={true}
-                        value={arbitraryData.sgst || 0.0}
+                        value={multiData.purchases.sgst || 0.0}
                     />
                     {/* igst */}
                     <NumberFormat
@@ -352,15 +354,15 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.cgst = 0.0
-                            arbitraryData.sgst = 0.0
-                            arbitraryData.igst = floatValue
+                            multiData.purchases.cgst = 0.0
+                            multiData.purchases.sgst = 0.0
+                            multiData.purchases.igst = floatValue
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         thousandSeparator={true}
-                        value={arbitraryData.igst || 0.0}
+                        value={multiData.purchases.igst || 0.0}
                     />
                 </div>
                 <Button
@@ -385,11 +387,11 @@ function PurchaseBody({ purchaseType }: any) {
                     variant='standard'
                     disabled={true}
                     label="Ref no"
-                    value={arbitraryData.autoRefNo || ''}
+                    value={multiData.purchases.autoRefNo || ''}
                 />
                 {/* date */}
                 <TextField
-                    label={arbitraryData.tranDate ? 'Date' : undefined}
+                    label={multiData.purchases.tranDate ? 'Date' : undefined}
                     variant='standard'
                     error={getDateError()}
                     helperText={
@@ -399,30 +401,30 @@ function PurchaseBody({ purchaseType }: any) {
                     }
                     type="date"
                     onChange={(e: any) => {
-                        arbitraryData.tranDate = e.target.value
+                        multiData.purchases.tranDate = e.target.value
                         setRefresh({})
                     }}
                     onFocus={(e) => e.target.select()}
-                    value={arbitraryData.tranDate || ''}
+                    value={multiData.purchases.tranDate || ''}
                 />
-                <PurchaseInvoiceNoSelect arbitraryData={arbitraryData} />
+                <PurchaseInvoiceNoSelect arbitraryData={multiData.purchases} />
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
                     variant='standard'
                     className="common-remarks"
                     onChange={(e: any) => {
-                        arbitraryData.commonRemarks = e.target.value
+                        multiData.purchases.commonRemarks = e.target.value
                         setRefresh({})
                     }}
-                    value={arbitraryData.commonRemarks || ''}
+                    value={multiData.purchases.commonRemarks || ''}
                 />
                 {/* gst invoice  */}
                 <FormControlLabel
                     className="gst-invoice"
                     control={
                         <Checkbox
-                            checked={arbitraryData.isGstInvoice}
+                            checked={multiData.purchases.isGstInvoice}
                             onChange={
                                 handleIsGstInvoice
                                 //     (e: any) => {
@@ -456,7 +458,7 @@ function PurchaseBody({ purchaseType }: any) {
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={arbitraryData.ledgerSubledgerPurchase}
+                        rowData={multiData.purchases.ledgerSubledgerPurchase}
                     />
                 </div>
                 <div>
@@ -469,13 +471,13 @@ function PurchaseBody({ purchaseType }: any) {
                         onChange={async () => {
                             getOtherAccountError()
                             const gstin: string = await queryGstin(
-                                arbitraryData.ledgerSubledgerOther?.accId
+                                multiData.purchases.ledgerSubledgerOther?.accId
                             )
-                            arbitraryData.gstin = gstin
+                            multiData.purchases.gstin = gstin
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={arbitraryData.ledgerSubledgerOther}
+                        rowData={multiData.purchases.ledgerSubledgerOther}
                     />
                 </div>
                 {/* gstin */}
@@ -485,11 +487,11 @@ function PurchaseBody({ purchaseType }: any) {
                     label="Gstin no"
                     error={getGstinError()}
                     onChange={(e: any) => {
-                        arbitraryData.gstin = e.target.value
+                        multiData.purchases.gstin = e.target.value
                         setRefresh({})
                         emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                     }}
-                    value={arbitraryData.gstin || ''}
+                    value={multiData.purchases.gstin || ''}
                 />
                 <div className="invoice">
                     {/* Invoice amount */}
@@ -507,12 +509,12 @@ function PurchaseBody({ purchaseType }: any) {
                         onValueChange={(values: any) => {
                             //using onChange event stores formatted value
                             const { floatValue } = values
-                            arbitraryData.invoiceAmount = floatValue
+                            multiData.purchases.invoiceAmount = floatValue
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         thousandSeparator={true}
-                        value={arbitraryData.invoiceAmount || 0.0}
+                        value={multiData.purchases.invoiceAmount || 0.0}
                     />
                     <NumberFormat
                         label="Total qty"
@@ -525,12 +527,12 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.qty = floatValue
+                            multiData.purchases.qty = floatValue
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         thousandSeparator={true}
-                        value={arbitraryData.qty || 0}
+                        value={multiData.purchases.qty || 0}
                     />
                 </div>
 
@@ -555,15 +557,15 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
+                            multiData.purchases.cgst = floatValue
+                            multiData.purchases.sgst = floatValue
+                            multiData.purchases.igst = 0.0
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         thousandSeparator={true}
-                        value={arbitraryData.cgst || 0.0}
+                        value={multiData.purchases.cgst || 0.0}
                     />
                     {/* sgst */}
                     <NumberFormat
@@ -585,15 +587,15 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
+                            multiData.purchases.cgst = floatValue
+                            multiData.purchases.sgst = floatValue
+                            multiData.purchases.igst = 0.0
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         thousandSeparator={true}
-                        value={arbitraryData.sgst || 0.0}
+                        value={multiData.purchases.sgst || 0.0}
                     />
                     {/* igst */}
                     <NumberFormat
@@ -615,15 +617,15 @@ function PurchaseBody({ purchaseType }: any) {
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
-                            arbitraryData.cgst = 0.0
-                            arbitraryData.sgst = 0.0
-                            arbitraryData.igst = floatValue
+                            multiData.purchases.cgst = 0.0
+                            multiData.purchases.sgst = 0.0
+                            multiData.purchases.igst = floatValue
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         thousandSeparator={true}
-                        value={arbitraryData.igst || 0.0}
+                        value={multiData.purchases.igst || 0.0}
                     />
                 </div>
                 <Button
@@ -650,7 +652,7 @@ function PurchaseBody({ purchaseType }: any) {
                             size="small"
                             color="secondary"
                             checked={
-                                arbitraryData.purchaseCashCredit === 'credit'
+                                multiData.purchases.purchaseCashCredit === 'credit'
                             }
                         />
                     }
@@ -666,7 +668,7 @@ function PurchaseBody({ purchaseType }: any) {
                             size="small"
                             color="secondary"
                             checked={
-                                arbitraryData.purchaseCashCredit === 'cash'
+                                multiData.purchases.purchaseCashCredit === 'cash'
                             }
                         />
                     }

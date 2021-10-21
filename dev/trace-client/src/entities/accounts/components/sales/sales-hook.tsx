@@ -12,7 +12,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import {MultiDataContext} from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
@@ -38,7 +38,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setRefresh({})
         })
 
-        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(()=>{
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
             setInBag('salesData', multiData.sales)
         })
 
@@ -61,12 +61,12 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         },
     })
 
-    const salesData  = getFromBag('salesData')
-    if(salesData){
+    const salesData = getFromBag('salesData')
+    if (salesData) {
         multiData.sales = salesData
         setInBag('salesData', undefined)
     }
-    
+
     // const arbitraryData: any = useRef({
     //     accounts: {
     //         cashBankAccountsWithLedgers: [],
@@ -117,7 +117,6 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     //     tranDate: moment().format(isoDateFormat),
     //     isViewBack: false,
     // })
-   
 
     function handleChangeTab(e: any, newValue: number) {
         meta.current.tabValue = newValue
@@ -169,7 +168,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-            multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
+        multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
             debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
@@ -183,7 +182,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-            multiData.sales.accounts.debtorCreditorAccountsWithSubledgers =
+        multiData.sales.accounts.debtorCreditorAccountsWithSubledgers =
             debtorCreditorAccountsWithSubledgers
         // auto subledger accounts
         const autoSubledgerAccounts = allAccounts.filter(

@@ -8,7 +8,7 @@ import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
 import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
-import { MultiDataContext } from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function SaleFooter() {
     const [, setRefresh] = useState({})

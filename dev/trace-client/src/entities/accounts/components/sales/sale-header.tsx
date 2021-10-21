@@ -12,7 +12,7 @@ import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
 import { ShipTo } from './ship-to'
 import { SaleBillNoSelect } from './sale-bill-no-select'
-import { MultiDataContext } from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function SaleHeader() {
     const classes = useStyles()

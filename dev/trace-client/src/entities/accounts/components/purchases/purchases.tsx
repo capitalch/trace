@@ -3,11 +3,11 @@ import { usePurchases, useStyles } from './purchases-hook'
 import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
 import { PurchaseBody } from './purchase-body'
-import { PurchasesProvider } from './purchases-provider'
+// import { PurchasesProvider } from './purchases-provider'
 
 function Purchases({ purchaseType, drillDownEditAttributes }: any) {
 
-    const { arbitraryData, handleOnTabChange, meta } = usePurchases(
+    const { multiData, handleOnTabChange, meta } = usePurchases(
         drillDownEditAttributes
     )
     const classes = useStyles({ purchaseType })
@@ -16,7 +16,7 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
         
     return (
         <div className={classes.content}>
-            <PurchasesProvider value={arbitraryData.current}>
+            {/* <PurchasesProvider value={multiData.purchases}> */}
                 <Typography color='secondary' variant='subtitle1' component='div'>{(purchaseType==='pur') ? 'Purchase': 'Purchase return'}</Typography>
                 <Tabs
                     className="tabs"
@@ -30,7 +30,7 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
                     <PurchaseBody                        
                         purchaseType={purchaseType}
                     />
-                    <PurchaseItems arbitraryData={arbitraryData.current} />
+                    <PurchaseItems arbitraryData={multiData.purchases} />
                 </div>
                 <div hidden={meta.current.value !== 1}>
                     <PurchaseView
@@ -38,7 +38,7 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
                         drillDownEditAttributes={drillDownEditAttributes}
                     />
                 </div>
-            </PurchasesProvider>
+            {/* </PurchasesProvider> */}
         </div>
     )
 }

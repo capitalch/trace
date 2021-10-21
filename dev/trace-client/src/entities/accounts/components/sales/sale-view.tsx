@@ -2,7 +2,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { useContext } from '../../../../imports/regular-imports'
 import { useSaleView, useStyles } from './sale-view-hook'
 import { Box } from '../../../../imports/gui-imports'
-import { MultiDataContext } from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function SaleView({ drillDownEditAttributes }: any) {
     const classes = useStyles()

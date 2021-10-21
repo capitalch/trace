@@ -43,10 +43,10 @@ create installer from innosetup
 4. implement same for purchase and debit / credit note.
 Steps
 1) emit DRAWYER-STATUS-CHANGED in app-main
-2) multi-data-context in common folder
-3) arbitrary-data in common folder, which provides arb. data for sales, purchase,db and cr note
+2) multi-data-bridge in common folder
+3) 
 4) launch-pad set provider and salesData
-5) filterOn DRAWYER-STATUS-CHANGED in sales-hook, setInBag. set multiData.sales is salesData not null
+5) filterOn DRAWYER-STATUS-CHANGED in sales-hook, setInBag. set multiData.sales if salesData not null
 6) in sales remove arbitraryData.current and work accordingly
 
 ## Notes

@@ -5,16 +5,15 @@ import {
     Typography,
     createStyles,
 } from '../../imports/gui-imports'
-import {} from '@material-ui/core'
 import { usingIbuki, manageEntitiesState } from '../../imports/trace-imports'
 import { getArtifacts } from '../../react-form/common/react-form-hook'
-import {} from '../../global-utils/esm'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 import { utils } from './utils'
 import {
     MultiDataContext,
+    getPurchasesArbitraryData,
     getSalesArbitraryData,
-} from '../accounts/components/common/multi-data-util'
+} from './components/common/multi-data-bridge'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -55,14 +54,17 @@ function LaunchPad() {
     }, [])
 
     const currCompArgs: any = getCurrentComponent()?.args
-    const salesData = currCompArgs ? getSalesArbitraryData(currCompArgs.saleType) : {}
-
+    const salesData = currCompArgs
+        ? getSalesArbitraryData(currCompArgs.saleType)
+        : {}
+    const purchasesData = getPurchasesArbitraryData()
     return (
         <>
             <Typography variant="h6" className={classes.title}>
                 {meta.current.mainHeading}
             </Typography>
-            <MultiDataContext.Provider value={{ sales: salesData }}>
+            <MultiDataContext.Provider
+                value={{ sales: salesData, purchases: purchasesData }}>
                 <Comp></Comp>
             </MultiDataContext.Provider>
             <AccountsLedgerDialog></AccountsLedgerDialog>
