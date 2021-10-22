@@ -57,6 +57,13 @@ function getSalesArbitraryData(saleType: string) {
 
 function getPurchasesArbitraryData(){
     return {
+        accounts: {
+            allAccounts:[],
+            debtorCreditorLedgerAccounts:[],
+            purchaseLedgerAccounts:[],
+            cashBankLedgerAccounts:[],
+            ledgerAccounts:[],
+        },
         autoRefNo: undefined,
         cgst: 0.0,
         commonRemarks: undefined,

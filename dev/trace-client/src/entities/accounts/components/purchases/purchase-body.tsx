@@ -49,7 +49,7 @@ function PurchaseBody({ purchaseType }: any) {
         getQtyError,
     } = allErrorMethods()
 
-    const { accountsMessages, emit, filterOn, TraceDialog } =
+    const { accountsMessages, emit, getMappedAccounts, filterOn, TraceDialog } =
         useSharedElements()
 
     return (
@@ -112,7 +112,7 @@ function PurchaseBody({ purchaseType }: any) {
                     variant="standard"
                     disabled={true}
                     label="Ref no"
-                    value={multiData.purchases.autoRefNo || ''}
+                    value={multiData.purchases?.autoRefNo || ''}
                 />
                 {/* date */}
                 <TextField
@@ -191,9 +191,16 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Purchase a/c</Typography>
                         {/* purchase */}
                         <LedgerSubledger
-                            allAccounts={meta.current.allAccounts}
+                            // allAccounts={meta.current.allAccounts}
+                            allAccounts={
+                                multiData.purchases.accounts.allAccounts
+                            }
                             className="ledger-subledger"
-                            ledgerAccounts={meta.current.purchaseLedgerAccounts}
+                            // ledgerAccounts={meta.current.purchaseLedgerAccounts}
+                            ledgerAccounts={getMappedAccounts(
+                                multiData.purchases.accounts
+                                    .purchaseLedgerAccounts
+                            )}
                             onChange={() => {
                                 getPurchaseAccountError()
                                 setRefresh({})
@@ -208,9 +215,15 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Credit a/c</Typography>
                         {/* credit account */}
                         <LedgerSubledger
-                            allAccounts={meta.current.allAccounts}
+                            // allAccounts={meta.current.allAccounts}
+                            allAccounts={
+                                multiData.purchases.accounts.allAccounts
+                            }
                             className="ledger-subledger"
-                            ledgerAccounts={meta.current.ledgerAccounts}
+                            ledgerAccounts={getMappedAccounts(
+                                multiData.purchases.accounts
+                                    .ledgerAccounts
+                            )}
                             onChange={async () => {
                                 getOtherAccountError()
                                 const gstin: string = await queryGstin(
@@ -238,7 +251,7 @@ function PurchaseBody({ purchaseType }: any) {
                         value={multiData.purchases.gstin || ''}
                     />
                 </div>
-                <div className = 'right'>
+                <div className="right">
                     <div className="invoice">
                         {/* Invoice amount */}
                         <NumberFormat
@@ -375,14 +388,6 @@ function PurchaseBody({ purchaseType }: any) {
                         />
                     </div>
                 </div>
-                {/* <Button
-                    className="reset"
-                    size="small"
-                    color="secondary"
-                    onClick={handleClear}
-                    startIcon={<ClearAll />}>
-                    Clear all
-                </Button> */}
             </div>
         )
     }

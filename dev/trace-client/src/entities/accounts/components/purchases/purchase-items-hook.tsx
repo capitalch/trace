@@ -574,13 +574,11 @@ function usePurchaseItems(arbitraryData: any) {
                                 }
                             }}
                             onBlur={async (e: any) => {
-                                // e.preventDefault()
                                 if (meta.current.isDataChanged) {
                                     meta.current.isDataChanged = false
                                     rowData.isGstInvoice =
                                         arbitraryData.isGstInvoice
                                     searchProductOnUpcCode(rowData)
-                                    // return(true)
                                 }
                             }}
                         />
@@ -829,13 +827,11 @@ function usePurchaseItems(arbitraryData: any) {
                                 meta.current.isDataChanged = false
                             }}
                             onBlur={(e: any) => {
-                                // if (meta.current.isDataChanged) {
                                 rowData.price =
                                     (+extractAmount(e.target.value)) / (1 + rowData.gstRate / 100)
                                 computeRow(rowData)
                                 meta.current.isMounted && setRefresh({})
                                 meta.current.isDataChanged = false
-                                // }
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {

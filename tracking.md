@@ -66,6 +66,7 @@ c) In all Typography comment out disableTypography
 # Working on
 0.1 Purchases perhaps onBlur is implemented, so if you click something and expect the results, on second click something happens
 0.2 Purchases when ledger-subledger clcked, after that when drawyer clicked, ui breaks
+0.3 drilldown from report not working with sales, purchases etc
 1. Retain values of purchases and sales when screen expanded. At present a refresh of data is done and original inserted values are lost
 1.1 Bank recon rework, drill down etc
 1.2 All transactions, default is reverse, so let the checkbox be checked
