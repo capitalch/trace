@@ -64,6 +64,7 @@ function BillTo({ arbitraryData }: any) {
                         }}
                         onChange={(e) => {
                             meta.current.searchFilter = e.target.value
+                            arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
                         }}
                         onKeyDown={(e: any) => {

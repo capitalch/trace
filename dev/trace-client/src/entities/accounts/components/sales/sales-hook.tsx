@@ -123,6 +123,8 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         if (newValue === 3) {
             // view
             multiData.sales.saleViewHookFetchData()
+        } else {
+            multiData.sales.salesCrownRefresh()
         }
         meta.current.isMounted && setRefresh({})
     }
@@ -206,6 +208,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 backgroundColor: 'dodgerBlue',
                 color: theme.palette.common.white,
                 marginTop: theme.spacing(0.5),
+                '& .reset':{
+                    backgroundColor: theme.palette.primary.dark,
+                    color: theme.palette.primary.contrastText,
+                    height: theme.spacing(4),
+                    marginTop:'auto',
+                    marginBottom: 'auto'
+                }
             },
         },
     })

@@ -116,7 +116,6 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         const f = footerError()
         const d = debitCreditError()
         const ret: boolean = h || i || f || d
-        // console.log(errorObject)
         return ret
     }
 

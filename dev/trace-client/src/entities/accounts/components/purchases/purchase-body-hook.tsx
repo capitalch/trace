@@ -239,10 +239,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         return ret
     }
 
-    // function handleClear() {
-    //     emit('LAUNCH-PAD:LOAD-COMPONENT', null)
-    // }
-
     function handleIsGstInvoice(e: any) {
         ad.isGstInvoice = e.target.checked
         for (let item of ad.lineItems) {
@@ -456,7 +452,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     return {
         allErrorMethods,
         getError,
-        // handleClear,
         handleIsGstInvoice,
         handlePurchaseCashCredit,
         handleSubmit,

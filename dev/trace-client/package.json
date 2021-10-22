@@ -23,7 +23,7 @@
     "@types/jest": "^27.0.2",
     "@types/lodash": "^4.14.176",
     "@types/moment": "^2.13.0",
-    "@types/node": "^16.11.1",
+    "@types/node": "^16.11.3",
     "@types/object-hash": "^2.2.1",
     "@types/react": "^17.0.31",
     "@types/react-dom": "^17.0.10",
@@ -31,7 +31,7 @@
     "@types/react-router-dom": "^5.3.1",
     "@types/react-select": "^5.0.0",
     "@types/react-table": "^7.7.7",
-    "@types/react-widgets": "^4.4.6",
+    "@types/react-widgets": "^4.4.7",
     "@types/styled-components": "^5.1.15",
     "@types/url-join": "^4.0.1",
     "apollo-boost": "^0.4.9",
@@ -89,7 +89,7 @@
     "css-loader": "^6.4.0",
     "eslint-plugin-react": "^7.26.1",
     "gzip": "^0.1.0",
-    "sass": "^1.43.2",
-    "style-loader": "^3.3.0"
+    "sass": "^1.43.3",
+    "style-loader": "^3.3.1"
   }
 }

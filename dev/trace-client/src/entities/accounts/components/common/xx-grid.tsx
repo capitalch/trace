@@ -109,7 +109,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleReverseOrder,
     } = useXXGrid(gridOptions)
-    const { emit, toDecimalFormat } = useSharedElements()
+    const { debounceEmit, emit, toDecimalFormat } = useSharedElements()
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     const classes = useStyles(meta)
     addSpecialColumns(specialColumns, gridActionMessages)
@@ -137,7 +137,11 @@ function XXGrid(gridOptions: XXGridOptions) {
             componentsProps={{
                 toolbar: {
                     value: meta.current.searchText,
-                    onChange: (event: any) => requestSearch(event.target.value),
+                    onChange: (event: any) => {
+                        meta.current.searchText = event.target.value
+                        meta.current.isMounted && setRefresh({})
+                        debounceEmit('XX-GRID-SEARCH-DEBOUNCE', event.target.value)
+                    }, // requestSearch(event.target.value),
                     clearSearch: () => requestSearch(''),
                 },
                 footer: {
@@ -149,8 +153,8 @@ function XXGrid(gridOptions: XXGridOptions) {
             onSelectionModelChange={onSelectModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
-            // onPageChange= {()=>{}}
-            // onRowsPerPageChange={()=>{}}
+        // onPageChange= {()=>{}}
+        // onRowsPerPageChange={()=>{}}
         />
         // </div>
     )

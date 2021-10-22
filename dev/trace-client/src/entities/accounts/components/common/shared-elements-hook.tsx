@@ -10,6 +10,7 @@ import {
     manageFormsState,
     queries,
     ReactForm,
+    useIbuki,
     usingIbuki,
     useTraceGlobal,
     useTraceMaterialComponents,
@@ -57,7 +58,7 @@ function useSharedElements() {
         execGenericView,
         toDecimalFormat,
     } = utilMethods()
-    const { hotEmit, hotFilterOn, emit, filterOn } = usingIbuki()
+    const { hotEmit, hotFilterOn, emit, filterOn, debounceEmit, debounceFilterOn } = useIbuki()
     const {
         TraceDialog,
         traceGlobalSearch,
@@ -92,6 +93,8 @@ function useSharedElements() {
         accountsMessages,
         clearServerError,
         confirm,
+        debounceEmit,
+        debounceFilterOn,
         doFormRefresh,
         doValidateForm,
         emit,

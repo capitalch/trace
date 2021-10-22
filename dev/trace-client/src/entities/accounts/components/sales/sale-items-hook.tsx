@@ -13,7 +13,7 @@ import {
     createStyles,
     TextareaAutosize,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
+import { } from '../../../../imports/icons-import'
 import { useProductUtils } from '../common/product-utils-hook'
 import { useSharedElements } from '../common/shared-elements-hook'
 
@@ -21,14 +21,24 @@ function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const lineItems = arbitraryData.lineItems
 
-    const { confirm, emit, filterOn, messages } = useSharedElements()
+    const { confirm, emit, filterOn, messages, debounceFilterOn } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
-        arbitraryData.saleItemsRefresh = ()=>{setRefresh({})}        
+        arbitraryData.saleItemsRefresh = () => { setRefresh({}) }
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE').subscribe((d: any) => {
+            arbitraryData.salesCrownRefresh()
+            if (d.data.source === 'upcCode') {
+                searchProductOnUpcCode(d.data.value)
+            } else if (d.data.source === 'productCode') {
+                searchProductOnProductCode(d.data.value)
+            }
+
+        })
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -42,7 +52,7 @@ function useSaleItems(arbitraryData: any) {
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => {},
+            actions: () => { },
         },
     })
 

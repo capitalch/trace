@@ -1,5 +1,6 @@
 import { filter } from 'rxjs/operators';
-import { Subject, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, debounce } from 'rxjs';
+import { debounceTime } from 'rxjs/operators'
 // import axios from 'axios';
 
 const subject = new Subject()
@@ -19,6 +20,20 @@ function useIbuki() {
     const hotFilterOn = (id: string) => {
         return behSubject.pipe(filter((d: any) => (d.id === id)));
     }
-    return { emit, filterOn, hotEmit, hotFilterOn }
+
+    function debounceEmit(id: string, options: any) {
+        subject.next({ id: id, data: options })
+    }
+
+    function debounceFilterOn(id: string, debouncePeriod:number = 1000) {
+        return (subject.pipe(filter((d: any) => (d.id === id))).pipe(debounceTime(debouncePeriod)))
+    }
+
+    // function deb(){
+    //     subject.pipe(debounceTime(1000)).subscribe(()=>{
+
+    //     })
+    // }
+    return { emit, filterOn, hotEmit, hotFilterOn, debounceEmit, debounceFilterOn }
 }
-export { useIbuki }
+export { useIbuki, Subject, debounceTime }

@@ -99,6 +99,7 @@ function SaleFooter() {
                             const { floatValue } = values
                             rowData.amount = floatValue || 0.0
                             computeSummary()
+                            arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
                         }}
                         thousandSeparator={true}
@@ -117,6 +118,7 @@ function SaleFooter() {
                         variant="standard"
                         onChange={(e) => {
                             rowData.instrNo = e.target.value
+                            arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
                         }}
                         value={rowData.instrNo || ''}

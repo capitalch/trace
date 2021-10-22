@@ -2,7 +2,6 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 import { Button, Typography } from '../../../../imports/gui-imports'
 import { Check, Error } from '../../../../imports/icons-import'
-// import { SalesContext } from './sales-provider'
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 

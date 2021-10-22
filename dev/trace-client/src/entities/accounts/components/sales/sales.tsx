@@ -1,5 +1,6 @@
-import { Tabs, Tab } from '../../../../imports/gui-imports'
+import {Button, Tabs, Tab } from '../../../../imports/gui-imports'
 import { useSales, useStyles } from './sales-hook'
+import {useSharedElements} from '../common/shared-elements-hook'
 import { SaleCrown } from './sale-crown'
 import { SaleHeader } from './sale-header'
 import { SaleItems } from './sale-items'
@@ -8,6 +9,7 @@ import { SaleView } from './sale-view'
 
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
+    const {emit} = useSharedElements()
     const { multiData, handleChangeTab, meta } = useSales(
         saleType,
         drillDownEditAttributes
@@ -28,6 +30,7 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                     <Tab label="Items" />
                     <Tab label="Footer" />
                     <Tab label="View" />
+                    <Button color='secondary' className='reset' variant='contained' onClick={()=>emit('LAUNCH-PAD:LOAD-COMPONENT',null)}>Reset</Button>
                 </Tabs>
                 <div hidden={meta.current.tabValue !== 0}>
                     <SaleHeader />

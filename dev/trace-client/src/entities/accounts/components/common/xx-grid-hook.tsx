@@ -31,6 +31,8 @@ function useXXGrid(gridOptions: any) {
 
     const {
         emit,
+        debounceEmit,
+        debounceFilterOn,
         filterOn,
         getCurrentEntity,
         getFromBag,
@@ -42,7 +44,6 @@ function useXXGrid(gridOptions: any) {
         meta.current.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
         const fetchIbukiMessage = gridOptions?.gridActionMessages?.fetchIbukiMessage || 'XX-GRID-FETCH-DATA'
-        // const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe((d: any) => {
         const subs1 = filterOn(fetchIbukiMessage).subscribe((d: any) => {
             if (d.data) {
                 sqlQueryArgs = d.data
@@ -53,10 +54,15 @@ function useXXGrid(gridOptions: any) {
             meta.current.filteredRows = []
             setRefresh({})
         })
+        const subs3 = debounceFilterOn('XX-GRID-SEARCH-DEBOUNCE').subscribe((d: any) => {
+            requestSearch(d.data)
+        })
+        
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
         }
     }, [])
 
@@ -224,14 +230,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -255,8 +261,8 @@ function useXXGrid(gridOptions: any) {
         meta.current.searchText = searchValue
         // const searchRegex = new RegExp(searchValue, 'i')
         meta.current.filteredRows = meta.current.allRows.filter((row: any) => {
-            return Object.keys(row).some((field) => {                
-                const temp:string = row[field] ? row[field].toString() : ''
+            return Object.keys(row).some((field) => {
+                const temp: string = row[field] ? row[field].toString() : ''
                 return temp.toLowerCase().includes(searchValue.toLowerCase())
                 // return searchRegex.test(temp)
             })
@@ -346,7 +352,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 columnGap: '1.5rem',
                 borderBottom: '1px solid lightgrey',
-                justifyContent:'space-between',
+                justifyContent: 'space-between',
 
                 '& .toolbar-left-items': {
                     display: 'flex',
@@ -368,13 +374,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     },
                 },
 
-                
+
                 '& .global-search': {
                     marginLeft: 'auto',
                     marginRight: '1rem',
                 },
-                
-                '& .add-button':{
+
+                '& .add-button': {
                     // marginLeft: 'auto',
                     marginRight: theme.spacing(1),
                 }

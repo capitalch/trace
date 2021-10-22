@@ -83,7 +83,6 @@ function SaleHeader() {
                             arbitraryData.tranDate = e.target.value
                             setRefresh({})
                             arbitraryData.salesCrownRefresh()
-                            // emit('SALES-CROWN-REFRESH', null)
                         }}
                         onFocus={(e) => e.target.select()}
                         value={arbitraryData.tranDate || ''}
