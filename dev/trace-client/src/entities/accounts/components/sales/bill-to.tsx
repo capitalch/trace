@@ -24,8 +24,8 @@ function BillTo({ arbitraryData }: any) {
         onSearchBoxFilter,
     } = useBillTo(arbitraryData)
 
-    const { emit, TraceDialog } = useSharedElements()
-
+    const { TraceDialog } = useSharedElements()
+    // console.log('saleType:', arbitraryData.saleType)
     const { billToError, gstinError } = allErrors()
     return (
         <Paper elevation={2} className={classes.content}>
@@ -157,7 +157,7 @@ function BillTo({ arbitraryData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled={arbitraryData.isAssignmentReturn}
+                    disabled={(arbitraryData.saleType === 'ret')}
                     onClick={handleClear}>
                     <CloseSharp />
                 </IconButton>

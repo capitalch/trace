@@ -137,6 +137,9 @@ c) In all Typography comment out disableTypography
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
+# 21-10-2021 - 22-10-2021
+2. Bug fixing for sales and purchases
+
 # 19-10-2021 - 20-10-2021
 1. Sales data persistent
 

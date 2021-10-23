@@ -18,6 +18,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
     const multiData: any = useContext(MultiDataContext)
+    multiData.sales.saleType = saleType
     const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
 
     useEffect(() => {
@@ -66,57 +67,6 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         multiData.sales = salesData
         setInBag('salesData', undefined)
     }
-
-    // const arbitraryData: any = useRef({
-    //     accounts: {
-    //         cashBankAccountsWithLedgers: [],
-    //         cashBankAccountsWithSubledgers: [],
-    //         debtorCreditorAccountsWithLedgers: [],
-    //         debtorCreditorAccountsWithSubledgers: [],
-    //         autoSubledgerAccounts: [],
-    //     },
-
-    //     allAccounts: [],
-    //     autoRefNo: undefined,
-    //     backCalulateAmount: 0.0,
-    //     billTo: {
-    //         id: undefined,
-    //     },
-
-    //     commonRemarks: undefined,
-    //     deletedSalePurchaseIds: [],
-    //     footer: {
-    //         items: [], // for TranD table
-    //         deletedIds: [],
-    //         amount: 0,
-    //     },
-    //     id: undefined,
-    //     isIgst: false,
-    //     isAssignmentReturn: saleType === 'ret',
-    //     isSales: saleType === 'sal',
-    //     ledgerAccounts: [],
-    //     lineItems: [], // for product details of SalePurchaseDetails table
-    //     rowData: {},
-
-    //     saleErrorMethods: {
-    //         headError: () => false,
-    //         itemsError: () => false,
-    //         footerError: () => false,
-    //         errorMethods: {
-    //             getSlNoError: () => false,
-    //         },
-    //     },
-
-    //     saleErrorObject: {},
-
-    //     saleVariety: 'r',
-    //     shipTo: {},
-    //     summary: {},
-    //     totalCredits: 0.0,
-    //     totalDebits: 0.0,
-    //     tranDate: moment().format(isoDateFormat),
-    //     isViewBack: false,
-    // })
 
     function handleChangeTab(e: any, newValue: number) {
         meta.current.tabValue = newValue
@@ -221,3 +171,55 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
+
+
+    // const arbitraryData: any = useRef({
+    //     accounts: {
+    //         cashBankAccountsWithLedgers: [],
+    //         cashBankAccountsWithSubledgers: [],
+    //         debtorCreditorAccountsWithLedgers: [],
+    //         debtorCreditorAccountsWithSubledgers: [],
+    //         autoSubledgerAccounts: [],
+    //     },
+
+    //     allAccounts: [],
+    //     autoRefNo: undefined,
+    //     backCalulateAmount: 0.0,
+    //     billTo: {
+    //         id: undefined,
+    //     },
+
+    //     commonRemarks: undefined,
+    //     deletedSalePurchaseIds: [],
+    //     footer: {
+    //         items: [], // for TranD table
+    //         deletedIds: [],
+    //         amount: 0,
+    //     },
+    //     id: undefined,
+    //     isIgst: false,
+    //     isAssignmentReturn: saleType === 'ret',
+    //     isSales: saleType === 'sal',
+    //     ledgerAccounts: [],
+    //     lineItems: [], // for product details of SalePurchaseDetails table
+    //     rowData: {},
+
+    //     saleErrorMethods: {
+    //         headError: () => false,
+    //         itemsError: () => false,
+    //         footerError: () => false,
+    //         errorMethods: {
+    //             getSlNoError: () => false,
+    //         },
+    //     },
+
+    //     saleErrorObject: {},
+
+    //     saleVariety: 'r',
+    //     shipTo: {},
+    //     summary: {},
+    //     totalCredits: 0.0,
+    //     totalDebits: 0.0,
+    //     tranDate: moment().format(isoDateFormat),
+    //     isViewBack: false,
+    // })

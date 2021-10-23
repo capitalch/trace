@@ -33,7 +33,7 @@ function utils() {
 
     function getAccountClass(accId: number) {
         let ret = undefined
-        const allAccounts: any[] = accStore['allAccounts']
+        const allAccounts: any[] = getFromBag('allAccounts')
         const account = allAccounts.find((x) => x.id === accId)
         account && (ret = account.accClass)
         return ret

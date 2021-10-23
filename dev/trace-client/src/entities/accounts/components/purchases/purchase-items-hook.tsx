@@ -979,7 +979,7 @@ function usePurchaseItems(arbitraryData: any) {
                             {toDecimalFormat(rowData.amount)}
                         </div>
                         <GstDetails rowData={rowData} />
-                        <Button style = {{padding: '.6rem', marginLeft:'.2rem'}} color='primary' variant='contained' size='small' onClick={() => {
+                        <Button style = {{padding: '.6rem', marginLeft:'.2rem'}} color='primary' variant='text' size='small' onClick={() => {
                             computeRow(rowData)
                             computeSummary()
                             meta.current.isMounted && setRefresh({})

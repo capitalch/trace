@@ -21,13 +21,17 @@ import {
     manageEntitiesState,
     useIbuki,
 } from '../../../../imports/trace-imports'
-import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'
 import { Sales } from '../sales/sales'
 import { Purchases } from '../purchases/purchases'
 import { DebitNotes } from '../debit-credit-notes/debit-notes'
 import { CreditNotes } from '../debit-credit-notes/credit-notes'
 import { truncateSync } from 'fs'
+import {
+    MultiDataContext,
+    getPurchasesArbitraryData,
+    getSalesArbitraryData,
+} from '../../components/common/multi-data-bridge'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
@@ -183,7 +187,6 @@ function AccountsLedgerDialog() {
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <DrillDownEditComponent />
-                    {/* <Voucher loadComponent='journal' /> */}
                 </DialogContent>
                 <DialogActions></DialogActions>
             </Dialog>
@@ -258,7 +261,12 @@ function AccountsLedgerDialog() {
             // credit notes
             ret = <CreditNotes drillDownEditAttributes={attrs} />
         }
-        return ret
+        return (
+            <MultiDataContext.Provider
+                value={{ purchases: getPurchasesArbitraryData() }}>
+                {ret}
+            </MultiDataContext.Provider>
+        )
     }
 
     function getArtifacts() {
