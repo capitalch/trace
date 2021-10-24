@@ -54,8 +54,7 @@ function usePurchaseItems(arbitraryData: any) {
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs3 = debounceFilterOn('DEBOUNCE-ON-CHANGE').subscribe((d: any) => {
-            // arbitraryData.salesCrownRefresh()
+        const subs3 = debounceFilterOn('DEBOUNCE-ON-CHANGE',1200).subscribe((d: any) => {
             if (d.data.source === 'upcCode') {
                 searchProductOnUpcCode(d.data.value)
             } else if (d.data.source === 'productCode') {
@@ -136,6 +135,7 @@ function usePurchaseItems(arbitraryData: any) {
         const obj = getEmptyRowData()
         arbitraryData.lineItems.push(obj)
         arbitraryData.summary.count = arbitraryData.lineItems.length
+        computeSummary()
         emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
         meta.current.isMounted && setRefresh({})
     }
@@ -519,7 +519,7 @@ function usePurchaseItems(arbitraryData: any) {
             // Search
             <PrimeColumn
                 key={incr()}
-                style={{ width: '12rem' }}
+                style={{ width: '10rem' }}
                 header={
                     <div className="search-header">
                         <Typography
@@ -622,9 +622,8 @@ function usePurchaseItems(arbitraryData: any) {
                             error={allErrorMethods().getProductCodeError(
                                 rowData
                             )}
-                            onValueChange={(values: any) => {
-                                const { value } = values
-                                rowData.productCode = value
+                            onChange={(e:any)=>{
+                                rowData.productCode = e.target.value
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData.productCode) {
                                     debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
@@ -632,9 +631,21 @@ function usePurchaseItems(arbitraryData: any) {
                                     clearRow(rowData)
                                 }
                                 allErrorMethods().setProductCodeError(rowData)
-                                // meta.current.isDataChanged = true
-
                             }}
+                            // onValueChange={(values: any) => {
+                            //     const { value } = values
+                                
+                            //     rowData.productCode = value
+                            //     meta.current.isMounted && setRefresh({})
+                            //     if (rowData.productCode) {
+                            //         debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
+                            //     } else {
+                            //         clearRow(rowData)
+                            //     }
+                            //     allErrorMethods().setProductCodeError(rowData)
+                            //     // meta.current.isDataChanged = true
+
+                            // }}
                             onFocus={(e) => {
                                 // meta.current.isDataChanged = false
                                 e.target.select()
@@ -886,7 +897,7 @@ function usePurchaseItems(arbitraryData: any) {
                 key={incr()}
                 field="discount"
                 header="Discount"
-                style={{ width: '8rem', textAlign: 'end' }}
+                style={{ width: '7rem', textAlign: 'end' }}
                 body={(rowData: any) => {
                     return (
                         <NumberFormat
@@ -1056,7 +1067,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             marginTop: theme.spacing(4),
-
             position: 'relative',
             top: (meta: any) => (meta.current.zoomIn ? '0rem' : '-13rem'),
 
@@ -1066,7 +1076,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 justifyContent: 'space-between',
             },
             '& .items': {
-                minWidth: '100rem',
+                // minWidth: '100rem',
                 '& .delete-icon': {
                     fontSize: '1.5rem',
                     color: theme.palette.secondary.main,

@@ -2,7 +2,7 @@ import { createContext, moment } from '../../../../imports/regular-imports'
 const MultiDataContext = createContext({})
 
 const isoDateFormat = 'YYYY-MM-DD'
-function getSalesArbitraryData(saleType: string) {
+function getSalesArbitraryData() {
     return {
         accounts: {
             cashBankAccountsWithLedgers: [],
@@ -28,8 +28,6 @@ function getSalesArbitraryData(saleType: string) {
         },
         id: undefined,
         isIgst: false,
-        isAssignmentReturn: saleType === 'ret',
-        isSales: saleType === 'sal',
         ledgerAccounts: [],
         lineItems: [], // for product details of SalePurchaseDetails table
         rowData: {},
@@ -48,6 +46,7 @@ function getSalesArbitraryData(saleType: string) {
         saleVariety: 'r',
         shipTo: {},
         summary: {},
+        tabValue: 0,
         totalCredits: 0.0,
         totalDebits: 0.0,
         tranDate: moment().format(isoDateFormat),
@@ -55,19 +54,20 @@ function getSalesArbitraryData(saleType: string) {
     }
 }
 
-function getPurchasesArbitraryData(){
+function getPurchasesArbitraryData() {
     return {
         accounts: {
-            allAccounts:[],
-            debtorCreditorLedgerAccounts:[],
-            purchaseLedgerAccounts:[],
-            cashBankLedgerAccounts:[],
-            ledgerAccounts:[],
+            allAccounts: [],
+            debtorCreditorLedgerAccounts: [],
+            purchaseLedgerAccounts: [],
+            cashBankLedgerAccounts: [],
+            ledgerAccounts: [],
         },
         autoRefNo: undefined,
         cgst: 0.0,
         commonRemarks: undefined,
         deletedSalePurchaseIds: [],
+        errorObject: {},
         gstin: undefined,
         id: undefined,
         igst: 0.0,
@@ -76,15 +76,47 @@ function getPurchasesArbitraryData(){
         ledgerSubledgerPurchase: { isLedgerSubledgerError: true },
         ledgerSubledgerOther: { isLedgerSubledgerError: true },
         invoiceAmount: 0.0,
+        isViewBack: false,
         lineItems: [],
         purchaseCashCredit: 'credit',
         qty: 0,
         sgst: 0.0,
         summary: {},
+        tabValue: 0,
         tranDate: undefined,
         userRefNo: '',
-        isViewBack: false,
     }
 }
 
-export { MultiDataContext, getSalesArbitraryData, getPurchasesArbitraryData }
+function getDebitCreditNotesArbitraryData() {
+    return ({
+        tabValue: 0, body: {
+            accounts: {
+                debtorCreditorLedgerAccounts: [],
+                saleLedgerAccounts: [],
+                purchaseLedgerAccounts: [],
+                allAccounts: [],
+            },
+            amount: 0.0,
+            autoRefNo: undefined,
+            commonRemarks: undefined,
+            ledgerSubledgerCredit: {},
+            ledgerSubledgerDebit: {},
+            lineRefNoDebit: undefined,
+            lineRefNoCredit: undefined,
+            lineRemarksDebit: undefined,
+            lineRemarksCredit: undefined,
+            tranDate: moment().format(isoDateFormat),
+            tranDetailsIdDebit: undefined,
+            tranDetailsIdCredit: undefined,
+            tranHeaderIdDebit: undefined,
+            tranHeaderIdCredit: undefined,
+            userRefNo: undefined,
+            isViewBack: false,
+
+
+        }
+    })
+}
+
+export { MultiDataContext, getSalesArbitraryData, getPurchasesArbitraryData, getDebitCreditNotesArbitraryData }

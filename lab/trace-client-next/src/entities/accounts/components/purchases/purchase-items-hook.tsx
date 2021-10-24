@@ -681,7 +681,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}

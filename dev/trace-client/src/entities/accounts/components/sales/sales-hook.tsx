@@ -34,8 +34,8 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             multiData.sales.shouldCloseParentOnSave = true
         }
 
-        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {
-            meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
+        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {            
+            multiData.sales.tabValue = d.data
             setRefresh({})
         })
 
@@ -54,7 +54,6 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         isMounted: false,
         saleTypeLabel: 'Sale',
         showDialog: false,
-        tabValue: 0,
         dialogConfig: {
             title: '',
             content: () => {},
@@ -69,7 +68,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     }
 
     function handleChangeTab(e: any, newValue: number) {
-        meta.current.tabValue = newValue
+        multiData.sales.tabValue = newValue
         if (newValue === 3) {
             // view
             multiData.sales.saleViewHookFetchData()
@@ -159,11 +158,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: theme.palette.common.white,
                 marginTop: theme.spacing(0.5),
                 '& .reset':{
-                    backgroundColor: theme.palette.primary.dark,
-                    color: theme.palette.primary.contrastText,
+                    backgroundColor: theme.palette.amber.main,
+                    color: theme.palette.amber.contrastText,
                     height: theme.spacing(4),
-                    marginTop:'auto',
-                    marginBottom: 'auto'
+                    margin:'auto',
+                    // marginRight: '20%'
                 }
             },
         },

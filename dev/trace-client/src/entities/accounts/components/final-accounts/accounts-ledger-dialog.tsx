@@ -36,7 +36,6 @@ import {
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
-    // const confirm = useConfirm()
     const {
         accountsMessages,
         confirm,
@@ -170,7 +169,7 @@ function AccountsLedgerDialog() {
                 maxWidth="xl"
                 fullWidth={true}
                 onClose={closeChildDialog}
-                // fullScreen={true}
+            // fullScreen={true}
             >
                 <DialogTitle
                     disableTypography
@@ -225,7 +224,7 @@ function AccountsLedgerDialog() {
                     )
                     setRefresh({})
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -263,7 +262,7 @@ function AccountsLedgerDialog() {
         }
         return (
             <MultiDataContext.Provider
-                value={{ purchases: getPurchasesArbitraryData() }}>
+                value={{ sales: getSalesArbitraryData(), purchases: getPurchasesArbitraryData() }}>
                 {ret}
             </MultiDataContext.Provider>
         )

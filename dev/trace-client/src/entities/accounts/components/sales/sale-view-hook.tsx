@@ -158,12 +158,12 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         ]
         const queryId = 'get_sale_purchase_headers'
         const queryArgs = {
-            tranTypeId: arbitraryData.isSales ? 4 : 9,
+            tranTypeId: (arbitraryData.saleType ==='sal') ? 4 : 9,
             no: 100,
             accId: meta.current.selectedAccount?.id
                 ? meta.current.selectedAccount.id + ''
                 : '%',
-            tranDc: arbitraryData.isSales ? 'C' : 'D',
+            tranDc: (arbitraryData.saleType==='sal') ? 'C' : 'D',
         }
         const summaryColNames: string[] = ['amount']
         const specialColumns = {

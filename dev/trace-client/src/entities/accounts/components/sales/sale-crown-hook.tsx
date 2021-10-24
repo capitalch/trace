@@ -162,7 +162,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                 branchId: branchId,
                 posId: '1',
                 autoRefNo: ad.autoRefNo,
-                tranTypeId: ad.isSales ? 4 : 9,
+                tranTypeId: (ad.saleType === 'sal') ? 4 : 9,
                 details: [],
             }
             obj.data.push(item)
@@ -183,7 +183,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             const saleDataRow: any = {
                 id: ad.rowData.id || undefined,
                 accId: ad.rowData.accId,
-                dc: ad.isSales ? 'C' : 'D',
+                dc: (ad.saleType === 'sal') ? 'C' : 'D',
                 amount: ad.summary.amount,
                 details: [],
             }
@@ -192,7 +192,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             for (let item of ad.footer.items) {
                 saleTranD.data.push({
                     accId: item.accId,
-                    dc: ad.isSales ? 'D' : 'C',
+                    dc: (ad.saleType === 'sal') ? 'D' : 'C',
                     amount: item.amount,
                     remarks: item.remarks,
                     instrNo: item.instrNo,
@@ -210,7 +210,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                         cgst: ad.summary.cgst,
                         sgst: ad.summary.sgst,
                         igst: ad.summary.igst,
-                        isInput: ad.isSales ? false : true,
+                        isInput: (ad.saleType === 'sal') ? false : true,
                     },
                 ],
             }

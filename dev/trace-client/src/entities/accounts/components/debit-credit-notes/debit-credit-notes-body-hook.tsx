@@ -26,103 +26,137 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     const isoFormat = 'YYYY-MM-DD'
     const meta: any = useRef({
         isMounted: false,
-        debtorCreditorLedgerAccounts: [],
-        saleLedgerAccounts: [],
-        purchaseLedgerAccounts: [],
-        allAccounts: [],
+        // debtorCreditorLedgerAccounts: [],
+        // saleLedgerAccounts: [],
+        // purchaseLedgerAccounts: [],
+        // allAccounts: [],
     })
+    const accounts = arbitraryData.body.accounts
 
-    arbitraryData.body = arbitraryData.body || {
-        amount: 0.0,
-        autoRefNo: undefined,
-        commonRemarks: undefined,
-        ledgerSubledgerCredit: {},
-        ledgerSubledgerDebit: {},
-        lineRefNoDebit: undefined,
-        lineRefNoCredit: undefined,
-        lineRemarksDebit: undefined,
-        lineRemarksCredit: undefined,
-        tranDate: arbitraryData?.body?.tranDate || moment().format(isoFormat),
-        tranDetailsIdDebit: undefined,
-        tranDetailsIdCredit: undefined,
-        tranHeaderIdDebit: undefined,
-        tranHeaderIdCredit: undefined,
-        userRefNo: undefined,
-        isViewBack: false,
-    }
+    // arbitraryData.body = arbitraryData.body || {
+    //     amount: 0.0,
+    //     autoRefNo: undefined,
+    //     commonRemarks: undefined,
+    //     ledgerSubledgerCredit: {},
+    //     ledgerSubledgerDebit: {},
+    //     lineRefNoDebit: undefined,
+    //     lineRefNoCredit: undefined,
+    //     lineRemarksDebit: undefined,
+    //     lineRemarksCredit: undefined,
+    //     tranDate: arbitraryData?.body?.tranDate || moment().format(isoFormat),
+    //     tranDetailsIdDebit: undefined,
+    //     tranDetailsIdCredit: undefined,
+    //     tranHeaderIdDebit: undefined,
+    //     tranHeaderIdCredit: undefined,
+    //     userRefNo: undefined,
+    //     isViewBack: false,
+    // }
 
     useEffect(() => {
         meta.current.isMounted = true
-        const pipe1: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter((el: any) => {
-                    const accClasses = ['debtor', 'creditor']
-                    let condition =
-                        accClasses.includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                    return condition
-                })
-            )
-        )
-
-        const pipe2: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter(
-                    (el: any) =>
-                        ['purchase'].includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                )
-            )
-        )
-
-        const pipe3: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter(
-                    (el: any) =>
-                        ['sale'].includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                )
-            )
-        )
-
-        const subs1 = pipe1.subscribe((d: any) => {
-            meta.current.debtorCreditorLedgerAccounts = d.map((el: any) => {
-                return {
-                    label: el.accName,
-                    value: el.id,
-                    accLeaf: el.accLeaf,
-                    isAutoSubledger: !!el.isAutoSubledger,
-                } // !! converts falsy to boolean false
-            })
-        })
-
-        const subs2 = pipe2.subscribe((d: any) => {
-            meta.current.purchaseLedgerAccounts = d.map((el: any) => {
-                return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
-            })
-        })
-
-        const subs3 = pipe3.subscribe((d: any) => {
-            meta.current.saleLedgerAccounts = d.map((el: any) => {
-                return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
-            })
-        })
-
-        const subs4: any = hotFilterOn(
-            'DATACACHE-SUCCESSFULLY-LOADED'
-        ).subscribe((d: any) => {
-            meta.current.allAccounts = d.data.allAccounts
-        })
-        // subs1.add(subs2).add(subs3).add(subs4)
+        setAccounts()
         setRefresh({})
+        // const pipe1: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
+        //     map((d: any) =>
+        //         d.data.allAccounts.filter((el: any) => {
+        //             const accClasses = ['debtor', 'creditor']
+        //             let condition =
+        //                 accClasses.includes(el.accClass) &&
+        //                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        //             return condition
+        //         })
+        //     )
+        // )
+
+        // const pipe2: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
+        //     map((d: any) =>
+        //         d.data.allAccounts.filter(
+        //             (el: any) =>
+        //                 ['purchase'].includes(el.accClass) &&
+        //                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        //         )
+        //     )
+        // )
+
+        // const pipe3: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
+        //     map((d: any) =>
+        //         d.data.allAccounts.filter(
+        //             (el: any) =>
+        //                 ['sale'].includes(el.accClass) &&
+        //                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        //         )
+        //     )
+        // )
+
+        // const subs1 = pipe1.subscribe((d: any) => {
+        //     accounts.debtorCreditorLedgerAccounts = d.map((el: any) => {
+        //         return {
+        //             label: el.accName,
+        //             value: el.id,
+        //             accLeaf: el.accLeaf,
+        //             isAutoSubledger: !!el.isAutoSubledger,
+        //         } // !! converts falsy to boolean false
+        //     })
+        // })
+
+                    // const subs2 = pipe2.subscribe((d: any) => {
+                    //     accounts.purchaseLedgerAccounts = d.map((el: any) => {
+                    //         return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
+                    //     })
+                    // })
+
+                    // const subs3 = pipe3.subscribe((d: any) => {
+                    //     accounts.saleLedgerAccounts = d.map((el: any) => {
+                    //         return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
+                    //     })
+                    // })
+
+                    // const subs4: any = hotFilterOn(
+                    //     'DATACACHE-SUCCESSFULLY-LOADED'
+                    // ).subscribe((d: any) => {
+                    //     accounts.allAccounts = d.data.allAccounts
+                    // })
+        
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
-            subs2.unsubscribe()
-            subs3.unsubscribe()
-            subs4.unsubscribe()
+            // subs1.unsubscribe()
+            // subs2.unsubscribe()
+            // subs3.unsubscribe()
+            // subs4.unsubscribe()
         }
     }, [])
+
+    function setAccounts() {
+        // allAccounts
+        const allAccounts = getFromBag('allAccounts') || []
+        accounts.allAccounts = allAccounts
+
+        //purchaseLedgerAccounts
+        const purchaseLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['purchase'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        accounts.purchaseLedgerAccounts = purchaseLedgerAccounts
+
+        //saleLedgerAccounts
+        const saleLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['sale'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        accounts.saleLedgerAccounts = saleLedgerAccounts
+
+        // debtorCreditorLedgerAccounts
+        const drCrArray = ['debtor', 'creditor']
+        const debtorCreditorLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                drCrArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf == 'L') &&
+                !el.isAutoSubledger
+        )
+        accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
+    }
 
     function getError() {
         const ret =
@@ -151,28 +185,6 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
-        }
-    }
-
-    function resetData() {
-        arbitraryData.body = {
-            amount: 0.0,
-            autoRefNo: undefined,
-            commonRemarks: undefined,
-            ledgerSubledgerCredit: {},
-            ledgerSubledgerDebit: {},
-            lineRefNoDebit: undefined,
-            lineRefNoCredit: undefined,
-            lineRemarksDebit: undefined,
-            lineRemarksCredit: undefined,
-            tranDate:
-                arbitraryData?.body?.tranDate || moment().format(isoFormat),
-            tranDetailsIdDebit: undefined,
-            tranDetailsIdCredit: undefined,
-            tranHeaderIdDebit: undefined,
-            tranHeaderIdCredit: undefined,
-            userRefNo: undefined,
-            isViewBack: false,
         }
     }
 

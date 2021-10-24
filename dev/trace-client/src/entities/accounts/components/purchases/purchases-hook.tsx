@@ -30,29 +30,24 @@ function usePurchases(drillDownEditAttributes: any) {
             multiData.purchases.shouldCloseParentOnSave = true
         }
         const subs1 = filterOn('PURCHASES-HOOK-CHANGE-TAB').subscribe((d) => {
-            meta.current.value = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
+            multiData.purchases.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
             setRefresh({})
         })
-        // const subs2 = filterOn('PURCHASE-CLEAR-ALL').subscribe(() => {
-            // arbitraryData.current = JSON.parse(JSON.stringify(initData))
-            // meta.current.isMounted && setRefresh({})
-        // })
-        const subs3 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
             setInBag('purchasesData', multiData.purchases)
         })
 
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
-            // subs2.unsubscribe()
-            subs3.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
     const meta: any = useRef({
         isMounted: false,
         purchaseTypeLabel: '',
-        value: 0,
+        // value: 0,
     })
 
     const purchasesData = getFromBag('purchasesData')
@@ -61,32 +56,8 @@ function usePurchases(drillDownEditAttributes: any) {
         setInBag('purchasesData', undefined)
     }
 
-    // const initData = {
-    //     autoRefNo: undefined,
-    //     cgst: 0.0,
-    //     commonRemarks: undefined,
-    //     deletedSalePurchaseIds: [],
-    //     gstin: undefined,
-    //     id: undefined,
-    //     igst: 0.0,
-    //     isIgst: false,
-    //     isGstInvoice: true,
-    //     ledgerSubledgerPurchase: { isLedgerSubledgerError: true },
-    //     ledgerSubledgerOther: { isLedgerSubledgerError: true },
-    //     invoiceAmount: 0.0,
-    //     lineItems: [],
-    //     purchaseCashCredit: 'credit',
-    //     qty: 0,
-    //     sgst: 0.0,
-    //     summary: {},
-    //     tranDate: undefined,
-    //     userRefNo: '',
-    //     isViewBack: false,
-    // }
-    // const arbitraryData: any = useRef(JSON.parse(JSON.stringify(initData)))
-
     function handleOnTabChange(e: any, newValue: number) {
-        meta.current.value = newValue
+        multiData.purchases.tabValue = newValue
         if (newValue === 1) {
             // to refresh view
             emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
@@ -109,22 +80,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginTop: theme.spacing(0.5),
 
                 '& .reset':{
-                    backgroundColor: theme.palette.primary.dark,
-                    color: theme.palette.primary.contrastText,
+                    backgroundColor: theme.palette.amber.main,
+                    color: theme.palette.amber.contrastText,
                     height: theme.spacing(4),
-                    marginTop:'auto',
-                    marginBottom: 'auto'
+                    margin:'auto',
+                    // marginRight: '20%'
                 }
-                // color: ({ purchaseType }: any) =>
-                //     purchaseType === 'pur'
-                //         ? theme.palette.common.white
-                //         : theme.palette.blue.dark, // theme.palette.common.white,
-                // backgroundColor: ({ purchaseType }: any) =>
-                //     purchaseType === 'pur'
-                //         ? 'dodgerBlue'
-                //         : theme.palette.warning.dark,
             },
-
             '& .purchase-body': {
                 marginTop: theme.spacing(1),
             },

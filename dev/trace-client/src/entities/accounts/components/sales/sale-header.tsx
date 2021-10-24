@@ -88,7 +88,7 @@ function SaleHeader() {
                         value={arbitraryData.tranDate || ''}
                     />
 
-                    {arbitraryData.isAssignmentReturn && SaleBillNoSelect('')}
+                    {(arbitraryData.saleType === 'ret') && SaleBillNoSelect('')}
 
                     {/* remarks */}
                     <TextField
@@ -102,7 +102,7 @@ function SaleHeader() {
                         value={arbitraryData.commonRemarks || ''}
                     />
                     {/* <SaleVariety /> */}
-                    {arbitraryData.isSales && SaleVariety()}
+                    {(arbitraryData.saleType = 'sal') && SaleVariety()}
 
                     {/* Sale account */}
                     <div>

@@ -47,7 +47,7 @@ function SaleItems() {
     } = useSharedElements()
 
     return (
-        <Paper elevation={2} className={classes.content}>
+        <div className={classes.content}>
             <DataTable
                 style={{ marginTop: 0 }}
                 className="sale-items"
@@ -58,7 +58,7 @@ function SaleItems() {
                 {getColumns()}
             </DataTable>
             <TraceDialog meta={meta} />
-        </Paper>
+        </div>
     )
 
     function GstDetails({ rowData }: any) {
@@ -259,9 +259,8 @@ function SaleItems() {
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.productCode ? false : true}
-                            onValueChange={(values: any) => {
-                                const { value } = values
-                                rowData.productCode = value
+                            onChange={(e:any)=>{
+                                rowData.productCode = e.target.value
                                 // meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData.productCode) {
@@ -271,6 +270,18 @@ function SaleItems() {
                                 }
                                 arbitraryData.salesCrownRefresh()
                             }}
+                            // onValueChange={(values: any) => {
+                            //     const { value } = values
+                            //     rowData.productCode = value
+                            //     // meta.current.isDataChanged = true
+                            //     meta.current.isMounted && setRefresh({})
+                            //     if (rowData.productCode) {
+                            //         debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
+                            //     } else {
+                            //         clearRow(rowData)
+                            //     }
+                            //     arbitraryData.salesCrownRefresh()
+                            // }}
                             onFocus={(e) => {
                                 // meta.current.isDataChanged = false
                                 e.target.select()

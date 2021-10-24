@@ -21,13 +21,13 @@ function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const lineItems = arbitraryData.lineItems
 
-    const { confirm, emit, filterOn, messages, debounceFilterOn } = useSharedElements()
+    const { confirm,  messages, debounceFilterOn } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
         arbitraryData.saleItemsRefresh = () => { setRefresh({}) }
-        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE').subscribe((d: any) => {
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE',1200).subscribe((d: any) => {
             arbitraryData.salesCrownRefresh()
             if (d.data.source === 'upcCode') {
                 searchProductOnUpcCode(d.data.value)

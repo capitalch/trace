@@ -306,18 +306,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     pointerEvents: (arbitraryData: any) => {
                         let ret = 'none'
                         if ('ra'.includes(arbitraryData.saleVariety)) {
-                            // if (arbitraryData.isSales) {
                             ret = 'auto'
-                            // }
                         }
                         return ret
                     },
                     opacity: (arbitraryData: any) => {
                         let ret = '0.4'
                         if ('ra'.includes(arbitraryData.saleVariety)) {
-                            // if (arbitraryData.isSales) {
                             ret = '1'
-                            // }
                         }
                         return ret
                     },

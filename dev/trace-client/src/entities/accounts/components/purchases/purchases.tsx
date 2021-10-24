@@ -5,8 +5,6 @@ import { PurchaseView } from './purchase-view'
 import { PurchaseItems } from './purchase-items'
 import { PurchaseBody } from './purchase-body'
 
-// import { PurchasesProvider } from './purchases-provider'
-
 function Purchases({ purchaseType, drillDownEditAttributes }: any) {
 
     const { multiData, handleOnTabChange, meta } = usePurchases(
@@ -19,24 +17,23 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
         
     return (
         <div className={classes.content}>
-            {/* <PurchasesProvider value={multiData.purchases}> */}
                 <Typography color='secondary' variant='subtitle1' component='div'>{(purchaseType==='pur') ? 'Purchase': 'Purchase return'}</Typography>
                 <Tabs
                     className="tabs"
                     indicatorColor="primary"
                     onChange={handleOnTabChange}
-                    value={meta.current.value}>
+                    value={multiData.purchases.tabValue}>
                     <Tab label="Main" />
                     <Tab label="View" />
-                    <Button color='secondary' className='reset' variant='contained' onClick={()=>emit('LAUNCH-PAD:LOAD-COMPONENT',null)}>Reset</Button>
+                    <Button className='reset' variant='contained' onClick={()=>emit('LAUNCH-PAD:LOAD-COMPONENT',null)}>Reset</Button>
                 </Tabs>
-                <div className="purchase-body" hidden={meta.current.value !== 0}>
+                <div className="purchase-body" hidden={multiData.purchases.tabValue !== 0}>
                     <PurchaseBody                        
                         purchaseType={purchaseType}
                     />
                     <PurchaseItems arbitraryData={multiData.purchases} />
                 </div>
-                <div hidden={meta.current.value !== 1}>
+                <div hidden={multiData.purchases.tabValue !== 1}>
                     <PurchaseView
                         purchaseType={purchaseType}
                         drillDownEditAttributes={drillDownEditAttributes}

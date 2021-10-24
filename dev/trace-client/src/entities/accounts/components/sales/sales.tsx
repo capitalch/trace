@@ -25,24 +25,24 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                     className="tabs"
                     indicatorColor="primary"
                     onChange={handleChangeTab}
-                    value={meta.current.tabValue}>
+                    value={multiData.sales.tabValue}>
                     <Tab label="Header" />
                     <Tab label="Items" />
                     <Tab label="Footer" />
                     <Tab label="View" />
-                    <Button color='secondary' className='reset' variant='contained' onClick={()=>emit('LAUNCH-PAD:LOAD-COMPONENT',null)}>Reset</Button>
+                    <Button className='reset' variant='contained' onClick={()=>emit('LAUNCH-PAD:LOAD-COMPONENT',null)}>Reset</Button>
                 </Tabs>
-                <div hidden={meta.current.tabValue !== 0}>
+                <div hidden={multiData.sales.tabValue !== 0}>
                     <SaleHeader />
                 </div>
 
-                <div hidden={meta.current.tabValue !== 1}>
+                <div hidden={multiData.sales.tabValue !== 1}>
                     <SaleItems />
                 </div>
-                <div hidden={meta.current.tabValue !== 2}>
+                <div hidden={multiData.sales.tabValue !== 2}>
                     <SaleFooter />
                 </div>
-                <div hidden={meta.current.tabValue !== 3}>
+                <div hidden={multiData.sales.tabValue !== 3}>
                     <SaleView
                         drillDownEditAttributes={drillDownEditAttributes}
                     />

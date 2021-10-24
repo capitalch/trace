@@ -16,10 +16,10 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
     const [, setRefresh] = useState({})
     const classes = useStyles()
     const { getError, handleSubmit, meta } = useDebitCreditNoteBody(arbitraryData, tranType)
-
+    const accounts = arbitraryData.body.accounts
     const {
         accountsMessages,
-
+        getMappedAccounts,
         isInvalidDate,
     } = useSharedElements()
 
@@ -85,9 +85,9 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                 <div className='ledger-subledger-box'>
                     <Typography variant='caption'>{tranType === 'dn' ? 'Debit (Debtor / Creditor)' : 'Debit (Sale)'}</Typography>
                     <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
+                        allAccounts={accounts.allAccounts}
                         className="ledger-subledger"
-                        ledgerAccounts={tranType === 'dn' ? meta.current.debtorCreditorLedgerAccounts : meta.current.saleLedgerAccounts}
+                        ledgerAccounts={tranType === 'dn' ? getMappedAccounts(accounts.debtorCreditorLedgerAccounts) : getMappedAccounts(accounts.saleLedgerAccounts)}
                         onChange={() => {// for registering error
                             meta.current.isMounted && setRefresh({})
                         }}
@@ -118,9 +118,9 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                     <Typography variant='caption'>{tranType === 'dn' ? 'Credit (Purchase)' : 'Credit (Debtor / Creditor)'}</Typography>
                     {/* Purchase */}
                     <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
+                        allAccounts={accounts.allAccounts}
                         className="ledger-subledger"
-                        ledgerAccounts={tranType === 'dn' ? meta.current.purchaseLedgerAccounts : meta.current.debtorCreditorLedgerAccounts}
+                        ledgerAccounts={tranType === 'dn' ? getMappedAccounts(accounts.purchaseLedgerAccounts) : getMappedAccounts(accounts.debtorCreditorLedgerAccounts)}
                         onChange={() => {// for registering error
                             meta.current.isMounted && setRefresh({})
                         }}
