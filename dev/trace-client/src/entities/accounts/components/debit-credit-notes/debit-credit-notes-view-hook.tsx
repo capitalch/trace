@@ -36,7 +36,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         ).subscribe((d: any) => {
             const { tranDate, clearDate, id1 } = d.data?.row
             if (isAllowedUpdate({ tranDate, clearDate })) {
-                arbitraryData.body.isViewBack = true
+                arbitraryData.isViewBack = true
                 loadDataOnId(id1)
             }
         })
@@ -216,7 +216,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
             ah.tranDetailsIdCredit = ret?.credits[0]?.tranDetailsId
         
             arbitraryData.tabValue = 0
-            ah.isViewBack = true
+            arbitraryData.isViewBack = true
             emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 0)
             setRefresh({})
         }

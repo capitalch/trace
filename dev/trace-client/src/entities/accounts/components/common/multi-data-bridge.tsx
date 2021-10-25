@@ -89,8 +89,10 @@ function getPurchasesArbitraryData() {
 }
 
 function getDebitCreditNotesArbitraryData() {
-    return ({
-        tabValue: 0, body: {
+    return {
+        isViewBack: false,
+        tabValue: 0,
+        body: {
             accounts: {
                 debtorCreditorLedgerAccounts: [],
                 saleLedgerAccounts: [],
@@ -112,11 +114,14 @@ function getDebitCreditNotesArbitraryData() {
             tranHeaderIdDebit: undefined,
             tranHeaderIdCredit: undefined,
             userRefNo: undefined,
-            isViewBack: false,
-
-
-        }
-    })
+            // isViewBack: false,
+        },
+    }
 }
 
-export { MultiDataContext, getSalesArbitraryData, getPurchasesArbitraryData, getDebitCreditNotesArbitraryData }
+export {
+    MultiDataContext,
+    getSalesArbitraryData,
+    getPurchasesArbitraryData,
+    getDebitCreditNotesArbitraryData,
+}

@@ -36,18 +36,16 @@ Netwoven 				: 19AACCN3894N1ZP
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
 create installer from innosetup
 
-## Logic for retaining sales data during drawyer status change
-1. Implement MultiDataContext, getSalesArbitraryData, MultiDataContext. Use MultiDataContext.Provider at launch-pad level. Set value of Provider here only.
-2. Emit event at drawyer click (DRAWYER-STATUS-CHANGED), catch at launch-pad. catch logic-> globalBag.setValue('saleData', multiData.sale), persisting sale arbitraryData
-3. In launch-pad at Provider value set-> if getFromBag('saleData') then multiData.sale = saleData, setInBag('saleData', undefined) else multiData.sale = getSaleArbitraryData. The argument of getSaleArbitraryData is derived from getCurrentComponent().
-4. implement same for purchase and debit / credit note.
-Steps
-1) emit DRAWYER-STATUS-CHANGED in app-main
-2) multi-data-bridge in common folder
-3) 
-4) launch-pad set provider and salesData
-5) filterOn DRAWYER-STATUS-CHANGED in sales-hook, setInBag. set multiData.sales if salesData not null
-6) in sales remove arbitraryData.current and work accordingly
+## Testing strategy
+1. Sales
+	1.1 CRUD, validations, BS edit, BS delete, Reports edit, delete
+	1.2 sales return all above
+2. Purchases
+	2.1 All above
+	2.2 Purchase return
+3. Debit credit notes
+	3.1 Debit notes
+	3.2 credit notes
 
 ## Notes
 1. 09-10-2021: 1st attempt to transfer to Material-UI version 5.x failed because xgrid breaks the UI

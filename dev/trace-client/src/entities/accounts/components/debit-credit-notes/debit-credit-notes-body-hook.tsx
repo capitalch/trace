@@ -177,7 +177,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         } else {
             if (arbitraryData.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-            } else if (arbitraryData.body.isViewBack) {
+            } else if (arbitraryData.isViewBack) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 // arbitraryData.body.isViewBack = false
                 emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 1)

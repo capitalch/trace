@@ -595,14 +595,6 @@ function usePurchaseItems(arbitraryData: any) {
                                     meta.current.isMounted && setRefresh({})
                                 }
                             }}
-                        // onBlur={async (e: any) => {
-                        //     if (meta.current.isDataChanged) {
-                        //         meta.current.isDataChanged = false
-                        //         rowData.isGstInvoice =
-                        //             arbitraryData.isGstInvoice
-                        //         searchProductOnUpcCode(rowData)
-                        //     }
-                        // }}
                         />
                     </div>
                 )}
@@ -657,12 +649,6 @@ function usePurchaseItems(arbitraryData: any) {
                                     clearRow(rowData)
                                 }
                             }}
-                            // onBlur={(e: any) => {
-                            //     if (meta.current.isDataChanged) {
-                            //         meta.current.isDataChanged = false
-                            //         searchProductOnProductCode(rowData)
-                            //     }
-                            // }}
                             value={rowData.productCode || ''}
                         />
                         {/* hsn */}
@@ -722,12 +708,6 @@ function usePurchaseItems(arbitraryData: any) {
                                 e.target.select()
                                 // meta.current.isDataChanged = false
                             }}
-                            // onBlur={() => {
-                            //     if (meta.current.isDataChanged) {
-                            //         computeRow(rowData)
-                            //         meta.current.isDataChanged = false
-                            //     }
-                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
                                     // meta.current.isDataChanged &&
@@ -770,12 +750,6 @@ function usePurchaseItems(arbitraryData: any) {
                                 e.target.select()
                                 // meta.current.isDataChanged = false
                             }}
-                            // onBlur={() => {
-                            //     if (meta.current.isDataChanged) {
-                            //         computeRow(rowData)
-                            //         meta.current.isDataChanged = false
-                            //     }
-                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
                                     // meta.current.isDataChanged &&
@@ -820,12 +794,6 @@ function usePurchaseItems(arbitraryData: any) {
                                 e.target.select()
                                 // meta.current.isDataChanged = false
                             }}
-                            // onBlur={() => {
-                            //     if (meta.current.isDataChanged) {
-                            //         computeRow(rowData)
-                            //         meta.current.isDataChanged = false
-                            //     }
-                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
                                     // meta.current.isDataChanged &&
@@ -920,15 +888,8 @@ function usePurchaseItems(arbitraryData: any) {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
-                            // onBlur={() => {
-                            //     if (meta.current.isDataChanged) {
-                            //         computeRow(rowData)
-                            //         meta.current.isDataChanged = false
-                            //     }
-                            // }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    // meta.current.isDataChanged &&
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false

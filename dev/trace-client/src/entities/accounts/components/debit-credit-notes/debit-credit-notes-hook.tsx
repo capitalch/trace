@@ -30,7 +30,8 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
                     'DEBIT-CREDIT-NOTES-FETCH-DATA-ON-ID-DRILL-DOWN-EDIT',
                     drillDownEditAttributes.tranHeaderId
                 )
-            meta.current.shouldCloseParentOnSave = true
+            // meta.current.shouldCloseParentOnSave = true
+            multiData.debitCreditNotes.shouldCloseParentOnSave = true
         }
         return () => {
             meta.current.isMounted = false

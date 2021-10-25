@@ -31,6 +31,7 @@ import {
     MultiDataContext,
     getPurchasesArbitraryData,
     getSalesArbitraryData,
+    getDebitCreditNotesArbitraryData,
 } from '../../components/common/multi-data-bridge'
 
 function AccountsLedgerDialog() {
@@ -169,7 +170,7 @@ function AccountsLedgerDialog() {
                 maxWidth="xl"
                 fullWidth={true}
                 onClose={closeChildDialog}
-            // fullScreen={true}
+                // fullScreen={true}
             >
                 <DialogTitle
                     disableTypography
@@ -224,7 +225,7 @@ function AccountsLedgerDialog() {
                     )
                     setRefresh({})
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 
@@ -262,7 +263,11 @@ function AccountsLedgerDialog() {
         }
         return (
             <MultiDataContext.Provider
-                value={{ sales: getSalesArbitraryData(), purchases: getPurchasesArbitraryData() }}>
+                value={{
+                    sales: getSalesArbitraryData(),
+                    purchases: getPurchasesArbitraryData(),
+                    debitCreditNotes: getDebitCreditNotesArbitraryData(),
+                }}>
                 {ret}
             </MultiDataContext.Provider>
         )

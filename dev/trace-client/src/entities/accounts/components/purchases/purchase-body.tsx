@@ -77,12 +77,13 @@ function PurchaseBody({ purchaseType }: any) {
                     setRefresh({})
                 }
             )
-
             return () => {
                 subs1.unsubscribe()
             }
         }, [])
-        const isError: boolean = errorObject?.isError ? ad.errorObject.isError() : true //getError()
+        const isError: boolean = errorObject?.isError
+            ? ad.errorObject.isError()
+            : true //getError()
         return (
             <Button
                 className="submit"
@@ -119,7 +120,11 @@ function PurchaseBody({ purchaseType }: any) {
                 <TextField
                     label={ad.tranDate ? 'Date' : undefined}
                     variant="standard"
-                    error={errorObject?.isDateError ? errorObject.isDateError() : true}
+                    error={
+                        errorObject?.isDateError
+                            ? errorObject.isDateError()
+                            : true
+                    }
                     helperText={(() => {
                         let ret
                         if (errorObject.isDateError) {
@@ -129,7 +134,7 @@ function PurchaseBody({ purchaseType }: any) {
                         } else {
                             ret = 'Date range / Audit lock error'
                         }
-                        return (ret)
+                        return ret
                     })()}
                     type="date"
                     onChange={(e: any) => {
@@ -144,7 +149,11 @@ function PurchaseBody({ purchaseType }: any) {
                     label="Invoice no"
                     variant="standard"
                     className="invoice-no"
-                    error={errorObject.isInvoiceError ? errorObject.isInvoiceError() : true}
+                    error={
+                        errorObject.isInvoiceError
+                            ? errorObject.isInvoiceError()
+                            : true
+                    }
                     onChange={(e: any) => {
                         ad.userRefNo = e.target.value
                         setRefresh({})
@@ -171,20 +180,11 @@ function PurchaseBody({ purchaseType }: any) {
                     control={
                         <Checkbox
                             checked={ad.isGstInvoice}
-                            onChange={
-                                handleIsGstInvoice
-                                // (
-                                //     e: any) => {
-                                //     arbitraryData.isGstInvoice = e.target.checked
-                                //     setRefresh({})
-                                // }
-                            }
+                            onChange={handleIsGstInvoice}
                         />
                     }
                     label="Gst invoice"
                 />
-                {/* <Button onClick={() => getError()}>Check</Button> */}
-                {/* submit */}
                 <SubmitComponent />
             </div>
         )
@@ -200,23 +200,18 @@ function PurchaseBody({ purchaseType }: any) {
                         {/* purchase */}
                         <LedgerSubledger
                             // allAccounts={meta.current.allAccounts}
-                            allAccounts={
-                                ad.accounts.allAccounts
-                            }
+                            allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
                             // ledgerAccounts={meta.current.purchaseLedgerAccounts}
                             ledgerAccounts={getMappedAccounts(
-                                ad.accounts
-                                    .purchaseLedgerAccounts
+                                ad.accounts.purchaseLedgerAccounts
                             )}
                             onChange={() => {
                                 // getPurchaseAccountError()
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            rowData={
-                                ad.ledgerSubledgerPurchase
-                            }
+                            rowData={ad.ledgerSubledgerPurchase}
                         />
                     </div>
                     <div>
@@ -224,19 +219,15 @@ function PurchaseBody({ purchaseType }: any) {
                         {/* credit account */}
                         <LedgerSubledger
                             // allAccounts={meta.current.allAccounts}
-                            allAccounts={
-                                ad.accounts.allAccounts
-                            }
+                            allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
                             ledgerAccounts={getMappedAccounts(
-                                ad.accounts
-                                    .ledgerAccounts
+                                ad.accounts.ledgerAccounts
                             )}
                             onChange={async () => {
                                 // getOtherAccountError()
                                 const gstin: string = await queryGstin(
-                                    ad.ledgerSubledgerOther
-                                        ?.accId
+                                    ad.ledgerSubledgerOther?.accId
                                 )
                                 ad.gstin = gstin
                                 setRefresh({})
@@ -251,7 +242,11 @@ function PurchaseBody({ purchaseType }: any) {
                         variant="standard"
                         label="Gstin no"
                         // error={getGstinError()}
-                        error={errorObject.isGstinError ? errorObject.isGstinError() : true}
+                        error={
+                            errorObject.isGstinError
+                                ? errorObject.isGstinError()
+                                : true
+                        }
                         onChange={(e: any) => {
                             ad.gstin = e.target.value
                             setRefresh({})
@@ -270,7 +265,11 @@ function PurchaseBody({ purchaseType }: any) {
                             customInput={TextField}
                             decimalScale={2}
                             // error={getInvoiceAmountError()}
-                            error={errorObject.isInvoiceAmountError ? errorObject.isInvoiceAmountError() : true}
+                            error={
+                                errorObject.isInvoiceAmountError
+                                    ? errorObject.isInvoiceAmountError()
+                                    : true
+                            }
                             fixedDecimalScale={true}
                             onFocus={(e) => {
                                 e.target.select()
@@ -291,7 +290,11 @@ function PurchaseBody({ purchaseType }: any) {
                             customInput={TextField}
                             decimalScale={2}
                             // error={getQtyError()}
-                            error={errorObject.isTotalQtyError ? errorObject.isTotalQtyError() : true}
+                            error={
+                                errorObject.isTotalQtyError
+                                    ? errorObject.isTotalQtyError()
+                                    : true
+                            }
                             onFocus={(e) => {
                                 e.target.select()
                             }}
@@ -313,7 +316,11 @@ function PurchaseBody({ purchaseType }: any) {
                             customInput={TextField}
                             decimalScale={2}
                             // error={getGstError()}
-                            error={errorObject.isGstError ? errorObject.isGstError() : true}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
                             fixedDecimalScale={true}
                             InputProps={{
                                 startAdornment: (
@@ -344,7 +351,11 @@ function PurchaseBody({ purchaseType }: any) {
                             customInput={TextField}
                             decimalScale={2}
                             // error={getGstError()}
-                            error={errorObject.isGstError ? errorObject.isGstError() : true}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
                             fixedDecimalScale={true}
                             InputProps={{
                                 startAdornment: (
@@ -375,7 +386,11 @@ function PurchaseBody({ purchaseType }: any) {
                             customInput={TextField}
                             decimalScale={2}
                             // error={getGstError()}
-                            error={errorObject.isGstError ? errorObject.isGstError() : true}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
                             fixedDecimalScale={true}
                             InputProps={{
                                 startAdornment: (
@@ -423,7 +438,11 @@ function PurchaseBody({ purchaseType }: any) {
                     label={ad.tranDate ? 'Date' : undefined}
                     variant="standard"
                     // error={getDateError()}
-                    error={errorObject?.isDateError ? errorObject.isDateError() : true}
+                    error={
+                        errorObject?.isDateError
+                            ? errorObject.isDateError()
+                            : true
+                    }
                     helperText={(() => {
                         let ret
                         if (errorObject.isDateError) {
@@ -433,7 +452,7 @@ function PurchaseBody({ purchaseType }: any) {
                         } else {
                             ret = 'Date range / Audit lock error'
                         }
-                        return (ret)
+                        return ret
                     })()}
                     type="date"
                     onChange={(e: any) => {
@@ -461,13 +480,7 @@ function PurchaseBody({ purchaseType }: any) {
                     control={
                         <Checkbox
                             checked={ad.isGstInvoice}
-                            onChange={
-                                handleIsGstInvoice
-                                //     (e: any) => {
-                                //     arbitraryData.isGstInvoice = e.target.checked
-                                //     setRefresh({})
-                                // }
-                            }
+                            onChange={handleIsGstInvoice}
                         />
                     }
                     label="Gst invoice"
@@ -482,195 +495,227 @@ function PurchaseBody({ purchaseType }: any) {
         const [, setRefresh] = useState({})
         return (
             <div className="body-line-2">
-                <div>
-                    <Typography variant="caption">Purchase a/c</Typography>
-                    {/* purchase */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.purchaseLedgerAccounts}
-                        onChange={() => {
-                            // getPurchaseAccountError()
+                <div className="left">
+                    <div>
+                        <Typography variant="caption">Purchase a/c</Typography>
+                        {/* purchase */}
+                        <LedgerSubledger
+                            allAccounts={ad.accounts.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={getMappedAccounts(
+                                ad.accounts.purchaseLedgerAccounts
+                            )}
+                            onChange={() => {
+                                // getPurchaseAccountError()
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={ad.ledgerSubledgerPurchase}
+                        />
+                    </div>
+                    <div>
+                        <Typography variant="caption">Debit a/c</Typography>
+                        {/* debit account */}
+                        <LedgerSubledger
+                            allAccounts={ad.accounts.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={getMappedAccounts(
+                                ad.accounts.ledgerAccounts
+                            )}
+                            onChange={async () => {
+                                // getOtherAccountError()
+                                const gstin: string = await queryGstin(
+                                    ad.ledgerSubledgerOther?.accId
+                                )
+                                ad.gstin = gstin
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={ad.ledgerSubledgerOther}
+                        />
+                    </div>
+                    {/* gstin */}
+                    <TextField
+                        className="gstin"
+                        variant="standard"
+                        label="Gstin no"
+                        error={
+                            errorObject.isGstinError
+                                ? errorObject.isGstinError()
+                                : true
+                        }
+                        onChange={(e: any) => {
+                            ad.gstin = e.target.value
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={ad.ledgerSubledgerPurchase}
+                        value={ad.gstin || ''}
                     />
                 </div>
-                <div>
-                    <Typography variant="caption">Debit a/c</Typography>
-                    {/* debit account */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.ledgerAccounts}
-                        onChange={async () => {
-                            // getOtherAccountError()
-                            const gstin: string = await queryGstin(
-                                ad.ledgerSubledgerOther?.accId
-                            )
-                            ad.gstin = gstin
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        rowData={ad.ledgerSubledgerOther}
-                    />
-                </div>
-                {/* gstin */}
-                <TextField
-                    className="gstin"
-                    variant="standard"
-                    label="Gstin no"
-                    error={errorObject.isGstinError ? errorObject.isGstinError() : true}
-                    onChange={(e: any) => {
-                        ad.gstin = e.target.value
-                        setRefresh({})
-                        emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                    }}
-                    value={ad.gstin || ''}
-                />
-                <div className="invoice">
-                    {/* Invoice amount */}
-                    <NumberFormat
-                        className="total-amount"
-                        label="Invoice amount"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        // error={getInvoiceAmountError()}
-                        error={errorObject.isInvoiceAmountError ? errorObject.isInvoiceAmountError() : true}
-                        fixedDecimalScale={true}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            //using onChange event stores formatted value
-                            const { floatValue } = values
-                            ad.invoiceAmount = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={ad.invoiceAmount || 0.0}
-                    />
-                    <NumberFormat
-                        label="Total qty"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        // error={getQtyError()}
-                        error={errorObject.isTotalQtyError ? errorObject.isTotalQtyError() : true}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            ad.qty = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={ad.qty || 0}
-                    />
-                </div>
+                <div className="right">
+                    <div className="invoice">
+                        {/* Invoice amount */}
+                        <NumberFormat
+                            className="total-amount"
+                            label="Invoice amount"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getInvoiceAmountError()}
+                            error={
+                                errorObject.isInvoiceAmountError
+                                    ? errorObject.isInvoiceAmountError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                //using onChange event stores formatted value
+                                const { floatValue } = values
+                                ad.invoiceAmount = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={ad.invoiceAmount || 0.0}
+                        />
+                        <NumberFormat
+                            label="Total qty"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getQtyError()}
+                            error={
+                                errorObject.isTotalQtyError
+                                    ? errorObject.isTotalQtyError()
+                                    : true
+                            }
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.qty = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={ad.qty || 0}
+                        />
+                    </div>
 
-                <div className="gst">
-                    {/* cgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        // error={getGstError()}
-                        error={errorObject.isGstError ? errorObject.isGstError() : true}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Cgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            ad.cgst = floatValue
-                            ad.sgst = floatValue
-                            ad.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={ad.cgst || 0.0}
-                    />
-                    {/* sgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={errorObject.isGstError ? errorObject.isGstError() : true}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Sgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            ad.cgst = floatValue
-                            ad.sgst = floatValue
-                            ad.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={ad.sgst || 0.0}
-                    />
-                    {/* igst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={errorObject.isGstError ? errorObject.isGstError() : true}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Igst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            ad.cgst = 0.0
-                            ad.sgst = 0.0
-                            ad.igst = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={ad.igst || 0.0}
-                    />
+                    <div className="gst">
+                        {/* cgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getGstError()}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Cgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = floatValue
+                                ad.sgst = floatValue
+                                ad.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.cgst || 0.0}
+                        />
+                        {/* sgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Sgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = floatValue
+                                ad.sgst = floatValue
+                                ad.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.sgst || 0.0}
+                        />
+                        {/* igst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Igst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = 0.0
+                                ad.sgst = 0.0
+                                ad.igst = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.igst || 0.0}
+                        />
+                    </div>
                 </div>
             </div>
         )
     }
-    
+
     function PurchaseCashCredit() {
         return (
             <div className="purchase-type">
@@ -682,10 +727,7 @@ function PurchaseBody({ purchaseType }: any) {
                             }}
                             size="small"
                             color="secondary"
-                            checked={
-                                ad.purchaseCashCredit ===
-                                'credit'
-                            }
+                            checked={ad.purchaseCashCredit === 'credit'}
                         />
                     }
                     label="Credit purchase"
@@ -699,10 +741,7 @@ function PurchaseBody({ purchaseType }: any) {
                             }}
                             size="small"
                             color="secondary"
-                            checked={
-                                ad.purchaseCashCredit ===
-                                'cash'
-                            }
+                            checked={ad.purchaseCashCredit === 'cash'}
                         />
                     }
                     label="Cash purchase"
