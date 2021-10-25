@@ -47,7 +47,6 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                         drillDownEditAttributes={drillDownEditAttributes}
                     />
                 </div>
-            {/* </SalesProvider> */}
         </div>
     )
 }

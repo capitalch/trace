@@ -42,7 +42,6 @@ function getSalesArbitraryData() {
         },
 
         saleErrorObject: {},
-
         saleVariety: 'r',
         shipTo: {},
         summary: {},

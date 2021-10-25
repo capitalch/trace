@@ -6,7 +6,6 @@ import {
     Typography,
     TextField,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
@@ -88,8 +87,7 @@ function SaleHeader() {
                         value={arbitraryData.tranDate || ''}
                     />
 
-                    {(arbitraryData.saleType === 'ret') && SaleBillNoSelect('')}
-
+                    {(arbitraryData.saleType === 'ret') && <SaleBillNoSelect />}
                     {/* remarks */}
                     <TextField
                         label="Common remarks"
@@ -102,7 +100,7 @@ function SaleHeader() {
                         value={arbitraryData.commonRemarks || ''}
                     />
                     {/* <SaleVariety /> */}
-                    {(arbitraryData.saleType = 'sal') && SaleVariety()}
+                    {(arbitraryData.saleType === 'sal') && SaleVariety()}
 
                     {/* Sale account */}
                     <div>

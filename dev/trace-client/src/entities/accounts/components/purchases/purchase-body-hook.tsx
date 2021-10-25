@@ -86,97 +86,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
     }
 
-    function allErrorMethods() {
-        const err = meta.current.errorsObject
-        const ab = arbitraryData
-
-        function getDateError() {
-            err.dateError = isInvalidDate(ab.tranDate) || undefined
-            return err.dateError
-        }
-        function getInvoiceError() {
-            // logic for invoice no for purchase or purchase ret
-            if (purchaseType === 'pur') {
-                err.invoiceNoError = ab.userRefNo ? undefined : true
-            } else {
-                err.invoiceNoError = undefined
-            }
-
-            return err.invoiceNoError
-        }
-        function getPurchaseAccountError() {
-            err.purchaseAccountError =
-                ab.ledgerSubledgerPurchase.isLedgerSubledgerError || undefined
-            return err.purchaseAccountError
-        }
-        function getOtherAccountError() {
-            err.otherAccountError =
-                ab.ledgerSubledgerOther.isLedgerSubledgerError || undefined
-            return err.otherAccountError
-        }
-        function getGstError() {
-            if (arbitraryData.isGstInvoice) {
-                if ((ab.cgst > 0 && ab.sgst > 0) || ab.igst > 0) {
-                    err.gstError = undefined
-                } else {
-                    err.gstError = true
-                }
-            } else {
-                err.gstError = undefined
-            }
-            return err.gstError
-        }
-        function getGstinError() {
-            if (arbitraryData.isGstInvoice) {
-                if (ab.gstin) {
-                    err.gstinError = isInvalidGstin(ab.gstin)
-                } else {
-                    err.gstinError = true
-                }
-            } else {
-                err.gstinError = undefined
-            }
-            return err.gstinError
-        }
-
-        function getInvoiceAmountError() {
-            if (arbitraryData.isGstInvoice) {
-                err.invoiceAmountError = ab.invoiceAmount ? undefined : true
-            } else {
-                err.invoiceAmountError = undefined
-            }
-            return err.invoiceAmountError
-        }
-        function getLineItemsError() {
-            const lineItemsErrors = arbitraryData.lineItems.map((item: any) => {
-                return Object.values(item.errorsObject).some((x: any) => !!x)
-            })
-            const ret = lineItemsErrors.some((x: any) => !!x) || undefined
-            err.lineItemsError = ret
-            return ret
-        }
-        function getQtyError() {
-            if (arbitraryData.qty) {
-                err.qtyError = undefined
-            } else {
-                err.qtyError = true
-            }
-            return err.qtyError
-        }
-
-        return {
-            getDateError,
-            getGstError,
-            getGstinError,
-            getInvoiceAmountError,
-            getInvoiceError,
-            getLineItemsError,
-            getOtherAccountError,
-            getPurchaseAccountError,
-            getQtyError,
-        }
-    }
-
     function checkIfValidInvoice() {
         const errorAllowed = 0.99
         const amountErrorAllowed = (arbitraryData.invoiceAmount * 0.5) / 100 // 0.5 % error in total amount is allowed
@@ -226,16 +135,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         const ret = !Object.values(errorObject).some((item: any) => !!item)
         return ret
     }
-
-    // function getError1(): boolean {
-    //     let ret: boolean = true
-    //     const errors = Object.values(allErrorMethods())
-    //     for (let f of errors) {
-    //         f()
-    //     }
-    //     ret = Object.values(meta.current.errorsObject).some((x: any) => x)
-    //     return ret
-    // }
 
     function setPurchaseErrorObject() {
         const errorObject = ad.errorObject
@@ -321,7 +220,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             }
             return (ret)
         }
-        errorObject.isDiscountError = (curr: any) => (curr.discount >= curr.price)
+        errorObject.isDiscountError = (curr: any) => (curr.price >= curr.discount) ? undefined : true
         errorObject.isSlNoError = (curr: any) => {
             function getCount() {
                 return curr?.serialNumbers.split(',').filter(Boolean).length || 0
@@ -355,132 +254,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             return (a || b || c)
         }
     }
-
-    // function getError(): boolean {
-    //     let ret: boolean = true
-
-    //     function headError() {
-    //         function dateError() {
-    //             return (isInvalidDate(ad.tranDate) || false)
-    //         }
-    //         function invoiceError() {
-    //             let ret = false
-    //             if (purchaseType === 'pur') {
-    //                 ret = ad.userRefNo ? false : true
-    //             }
-    //             return (ret)
-    //         }
-    //         return (dateError() || invoiceError())
-    //     }
-
-    //     function bodyError() {
-
-    //         function purchaseAccountError() {
-    //             return (ad.ledgerSubledgerPurchase.isLedgerSubledgerError || false)
-    //         }
-    //         function otherAccountError() {
-    //             return (ad.ledgerSubledgerOther.isLedgerSubledgerError || false)
-    //         }
-    //         function gstinError() {
-    //             let ret = true
-    //             if (ad.isGstInvoice) {
-    //                 if (ad.gstin) {
-    //                     ret = isInvalidGstin(ad.gstin)
-    //                 }
-    //             } else {
-    //                 ret = false
-    //             }
-    //             return (ret)
-    //         }
-    //         function gstError() {
-    //             let ret = true
-    //             if (ad.isGstInvoice) {
-    //                 if ((ad.cgst > 0 && ad.sgst > 0) || ad.igst > 0) {
-    //                     ret = false
-    //                 }
-    //             } else {
-    //                 ret = false
-    //             }
-    //             return (ret)
-    //         }
-    //         function invoiceAmountError() {
-    //             let ret = false
-    //             if (ad.isGstInvoice) {
-    //                 ret = ad.invoiceAmount ? false : true
-    //             }
-    //             return (ret)
-    //         }
-    //         function qtyError() {
-    //             let ret = true
-    //             if (ad.qty) {
-    //                 ret = false
-    //             }
-    //             return (ret)
-    //         }
-
-    //         const p = purchaseAccountError()
-    //         const o = otherAccountError()
-    //         const g = gstinError()
-    //         const g1 = gstError()
-    //         const i = invoiceAmountError()
-    //         const q = qtyError()
-    //         return (
-    //             p || o || g || g1 || i || q
-    //         )
-
-    //     }
-
-    //     function itemsError() {
-    //         const ret: any = ad.lineItems.reduce(
-    //             (prev: any, curr: any, index: number) => {
-    //                 const discountError = (curr: any) => (curr.discount >= curr.price)
-    //                 const hsnError = (curr: any) => {
-    //                     let ret = false
-    //                     if (ad.isGstInvoice) {
-    //                         ret = curr.hsn ? false : true
-    //                     }
-    //                     return (ret)
-    //                 }
-    //                 const gstRateError = (curr: any) => {
-    //                     let ret = false
-    //                     if (ad.isGstInvoice) {
-    //                         ret = curr.gstRate ? false : true
-    //                     }
-    //                     return (ret)
-    //                 }
-    //                 const slNoError = (curr: any) => {
-    //                     function getCount() {
-    //                         return curr?.serialNumbers.split(',').filter(Boolean).length || 0
-    //                     }
-    //                     const ok = (getCount() === curr.qty) || (getCount() === 0)
-    //                     return (!ok)
-    //                 }
-    //                 const d = discountError(curr)
-    //                 const h = hsnError(curr)
-    //                 const g = gstRateError(curr)
-    //                 const s = slNoError(curr)
-    //                 curr.isError =
-    //                     !!!curr.productCode ||
-    //                     !!!curr.hsn ||
-    //                     !!!curr.qty ||
-    //                     d ||
-    //                     h ||
-    //                     g ||
-    //                     s
-
-    //                 prev.isError = prev.isError || curr.isError
-    //                 return prev
-    //             },
-    //             { isError: false }
-    //         )
-    //         return (ret.isError)
-    //     }
-    //     const h = headError()
-    //     const b = bodyError()
-    //     const i = itemsError()
-    //     ret = h || b || i
-    //     return (ret)
-    // }
 
     function handleIsGstInvoice(e: any) {
         ad.isGstInvoice = e.target.checked
@@ -698,7 +471,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     }
 
     return {
-        allErrorMethods,
+        // allErrorMethods,
         // getError,
         handleIsGstInvoice,
         preHandlePurchaseCashCredit,
@@ -747,7 +520,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 display: 'flex',
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(2),
-                // columnGap: theme.spacing(4),
                 justifyContent: 'space-between',
 
                 '& .left': {
@@ -796,92 +568,227 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
 export { useStyles }
 
+// function allErrorMethods() {
+    //     const err = meta.current.errorsObject
+    //     const ab = arbitraryData
 
-    // useEffect(() => {
-    //     // Debtor / creditor
-    //     const pipe1: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-    //         map((d: any) =>
-    //             d.data.allAccounts.filter((el: any) => {
-    //                 const accClasses = ['debtor', 'creditor']
-    //                 let condition =
-    //                     accClasses.includes(el.accClass) &&
-    //                     (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-    //                     !el.isAutoSubledger
-    //                 return condition
-    //             })
-    //         )
-    //     )
-
-    //     // Purchase
-    //     const pipe2: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-    //         map((d: any) =>
-    //             d.data.allAccounts.filter(
-    //                 (el: any) =>
-    //                     ['purchase'].includes(el.accClass) &&
-    //                     (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //             )
-    //         )
-    //     )
-
-    //     // cash / bank / ecash /card
-    //     const pipe3: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-    //         map((d: any) =>
-    //             d.data.allAccounts.filter(
-    //                 (el: any) =>
-    //                     ['cash', 'bank', 'ecash', 'card'].includes(
-    //                         el.accClass
-    //                     ) &&
-    //                     (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //             )
-    //         )
-    //     )
-
-    //     const subs1 = pipe1.subscribe((d: any) => {
-    //         meta.current.debtorCreditorLedgerAccounts = d.map((el: any) => {
-    //             return {
-    //                 label: el.accName,
-    //                 value: el.id,
-    //                 accLeaf: el.accLeaf,
-    //             }
-    //         })
-    //     })
-
-    //     const subs2 = pipe2.subscribe((d: any) => {
-    //         meta.current.purchaseLedgerAccounts = d.map((el: any) => {
-    //             return {
-    //                 label: el.accName,
-    //                 value: el.id,
-    //                 accLeaf: el.accLeaf,
-    //             }
-    //         })
-    //     })
-
-    //     const subs3 = pipe3.subscribe((d: any) => {
-    //         meta.current.cashBankLedgerAccounts = d.map((el: any) => {
-    //             return {
-    //                 label: el.accName,
-    //                 value: el.id,
-    //                 accLeaf: el.accLeaf,
-    //             }
-    //         })
-    //     })
-
-    //     const subs4: any = hotFilterOn(
-    //         'DATACACHE-SUCCESSFULLY-LOADED'
-    //     ).subscribe((d: any) => {
-    //         meta.current.allAccounts = d.data.allAccounts
-    //         registerAccounts(meta.current.allAccounts)
-    //     })
-    //     // subs1.add(subs2).add(subs3).add(subs4)
-    //     setRefresh({})
-    //     return () => {
-    //         subs1.unsubscribe()
-    //         subs2.unsubscribe()
-    //         subs3.unsubscribe()
-    //         subs4.unsubscribe()
+    //     function getDateError() {
+    //         err.dateError = isInvalidDate(ab.tranDate) || undefined
+    //         return err.dateError
     //     }
-    // }, [])
+    //     function getInvoiceError() {
+    //         // logic for invoice no for purchase or purchase ret
+    //         if (purchaseType === 'pur') {
+    //             err.invoiceNoError = ab.userRefNo ? undefined : true
+    //         } else {
+    //             err.invoiceNoError = undefined
+    //         }
 
-    // useEffect(() => {
-    //     meta.current.ledgerAccounts = meta.current.debtorCreditorLedgerAccounts
-    // }, [])
+    //         return err.invoiceNoError
+    //     }
+    //     function getPurchaseAccountError() {
+    //         err.purchaseAccountError =
+    //             ab.ledgerSubledgerPurchase.isLedgerSubledgerError || undefined
+    //         return err.purchaseAccountError
+    //     }
+    //     function getOtherAccountError() {
+    //         err.otherAccountError =
+    //             ab.ledgerSubledgerOther.isLedgerSubledgerError || undefined
+    //         return err.otherAccountError
+    //     }
+    //     function getGstError() {
+    //         if (arbitraryData.isGstInvoice) {
+    //             if ((ab.cgst > 0 && ab.sgst > 0) || ab.igst > 0) {
+    //                 err.gstError = undefined
+    //             } else {
+    //                 err.gstError = true
+    //             }
+    //         } else {
+    //             err.gstError = undefined
+    //         }
+    //         return err.gstError
+    //     }
+    //     function getGstinError() {
+    //         if (arbitraryData.isGstInvoice) {
+    //             if (ab.gstin) {
+    //                 err.gstinError = isInvalidGstin(ab.gstin)
+    //             } else {
+    //                 err.gstinError = true
+    //             }
+    //         } else {
+    //             err.gstinError = undefined
+    //         }
+    //         return err.gstinError
+    //     }
+
+    //     function getInvoiceAmountError() {
+    //         if (arbitraryData.isGstInvoice) {
+    //             err.invoiceAmountError = ab.invoiceAmount ? undefined : true
+    //         } else {
+    //             err.invoiceAmountError = undefined
+    //         }
+    //         return err.invoiceAmountError
+    //     }
+    //     function getLineItemsError() {
+    //         const lineItemsErrors = arbitraryData.lineItems.map((item: any) => {
+    //             return Object.values(item.errorsObject).some((x: any) => !!x)
+    //         })
+    //         const ret = lineItemsErrors.some((x: any) => !!x) || undefined
+    //         err.lineItemsError = ret
+    //         return ret
+    //     }
+    //     function getQtyError() {
+    //         if (arbitraryData.qty) {
+    //             err.qtyError = undefined
+    //         } else {
+    //             err.qtyError = true
+    //         }
+    //         return err.qtyError
+    //     }
+
+    //     return {
+    //         getDateError,
+    //         getGstError,
+    //         getGstinError,
+    //         getInvoiceAmountError,
+    //         getInvoiceError,
+    //         getLineItemsError,
+    //         getOtherAccountError,
+    //         getPurchaseAccountError,
+    //         getQtyError,
+    //     }
+    // }
+    // function getError1(): boolean {
+    //     let ret: boolean = true
+    //     const errors = Object.values(allErrorMethods())
+    //     for (let f of errors) {
+    //         f()
+    //     }
+    //     ret = Object.values(meta.current.errorsObject).some((x: any) => x)
+    //     return ret
+    // }
+    // function getError(): boolean {
+    //     let ret: boolean = true
+
+    //     function headError() {
+    //         function dateError() {
+    //             return (isInvalidDate(ad.tranDate) || false)
+    //         }
+    //         function invoiceError() {
+    //             let ret = false
+    //             if (purchaseType === 'pur') {
+    //                 ret = ad.userRefNo ? false : true
+    //             }
+    //             return (ret)
+    //         }
+    //         return (dateError() || invoiceError())
+    //     }
+
+    //     function bodyError() {
+
+    //         function purchaseAccountError() {
+    //             return (ad.ledgerSubledgerPurchase.isLedgerSubledgerError || false)
+    //         }
+    //         function otherAccountError() {
+    //             return (ad.ledgerSubledgerOther.isLedgerSubledgerError || false)
+    //         }
+    //         function gstinError() {
+    //             let ret = true
+    //             if (ad.isGstInvoice) {
+    //                 if (ad.gstin) {
+    //                     ret = isInvalidGstin(ad.gstin)
+    //                 }
+    //             } else {
+    //                 ret = false
+    //             }
+    //             return (ret)
+    //         }
+    //         function gstError() {
+    //             let ret = true
+    //             if (ad.isGstInvoice) {
+    //                 if ((ad.cgst > 0 && ad.sgst > 0) || ad.igst > 0) {
+    //                     ret = false
+    //                 }
+    //             } else {
+    //                 ret = false
+    //             }
+    //             return (ret)
+    //         }
+    //         function invoiceAmountError() {
+    //             let ret = false
+    //             if (ad.isGstInvoice) {
+    //                 ret = ad.invoiceAmount ? false : true
+    //             }
+    //             return (ret)
+    //         }
+    //         function qtyError() {
+    //             let ret = true
+    //             if (ad.qty) {
+    //                 ret = false
+    //             }
+    //             return (ret)
+    //         }
+
+    //         const p = purchaseAccountError()
+    //         const o = otherAccountError()
+    //         const g = gstinError()
+    //         const g1 = gstError()
+    //         const i = invoiceAmountError()
+    //         const q = qtyError()
+    //         return (
+    //             p || o || g || g1 || i || q
+    //         )
+
+    //     }
+
+    //     function itemsError() {
+    //         const ret: any = ad.lineItems.reduce(
+    //             (prev: any, curr: any, index: number) => {
+    //                 const discountError = (curr: any) => (curr.discount >= curr.price)
+    //                 const hsnError = (curr: any) => {
+    //                     let ret = false
+    //                     if (ad.isGstInvoice) {
+    //                         ret = curr.hsn ? false : true
+    //                     }
+    //                     return (ret)
+    //                 }
+    //                 const gstRateError = (curr: any) => {
+    //                     let ret = false
+    //                     if (ad.isGstInvoice) {
+    //                         ret = curr.gstRate ? false : true
+    //                     }
+    //                     return (ret)
+    //                 }
+    //                 const slNoError = (curr: any) => {
+    //                     function getCount() {
+    //                         return curr?.serialNumbers.split(',').filter(Boolean).length || 0
+    //                     }
+    //                     const ok = (getCount() === curr.qty) || (getCount() === 0)
+    //                     return (!ok)
+    //                 }
+    //                 const d = discountError(curr)
+    //                 const h = hsnError(curr)
+    //                 const g = gstRateError(curr)
+    //                 const s = slNoError(curr)
+    //                 curr.isError =
+    //                     !!!curr.productCode ||
+    //                     !!!curr.hsn ||
+    //                     !!!curr.qty ||
+    //                     d ||
+    //                     h ||
+    //                     g ||
+    //                     s
+
+    //                 prev.isError = prev.isError || curr.isError
+    //                 return prev
+    //             },
+    //             { isError: false }
+    //         )
+    //         return (ret.isError)
+    //     }
+    //     const h = headError()
+    //     const b = bodyError()
+    //     const i = itemsError()
+    //     ret = h || b || i
+    //     return (ret)
+    // }

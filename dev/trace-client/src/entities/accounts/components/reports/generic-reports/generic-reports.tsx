@@ -23,17 +23,21 @@ function GenericReports({ loadReport }: any) {
         title,
     } = selectLogic[loadReport]()
 
-    const { emit, filterOn } = useSharedElements()
+    const { accountsMessages, confirm, emit, filterOn, genericUpdateMaster, isGoodToDelete, } = useSharedElements()
     const classes = useStyles()
 
     useEffect(() => {
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
             emit(actionMessages.fetchIbukiMessage, null)
         })
+        const subs2 = filterOn(actionMessages.deleteIbukiMessage).subscribe((d: any) => {
+            doDelete(d.data)
+        })
         emit(actionMessages.fetchIbukiMessage, null)
 
         return () => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
@@ -54,6 +58,34 @@ function GenericReports({ loadReport }: any) {
             />
         </Card>
     )
+
+    async function doDelete(params: any) {
+        const row = params.row
+        const tranHeaderId = row['id1']
+        const options = {
+            description: accountsMessages.transactionDelete,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        if (isGoodToDelete(params)) {
+            confirm(options)
+                .then(async () => {
+                    await genericUpdateMaster({
+                        deletedIds: [tranHeaderId],
+                        tableName: 'TranH',
+                    })
+                    emit('SHOW-MESSAGE', {})
+                    emit(
+                        actionMessages.fetchIbukiMessage,
+                        null
+                    )
+                    // setRefresh({})
+                })
+                .catch(() => { }) // important to have otherwise eror
+        }
+    }
+
+
 }
 
 export { GenericReports }

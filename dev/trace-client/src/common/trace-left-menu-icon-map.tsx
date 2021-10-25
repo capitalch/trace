@@ -80,8 +80,8 @@ const iconMap: any = {
     salesPurchasesMenu: <DynamicFeed></DynamicFeed>,
     salesSubMenu: <Money></Money>,
     purchasesSubMenu: <MoneyOff></MoneyOff>,
-    assignmentReturnSubMenu: <AssignmentReturn></AssignmentReturn>,
-    assignmentReturnedSubMenu: <AssignmentReturned></AssignmentReturned>,
+    salesReturnSubMenu: <AssignmentReturn></AssignmentReturn>,
+    purchasesReturnSubMenu: <AssignmentReturned></AssignmentReturned>,
     debitNotesSubMenu: <FlightLand></FlightLand>,
     creditNotesSubMenu: <FlightTakeoff></FlightTakeoff>,
 

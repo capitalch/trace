@@ -36,7 +36,6 @@ function SaleItems() {
         handleSerialNo,
         meta,
         searchProductOnProductCode,
-        searchProductOnUpcCode,
     } = useSaleItems(arbitraryData)
     const lineItems = arbitraryData.lineItems
 

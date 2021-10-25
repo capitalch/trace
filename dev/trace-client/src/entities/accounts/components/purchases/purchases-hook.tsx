@@ -18,6 +18,7 @@ function usePurchases(drillDownEditAttributes: any) {
     const isoFormat = 'YYYY-MM-DD'
     const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
     const multiData: any = useContext(MultiDataContext)
+
     useEffect(() => {
         meta.current.isMounted = true
         if (drillDownEditAttributes && !_.isEmpty(drillDownEditAttributes)) {
@@ -47,7 +48,6 @@ function usePurchases(drillDownEditAttributes: any) {
     const meta: any = useRef({
         isMounted: false,
         purchaseTypeLabel: '',
-        // value: 0,
     })
 
     const purchasesData = getFromBag('purchasesData')
