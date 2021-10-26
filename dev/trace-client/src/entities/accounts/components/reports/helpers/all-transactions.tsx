@@ -85,7 +85,6 @@ function useAllTransactions() {
         isHide: true,
         isEdit: true,
         isDelete: true,        
-        // isDrillDown: true,
     }
     const actionMessages = {
         fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ALL-TRANSACTIONS',

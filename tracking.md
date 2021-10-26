@@ -37,15 +37,6 @@ pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.
 create installer from innosetup
 
 ## Testing strategy
-1. Sales
-	1.1 CRUD, validations, BS edit, BS delete, Reports edit, delete
-	1.2 sales return all above
-2. Purchases
-	2.1 All above
-	2.2 Purchase return
-3. Debit credit notes
-	3.1 Debit notes
-	3.2 credit notes
 
 ## Notes
 1. 09-10-2021: 1st attempt to transfer to Material-UI version 5.x failed because xgrid breaks the UI
@@ -62,31 +53,28 @@ c) In all Typography comment out disableTypography
 # Pending
 
 # Working on
-0.1 Purchases perhaps onBlur is implemented, so if you click something and expect the results, on second click something happens
-0.2 Purchases when ledger-subledger clcked, after that when drawyer clicked, ui breaks
-0.3 drilldown from report not working with sales, purchases etc
-1. Retain values of purchases and sales when screen expanded. At present a refresh of data is done and original inserted values are lost
+0.1 
+
 1.1 Bank recon rework, drill down etc
 1.2 All transactions, default is reverse, so let the checkbox be checked
-1.5 All dialog boxes to originate from same place. At present there are many
-1.6 Provide debounce in search event of all XX-grid
-1.7 Provide reset in sales / purchases...
+1.5 
+1.6 
+1.7 
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
-1.9.1 In Sales, sometimes crown is not updated and submit button is not hilighted
+1.9.1 
 1.9.2 Print support for sales
 1.9.3 Easy sales implementation
 1.9.4 Sale SMS and mail provisions
-2. Thorough checkup required
-3. Purchase sale clickaway
+2. 
 4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
-1. serial number error in purchases
+1. 
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
-3. 	Sales / Sale return GST rate change does not calculate well
-6. In purchase entries, sl no columns un necessary commas are appearing. Sometimes sl no tag showing blank
-7. Sales return select bill does not work well	
+3. 	
+6. 
+7. 
 
 ## Reorganize
 
@@ -134,6 +122,10 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 23-10-2021 - 26-10-2021
+1. Complete rework on sales, purchase, debit, credit notes, uplifting the state to launchpad level using useContext and Provider
+2. Started work on bank recon as prof grid
 
 # 21-10-2021 - 22-10-2021
 2. Bug fixing for sales and purchases

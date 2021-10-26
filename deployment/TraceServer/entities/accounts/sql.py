@@ -532,50 +532,7 @@ allSqls = {
             from cte1
                 join cte2
                     on cte1."id" = cte2."id"
-                order by cte1."id" DESC LIMIT %(no)s
-    ''',
-
-    "get_sale_purchase_headers1": '''
-        with cte1 as (
-            select h."id", string_agg("accName",', ') as "accounts", "clearDate"
-                from "TranH" h		
-                    join "TranD" d
-                        on h."id" = d."tranHeaderId" 
-                    join "AccM" a
-                        on a."id" = d."accId"
-                    left outer join "ExtBankReconTranD" b
-						on d."id" = b."tranDetailsId"
-                    where "tranTypeId" = %(tranTypeId)s
-                        and "dc" <> %(tranDc)s
-                        and "accId"::text ILIKE %(accId)s
-                        and "finYearId" = %(finYearId)s
-                        and "branchId" = %(branchId)s
-                group by h."id", "clearDate"
-        ),
-        cte2 as (
-            select h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
-                d."amount" , string_agg("label", ' ,') as "labels", 
-                string_agg(s."jData"->>'serialNumbers', ' ,') as "serialNumbers"
-                from "TranH" h			
-                    join "TranD" d
-                        on "h"."id" = d."tranHeaderId" 
-                    join "SalePurchaseDetails" s
-                        on d."id" = s."tranDetailsId"
-                    join "ProductM" p
-                        on p."id" = s."productId"		
-                where "tranTypeId" = %(tranTypeId)s
-                    and "dc" = %(tranDc)s
-                    and "finYearId" = %(finYearId)s
-                    and "branchId" = %(branchId)s
-                group by h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
-                    d."amount"
-            )
-					
-        select  cte1."id",cte1."accounts", cte1."clearDate", cte2.* 
-            from cte1
-                join cte2
-                    on cte1."id" = cte2."id"
-                order by cte1."id" DESC LIMIT %(no)s
+                order by "tranDate" DESC, cte1."id" DESC LIMIT %(no)s
     ''',
 
     "get_search_product": '''
