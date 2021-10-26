@@ -37,15 +37,8 @@ pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.
 create installer from innosetup
 
 ## Testing strategy
-1. Sales
-	1.1 CRUD, validations, BS edit, BS delete, Reports edit, delete
-	1.2 sales return all above
-2. Purchases
-	2.1 All above
-	2.2 Purchase return
-3. Debit credit notes
-	3.1 Debit notes
-	3.2 credit notes
+1. Delete all orphan entries in TranH table
+2. Check all GST impact for sales and purchases CRUD
 
 ## Notes
 1. 09-10-2021: 1st attempt to transfer to Material-UI version 5.x failed because xgrid breaks the UI
