@@ -1,16 +1,4 @@
-import {
-    _,
-    clsx,
-    DataTable,
-    hash,
-    InputMask,
-    InputText,
-    moment,
-    PrimeColumn,
-    useState,
-    useEffect,
-    useRef,
-} from '../../../../imports/regular-imports'
+import { _,clsx, DataTable, hash, InputMask, InputText, moment,PrimeColumn, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     Button,
@@ -30,23 +18,9 @@ import {
     ListItemText,
     useTheme,
 } from '../../../../imports/gui-imports'
-import {
-    CloseSharp,
-    AccountBalance,
-    FlipToFront,
-    Cached,
-    Save,
-} from '../../../../imports/icons-import'
-import { useSharedElements } from '../common/shared-elements-hook'
-import {
-    componentStore,
-    manageEntitiesState,
-    manageFormsState,
-    ReactForm,
-    useIbuki,
-    useTraceGlobal,
-    useTraceMaterialComponents,
-} from '../../../../imports/trace-imports'
+import { CloseSharp, AccountBalance, FlipToFront, Cached, Save } from '../../../../imports/icons-import'
+
+import {componentStore,manageEntitiesState,manageFormsState,ReactForm, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../../../messages.json'
 
@@ -71,7 +45,6 @@ function BankRecon() {
         getDateMaskMap,
         isControlDisabled,
     } = utilMethods()
-    const { XXGrid } = useSharedElements()
     const [, setRefresh] = useState({})
     const { TraceFullWidthSubmitButton } = useTraceMaterialComponents()
     const isoDateFormat = 'YYYY-MM-DD'
@@ -110,7 +83,7 @@ function BankRecon() {
     const headerConfig = meta.current.headerConfig
     const classes = useStyles({ headerConfig: headerConfig })
     const { getCurrentMediaSize, getCurrentWindowSize } = useTraceGlobal()
-    const theme: Theme = useTheme()
+    const theme:Theme = useTheme()
     useEffect(() => {
         meta.current.isMounted = true
         utilFunc().getAllBanks()
@@ -181,15 +154,6 @@ function BankRecon() {
         return ret
     }
 
-    const {
-        columns,
-        gridActionMessages,
-        queryArgs,
-        queryId,
-        specialColumns,
-        summaryColNames,
-    } = getXXGridParams()
-
     return (
         <div
             className={classes.content}
@@ -250,7 +214,9 @@ function BankRecon() {
                         size={meta.current.headerConfig.buttonSize}
                         className={clsx(classes.buttons, classes.refresh)}
                         startIcon={
-                            headerConfig.isButtonsIcon && <Cached></Cached>
+                            headerConfig.isButtonsIcon && (
+                                <Cached></Cached>
+                            )
                         }
                         onClick={(e: any) => utilFunc().fetchBankRecon()}
                         variant="contained">
@@ -262,29 +228,123 @@ function BankRecon() {
                         disabled={handleDisabled()}
                         size={meta.current.headerConfig.buttonSize}
                         className={clsx(classes.buttons, classes.submit)}
-                        startIcon={headerConfig.isButtonsIcon && <Save></Save>}
+                        startIcon={
+                            headerConfig.isButtonsIcon && (
+                                <Save></Save>
+                            )
+                        }
                         onClick={utilFunc().submitBankRecon}
                         variant="contained">
                         Submit
                     </Button>
                 </Box>
             </Box>
-            <Box className={classes.content}>
-                <XXGrid
-                    
-                    gridActionMessages={gridActionMessages}
-                    columns={columns}
-                    summaryColNames={summaryColNames}
-                    title={'Bank reconcillation'}
-                    sqlQueryId={queryId}
-                    sqlQueryArgs={queryArgs}
-                    specialColumns={specialColumns}
-                    toShowOpeningBalance={false}
-                    toShowReverseCheckbox={true}
-                    // xGridProps={{ disableSelectionOnClick: true }}
-                    viewLimit="1000"
+            <DataTable
+                style={{ marginTop: '1rem', fontSize: '0.8rem' }}
+                value={meta.current.reconData}
+                scrollable={true}
+                selectionMode="multiple"
+                selection={selectedItems}
+                onSelectionChange={(e) => setSelectedItems(e.value)}
+                scrollHeight="calc(100vh - 20rem)">
+                <PrimeColumn
+                    selectionMode="multiple"
+                    style={{ width: '3rem', textAlign: 'center' }}
                 />
-            </Box>
+                {/* id */}
+                <PrimeColumn
+                    style={{ width: '4rem', textAlign: 'left' }}
+                    field="id"
+                    header="Id"></PrimeColumn>
+
+                {/* tran Date */}
+                <PrimeColumn
+                    header="Tran date"
+                    style={{ width: '7rem', textAlign: 'left' }}
+                    field={'tranDate'}></PrimeColumn>
+
+                {/* instr no  */}
+                <PrimeColumn
+                    style={{
+                        width: '7rem',
+                        textAlign: 'left',
+                        wordWrap: 'break-word',
+                    }}
+                    field="instrNo"
+                    header="Instr no"></PrimeColumn>
+
+                {/* clear date ------------------------------------  */}
+                <PrimeColumn
+                    editor={utilFunc().clearDateEditor}
+                    style={{
+                        height: '2rem',
+                        fontSize: '0.8rem',
+                        width: '7.0rem',
+                        textAlign: 'left',
+                        backgroundColor: theme.palette.yellow.light,
+                        color: theme.palette.getContrastText(theme.palette.yellow.light),
+                    }}
+                    field="clearDate"
+                    header="Clear date"></PrimeColumn>
+
+                {/* debit */}
+                <PrimeColumn
+                    style={{ width: '8rem', textAlign: 'right' }}
+                    body={(node: any) => toDecimalFormat(node.debit)}
+                    header="Debit"></PrimeColumn>
+
+                {/* credit */}
+                <PrimeColumn
+                    style={{ width: '8rem', textAlign: 'right' }}
+                    body={(node: any) => toDecimalFormat(node.credit)}
+                    header="Credit"></PrimeColumn>
+
+                {/* balance  */}
+                <PrimeColumn
+                    style={{ width: '8rem', textAlign: 'right' }}
+                    body={(node: any) => toDecimalFormat(node.balance)}
+                    header="Balance"></PrimeColumn>
+
+                {/* autoRefNo */}
+                <PrimeColumn
+                    style={{
+                        overflow: 'hidden',
+                        textAlign: 'left',
+                        width: '10rem',
+                    }}
+                    field="autoRefNo"
+                    header="Auto ref no"></PrimeColumn>
+
+                {/* clear remarks ----------------------------------------*/}
+                <PrimeColumn
+                    editor={utilFunc().clearRemarksEditor}
+                    style={{
+                        textAlign: 'left',
+                        backgroundColor: theme.palette.yellow.light,
+                        color: theme.palette.getContrastText(theme.palette.yellow.light),
+                        width: '15rem',
+                    }}
+                    field="clearRemarks"
+                    header="Clear remarks"></PrimeColumn>
+
+                {/* Account name */}
+                <PrimeColumn
+                    style={{ width: '8rem', textAlign: 'left' }}
+                    field="accNames"
+                    header="Accounts"></PrimeColumn>
+
+                {/* line ref no */}
+                <PrimeColumn
+                    style={{ textAlign: 'left', width: '10rem' }}
+                    field="lineRefNo"
+                    header="Line ref no"></PrimeColumn>
+
+                {/* line remarks */}
+                <PrimeColumn
+                    style={{ textAlign: 'left', width: '15rem' }}
+                    field="lineRemarks"
+                    header="Line remarks"></PrimeColumn>
+            </DataTable>
 
             <Dialog //material-ui dialog
                 open={meta.current.showDialog}
@@ -311,60 +371,6 @@ function BankRecon() {
             </Dialog>
         </div>
     )
-
-    function getXXGridParams() {
-        const columns = [
-            {
-                headerName: 'Ind',
-                description: 'Index',
-                field: 'id',
-                width: 80,
-                disableColumnMenu: true,
-            },
-            {
-                headerName: 'Id',
-                description: 'Id',
-                field: 'id1',
-                width: 90,
-            },
-            {
-                headerName: 'Date',
-                description: 'Date',
-                field: 'tranDate',
-                width: 120,
-                type: 'date',
-                valueFormatter: (params: any) =>
-                    moment(params.value).format(dateFormat),
-            },
-        ]
-        const queryId = 'get_sale_purchase_headers'
-        const queryArgs = {
-            // tranTypeId: (arbitraryData.saleType ==='sal') ? 4 : 9,
-            // no: 100,
-            // accId: meta.current.selectedAccount?.id
-            //     ? meta.current.selectedAccount.id + ''
-            //     : '%',
-            // tranDc: (arbitraryData.saleType==='sal') ? 'C' : 'D',
-        }
-        const summaryColNames: string[] = ['amount']
-        const specialColumns = {
-            isEdit: true,
-            isDelete: true,
-        }
-        const gridActionMessages = {
-            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-SALES-DATA',
-            editIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
-        }
-        return {
-            columns,
-            gridActionMessages,
-            queryId,
-            queryArgs,
-            summaryColNames,
-            specialColumns,
-        }
-    }
 
     function utilFunc() {
         function bankSelected(item: any) {
@@ -461,7 +467,7 @@ function BankRecon() {
                     accId: meta.current.selectedBankId,
                     nextFinYearId: nextFinYearId,
                     isoStartDate: finYearObject.isoStartDate,
-                    isoEndDate: finYearObject.isoEndDate,
+                    isoEndDate: finYearObject.isoEndDate
                 },
             })
             if (ret) {
@@ -701,10 +707,6 @@ export { BankRecon }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: 'calc(100vh - 200px)',
-            width: '100%',
-            // marginTop: '5px',
-
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
             overflowX: 'auto',
@@ -731,9 +733,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
         header: {
             display: 'flex',
-            flexDirection: ({ headerConfig }: any): any =>
+            flexDirection: ({ headerConfig }:any): any =>
                 headerConfig.flexDirection,
-            alignItems: ({ headerConfig }: any): any => headerConfig.alignItems,
+            alignItems: ({ headerConfig }:any): any => headerConfig.alignItems,
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '1rem',
@@ -807,109 +809,6 @@ const opClosJson: any = {
     ],
 }
 
-// {/* <DataTable
-//                 style={{ marginTop: '1rem', fontSize: '0.8rem' }}
-//                 value={meta.current.reconData}
-//                 scrollable={true}
-//                 selectionMode="multiple"
-//                 selection={selectedItems}
-//                 onSelectionChange={(e) => setSelectedItems(e.value)}
-//                 scrollHeight="calc(100vh - 20rem)">
-//                 <PrimeColumn
-//                     selectionMode="multiple"
-//                     style={{ width: '3rem', textAlign: 'center' }}
-//                 />
-//                 {/* id */}
-//                 <PrimeColumn
-//                     style={{ width: '4rem', textAlign: 'left' }}
-//                     field="id"
-//                     header="Id"></PrimeColumn>
+/*
 
-//                 {/* tran Date */}
-//                 <PrimeColumn
-//                     header="Tran date"
-//                     style={{ width: '7rem', textAlign: 'left' }}
-//                     field={'tranDate'}></PrimeColumn>
-
-//                 {/* instr no  */}
-//                 <PrimeColumn
-//                     style={{
-//                         width: '7rem',
-//                         textAlign: 'left',
-//                         wordWrap: 'break-word',
-//                     }}
-//                     field="instrNo"
-//                     header="Instr no"></PrimeColumn>
-
-//                 {/* clear date ------------------------------------  */}
-//                 <PrimeColumn
-//                     editor={utilFunc().clearDateEditor}
-//                     style={{
-//                         height: '2rem',
-//                         fontSize: '0.8rem',
-//                         width: '7.0rem',
-//                         textAlign: 'left',
-//                         backgroundColor: theme.palette.yellow.light,
-//                         color: theme.palette.getContrastText(theme.palette.yellow.light),
-//                     }}
-//                     field="clearDate"
-//                     header="Clear date"></PrimeColumn>
-
-//                 {/* debit */}
-//                 <PrimeColumn
-//                     style={{ width: '8rem', textAlign: 'right' }}
-//                     body={(node: any) => toDecimalFormat(node.debit)}
-//                     header="Debit"></PrimeColumn>
-
-//                 {/* credit */}
-//                 <PrimeColumn
-//                     style={{ width: '8rem', textAlign: 'right' }}
-//                     body={(node: any) => toDecimalFormat(node.credit)}
-//                     header="Credit"></PrimeColumn>
-
-//                 {/* balance  */}
-//                 <PrimeColumn
-//                     style={{ width: '8rem', textAlign: 'right' }}
-//                     body={(node: any) => toDecimalFormat(node.balance)}
-//                     header="Balance"></PrimeColumn>
-
-//                 {/* autoRefNo */}
-//                 <PrimeColumn
-//                     style={{
-//                         overflow: 'hidden',
-//                         textAlign: 'left',
-//                         width: '10rem',
-//                     }}
-//                     field="autoRefNo"
-//                     header="Auto ref no"></PrimeColumn>
-
-//                 {/* clear remarks ----------------------------------------*/}
-//                 <PrimeColumn
-//                     editor={utilFunc().clearRemarksEditor}
-//                     style={{
-//                         textAlign: 'left',
-//                         backgroundColor: theme.palette.yellow.light,
-//                         color: theme.palette.getContrastText(theme.palette.yellow.light),
-//                         width: '15rem',
-//                     }}
-//                     field="clearRemarks"
-//                     header="Clear remarks"></PrimeColumn>
-
-//                 {/* Account name */}
-//                 <PrimeColumn
-//                     style={{ width: '8rem', textAlign: 'left' }}
-//                     field="accNames"
-//                     header="Accounts"></PrimeColumn>
-
-//                 {/* line ref no */}
-//                 <PrimeColumn
-//                     style={{ textAlign: 'left', width: '10rem' }}
-//                     field="lineRefNo"
-//                     header="Line ref no"></PrimeColumn>
-
-//                 {/* line remarks */}
-//                 <PrimeColumn
-//                     style={{ textAlign: 'left', width: '15rem' }}
-//                     field="lineRemarks"
-//                     header="Line remarks"></PrimeColumn>
-//             </DataTable> } */}
+*/

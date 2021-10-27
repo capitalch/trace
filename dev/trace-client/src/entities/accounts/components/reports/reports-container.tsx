@@ -3,11 +3,11 @@ import {
     Theme,
     createStyles,
     makeStyles,
-} from '../../../../../imports/gui-imports'
-import { XXGrid } from '../../../../../imports/trace-imports'
-import { useSharedElements } from '../../common/shared-elements-hook'
-import { useAllTransactions } from '../helpers/all-transactions'
-import { _, useEffect } from '../../../../../imports/regular-imports'
+} from '../../../../imports/gui-imports'
+import { XXGrid } from '../../../../imports/trace-imports'
+import { useSharedElements } from '../common/shared-elements-hook'
+import { useAllTransactions } from './all-reports/all-transactions'
+import { _, useEffect } from '../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
@@ -84,8 +84,6 @@ function GenericReports({ loadReport }: any) {
                 .catch(() => { }) // important to have otherwise eror
         }
     }
-
-
 }
 
 export { GenericReports }
