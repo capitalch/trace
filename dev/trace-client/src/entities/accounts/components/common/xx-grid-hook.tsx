@@ -334,7 +334,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             height: '100%',
             width: '100%',
-
+            minHeight: '65vh',
             '& .ledger-summary': {
                 color: theme.palette.blue.dark,
                 backgroundColor: '#FFFAFA',
@@ -357,6 +357,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .toolbar-left-items': {
                     display: 'flex',
                     alignItems: 'center',
+                    flexWrap:'wrap',
+                    columnGap:theme.spacing(0.5),
+                    // rowGap: theme.spacing(1),
                     '& .toolbar-title': {
                         color: 'dodgerblue',
                         fontSize: '1.2rem',

@@ -87,6 +87,7 @@ interface XXGridOptions {
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
+        className,
         gridActionMessages,
         columns,
         disableSelectionOnClick,
@@ -97,7 +98,9 @@ function XXGrid(gridOptions: XXGridOptions) {
         title,
         viewLimit,
     }: any = gridOptions
+
     const apiRef: any = useGridApiRef()
+
     const {
         fetchRows,
         fillColumnBalance,
@@ -109,8 +112,10 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleReverseOrder,
     } = useXXGrid(gridOptions)
-    const { debounceEmit, emit, toDecimalFormat } = useSharedElements()
+
+    const { debounceEmit, emit,isMediumSizeDown, toDecimalFormat } = useSharedElements()
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
+    meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
     addSpecialColumns(specialColumns, gridActionMessages)
 
@@ -120,14 +125,16 @@ function XXGrid(gridOptions: XXGridOptions) {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
             }}
+            // autoHeight={!!isMediumSizeDown}
+            // autoHeight={true}
             disableSelectionOnClick={disableSelectionOnClick || true}
-            className={clsx(gridOptions.className || '', classes.content)}
+            className={clsx(className || '', classes.content)}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}
             rows={meta.current.filteredRows}
             rowHeight={32}
-            // autoHeight={true}
+            // 
             // disableSelectionOnClick={true}
             components={{
                 Toolbar: CustomGridToolbar,

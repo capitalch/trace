@@ -65,7 +65,7 @@ function useSharedElements() {
         TraceFullWidthSubmitButton,
         TraceSearchBox,
     } = useTraceMaterialComponents()
-    const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
+    const { getCurrentMediaSize,isMediumSizeDown, isMediumSizeUp, getCurrentWindowSize } =
         useTraceGlobal()
     const confirm = useConfirm()
     const {
@@ -131,6 +131,7 @@ function useSharedElements() {
         isDateAuditLocked,
         isDateNotAuditLocked,
         isGoodToDelete,
+        isMediumSizeDown,
         isMediumSizeUp,
         isImproperDate,
         isInvalidDate,

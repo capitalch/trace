@@ -51,8 +51,8 @@ import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../../../messages.json'
 
 function BankRecon() {
-    const [selectedItems, setSelectedItems] = useState(null)
-    const { emit } = useIbuki()
+    // const [selectedItems, setSelectedItems] = useState(null)
+    // const { emit } = useIbuki()
     const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const {
         resetForm,
@@ -71,7 +71,7 @@ function BankRecon() {
         getDateMaskMap,
         isControlDisabled,
     } = utilMethods()
-    const { XXGrid } = useSharedElements()
+    const { emit, filterOn, XXGrid } = useSharedElements()
     const [, setRefresh] = useState({})
     const { TraceFullWidthSubmitButton } = useTraceMaterialComponents()
     const isoDateFormat = 'YYYY-MM-DD'
@@ -113,7 +113,10 @@ function BankRecon() {
     const theme: Theme = useTheme()
     useEffect(() => {
         meta.current.isMounted = true
-        utilFunc().getAllBanks()
+        // utilFunc().getAllBanks()
+        // const subs1 = filterOn(getXXGridParams().gridActionMessages.fetchIbukiMessage).subscribe(()=>{
+
+        // })
         return () => {
             meta.current.isMounted = false
         }
@@ -194,8 +197,8 @@ function BankRecon() {
         <div
             className={classes.content}
             style={{ width: getCurrentWindowSize() }}>
-            <Box className={classes.header}>
-                <Box className={classes.bank}>
+            <Box className='header'>
+                <Box className='bank'>
                     <Typography
                         color="primary"
                         variant={headerConfig.textVariant}
@@ -205,32 +208,25 @@ function BankRecon() {
                     <Chip
                         avatar={<Avatar>B</Avatar>}
                         label={meta.current.selectedBankName}
-                        className={classes.selectedBank}
+                        // className={classes.selectedBank}
                         color="secondary"
-                        onClick={utilFunc().selectBankClick}
+                        onClick={utilFunc().onSelectBankClick}
                         size={meta.current.headerConfig.chipSize}></Chip>
                 </Box>
-                <Box component="div" className={classes.buttons}>
+                <Box component="div" className='all-buttons'>
                     {/* Opening */}
                     <Button
-                        className={classes.buttons}
-                        size={meta.current.headerConfig.buttonSize}
+                        size='medium'
                         variant="contained"
-                        color="primary"
-                        startIcon={
-                            headerConfig.isButtonsIcon && (
-                                <AccountBalance></AccountBalance>
-                            )
-                        }
+                        color="default"
+                        startIcon={<AccountBalance></AccountBalance>}
                         disabled={!meta.current.selectedBankId}
                         onClick={utilFunc().opBalanceButtonClick}>
                         Opening
                     </Button>
 
                     {/* rearrange */}
-                    <Button
-                        className={classes.buttons}
-                        size={meta.current.headerConfig.buttonSize}
+                    <Button size='medium'
                         startIcon={
                             headerConfig.isButtonsIcon && (
                                 <FlipToFront></FlipToFront>
@@ -241,17 +237,15 @@ function BankRecon() {
                             meta.current.isMounted && setRefresh({})
                         }}
                         variant="contained"
-                        color="secondary">
-                        Rearrange
+                        color="primary">
+                        Rearr..
                     </Button>
 
                     {/* refresh */}
                     <Button
-                        size={meta.current.headerConfig.buttonSize}
-                        className={clsx(classes.buttons, classes.refresh)}
-                        startIcon={
-                            headerConfig.isButtonsIcon && <Cached></Cached>
-                        }
+                        size='medium'
+                        startIcon={<Cached></Cached>}
+                        className='refresh'
                         onClick={(e: any) => utilFunc().fetchBankRecon()}
                         variant="contained">
                         Refresh
@@ -260,8 +254,8 @@ function BankRecon() {
                     {/* submit */}
                     <Button
                         disabled={handleDisabled()}
-                        size={meta.current.headerConfig.buttonSize}
-                        className={clsx(classes.buttons, classes.submit)}
+                        color='secondary'
+                        size='medium'
                         startIcon={headerConfig.isButtonsIcon && <Save></Save>}
                         onClick={utilFunc().submitBankRecon}
                         variant="contained">
@@ -269,22 +263,22 @@ function BankRecon() {
                     </Button>
                 </Box>
             </Box>
-            <Box className={classes.content}>
-                <XXGrid
-                    
-                    gridActionMessages={gridActionMessages}
-                    columns={columns}
-                    summaryColNames={summaryColNames}
-                    title={'Bank reconcillation'}
-                    sqlQueryId={queryId}
-                    sqlQueryArgs={queryArgs}
-                    specialColumns={specialColumns}
-                    toShowOpeningBalance={false}
-                    toShowReverseCheckbox={true}
-                    // xGridProps={{ disableSelectionOnClick: true }}
-                    viewLimit="1000"
-                />
-            </Box>
+            {/* <Box className={classes.content}> */}
+            <XXGrid className='xx-grid'
+                gridActionMessages={gridActionMessages}
+                columns={columns}
+                summaryColNames={summaryColNames}
+                title={'Bank reconcillation'}
+                sqlQueryId={queryId}
+                sqlQueryArgs={queryArgs}
+                jsonFieldPath='jsonResult.bankRecon'
+                specialColumns={specialColumns}
+                toShowOpeningBalance={false}
+                toShowReverseCheckbox={true}
+                // xGridProps={{ disableSelectionOnClick: true }}
+                viewLimit="1000"
+            />
+            {/* </Box> */}
 
             <Dialog //material-ui dialog
                 open={meta.current.showDialog}
@@ -337,8 +331,15 @@ function BankRecon() {
                     moment(params.value).format(dateFormat),
             },
         ]
-        const queryId = 'get_sale_purchase_headers'
+        const queryId = 'getJson_bankRecon'
+
+        const finYearObject = getFromBag('finYearObject')
+        const nextFinYearId = finYearObject.finYearId + 1
         const queryArgs = {
+            accId: meta.current.selectedBankId,
+            nextFinYearId: nextFinYearId,
+            isoStartDate: finYearObject.isoStartDate,
+            isoEndDate: finYearObject.isoEndDate,
             // tranTypeId: (arbitraryData.saleType ==='sal') ? 4 : 9,
             // no: 100,
             // accId: meta.current.selectedAccount?.id
@@ -352,9 +353,9 @@ function BankRecon() {
             isDelete: true,
         }
         const gridActionMessages = {
-            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-SALES-DATA',
-            editIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
+            fetchIbukiMessage: 'BANK-RECON-FETCH-DATA',
+            editIbukiMessage: 'BANK-RECON-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage: 'BANK-RECON-XX-GRID-DELETE-CLICKED',
         }
         return {
             columns,
@@ -370,7 +371,8 @@ function BankRecon() {
         function bankSelected(item: any) {
             meta.current.selectedBankName = item.accName
             meta.current.selectedBankId = item.id
-            fetchBankRecon()
+            // fetchBankRecon()
+            emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, getXXGridParams().queryArgs)
             closeDialog()
         }
 
@@ -608,7 +610,8 @@ function BankRecon() {
             )
         }
 
-        function selectBankClick() {
+        async function onSelectBankClick() {
+            await getAllBanks()
             meta.current.dialogConfig.title = 'Select a bank'
             meta.current.dialogConfig.dialogContent = getAllBanksListItems()
             meta.current.dialogConfig.dialogActions = <></>
@@ -684,7 +687,7 @@ function BankRecon() {
             getDataDiff,
             closeDialog,
             submitOpBal,
-            selectBankClick,
+            onSelectBankClick,
             getAllBanksListItems,
             bankSelected,
             fetchBankRecon,
@@ -701,18 +704,42 @@ export { BankRecon }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: 'calc(100vh - 200px)',
+            // height: 'calc(100vh - 200px)',
             width: '100%',
-            // marginTop: '5px',
-
+            height: '100%',
             marginTop: theme.spacing(1),
-            marginBottom: theme.spacing(1),
-            overflowX: 'auto',
+            // display:'flex',
+            '& .header': {
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                rowGap: theme.spacing(0.5),
+                '& .bank': {
+                    display: 'flex',
+                    alignItems: 'center',
+                    columnGap: theme.spacing(1),
+                },
+                '& .all-buttons': {
+                    display: 'flex',
+                    columnGap: theme.spacing(1),
+                    rowGap: theme.spacing(0.5),
+                    flexWrap: 'wrap',
+                    '& .refresh': {
+                        backgroundColor: 'dodgerBlue',
+                        color: theme.palette.primary.contrastText,
+                    },
+                },
+            },
+            '& .xx-grid': {
+                marginTop: theme.spacing(2),
+                // minHeight:'80vh',
+                height: 'calc(100vh - 265px)',
+            }
         },
-        selectedBank: {
-            marginLeft: theme.spacing(1),
-            maxWidth: '17rem',
-        },
+        // selectedBank: {
+        //     marginLeft: theme.spacing(1),
+        //     maxWidth: '17rem',
+        // },
         dialogContent: {
             maxHeight: '12rem',
             minWidth: '20rem',
@@ -729,37 +756,12 @@ const useStyles: any = makeStyles((theme: Theme) =>
             minHeight: theme.spacing(4),
         },
 
-        header: {
-            display: 'flex',
-            flexDirection: ({ headerConfig }: any): any =>
-                headerConfig.flexDirection,
-            alignItems: ({ headerConfig }: any): any => headerConfig.alignItems,
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1rem',
-        },
 
-        bank: {
-            display: 'flex',
-            alignItems: 'center',
-        },
 
-        buttons: {
-            marginRight: ({ headerConfig }: any) =>
-                headerConfig.buttonRightMargin,
-            marginTop: ({ headerConfig }: any) => headerConfig.buttonTopMargin,
-            borderRadius: '16px',
-        },
-
-        submit: {
-            backgroundColor: theme.palette.success.main,
-            color: theme.palette.primary.contrastText,
-        },
-
-        refresh: {
-            backgroundColor: theme.palette.info.main,
-            color: theme.palette.primary.contrastText,
-        },
+        // refresh: {
+        //     backgroundColor: theme.palette.info.main,
+        //     color: theme.palette.primary.contrastText,
+        // },
     })
 )
 
