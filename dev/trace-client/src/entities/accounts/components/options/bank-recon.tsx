@@ -185,6 +185,7 @@ function BankRecon() {
     }
 
     const {
+        allRows,
         columns,
         gridActionMessages,
         queryArgs,
@@ -197,8 +198,8 @@ function BankRecon() {
         <div
             className={classes.content}
             style={{ width: getCurrentWindowSize() }}>
-            <Box className='header'>
-                <Box className='bank'>
+            <Box className="header">
+                <Box className="bank">
                     <Typography
                         color="primary"
                         variant={headerConfig.textVariant}
@@ -213,10 +214,10 @@ function BankRecon() {
                         onClick={utilFunc().onSelectBankClick}
                         size={meta.current.headerConfig.chipSize}></Chip>
                 </Box>
-                <Box component="div" className='all-buttons'>
+                <Box component="div" className="all-buttons">
                     {/* Opening */}
                     <Button
-                        size='medium'
+                        size="medium"
                         variant="contained"
                         color="default"
                         startIcon={<AccountBalance></AccountBalance>}
@@ -226,7 +227,8 @@ function BankRecon() {
                     </Button>
 
                     {/* rearrange */}
-                    <Button size='medium'
+                    <Button
+                        size="medium"
                         startIcon={
                             headerConfig.isButtonsIcon && (
                                 <FlipToFront></FlipToFront>
@@ -243,9 +245,9 @@ function BankRecon() {
 
                     {/* refresh */}
                     <Button
-                        size='medium'
+                        size="medium"
                         startIcon={<Cached></Cached>}
-                        className='refresh'
+                        className="refresh"
                         onClick={(e: any) => utilFunc().fetchBankRecon()}
                         variant="contained">
                         Refresh
@@ -254,8 +256,8 @@ function BankRecon() {
                     {/* submit */}
                     <Button
                         disabled={handleDisabled()}
-                        color='secondary'
-                        size='medium'
+                        color="secondary"
+                        size="medium"
                         startIcon={headerConfig.isButtonsIcon && <Save></Save>}
                         onClick={utilFunc().submitBankRecon}
                         variant="contained">
@@ -264,14 +266,16 @@ function BankRecon() {
                 </Box>
             </Box>
             {/* <Box className={classes.content}> */}
-            <XXGrid className='xx-grid'
+            <XXGrid
+                className="xx-grid"
+                // allRows={meta.current.reconData || []}
                 gridActionMessages={gridActionMessages}
                 columns={columns}
                 summaryColNames={summaryColNames}
                 title={'Bank reconcillation'}
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
-                jsonFieldPath='jsonResult.bankRecon'
+                jsonFieldPath="jsonResult.bankRecon"
                 specialColumns={specialColumns}
                 toShowOpeningBalance={false}
                 toShowReverseCheckbox={true}
@@ -322,17 +326,35 @@ function BankRecon() {
                 width: 90,
             },
             {
-                headerName: 'Date',
+                headerName: 'T. date',
                 description: 'Date',
                 field: 'tranDate',
                 width: 120,
                 type: 'date',
                 valueFormatter: (params: any) =>
-                    moment(params.value).format(dateFormat),
+                    moment(params.value, isoDateFormat).format(dateFormat),
+            },
+            {
+                headerName: 'Instr no',
+                description: 'Instrument name',
+                field: 'instrNo',
+                editable: true,
+                width: 120,
+            },
+            {
+                headerName: 'Clear date',
+                width: 150,
+                field: 'clearDate',
+                editable: true,
+                type: 'date',
+                // valueFormatter: (params: any) =>
+                //     moment(params.value).format(dateFormat),
+                valueFormatter: (params: any) =>
+                    params.value ? moment(params.value).format(dateFormat) : '',
             },
         ]
         const queryId = 'getJson_bankRecon'
-
+        const allRows = meta.current.reconData
         const finYearObject = getFromBag('finYearObject')
         const nextFinYearId = finYearObject.finYearId + 1
         const queryArgs = {
@@ -340,12 +362,6 @@ function BankRecon() {
             nextFinYearId: nextFinYearId,
             isoStartDate: finYearObject.isoStartDate,
             isoEndDate: finYearObject.isoEndDate,
-            // tranTypeId: (arbitraryData.saleType ==='sal') ? 4 : 9,
-            // no: 100,
-            // accId: meta.current.selectedAccount?.id
-            //     ? meta.current.selectedAccount.id + ''
-            //     : '%',
-            // tranDc: (arbitraryData.saleType==='sal') ? 'C' : 'D',
         }
         const summaryColNames: string[] = ['amount']
         const specialColumns = {
@@ -353,11 +369,13 @@ function BankRecon() {
             isDelete: true,
         }
         const gridActionMessages = {
-            fetchIbukiMessage: 'BANK-RECON-FETCH-DATA',
+            fetchIbukiMessage: 'XX-GRID-BANK-RECON-FETCH-DATA',
             editIbukiMessage: 'BANK-RECON-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'BANK-RECON-XX-GRID-DELETE-CLICKED',
+            justRefreshIbukiMessage: 'XX-GRID-BANK-RECON-JUST-REFRESH',
         }
         return {
+            allRows,
             columns,
             gridActionMessages,
             queryId,
@@ -372,6 +390,7 @@ function BankRecon() {
             meta.current.selectedBankName = item.accName
             meta.current.selectedBankId = item.id
             // fetchBankRecon()
+
             emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, getXXGridParams().queryArgs)
             closeDialog()
         }
@@ -481,15 +500,15 @@ function BankRecon() {
                     amount: 0,
                     dc: 'D',
                 }
-                const bankRec: any[] = ret.jsonResult.bankRecon || []
-                const bankRecon = bankRec.map((item) => {
-                    //date format change
-                    item.tranDate = moment(item.tranDate).format(dateFormat)
-                    item.clearDate = item.clearDate
-                        ? moment(item.clearDate).format(dateFormat)
-                        : ''
-                    return item
-                })
+                const bankRecon: any[] = ret.jsonResult.bankRecon || []
+                // const bankRecon = bankRec.map((item) => {
+                //     //date format change
+                //     item.tranDate = moment(item.tranDate).format(dateFormat)
+                //     item.clearDate = item.clearDate
+                //         ? moment(item.clearDate).format(dateFormat)
+                //         : ''
+                //     return item
+                // })
                 let opDebit = 0,
                     opCredit = 0
                 if (meta.current.balances['opBal']?.amount > 0) {
@@ -504,8 +523,8 @@ function BankRecon() {
                     //add at begining
                     lineRemarks: 'Opening balance',
                     autoRefNo: 'Opening balance',
-                    tranDate: finYearObject.startDate,
-                    clearDate: finYearObject.startDate,
+                    tranDate: finYearObject.isoStartDate,
+                    clearDate: finYearObject.isoStartDate,
                     debit: opDebit,
                     credit: opCredit,
                 })
@@ -515,9 +534,33 @@ function BankRecon() {
                     JSON.stringify(meta.current.reconData)
                 )
                 meta.current.initialDataHash = hash(meta.current.reconData)
+                setUniqueIds()
+                emit(
+                    getXXGridParams().gridActionMessages
+                        .justRefreshIbukiMessage,
+                    null
+                )
             }
             emit('SHOW-LOADING-INDICATOR', false)
             meta.current.isMounted && setRefresh({})
+
+            function setUniqueIds() {
+                let i = 1
+                function incr() {
+                    return i++
+                }
+                meta.current.reconData = meta.current.reconData.map(
+                    (x: any) => {
+                        // if (!x.isDailySummary) {
+                        if (!x['id1']) {
+                            x['id1'] = x.id
+                        }
+                        // }
+                        x.id = incr()
+                        return x
+                    }
+                )
+            }
         }
 
         async function getAllBanks() {
@@ -734,7 +777,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginTop: theme.spacing(2),
                 // minHeight:'80vh',
                 height: 'calc(100vh - 265px)',
-            }
+            },
         },
         // selectedBank: {
         //     marginLeft: theme.spacing(1),
@@ -755,8 +798,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
         dialogActions: {
             minHeight: theme.spacing(4),
         },
-
-
 
         // refresh: {
         //     backgroundColor: theme.palette.info.main,

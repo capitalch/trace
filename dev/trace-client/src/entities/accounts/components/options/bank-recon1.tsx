@@ -522,6 +522,7 @@ function BankRecon() {
             }
             emit('SHOW-LOADING-INDICATOR', false)
             meta.current.isMounted && setRefresh({})
+
         }
 
         async function getAllBanks() {

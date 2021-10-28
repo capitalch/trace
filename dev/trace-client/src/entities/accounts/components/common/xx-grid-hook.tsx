@@ -57,12 +57,16 @@ function useXXGrid(gridOptions: any) {
         const subs3 = debounceFilterOn('XX-GRID-SEARCH-DEBOUNCE').subscribe((d: any) => {
             requestSearch(d.data)
         })
+        const subs4 = filterOn(gridOptions?.gridActionMessages?.justRefreshIbukiMessage).subscribe(()=>{
+            setRefresh({})
+        })
         
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 

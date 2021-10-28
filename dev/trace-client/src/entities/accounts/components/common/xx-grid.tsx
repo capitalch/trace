@@ -57,36 +57,40 @@ interface GridActionMessagesOptions {
     addIbukiMessage?: any
     fetchIbukiMessage?: any
     editIbukiMessage?: any
+    justRefreshIbukiMessage?: any
     deleteIbukiMessage?: any
     drillDownIbukiMessage?: any
     resetIbukiMessage?: any
 }
 
 interface XXGridOptions {
-    gridActionMessages?: GridActionMessagesOptions
+    allRows?: any[]
     autoFetchData?: boolean
-    columns: any[]
     className?: string
+    columns: any[]
+    disableSelectionOnClick?: boolean
+    gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
+    jsonFieldPath?: any // if input is a json object then give the path of json field
+    postFetchMethod?: any // method to call after fetching of data
     sqlQueryArgs?: any
     sqlQueryId?: any
+    specialColumns: SpecialColumnOptions
     summaryColNames: string[]
+    title?: string
     toShowAddButton?: boolean
     toShowClosingBalance?: boolean
     toShowColumnBalance?: boolean
     toShowDailySummary?: boolean
     toShowOpeningBalance?: boolean
     toShowReverseCheckbox?: boolean
-    title?: string
-    specialColumns: SpecialColumnOptions
-    xGridProps?: any
-    disableSelectionOnClick?: boolean
-    jsonFieldPath?: any // if input is a json object then give the path of json field
     viewLimit?: string
+    xGridProps?: any
 }
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
+        allRows,
         className,
         gridActionMessages,
         columns,
@@ -113,12 +117,16 @@ function XXGrid(gridOptions: XXGridOptions) {
         toggleReverseOrder,
     } = useXXGrid(gridOptions)
 
-    const { debounceEmit, emit,isMediumSizeDown, toDecimalFormat } = useSharedElements()
+    const { debounceEmit, emit, isMediumSizeDown, toDecimalFormat } =
+        useSharedElements()
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
     addSpecialColumns(specialColumns, gridActionMessages)
-
+    if (allRows && allRows.length > 0) {
+        meta.current.allRows = allRows
+        meta.current.filteredRows = allRows
+    }
     return (
         <DataGridPro
             getRowClassName={(params: any) => {
@@ -134,7 +142,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             columns={columns}
             rows={meta.current.filteredRows}
             rowHeight={32}
-            // 
+            //
             // disableSelectionOnClick={true}
             components={{
                 Toolbar: CustomGridToolbar,
@@ -147,7 +155,10 @@ function XXGrid(gridOptions: XXGridOptions) {
                     onChange: (event: any) => {
                         meta.current.searchText = event.target.value
                         meta.current.isMounted && setRefresh({})
-                        debounceEmit('XX-GRID-SEARCH-DEBOUNCE', event.target.value)
+                        debounceEmit(
+                            'XX-GRID-SEARCH-DEBOUNCE',
+                            event.target.value
+                        )
                     }, // requestSearch(event.target.value),
                     clearSearch: () => requestSearch(''),
                 },
@@ -160,8 +171,8 @@ function XXGrid(gridOptions: XXGridOptions) {
             onSelectionModelChange={onSelectModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
-        // onPageChange= {()=>{}}
-        // onRowsPerPageChange={()=>{}}
+            // onPageChange= {()=>{}}
+            // onRowsPerPageChange={()=>{}}
         />
         // </div>
     )
@@ -169,7 +180,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className="custom-toolbar">
-                <Box className='toolbar-left-items'>
+                <Box className="toolbar-left-items">
                     <Typography className="toolbar-title">{title}</Typography>
                     <div>
                         <GridToolbarColumnsButton color="secondary" />
