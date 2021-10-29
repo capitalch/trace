@@ -75,7 +75,7 @@ function GeneralLedger() {
                     sqlQueryArgs={meta.current.sqlQueryArgs}
                     specialColumns={getArtifacts().specialColumns}
                     toShowOpeningBalance={true}
-                    toShowColumnBalance={true}
+                    toShowColumnBalanceCheckBox={true}
                     toShowClosingBalance={true}
                     toShowDailySummary={true}
                     toShowReverseCheckbox={true}

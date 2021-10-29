@@ -864,7 +864,7 @@ allSqls = {
                 and (("finYearId" = %(finYearId)s) or 
                 (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
                 )
-            order by "clearDate","tranDate", h."id"
+            order by "clearDate", "tranDate", h."id"
         ), 
         cte2 as (
             select
@@ -885,6 +885,7 @@ allSqls = {
 						and "accId" <> %(accId)s
 				) as "accNames"
 			from cte1 c1
+                order by "clearDate","tranDate", "headerId"
 				--order by c1."headerId" DESC
 		)
         select json_build_object(

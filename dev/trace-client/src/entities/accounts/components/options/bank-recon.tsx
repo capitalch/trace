@@ -271,6 +271,8 @@ function BankRecon() {
                 // allRows={meta.current.reconData || []}
                 gridActionMessages={gridActionMessages}
                 columns={columns}
+                isReverseOrderByDefault={true}
+                isShowColBalanceByDefault={true}
                 postFetchMethod={utilFunc().postFetchMethod}
                 summaryColNames={summaryColNames}
                 title={'Bank reconcillation'}
@@ -279,6 +281,8 @@ function BankRecon() {
                 jsonFieldPath="jsonResult.bankRecon"
                 specialColumns={specialColumns}
                 toShowOpeningBalance={true}
+                toShowColumnBalanceCheckBox={true}
+                toShowClosingBalance={true}
                 toShowReverseCheckbox={true}
                 // xGridProps={{ disableSelectionOnClick: true }}
                 viewLimit="1000"
@@ -392,7 +396,7 @@ function BankRecon() {
             isoStartDate: finYearObject.isoStartDate,
             isoEndDate: finYearObject.isoEndDate,
         }
-        const summaryColNames: string[] = ['amount']
+        const summaryColNames: string[] = ['debit','credit']
         const specialColumns = {
             isEdit: true,
             isDelete: true,

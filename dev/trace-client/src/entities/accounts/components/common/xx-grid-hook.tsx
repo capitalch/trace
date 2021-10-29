@@ -84,7 +84,7 @@ function useXXGrid(gridOptions: any) {
         rows.reverse()
         pre.filteredRows = rows
 
-        pre.isMounted && setRefresh({})
+        // pre.isMounted && setRefresh({})
     }
 
     async function fetchRows(queryId: string, queryArgs: any) {
@@ -101,8 +101,19 @@ function useXXGrid(gridOptions: any) {
         setUniqueIds()
         requestSearch(meta.current.searchText)
 
-        pre.isMounted && setRefresh({})
-
+        if (gridOptions.isShowColBalanceByDefault) {
+            pre.isColumnBalance = true
+            fillColumnBalance()
+            // meta.current.isMounted && setRefresh({})
+        }
+        
+        if (gridOptions.isReverseOrderByDefault) {
+            pre.isReverseOrder = true
+            toggleReverseOrder()
+            // meta.current.isMounted && setRefresh({})
+        }
+        
+        meta.current.isMounted && setRefresh({})
         async function fetch() {
             // populates meta.current.filteredRows
             pre.isReverseOrder = false
@@ -170,7 +181,7 @@ function useXXGrid(gridOptions: any) {
             }
         }
         pre.filteredRows = rows
-        setRefresh({})
+        // setRefresh({})
     }
 
     function injectDailySummary() {
@@ -246,14 +257,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }

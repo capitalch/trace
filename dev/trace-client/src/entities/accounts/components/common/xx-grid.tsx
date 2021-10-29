@@ -80,10 +80,12 @@ interface XXGridOptions {
     title?: string
     toShowAddButton?: boolean
     toShowClosingBalance?: boolean
-    toShowColumnBalance?: boolean
+    toShowColumnBalanceCheckBox?: boolean
     toShowDailySummary?: boolean
     toShowOpeningBalance?: boolean
     toShowReverseCheckbox?: boolean
+    isReverseOrderByDefault?: boolean
+    isShowColBalanceByDefault?: boolean
     viewLimit?: string
     xGridProps?: any
 }
@@ -171,8 +173,8 @@ function XXGrid(gridOptions: XXGridOptions) {
             onSelectionModelChange={onSelectModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
-            // onPageChange= {()=>{}}
-            // onRowsPerPageChange={()=>{}}
+        // onPageChange= {()=>{}}
+        // onRowsPerPageChange={()=>{}}
         />
         // </div>
     )
@@ -236,6 +238,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                         meta.current.isReverseOrder =
                                             e.target.checked
                                         toggleReverseOrder()
+                                        meta.current.isMounted && setRefresh({})
                                     }}
                                 />
                             }
@@ -257,7 +260,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             label="Daily summary"
                         />
                     )}
-                    {!!gridOptions.toShowColumnBalance && (
+                    {!!gridOptions.toShowColumnBalanceCheckBox && (
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -266,6 +269,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                         meta.current.isColumnBalance =
                                             e.target.checked
                                         fillColumnBalance()
+                                        meta.current.isMounted && setRefresh({})
                                     }}
                                 />
                             }
