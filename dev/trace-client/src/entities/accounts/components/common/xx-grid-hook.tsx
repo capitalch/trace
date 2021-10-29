@@ -43,7 +43,9 @@ function useXXGrid(gridOptions: any) {
     useEffect(() => {
         meta.current.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
-        const fetchIbukiMessage = gridOptions?.gridActionMessages?.fetchIbukiMessage || 'XX-GRID-FETCH-DATA'
+        const fetchIbukiMessage =
+            gridOptions?.gridActionMessages?.fetchIbukiMessage ||
+            'XX-GRID-FETCH-DATA'
         const subs1 = filterOn(fetchIbukiMessage).subscribe((d: any) => {
             if (d.data) {
                 sqlQueryArgs = d.data
@@ -54,13 +56,17 @@ function useXXGrid(gridOptions: any) {
             meta.current.filteredRows = []
             setRefresh({})
         })
-        const subs3 = debounceFilterOn('XX-GRID-SEARCH-DEBOUNCE').subscribe((d: any) => {
-            requestSearch(d.data)
-        })
-        const subs4 = filterOn(gridOptions?.gridActionMessages?.justRefreshIbukiMessage).subscribe(()=>{
+        const subs3 = debounceFilterOn('XX-GRID-SEARCH-DEBOUNCE').subscribe(
+            (d: any) => {
+                requestSearch(d.data)
+            }
+        )
+        const subs4 = filterOn(
+            gridOptions?.gridActionMessages?.justRefreshIbukiMessage
+        ).subscribe(() => {
             setRefresh({})
         })
-        
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -103,43 +109,49 @@ function useXXGrid(gridOptions: any) {
             pre.isDailySummary = false
             pre.isColumnBalance = false
             emit('SHOW-LOADING-INDICATOR', true)
-            const ret1: any = await execGenericView({
+            let ret1: any = await execGenericView({
                 isMultipleRows: gridOptions.jsonFieldPath ? false : true,
                 sqlKey: queryId,
                 args: queryArgs || null,
                 entityName: entityName,
             })
             emit('SHOW-LOADING-INDICATOR', false)
-            injectOpBalance(ret1)
-
-            function injectOpBalance(ret1: any) {
-                pre.opBalance = ret1?.jsonResult?.opBalance || {
-                    debit: 0,
-                    credit: 0,
+            const path = gridOptions.jsonFieldPath
+            let rows = ret1
+            const opBalance = ret1?.jsonResult?.opBalance || {
+                debit: 0,
+                credit: 0,
+                id: 0,
+                id1: 0,
+            }
+            path && (rows = _.get(ret1, path, []))
+            rows = rows.map((item: any) => {
+                return {
+                    ...item,
+                    balance: 0,
                 }
-                let ret: any[]
-                if (gridOptions.jsonFieldPath) {
-                    ret = _.get(ret1, gridOptions.jsonFieldPath)
-                } else {
-                    ret = ret1
-                }
-                ret = ret || []
-                ret = ret.map((item: any) => {
-                    return {
-                        ...item,
-                        balance: 0,
-                    }
-                })
+            })
+            gridOptions.toShowOpeningBalance && injectOpBalance(rows, opBalance)
 
+            pre.filteredRows = rows || []
+            pre.allRows = [...rows]
+
+            // if (gridOptions.postFetchMethod) {
+            //     gridOptions.postFetchMethod(ret1)
+            //     pre.filteredRows = ret1.jsonResult.bankRecon
+            //     pre.allRows = [ret1.jsonResult.bankRecon]
+            // }
+
+            function injectOpBalance(rows: any[], opBalance: any) {
                 gridOptions.toShowOpeningBalance &&
-                    ret.unshift({
+                    rows.unshift({
                         otherAccounts: 'Opening balance',
-                        debit: pre.opBalance.debit,
-                        credit: pre.opBalance.credit,
+                        id: 0,
+                        id1: 0,
+                        debit: opBalance.debit,
+                        credit: opBalance.credit,
                         tranDate: getFromBag('finYearObject').isoStartDate,
                     })
-                pre.filteredRows = ret || []
-                pre.allRows = [...ret]
             }
         }
     }
@@ -158,7 +170,7 @@ function useXXGrid(gridOptions: any) {
             }
         }
         pre.filteredRows = rows
-        pre.isMounted && setRefresh({})
+        setRefresh({})
     }
 
     function injectDailySummary() {
@@ -234,14 +246,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -361,8 +373,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .toolbar-left-items': {
                     display: 'flex',
                     alignItems: 'center',
-                    flexWrap:'wrap',
-                    columnGap:theme.spacing(0.5),
+                    flexWrap: 'wrap',
+                    columnGap: theme.spacing(0.5),
                     // rowGap: theme.spacing(1),
                     '& .toolbar-title': {
                         color: 'dodgerblue',
@@ -381,7 +393,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     },
                 },
 
-
                 '& .global-search': {
                     marginLeft: 'auto',
                     marginRight: '1rem',
@@ -390,7 +401,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .add-button': {
                     // marginLeft: 'auto',
                     marginRight: theme.spacing(1),
-                }
+                },
             },
             '& .custom-footer': {
                 display: 'flex',

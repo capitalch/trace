@@ -271,6 +271,7 @@ function BankRecon() {
                 // allRows={meta.current.reconData || []}
                 gridActionMessages={gridActionMessages}
                 columns={columns}
+                postFetchMethod={utilFunc().postFetchMethod}
                 summaryColNames={summaryColNames}
                 title={'Bank reconcillation'}
                 sqlQueryId={queryId}
@@ -391,8 +392,64 @@ function BankRecon() {
             meta.current.selectedBankId = item.id
             // fetchBankRecon()
 
-            emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, getXXGridParams().queryArgs)
+            emit(
+                getXXGridParams().gridActionMessages.fetchIbukiMessage,
+                getXXGridParams().queryArgs
+            )
             closeDialog()
+        }
+
+        function postFetchMethod(ret: any) {
+            if (ret) {
+                meta.current.balances['opBal'] = ret?.jsonResult?.opBal || {
+                    amount: 0,
+                    dc: 'D',
+                }
+                meta.current.dialogConfig.bankOpBalId =
+                    ret.jsonResult?.opBal?.id
+                // set the values for opening balance update dialog
+                opClosJson.items[0].value =
+                    meta.current.balances['opBal'].amount
+                opClosJson.items[1].value = meta.current.balances['opBal'].dc
+                meta.current.balances['closBal'] = ret.jsonResult.closBpBal || {
+                    amount: 0,
+                    dc: 'D',
+                }
+                const bankRecon: any[] = ret.jsonResult.bankRecon 
+
+                let opDebit = 0,
+                    opCredit = 0
+                if (meta.current.balances['opBal']?.amount > 0) {
+                    if (meta.current.balances['opBal']?.dc === 'D') {
+                        opDebit = meta.current.balances['opBal']?.amount
+                    } else {
+                        opCredit = meta.current.balances['opBal']?.amount
+                    }
+                }
+                const finYearObject = getFromBag('finYearObject')
+                bankRecon.unshift({
+                    //add at begining                    
+                    lineRemarks: 'Opening balance',
+                    autoRefNo: 'Opening balance',
+                    tranDate: finYearObject.isoStartDate,
+                    clearDate: finYearObject.isoStartDate,
+                    debit: opDebit,
+                    credit: opCredit,
+                })
+                // meta.current.reconData =
+                //     bankRecon && utilFunc().computeBalance(bankRecon)
+                ret.jsonResult.bankRecon  = bankRecon && utilFunc().computeBalance(bankRecon)
+                meta.current.initialData = JSON.parse(
+                    JSON.stringify(meta.current.reconData)
+                )
+                meta.current.initialDataHash = hash(meta.current.reconData)
+                // setUniqueIds()
+                // emit(
+                //     getXXGridParams().gridActionMessages
+                //         .justRefreshIbukiMessage,
+                //     null
+                // )
+            }
         }
 
         function clearDateEditor(props: any) {
@@ -501,14 +558,7 @@ function BankRecon() {
                     dc: 'D',
                 }
                 const bankRecon: any[] = ret.jsonResult.bankRecon || []
-                // const bankRecon = bankRec.map((item) => {
-                //     //date format change
-                //     item.tranDate = moment(item.tranDate).format(dateFormat)
-                //     item.clearDate = item.clearDate
-                //         ? moment(item.clearDate).format(dateFormat)
-                //         : ''
-                //     return item
-                // })
+
                 let opDebit = 0,
                     opCredit = 0
                 if (meta.current.balances['opBal']?.amount > 0) {
@@ -729,6 +779,7 @@ function BankRecon() {
             getDataNotChanged,
             getDataDiff,
             closeDialog,
+            postFetchMethod,
             submitOpBal,
             onSelectBankClick,
             getAllBanksListItems,
@@ -850,6 +901,14 @@ const opClosJson: any = {
     ],
 }
 
+// const bankRecon = bankRec.map((item) => {
+//     //date format change
+//     item.tranDate = moment(item.tranDate).format(dateFormat)
+//     item.clearDate = item.clearDate
+//         ? moment(item.clearDate).format(dateFormat)
+//         : ''
+//     return item
+// })
 // {/* <DataTable
 //                 style={{ marginTop: '1rem', fontSize: '0.8rem' }}
 //                 value={meta.current.reconData}
