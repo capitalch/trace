@@ -864,6 +864,57 @@ allSqls = {
                 and (("finYearId" = %(finYearId)s) or 
                 (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
                 )
+            order by "clearDate","tranDate", h."id"
+        ), 
+        cte2 as (
+            select
+            CASE WHEN "dc" = 'D' then "amount" ELSE 0.00 END as "debit"
+            , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
+            , "dc"
+            from "BankOpBal"
+                where "accId" = %(accId)s
+                    and "finYearId" = %(finYearId)s),
+		cte3 as (
+			select c1.* 
+			, (
+				select string_agg("accName", ' ,')
+					from "TranD" d1
+						join "AccM" a
+							on a."id" = d1."accId"
+					where d1."tranHeaderId" = c1."headerId"
+						and "accId" <> %(accId)s
+				) as "accNames"
+			from cte1 c1
+				--order by c1."headerId" DESC
+		)
+        select json_build_object(
+            'bankRecon', (SELECT json_agg(row_to_json(a)) from cte3 a)
+            , 'opBalance', (SELECT row_to_json(b) from cte2 b)
+        ) as "jsonResult"
+    ''',
+
+    "getJson_bankRecon1": '''
+        with cte1 as (select d."id"
+            , h."id" as "headerId"
+            , "tranDate"
+            , "userRefNo"
+            , h."remarks"
+            , "autoRefNo"
+            , "lineRefNo"
+            , "instrNo"
+            , d."remarks" as "lineRemarks"
+            , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
+            , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
+            , x."clearDate", "clearRemarks", x."id" as "bankReconId"
+                from "TranD" d
+                    left outer join "ExtBankReconTranD" x
+                        on d."id" = x."tranDetailsId"
+                    join "TranH" h
+                        on h."id" = d."tranHeaderId"
+            where "accId" = %(accId)s
+                and (("finYearId" = %(finYearId)s) or 
+                (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
+                )
             order by h."id" DESC
         ), 
         cte2 as (

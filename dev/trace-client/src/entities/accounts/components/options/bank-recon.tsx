@@ -278,7 +278,7 @@ function BankRecon() {
                 sqlQueryArgs={queryArgs}
                 jsonFieldPath="jsonResult.bankRecon"
                 specialColumns={specialColumns}
-                toShowOpeningBalance={false}
+                toShowOpeningBalance={true}
                 toShowReverseCheckbox={true}
                 // xGridProps={{ disableSelectionOnClick: true }}
                 viewLimit="1000"
@@ -325,6 +325,8 @@ function BankRecon() {
                 description: 'Id',
                 field: 'id1',
                 width: 90,
+                valueFormatter: (params: any) =>
+                    params.value ? params.value: ''
             },
             {
                 headerName: 'T. date',
@@ -348,11 +350,37 @@ function BankRecon() {
                 field: 'clearDate',
                 editable: true,
                 type: 'date',
-                // valueFormatter: (params: any) =>
-                //     moment(params.value).format(dateFormat),
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
             },
+            {
+                headerName: 'Debit',
+                description: 'Debit',
+                field: 'debit',
+                type: 'number',
+                width: 120,
+            },
+            {
+                headerName: 'Credit',
+                description: 'Credit',
+                field: 'credit',
+                type: 'number',
+                width: 120,
+            },
+            {
+                headerName: 'Balance',
+                description: 'Balance',
+                field: 'balance',
+                type: 'number',
+                width: 120,
+            },
+            {
+                headerName: 'Auto ref no',
+                description: 'Auto ref no',
+                field: 'autoRefNo',
+                type: 'string',
+                width: 150,
+            }
         ]
         const queryId = 'getJson_bankRecon'
         const allRows = meta.current.reconData
