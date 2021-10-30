@@ -55,6 +55,7 @@ interface SpecialColumnOptions {
 
 interface GridActionMessagesOptions {
     addIbukiMessage?: any
+    calculateBalanceIbukiMessage?: any
     fetchIbukiMessage?: any
     editIbukiMessage?: any
     justRefreshIbukiMessage?: any

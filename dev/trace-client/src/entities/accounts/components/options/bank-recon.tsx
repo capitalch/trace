@@ -235,7 +235,19 @@ function BankRecon() {
                             )
                         }
                         onClick={async (e: any) => {
-                            meta.current.reconData = utilFunc().computeBalance()
+                            // meta.current.reconData = utilFunc().computeBalance()
+                            meta.current.testParams = {
+                                name: '',
+                            }
+                            emit(
+                                getXXGridParams().gridActionMessages
+                                    .calculateBalanceIbukiMessage,
+                                    null
+                                // {
+                                //     testParams: meta,
+                                //     testFunc: testCallback,
+                                // }
+                            )
                             meta.current.isMounted && setRefresh({})
                         }}
                         variant="contained"
@@ -315,6 +327,11 @@ function BankRecon() {
         </div>
     )
 
+    // function testCallback(params: any) {
+    //     console.log(meta.current.testParams)
+    //     console.log(params)
+    // }
+
     function getXXGridParams() {
         const columns = [
             {
@@ -330,7 +347,7 @@ function BankRecon() {
                 field: 'id1',
                 width: 90,
                 valueFormatter: (params: any) =>
-                    params.value ? params.value: ''
+                    params.value ? params.value : '',
             },
             {
                 headerName: 'T. date',
@@ -350,7 +367,7 @@ function BankRecon() {
             },
             {
                 headerName: 'Clear date',
-                width: 150,
+                width: 170,
                 field: 'clearDate',
                 editable: true,
                 type: 'date',
@@ -384,7 +401,7 @@ function BankRecon() {
                 field: 'autoRefNo',
                 type: 'string',
                 width: 150,
-            }
+            },
         ]
         const queryId = 'getJson_bankRecon'
         const allRows = meta.current.reconData
@@ -396,13 +413,15 @@ function BankRecon() {
             isoStartDate: finYearObject.isoStartDate,
             isoEndDate: finYearObject.isoEndDate,
         }
-        const summaryColNames: string[] = ['debit','credit']
+        const summaryColNames: string[] = ['debit', 'credit']
         const specialColumns = {
             isEdit: true,
             isDelete: true,
         }
         const gridActionMessages = {
             fetchIbukiMessage: 'XX-GRID-BANK-RECON-FETCH-DATA',
+            calculateBalanceIbukiMessage:
+                'XX-GRID-BANK-RECON-CALCULATE-BALANCE',
             editIbukiMessage: 'BANK-RECON-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'BANK-RECON-XX-GRID-DELETE-CLICKED',
             justRefreshIbukiMessage: 'XX-GRID-BANK-RECON-JUST-REFRESH',
@@ -447,7 +466,7 @@ function BankRecon() {
                     amount: 0,
                     dc: 'D',
                 }
-                const bankRecon: any[] = ret.jsonResult.bankRecon 
+                const bankRecon: any[] = ret.jsonResult.bankRecon
 
                 let opDebit = 0,
                     opCredit = 0
@@ -460,7 +479,7 @@ function BankRecon() {
                 }
                 const finYearObject = getFromBag('finYearObject')
                 bankRecon.unshift({
-                    //add at begining                    
+                    //add at begining
                     lineRemarks: 'Opening balance',
                     autoRefNo: 'Opening balance',
                     tranDate: finYearObject.isoStartDate,
@@ -470,7 +489,8 @@ function BankRecon() {
                 })
                 // meta.current.reconData =
                 //     bankRecon && utilFunc().computeBalance(bankRecon)
-                ret.jsonResult.bankRecon  = bankRecon && utilFunc().computeBalance(bankRecon)
+                ret.jsonResult.bankRecon =
+                    bankRecon && utilFunc().computeBalance(bankRecon)
                 meta.current.initialData = JSON.parse(
                     JSON.stringify(meta.current.reconData)
                 )

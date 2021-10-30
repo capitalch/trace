@@ -67,12 +67,23 @@ function useXXGrid(gridOptions: any) {
             setRefresh({})
         })
 
+        const subs5 = filterOn(
+            gridOptions?.gridActionMessages?.calculateBalanceIbukiMessage
+        ).subscribe(() => {
+            fillColumnBalance()
+            setRefresh({})
+            // const testParams = d.data.testParams
+            // testParams.current.testParams.name = 'sushant'
+            // d.data.testFunc('callback data')
+        })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
@@ -101,18 +112,18 @@ function useXXGrid(gridOptions: any) {
         setUniqueIds()
         requestSearch(meta.current.searchText)
 
-        if (gridOptions.isShowColBalanceByDefault) {
-            pre.isColumnBalance = true
-            fillColumnBalance()
-            // meta.current.isMounted && setRefresh({})
-        }
-        
         if (gridOptions.isReverseOrderByDefault) {
             pre.isReverseOrder = true
             toggleReverseOrder()
             // meta.current.isMounted && setRefresh({})
         }
-        
+
+        if (gridOptions.isShowColBalanceByDefault) {
+            pre.isColumnBalance = true
+            fillColumnBalance()
+            // meta.current.isMounted && setRefresh({})
+        }
+
         meta.current.isMounted && setRefresh({})
         async function fetch() {
             // populates meta.current.filteredRows
@@ -168,6 +179,61 @@ function useXXGrid(gridOptions: any) {
     }
 
     function fillColumnBalance() {
+        let rows: any[] = [...pre.filteredRows] // [...pre.allRows]
+       
+        // At first sort
+        rows = rows.sort((a: any, b: any) => {
+            let ret = 0
+            if (a.clearDate > b.clearDate) {
+                ret = pre.isReverseOrder ? -1 : 1
+            }
+            if (a.clearDate < b.clearDate) {
+                ret = pre.isReverseOrder ? 1 : -1
+            }
+            return ret
+        })
+        const fn = (prev: any, current: any) => {
+            current.balance =
+                prev.balance + (current.debit || 0.0) - (current.credit || 0.0)
+            return current
+        }
+        if (pre.isColumnBalance) {
+            if (pre.isReverseOrder) {
+                rows.reduceRight(fn, { balance: 0.0 })
+            } else {
+                rows.reduce(fn, { balance: 0.0 })
+            }
+        } else {
+            for (let row of rows) {
+                row.balance = undefined
+            }
+        }
+        rows = pre.filteredRows
+        // if (pre.isColumnBalance) {
+        //     rows.reduce(
+        //         (prev: any, current: any) => {
+        //             current.balance =
+        //                 prev.balance +
+        //                 (current.debit || 0.0) -
+        //                 (current.credit || 0.0)
+        //             return current
+        //         },
+        //         { balance: 0.0 }
+        //     )
+        //     // let op: number = 0.0
+        //     // for (let row of rows) {
+        //     //     row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
+        //     //     op = row.balance
+        //     // }
+        // } else {
+        //     for (let row of rows) {
+        //         row.balance = undefined
+        //     }
+        // }
+        // pre.filteredRows = rows
+    }
+
+    function fillColumnBalance1() {
         const rows: any[] = [...pre.allRows]
         if (pre.isColumnBalance) {
             let op: number = 0.0
@@ -181,7 +247,6 @@ function useXXGrid(gridOptions: any) {
             }
         }
         pre.filteredRows = rows
-        // setRefresh({})
     }
 
     function injectDailySummary() {
@@ -257,14 +322,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
