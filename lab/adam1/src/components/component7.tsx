@@ -15,49 +15,45 @@ import { Subscription } from 'rxjs'
 
 function Component7() {
     const [, setRefresh] = useState({})
-    let userProfile = {
-        name: 'Sushant',
-        address: '92/2A Bidhannagar Road'
-    }
+
     const { emit, debounceEmit, debounceFilterOn } = useIbuki()
-    let myValue = 1
+    const testArr = [
+        {
+            name: 'aaa',
+            clearDate: undefined
+        },
+        {
+            name: 'bbb',
+            clearDate: '2021-04-01'
+        },
+        {
+            name: 'ccc',
+            clearDate: '2021-03-31'
+        },
+        {
+            name: 'ddd',
+            clearDate: '2021-05-21'
+        }
+    ]
     return (
-        <CounterContext.Provider value={myValue}>
-            <Box sx={{ p: 2 }}>
-                <Button variant='contained'
-                    onClick={() => {
-                        myValue = myValue + 1
-                        // userProfile = {
-                        //     name: 'Prashant',
-                        //     address: 'VIP'
-                        // }
-
-                        // emit('REFRESH', null)
-                    }}
-                >Change name</Button>
-                <SubComp7 />
-            </Box>
-        </CounterContext.Provider>
+        <div>
+            <Button color='primary' variant='contained' onClick={sortArray}>Test array sort</Button>
+        </div>
     )
-}
 
-function SubComp7() {
-    const [, setRefresh] = useState({})
-    const { emit, debounceEmit, debounceFilterOn } = useIbuki()
-
-    useEffect(() => {
-        const subs = debounceFilterOn('input').subscribe((d:any)=>{
-            console.log(d.data)
+    function sortArray(){
+        testArr.sort((a:any,b:any)=>{
+            let ret = 0
+            if(a.clearDate > b.clearDate){
+                ret = 1
+            }
+            if(a.clearDate < b.clearDate){
+                ret =-1
+            }
+            return(ret)
         })
-        return (() => {
-            subs.unsubscribe()
-        })
-    }, [])
-    return (<Box>
-        <input onChange={(e: any) => {
-            debounceEmit('input', e.target.value)
-        }} />
-    </Box>)
+        console.log(testArr)
+    }
 }
 
 

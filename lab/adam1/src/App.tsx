@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { LicenseInfo } from '@mui/x-data-grid-pro'
 import { ConfirmProvider } from "material-ui-confirm";
 import { useIdleTimer } from "react-idle-timer";
 import {
