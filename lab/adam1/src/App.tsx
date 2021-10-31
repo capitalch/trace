@@ -83,6 +83,10 @@ declare module "@material-ui/core/styles/createPalette" {
   }
 }
 
+LicenseInfo.setLicenseKey(
+  '094c13fcff99f49fe015161354d1d052T1JERVI6MjkzMjgsRVhQSVJZPTE2NjMxMjQ0NjcwMDAsS0VZVkVSU0lPTj0x'
+)
+
 const App: React.FC = () => {
   const [, setRefresh] = useState({});
   const { emit } = useIbuki();

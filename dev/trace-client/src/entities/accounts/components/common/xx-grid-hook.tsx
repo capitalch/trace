@@ -1,5 +1,6 @@
 import {
     _,
+    useCallback,
     useEffect,
     useState,
     useRef,
@@ -178,20 +179,32 @@ function useXXGrid(gridOptions: any) {
         }
     }
 
+    const handleEditRowsModelChange = useCallback((newModel:any)=>{
+        const filteredRows:any[] = meta.current.filteredRows
+        Object.keys(newModel).forEach((key:any)=>{
+            if(newModel[key]?.clearDate?.value){
+                const foundRow = filteredRows.find((x:any)=>x.id === +key)
+                foundRow.clearDate = newModel[key].clearDate.value
+            }
+        })
+    }, [])
+
     function fillColumnBalance() {
-        let rows: any[] = [...pre.filteredRows] // [...pre.allRows]
+        let rows: any[] = pre.filteredRows // [...pre.allRows]
        
         // At first sort
-        rows = rows.sort((a: any, b: any) => {
-            let ret = 0
-            if (a.clearDate > b.clearDate) {
-                ret = pre.isReverseOrder ? -1 : 1
-            }
-            if (a.clearDate < b.clearDate) {
-                ret = pre.isReverseOrder ? 1 : -1
-            }
-            return ret
-        })
+        rows = _.orderBy(rows,['clearDate'
+        ]).reverse()
+        // rows.sort((a: any, b: any) => {
+        //     let ret = 0
+        //     if (a.clearDate > b.clearDate) {
+        //         ret = pre.isReverseOrder ? -1 : 1
+        //     }
+        //     if (a.clearDate < b.clearDate) {
+        //         ret = pre.isReverseOrder ? 1 : -1
+        //     }
+        //     return ret
+        // })
         const fn = (prev: any, current: any) => {
             current.balance =
                 prev.balance + (current.debit || 0.0) - (current.credit || 0.0)
@@ -208,29 +221,6 @@ function useXXGrid(gridOptions: any) {
                 row.balance = undefined
             }
         }
-        rows = pre.filteredRows
-        // if (pre.isColumnBalance) {
-        //     rows.reduce(
-        //         (prev: any, current: any) => {
-        //             current.balance =
-        //                 prev.balance +
-        //                 (current.debit || 0.0) -
-        //                 (current.credit || 0.0)
-        //             return current
-        //         },
-        //         { balance: 0.0 }
-        //     )
-        //     // let op: number = 0.0
-        //     // for (let row of rows) {
-        //     //     row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
-        //     //     op = row.balance
-        //     // }
-        // } else {
-        //     for (let row of rows) {
-        //         row.balance = undefined
-        //     }
-        // }
-        // pre.filteredRows = rows
     }
 
     function fillColumnBalance1() {
@@ -409,8 +399,10 @@ function useXXGrid(gridOptions: any) {
     return {
         fetchRows,
         fillColumnBalance,
+        handleEditRowsModelChange,
         injectDailySummary,
         meta,
+        // onCellValueChange,
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,

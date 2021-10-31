@@ -283,6 +283,7 @@ function BankRecon() {
                 // allRows={meta.current.reconData || []}
                 gridActionMessages={gridActionMessages}
                 columns={columns}
+                editableFields={['clearDate', 'remarks']}
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}
                 postFetchMethod={utilFunc().postFetchMethod}
@@ -371,6 +372,8 @@ function BankRecon() {
                 field: 'clearDate',
                 editable: true,
                 type: 'date',
+                valueGetter: (params:any) => params.value ? moment(params.value).format(isoDateFormat): '',
+                valueSetter: (params:any) => params.value ? moment(params.value).format(isoDateFormat): '',
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
             },
@@ -379,21 +382,24 @@ function BankRecon() {
                 description: 'Debit',
                 field: 'debit',
                 type: 'number',
-                width: 120,
+                width: 150,
+                valueFormatter : (params:any)=>toDecimalFormat(String(Math.abs(params.value)))
             },
             {
                 headerName: 'Credit',
                 description: 'Credit',
                 field: 'credit',
                 type: 'number',
-                width: 120,
+                width: 150,
+                valueFormatter : (params:any)=>toDecimalFormat(String(Math.abs(params.value)))
             },
             {
                 headerName: 'Balance',
                 description: 'Balance',
                 field: 'balance',
                 type: 'number',
-                width: 120,
+                width: 200,
+                valueFormatter : (params:any)=>toDecimalFormat(String(Math.abs(params.value))).concat(' ', params.value < 0 ? 'Cr' : 'Dr')
             },
             {
                 headerName: 'Auto ref no',
@@ -401,6 +407,14 @@ function BankRecon() {
                 field: 'autoRefNo',
                 type: 'string',
                 width: 150,
+            },
+            {
+                headerName: 'Remarks',
+                description: 'remarks',
+                field: 'remarks',
+                type: 'string',
+                width: 150,
+                editable: true
             },
         ]
         const queryId = 'getJson_bankRecon'

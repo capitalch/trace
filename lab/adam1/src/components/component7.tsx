@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from 'react'
+import React, { useEffect, useState, useRef, useContext, useCallback } from 'react'
+import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro'
 // import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
@@ -10,50 +11,80 @@ import { Box, Button, Paper, Theme, useTheme, Typography, Table, TableContainer,
 import { border } from '@material-ui/system'
 import { UserProfileProvider, UserProfileContext, CounterContext } from './user-profile-provider'
 import { Subscription } from 'rxjs'
+import {
+    randomCreatedDate,
+    randomTraderName,
+    randomUpdatedDate,
+} from '@mui/x-data-grid-generator'
 // import { red } from '@material-ui/core/colors'
 // import { TableFooter } from 'material-ui'
 
 function Component7() {
     const [, setRefresh] = useState({})
-
+    const apiRef = useGridApiRef()
     const { emit, debounceEmit, debounceFilterOn } = useIbuki()
-    const testArr = [
-        {
-            name: 'aaa',
-            clearDate: undefined
-        },
-        {
-            name: 'bbb',
-            clearDate: '2021-04-01'
-        },
-        {
-            name: 'ccc',
-            clearDate: '2021-03-31'
-        },
-        {
-            name: 'ddd',
-            clearDate: '2021-05-21'
-        }
-    ]
+
+    const meta: any = useRef({
+        data: rows
+    })
+
+    // const handleEditRowsModelChange = useCallback((newModel:any)=>{
+    //     const updatedModel = {...newModel}
+    //     Object.keys(updatedModel).forEach((key:any)=>{
+            // if(updatedModel[key].name.value){
+            //     meta.current.data[key - 1].name = updatedModel[key].name.value
+            // }
+    //     })
+    //     // setRefresh({})
+    //     // console.log(meta)
+    // }, [])
+
+    function handleEditRowsModelChange(newModel:any){
+        const updatedModel = {...newModel}
+        Object.keys(updatedModel).forEach((key:any)=>{
+            if(updatedModel[key]?.name?.value){
+                meta.current.data[key - 1].name = updatedModel[key].name.value
+            }
+            if(updatedModel[key]?.dateCreated?.value){
+                meta.current.data[key - 1].dateCreated = updatedModel[key].dateCreated.value
+            }
+        })
+    }
+
     return (
-        <div>
-            <Button color='primary' variant='contained' onClick={sortArray}>Test array sort</Button>
+        <div style={{ height: 400, width: '100%' }}>
+            <DataGridPro rows={meta.current.data} columns={columns}
+                onEditRowsModelChange={handleEditRowsModelChange}
+                onCellClick={(item:any)=>{
+                    // console.log(item)
+                    apiRef.current.setCellMode(item.id, 'name', 'edit')
+                    apiRef.current.setCellMode(item.id, 'dateCreated', 'edit')
+                }}
+                apiRef={apiRef}
+            />
+            <Button
+                onClick={() => {
+                    setRefresh({})
+                }}
+            >Test</Button>
         </div>
     )
 
-    function sortArray(){
-        testArr.sort((a:any,b:any)=>{
-            let ret = 0
-            if(a.clearDate > b.clearDate){
-                ret = 1
-            }
-            if(a.clearDate < b.clearDate){
-                ret =-1
-            }
-            return(ret)
-        })
-        console.log(testArr)
-    }
+    
+
+    // function sortArray(){
+    //     testArr.sort((a:any,b:any)=>{
+    //         let ret = 0
+    //         if(a.clearDate > b.clearDate){
+    //             ret = 1
+    //         }
+    //         if(a.clearDate < b.clearDate){
+    //             ret =-1
+    //         }
+    //         return(ret)
+    //     })
+    //     console.log(testArr)
+    // }
 }
 
 
@@ -74,3 +105,60 @@ const style = {
 }
 
 export { Component7 }
+
+const columns = [
+    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: 'age', headerName: 'Age', type: 'number', editable: true },
+    {
+        field: 'dateCreated',
+        headerName: 'Date Created',
+        type: 'date',
+        width: 180,
+        editable: true,
+    },
+    {
+        field: 'lastLogin',
+        headerName: 'Last Login',
+        type: 'dateTime',
+        width: 220,
+        editable: true,
+    },
+];
+
+const rows = [
+    {
+        id: 1,
+        name: randomTraderName(),
+        age: 25,
+        dateCreated: randomCreatedDate(),
+        lastLogin: randomUpdatedDate(),
+    },
+    {
+        id: 2,
+        name: randomTraderName(),
+        age: 36,
+        dateCreated: randomCreatedDate(),
+        lastLogin: randomUpdatedDate(),
+    },
+    {
+        id: 3,
+        name: randomTraderName(),
+        age: 19,
+        dateCreated: randomCreatedDate(),
+        lastLogin: randomUpdatedDate(),
+    },
+    {
+        id: 4,
+        name: randomTraderName(),
+        age: 28,
+        dateCreated: randomCreatedDate(),
+        lastLogin: randomUpdatedDate(),
+    },
+    {
+        id: 5,
+        name: randomTraderName(),
+        age: 23,
+        dateCreated: randomCreatedDate(),
+        lastLogin: randomUpdatedDate(),
+    },
+];

@@ -1,5 +1,6 @@
 import { useStyles } from './xx-grid-hook'
-import { _, clsx } from '../../../../imports/regular-imports'
+import React from 'react'
+import { _, clsx, useState } from '../../../../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -70,6 +71,7 @@ interface XXGridOptions {
     className?: string
     columns: any[]
     disableSelectionOnClick?: boolean
+    editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
@@ -105,14 +107,15 @@ function XXGrid(gridOptions: XXGridOptions) {
         title,
         viewLimit,
     }: any = gridOptions
-
+    // const [editRowsModel, setEditRowsModel] = useState({})
     const apiRef: any = useGridApiRef()
-
     const {
         fetchRows,
         fillColumnBalance,
+        handleEditRowsModelChange,
         injectDailySummary,
         meta,
+        // onCellValueChange,
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,
@@ -162,7 +165,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             'XX-GRID-SEARCH-DEBOUNCE',
                             event.target.value
                         )
-                    }, // requestSearch(event.target.value),
+                    },
                     clearSearch: () => requestSearch(''),
                 },
                 footer: {
@@ -171,13 +174,33 @@ function XXGrid(gridOptions: XXGridOptions) {
                     allSummary: meta.current.allSummary,
                 },
             }}
+
             onSelectionModelChange={onSelectModelChange}
+            // onCellClick={(item:any)=>{
+            //     if(gridOptions.editableFields){
+            //         if(gridOptions.editableFields.includes(item.field)){
+            //             apiRef.current.setCellMode(item.id, item.field, 'edit')
+            //         } else {
+            //             // apiRef.current.setCellMode(item.id, item.field, '')
+            //             gridOptions.editableFields.forEach((x:string)=>{
+            //                 apiRef.current.setCellMode(item.id, x, 'read')
+            //             })
+            //         }
+            //     } 
+            // }}
+            // editRowsModel={editRowsModel}
+            onCellDoubleClick={(item: any)=>{
+                if(item.field === 'clearDate'){
+                    if(!item.value){
+                        item.value = item.row['tranDate']
+                        // setRefresh({})
+                    }
+                }
+            }}
+            onEditRowsModelChange={handleEditRowsModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
-        // onPageChange= {()=>{}}
-        // onRowsPerPageChange={()=>{}}
         />
-        // </div>
     )
 
     function CustomGridToolbar(props: any) {
