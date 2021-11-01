@@ -1,5 +1,6 @@
 import {
     _,
+    moment,
     useCallback,
     useEffect,
     useState,
@@ -71,9 +72,10 @@ function useXXGrid(gridOptions: any) {
 
         const subs5 = filterOn(
             gridOptions?.gridActionMessages?.calculateBalanceIbukiMessage
-        ).subscribe(() => {
-            // fillColumnBalance()
-            doSorting()
+        ).subscribe((d: any) => {
+            const sortFunction: any = d.data // got sort function from bank-recon
+            sortFunction(pre)
+            fillColumnBalance()
             setRefresh({})
         })
 
@@ -89,16 +91,6 @@ function useXXGrid(gridOptions: any) {
 
     const entityName = getCurrentEntity()
     const pre: any = meta.current
-
-    function doSorting() {
-        let rows: any[] = pre.filteredRows
-        rows = _.orderBy(rows, ['clearDate'
-            // (item: any) => (item.clearDate ? item.clearDate : '9999-01-01'),
-            // 'tranDate',
-            // 'id',
-        ])
-        pre.filteredRows = rows
-    }
 
     async function fetchRows(queryId: string, queryArgs: any) {
         if (!queryId || !queryArgs) {
@@ -117,16 +109,12 @@ function useXXGrid(gridOptions: any) {
         if (gridOptions.isReverseOrderByDefault) {
             pre.isReverseOrder = true
             toggleOrder()
-            // meta.current.isMounted && setRefresh({})
         }
 
         if (gridOptions.isShowColBalanceByDefault) {
             pre.isColumnBalance = true
             fillColumnBalance()
-            // meta.current.isMounted && setRefresh({})
         }
-
-        // meta.current.isMounted && setRefresh({})
 
         async function fetch() {
             // populates meta.current.filteredRows
@@ -193,23 +181,6 @@ function useXXGrid(gridOptions: any) {
 
     function fillColumnBalance() {
         let rows: any[] = pre.filteredRows // [...pre.filteredRows] // [...pre.allRows]
-        // rows = _.orderBy(rows, [
-        //     (item: any) => (item.clearDate ? item.clearDate : '9999-01-01'),
-        //     'tranDate',
-        //     "id"
-        // ]).reverse()
-        // pre.filteredRows = rows
-
-        // rows.sort((a: any, b: any) => {
-        //     let ret = 0
-        //     if (a.clearDate > b.clearDate) {
-        //         ret = pre.isReverseOrder ? -1 : 1
-        //     }
-        //     if (a.clearDate < b.clearDate) {
-        //         ret = pre.isReverseOrder ? 1 : -1
-        //     }
-        //     return ret
-        // })
         const fn = (prev: any, current: any) => {
             current.balance =
                 prev.balance + (current.debit || 0.0) - (current.credit || 0.0)
@@ -317,14 +288,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -515,3 +486,16 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
+
+// const rows =  [...pre.filteredRows]
+        // rows.sort((a: any, b: any) => {
+        //     let ret = 0
+        //     if (moment(a.clearDate) > moment(b.clearDate)) {
+        //         ret = pre.isReverseOrder ? -1 : 1
+        //     }
+        //     if (moment(a.clearDate) < moment(b.clearDate)) {
+        //         ret = pre.isReverseOrder ? 1 : -1
+        //     }
+        //     return ret
+        // })
+        // pre.filteredRows = rows
