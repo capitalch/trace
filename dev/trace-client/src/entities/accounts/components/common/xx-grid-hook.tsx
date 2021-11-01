@@ -47,11 +47,12 @@ function useXXGrid(gridOptions: any) {
         const fetchIbukiMessage =
             gridOptions?.gridActionMessages?.fetchIbukiMessage ||
             'XX-GRID-FETCH-DATA'
-        const subs1 = filterOn(fetchIbukiMessage).subscribe((d: any) => {
+        const subs1 = filterOn(fetchIbukiMessage).subscribe(async (d: any) => {
             if (d.data) {
                 sqlQueryArgs = d.data
             }
-            fetchRows(sqlQueryId, sqlQueryArgs)
+            await fetchRows(sqlQueryId, sqlQueryArgs)
+            setRefresh({})
         })
         const subs2 = filterOn('XX-GRID-RESET').subscribe(() => {
             meta.current.filteredRows = []
@@ -71,11 +72,9 @@ function useXXGrid(gridOptions: any) {
         const subs5 = filterOn(
             gridOptions?.gridActionMessages?.calculateBalanceIbukiMessage
         ).subscribe(() => {
-            fillColumnBalance()
+            // fillColumnBalance()
+            doSorting()
             setRefresh({})
-            // const testParams = d.data.testParams
-            // testParams.current.testParams.name = 'sushant'
-            // d.data.testFunc('callback data')
         })
 
         return () => {
@@ -91,12 +90,14 @@ function useXXGrid(gridOptions: any) {
     const entityName = getCurrentEntity()
     const pre: any = meta.current
 
-    function toggleReverseOrder() {
-        let rows = [...pre.filteredRows]
-        rows.reverse()
+    function doSorting() {
+        let rows: any[] = pre.filteredRows
+        rows = _.orderBy(rows, ['clearDate'
+            // (item: any) => (item.clearDate ? item.clearDate : '9999-01-01'),
+            // 'tranDate',
+            // 'id',
+        ])
         pre.filteredRows = rows
-
-        // pre.isMounted && setRefresh({})
     }
 
     async function fetchRows(queryId: string, queryArgs: any) {
@@ -115,7 +116,7 @@ function useXXGrid(gridOptions: any) {
 
         if (gridOptions.isReverseOrderByDefault) {
             pre.isReverseOrder = true
-            toggleReverseOrder()
+            toggleOrder()
             // meta.current.isMounted && setRefresh({})
         }
 
@@ -125,7 +126,8 @@ function useXXGrid(gridOptions: any) {
             // meta.current.isMounted && setRefresh({})
         }
 
-        meta.current.isMounted && setRefresh({})
+        // meta.current.isMounted && setRefresh({})
+
         async function fetch() {
             // populates meta.current.filteredRows
             pre.isReverseOrder = false
@@ -166,35 +168,38 @@ function useXXGrid(gridOptions: any) {
             // }
 
             function injectOpBalance(rows: any[], opBalance: any) {
-                gridOptions.toShowOpeningBalance &&
-                    rows.unshift({
-                        otherAccounts: 'Opening balance',
-                        id: 0,
-                        id1: 0,
-                        debit: opBalance.debit,
-                        credit: opBalance.credit,
-                        tranDate: getFromBag('finYearObject').isoStartDate,
-                    })
+                rows.unshift({
+                    otherAccounts: 'Opening balance',
+                    id: 0,
+                    id1: 0,
+                    debit: opBalance.debit,
+                    credit: opBalance.credit,
+                    tranDate: getFromBag('finYearObject').isoStartDate,
+                    clearDate: getFromBag('finYearObject').isoStartDate,
+                })
             }
         }
     }
 
-    const handleEditRowsModelChange = useCallback((newModel:any)=>{
-        const filteredRows:any[] = meta.current.filteredRows
-        Object.keys(newModel).forEach((key:any)=>{
-            if(newModel[key]?.clearDate?.value){
-                const foundRow = filteredRows.find((x:any)=>x.id === +key)
+    const handleEditRowsModelChange = useCallback((newModel: any) => {
+        const filteredRows: any[] = meta.current.filteredRows
+        Object.keys(newModel).forEach((key: any) => {
+            if (newModel[key]?.clearDate?.value) {
+                const foundRow = filteredRows.find((x: any) => x.id === +key)
                 foundRow.clearDate = newModel[key].clearDate.value
             }
         })
     }, [])
 
     function fillColumnBalance() {
-        let rows: any[] = pre.filteredRows // [...pre.allRows]
-       
-        // At first sort
-        rows = _.orderBy(rows,['clearDate'
-        ]).reverse()
+        let rows: any[] = pre.filteredRows // [...pre.filteredRows] // [...pre.allRows]
+        // rows = _.orderBy(rows, [
+        //     (item: any) => (item.clearDate ? item.clearDate : '9999-01-01'),
+        //     'tranDate',
+        //     "id"
+        // ]).reverse()
+        // pre.filteredRows = rows
+
         // rows.sort((a: any, b: any) => {
         //     let ret = 0
         //     if (a.clearDate > b.clearDate) {
@@ -254,7 +259,7 @@ function useXXGrid(gridOptions: any) {
             pre.isReverseOrder = false
         }
         pre.filteredRows = rows
-        pre.isReverseOrder && toggleReverseOrder()
+        pre.isReverseOrder && toggleOrder()
         setUniqueIds()
         pre.isMounted && setRefresh({})
 
@@ -396,6 +401,19 @@ function useXXGrid(gridOptions: any) {
         })
     }
 
+    function toggleOrder() {
+        const rows = [...pre.filteredRows]
+        rows.reverse()
+        pre.filteredRows = rows
+
+        // pre.filteredRows.reverse()
+        // let rows = [...pre.filteredRows]
+        // rows.reverse()
+        // pre.filteredRows = rows
+
+        // pre.isMounted && setRefresh({})
+    }
+
     return {
         fetchRows,
         fillColumnBalance,
@@ -407,7 +425,7 @@ function useXXGrid(gridOptions: any) {
         requestSearch,
         setFilteredSummary,
         setRefresh,
-        toggleReverseOrder,
+        toggleOrder,
     }
 }
 

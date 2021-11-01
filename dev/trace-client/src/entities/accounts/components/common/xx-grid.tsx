@@ -120,7 +120,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         requestSearch,
         setFilteredSummary,
         setRefresh,
-        toggleReverseOrder,
+        toggleOrder,
     } = useXXGrid(gridOptions)
 
     const { debounceEmit, emit, isMediumSizeDown, toDecimalFormat } =
@@ -261,7 +261,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     onChange={(e: any) => {
                                         meta.current.isReverseOrder =
                                             e.target.checked
-                                        toggleReverseOrder()
+                                        toggleOrder()
                                         meta.current.isMounted && setRefresh({})
                                     }}
                                 />
