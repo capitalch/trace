@@ -59,6 +59,7 @@ c) In all Typography comment out disableTypography
 	b) Submit save
 	c) Slider removes data
 	d) Opening
+	e) Delete
 
 1.1 Bank recon rework, drill down etc
 1.2 All transactions, default is reverse, so let the checkbox be checked
