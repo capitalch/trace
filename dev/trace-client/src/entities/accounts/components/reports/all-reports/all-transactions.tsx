@@ -90,7 +90,6 @@ function useAllTransactions() {
     const actionMessages = {
         fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ALL-TRANSACTIONS',
         editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
-        // deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
         deleteIbukiMessage: 'GENERIC-REPORTS-XX-GRID-DELETE-CLICKED'
     }
     return {actionMessages, args, columns, specialColumns, sqlQueryId, title, summaryColNames }

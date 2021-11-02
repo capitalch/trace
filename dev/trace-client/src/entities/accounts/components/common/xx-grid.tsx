@@ -391,7 +391,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         }
         function ClosingBalanceMarkup() {
             return (
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex'}}>
                     <div>
                         <b>Closing</b>&nbsp;
                     </div>
@@ -415,6 +415,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                         <span
                             style={{
                                 color: suffix === 'Dr' ? 'inherit' : 'red',
+                                marginRight:'0.2rem' 
                             }}>
                             {suffix}&nbsp;
                         </span>

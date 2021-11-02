@@ -843,9 +843,11 @@ allSqls = {
     ''',
 
     "getJson_bankRecon": '''
-        with cte1 as (select d."id"
-            , h."id" as "headerId"
+        with cte1 as (select 
+            -- d."id",
+            h."id" --as "headerId"
             , "tranDate"
+            , "tranTypeId"
             , "userRefNo"
             , h."remarks"
             , "autoRefNo"
@@ -881,11 +883,11 @@ allSqls = {
 					from "TranD" d1
 						join "AccM" a
 							on a."id" = d1."accId"
-					where d1."tranHeaderId" = c1."headerId"
+					where d1."tranHeaderId" = c1."id"
 						and "accId" <> %(accId)s
 				) as "accNames"
 			from cte1 c1
-                order by "clearDate","tranDate", "headerId"
+                order by "clearDate","tranDate", "id"
 				--order by c1."headerId" DESC
 		)
         select json_build_object(

@@ -114,11 +114,18 @@ function BankRecon() {
     const theme: Theme = useTheme()
     useEffect(() => {
         meta.current.isMounted = true
+        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(()=>{
+            emit(
+                getXXGridParams().gridActionMessages.fetchIbukiMessage,
+                getXXGridParams().queryArgs
+            )
+        })
         // utilFunc().getAllBanks()
         // const subs1 = filterOn(getXXGridParams().gridActionMessages.fetchIbukiMessage).subscribe(()=>{
 
         // })
         return () => {
+            subs1.unsubscribe()
             meta.current.isMounted = false
         }
     }, [])
@@ -438,7 +445,8 @@ function BankRecon() {
             fetchIbukiMessage: 'XX-GRID-BANK-RECON-FETCH-DATA',
             calculateBalanceIbukiMessage:
                 'XX-GRID-BANK-RECON-CALCULATE-BALANCE',
-            editIbukiMessage: 'BANK-RECON-XX-GRID-EDIT-CLICKED',
+            // editIbukiMessage: 'BANK-RECON-XX-GRID-EDIT-CLICKED',
+            editIbukiMessage:'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'BANK-RECON-XX-GRID-DELETE-CLICKED',
             justRefreshIbukiMessage: 'XX-GRID-BANK-RECON-JUST-REFRESH',
         }

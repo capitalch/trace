@@ -36,9 +36,9 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             handleOnTabChange(null, d.data?.tabValue || 1)
         })
 
-        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe((d: any) => {
+        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe(async (d: any) => {
             const tranHeaderId = d.data?.tranHeaderId
-            tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
+            tranHeaderId && (await fetchAndPopulateDataOnId(tranHeaderId))
             arbitraryData.shouldCloseParentOnSave = true
             handleOnTabChange(null, 0)
         })
