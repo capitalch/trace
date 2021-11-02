@@ -72,7 +72,15 @@ function BankRecon() {
         getDateMaskMap,
         isControlDisabled,
     } = utilMethods()
-    const { emit, filterOn, XXGrid } = useSharedElements()
+    const {
+        accountsMessages,
+        confirm,
+        emit,
+        filterOn,
+        genericUpdateMaster,
+        isGoodToDelete,
+        XXGrid,
+    } = useSharedElements()
     const [, setRefresh] = useState({})
     const { TraceFullWidthSubmitButton } = useTraceMaterialComponents()
     const isoDateFormat = 'YYYY-MM-DD'
@@ -114,18 +122,20 @@ function BankRecon() {
     const theme: Theme = useTheme()
     useEffect(() => {
         meta.current.isMounted = true
-        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(()=>{
+        const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
             emit(
                 getXXGridParams().gridActionMessages.fetchIbukiMessage,
                 getXXGridParams().queryArgs
             )
         })
-        // utilFunc().getAllBanks()
-        // const subs1 = filterOn(getXXGridParams().gridActionMessages.fetchIbukiMessage).subscribe(()=>{
-
-        // })
+        const subs2 = filterOn(
+            getXXGridParams().gridActionMessages.deleteIbukiMessage
+        ).subscribe((d: any) => {
+            doDelete(d.data)
+        })
         return () => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
             meta.current.isMounted = false
         }
     }, [])
@@ -182,6 +192,32 @@ function BankRecon() {
     const currentMediaSize = getCurrentMediaSize()
     currentMediaSize && mediaLogic[currentMediaSize]()
 
+    async function doDelete(params: any) {
+        const row = params.row
+        const tranHeaderId = row['id1']
+        const options = {
+            description: accountsMessages.transactionDelete,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        if (isGoodToDelete(params)) {
+            confirm(options)
+                .then(async () => {
+                    await genericUpdateMaster({
+                        deletedIds: [tranHeaderId],
+                        tableName: 'TranH',
+                    })
+                    emit('SHOW-MESSAGE', {})
+                    emit(
+                        getXXGridParams().gridActionMessages.fetchIbukiMessage,
+                        null
+                    )
+                    // setRefresh({})
+                })
+                .catch(() => {}) // important to have otherwise eror
+        }
+    }
+
     function handleDisabled() {
         let ret = false
         if (isControlDisabled('doBankRecon')) {
@@ -217,7 +253,6 @@ function BankRecon() {
                     <Chip
                         avatar={<Avatar>B</Avatar>}
                         label={meta.current.selectedBankName}
-                        // className={classes.selectedBank}
                         color="secondary"
                         onClick={utilFunc().onSelectBankClick}
                         size={meta.current.headerConfig.chipSize}></Chip>
@@ -264,10 +299,13 @@ function BankRecon() {
                         size="medium"
                         startIcon={<Cached></Cached>}
                         className="refresh"
-                        onClick={(e: any) => emit(
-                            getXXGridParams().gridActionMessages.fetchIbukiMessage,
-                            getXXGridParams().queryArgs
-                        )}
+                        onClick={(e: any) =>
+                            emit(
+                                getXXGridParams().gridActionMessages
+                                    .fetchIbukiMessage,
+                                getXXGridParams().queryArgs
+                            )
+                        }
                         variant="contained">
                         Refresh
                     </Button>
@@ -284,7 +322,6 @@ function BankRecon() {
                     </Button>
                 </Box>
             </Box>
-            {/* <Box className={classes.content}> */}
             <XXGrid
                 className="xx-grid"
                 // allRows={meta.current.reconData || []}
@@ -383,8 +420,14 @@ function BankRecon() {
                 type: 'date',
                 cellClassName: 'editable-column',
                 // renderEditCell: utilFunc().dateEditor,
-                valueGetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
-                valueSetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
+                valueGetter: (params: any) =>
+                    params.value
+                        ? moment(params.value).format(isoDateFormat)
+                        : '',
+                valueSetter: (params: any) =>
+                    params.value
+                        ? moment(params.value).format(isoDateFormat)
+                        : '',
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
                 // valueGetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
@@ -398,7 +441,8 @@ function BankRecon() {
                 field: 'debit',
                 type: 'number',
                 width: 150,
-                valueFormatter: (params: any) => toDecimalFormat(String(Math.abs(params.value)))
+                valueFormatter: (params: any) =>
+                    toDecimalFormat(String(Math.abs(params.value))),
             },
             {
                 headerName: 'Credit',
@@ -406,7 +450,8 @@ function BankRecon() {
                 field: 'credit',
                 type: 'number',
                 width: 150,
-                valueFormatter: (params: any) => toDecimalFormat(String(Math.abs(params.value)))
+                valueFormatter: (params: any) =>
+                    toDecimalFormat(String(Math.abs(params.value))),
             },
             {
                 headerName: 'Balance',
@@ -414,7 +459,11 @@ function BankRecon() {
                 field: 'balance',
                 type: 'number',
                 width: 170,
-                valueFormatter: (params: any) => toDecimalFormat(String(Math.abs(params.value))).concat(' ', params.value < 0 ? 'Cr' : 'Dr')
+                valueFormatter: (params: any) =>
+                    toDecimalFormat(String(Math.abs(params.value))).concat(
+                        ' ',
+                        params.value < 0 ? 'Cr' : 'Dr'
+                    ),
             },
             {
                 headerName: 'Clear Remarks',
@@ -423,7 +472,7 @@ function BankRecon() {
                 type: 'string',
                 cellClassName: 'editable-column',
                 width: 170,
-                editable: true
+                editable: true,
             },
         ]
         const queryId = 'getJson_bankRecon'
@@ -446,7 +495,7 @@ function BankRecon() {
             calculateBalanceIbukiMessage:
                 'XX-GRID-BANK-RECON-CALCULATE-BALANCE',
             // editIbukiMessage: 'BANK-RECON-XX-GRID-EDIT-CLICKED',
-            editIbukiMessage:'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
+            editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'BANK-RECON-XX-GRID-DELETE-CLICKED',
             justRefreshIbukiMessage: 'XX-GRID-BANK-RECON-JUST-REFRESH',
         }
@@ -462,6 +511,7 @@ function BankRecon() {
     }
 
     function utilFunc() {
+
         function bankSelected(item: any) {
             meta.current.selectedBankName = item.accName
             meta.current.selectedBankId = item.id
@@ -475,8 +525,14 @@ function BankRecon() {
         function doSortOnClearDateTranDateAndId(pre: any) {
             let rows: any[] = [...pre.filteredRows]
             rows = _.orderBy(rows, [
-                (item: any) => (item.clearDate ? moment(item.clearDate) : moment('9999-01-01')),
-                (item: any) => (item.tranDate ? moment(item.tranDate) : moment('9999-01-01')),
+                (item: any) =>
+                    item.clearDate
+                        ? moment(item.clearDate)
+                        : moment('9999-01-01'),
+                (item: any) =>
+                    item.tranDate
+                        ? moment(item.tranDate)
+                        : moment('9999-01-01'),
                 'id',
             ])
             pre.isReverseOrder && rows.reverse()
@@ -520,45 +576,39 @@ function BankRecon() {
                     debit: opDebit,
                     credit: opCredit,
                 })
-                // meta.current.reconData =
-                //     bankRecon && utilFunc().computeBalance(bankRecon)
                 ret.jsonResult.bankRecon =
                     bankRecon && utilFunc().computeBalance(bankRecon)
                 meta.current.initialData = JSON.parse(
                     JSON.stringify(meta.current.reconData)
                 )
                 meta.current.initialDataHash = hash(meta.current.reconData)
-                // setUniqueIds()
-                // emit(
-                //     getXXGridParams().gridActionMessages
-                //         .justRefreshIbukiMessage,
-                //     null
-                // )
             }
         }
 
-        function dateEditor(props: any) {
-            console.log(props)
-            return <TextField
-                // error={isInvalidDate(arbitraryData.header.tranDate)}
-                variant='standard'
-                // helperText={
-                //     isInvalidDate(arbitraryData.header.tranDate)
-                //         ? accountsMessages.dateRangeAuditLockMessage
-                //         : undefined
-                // }
-                type="date"
-                onChange={(e: any) => {
-                    props.row.clearDate = e.target.value
-                    // arbitraryData.header.tranDate = e.target.value
-                    // emit('CROWN-REFRESH', '')
-                    setRefresh({})
-                }}
-                onFocus={(e) => e.target.select()}
-                // value={arbitraryData.header.tranDate || ''}
-                value={props.row.clearDate || ''}
-            />
-        }
+        // function dateEditor(props: any) {
+        //     console.log(props)
+        //     return (
+        //         <TextField
+        //             // error={isInvalidDate(arbitraryData.header.tranDate)}
+        //             variant="standard"
+        //             // helperText={
+        //             //     isInvalidDate(arbitraryData.header.tranDate)
+        //             //         ? accountsMessages.dateRangeAuditLockMessage
+        //             //         : undefined
+        //             // }
+        //             type="date"
+        //             onChange={(e: any) => {
+        //                 props.row.clearDate = e.target.value
+        //                 // arbitraryData.header.tranDate = e.target.value
+        //                 // emit('CROWN-REFRESH', '')
+        //                 setRefresh({})
+        //             }}
+        //             onFocus={(e) => e.target.select()}
+        //             // value={arbitraryData.header.tranDate || ''}
+        //             value={props.row.clearDate || ''}
+        //         />
+        //     )
+        // }
 
         function clearDateEditor(props: any) {
             const field = 'clearDate'
@@ -587,8 +637,7 @@ function BankRecon() {
                     onChange={(e) => {
                         props.rowData[field] = e.target.value
                         meta.current.isMounted && setRefresh({})
-                    }}
-                ></InputMask>
+                    }}></InputMask>
             )
         }
 
@@ -808,7 +857,7 @@ function BankRecon() {
                     formId={utilFunc().getFormId()}
                     jsonText={JSON.stringify(opClosJson)}
                     name={getCurrentEntity()}
-                    componentStore={componentStore}></ReactForm>
+                    componentStore={componentStore} />
             )
         }
 
@@ -882,7 +931,7 @@ function BankRecon() {
         }
 
         return {
-            dateEditor,
+            // dateEditor,
             getFormId,
             getAllBanks,
             computeBalance,
@@ -938,18 +987,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
             '& .xx-grid': {
                 marginTop: theme.spacing(2),
-                // minHeight:'80vh',
                 height: 'calc(100vh - 265px)',
                 '& .editable-column': {
                     backgroundColor: theme.palette.yellow.light,
-                    color: theme.palette.yellow.contrastText
+                    color: theme.palette.yellow.contrastText,
                 },
             },
         },
-        // selectedBank: {
-        //     marginLeft: theme.spacing(1),
-        //     maxWidth: '17rem',
-        // },
         dialogContent: {
             maxHeight: '12rem',
             minWidth: '20rem',
@@ -965,11 +1009,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
         dialogActions: {
             minHeight: theme.spacing(4),
         },
-
-        // refresh: {
-        //     backgroundColor: theme.palette.info.main,
-        //     color: theme.palette.primary.contrastText,
-        // },
     })
 )
 
@@ -1010,7 +1049,7 @@ const opClosJson: any = {
             validations: [
                 {
                     name: 'required',
-                    message: 'Please select a financial year',
+                    message: 'Please select',
                 },
             ],
         },
