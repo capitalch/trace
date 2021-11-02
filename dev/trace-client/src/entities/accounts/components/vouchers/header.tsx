@@ -12,15 +12,10 @@ function Header({ allowHeaderGst }: any) {
     const [, setRefresh] = useState({})
     const arbitraryData: any = useContext(VoucherContext)
     const {
-        // _,
         accountsMessages,
-
         emit,
-
         isInvalidDate,
         isInvalidGstin,
-        // NumberFormat,
-
     } = useSharedElements()
     return (
         <Paper elevation={1} className={classes.contentHeader}>

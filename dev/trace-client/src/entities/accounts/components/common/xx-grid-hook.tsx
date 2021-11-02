@@ -199,21 +199,21 @@ function useXXGrid(gridOptions: any) {
         }
     }
 
-    function fillColumnBalance1() {
-        const rows: any[] = [...pre.allRows]
-        if (pre.isColumnBalance) {
-            let op: number = 0.0
-            for (let row of rows) {
-                row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
-                op = row.balance
-            }
-        } else {
-            for (let row of rows) {
-                row.balance = undefined
-            }
-        }
-        pre.filteredRows = rows
-    }
+    // function fillColumnBalance1() {
+    //     const rows: any[] = [...pre.allRows]
+    //     if (pre.isColumnBalance) {
+    //         let op: number = 0.0
+    //         for (let row of rows) {
+    //             row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
+    //             op = row.balance
+    //         }
+    //     } else {
+    //         for (let row of rows) {
+    //             row.balance = undefined
+    //         }
+    //     }
+    //     pre.filteredRows = rows
+    // }
 
     function injectDailySummary() {
         if (pre.allRows.length === 0) {
