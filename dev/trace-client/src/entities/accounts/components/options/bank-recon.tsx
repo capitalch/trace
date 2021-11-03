@@ -1,5 +1,4 @@
 import {
-    TextField,
     Typography,
     Button,
     Chip,
@@ -75,7 +74,7 @@ function BankRecon() {
                         variant="contained"
                         color="default"
                         startIcon={<AccountBalance></AccountBalance>}
-                        // disabled={!meta.current.selectedBankId}
+                        disabled={!meta.current.selectedBankId}
                         onClick={handleOpBalanceButtonClick}>
                         Opening
                     </Button>

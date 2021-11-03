@@ -279,6 +279,13 @@ allSqls = {
             ) as "jsonResult"
     ''',
 
+    "get_bank_op_balance": '''
+        select "id", "amount", "dc"
+            from "BankOpBal"
+                where "accId" = %(accId)s
+                    and "finYearId" = %(finYearId)s
+    ''',
+
     "get_brands": '''
         select  ROW_NUMBER() over(order by "brandName") as "index", "id", "brandName", "remarks"
 	        from "BrandM" order by "brandName"

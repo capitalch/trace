@@ -18,9 +18,11 @@ function useXXGrid(gridOptions: any) {
     let { sqlQueryArgs, sqlQueryId, summaryColNames } = gridOptions
     const meta: any = useRef({
         allRows: [],
+        allSummary: {},
         filteredRows: [],
         filteredSummary: {},
-        allSummary: {},
+        hashCurrentData: null,
+        hashInitialData: null,
         isColumnBalance: false,
         isDailySummary: false,
         isMounted: false,
@@ -104,7 +106,7 @@ function useXXGrid(gridOptions: any) {
             injectDailySummary()
         }
         setUniqueIds()
-        requestSearch(meta.current.searchText)
+        // requestSearch(meta.current.searchText)
 
         if (gridOptions.isReverseOrderByDefault) {
             pre.isReverseOrder = true
@@ -147,14 +149,8 @@ function useXXGrid(gridOptions: any) {
             gridOptions.toShowOpeningBalance && injectOpBalance(rows, opBalance)
 
             pre.filteredRows = rows || []
-            pre.allRows = [...rows]
-
-            // if (gridOptions.postFetchMethod) {
-            //     gridOptions.postFetchMethod(ret1)
-            //     pre.filteredRows = ret1.jsonResult.bankRecon
-            //     pre.allRows = [ret1.jsonResult.bankRecon]
-            // }
-
+            pre.allRows = rows.map((x: any) => ({ ...x }))  // this is cloning at object level of array and better than just [...rows]
+            // pre.allRows = [...rows]
             function injectOpBalance(rows: any[], opBalance: any) {
                 rows.unshift({
                     otherAccounts: 'Opening balance',
@@ -198,22 +194,6 @@ function useXXGrid(gridOptions: any) {
             }
         }
     }
-
-    // function fillColumnBalance1() {
-    //     const rows: any[] = [...pre.allRows]
-    //     if (pre.isColumnBalance) {
-    //         let op: number = 0.0
-    //         for (let row of rows) {
-    //             row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
-    //             op = row.balance
-    //         }
-    //     } else {
-    //         for (let row of rows) {
-    //             row.balance = undefined
-    //         }
-    //     }
-    //     pre.filteredRows = rows
-    // }
 
     function injectDailySummary() {
         if (pre.allRows.length === 0) {
@@ -316,15 +296,17 @@ function useXXGrid(gridOptions: any) {
     }
 
     function requestSearch(searchValue: string) {
-        meta.current.searchText = searchValue
-        // const searchRegex = new RegExp(searchValue, 'i')
-        meta.current.filteredRows = meta.current.allRows.filter((row: any) => {
-            return Object.keys(row).some((field) => {
-                const temp: string = row[field] ? row[field].toString() : ''
-                return temp.toLowerCase().includes(searchValue.toLowerCase())
-                // return searchRegex.test(temp)
+        if (searchValue) {
+            meta.current.searchText = searchValue
+            // const searchRegex = new RegExp(searchValue, 'i')
+            meta.current.filteredRows = meta.current.allRows.filter((row: any) => {
+                return Object.keys(row).some((field) => {
+                    const temp: string = row[field] ? row[field].toString() : ''
+                    return temp.toLowerCase().includes(searchValue.toLowerCase())
+                    // return searchRegex.test(temp)
+                })
             })
-        })
+        }
         pre.isReverseOrder = false
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})

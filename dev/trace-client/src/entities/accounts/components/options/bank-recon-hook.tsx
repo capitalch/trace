@@ -1,19 +1,14 @@
 import {
     _,
     hash,
-    InputMask,
-    InputText,
     moment,
     NumberFormat,
-    PrimeInputMask,
     useEffect,
     useRef,
     useState,
 } from '../../../../imports/regular-imports'
-import { componentStore } from '../../../../imports/trace-imports'
-import { utilMethods } from '../../../../global-utils/misc-utils'
+// import { utilMethods } from '../../../../global-utils/misc-utils'
 import {
-    Box,
     Button,
     Input,
     List,
@@ -21,13 +16,10 @@ import {
     ListItemText,
     makeStyles,
     NativeSelect,
-    Select,
-    TextField,
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { classNames } from 'react-select/dist/declarations/src/utils'
 
 function useBankRecon() {
     const [, setRefresh] = useState({})
@@ -35,7 +27,6 @@ function useBankRecon() {
         accountsMessages,
         confirm,
         emit,
-        extractAmount,
         execGenericView,
         filterOn,
         genericUpdateMaster,
@@ -44,32 +35,20 @@ function useBankRecon() {
         isGoodToDelete,
         manageFormsState,
         messages,
-        ReactForm,
         toDecimalFormat,
-        TraceDialog,
-        TraceFullWidthSubmitButton,
+        genericUpdateMasterNoForm,
         useTraceGlobal,
-        XXGrid,
     } = useSharedElements()
 
     const {
         resetForm,
         resetAllFormErrors,
-        getValidationFabric,
-        getFormData,
-        clearServerError,
     } = manageFormsState()
-    const { doValidateForm, isValidForm } = getValidationFabric()
-    const {
-        saveForm,
-        genericUpdateMasterNoForm,
-        getDateMaskMap,
-        isControlDisabled,
-    } = utilMethods()
+    
 
     const isoDateFormat = 'YYYY-MM-DD'
     const dateFormat = getFromBag('dateFormat')
-
+    const classes = useStyles()
     const meta: any = useRef({
         isMounted: false,
         selectedBank: 'Select a bank account',
@@ -96,16 +75,12 @@ function useBankRecon() {
             title: '',
             formId: '',
             bankOpBalId: '',
-            // dialogActions: <></>,
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
-            // dialogContent: <></>,
         },
     })
     const pre = meta.current
-    // const headerConfig = meta.current.headerConfig
     const dialogConfig = meta.current.dialogConfig
-    // const classes = useStyles({ headerConfig: headerConfig })
     const { getCurrentMediaSize, getCurrentWindowSize } = useTraceGlobal()
 
     useEffect(() => {
@@ -148,9 +123,8 @@ function useBankRecon() {
                         getXXGridParams().gridActionMessages.fetchIbukiMessage,
                         null
                     )
-                    // setRefresh({})
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -304,7 +278,7 @@ function useBankRecon() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => {}
+        meta.current.dialogConfig.actions = () => { }
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -327,7 +301,7 @@ function useBankRecon() {
                         onClick={() => bankSelected(item)}
                         selected
                         button
-                        // className={classes.listItem}
+                    // className={classes.listItem}
                     >
                         <ListItemText primary={item.accName}></ListItemText>
                     </ListItem>
@@ -354,107 +328,99 @@ function useBankRecon() {
     function handleOpBalanceButtonClick() {
         dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
         dialogConfig.content = OpeningBalanceContent //OpBalanceDialogContent()
-        dialogConfig.actions = () => {} //  submitOpBal
+        dialogConfig.actions = () => { } //  submitOpBal
+        meta.current.showDialog = true
+        pre.isMounted && setRefresh({})
 
         function OpeningBalanceContent() {
-            const [opBalance, setOpBalance] = useState(0)
+            const [opBalance, setOpBalance] = useState(0.00)
             const [drCr, setDrCr] = useState('C')
+            const [opBalId, setOpBalId] = useState(undefined)
+
+            useEffect(() => {
+                doFetch()
+            }, [])
+
             return (
-                <div
-                    style={{
-                        display: 'flex',
-                        // flexDirection: 'column',
-                        rowGap: '1rem',
-                        flexWrap: 'wrap',
-                    }}>
-                    <NumberFormat
-                        allowNegative={false}
-                        label="Opening balance"
-                        style={{width: '10rem'}}
-                        // inputProps={{
-                        //     label:'hjhjhj',
-                        //     placeholder:'Opening balance',
-                        //     width:'6rem'
-                        // }}
-                        // {...{ label: 'Opening balance' }}
-                        customInput={Input}
-                        decimalScale={2}
-                        fixedDecimalScale={true}
-                        onFocus={(e: any) => {
-                            e.target.select()
-                        }}
-                        thousandSeparator={true}
-                        value={opBalance || 0.0}
-                    />
-                    {/* <Input
-                        placeholder="Opening balance"
-                        style={{ maxWidth: '16ch', width: '12ch' }}
-                        type="number"
-                    /> */}
-
-                    <NativeSelect
-                        onChange={(e: any) => setDrCr(e.target.value)}
-                        style={{ width: '5rem', marginLeft: '1rem' }}
-                        value={drCr || 'C'}>
-                        <option value="C">Credit</option>
-                        <option value="D">Debit</option>
-                    </NativeSelect>
-                    
-                    {/* </div> */}
-
+                <div className={classes.dialogContent}                >
+                    <div className='items'>
+                        <NumberFormat
+                            allowNegative={false}
+                            label="Opening balance"
+                            className='numeric'
+                            customInput={Input}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                setOpBalance(floatValue)
+                            }}
+                            thousandSeparator={true}
+                            value={opBalance || 0.0} />
+                        <NativeSelect
+                            onChange={(e: any) => setDrCr(e.target.value)}
+                            style={{ width: '5rem' }}
+                            value={drCr || 'C'}>
+                            <option value="C">Credit</option>
+                            <option value="D">Debit</option>
+                        </NativeSelect>
+                    </div>
                     <Button
                         variant="contained"
                         color="secondary"
                         size="small"
-                        style={{ marginLeft: '1rem' }}>
+                        onClick={doSubmit}
+                        className='submit'>
                         Submit
                     </Button>
                 </div>
             )
-        }
 
-        //  (
-        //     <TraceFullWidthSubmitButton
-        //         onClick={() => submitOpBal()}></TraceFullWidthSubmitButton>
-        // )
-        meta.current.showDialog = true
-        meta.current.isMounted && setRefresh({})
+            async function doFetch() {
+                emit('SHOW-LOADING-INDICATOR', true)
+                let ret: any = await execGenericView({
+                    isMultipleRows: false,
+                    sqlKey: 'get_bank_op_balance',
+                    args: {
+                        accId: pre.selectedBankId,
+                        finYearId: getFromBag('finYearObject')?.finYearId
+                    },
+                    entityName: getCurrentEntity(),
+                })
+                emit('SHOW-LOADING-INDICATOR', false)
+                if (ret && (!_.isEmpty(ret))) {
+                    setOpBalance(ret.amount)
+                    setDrCr(ret.dc)
+                    setOpBalId(ret.id)
+                }
+            }
 
-        function OpBalanceDialogContent() {
-            return (
-                <ReactForm
-                    formId={dialogConfig.formId}
-                    jsonText={JSON.stringify(bankOpeningBalanceJson)}
-                    name={getCurrentEntity()}
-                    componentStore={componentStore}
-                />
-            )
-        }
-
-        async function submitOpBal() {
-            // const formId = dialogConfig.formId
-            // clearServerError(formId)
-            // await doValidateForm(formId)
-            // if (isValidForm(formId)) {
-            //     let data = getFormData(formId)
-            //     data.amount = extractAmount(data.amount)
-            //     data.accId = meta.current.selectedBankId
-            //     data.finYearId = getFromBag('finYearObject')?.finYearId
-            //     data.id = meta.current.dialogConfig.bankOpBalId || undefined
-            //     const finalData: any = {}
-            //     finalData.tableName = 'BankOpBal'
-            //     finalData.data = { ...data }
-            //     saveForm({
-            //         data: finalData,
-            //         formId: formId,
-            //         queryId: 'genericUpdateMaster',
-            //         afterMethod: () => {
-            //             utilFunc().closeDialog()
-            //             // fetchBankRecon()
-            //         },
-            //         formRefresh: false,
-            //     })
-            // }
+            async function doSubmit() {
+                try {
+                    const ret = await genericUpdateMasterNoForm({
+                        tableName: 'BankOpBal',
+                        data: {
+                            id: opBalId,
+                            accId: pre.selectedBankId,
+                            finYearId: getFromBag('finYearObject')?.finYearId,
+                            amount: opBalance,
+                            dc: drCr
+                        }
+                    })
+                    emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
+                    handleCloseDialog()
+                } catch (e: any) {
+                    console.log(e.message)
+                    emit('SHOW-MESSAGE', {
+                        message: messages['errorInOperation'],
+                        severity: 'error',
+                        duration: null,
+                    })
+                }
+            }
         }
     }
 
@@ -501,129 +467,6 @@ function useBankRecon() {
         ])
         pre.isReverseOrder && rows.reverse()
         pre.filteredRows = rows
-    }
-
-    function utilFunc() {
-        // function clearDateEditor(props: any) {
-        //     const field = 'clearDate'
-        //     const maskMap: any = getDateMaskMap()
-        //     return (
-        //         <InputMask
-        //             style={{
-        //                 height: '1.2rem',
-        //                 fontSize: '0.8rem',
-        //                 width: '6rem',
-        //             }}
-        //             mask={maskMap[dateFormat]}
-        //             placeholder={dateFormat}
-        //             value={props.rowData[field] || props.rowData['tranDate']}
-        //             onFocus={(e: any) => {
-        //                 props.rowData[field] =
-        //                     props.rowData[field] || props.rowData['tranDate']
-        //                 meta.current.isMounted && setRefresh({})
-        //             }}
-        //             onKeyDown={(e) => {
-        //                 if (e.key === 'Escape') {
-        //                     props.rowData[field] = null
-        //                     meta.current.isMounted && setRefresh({})
-        //                 }
-        //             }}
-        //             onChange={(e) => {
-        //                 props.rowData[field] = e.target.value
-        //                 meta.current.isMounted && setRefresh({})
-        //             }}></InputMask>
-        //     )
-        // }
-
-        // function clearRemarksEditor(props: any) {
-        //     const field = 'clearRemarks'
-        //     return (
-        //         <InputText
-        //             style={{ height: '1.2rem', fontSize: '0.8rem' }}
-        //             value={props.rowData[field] || ''}
-        //             onChange={(e: any) => {
-        //                 props.rowData[field] = e.target.value || null
-        //                 meta.current.isMounted && setRefresh({})
-        //             }}></InputText>
-        //     )
-        // }
-
-        // function closeDialog() {
-        //     meta.current.showDialog = false
-        //     meta.current.isMounted && resetForm(dialogConfig.formId)
-        //     meta.current.isMounted && resetAllFormErrors(dialogConfig.formId)
-        //     meta.current.isMounted && setRefresh({})
-        // }
-
-        // function computeBalance(itemArray: any[] = meta.current.reconData) {
-        //     const orderedItemArray = _.orderBy(itemArray, [
-        //         (item) =>
-        //             moment(
-        //                 item.clearDate ? item.clearDate : '30/12/9999',
-        //                 dateFormat
-        //             ),
-        //         (item) => moment(item.tranDate, dateFormat),
-        //         (item) => item.id,
-        //     ])
-        //     orderedItemArray?.reduce(
-        //         (prev: any, item: any, index: number) => {
-        //             item.clearDate = item.clearDate || null
-        //             const bal = prev.opBal + item.debit - item.credit
-        //             item.balance = toDecimalFormat(
-        //                 String(Math.abs(bal))
-        //             ).concat(' ', bal < 0 ? 'Cr' : 'Dr')
-        //             return { opBal: bal }
-        //         },
-        //         { opBal: 0 }
-        //     )
-
-        //     return orderedItemArray?.reverse()
-        // }
-
-        // async function submitBankRecon() {
-        //     emit('SHOW-LOADING-INDICATOR', true)
-        //     const diffObj: any[] = utilFunc().getDataDiff()
-        //     // correct the clearDate format to iso date
-        //     const diff: any[] = diffObj.map((x) => {
-        //         x.clearDate = x.clearDate
-        //             ? moment(x.clearDate, dateFormat).format(isoDateFormat)
-        //             : null
-        //         return x
-        //     })
-        //     const sqlObject = {
-        //         tableName: 'ExtBankReconTranD',
-        //         data: diff,
-        //     }
-        //     const ret = await genericUpdateMasterNoForm(sqlObject)
-        //     if (ret) {
-        //         // meta.current.reconData = utilFunc().computeBalance()
-        //         meta.current.initialData = JSON.parse(
-        //             JSON.stringify(meta.current.reconData)
-        //         )
-        //         meta.current.initialDataHash = hash(meta.current.initialData)
-        //         // fetchBankRecon()
-        //     } else {
-        //         emit('SHOW-MESSAGE', {
-        //             severity: 'error',
-        //             message: messages['errorInOperation'],
-        //             duration: null,
-        //         })
-        //     }
-        //     emit('SHOW-LOADING-INDICATOR', false)
-        //     meta.current.isMounted && setRefresh({})
-        // }
-
-        return {
-            // computeBalance,
-            // getDataNotChanged,
-            // isDataChanged,
-            // closeDialog,
-            // doSortOnClearDateTranDateAndId,
-            // submitBankRecon,
-            // clearDateEditor,
-            // clearRemarksEditor,
-            // handleOpBalanceButtonClick,
-        }
     }
 
     return {
@@ -679,66 +522,194 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
             },
         },
-        // dialogContent: {
-        //     maxHeight: '12rem',
-        //     minWidth: '20rem',
-        // },
-
-        // dialogTitle: {
-        //     display: 'flex',
-        //     justifyContent: 'space-between',
-        //     alignItems: 'center',
-        //     paddingBottom: '0px',
-        // },
-
-        // dialogActions: {
-        //     minHeight: theme.spacing(4),
-        // },
+        dialogContent: {
+            display: 'flex',
+            flexDirection: 'column',
+            rowGap: theme.spacing(1),
+            '& .items': {
+                display: 'flex',
+                columnGap: theme.spacing(1),
+                justifyContent: 'space-between',
+                '& .numeric': {
+                    width: '10rem',
+                    '& input': {
+                        textAlign: 'end'
+                    }
+                },
+            },
+            '& .submit': {
+                width: '5rem',
+                marginLeft: 'auto',
+                marginRight: 'auto'
+            }
+        },
     })
 )
 
 export { useStyles }
 
-const bankOpeningBalanceJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'Money',
-            name: 'amount',
-            style: { width: '100%' },
-            placeholder: 'Opening balance as per bank',
-            label: 'Opening balance as per bank statement',
-            showLabel: true,
-            validations: [
-                {
-                    name: 'required',
-                    message:
-                        'Please provide opening balance as per bank statement',
-                },
-            ],
-        },
-        {
-            type: 'Select',
-            name: 'dc',
-            style: { width: '100%', height: '2.0rem' },
-            placeholder: 'Debit / Credit',
-            label: 'Select debit / credit',
-            options: [
-                {
-                    label: 'Debit',
-                    value: 'D',
-                },
-                {
-                    label: 'Credit',
-                    value: 'C',
-                },
-            ],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select',
-                },
-            ],
-        },
-    ],
+// const bankOpeningBalanceJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'Money',
+//             name: 'amount',
+//             style: { width: '100%' },
+//             placeholder: 'Opening balance as per bank',
+//             label: 'Opening balance as per bank statement',
+//             showLabel: true,
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message:
+//                         'Please provide opening balance as per bank statement',
+//                 },
+//             ],
+//         },
+//         {
+//             type: 'Select',
+//             name: 'dc',
+//             style: { width: '100%', height: '2.0rem' },
+//             placeholder: 'Debit / Credit',
+//             label: 'Select debit / credit',
+//             options: [
+//                 {
+//                     label: 'Debit',
+//                     value: 'D',
+//                 },
+//                 {
+//                     label: 'Credit',
+//                     value: 'C',
+//                 },
+//             ],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select',
+//                 },
+//             ],
+//         },
+//     ],
+// }
+function utilFunc() {
+    // function clearDateEditor(props: any) {
+    //     const field = 'clearDate'
+    //     const maskMap: any = getDateMaskMap()
+    //     return (
+    //         <InputMask
+    //             style={{
+    //                 height: '1.2rem',
+    //                 fontSize: '0.8rem',
+    //                 width: '6rem',
+    //             }}
+    //             mask={maskMap[dateFormat]}
+    //             placeholder={dateFormat}
+    //             value={props.rowData[field] || props.rowData['tranDate']}
+    //             onFocus={(e: any) => {
+    //                 props.rowData[field] =
+    //                     props.rowData[field] || props.rowData['tranDate']
+    //                 meta.current.isMounted && setRefresh({})
+    //             }}
+    //             onKeyDown={(e) => {
+    //                 if (e.key === 'Escape') {
+    //                     props.rowData[field] = null
+    //                     meta.current.isMounted && setRefresh({})
+    //                 }
+    //             }}
+    //             onChange={(e) => {
+    //                 props.rowData[field] = e.target.value
+    //                 meta.current.isMounted && setRefresh({})
+    //             }}></InputMask>
+    //     )
+    // }
+
+    // function clearRemarksEditor(props: any) {
+    //     const field = 'clearRemarks'
+    //     return (
+    //         <InputText
+    //             style={{ height: '1.2rem', fontSize: '0.8rem' }}
+    //             value={props.rowData[field] || ''}
+    //             onChange={(e: any) => {
+    //                 props.rowData[field] = e.target.value || null
+    //                 meta.current.isMounted && setRefresh({})
+    //             }}></InputText>
+    //     )
+    // }
+
+    // function closeDialog() {
+    //     meta.current.showDialog = false
+    //     meta.current.isMounted && resetForm(dialogConfig.formId)
+    //     meta.current.isMounted && resetAllFormErrors(dialogConfig.formId)
+    //     meta.current.isMounted && setRefresh({})
+    // }
+
+    // function computeBalance(itemArray: any[] = meta.current.reconData) {
+    //     const orderedItemArray = _.orderBy(itemArray, [
+    //         (item) =>
+    //             moment(
+    //                 item.clearDate ? item.clearDate : '30/12/9999',
+    //                 dateFormat
+    //             ),
+    //         (item) => moment(item.tranDate, dateFormat),
+    //         (item) => item.id,
+    //     ])
+    //     orderedItemArray?.reduce(
+    //         (prev: any, item: any, index: number) => {
+    //             item.clearDate = item.clearDate || null
+    //             const bal = prev.opBal + item.debit - item.credit
+    //             item.balance = toDecimalFormat(
+    //                 String(Math.abs(bal))
+    //             ).concat(' ', bal < 0 ? 'Cr' : 'Dr')
+    //             return { opBal: bal }
+    //         },
+    //         { opBal: 0 }
+    //     )
+
+    //     return orderedItemArray?.reverse()
+    // }
+
+    // async function submitBankRecon() {
+    //     emit('SHOW-LOADING-INDICATOR', true)
+    //     const diffObj: any[] = utilFunc().getDataDiff()
+    //     // correct the clearDate format to iso date
+    //     const diff: any[] = diffObj.map((x) => {
+    //         x.clearDate = x.clearDate
+    //             ? moment(x.clearDate, dateFormat).format(isoDateFormat)
+    //             : null
+    //         return x
+    //     })
+    //     const sqlObject = {
+    //         tableName: 'ExtBankReconTranD',
+    //         data: diff,
+    //     }
+    //     const ret = await genericUpdateMasterNoForm(sqlObject)
+    //     if (ret) {
+    //         // meta.current.reconData = utilFunc().computeBalance()
+    //         meta.current.initialData = JSON.parse(
+    //             JSON.stringify(meta.current.reconData)
+    //         )
+    //         meta.current.initialDataHash = hash(meta.current.initialData)
+    //         // fetchBankRecon()
+    //     } else {
+    //         emit('SHOW-MESSAGE', {
+    //             severity: 'error',
+    //             message: messages['errorInOperation'],
+    //             duration: null,
+    //         })
+    //     }
+    //     emit('SHOW-LOADING-INDICATOR', false)
+    //     meta.current.isMounted && setRefresh({})
+    // }
+
+    return {
+        // computeBalance,
+        // getDataNotChanged,
+        // isDataChanged,
+        // closeDialog,
+        // doSortOnClearDateTranDateAndId,
+        // submitBankRecon,
+        // clearDateEditor,
+        // clearRemarksEditor,
+        // handleOpBalanceButtonClick,
+    }
 }
