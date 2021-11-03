@@ -4,23 +4,29 @@ import {
     InputMask,
     InputText,
     moment,
+    NumberFormat,
+    PrimeInputMask,
     useEffect,
     useRef,
     useState,
 } from '../../../../imports/regular-imports'
-import {
-    componentStore,
-} from '../../../../imports/trace-imports'
+import { componentStore } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import {
+    Box,
+    Button,
     List,
     ListItem,
     ListItemText,
     makeStyles,
+    NativeSelect,
+    Select,
+    TextField,
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { classNames } from 'react-select/dist/declarations/src/utils'
 
 function useBankRecon() {
     const [, setRefresh] = useState({})
@@ -67,36 +73,36 @@ function useBankRecon() {
         isMounted: false,
         selectedBank: 'Select a bank account',
         allBanks: [],
-        reconData: [],
+        // reconData: [],
         selectedBankId: '',
         selectedBankName: 'Select a bank',
-        balances: {},
+        // balances: {},
         initialDataHash: '',
         initialData: [],
-        headerConfig: {
-            flexDirection: '',
-            alignItems: '',
-            chipSize: '',
-            buttonSize: '',
-            buttonTopMargin: '',
-            buttonRightMargin: '',
-            textVariant: '',
-            isBbuttonsIcon: false,
-            windowWidth: '',
-        },
+        // headerConfig: {
+        //     flexDirection: '',
+        //     alignItems: '',
+        //     chipSize: '',
+        //     buttonSize: '',
+        //     buttonTopMargin: '',
+        //     buttonRightMargin: '',
+        //     textVariant: '',
+        //     isBbuttonsIcon: false,
+        //     windowWidth: '',
+        // },
         showDialog: false,
         dialogConfig: {
-            title: 'Bank opening balance',
+            title: '',
             formId: '',
             bankOpBalId: '',
             // dialogActions: <></>,
-            actions: () => { },
-            content: () => <></>
+            actions: () => {},
+            content: () => <></>,
             // dialogContent: <></>,
         },
     })
     const pre = meta.current
-    const headerConfig = meta.current.headerConfig
+    // const headerConfig = meta.current.headerConfig
     const dialogConfig = meta.current.dialogConfig
     // const classes = useStyles({ headerConfig: headerConfig })
     const { getCurrentMediaSize, getCurrentWindowSize } = useTraceGlobal()
@@ -143,7 +149,7 @@ function useBankRecon() {
                     )
                     // setRefresh({})
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 
@@ -297,7 +303,7 @@ function useBankRecon() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => { }
+        meta.current.dialogConfig.actions = () => {}
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -320,7 +326,7 @@ function useBankRecon() {
                         onClick={() => bankSelected(item)}
                         selected
                         button
-                    // className={classes.listItem}
+                        // className={classes.listItem}
                     >
                         <ListItemText primary={item.accName}></ListItemText>
                     </ListItem>
@@ -345,9 +351,62 @@ function useBankRecon() {
     }
 
     function handleOpBalanceButtonClick() {
-        meta.current.dialogConfig.title = 'Opening balance'
-        meta.current.dialogConfig.content = OpBalanceDialogContent()
-        meta.current.dialogConfig.actions = submitOpBal
+        dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
+        dialogConfig.content = OpeningBalanceContent //OpBalanceDialogContent()
+        dialogConfig.actions = () => {} //  submitOpBal
+
+        function OpeningBalanceContent() {
+            const [opBalance, setOpBalance] = useState(0)
+            const [drCr, setDrCr] = useState('C')
+            return (
+                <div
+                    style={{
+                        display: 'flex',
+                        // flexDirection: 'column',
+                        rowGap: '1rem',
+                        flexWrap: 'wrap',
+                    }}>
+                    {/* <NumberFormat
+                        allowNegative={false}
+                        label="Opening balance"
+                        inputProps={{
+                            width: '6rem'
+                        }}
+                        // {...{ label: 'Opening balance' }}
+                        customInput={TextField}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        onFocus={(e: any) => {
+                            e.target.select()
+                        }}
+                        thousandSeparator={true}
+                        value={opBalance || 0.0}
+                    /> */}
+                    <TextField 
+                        label='test'
+                        style = {{width: '6rem'}}
+                        />
+
+                    <NativeSelect
+                        onChange={(e: any) => setDrCr(e.target.value)}
+                        style={{ width: '5rem', marginLeft: '1rem' }}
+                        value={drCr || 'C'}>
+                        <option value="C">Credit</option>
+                        <option value="D">Debit</option>
+                    </NativeSelect>
+                    {/* </div> */}
+
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        size="small"
+                        style={{ marginLeft: '1rem' }}>
+                        Submit
+                    </Button>
+                </div>
+            )
+        }
+
         //  (
         //     <TraceFullWidthSubmitButton
         //         onClick={() => submitOpBal()}></TraceFullWidthSubmitButton>
@@ -361,7 +420,8 @@ function useBankRecon() {
                     formId={dialogConfig.formId}
                     jsonText={JSON.stringify(bankOpeningBalanceJson)}
                     name={getCurrentEntity()}
-                    componentStore={componentStore} />
+                    componentStore={componentStore}
+                />
             )
         }
 
@@ -378,7 +438,6 @@ function useBankRecon() {
             //     const finalData: any = {}
             //     finalData.tableName = 'BankOpBal'
             //     finalData.data = { ...data }
-
             //     saveForm({
             //         data: finalData,
             //         formId: formId,
@@ -394,9 +453,7 @@ function useBankRecon() {
     }
 
     function getChangedData() {
-        const data1 = _.orderBy(meta.current.initialData, [
-            (item) => item.id,
-        ])
+        const data1 = _.orderBy(meta.current.initialData, [(item) => item.id])
         let data2 = JSON.parse(JSON.stringify(meta.current.reconData))
         data2 = _.orderBy(data2, [(item) => item.id])
         const diffObj: any[] = []
@@ -431,13 +488,9 @@ function useBankRecon() {
         let rows: any[] = [...pre.filteredRows]
         rows = _.orderBy(rows, [
             (item: any) =>
-                item.clearDate
-                    ? moment(item.clearDate)
-                    : moment('9999-01-01'),
+                item.clearDate ? moment(item.clearDate) : moment('9999-01-01'),
             (item: any) =>
-                item.tranDate
-                    ? moment(item.tranDate)
-                    : moment('9999-01-01'),
+                item.tranDate ? moment(item.tranDate) : moment('9999-01-01'),
             'id',
         ])
         pre.isReverseOrder && rows.reverse()
@@ -554,7 +607,6 @@ function useBankRecon() {
         //     meta.current.isMounted && setRefresh({})
         // }
 
-
         return {
             // computeBalance,
             // getDataNotChanged,
@@ -568,10 +620,18 @@ function useBankRecon() {
         }
     }
 
-    return ({
-        doSortOnClearDateTranDateAndId, getXXGridParams, handleCloseDialog, handleOnSelectBankClick,
-        handleOpBalanceButtonClick, getChangedData, isDataNotChanged, meta, setRefresh, utilFunc
-    })
+    return {
+        doSortOnClearDateTranDateAndId,
+        getXXGridParams,
+        handleCloseDialog,
+        handleOnSelectBankClick,
+        handleOpBalanceButtonClick,
+        getChangedData,
+        isDataNotChanged,
+        meta,
+        setRefresh,
+        utilFunc,
+    }
 }
 
 export { useBankRecon }
@@ -586,7 +646,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 display: 'flex',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                rowGap: theme.spacing(0.5),
+                rowGap: theme.spacing(1),
                 '& .bank': {
                     display: 'flex',
                     alignItems: 'center',
@@ -595,7 +655,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .all-buttons': {
                     display: 'flex',
                     columnGap: theme.spacing(1),
-                    rowGap: theme.spacing(0.5),
+                    rowGap: theme.spacing(1),
                     flexWrap: 'wrap',
                     '& .refresh': {
                         backgroundColor: 'dodgerBlue',
@@ -613,21 +673,21 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
             },
         },
-        dialogContent: {
-            maxHeight: '12rem',
-            minWidth: '20rem',
-        },
+        // dialogContent: {
+        //     maxHeight: '12rem',
+        //     minWidth: '20rem',
+        // },
 
-        dialogTitle: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingBottom: '0px',
-        },
+        // dialogTitle: {
+        //     display: 'flex',
+        //     justifyContent: 'space-between',
+        //     alignItems: 'center',
+        //     paddingBottom: '0px',
+        // },
 
-        dialogActions: {
-            minHeight: theme.spacing(4),
-        },
+        // dialogActions: {
+        //     minHeight: theme.spacing(4),
+        // },
     })
 )
 

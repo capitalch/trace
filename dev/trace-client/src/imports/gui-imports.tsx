@@ -39,6 +39,7 @@ export {
     Paper,
     Radio,
     RadioGroup,
+    Select,
     Snackbar,
     // StyledEngineProvider,
     Switch,

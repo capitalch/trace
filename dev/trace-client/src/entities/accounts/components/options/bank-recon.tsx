@@ -1,4 +1,5 @@
 import {
+    TextField,
     Typography,
     Button,
     Chip,
@@ -36,7 +37,7 @@ function BankRecon() {
         } else {
             ret = isDataNotChanged()
         }
-        return ret
+        return(ret)
     }
 
     const {
@@ -65,7 +66,7 @@ function BankRecon() {
                         label={meta.current.selectedBankName}
                         color="secondary"
                         onClick={handleOnSelectBankClick}
-                        size='medium'></Chip>
+                        size='medium'></Chip>                        
                 </Box>
                 <Box component="div" className="all-buttons">
                     {/* Opening */}
@@ -74,7 +75,7 @@ function BankRecon() {
                         variant="contained"
                         color="default"
                         startIcon={<AccountBalance></AccountBalance>}
-                        disabled={!meta.current.selectedBankId}
+                        // disabled={!meta.current.selectedBankId}
                         onClick={handleOpBalanceButtonClick}>
                         Opening
                     </Button>
