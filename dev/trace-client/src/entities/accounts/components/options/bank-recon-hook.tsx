@@ -15,6 +15,7 @@ import { utilMethods } from '../../../../global-utils/misc-utils'
 import {
     Box,
     Button,
+    Input,
     List,
     ListItem,
     ListItemText,
@@ -366,14 +367,17 @@ function useBankRecon() {
                         rowGap: '1rem',
                         flexWrap: 'wrap',
                     }}>
-                    {/* <NumberFormat
+                    <NumberFormat
                         allowNegative={false}
                         label="Opening balance"
-                        inputProps={{
-                            width: '6rem'
-                        }}
+                        style={{width: '10rem'}}
+                        // inputProps={{
+                        //     label:'hjhjhj',
+                        //     placeholder:'Opening balance',
+                        //     width:'6rem'
+                        // }}
                         // {...{ label: 'Opening balance' }}
-                        customInput={TextField}
+                        customInput={Input}
                         decimalScale={2}
                         fixedDecimalScale={true}
                         onFocus={(e: any) => {
@@ -381,11 +385,12 @@ function useBankRecon() {
                         }}
                         thousandSeparator={true}
                         value={opBalance || 0.0}
+                    />
+                    {/* <Input
+                        placeholder="Opening balance"
+                        style={{ maxWidth: '16ch', width: '12ch' }}
+                        type="number"
                     /> */}
-                    <TextField 
-                        label='test'
-                        style = {{width: '6rem'}}
-                        />
 
                     <NativeSelect
                         onChange={(e: any) => setDrCr(e.target.value)}
@@ -394,6 +399,7 @@ function useBankRecon() {
                         <option value="C">Credit</option>
                         <option value="D">Debit</option>
                     </NativeSelect>
+                    
                     {/* </div> */}
 
                     <Button
