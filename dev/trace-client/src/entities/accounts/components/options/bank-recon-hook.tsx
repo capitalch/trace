@@ -44,7 +44,7 @@ function useBankRecon() {
         resetForm,
         resetAllFormErrors,
     } = manageFormsState()
-    
+
 
     const isoDateFormat = 'YYYY-MM-DD'
     const dateFormat = getFromBag('dateFormat')
@@ -223,11 +223,18 @@ function useBankRecon() {
                 field: 'balance',
                 type: 'number',
                 width: 170,
-                valueFormatter: (params: any) =>
-                    toDecimalFormat(String(Math.abs(params.value))).concat(
-                        ' ',
-                        params.value < 0 ? 'Cr' : 'Dr'
-                    ),
+                valueFormatter: (params: any) => {
+                    let ret
+                    if (params.value) {
+                        ret = toDecimalFormat(String(Math.abs(params.value))).concat(
+                            ' ',
+                            params.value < 0 ? 'Cr' : 'Dr'
+                        )
+                    } else {
+                        ret = ''
+                    }
+                    return(ret)
+                }
             },
             {
                 headerName: 'Clear Remarks',
