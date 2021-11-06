@@ -1,6 +1,6 @@
 import {
     _,
-    // moment,
+    hash,
     useCallback,
     useEffect,
     useState,
@@ -35,7 +35,6 @@ function useXXGrid(gridOptions: any) {
 
     const {
         emit,
-        // debounceEmit,
         debounceFilterOn,
         filterOn,
         getCurrentEntity,
@@ -181,7 +180,7 @@ function useXXGrid(gridOptions: any) {
     }, [])
 
     function fillColumnBalance() {
-        let rows: any[] = pre.filteredRows // [...pre.filteredRows] // [...pre.allRows]
+        let rows: any[] = pre.filteredRows
         const fn = (prev: any, current: any) => {
             if (current && current.isDailySummary) {
                 current.balance = prev.balance || 0.0
@@ -238,7 +237,6 @@ function useXXGrid(gridOptions: any) {
             const acc: any = {
                 tranDate: '',
                 op: +opBalance,
-
                 debit: 0,
                 credit: 0,
                 clos: +opBalance,
@@ -250,10 +248,8 @@ function useXXGrid(gridOptions: any) {
 
             for (let item of arr) {
                 if (item.tranDate === acc.tranDate) {
-                    // if(item.id1){
                     acc.debit = +acc.debit + (item.debit || 0)
                     acc.credit = +acc.credit + (item.credit || 0)
-                    // }
                 } else {
                     //push
                     acc.clos = (item.id1 ? +acc.op : 0) + acc.debit - acc.credit // This iif was necessary to skip initial opbalance which is already taken in debit or credit
@@ -363,9 +359,13 @@ function useXXGrid(gridOptions: any) {
     }
 
     function toggleOrder() {
+        const hash1 = hash(pre.filteredRows)
+        console.log(hash1)
         const rows = [...pre.filteredRows]
         rows.reverse()
         pre.filteredRows = rows
+        const hash2 = hash(pre.filteredRows)
+        console.log(hash2)
     }
 
     return {
@@ -374,7 +374,6 @@ function useXXGrid(gridOptions: any) {
         handleEditRowsModelChange,
         injectDailySummary,
         meta,
-        // onCellValueChange,
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,
@@ -438,7 +437,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
 
                 '& .add-button': {
-                    // marginLeft: 'auto',
                     marginRight: theme.spacing(1),
                 },
             },

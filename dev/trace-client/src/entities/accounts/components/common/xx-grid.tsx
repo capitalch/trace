@@ -74,6 +74,8 @@ interface XXGridOptions {
     editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
+    isReverseOrderByDefault?: boolean
+    isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
     postFetchMethod?: any // method to call after fetching of data
     sqlQueryArgs?: any
@@ -87,8 +89,6 @@ interface XXGridOptions {
     toShowDailySummary?: boolean
     toShowOpeningBalance?: boolean
     toShowReverseCheckbox?: boolean
-    isReverseOrderByDefault?: boolean
-    isShowColBalanceByDefault?: boolean
     viewLimit?: string
     xGridProps?: any
 }
