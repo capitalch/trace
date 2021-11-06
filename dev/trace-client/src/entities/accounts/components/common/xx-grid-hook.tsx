@@ -145,12 +145,18 @@ function useXXGrid(gridOptions: any) {
                 row.id1 = row.id
                 row.balance = 0
                 row.id = incr()
+                row.isDataChanged = false
             }
             gridOptions.toShowOpeningBalance && injectOpBalance(rows, opBalance)
 
             pre.filteredRows = rows || []
+            
             pre.allRows = rows.map((x: any) => ({ ...x }))  // this is cloning at object level of array and better than just [...rows]
 
+            if(gridOptions.sharedData && (!_.isEmpty(gridOptions.sharedData))){
+                gridOptions.sharedData['filteredRows'] = pre.filteredRows
+                gridOptions.sharedData['allRows'] = pre.allRows
+            }
             function injectOpBalance(rows: any[], opBalance: any) {
                 rows.unshift({
                     otherAccounts: 'Opening balance',
@@ -175,6 +181,7 @@ function useXXGrid(gridOptions: any) {
             if (newModel[key]?.clearDate?.value) {
                 const foundRow = filteredRows.find((x: any) => x.id === +key)
                 foundRow.clearDate = newModel[key].clearDate.value
+                foundRow.isDataChanged = true
             }
         })
     }, [])

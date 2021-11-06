@@ -78,6 +78,7 @@ interface XXGridOptions {
     isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
     postFetchMethod?: any // method to call after fetching of data
+    sharedData?:any // data shared with parent
     sqlQueryArgs?: any
     sqlQueryId?: any
     specialColumns: SpecialColumnOptions

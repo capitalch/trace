@@ -132,6 +132,7 @@ function BankRecon() {
                 gridActionMessages={gridActionMessages}
                 columns={columns}
                 editableFields={['clearDate', 'remarks']}
+                hideViewLimit={true}
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}
                 summaryColNames={summaryColNames}
@@ -141,9 +142,9 @@ function BankRecon() {
                 jsonFieldPath="jsonResult.bankRecon"
                 specialColumns={specialColumns}
                 toShowOpeningBalance={true}
-                toShowColumnBalanceCheckBox={true}
+                toShowColumnBalanceCheckBox={false}
                 toShowClosingBalance={true}
-                toShowReverseCheckbox={true}
+                toShowReverseCheckbox={false}
                 viewLimit="1000"
             />
             <TraceDialog

@@ -184,6 +184,9 @@ function useBankRecon() {
                 type: 'date',
                 cellClassName: 'editable-column',
                 // renderEditCell: utilFunc().dateEditor,
+                renderEditCell:(params:any)=>{
+                    return <Button variant='contained'>Test</Button>
+                },
                 valueGetter: (params: any) =>
                     params.value
                         ? moment(params.value).format(isoDateFormat)
@@ -194,10 +197,6 @@ function useBankRecon() {
                         : '',
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
-                // valueGetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
-                // valueSetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
-                // valueFormatter: (params: any) =>
-                //     params.value ? moment(params.value).format(dateFormat) : '',
             },
             {
                 headerName: 'Debit',
