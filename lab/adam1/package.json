@@ -18,6 +18,7 @@
     "@material-ui/styles": "^5.0.0-beta.2",
     "@material-ui/x-grid": "^4.0.0-alpha.36",
     "@material-ui/x-grid-data-generator": "^4.0.0-alpha.37",
+    "@mui/material": "^5.0.6",
     "@mui/x-data-grid": "^4.0.1",
     "@mui/x-data-grid-generator": "^4.0.1",
     "@mui/x-data-grid-pro": "^4.0.2",

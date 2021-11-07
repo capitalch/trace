@@ -36,7 +36,7 @@ function BankRecon() {
         } else {
             ret = isDataNotChanged()
         }
-        return(ret)
+        return (ret)
     }
 
     const {
@@ -65,7 +65,7 @@ function BankRecon() {
                         label={meta.current.selectedBankName}
                         color="secondary"
                         onClick={handleOnSelectBankClick}
-                        size='medium'></Chip>                        
+                        size='medium'></Chip>
                 </Box>
                 <Box component="div" className="all-buttons">
                     {/* Opening */}
@@ -132,8 +132,10 @@ function BankRecon() {
                 gridActionMessages={gridActionMessages}
                 columns={columns}
                 editableFields={['clearDate', 'remarks']}
+                hideViewLimit={true}
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}
+                sharedData={meta.current.sharedData}
                 summaryColNames={summaryColNames}
                 title={'Bank reconcillation'}
                 sqlQueryId={queryId}
@@ -141,9 +143,9 @@ function BankRecon() {
                 jsonFieldPath="jsonResult.bankRecon"
                 specialColumns={specialColumns}
                 toShowOpeningBalance={true}
-                toShowColumnBalanceCheckBox={true}
+                toShowColumnBalanceCheckBox={false}
                 toShowClosingBalance={true}
-                toShowReverseCheckbox={true}
+                toShowReverseCheckbox={false}
                 viewLimit="1000"
             />
             <TraceDialog

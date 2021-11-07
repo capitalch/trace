@@ -1,6 +1,7 @@
 import {
     _,
     hash,
+    InputMask,
     moment,
     NumberFormat,
     useEffect,
@@ -16,6 +17,7 @@ import {
     ListItemText,
     makeStyles,
     NativeSelect,
+    TextField,
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
@@ -29,6 +31,7 @@ function useBankRecon() {
         emit,
         execGenericView,
         filterOn,
+        getDateMaskMap,
         genericUpdateMaster,
         getCurrentEntity,
         getFromBag,
@@ -70,6 +73,7 @@ function useBankRecon() {
         //     isBbuttonsIcon: false,
         //     windowWidth: '',
         // },
+        sharedData:{},
         showDialog: false,
         dialogConfig: {
             title: '',
@@ -183,7 +187,51 @@ function useBankRecon() {
                 editable: true,
                 type: 'date',
                 cellClassName: 'editable-column',
-                // renderEditCell: utilFunc().dateEditor,
+                
+                renderEditCell: (params: any) => {
+                    return <TextField
+                    type='date'
+                    variant='standard'
+                    size='small'
+                    value = {params.row.clearDate}
+                    onChange={(e:any)=>{
+                        const filteredRows:any[] = meta.current.sharedData['filteredRows']
+                        const row = params.row
+                        const idx = filteredRows.findIndex((x:any)=>x.id === row.id)
+                        filteredRows[idx].clearDate = e.target.value
+                        params.row.clearDate = e.target.value
+                        // setRefresh({})
+                        emit(gridActionMessages.calculateBalanceIbukiMessage, null)
+                    }} />
+                    // return <InputMask
+                    // style={{
+                    //     height: '1.2rem',
+                    //     fontSize: '0.8rem',
+                    //     width: '6rem',
+                    // }}
+                    // // mask={getDateMaskMap()}
+                    // mask="99/99/9999"
+                    // placeholder={dateFormat}
+                    // value={props.rowData[field] || props.rowData['tranDate']}
+                    // onFocus={(e: any) => {
+                    //     props.rowData[field] =
+                    //         props.rowData[field] || props.rowData['tranDate']
+                    //     meta.current.isMounted && setRefresh({})
+                    // }}
+                    // onKeyDown={(e) => {
+                    //     if (e.key === 'Escape') {
+                    //         props.rowData[field] = null
+                    //         meta.current.isMounted && setRefresh({})
+                    //     }
+                    // }}
+                    // onChange={(e) => {
+                    //     props.rowData[field] = e.target.value
+                    //     meta.current.isMounted && setRefresh({})
+                    // }}
+                    // >
+
+                    // </InputMask>
+                },
                 valueGetter: (params: any) =>
                     params.value
                         ? moment(params.value).format(isoDateFormat)
@@ -192,10 +240,6 @@ function useBankRecon() {
                     params.value
                         ? moment(params.value).format(isoDateFormat)
                         : '',
-                valueFormatter: (params: any) =>
-                    params.value ? moment(params.value).format(dateFormat) : '',
-                // valueGetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
-                // valueSetter: (params: any) => params.value ? moment(params.value).format(isoDateFormat) : '',
                 // valueFormatter: (params: any) =>
                 //     params.value ? moment(params.value).format(dateFormat) : '',
             },
@@ -233,7 +277,7 @@ function useBankRecon() {
                     } else {
                         ret = ''
                     }
-                    return(ret)
+                    return (ret)
                 }
             },
             {

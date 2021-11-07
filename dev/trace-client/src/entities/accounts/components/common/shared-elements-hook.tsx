@@ -50,6 +50,7 @@ function useSharedElements() {
     const { doValidateForm, isValidForm } = getValidationFabric()
     const {
         extractAmount,
+        getDateMaskMap,
         saveForm,
         genericUpdateMaster,
         genericUpdateMasterDetails,
@@ -112,6 +113,7 @@ function useSharedElements() {
         getCurrentEntity,
         getCurrentMediaSize,
         getCurrentWindowSize,
+        getDateMaskMap,
         getFromBag,
         getFormData,
         getFormObject,

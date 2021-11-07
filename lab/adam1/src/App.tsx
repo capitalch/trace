@@ -57,6 +57,7 @@ import { Component6 } from './components/component6'
 import { Component7 } from './components/component7'
 
 import { MobxStoreContext, mobxStoreInstance } from './components/mobx-store'
+import { Component8 } from './components/component8'
 
 declare module '@material-ui/core/styles/createPalette' {
     interface Palette {
@@ -151,9 +152,7 @@ const App: React.FC = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <MobxStoreContext.Provider value={mobxStoreInstance}>
-                <Component6 />
-            </MobxStoreContext.Provider>
+                <Component8 />
         </ThemeProvider>
     )
 }

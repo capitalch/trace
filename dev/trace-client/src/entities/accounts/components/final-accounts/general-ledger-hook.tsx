@@ -17,7 +17,6 @@ function useGeneralLedger(getArtifacts: any) {
         emit,
         filterOn,
         getFromBag,
-        // isAllowedUpdate,
     } = useSharedElements()
 
     useEffect(() => {

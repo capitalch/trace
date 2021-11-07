@@ -105,7 +105,7 @@ function useXXGrid(gridOptions: any) {
             injectDailySummary()
         }
 
-        requestSearch(meta.current.searchText)
+        // requestSearch(meta.current.searchText)
 
         if (gridOptions.isReverseOrderByDefault) {
             pre.isReverseOrder = true
@@ -115,6 +115,11 @@ function useXXGrid(gridOptions: any) {
         if (gridOptions.isShowColBalanceByDefault) {
             pre.isColumnBalance = true
             fillColumnBalance()
+        }
+
+        if (gridOptions.sharedData) {
+            gridOptions.sharedData['filteredRows'] = pre.filteredRows
+            gridOptions.sharedData['allRows'] = pre.allRows
         }
 
         async function fetch() {
@@ -145,10 +150,12 @@ function useXXGrid(gridOptions: any) {
                 row.id1 = row.id
                 row.balance = 0
                 row.id = incr()
+                row.isDataChanged = false
             }
             gridOptions.toShowOpeningBalance && injectOpBalance(rows, opBalance)
 
             pre.filteredRows = rows || []
+
             pre.allRows = rows.map((x: any) => ({ ...x }))  // this is cloning at object level of array and better than just [...rows]
 
             function injectOpBalance(rows: any[], opBalance: any) {
@@ -175,6 +182,7 @@ function useXXGrid(gridOptions: any) {
             if (newModel[key]?.clearDate?.value) {
                 const foundRow = filteredRows.find((x: any) => x.id === +key)
                 foundRow.clearDate = newModel[key].clearDate.value
+                foundRow.isDataChanged = true
             }
         })
     }, [])
@@ -188,7 +196,7 @@ function useXXGrid(gridOptions: any) {
                 current.balance =
                     prev.balance + (current.debit || 0.0) - (current.credit || 0.0)
             }
-            return(current)
+            return (current)
         }
         if (pre.isColumnBalance) {
             if (pre.isReverseOrder) {
@@ -220,7 +228,7 @@ function useXXGrid(gridOptions: any) {
         pre.filteredRows = rows
         pre.isReverseOrder && toggleOrder()
         reIndexId(pre.filteredRows)
-        if(pre.isColumnBalance){
+        if (pre.isColumnBalance) {
             fillColumnBalance()
         }
         pre.isMounted && setRefresh({})
