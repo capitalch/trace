@@ -323,7 +323,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     {/* global filter */}
                     <TextField
                         variant="standard"
-                        autoFocus
+                        // autoFocus
                         value={props.value}
                         onChange={props.onChange}
                         placeholder="Search…"

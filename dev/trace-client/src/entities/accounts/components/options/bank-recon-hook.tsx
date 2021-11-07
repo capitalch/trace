@@ -43,11 +43,7 @@ function useBankRecon() {
         useTraceGlobal,
     } = useSharedElements()
 
-    const {
-        resetForm,
-        resetAllFormErrors,
-    } = manageFormsState()
-
+    const { resetForm, resetAllFormErrors } = manageFormsState()
 
     const isoDateFormat = 'YYYY-MM-DD'
     const dateFormat = getFromBag('dateFormat')
@@ -73,13 +69,13 @@ function useBankRecon() {
         //     isBbuttonsIcon: false,
         //     windowWidth: '',
         // },
-        sharedData:{},
+        sharedData: {},
         showDialog: false,
         dialogConfig: {
             title: '',
             formId: '',
             bankOpBalId: '',
-            actions: () => { },
+            actions: () => {},
             content: () => <></>,
         },
     })
@@ -128,7 +124,7 @@ function useBankRecon() {
                         null
                     )
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 
@@ -187,61 +183,45 @@ function useBankRecon() {
                 editable: true,
                 type: 'date',
                 cellClassName: 'editable-column',
-                
-                renderEditCell: (params: any) => {
-                    return <TextField
-                    type='date'
-                    variant='standard'
-                    size='small'
-                    value = {params.row.clearDate}
-                    onChange={(e:any)=>{
-                        const filteredRows:any[] = meta.current.sharedData['filteredRows']
-                        const row = params.row
-                        const idx = filteredRows.findIndex((x:any)=>x.id === row.id)
-                        filteredRows[idx].clearDate = e.target.value
-                        params.row.clearDate = e.target.value
-                        // setRefresh({})
-                        emit(gridActionMessages.calculateBalanceIbukiMessage, null)
-                    }} />
-                    // return <InputMask
-                    // style={{
-                    //     height: '1.2rem',
-                    //     fontSize: '0.8rem',
-                    //     width: '6rem',
-                    // }}
-                    // // mask={getDateMaskMap()}
-                    // mask="99/99/9999"
-                    // placeholder={dateFormat}
-                    // value={props.rowData[field] || props.rowData['tranDate']}
-                    // onFocus={(e: any) => {
-                    //     props.rowData[field] =
-                    //         props.rowData[field] || props.rowData['tranDate']
-                    //     meta.current.isMounted && setRefresh({})
-                    // }}
-                    // onKeyDown={(e) => {
-                    //     if (e.key === 'Escape') {
-                    //         props.rowData[field] = null
-                    //         meta.current.isMounted && setRefresh({})
-                    //     }
-                    // }}
-                    // onChange={(e) => {
-                    //     props.rowData[field] = e.target.value
-                    //     meta.current.isMounted && setRefresh({})
-                    // }}
-                    // >
 
-                    // </InputMask>
+                renderEditCell: (params: any) => {
+                    return (
+                        <TextField
+                            type="date"
+                            variant="standard"
+                            size="small"
+                            value={params.row.clearDate}
+                            onFocus={(e) => e.target.select()}
+                            onChange={(e: any) => {
+                                const filteredRows: any[] = meta.current.sharedData.filteredRows
+                                const row = params.row
+                                const idx = filteredRows.findIndex(
+                                    (x: any) => x.id === row.id
+                                )
+                                filteredRows[idx].clearDate = e.target.value
+                                const api: any = params.api
+                                api.setEditCellValue(
+                                    {
+                                        id: params.row.id,
+                                        field: 'clearDate',
+                                        value: e.target.value,
+                                    },
+                                    e
+                                )
+
+                                // setRefresh({})
+                                emit(gridActionMessages.justRefreshIbukiMessage, null)
+                            }}
+                        />
+                    )
                 },
-                valueGetter: (params: any) =>
-                    params.value
-                        ? moment(params.value).format(isoDateFormat)
-                        : '',
-                valueSetter: (params: any) =>
-                    params.value
-                        ? moment(params.value).format(isoDateFormat)
-                        : '',
-                // valueFormatter: (params: any) =>
-                //     params.value ? moment(params.value).format(dateFormat) : '',
+                // valueGetter: (params: any) =>
+                //     params.value
+                //         ? moment(params.value).format(isoDateFormat)
+                //         : '',
+                
+                valueFormatter: (params: any) =>
+                    params.value ? moment(params.value).format(dateFormat) : '',
             },
             {
                 headerName: 'Debit',
@@ -270,15 +250,14 @@ function useBankRecon() {
                 valueFormatter: (params: any) => {
                     let ret
                     if (params.value) {
-                        ret = toDecimalFormat(String(Math.abs(params.value))).concat(
-                            ' ',
-                            params.value < 0 ? 'Cr' : 'Dr'
-                        )
+                        ret = toDecimalFormat(
+                            String(Math.abs(params.value))
+                        ).concat(' ', params.value < 0 ? 'Cr' : 'Dr')
                     } else {
                         ret = ''
                     }
-                    return (ret)
-                }
+                    return ret
+                },
             },
             {
                 headerName: 'Clear Remarks',
@@ -329,7 +308,7 @@ function useBankRecon() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => { }
+        meta.current.dialogConfig.actions = () => {}
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -352,7 +331,7 @@ function useBankRecon() {
                         onClick={() => bankSelected(item)}
                         selected
                         button
-                    // className={classes.listItem}
+                        // className={classes.listItem}
                     >
                         <ListItemText primary={item.accName}></ListItemText>
                     </ListItem>
@@ -379,12 +358,12 @@ function useBankRecon() {
     function handleOpBalanceButtonClick() {
         dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
         dialogConfig.content = OpeningBalanceContent //OpBalanceDialogContent()
-        dialogConfig.actions = () => { } //  submitOpBal
+        dialogConfig.actions = () => {} //  submitOpBal
         meta.current.showDialog = true
         pre.isMounted && setRefresh({})
 
         function OpeningBalanceContent() {
-            const [opBalance, setOpBalance] = useState(0.00)
+            const [opBalance, setOpBalance] = useState(0.0)
             const [drCr, setDrCr] = useState('C')
             const [opBalId, setOpBalId] = useState(undefined)
 
@@ -393,12 +372,12 @@ function useBankRecon() {
             }, [])
 
             return (
-                <div className={classes.dialogContent}                >
-                    <div className='items'>
+                <div className={classes.dialogContent}>
+                    <div className="items">
                         <NumberFormat
                             allowNegative={false}
                             label="Opening balance"
-                            className='numeric'
+                            className="numeric"
                             customInput={Input}
                             decimalScale={2}
                             fixedDecimalScale={true}
@@ -410,7 +389,8 @@ function useBankRecon() {
                                 setOpBalance(floatValue)
                             }}
                             thousandSeparator={true}
-                            value={opBalance || 0.0} />
+                            value={opBalance || 0.0}
+                        />
                         <NativeSelect
                             onChange={(e: any) => setDrCr(e.target.value)}
                             style={{ width: '5rem' }}
@@ -424,7 +404,7 @@ function useBankRecon() {
                         color="secondary"
                         size="small"
                         onClick={doSubmit}
-                        className='submit'>
+                        className="submit">
                         Submit
                     </Button>
                 </div>
@@ -437,12 +417,12 @@ function useBankRecon() {
                     sqlKey: 'get_bank_op_balance',
                     args: {
                         accId: pre.selectedBankId,
-                        finYearId: getFromBag('finYearObject')?.finYearId
+                        finYearId: getFromBag('finYearObject')?.finYearId,
                     },
                     entityName: getCurrentEntity(),
                 })
                 emit('SHOW-LOADING-INDICATOR', false)
-                if (ret && (!_.isEmpty(ret))) {
+                if (ret && !_.isEmpty(ret)) {
                     setOpBalance(ret.amount)
                     setDrCr(ret.dc)
                     setOpBalId(ret.id)
@@ -458,10 +438,13 @@ function useBankRecon() {
                             accId: pre.selectedBankId,
                             finYearId: getFromBag('finYearObject')?.finYearId,
                             amount: opBalance,
-                            dc: drCr
-                        }
+                            dc: drCr,
+                        },
                     })
-                    emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
+                    emit(
+                        getXXGridParams().gridActionMessages.fetchIbukiMessage,
+                        null
+                    )
                     handleCloseDialog()
                 } catch (e: any) {
                     console.log(e.message)
@@ -584,15 +567,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .numeric': {
                     width: '10rem',
                     '& input': {
-                        textAlign: 'end'
-                    }
+                        textAlign: 'end',
+                    },
                 },
             },
             '& .submit': {
                 width: '5rem',
                 marginLeft: 'auto',
-                marginRight: 'auto'
-            }
+                marginRight: 'auto',
+            },
         },
     })
 )
