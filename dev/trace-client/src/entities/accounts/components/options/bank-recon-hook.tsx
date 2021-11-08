@@ -186,13 +186,11 @@ function useBankRecon() {
 
                 renderEditCell: (params: any) => {
                     return (
-                        <TextField
-                            type="date"
-                            variant="standard"
-                            size="small"
-                            value={params.row.clearDate}
-                            onFocus={(e) => e.target.select()}
-                            onChange={(e: any) => {
+                        <InputMask
+                        mask='99/99/9999'
+                        value = {params.row.clearDate}
+                        onChange = {
+                            (e:any)=>{
                                 const filteredRows: any[] = meta.current.sharedData.filteredRows
                                 const row = params.row
                                 const idx = filteredRows.findIndex(
@@ -208,20 +206,46 @@ function useBankRecon() {
                                     },
                                     e
                                 )
-
                                 setRefresh({})
-                                emit(gridActionMessages.justRefreshIbukiMessage, null)
-                            }}
+                            }
+                        }
                         />
+                        // <TextField
+                        //     type="date"
+                        //     variant="standard"
+                        //     size="small"
+                        //     value={params.row.clearDate}
+                        //     onFocus={(e) => e.target.select()}
+                        //     onChange={(e: any) => {
+                        //         const filteredRows: any[] = meta.current.sharedData.filteredRows
+                        //         const row = params.row
+                                // const idx = filteredRows.findIndex(
+                                //     (x: any) => x.id === row.id
+                                // )
+                        //         filteredRows[idx].clearDate = e.target.value
+                        //         const api: any = params.api
+                        //         api.setEditCellValue(
+                        //             {
+                        //                 id: params.row.id,
+                        //                 field: 'clearDate',
+                        //                 value: e.target.value,
+                        //             },
+                        //             e
+                        //         )
+
+                        //         setRefresh({})
+                        //         emit(gridActionMessages.justRefreshIbukiMessage, null)
+                        //     }}
+                        // />
                     )
                 },
-                // valueFormatter: (params: any) =>
-                //     params.value ? moment(params.value).format(dateFormat) : '',
+                valueFormatter: (params: any) =>
+                    params.value ? moment(params.value).format(dateFormat) : '',
 
-                // valueGetter: (params: any) =>
-                //     params.value
-                //         ? moment(params.value).format(isoDateFormat)
-                //         : '',
+                valueGetter: (params: any) =>
+                    params.value
+                        ? moment(params.value).format(isoDateFormat)
+                        : '',
                 
                 
             },

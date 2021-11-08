@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import moment from 'moment'
 import { Button, TextField } from '@material-ui/core'
+import {InputMask} from 'primereact/inputmask'
+// import InputMask from 'react-input-mask'
 import { useGlobal } from '../utils/global-hook'
 import { Component9 } from './component9'
 import { DataGridPro, useGridApiRef, GridApi } from '@mui/x-data-grid-pro'
@@ -84,8 +86,31 @@ function Component8() {
                 editable: true,
                 renderEditCell: (params: any) => {
                     return (
-                        <TextField
-                            
+                        // <InputMask
+                        // mask='99/99/9999'
+                        // value = {params.row.clearDate}
+                        // onChange = {
+                        //     (e:any)=>{
+                        //         const allRows: any[] = meta.current.allRows
+                        //         const row = params.row
+                        //         const idx = allRows.findIndex(
+                        //             (x: any) => x.id === row.id
+                        //         )
+                        //         allRows[idx].clearDate = e.value
+                        //         const api: any = params.api
+                        //         api.setEditCellValue(
+                        //             {
+                        //                 id: params.row.id,
+                        //                 field: 'clearDate',
+                        //                 value: e.value,
+                        //             },
+                        //             e
+                        //         )
+                        //         setRefresh({})
+                        //     }
+                        // }
+                        // />
+                        <TextField                            
                             type="date"
                             variant="standard"
                             size="small"
@@ -108,7 +133,7 @@ function Component8() {
                                     e
                                 )
 
-                                setRefresh({})
+                                // setRefresh({})
                             }}
                         />
                     )
@@ -120,10 +145,10 @@ function Component8() {
                         ? moment(params.value).format(isoDateFormat)
                         : ''
                 },
-                // valueSetter: (params: any) => {
-                //     params.row.clearDate = params.value
-                //     return { ...params.row }
-                // },
+                valueSetter: (params: any) => {
+                    params.row.clearDate = params.value
+                    return { ...params.row }
+                },
             },
         ]
     }
