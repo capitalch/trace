@@ -116,7 +116,6 @@ function Component8() {
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
                 valueGetter: (params: any) => {
-                    // apiRef.commitCellChange()
                     return params.value
                         ? moment(params.value).format(isoDateFormat)
                         : ''

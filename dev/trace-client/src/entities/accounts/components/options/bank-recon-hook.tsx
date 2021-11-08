@@ -209,19 +209,21 @@ function useBankRecon() {
                                     e
                                 )
 
-                                // setRefresh({})
+                                setRefresh({})
                                 emit(gridActionMessages.justRefreshIbukiMessage, null)
                             }}
                         />
                     )
                 },
-                // valueGetter: (params: any) =>
-                //     params.value
-                //         ? moment(params.value).format(isoDateFormat)
-                //         : '',
-                
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
+
+                valueGetter: (params: any) =>
+                    params.value
+                        ? moment(params.value).format(isoDateFormat)
+                        : '',
+                
+                
             },
             {
                 headerName: 'Debit',
