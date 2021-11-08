@@ -215,13 +215,13 @@ function useBankRecon() {
                         />
                     )
                 },
-                valueFormatter: (params: any) =>
-                    params.value ? moment(params.value).format(dateFormat) : '',
+                // valueFormatter: (params: any) =>
+                //     params.value ? moment(params.value).format(dateFormat) : '',
 
-                valueGetter: (params: any) =>
-                    params.value
-                        ? moment(params.value).format(isoDateFormat)
-                        : '',
+                // valueGetter: (params: any) =>
+                //     params.value
+                //         ? moment(params.value).format(isoDateFormat)
+                //         : '',
                 
                 
             },
