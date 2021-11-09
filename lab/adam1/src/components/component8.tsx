@@ -6,13 +6,19 @@ import {InputMask} from 'primereact/inputmask'
 import { useGlobal } from '../utils/global-hook'
 import { Component9 } from './component9'
 import { DataGridPro, useGridApiRef, GridApi } from '@mui/x-data-grid-pro'
-
+import { DataGrid } from '@mui/x-data-grid'
+import {
+    randomCreatedDate,
+    randomTraderName,
+    randomUpdatedDate,
+  } from '@mui/x-data-grid-generator'
+  const dateFormat = 'DD/MM/YYYY'
+  const isoDateFormat = 'YYYY-MM-DD'
 function Component8() {
     const { registerEntry, getValue, setValue } = useGlobal()
     const [editRowsModel, setEditRowsModel] = useState({})
     const [, setRefresh] = useState({})
-    const dateFormat = 'DD/MM/YYYY'
-    const isoDateFormat = 'YYYY-MM-DD'
+    
     const apiRef: any = useGridApiRef()
     const meta: any = useRef({
         allRows: [],
@@ -46,9 +52,9 @@ function Component8() {
                 }}>
                 Submit
             </Button>
-            <DataGridPro
+            <DataGrid
                 style={{ height: '100%' }}
-                apiRef={apiRef}
+                // apiRef={apiRef}
                 columns={getColumns()}
                 rows={meta.current.allRows}
                 // editRowsModel={editRowsModel}
@@ -57,6 +63,7 @@ function Component8() {
         </div>
     )
 
+    
     function getColumns() {
         return [
             {
@@ -82,7 +89,7 @@ function Component8() {
                 headerName: 'Clear date',
                 field: 'clearDate',
                 width: 160,
-                type: 'date',
+                // type: 'date',
                 editable: true,
                 renderEditCell: (params: any) => {
                     return (
@@ -123,6 +130,7 @@ function Component8() {
                                     (x: any) => x.id === row.id
                                 )
                                 allRows[idx].clearDate = e.target.value
+                                row.clearDate = e.target.value
                                 const api: any = params.api
                                 api.setEditCellValue(
                                     {
@@ -133,16 +141,17 @@ function Component8() {
                                     e
                                 )
 
-                                // setRefresh({})
+                                setRefresh({})
                             }}
                         />
                     )
                 },
+
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
                 valueGetter: (params: any) => {
                     return params.value
-                        ? moment(params.value).format(isoDateFormat)
+                        ? (moment(params.value).format(isoDateFormat)) || params.value
                         : ''
                 },
                 valueSetter: (params: any) => {
@@ -161,21 +170,21 @@ const data = [
         name: 'aaa1',
         remarks: 'remarks1',
         tranDate: '2021-04-01',
-        clearDate: '',
+        clearDate: randomCreatedDate(),
     },
     {
         id: 2,
         name: 'aaa2',
         remarks: 'remarks2',
         tranDate: '2021-04-02',
-        clearDate: '',
+        clearDate: randomCreatedDate(),
     },
     {
         id: 3,
         name: 'aaa3',
         remarks: 'remarks3',
         tranDate: '2021-04-03',
-        clearDate: '',
+        clearDate: randomCreatedDate(),
     },
     {
         id: 4,
@@ -185,3 +194,63 @@ const data = [
         clearDate: '',
     },
 ]
+
+const columns = [
+    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: 'age', headerName: 'Age', type: 'number', editable: true },
+    {
+      field: 'dateCreated',
+      headerName: 'Date Created',
+      type: 'date',
+      width: 180,
+      editable: true,
+      valueFormatter: (params: any) =>
+                    params.value ? moment(params.value, isoDateFormat).format(dateFormat) : '',
+    },
+    {
+      field: 'lastLogin',
+      headerName: 'Last Login',
+      type: 'dateTime',
+      width: 220,
+      editable: true,
+    },
+  ];
+  
+  const rows = [
+    {
+      id: 1,
+      name: randomTraderName(),
+      age: 25,
+      dateCreated: randomCreatedDate(),
+      lastLogin: randomUpdatedDate(),
+    },
+    {
+      id: 2,
+      name: randomTraderName(),
+      age: 36,
+      dateCreated: randomCreatedDate(),
+      lastLogin: randomUpdatedDate(),
+    },
+    {
+      id: 3,
+      name: randomTraderName(),
+      age: 19,
+      dateCreated: randomCreatedDate(),
+      lastLogin: randomUpdatedDate(),
+    },
+    {
+      id: 4,
+      name: randomTraderName(),
+      age: 28,
+      dateCreated: randomCreatedDate(),
+      lastLogin: randomUpdatedDate(),
+    },
+    {
+      id: 5,
+      name: randomTraderName(),
+      age: 23,
+      dateCreated: randomCreatedDate(),
+      lastLogin: randomUpdatedDate(),
+    },
+  ];
+
