@@ -110,10 +110,11 @@ function XXGrid(gridOptions: XXGridOptions) {
     }: any = gridOptions
     // const [editRowsModel, setEditRowsModel] = useState({})
     const apiRef: any = useGridApiRef()
+    gridOptions.sharedData.apiRef = apiRef
     const {
         fetchRows,
         fillColumnBalance,
-        handleEditRowsModelChange,
+        // handleEditRowsModelChange,
         injectDailySummary,
         meta,
         // onCellValueChange,
@@ -190,6 +191,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             //     } 
             // }}
             // editRowsModel={editRowsModel}
+
             onCellDoubleClick={(item: any)=>{
                 if(item.field === 'clearDate'){
                     if(!item.value){
@@ -198,7 +200,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     }
                 }
             }}
-            onEditRowsModelChange={handleEditRowsModelChange}
+            // onEditRowsModelChange={handleEditRowsModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
         />

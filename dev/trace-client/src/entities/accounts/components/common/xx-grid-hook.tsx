@@ -176,16 +176,16 @@ function useXXGrid(gridOptions: any) {
         }
     }
 
-    const handleEditRowsModelChange = useCallback((newModel: any) => {
-        const filteredRows: any[] = meta.current.filteredRows
-        Object.keys(newModel).forEach((key: any) => {
-            if (newModel[key]?.clearDate?.value) {
-                const foundRow = filteredRows.find((x: any) => x.id === +key)
-                foundRow.clearDate = newModel[key].clearDate.value
-                foundRow.isDataChanged = true
-            }
-        })
-    }, [])
+    // const handleEditRowsModelChange = useCallback((newModel: any) => {
+    //     const filteredRows: any[] = meta.current.filteredRows
+    //     Object.keys(newModel).forEach((key: any) => {
+    //         if (newModel[key]?.clearDate?.value) {
+    //             const foundRow = filteredRows.find((x: any) => x.id === +key)
+    //             foundRow.clearDate = newModel[key].clearDate.value
+    //             foundRow.isDataChanged = true
+    //         }
+    //     })
+    // }, [])
 
     function fillColumnBalance() {
         let rows: any[] = pre.filteredRows
@@ -379,7 +379,7 @@ function useXXGrid(gridOptions: any) {
     return {
         fetchRows,
         fillColumnBalance,
-        handleEditRowsModelChange,
+        // handleEditRowsModelChange,
         injectDailySummary,
         meta,
         onSelectModelChange,

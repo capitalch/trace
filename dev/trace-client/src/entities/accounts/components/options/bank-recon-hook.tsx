@@ -22,6 +22,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { GridCellParams } from '@mui/x-data-grid-pro'
 
 function useBankRecon() {
     const [, setRefresh] = useState({})
@@ -75,7 +76,7 @@ function useBankRecon() {
             title: '',
             formId: '',
             bankOpBalId: '',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
     })
@@ -124,7 +125,7 @@ function useBankRecon() {
                         null
                     )
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -182,62 +183,71 @@ function useBankRecon() {
                 field: 'clearDate',
                 editable: true,
                 type: 'date',
-                cellClassName: 'editable-column',
+                cellClassName: (params: any) =>
+                    params.row.isDataChanged ? 'data-changed' : 'editable-column'
+                ,
+
 
                 renderEditCell: (params: any) => {
-                    return (
-                        <InputMask
-                        mask='99/99/9999'
-                        value = {params.row.clearDate}
-                        onChange = {
-                            (e:any)=>{
-                                const filteredRows: any[] = meta.current.sharedData.filteredRows
-                                const row = params.row
-                                const idx = filteredRows.findIndex(
-                                    (x: any) => x.id === row.id
-                                )
-                                filteredRows[idx].clearDate = e.target.value
-                                const api: any = params.api
-                                api.setEditCellValue(
-                                    {
-                                        id: params.row.id,
-                                        field: 'clearDate',
-                                        value: e.target.value,
-                                    },
-                                    e
-                                )
-                                setRefresh({})
-                            }
-                        }
-                        />
-                        // <TextField
-                        //     type="date"
-                        //     variant="standard"
-                        //     size="small"
-                        //     value={params.row.clearDate}
-                        //     onFocus={(e) => e.target.select()}
-                        //     onChange={(e: any) => {
-                        //         const filteredRows: any[] = meta.current.sharedData.filteredRows
-                        //         const row = params.row
-                                // const idx = filteredRows.findIndex(
-                                //     (x: any) => x.id === row.id
-                                // )
-                        //         filteredRows[idx].clearDate = e.target.value
-                        //         const api: any = params.api
-                        //         api.setEditCellValue(
-                        //             {
-                        //                 id: params.row.id,
-                        //                 field: 'clearDate',
-                        //                 value: e.target.value,
-                        //             },
-                        //             e
-                        //         )
+                    // if (!params.row.clearDate) {
+                    //     setValue(params.row.tranDate)
+                    //     // setRefresh({})
+                    //     // emit(gridActionMessages.justRefreshIbukiMessage, null)
+                    //     // const apiRef = pre.sharedData.apiRef
+                    //     // apiRef.current.setEditCellValue(
+                    //     //     {
+                    //     //         id: params.row.id,
+                    //     //         field: 'clearDate',
+                    //     //         value: params.row.tranDate,
+                    //     //     })
+                    // }
 
-                        //         setRefresh({})
-                        //         emit(gridActionMessages.justRefreshIbukiMessage, null)
-                        //     }}
-                        // />
+                    return (
+                        <TextField
+                            type="date"
+                            variant="standard"
+                            size="small"
+                            value={params.row.clearDate}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+
+                            onChange={(e: any) => {
+                                setValue(e.target.value)
+                                setRefresh({})
+                                // emit(gridActionMessages.justRefreshIbukiMessage, null)
+                            }}
+                        />
                     )
+                    function setValue(value:any = null) {
+                        // let value
+                        // e ? (value = e.target.value) : (value = val)
+                        const filteredRows: any[] = meta.current.sharedData.filteredRows
+                        const row = params.row
+                        const idx = filteredRows.findIndex(
+                            (x: any) => x.id === row.id
+                        )
+                        if (filteredRows[idx].clearDate !== value) {
+                            filteredRows[idx].clearDate = value
+                            params.row.isDataChanged = true
+                        }
+
+                        row.clearDate = value
+                        const apiRef = pre.sharedData.apiRef
+                        apiRef.current.setEditCellValue(
+                            {
+                                id: params.row.id,
+                                field: 'clearDate',
+                                value: value,
+                            })
+                        // const api: any = params.api
+                        // e && api.setEditCellValue(
+                        //     {
+                        //         id: params.row.id,
+                        //         field: 'clearDate',
+                        //         value: value,
+                        //     }, e)
+                    }
                 },
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
@@ -246,8 +256,9 @@ function useBankRecon() {
                     params.value
                         ? moment(params.value).format(isoDateFormat)
                         : '',
-                
-                
+                // valueSetter: (params:any) =>params.value
+                // ? moment(params.value).format(isoDateFormat)
+                // : '',
             },
             {
                 headerName: 'Debit',
@@ -334,7 +345,7 @@ function useBankRecon() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => {}
+        meta.current.dialogConfig.actions = () => { }
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -357,7 +368,7 @@ function useBankRecon() {
                         onClick={() => bankSelected(item)}
                         selected
                         button
-                        // className={classes.listItem}
+                    // className={classes.listItem}
                     >
                         <ListItemText primary={item.accName}></ListItemText>
                     </ListItem>
@@ -384,7 +395,7 @@ function useBankRecon() {
     function handleOpBalanceButtonClick() {
         dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
         dialogConfig.content = OpeningBalanceContent //OpBalanceDialogContent()
-        dialogConfig.actions = () => {} //  submitOpBal
+        dialogConfig.actions = () => { } //  submitOpBal
         meta.current.showDialog = true
         pre.isMounted && setRefresh({})
 
@@ -580,6 +591,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     backgroundColor: theme.palette.yellow.light,
                     color: theme.palette.yellow.contrastText,
                 },
+                '& .data-changed': {
+                    backgroundColor: theme.palette.orange.main,
+                    color: theme.palette.orange.contrastText
+                }
             },
         },
         dialogContent: {
@@ -651,6 +666,31 @@ export { useStyles }
 //         },
 //     ],
 // }
+
+// <InputMask
+// mask='99/99/9999'
+// value = {params.row.clearDate}
+// onChange = {
+//     (e:any)=>{
+//         const filteredRows: any[] = meta.current.sharedData.filteredRows
+//         const row = params.row
+//         const idx = filteredRows.findIndex(
+//             (x: any) => x.id === row.id
+//         )
+//         filteredRows[idx].clearDate = e.target.value
+//         const api: any = params.api
+//         api.setEditCellValue(
+//             {
+//                 id: params.row.id,
+//                 field: 'clearDate',
+//                 value: e.target.value,
+//             },
+//             e
+//         )
+//         setRefresh({})
+//     }
+// }
+// />
 function utilFunc() {
     // function clearDateEditor(props: any) {
     //     const field = 'clearDate'
