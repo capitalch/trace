@@ -192,14 +192,14 @@ function XXGrid(gridOptions: XXGridOptions) {
             // }}
             // editRowsModel={editRowsModel}
 
-            onCellDoubleClick={(item: any)=>{
-                if(item.field === 'clearDate'){
-                    if(!item.value){
-                        item.value = item.row['tranDate']
-                        // setRefresh({})
-                    }
-                }
-            }}
+            // onCellDoubleClick={(item: any)=>{
+            //     if(item.field === 'clearDate'){
+            //         if(!item.value){
+            //             item.value = item.row['tranDate']
+            //             // setRefresh({})
+            //         }
+            //     }
+            // }}
             // onEditRowsModelChange={handleEditRowsModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
@@ -325,7 +325,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     {/* global filter */}
                     <TextField
                         variant="standard"
-                        // autoFocus
+                        autoFocus
                         value={props.value}
                         onChange={props.onChange}
                         placeholder="Search…"

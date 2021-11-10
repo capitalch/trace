@@ -851,8 +851,8 @@ allSqls = {
 
     "getJson_bankRecon": '''
         with cte1 as (select 
-            -- d."id",
-            h."id" --as "headerId"
+            d."id" --as "tranDetailsId",
+            --h."id" --as "headerId"
             , "tranDate"
             , "tranTypeId"
             , "userRefNo"

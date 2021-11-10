@@ -43,72 +43,7 @@ Netwoven 				: 19AACCN3894N1ZP
 		Only can select from calendar in both places
 
 ## TextField
-renderEditCell: (params: any) => {
-                    // if (!params.row.clearDate) {
-                    //     setValue(null,params.row.tranDate)
-                    //         // setRefresh({})
-                    //         // emit(gridActionMessages.justRefreshIbukiMessage, null)
-                    //     const apiRef = pre.sharedData.apiRef
-                    //     apiRef.current.setEditCellValue({
-                    //         id: params.row.id,
-                    //         field: 'clearDate',
-                    //         value: params.row.tranDate,
-                    //     })
-                    // }
 
-                    return (
-                        <TextField
-                            type="date"
-                            variant="standard"
-                            size="small"
-                            value={params.row.clearDate}
-                            onFocus={(e) => {
-                                e.target.select()
-                            }}
-                            onChange={(e: any) => {
-                                setValue(e)
-                                // setRefresh({})
-                                // emit(
-                                //     gridActionMessages.justRefreshIbukiMessage,
-                                //     null
-                                // )
-                            }}
-                        />
-                    )
-                    function setValue(e: any, val: any = null) {
-                        let value
-                        e ? (value = e.target.value) : (value = val)
-                        const filteredRows: any[] =
-                            meta.current.sharedData.filteredRows
-                        const row = params.row
-                        const idx = filteredRows.findIndex(
-                            (x: any) => x.id === row.id
-                        )
-                        if (filteredRows[idx].clearDate !== value) {
-                            filteredRows[idx].clearDate = value
-                            params.row.isDataChanged = true
-                        }
-
-                        row.clearDate = value
-                        // const apiRef = pre.sharedData.apiRef
-                        // apiRef.current.setEditCellValue(
-                        //     {
-                        //         id: params.row.id,
-                        //         field: 'clearDate',
-                        //         value: value,
-                        //     })
-                        const api: any = params.api
-                        e &&
-                            api.setEditCellValue(
-                                {
-                                    id: params.row.id,
-                                    field: 'clearDate',
-                                    value: value,
-                                },
-                                e
-                            )
-                    }
-                },
 
 ## pyinstaller command for tkenter
 # acivate env where pyinstaller is installed
@@ -134,11 +69,7 @@ c) In all Typography comment out disableTypography
 
 # Working on
 0.1 Bank recon
-	a) Edit date clean way
-	b) Submit save
-	c) Slider removes data
-	d) Opening
-	e) clean up bank recon
+	a) When search or icon refresh then order is not reverse
 
 1.1 Bank recon rework, drill down etc
 1.2 All transactions, default is reverse, so let the checkbox be checked

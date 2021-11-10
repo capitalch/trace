@@ -17,7 +17,7 @@ import { useBankRecon, useStyles } from './bank-recon-hook'
 function BankRecon() {
     const { doSortOnClearDateTranDateAndId, getXXGridParams, handleCloseDialog,
         handleOnSelectBankClick, isDataNotChanged,
-        handleOpBalanceButtonClick, meta, setRefresh } = useBankRecon()
+        handleOpBalanceButtonClick, meta, setRefresh, submitBankRecon } = useBankRecon()
     const {
         emit,
         isControlDisabled,
@@ -117,10 +117,11 @@ function BankRecon() {
 
                     {/* submit */}
                     <Button
-                        disabled={handleDisabled()}
+                        // disabled={handleDisabled()}
                         color="secondary"
                         size="medium"
                         startIcon={<Save></Save>}
+                        onClick= {submitBankRecon}
                         // onClick={utilFunc().submitBankRecon}
                         variant="contained">
                         Submit

@@ -332,10 +332,12 @@ function useXXGrid(gridOptions: any) {
                     // return searchRegex.test(temp)
                 })
             })
+            
         } else {
             meta.current.filteredRows = meta.current.allRows.map((x: any) => ({ ...x }))
         }
-        pre.isReverseOrder = false
+        // gridOptions.isReverseOrderByDefault && meta.current.filteredRows.reverse()
+        // pre.isReverseOrder = false
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
     }
