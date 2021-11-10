@@ -76,7 +76,7 @@ function useBankRecon() {
             title: '',
             formId: '',
             bankOpBalId: '',
-            actions: () => { },
+            actions: () => {},
             content: () => <></>,
         },
     })
@@ -125,7 +125,7 @@ function useBankRecon() {
                         null
                     )
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 
@@ -182,47 +182,53 @@ function useBankRecon() {
                 width: 170,
                 field: 'clearDate',
                 editable: true,
-                type: 'date',
+                // type: 'date',
                 cellClassName: (params: any) =>
-                    params.row.isDataChanged ? 'data-changed' : 'editable-column'
-                ,
-
-
+                    params.row.isDataChanged
+                        ? 'data-changed'
+                        : 'editable-column',
                 renderEditCell: (params: any) => {
-                    // if (!params.row.clearDate) {
-                    //     setValue(params.row.tranDate)
-                    //     // setRefresh({})
-                    //     // emit(gridActionMessages.justRefreshIbukiMessage, null)
-                    //     // const apiRef = pre.sharedData.apiRef
-                    //     // apiRef.current.setEditCellValue(
-                    //     //     {
-                    //     //         id: params.row.id,
-                    //     //         field: 'clearDate',
-                    //     //         value: params.row.tranDate,
-                    //     //     })
-                    // }
+                    if (!params.row.clearDate) {
+                        setValue(null,params.row.tranDate)
+                            // setRefresh({})
+                            // emit(gridActionMessages.justRefreshIbukiMessage, null)
+                        const apiRef = pre.sharedData.apiRef
+                        apiRef.current.setEditCellValue({
+                            id: params.row.id,
+                            field: 'clearDate',
+                            value: params.row.tranDate,
+                        })
+                    }
 
                     return (
-                        <TextField
+                        <Input
                             type="date"
-                            variant="standard"
-                            size="small"
+                            // variant="standard"
+                            // size="small"
                             value={params.row.clearDate}
                             onFocus={(e) => {
                                 e.target.select()
                             }}
-
+                            // onKeyDown={(e: any) => {
+                            //     if (![46, 32].includes(e.keyCode)) {
+                            //         e.preventDefault()
+                            //     }
+                            // }}
                             onChange={(e: any) => {
-                                setValue(e.target.value)
-                                setRefresh({})
-                                // emit(gridActionMessages.justRefreshIbukiMessage, null)
+                                setValue(e)
+                                // setRefresh({})
+                                // emit(
+                                //     gridActionMessages.justRefreshIbukiMessage,
+                                //     null
+                                // )
                             }}
                         />
                     )
-                    function setValue(value:any = null) {
-                        // let value
-                        // e ? (value = e.target.value) : (value = val)
-                        const filteredRows: any[] = meta.current.sharedData.filteredRows
+                    function setValue(e: any, val: any = null) {
+                        let value
+                        e ? (value = e.target.value) : (value = val)
+                        const filteredRows: any[] =
+                            meta.current.sharedData.filteredRows
                         const row = params.row
                         const idx = filteredRows.findIndex(
                             (x: any) => x.id === row.id
@@ -233,32 +239,33 @@ function useBankRecon() {
                         }
 
                         row.clearDate = value
-                        const apiRef = pre.sharedData.apiRef
-                        apiRef.current.setEditCellValue(
-                            {
-                                id: params.row.id,
-                                field: 'clearDate',
-                                value: value,
-                            })
-                        // const api: any = params.api
-                        // e && api.setEditCellValue(
+                        // const apiRef = pre.sharedData.apiRef
+                        // apiRef.current.setEditCellValue(
                         //     {
                         //         id: params.row.id,
                         //         field: 'clearDate',
                         //         value: value,
-                        //     }, e)
+                        //     })
+
+                        const api: any = params.api
+                        e &&
+                            api.setEditCellValue(
+                                {
+                                    id: params.row.id,
+                                    field: 'clearDate',
+                                    value: value,
+                                },
+                                e
+                            )
                     }
                 },
                 valueFormatter: (params: any) =>
                     params.value ? moment(params.value).format(dateFormat) : '',
 
-                valueGetter: (params: any) =>
-                    params.value
-                        ? moment(params.value).format(isoDateFormat)
-                        : '',
-                // valueSetter: (params:any) =>params.value
-                // ? moment(params.value).format(isoDateFormat)
-                // : '',
+                // valueGetter: (params: any) =>
+                //     params.value
+                //         ? moment(params.value).format(isoDateFormat)
+                //         : '',
             },
             {
                 headerName: 'Debit',
@@ -345,7 +352,7 @@ function useBankRecon() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => { }
+        meta.current.dialogConfig.actions = () => {}
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -368,7 +375,7 @@ function useBankRecon() {
                         onClick={() => bankSelected(item)}
                         selected
                         button
-                    // className={classes.listItem}
+                        // className={classes.listItem}
                     >
                         <ListItemText primary={item.accName}></ListItemText>
                     </ListItem>
@@ -395,7 +402,7 @@ function useBankRecon() {
     function handleOpBalanceButtonClick() {
         dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
         dialogConfig.content = OpeningBalanceContent //OpBalanceDialogContent()
-        dialogConfig.actions = () => { } //  submitOpBal
+        dialogConfig.actions = () => {} //  submitOpBal
         meta.current.showDialog = true
         pre.isMounted && setRefresh({})
 
@@ -593,8 +600,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
                 '& .data-changed': {
                     backgroundColor: theme.palette.orange.main,
-                    color: theme.palette.orange.contrastText
-                }
+                    color: theme.palette.orange.contrastText,
+                },
             },
         },
         dialogContent: {

@@ -105,7 +105,7 @@ function useXXGrid(gridOptions: any) {
             injectDailySummary()
         }
 
-        // requestSearch(meta.current.searchText)
+        requestSearch(meta.current.searchText)
 
         if (gridOptions.isReverseOrderByDefault) {
             pre.isReverseOrder = true

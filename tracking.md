@@ -31,6 +31,85 @@ Netwoven 				: 19AACCN3894N1ZP
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
+# Observations on Bank recon implementation
+## No renderEditCell: No default clearDate(when empty). Problem entering year. Selection from calendar works
+## RenderEditCell as textField
+	a) No auto population of clearDate
+		Edit of populated clear date: OK
+		Edit of clear date: Edit error, wrong values. Only can select from calendar
+	b) Auto population of clearDate
+		Date change of populated clear date: Fault
+		Date change of clear date: Fault
+		Only can select from calendar in both places
+
+## TextField
+renderEditCell: (params: any) => {
+                    // if (!params.row.clearDate) {
+                    //     setValue(null,params.row.tranDate)
+                    //         // setRefresh({})
+                    //         // emit(gridActionMessages.justRefreshIbukiMessage, null)
+                    //     const apiRef = pre.sharedData.apiRef
+                    //     apiRef.current.setEditCellValue({
+                    //         id: params.row.id,
+                    //         field: 'clearDate',
+                    //         value: params.row.tranDate,
+                    //     })
+                    // }
+
+                    return (
+                        <TextField
+                            type="date"
+                            variant="standard"
+                            size="small"
+                            value={params.row.clearDate}
+                            onFocus={(e) => {
+                                e.target.select()
+                            }}
+                            onChange={(e: any) => {
+                                setValue(e)
+                                // setRefresh({})
+                                // emit(
+                                //     gridActionMessages.justRefreshIbukiMessage,
+                                //     null
+                                // )
+                            }}
+                        />
+                    )
+                    function setValue(e: any, val: any = null) {
+                        let value
+                        e ? (value = e.target.value) : (value = val)
+                        const filteredRows: any[] =
+                            meta.current.sharedData.filteredRows
+                        const row = params.row
+                        const idx = filteredRows.findIndex(
+                            (x: any) => x.id === row.id
+                        )
+                        if (filteredRows[idx].clearDate !== value) {
+                            filteredRows[idx].clearDate = value
+                            params.row.isDataChanged = true
+                        }
+
+                        row.clearDate = value
+                        // const apiRef = pre.sharedData.apiRef
+                        // apiRef.current.setEditCellValue(
+                        //     {
+                        //         id: params.row.id,
+                        //         field: 'clearDate',
+                        //         value: value,
+                        //     })
+                        const api: any = params.api
+                        e &&
+                            api.setEditCellValue(
+                                {
+                                    id: params.row.id,
+                                    field: 'clearDate',
+                                    value: value,
+                                },
+                                e
+                            )
+                    }
+                },
+
 ## pyinstaller command for tkenter
 # acivate env where pyinstaller is installed
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
