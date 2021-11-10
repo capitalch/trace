@@ -108,9 +108,8 @@ function XXGrid(gridOptions: XXGridOptions) {
         title,
         viewLimit,
     }: any = gridOptions
-    // const [editRowsModel, setEditRowsModel] = useState({})
     const apiRef: any = useGridApiRef()
-    gridOptions.sharedData.apiRef = apiRef
+    gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
         fetchRows,
         fillColumnBalance,
@@ -152,6 +151,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             rowHeight={32}
             //
             // disableSelectionOnClick={true}
+            disableColumnMenu={true}
             components={{
                 Toolbar: CustomGridToolbar,
                 Footer: CustomGridFooter,

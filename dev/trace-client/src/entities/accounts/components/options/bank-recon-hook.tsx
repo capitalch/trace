@@ -178,12 +178,12 @@ function useBankRecon() {
                 headerName: 'Instr no',
                 description: 'Instrument name',
                 field: 'instrNo',
-                editable: true,
+                // editable: true,
                 width: 120,
             },
             {
                 headerName: 'Clear date',
-                width: 190,
+                width: 180,
                 field: 'clearDate',
                 editable: true,
                 // type: 'date',
@@ -609,8 +609,8 @@ function useBankRecon() {
             const diffObjs: any[] = changedData.map((item: any) => {
                 const it = {
                     clearDate: item.clearDate || null,
-                    clearRemarks: item.remarks,
-                    tranDetailsId: item.id1,
+                    clearRemarks: item.clearRemarks,
+                    tranDetailsId: item.tranDetailsId,
                     id: item.bankReconId
                 }
                 if(!it.id){
