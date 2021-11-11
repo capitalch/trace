@@ -48,7 +48,9 @@ function Component8() {
                 variant="contained"
                 size="small"
                 onClick={() => {
-                    console.log(meta.current.allRows)
+                    // console.log(meta.current.allRows)
+                    const temp = moment('') || ''
+                    console.log(temp)
                 }}>
                 Submit
             </Button>

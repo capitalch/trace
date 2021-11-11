@@ -1,7 +1,6 @@
 import {
     _,
     hash,
-    useCallback,
     useEffect,
     useState,
     useRef,
@@ -146,6 +145,7 @@ function useXXGrid(gridOptions: any) {
                 id1: 0,
             }
             path && (rows = _.get(ret1, path, []))
+            rows = rows || []
             for (const row of rows) {
                 row.id1 = row.id
                 row.balance = 0
@@ -156,7 +156,7 @@ function useXXGrid(gridOptions: any) {
 
             pre.filteredRows = rows || []
 
-            pre.allRows = rows.map((x: any) => ({ ...x }))  // this is cloning at object level of array and better than just [...rows]
+            pre.allRows = rows.map((x: any) => ({ ...x })) // this is cloning at object level of array and better than just [...rows]
 
             function injectOpBalance(rows: any[], opBalance: any) {
                 rows.unshift({
@@ -176,17 +176,6 @@ function useXXGrid(gridOptions: any) {
         }
     }
 
-    // const handleEditRowsModelChange = useCallback((newModel: any) => {
-    //     const filteredRows: any[] = meta.current.filteredRows
-    //     Object.keys(newModel).forEach((key: any) => {
-    //         if (newModel[key]?.clearDate?.value) {
-    //             const foundRow = filteredRows.find((x: any) => x.id === +key)
-    //             foundRow.clearDate = newModel[key].clearDate.value
-    //             foundRow.isDataChanged = true
-    //         }
-    //     })
-    // }, [])
-
     function fillColumnBalance() {
         let rows: any[] = pre.filteredRows
         const fn = (prev: any, current: any) => {
@@ -194,9 +183,11 @@ function useXXGrid(gridOptions: any) {
                 current.balance = prev.balance || 0.0
             } else {
                 current.balance =
-                    prev.balance + (current.debit || 0.0) - (current.credit || 0.0)
+                    prev.balance +
+                    (current.debit || 0.0) -
+                    (current.credit || 0.0)
             }
-            return (current)
+            return current
         }
         if (pre.isColumnBalance) {
             if (pre.isReverseOrder) {
@@ -284,14 +275,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -325,16 +316,23 @@ function useXXGrid(gridOptions: any) {
         if (searchValue) {
             meta.current.searchText = searchValue
             // const searchRegex = new RegExp(searchValue, 'i')
-            meta.current.filteredRows = meta.current.allRows.filter((row: any) => {
-                return Object.keys(row).some((field) => {
-                    const temp: string = row[field] ? row[field].toString() : ''
-                    return temp.toLowerCase().includes(searchValue.toLowerCase())
-                    // return searchRegex.test(temp)
-                })
-            })
-            
+            meta.current.filteredRows = meta.current.allRows.filter(
+                (row: any) => {
+                    return Object.keys(row).some((field) => {
+                        const temp: string = row[field]
+                            ? row[field].toString()
+                            : ''
+                        return temp
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                        // return searchRegex.test(temp)
+                    })
+                }
+            )
         } else {
-            meta.current.filteredRows = meta.current.allRows.map((x: any) => ({ ...x }))
+            meta.current.filteredRows = meta.current.allRows.map((x: any) => ({
+                ...x,
+            }))
         }
         // gridOptions.isReverseOrderByDefault && meta.current.filteredRows.reverse()
         // pre.isReverseOrder = false
@@ -381,7 +379,6 @@ function useXXGrid(gridOptions: any) {
     return {
         fetchRows,
         fillColumnBalance,
-        // handleEditRowsModelChange,
         injectDailySummary,
         meta,
         onSelectModelChange,
@@ -476,3 +473,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
+
+// const handleEditRowsModelChange = useCallback((newModel: any) => {
+//     const filteredRows: any[] = meta.current.filteredRows
+//     Object.keys(newModel).forEach((key: any) => {
+//         if (newModel[key]?.clearDate?.value) {
+//             const foundRow = filteredRows.find((x: any) => x.id === +key)
+//             foundRow.clearDate = newModel[key].clearDate.value
+//             foundRow.isDataChanged = true
+//         }
+//     })
+// }, [])

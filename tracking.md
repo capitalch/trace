@@ -31,20 +31,6 @@ Netwoven 				: 19AACCN3894N1ZP
 5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
 7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
 
-# Observations on Bank recon implementation
-## No renderEditCell: No default clearDate(when empty). Problem entering year. Selection from calendar works
-## RenderEditCell as textField
-	a) No auto population of clearDate
-		Edit of populated clear date: OK
-		Edit of clear date: Edit error, wrong values. Only can select from calendar
-	b) Auto population of clearDate
-		Date change of populated clear date: Fault
-		Date change of clear date: Fault
-		Only can select from calendar in both places
-
-## TextField
-
-
 ## pyinstaller command for tkenter
 # acivate env where pyinstaller is installed
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
@@ -70,12 +56,10 @@ c) In all Typography comment out disableTypography
 # Working on
 0.1 Bank recon
 	a) When search or icon refresh then order is not reverse
+	b) Include common remarks, line remarks, line ref no
 
 1.1 Bank recon rework, drill down etc
-1.2 All transactions, default is reverse, so let the checkbox be checked
-1.5 
-1.6 
-1.7 
+1.2 All transactions, default is reverse, so let the checkbox be checked 
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
 1.9.1 
@@ -86,17 +70,15 @@ c) In all Typography comment out disableTypography
 4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
-1. 
+1. Bank recon, capi ele allahabahad bannk, row is not iterable
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
 3. 	
 6. 
 7. 
 
-## Reorganize
-
 ## Functionality
 	1. Auto subledger create bill
-	3. Rework on bank recon with ProfGrid
+	3. 
 	4. Footer Trace version copyright
 	5. Sales bill to PDF and email / print
 	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
@@ -105,9 +87,8 @@ c) In all Typography comment out disableTypography
 	9. 
 	10. Universally make it responsive
 	11. Remove references to datacache for accounts and use getFromBag concept
-	12. 
 	13. Export of PL, BL and TB should be lowest and highest levels
-	14. Bank recon should show details of default bank
+	14. 
 	15. Show ledger balance at the time of data entry
 	16. When new account code is created that should immediately be visible at payment options
 	17. Purchase entry unable to enter gst price of an item
@@ -138,6 +119,9 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 27-10-2021 - 11-11-2021
+1. Working on Bank recon upgradations
 
 # 23-10-2021 - 26-10-2021
 1. Complete rework on sales, purchase, debit, credit notes, uplifting the state to launchpad level using useContext and Provider
