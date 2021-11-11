@@ -57,7 +57,7 @@ c) In all Typography comment out disableTypography
 0.1 Bank recon
 	a) When search or icon refresh then order is not reverse
 	b) Include common remarks, line remarks, line ref no
-
+0.2 When Voucher is selected, logout, login, then crown-hook line 207 show error, since arbitrarydata is not initialized. Remedy is use context the way sales and purchase is used.
 1.1 Bank recon rework, drill down etc
 1.2 All transactions, default is reverse, so let the checkbox be checked 
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
