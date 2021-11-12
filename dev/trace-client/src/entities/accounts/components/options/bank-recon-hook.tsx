@@ -62,7 +62,7 @@ function useBankRecon() {
             title: '',
             formId: '',
             bankOpBalId: '',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
     })
@@ -111,7 +111,7 @@ function useBankRecon() {
                         null
                     )
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -328,6 +328,34 @@ function useBankRecon() {
                     )
                 },
             },
+            {
+                headerName: 'Accounts',
+                description: 'Accounts',
+                field: 'accNames',
+                type: 'string',
+                width: 150,
+            },
+            {
+                headerName: 'Remarks',
+                description: 'Remarks',
+                field: 'remarks',
+                type: 'string',
+                width: 150,
+            },
+            {
+                headerName: 'Line ref',
+                description: 'Line Ref no',
+                field: 'lineRefNo',
+                type: 'string',
+                width: 150,
+            },
+            {
+                headerName: 'Line remarks',
+                description: 'Line remarks',
+                field: 'lineRemarks',
+                type: 'string',
+                width: 150,
+            },
         ]
         const queryId = 'getJson_bankRecon'
         const allRows = meta.current.reconData
@@ -368,7 +396,7 @@ function useBankRecon() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => {}
+        meta.current.dialogConfig.actions = () => { }
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -416,7 +444,7 @@ function useBankRecon() {
     function handleOpBalanceButtonClick() {
         dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
         dialogConfig.content = OpeningBalanceContent
-        dialogConfig.actions = () => {}
+        dialogConfig.actions = () => { }
         meta.current.showDialog = true
         pre.isMounted && setRefresh({})
 

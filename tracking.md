@@ -53,13 +53,9 @@ c) In all Typography comment out disableTypography
 
 # Pending
 
-# Working on
-0.1 Bank recon
-	a) When search or icon refresh then order is not reverse
-	b) Include common remarks, line remarks, line ref no
-0.2 When Voucher is selected, logout, login, then crown-hook line 207 show error, since arbitrarydata is not initialized. Remedy is use context the way sales and purchase is used.
-1.1 Bank recon rework, drill down etc
-1.2 All transactions, default is reverse, so let the checkbox be checked 
+# Working on 
+
+1.2  
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
 1.9.1 
@@ -70,7 +66,7 @@ c) In all Typography comment out disableTypography
 4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
-1. Bank recon, capi ele allahabahad bannk, row is not iterable
+1. 
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
 3. 	
 6. 
@@ -120,8 +116,12 @@ c) In all Typography comment out disableTypography
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
 
-# 27-10-2021 - 11-11-2021
-1. Working on Bank recon upgradations
+# 27-10-2021 - 12-11-2021
+1. Bank recon upgradations completed
+2. Multiple bug fixes
+3. Include common remarks, line remarks, line ref no, account names in bank recon
+4. Data grid default reverse order issue corrected
+5. All transactions, default is reverse, so let the checkbox be checked
 
 # 23-10-2021 - 26-10-2021
 1. Complete rework on sales, purchase, debit, credit notes, uplifting the state to launchpad level using useContext and Provider

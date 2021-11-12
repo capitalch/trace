@@ -14,7 +14,7 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
+    const { emit, execGenericView, filterOn, getFromBag, setInBag } = useSharedElements()
     const multiData: any = useContext(MultiDataContext)
     // const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
     const arbitraryData = multiData.vouchers
@@ -56,12 +56,18 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
                 handleOnTabChange(null, 0)
             }
         )
+
+        const subs5 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+            setInBag('vouchersData', multiData.vouchers)
+        })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
@@ -76,6 +82,12 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         title: getTitle(),
         tabValue: 0,
     })
+
+    const vouchersData = getFromBag('vouchersData')
+    if (vouchersData) {
+        multiData.vouchers = vouchersData
+        setInBag('vouchersData', undefined)
+    }
 
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
         emit('SHOW-LOADING-INDICATOR', true)

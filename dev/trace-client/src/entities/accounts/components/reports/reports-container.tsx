@@ -53,6 +53,7 @@ function GenericReports({ loadReport }: any) {
                 specialColumns={specialColumns}
                 toShowOpeningBalance={false}
                 toShowReverseCheckbox={true}
+                isReverseOrderChecked={true}
                 // xGridProps={{ disableSelectionOnClick: true }}
                 viewLimit="1000"
             />

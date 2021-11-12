@@ -195,7 +195,7 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('TRACE-MAIN:JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-        setVouchersArbitraryData()
+        // setVouchersArbitraryData()
         function getRoom() {
             const clientId = getLoginData()?.clientId
             const buCode = getFromBag('buCode')
@@ -207,22 +207,22 @@ function initCode() {
             return room
         }
 
-        function setVouchersArbitraryData(){
-            const temp:any = {
-                accounts: {
-                    all: [],
-                    journal: [],
-                },
-                header: {},
-                deletedDetailsIds: [],
-                debits: [{ key: 0 }],
-                credits: [{ key: 0 }],
-            }
-            setInBag('journal-voucher',JSON.parse(JSON.stringify(temp)))
-            setInBag('payment-voucher', JSON.parse(JSON.stringify(temp)))
-            setInBag('receipt-voucher', JSON.parse(JSON.stringify(temp)))
-            setInBag('contra-voucher', JSON.parse(JSON.stringify(temp)))
-        }
+        // function setVouchersArbitraryData(){
+        //     const temp:any = {
+        //         accounts: {
+        //             all: [],
+        //             journal: [],
+        //         },
+        //         header: {},
+        //         deletedDetailsIds: [],
+        //         debits: [{ key: 0 }],
+        //         credits: [{ key: 0 }],
+        //     }
+        //     setInBag('journal-voucher',JSON.parse(JSON.stringify(temp)))
+        //     setInBag('payment-voucher', JSON.parse(JSON.stringify(temp)))
+        //     setInBag('receipt-voucher', JSON.parse(JSON.stringify(temp)))
+        //     setInBag('contra-voucher', JSON.parse(JSON.stringify(temp)))
+        // }
     }
 
     return { setLastBuCodeFinYearIdBranchId, execDataCache }

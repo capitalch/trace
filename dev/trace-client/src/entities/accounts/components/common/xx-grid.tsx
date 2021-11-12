@@ -75,10 +75,11 @@ interface XXGridOptions {
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
     isReverseOrderByDefault?: boolean
+    isReverseOrderChecked?: boolean
     isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
     postFetchMethod?: any // method to call after fetching of data
-    sharedData?:any // data shared with parent
+    sharedData?: any // data shared with parent
     sqlQueryArgs?: any
     sqlQueryId?: any
     specialColumns: SpecialColumnOptions
@@ -168,7 +169,10 @@ function XXGrid(gridOptions: XXGridOptions) {
                             event.target.value
                         )
                     },
-                    clearSearch: () => requestSearch(''),
+                    clearSearch: () => {
+                        meta.current.searchText = ''
+                        requestSearch('')
+                    },
                 },
                 footer: {
                     selectedSummary: meta.current.selectedSummary,
@@ -192,14 +196,6 @@ function XXGrid(gridOptions: XXGridOptions) {
             // }}
             // editRowsModel={editRowsModel}
 
-            // onCellDoubleClick={(item: any)=>{
-            //     if(item.field === 'clearDate'){
-            //         if(!item.value){
-            //             item.value = item.row['tranDate']
-            //             // setRefresh({})
-            //         }
-            //     }
-            // }}
             // onEditRowsModelChange={handleEditRowsModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
@@ -230,9 +226,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                         className={classes.syncSharpButton}
                         size="medium"
                         color="secondary"
-                        onClick={(e: any) =>
-                            fetchRows(sqlQueryId, sqlQueryArgs)
-                        }>
+                        onClick={(e: any) => {
+                            emit(gridOptions.gridActionMessages?.fetchIbukiMessage, null)
+                            // fetchRows(sqlQueryId, sqlQueryArgs)
+                            // setRefresh({})
+                        }}>
                         <SyncSharp></SyncSharp>
                     </IconButton>
                     {!!!gridOptions.hideViewLimit && (
@@ -394,7 +392,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         }
         function ClosingBalanceMarkup() {
             return (
-                <div style={{ display: 'flex'}}>
+                <div style={{ display: 'flex' }}>
                     <div>
                         <b>Closing</b>&nbsp;
                     </div>
@@ -418,7 +416,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                         <span
                             style={{
                                 color: suffix === 'Dr' ? 'inherit' : 'red',
-                                marginRight:'0.2rem' 
+                                marginRight: '0.2rem'
                             }}>
                             {suffix}&nbsp;
                         </span>

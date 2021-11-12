@@ -91,9 +91,12 @@ function useXXGrid(gridOptions: any) {
 
     const entityName = getCurrentEntity()
     const pre: any = meta.current
+    if(gridOptions.isReverseOrderChecked){
+        meta.current.isReverseOrder = true
+    }
 
     async function fetchRows(queryId: string, queryArgs: any) {
-        if (!queryId || !queryArgs) {
+        if ((!queryId) || (!queryArgs)) { //|| (!queryArgs?.accId)
             return
         }
         queryArgs['no'] =

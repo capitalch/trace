@@ -104,13 +104,16 @@ function BankRecon() {
                         size="medium"
                         startIcon={<Cached></Cached>}
                         className="refresh"
-                        onClick={(e: any) =>
-                            emit(
-                                getXXGridParams().gridActionMessages
-                                    .fetchIbukiMessage,
-                                getXXGridParams().queryArgs
-                            )
-                        }
+                        onClick={(e: any) => {
+                            const queryArgs = getXXGridParams().queryArgs
+                            if (queryArgs.accId) {
+                                emit(
+                                    getXXGridParams().gridActionMessages
+                                        .fetchIbukiMessage,
+                                    queryArgs
+                                )
+                            }
+                        }}
                         variant="contained">
                         Refresh
                     </Button>
@@ -121,7 +124,7 @@ function BankRecon() {
                         color="secondary"
                         size="medium"
                         startIcon={<Save></Save>}
-                        onClick= {submitBankRecon}
+                        onClick={submitBankRecon}
                         // onClick={utilFunc().submitBankRecon}
                         variant="contained">
                         Submit
