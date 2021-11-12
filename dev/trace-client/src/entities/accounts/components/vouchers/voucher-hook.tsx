@@ -1,12 +1,24 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    useContext,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, filterOn, getFromBag } =
-        useSharedElements()
-    const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
+    const { emit, execGenericView, filterOn, getFromBag } = useSharedElements()
+    const multiData: any = useContext(MultiDataContext)
+    // const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
+    const arbitraryData = multiData.vouchers
+    
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
         meta.current.isMounted = true
@@ -36,12 +48,14 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             handleOnTabChange(null, d.data?.tabValue || 1)
         })
 
-        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe(async (d: any) => {
-            const tranHeaderId = d.data?.tranHeaderId
-            tranHeaderId && (await fetchAndPopulateDataOnId(tranHeaderId))
-            arbitraryData.shouldCloseParentOnSave = true
-            handleOnTabChange(null, 0)
-        })
+        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe(
+            async (d: any) => {
+                const tranHeaderId = d.data?.tranHeaderId
+                tranHeaderId && (await fetchAndPopulateDataOnId(tranHeaderId))
+                arbitraryData.shouldCloseParentOnSave = true
+                handleOnTabChange(null, 0)
+            }
+        )
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -53,7 +67,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
 
     useEffect(() => {
         emit('VOUCHER-HANDLE-DRILL-DOWN-EDIT', {
-            tranHeaderId: drillDownEditAttributes?.tranHeaderId
+            tranHeaderId: drillDownEditAttributes?.tranHeaderId,
         })
     }, [drillDownEditAttributes?.tranHeaderId])
 

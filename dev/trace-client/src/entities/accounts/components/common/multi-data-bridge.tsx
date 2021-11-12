@@ -2,6 +2,7 @@ import { createContext, moment } from '../../../../imports/regular-imports'
 const MultiDataContext = createContext({})
 
 const isoDateFormat = 'YYYY-MM-DD'
+
 function getSalesArbitraryData() {
     return {
         accounts: {
@@ -113,9 +114,23 @@ function getDebitCreditNotesArbitraryData() {
             tranHeaderIdDebit: undefined,
             tranHeaderIdCredit: undefined,
             userRefNo: undefined,
-            // isViewBack: false,
         },
     }
+}
+
+function getVouchersArbitraryData() {
+    return {
+        accounts: {
+            all: [],
+            journal: [],
+        },
+        header: {},
+        deletedDetailsIds: [],
+        debits: [{ key: 0 }],
+        credits: [{ key: 0 }],
+    }
+    // return (JSON.parse(JSON.stringify(temp)))
+    // return(temp)
 }
 
 export {
@@ -123,4 +138,5 @@ export {
     getSalesArbitraryData,
     getPurchasesArbitraryData,
     getDebitCreditNotesArbitraryData,
+    getVouchersArbitraryData,
 }

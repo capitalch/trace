@@ -14,6 +14,7 @@ import {
     getPurchasesArbitraryData,
     getSalesArbitraryData,
     getDebitCreditNotesArbitraryData,
+    getVouchersArbitraryData,
 } from './components/common/multi-data-bridge'
 
 function LaunchPad() {
@@ -57,13 +58,19 @@ function LaunchPad() {
     const salesData = getSalesArbitraryData()
     const purchasesData = getPurchasesArbitraryData()
     const debitCreditNotesData = getDebitCreditNotesArbitraryData()
+    const vouchersArbitraryData = getVouchersArbitraryData()
     return (
         <>
             <Typography variant="h6" className={classes.title}>
                 {meta.current.mainHeading}
             </Typography>
             <MultiDataContext.Provider
-                value={{ sales: salesData, purchases: purchasesData, debitCreditNotes: debitCreditNotesData }}>
+                value={{
+                    sales: salesData,
+                    purchases: purchasesData,
+                    debitCreditNotes: debitCreditNotesData,
+                    vouchers: vouchersArbitraryData,
+                }}>
                 <Comp></Comp>
             </MultiDataContext.Provider>
             <AccountsLedgerDialog></AccountsLedgerDialog>
