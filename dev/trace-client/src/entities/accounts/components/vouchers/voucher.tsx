@@ -5,7 +5,8 @@ import { Payment } from './voucher-type/payment'
 import { Receipt } from './voucher-type/receipt'
 import { Contra } from './voucher-type/contra'
 import { VoucherView } from './voucher-view'
-import { VoucherContext } from './voucher-context'
+import { MultiDataContext } from '../common/multi-data-bridge'
+// import { VoucherContext } from './voucher-context'
 
 function Voucher({ loadComponent, drillDownEditAttributes }: any) {
     const classes = useStyles()
@@ -23,25 +24,25 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
 
     return (
         <div className={classes.content}>
-            <VoucherContext.Provider value={arbitraryData}>
-                <Typography component="div" variant="subtitle1" color="secondary">
-                    {meta.current.title}
-                </Typography>
-                <Tabs
-                    className="tabs"
-                    indicatorColor="secondary"
-                    onChange={handleOnTabChange}
-                    value={meta.current.tabValue}>
-                    <Tab className="tab" label="New / Edit" />
-                    <Tab label="View" />
-                </Tabs>
-                <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
-                <VoucherView
-                    hidden={meta.current.tabValue !== 1}
-                    // hidden={false}
-                    tranTypeId={getTranTypeId()}
-                />
-            </VoucherContext.Provider>
+            {/* <VoucherContext.Provider value={arbitraryData}> */}
+            <Typography component="div" variant="subtitle1" color="secondary">
+                {meta.current.title}
+            </Typography>
+            <Tabs
+                className="tabs"
+                indicatorColor="secondary"
+                onChange={handleOnTabChange}
+                value={meta.current.tabValue}>
+                <Tab className="tab" label="New / Edit" />
+                <Tab label="View" />
+            </Tabs>
+            <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
+            <VoucherView
+                hidden={meta.current.tabValue !== 1}
+                // hidden={false}
+                tranTypeId={getTranTypeId()}
+            />
+            {/* </VoucherContext.Provider> */}
         </div>
     )
 }

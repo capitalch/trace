@@ -12,12 +12,15 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { VoucherContext } from './voucher-context'
-import { getArtifacts } from '../../../../imports/trace-imports'
+// import { VoucherContext } from './voucher-context'
+// import { getArtifacts } from '../../../../imports/trace-imports'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {
     const [, setRefresh] = useState({})
-    const arbitraryData: any = useContext(VoucherContext)
+    const ctx: any = useContext(MultiDataContext)
+    const arbitraryData = ctx?.vouchers
+    // const arbitraryData: any = useContext(VoucherContext)
     const {
         accountsMessages,
         confirm,
@@ -90,7 +93,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
                     emit('SHOW-MESSAGE', {})
                     emit('VOUCHER-VIEW-REFRESH', '')
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 

@@ -5,7 +5,7 @@ import {
 import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { VoucherContext } from './voucher-context'
+import {MultiDataContext} from '../common/multi-data-bridge'
 
 function ActionBlock({
     actionType,
@@ -18,7 +18,9 @@ function ActionBlock({
     allowFreeze,
 }: any) {
     const [, setRefresh] = useState({})
-    const arbitraryData: any = useContext(VoucherContext)
+    const ctx:any = useContext(MultiDataContext)
+    const arbitraryData = ctx?.vouchers
+    // const arbitraryData: any = useContext(VoucherContext)
     const isGst = !!arbitraryData.header.isGst
     const tranTypeId = arbitraryData.header.tranTypeId
     const classes = useStyles({ actionType, isGst, tranTypeId })
@@ -30,6 +32,7 @@ function ActionBlock({
         getMappedAccounts,
         toDecimalFormat,
     } = useSharedElements()
+
     useEffect(() => {
         const subs1 = filterOn('ACTION-BLOCK-REFRESH').subscribe(() => {
             setRefresh({})

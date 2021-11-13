@@ -5,12 +5,15 @@ import {
 } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { VoucherContext } from './voucher-context'
+// import { VoucherContext } from './voucher-context'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function Header({ allowHeaderGst }: any) {
     const classes = useStyles()
     const [, setRefresh] = useState({})
-    const arbitraryData: any = useContext(VoucherContext)
+    const ctx: any = useContext(MultiDataContext)
+    const arbitraryData = ctx?.vouchers
+    // const arbitraryData: any = useContext(VoucherContext)
     const {
         accountsMessages,
         emit,

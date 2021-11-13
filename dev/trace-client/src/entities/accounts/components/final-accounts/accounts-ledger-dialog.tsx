@@ -32,6 +32,7 @@ import {
     getPurchasesArbitraryData,
     getSalesArbitraryData,
     getDebitCreditNotesArbitraryData,
+    getVouchersArbitraryData,
 } from '../../components/common/multi-data-bridge'
 
 function AccountsLedgerDialog() {
@@ -267,6 +268,7 @@ function AccountsLedgerDialog() {
                     sales: getSalesArbitraryData(),
                     purchases: getPurchasesArbitraryData(),
                     debitCreditNotes: getDebitCreditNotesArbitraryData(),
+                    vouchers: getVouchersArbitraryData()
                 }}>
                 {ret}
             </MultiDataContext.Provider>
