@@ -6,6 +6,7 @@ import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { VoucherContext } from './voucher-context'
+import {MultiDataContext} from '../common/multi-data-bridge'
 
 function ActionBlock({
     actionType,
@@ -18,7 +19,7 @@ function ActionBlock({
     allowFreeze,
 }: any) {
     const [, setRefresh] = useState({})
-    const arbitraryData: any = useContext(VoucherContext)
+    const arbitraryData: any =  useContext(VoucherContext) //useContext(MultiDataContext).vouchers
     const isGst = !!arbitraryData.header.isGst
     const tranTypeId = arbitraryData.header.tranTypeId
     const classes = useStyles({ actionType, isGst, tranTypeId })

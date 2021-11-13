@@ -204,7 +204,7 @@ function useCrown(meta: any) {
     }
 
     function computeSummary(ad: any) {
-        ad.summary = {}
+       ad && (ad.summary = {})
         const debitsSummary = getSummary('debits')
         const creditsSummary = getSummary('credits')
 

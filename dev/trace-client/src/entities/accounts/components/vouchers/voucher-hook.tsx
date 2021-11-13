@@ -17,7 +17,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const { emit, execGenericView, filterOn, getFromBag, setInBag } = useSharedElements()
     const multiData: any = useContext(MultiDataContext)
     // const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
-    const arbitraryData = multiData.vouchers
+    const arbitraryData:any = multiData.vouchers
     
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
