@@ -1,7 +1,10 @@
 from flask_cors import CORS
 import jwt
+import pdfkit
+from pdfkit.api import configuration
 # import asyncio
-from flask_scss import Scss
+# from flask_scss import Scss
+import sass
 from werkzeug.exceptions import HTTPException
 import simplejson as json
 from flask_mail import Mail, Message
@@ -23,6 +26,7 @@ from loadConfig import cfg
 from downloadHelper import handleDownload
 from util import setMailConfig
 from entities.legacy.artifacts import trackApp
+from entities.accounts.artifacts import traceApp
 from app.link_client import connectToLinkServer
 from loadConfig import cfg
 
@@ -39,9 +43,12 @@ connectToLinkServer(linkServerUrl, traceServerId, token=cfg['linkServerKey'])
 
 app = Flask(__name__,  template_folder="../build")
 app.register_blueprint(trackApp)
+app.register_blueprint(traceApp)
 # asset folder has .scss files, static folder has .css files. The Scss creates .css files from .scss files
-Scss(app, asset_dir='entities/legacy/assets',
-     static_dir='entities/legacy/static')
+# Scss(app, asset_dir='entities/legacy/assets',
+#      static_dir='entities/legacy/static')
+
+sass.compile(dirname=('entities/legacy/assets','entities/legacy/static'))
 CORS(app, expose_headers='SELECTION-CRITERIA')
 
 setMailConfig(app)

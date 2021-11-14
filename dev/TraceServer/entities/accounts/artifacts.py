@@ -1,7 +1,9 @@
+from os import name
+from flask import Blueprint, request, render_template, jsonify, make_response, url_for
+import pdfkit
+import sass
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
 from postgres import getPool, execSql, execGenericUpdateMaster,  genericView
-from .sql import allSqls
-from entities.authentication.sql import allSqls as authSql
 import pandas as pd
 import simplejson as json
 import demjson as demJson
@@ -9,7 +11,8 @@ import re  # Python regex
 from time import sleep
 from urllib.parse import unquote
 from util import getErrorMessage
-
+from entities.authentication.sql import allSqls as authSql
+from .sql import allSqls
 from .artifactsHelper import trialBalanceHelper
 # tranHeaderAndDetails_helper,
 from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsLedgersHelper, accountsOpBalHelper
@@ -28,7 +31,9 @@ type_defs = load_schema_from_path('entities/accounts')
 
 accountsQuery = ObjectType("AccountsQuery")
 accountsMutation = ObjectType("AccountsMutation")
-
+sass.compile(dirname=('entities/accounts/templates/scss', 'entities/accounts/static'))
+traceApp = Blueprint('traceApp', __name__,
+                     template_folder='templates', static_folder='static')
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
     clientId = ctx['clientId']
@@ -42,6 +47,19 @@ def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
                      'clientId': clientId, 'entityName': entityName}, isMultipleRows=False)['dbName']
     return dbName, buCode, clientId, finYearId, branchId
 
+@traceApp.route('/trace/testpdf', methods=['GET'])
+def test_pdf():
+    html = render_template('bill-template1.html',name='Sushant')
+    pdf = pdfkit.from_string(html,False)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    return(response , 200)
+    # pdfkit.from_file('data/demo.html','data/demo.pdf' )#, configuration=config )
+    # return jsonify('pdf ok'), 200
+
+    # pathTo = 'data/wkhtmltopdf.exe'
+    # config = pdfkit.configuration(wkhtmltopdf=pathTo)
 
 @accountsQuery.field("accountsMasterGroupsLedgers")
 def resolve_accounts_masters_groups_ledgers(parent, info):
@@ -91,7 +109,6 @@ def resolve_configuration(parent, info):
                      'linkServerKey': cfg['linkServerKey']
                      }
     return(configuration)
-
 
 @accountsMutation.field("genericUpdateMaster")
 def resolve_generic_update_master(parent, info, value):

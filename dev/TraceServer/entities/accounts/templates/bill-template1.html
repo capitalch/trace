@@ -1,0 +1,39 @@
+<html>
+<head>
+   <title>Demo pdfkit</title>
+   <!-- <link href="{{url_for('static',filename='template1.css', _external=True) }}" rel="stylesheet" type="text/css" /> -->
+   <link href="c:\\projects\\trace\\dev\\TraceServer\\entities\\accounts\\static\\template1.css" rel="stylesheet" type="text/css" />
+</head>
+<body class='container'>
+   <h2>Flask PDFKit</h2>
+   <h3>{{name}}</h3>
+   <table border="1">
+      <tr>
+         <th width="90">ID</th>
+         <th width="250">Title</th>
+         <th width="150">writer</th>
+         <th width="170">Publisher</th>
+      </tr>
+      <tr>
+         <td>B001</td>
+         <td>Learning Flask Framework</td>
+         <td>Matt Copperwaite</td>
+         <td>PACKT Publishing</td>
+      </tr>
+      <tr>
+         <td>B002</td>
+         <td>Flask By Example</td>
+         <td>Gareth Dwyer</td>
+         <td>PACKT Publishing</td>
+      </tr>
+      <tr>
+         <td>B003</td>
+         <td>Essential SQLAlchemy</td>
+         <td>Rick Copeland</td>
+         <td>OReilly</td>
+      </tr>
+   </table>
+
+   <p><a href="http://localhost:5000/convert">Convert to PDF</a></p>
+</body>
+</html>
