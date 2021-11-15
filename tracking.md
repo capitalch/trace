@@ -1,3 +1,16 @@
+## Logic and functionality for pdf print of sale bill and money receipt
+1. Create HTML template for sale bill
+2. function in python: GetInvoicePDF(id)
+	Pulls invoice data from postgresql against id
+	creates HTML and then PDF from data
+3. Functionality
+	a) Save invoice: Saves invoice: Get new saved invoice: Get PDF: returns PDF
+	b) PDF displayed and ask for print
+	c) Settings for auto SMS message and email: General settings stored: each time sending isSMS, isEmail
+	d) If isSMS and isEmail send generated PDF through link / email
+	e) In view, a column for print: Gives option for print, SMS, email in dialog box and does the needful
+
+
 GST
 Capital Chowr. Pvt Ltd	: 19AACCC5685L1Z3
 Capital Electronics old	: 19ADMPA9760G1Z9
@@ -68,9 +81,6 @@ c) In all Typography comment out disableTypography
 ## Bug fixing
 1. 
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
-3. 	
-6. 
-7. 
 
 ## Functionality
 	1. Auto subledger create bill
@@ -115,6 +125,9 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 13-11-2021 - 15-11-2021
+1. Research on print pdf, scss to css in Python, consuming css in HTML template
 
 # 27-10-2021 - 12-11-2021
 1. Bank recon upgradations completed

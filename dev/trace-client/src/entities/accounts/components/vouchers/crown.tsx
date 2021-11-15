@@ -5,14 +5,12 @@ import {
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrown } from './crown-hook'
-// import { VoucherContext } from './voucher-context'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
 function Crown({ meta }: any) {
     const classes = useStyles()
     const ctx: any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
-    // const arbitraryData = useContext(VoucherContext)
     const {
         checkError,
         ResetButton,

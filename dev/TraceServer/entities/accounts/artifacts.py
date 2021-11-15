@@ -34,7 +34,7 @@ accountsMutation = ObjectType("AccountsMutation")
 sass.compile(dirname=('entities/accounts/templates/scss',
              'entities/accounts/static'))
 traceApp = Blueprint('traceApp', __name__,
-                     template_folder='templates', static_folder='static')
+                     template_folder='templates', static_folder='static') #, static_url_path='/trace/view/css' )
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
