@@ -34,7 +34,7 @@ accountsMutation = ObjectType("AccountsMutation")
 sass.compile(dirname=('entities/accounts/templates/scss',
              'entities/accounts/static'))
 traceApp = Blueprint('traceApp', __name__,
-                     template_folder='templates', static_folder='static') #, static_url_path='/trace/view/css' )
+                     template_folder='templates', static_folder='static', url_prefix='/traceApp') #, static_url_path='/trace/view/css' )
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
@@ -55,7 +55,8 @@ def test_pdf():
     options = {
         "enable-local-file-access": None
     }
-    html = render_template('bill-template1.html', name='Sushant')
+    html = render_template('bill-template1.html', 
+    companyInfo={'addr1':'', 'addr2':'', 'pin':'', 'phone':'', 'gstin':'', 'email':''}, ref_no='xxx', date='21/12/2021', bill_memo='B', acc_name='', pin='', name='', mobile='', address='', gstin='', email='',stateCode='', products=[])
     pdf = pdfkit.from_string(html, False, options=options)
 
     response = make_response(pdf)
