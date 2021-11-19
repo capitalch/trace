@@ -1,3 +1,7 @@
+## python pdf libs
+borb, reportlab, pyfpdf
+# PDF report to response
+https://tutorial101.blogspot.com/2021/06/generate-pdf-report-using-python-flask.html
 ## Logic and functionality for pdf print of sale bill and money receipt
 1. Create HTML template for sale bill
 2. function in python: GetInvoicePDF(id)
@@ -67,8 +71,9 @@ c) In all Typography comment out disableTypography
 # Pending
 
 # Working on 
-
-1.2  
+1.1 Sale amount with GST error
+1.2 Journal, When ASSEt GST is not allowed. Make it allowed for assets also
+1.3 In vouchers, if part selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
 1.9.1 
