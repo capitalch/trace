@@ -1,15 +1,34 @@
-from werkzeug import debug
-from app import socketio, create_app
-from app import track
-import app.socket
+from flask import Flask, render_template, make_response
+import sass
+import pdfkit
+from invoice import invoice
 
-app = create_app()
+app = Flask(__name__)
 
-app.register_blueprint(track.trackApp)
+sass.compile(dirname=('templates/scss',
+             'static'))
 
-@app.route('/test')
-def handle_test():
-    return({'status': 'ok'})
+companyInfo = invoice.get('companyInfo', {})
+
+
+@app.route("/")
+def template_test():
+    return render_template('bill-template1.html', companyInfo=companyInfo , invoice=invoice)
+
+
+@ app.route('/pdf')
+def pdf():
+    options = {
+        "enable-local-file-access": None
+    }
+
+    html = render_template('bill-template1.html', companyInfo=companyInfo, invoice=invoice)
+    pdf = pdfkit.from_string(html, False, options=options)
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    return(response, 200)
+
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    app.run(debug=True)

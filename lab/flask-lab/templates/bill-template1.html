@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="{{url_for('static', filename='bill-template1.css', _external= True) }}"
+            rel="stylesheet"
+            type="text/css"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <div class="company-info-tax-invoice">
+                <div class="company-info">
+                    <h2 class="company-name">{{companyInfo.name}}</h2>
+                    <div class="address-details">
+                        {{companyInfo.address1}} {{companyInfo.address2}}
+                        <b>Pin:</b> {{companyInfo.pin}}
+                        <b>Phone:</b>{{companyInfo.phone}}
+                        <b>Email:</b> {{companyInfo.email}}
+                        <b>GSTIN:</b> {{companyInfo.gstin}}
+                        <b>PAN:</b> {{companyInfo.pan}}
+                        <b>WEB:</b> {{companyInfo.web}}
+                    </div>
+                </div>
+                <div class="tax-invoice">
+                    <h2>Tax invoice</h2>
+                    <div><b>Inv no:</b> {{invoice.refNo}}</div>
+                    <div><b>Date:</b>{{invoice.tranDate}}</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

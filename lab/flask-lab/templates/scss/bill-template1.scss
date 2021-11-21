@@ -1,0 +1,34 @@
+html,
+body {
+    height: 297mm;
+    width: 210mm;
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    // margin:1cm;
+}
+
+// @page {
+//     size: A4; /* Change from the default size of A4 */
+//     // margin: 1cm; /* Set margin on each page */
+//     font-size: 16px;
+//     font-family: Arial, Helvetica, sans-serif;
+// }
+.container {
+    display:'flex';
+    flex-direction: column;
+    .company-info-tax-invoice{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .company-info{
+            display:flex;
+            flex-direction: column;
+            max-width: 50%;
+        }
+        .tax-invoice{
+            display: flex;
+            flex-direction: column;
+            max-width: 40%;
+        }
+    }
+}
