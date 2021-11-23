@@ -2,33 +2,47 @@ html,
 body {
     height: 297mm;
     width: 210mm;
-    font-size: 16px;
+    font-size: 12px;
     font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+    padding:0;
+    // padding: 1cm;
     // margin:1cm;
 }
 
-// @page {
-//     size: A4; /* Change from the default size of A4 */
-//     // margin: 1cm; /* Set margin on each page */
-//     font-size: 16px;
-//     font-family: Arial, Helvetica, sans-serif;
-// }
+@page {
+    size: A4; /* Change from the default size of A4 */
+    // margin: 1cm; /* Set margin on each page */
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+}
 .container {
-    display:'flex';
+    display:flex;
     flex-direction: column;
+    width: 88%;
+    border:1px solid red;
     .company-info-tax-invoice{
-        display: flex;
+        display:flex;
+        width: 100%;
         flex-direction: row;
         justify-content: space-between;
         .company-info{
             display:flex;
             flex-direction: column;
-            max-width: 50%;
+            max-width: 70%;
+            border:1px solid blue;
+            flex-wrap: wrap;
+            .company-name{
+                font-size: 16px;
+                font-weight: bold;
+            }
         }
         .tax-invoice{
+            margin-left: auto;
             display: flex;
             flex-direction: column;
-            max-width: 40%;
+            max-width: 30%;
+            border:1px solid blue;
         }
     }
 }

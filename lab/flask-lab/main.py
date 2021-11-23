@@ -1,4 +1,5 @@
 from flask import Flask, render_template, make_response
+from flask_weasyprint import HTML, render_pdf
 import sass
 import pdfkit
 from invoice import invoice
@@ -23,7 +24,8 @@ def pdf():
     }
 
     html = render_template('bill-template1.html', companyInfo=companyInfo, invoice=invoice)
-    pdf = pdfkit.from_string(html, False, options=options)
+    pdf = render_pdf(HTML(string=html))
+    # pdf = pdfkit.from_string(html, False, options=options)
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=output.pdf"

@@ -12,7 +12,8 @@
         <div class="container">
             <div class="company-info-tax-invoice">
                 <div class="company-info">
-                    <h2 class="company-name">{{companyInfo.name}}</h2>
+                    <div class="company-name">{{companyInfo.name}}</div>
+                    <br/>
                     <div class="address-details">
                         {{companyInfo.address1}} {{companyInfo.address2}}
                         <b>Pin:</b> {{companyInfo.pin}}
@@ -23,8 +24,9 @@
                         <b>WEB:</b> {{companyInfo.web}}
                     </div>
                 </div>
+                <div style='width: 150px;'></div>
                 <div class="tax-invoice">
-                    <h2>Tax invoice</h2>
+                    <div>Tax invoice</div>
                     <div><b>Inv no:</b> {{invoice.refNo}}</div>
                     <div><b>Date:</b>{{invoice.tranDate}}</div>
                 </div>
