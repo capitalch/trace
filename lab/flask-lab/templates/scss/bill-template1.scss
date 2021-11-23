@@ -22,27 +22,20 @@ body {
     width: 88%;
     border:1px solid red;
     .company-info-tax-invoice{
-        display:flex;
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-between;
+        // display: flex;
+        // flex-direction: row;
+        // justify-content: space-between;
         .company-info{
-            display:flex;
+            // display:flex;
             flex-direction: column;
-            max-width: 70%;
-            border:1px solid blue;
-            flex-wrap: wrap;
-            .company-name{
-                font-size: 16px;
-                font-weight: bold;
-            }
+            max-width: 50%;
+            float: left;
         }
         .tax-invoice{
-            margin-left: auto;
-            display: flex;
+            // display: flex;
             flex-direction: column;
-            max-width: 30%;
-            border:1px solid blue;
+            max-width: 40%;
+            float: right;
         }
     }
 }

@@ -20,7 +20,8 @@ def template_test():
 @ app.route('/pdf')
 def pdf():
     options = {
-        "enable-local-file-access": None
+        'enable-local-file-access': None,
+        'header_html':render_template('header.html')
     }
 
     html = render_template('bill-template1.html', companyInfo=companyInfo, invoice=invoice)
