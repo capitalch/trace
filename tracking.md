@@ -76,11 +76,11 @@ c) In all Typography comment out disableTypography
 1.3 In vouchers, if part selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
-1.9.1 
+1.9.1 Accounts creation email should be optional
 1.9.2 Print support for sales
 1.9.3 Easy sales implementation
 1.9.4 Sale SMS and mail provisions
-2. 
+2. Account balances in vouchers
 4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
