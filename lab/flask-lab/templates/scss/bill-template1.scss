@@ -17,18 +17,20 @@ body {
     display:'flex';
     flex-direction: column;
     .company-info-tax-invoice{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        // display: flex;
+        // flex-direction: row;
+        // justify-content: space-between;
         .company-info{
-            display:flex;
+            // display:flex;
             flex-direction: column;
             max-width: 50%;
+            float: left;
         }
         .tax-invoice{
-            display: flex;
+            // display: flex;
             flex-direction: column;
             max-width: 40%;
+            float: right;
         }
     }
 }
