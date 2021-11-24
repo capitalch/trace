@@ -125,6 +125,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         const details = extractDetails()
         header.data[0].details = details
         const ret = await genericUpdateMasterDetails([header])
+        console.log(JSON.stringify(header))
         if (ret.error) {
             console.log(ret.error)
         } else {

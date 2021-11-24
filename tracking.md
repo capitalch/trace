@@ -1,5 +1,15 @@
+set search_path to demo_accounts;
+with cte1 as(
+	select "id", "tranDate", "autoRefNo", "remarks", "tranTypeId", "contactsId" 
+		from "TranH" t
+			join "Contacts" c
+				on c."id" = t."contactsId"
+			join "ExtBusinessContactsAccM" b
+				on 
+)
+
 ## python pdf libs
-borb, reportlab, pyfpdf
+borb, reportlab, fpdf2
 # PDF report to response
 https://tutorial101.blogspot.com/2021/06/generate-pdf-report-using-python-flask.html
 ## Logic and functionality for pdf print of sale bill and money receipt
@@ -80,11 +90,12 @@ c) In all Typography comment out disableTypography
 1.9.2 Print support for sales
 1.9.3 Easy sales implementation
 1.9.4 Sale SMS and mail provisions
+1.9.5 Opening balances: Don't show balance up in the hierarchy, only sho balances at lowest level
 2. Account balances in vouchers
 4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
-1. 
+1. Transfer of balances some issue
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
 
 ## Functionality
