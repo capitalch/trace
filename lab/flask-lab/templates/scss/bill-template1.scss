@@ -2,7 +2,7 @@ html,
 body {
     height: 297mm;
     width: 210mm;
-    font-size: 12px;
+    font-size: 14px;
     font-family: Arial, Helvetica, sans-serif;
     margin:0;
     padding:0;
@@ -17,23 +17,23 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 .container {
-    display:flex;
-    flex-direction: column;
-    width: 88%;
-    border:1px solid red;
+    // display:flex;
+    // flex-direction: column;
+    width: 100%;
+    // border:1px solid red;
     .company-info-tax-invoice{
         // display: flex;
         // flex-direction: row;
         // justify-content: space-between;
         .company-info{
             // display:flex;
-            flex-direction: column;
-            max-width: 50%;
+            // flex-direction: column;
+            max-width: 60%;
             float: left;
         }
         .tax-invoice{
             // display: flex;
-            flex-direction: column;
+            // flex-direction: column;
             max-width: 40%;
             float: right;
         }

@@ -16,17 +16,24 @@ companyInfo = invoice.get('companyInfo', {})
 def template_test():
     return render_template('bill-template1.html', companyInfo=companyInfo , invoice=invoice)
 
+@ app.route('/pdf/header')
+def pdf_header():
+    return('<b>This is header</b>')
 
 @ app.route('/pdf')
 def pdf():
     options = {
         'enable-local-file-access': None,
-        'header_html':render_template('header.html')
+        # 'header_html':render_template('header.html')
+        'footer-right': '[page] of [topage]',
+        
+        '--header-html':'http://localhost:5000/pdf/header'
+        # 'header-left': render_template('header.html')
     }
 
     html = render_template('bill-template1.html', companyInfo=companyInfo, invoice=invoice)
-    pdf = render_pdf(HTML(string=html))
-    # pdf = pdfkit.from_string(html, False, options=options)
+    # pdf = render_pdf(HTML(string=html))
+    pdf = pdfkit.from_string(html, False, options=options)
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=output.pdf"
