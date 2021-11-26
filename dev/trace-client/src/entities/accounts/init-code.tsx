@@ -206,23 +206,6 @@ function initCode() {
             )}:${buCode}:${finYearId}:${branchId}`
             return room
         }
-
-        // function setVouchersArbitraryData(){
-        //     const temp:any = {
-        //         accounts: {
-        //             all: [],
-        //             journal: [],
-        //         },
-        //         header: {},
-        //         deletedDetailsIds: [],
-        //         debits: [{ key: 0 }],
-        //         credits: [{ key: 0 }],
-        //     }
-        //     setInBag('journal-voucher',JSON.parse(JSON.stringify(temp)))
-        //     setInBag('payment-voucher', JSON.parse(JSON.stringify(temp)))
-        //     setInBag('receipt-voucher', JSON.parse(JSON.stringify(temp)))
-        //     setInBag('contra-voucher', JSON.parse(JSON.stringify(temp)))
-        // }
     }
 
     return { setLastBuCodeFinYearIdBranchId, execDataCache }

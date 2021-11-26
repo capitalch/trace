@@ -1,15 +1,32 @@
-import { _, useEffect, useState, useRef } from '../../../../imports/regular-imports'
+import {
+    _,
+    useEffect,
+    useState,
+    useRef,
+} from '../../../../imports/regular-imports'
 import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions, IconButton, makeStyles, Theme, createStyles
+    DialogActions,
+    IconButton,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '../../../../imports/gui-imports'
 import { CloseSharp } from '../../../../imports/icons-import'
-import { manageEntitiesState, ReactForm, manageFormsState, useIbuki, useTraceMaterialComponents, useTraceGlobal } from '../../../../imports/trace-imports'
+import {
+    manageEntitiesState,
+    ReactForm,
+    manageFormsState,
+    useIbuki,
+    useTraceMaterialComponents,
+    useTraceGlobal,
+} from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import { initCode } from '../../init-code'
 import messages from '../../../../messages.json'
+import stateCodes from '../../../../data/india-states-with-codes-gst.json'
 
 function GenericDialoges({ loadDialog }: any) {
     const meta: any = useRef({
@@ -25,6 +42,13 @@ function GenericDialoges({ loadDialog }: any) {
         },
     })
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
+    // const temp:any = stateCodes
+    // const tempArr = Object.keys(stateCodes).map((key:string)=>{
+    //     return({
+    //         label: temp[key],
+    //         value: key
+    //     })
+    // })
     const { isMediumSizeUp } = useTraceGlobal()
     if (isMediumSizeUp) {
         meta.current.dialogConfig.loginScreenSize = '360px'
@@ -46,11 +70,8 @@ function GenericDialoges({ loadDialog }: any) {
     } = manageEntitiesState()
     const { emit } = useIbuki()
     const [, setRefresh] = useState({})
-    const {
-        execGenericView,
-        genericUpdateMaster,
-        isControlDisabled,
-    } = utilMethods()
+    const { execGenericView, genericUpdateMaster, isControlDisabled } =
+        utilMethods()
     const {
         resetAllValidators,
         clearServerError,
@@ -157,7 +178,7 @@ function GenericDialoges({ loadDialog }: any) {
                         data: { jData: formData },
                         setRefresh: setRefresh,
                     })
-                    if ((ret === true) || (ret?.length <= 9)) {
+                    if (ret === true || ret?.length <= 9) {
                         execDataCache()
                         emit('SHOW-MESSAGE', {})
                         closeDialog()
@@ -221,7 +242,7 @@ function GenericDialoges({ loadDialog }: any) {
                         data: { jData: formData },
                         setRefresh: setRefresh,
                     })
-                    if ((ret === true) || (ret?.length <= 9)) {
+                    if (ret === true || ret?.length <= 9) {
                         setLastBuCodeFinYearIdBranchId()
                         emit('SHOW-MESSAGE', {})
                         emit('TRACE-MAIN:JUST-REFRESH', null)
@@ -299,6 +320,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
+const temp:any = import('../../../../data/india-states-with-codes-gst.json')
+const tempArr = Object.keys(temp).map((key:string)=>{
+    return({
+        label: temp[key],
+        value: key
+    })
+})
 
 const unitInfoJson: any = {
     class: 'generic-dialog',
@@ -380,6 +408,33 @@ const unitInfoJson: any = {
         },
         {
             type: 'TextMaterial',
+            name: 'landPhone',
+            class: 'textField',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            label: 'Land phone',
+            validations: [],
+        },
+        {
+            type: 'TextMaterial',
+            name: 'mobileNumber',
+            class: 'textField',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            label: 'Mobile number',
+            validations: [
+                {
+                    name: 'phoneNumber',
+                    message: 'Invalid mobile number',
+                },
+            ],
+        },
+        {
+            type: 'TextMaterial',
             name: 'email',
             placeholder: 'Email',
             label: 'Email',
@@ -396,14 +451,41 @@ const unitInfoJson: any = {
         },
         {
             type: 'TextMaterial',
-            name: 'tin',
-            placeholder: 'Tin',
+            class: 'textField',
+            name: 'gstin',
+            placeholder: 'Gstin',
             materialProps: {
                 size: 'small',
                 fullWidth: true,
             },
-            label: 'Tin',
-            validations: [],
+            label: 'Gstin number',
+            validations: [
+                {
+                    name: 'gstinValidation',
+                    message: 'Invalid GSTIN',
+                },
+            ],
+        },
+        {
+            type: 'Select',
+            name: 'State',
+            label: 'State',
+            // onChange: 'onAccTypeChange',
+            validations: [{ name: 'required', message: 'State is required' }],
+            options: tempArr,
+            // Object.keys(stateCodes).map((key: string, i: number) => {
+            //     return {
+            //         label: key,
+            //         value: key,
+            //     }
+            // }),
+            // [
+            //     { label: '---select---', value: '' },
+            //     { label: 'Asset', value: 'A' },
+            //     { label: 'Expence', value: 'E' },
+            //     { label: 'Income', value: 'I' },
+            //     { label: 'Liability', value: 'L' },
+            // ],
         },
     ],
 }
