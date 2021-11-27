@@ -41,14 +41,8 @@ function GenericDialoges({ loadDialog }: any) {
             loginScreenSize: '360px',
         },
     })
+
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
-    // const temp:any = stateCodes
-    // const tempArr = Object.keys(stateCodes).map((key:string)=>{
-    //     return({
-    //         label: temp[key],
-    //         value: key
-    //     })
-    // })
     const { isMediumSizeUp } = useTraceGlobal()
     if (isMediumSizeUp) {
         meta.current.dialogConfig.loginScreenSize = '360px'
@@ -98,7 +92,7 @@ function GenericDialoges({ loadDialog }: any) {
 
     return (
         <>
-            <Dialog
+            <Dialog fullWidth={true}
                 classes={{
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper,
@@ -136,6 +130,13 @@ function GenericDialoges({ loadDialog }: any) {
         </>
     )
 
+    function closeDialog() {
+        meta.current.showDialog = false
+        resetForm(meta.current.dialogConfig.formId)
+        setCurrentComponent({})
+        emit('TRACE-MAIN:JUST-REFRESH', '') //this is necessary otherwise on click of accounts this dialog window opens automatically
+    }
+
     function dialogSelectLogic() {
         const entityName = getCurrentEntity()
         const logic: any = {
@@ -145,6 +146,7 @@ function GenericDialoges({ loadDialog }: any) {
                     meta.current.dialogConfig.title = 'Unit info'
                     meta.current.dialogConfig.jsonObject = unitInfoJson
                     emit('SHOW-LOADING-INDICATOR', true)
+                    fillStateCodesForUnitInfo()
                     meta.current.showDialog = true
                     const ret = await execGenericView({
                         isMultipleRows: false,
@@ -281,11 +283,19 @@ function GenericDialoges({ loadDialog }: any) {
         )
     }
 
-    function closeDialog() {
-        meta.current.showDialog = false
-        resetForm(meta.current.dialogConfig.formId)
-        setCurrentComponent({})
-        emit('TRACE-MAIN:JUST-REFRESH', '') //this is necessary otherwise on click of accounts this dialog window opens automatically
+    function fillStateCodesForUnitInfo() {
+        const temp: any = stateCodes
+        let tempArr = Object.keys(stateCodes).map((key: string) => {
+            return {
+                label: temp[key],
+                value: key,
+            }
+        })
+        tempArr = _.sortBy(tempArr, ['label'])
+        const stateSelect = unitInfoJson.items.find(
+            (x: any) => x.name === 'state'
+        )
+        stateSelect && (stateSelect.options = tempArr)
     }
 }
 
@@ -320,13 +330,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
-const temp:any = import('../../../../data/india-states-with-codes-gst.json')
-const tempArr = Object.keys(temp).map((key:string)=>{
-    return({
-        label: temp[key],
-        value: key
-    })
-})
 
 const unitInfoJson: any = {
     class: 'generic-dialog',
@@ -451,6 +454,18 @@ const unitInfoJson: any = {
         },
         {
             type: 'TextMaterial',
+            name: 'webSite',
+            placeholder: 'Web site',
+            label: 'Web site',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            validations: [
+            ],
+        },
+        {
+            type: 'TextMaterial',
             class: 'textField',
             name: 'gstin',
             placeholder: 'Gstin',
@@ -468,24 +483,9 @@ const unitInfoJson: any = {
         },
         {
             type: 'Select',
-            name: 'State',
+            name: 'state',
             label: 'State',
-            // onChange: 'onAccTypeChange',
             validations: [{ name: 'required', message: 'State is required' }],
-            options: tempArr,
-            // Object.keys(stateCodes).map((key: string, i: number) => {
-            //     return {
-            //         label: key,
-            //         value: key,
-            //     }
-            // }),
-            // [
-            //     { label: '---select---', value: '' },
-            //     { label: 'Asset', value: 'A' },
-            //     { label: 'Expence', value: 'E' },
-            //     { label: 'Income', value: 'I' },
-            //     { label: 'Liability', value: 'L' },
-            // ],
         },
     ],
 }
@@ -545,61 +545,61 @@ const generalSettingsJson: any = {
     ],
 }
 
-const selectBuJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'TypeSelect',
-            name: 'buCode',
-            placeholder: 'Business units',
-            label: 'Select business unit',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a business unit',
-                },
-            ],
-        },
-    ],
-}
+// const selectBuJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'TypeSelect',
+//             name: 'buCode',
+//             placeholder: 'Business units',
+//             label: 'Select business unit',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a business unit',
+//                 },
+//             ],
+//         },
+//     ],
+// }
 
-const selectFinYearJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            // "type": "TypeSelect",
-            class: 'select-fin-year',
-            type: 'Select',
-            name: 'id',
-            placeholder: 'Financial years',
-            label: 'Select financial year',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a financial year',
-                },
-            ],
-        },
-    ],
-}
+// const selectFinYearJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             // "type": "TypeSelect",
+//             class: 'select-fin-year',
+//             type: 'Select',
+//             name: 'id',
+//             placeholder: 'Financial years',
+//             label: 'Select financial year',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a financial year',
+//                 },
+//             ],
+//         },
+//     ],
+// }
 
-const selectBranchJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'TypeSelect',
-            name: 'id',
-            placeholder: 'Branches',
-            label: 'Select branch',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a branch',
-                },
-            ],
-        },
-    ],
-}
+// const selectBranchJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'TypeSelect',
+//             name: 'id',
+//             placeholder: 'Branches',
+//             label: 'Select branch',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a branch',
+//                 },
+//             ],
+//         },
+//     ],
+// }
