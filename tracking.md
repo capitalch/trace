@@ -7,6 +7,109 @@ with cte1 as(
 			join "ExtBusinessContactsAccM" b
 				on 
 )
+## party info JS:
+{
+  "pin": "700065",
+  "tin": "NNNNNNNNNNNNNLLLLLL",
+  "State": "19",
+  "email": "demo@gmail.com",
+  "gstin": "19AACCC5685L1Z3",
+  "state": "37",
+  "address1": "23 Demo lane, Back portion",
+  "address2": "adccs",
+  "unitName": "Demo unit",
+  "shortName": "DemoCompany"
+}
+
+## sale data on id
+{
+  "jsonResult": {
+    "tranH": {
+      "id": 9944,
+      "tranDate": "2021-11-24",
+      "userRefNo": null,
+      "remarks": null,
+      "autoRefNo": "head\\SAL\\2911\\2021",
+      "jData": null
+    },
+    "billTo": null,
+    "businessContacts": {
+      "id": 2,
+      "contactName": "ABC services pvt ltd",
+      "contactCode": "abcServices",
+      "mobileNumber": "8888888888",
+      "otherMobileNumber": "",
+      "landPhone": "",
+      "email": "hhh@ss.com",
+      "otherEmail": "",
+      "jAddress": [
+        {
+          "pin": "700013",
+          "city": "Kolkata",
+          "state": "West Bengal",
+          "country": "India",
+          "address1": "12 J. L. Nehru road",
+          "address2": "1st lane"
+        }
+      ],
+      "descr": "",
+      "accId": 150,
+      "jData": null,
+      "gstin": null,
+      "timestamp": "2021-03-25T09:58:01+00:00",
+      "stateCode": 19
+    },
+    "tranD": [
+      {
+        "id": 19773,
+        "accId": 167,
+        "dc": "C",
+        "amount": 6652,
+        "instrNo": null,
+        "remarks": null
+      },
+      {
+        "id": 19774,
+        "accId": 150,
+        "dc": "D",
+        "amount": 6652,
+        "instrNo": null,
+        "remarks": ""
+      }
+    ],
+    "extGstTranD": {
+      "id": 9669,
+      "gstin": null,
+      "cgst": 356.36,
+      "sgst": 356.36,
+      "igst": 0
+    },
+    "salePurchaseDetails": [
+      {
+        "id": 9581,
+        "productId": 13,
+        "qty": 1,
+        "price": 5939.29,
+        "priceGst": 6652,
+        "discount": 0,
+        "cgst": 356.36,
+        "sgst": 356.36,
+        "igst": 0,
+        "amount": 6652,
+        "hsn": 122200,
+        "gstRate": 12,
+        "productCode": "1004",
+        "upcCode": "5",
+        "catName": "OLED",
+        "brandName": "SONY",
+        "info": "",
+        "label": "DD-R31",
+        "serialNumbers": "",
+        "remarks": null
+      }
+    ]
+  }
+}
 
 ## invoice PDF logic
 1. Get complete invoice data from server against id

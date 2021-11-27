@@ -41,6 +41,7 @@ function GenericDialoges({ loadDialog }: any) {
             loginScreenSize: '360px',
         },
     })
+<<<<<<< HEAD
     
     // const temp:any = stateCodes
     // const tempArr = Object.keys(stateCodes).map((key:string)=>{
@@ -49,6 +50,9 @@ function GenericDialoges({ loadDialog }: any) {
     //         value: key
     //     })
     // })
+=======
+
+>>>>>>> 8a8e2ab3a5336801cebb32fecce6112334a32760
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
     const { isMediumSizeUp } = useTraceGlobal()
     if (isMediumSizeUp) {
@@ -99,7 +103,7 @@ function GenericDialoges({ loadDialog }: any) {
 
     return (
         <>
-            <Dialog
+            <Dialog fullWidth={true}
                 classes={{
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper,
@@ -137,6 +141,13 @@ function GenericDialoges({ loadDialog }: any) {
         </>
     )
 
+    function closeDialog() {
+        meta.current.showDialog = false
+        resetForm(meta.current.dialogConfig.formId)
+        setCurrentComponent({})
+        emit('TRACE-MAIN:JUST-REFRESH', '') //this is necessary otherwise on click of accounts this dialog window opens automatically
+    }
+
     function dialogSelectLogic() {
         const entityName = getCurrentEntity()
         const logic: any = {
@@ -146,6 +157,7 @@ function GenericDialoges({ loadDialog }: any) {
                     meta.current.dialogConfig.title = 'Unit info'
                     meta.current.dialogConfig.jsonObject = unitInfoJson
                     emit('SHOW-LOADING-INDICATOR', true)
+                    fillStateCodesForUnitInfo()
                     meta.current.showDialog = true
                     const ret = await execGenericView({
                         isMultipleRows: false,
@@ -282,11 +294,19 @@ function GenericDialoges({ loadDialog }: any) {
         )
     }
 
-    function closeDialog() {
-        meta.current.showDialog = false
-        resetForm(meta.current.dialogConfig.formId)
-        setCurrentComponent({})
-        emit('TRACE-MAIN:JUST-REFRESH', '') //this is necessary otherwise on click of accounts this dialog window opens automatically
+    function fillStateCodesForUnitInfo() {
+        const temp: any = stateCodes
+        let tempArr = Object.keys(stateCodes).map((key: string) => {
+            return {
+                label: temp[key],
+                value: key,
+            }
+        })
+        tempArr = _.sortBy(tempArr, ['label'])
+        const stateSelect = unitInfoJson.items.find(
+            (x: any) => x.name === 'state'
+        )
+        stateSelect && (stateSelect.options = tempArr)
     }
 }
 
@@ -321,13 +341,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
-const temp:any = import('../../../../data/india-states-with-codes-gst.json')
-const tempArr = Object.keys(temp).map((key:string)=>{
-    return({
-        label: temp[key],
-        value: key
-    })
-})
 
 const unitInfoJson: any = {
     class: 'generic-dialog',
@@ -452,6 +465,18 @@ const unitInfoJson: any = {
         },
         {
             type: 'TextMaterial',
+            name: 'webSite',
+            placeholder: 'Web site',
+            label: 'Web site',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            validations: [
+            ],
+        },
+        {
+            type: 'TextMaterial',
             class: 'textField',
             name: 'gstin',
             placeholder: 'Gstin',
@@ -469,10 +494,10 @@ const unitInfoJson: any = {
         },
         {
             type: 'Select',
-            name: 'State',
+            name: 'state',
             label: 'State',
-            // onChange: 'onAccTypeChange',
             validations: [{ name: 'required', message: 'State is required' }],
+<<<<<<< HEAD
             options: 
             Object.keys(stateCodes).map((key: string, i: number) => {
                 return {
@@ -487,6 +512,8 @@ const unitInfoJson: any = {
             //     { label: 'Income', value: 'I' },
             //     { label: 'Liability', value: 'L' },
             // ],
+=======
+>>>>>>> 8a8e2ab3a5336801cebb32fecce6112334a32760
         },
     ],
 }
@@ -569,6 +596,10 @@ const generalSettingsJson: any = {
 //     class: 'generic-dialog',
 //     items: [
 //         {
+<<<<<<< HEAD
+=======
+//             // "type": "TypeSelect",
+>>>>>>> 8a8e2ab3a5336801cebb32fecce6112334a32760
 //             class: 'select-fin-year',
 //             type: 'Select',
 //             name: 'id',
