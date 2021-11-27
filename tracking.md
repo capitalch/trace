@@ -8,6 +8,20 @@ with cte1 as(
 				on 
 )
 
+## invoice PDF logic
+1. Get complete invoice data from server against id
+2. draw_invoice py
+    a) draw_company_info
+    b) draw_tax_invoice
+    c) draw_bill_to
+    d) draw_ship_to
+    c) draw_item_details
+    d) draw_summary
+3. Byte array pdf send to client
+4. Client click submit, show PDF in a dialog ask for print / SMS / email
+5. Server mecanism for a link, on click opens the PDF of invoice
+6. Email PDF invoice
+
 ## python pdf libs
 borb, reportlab, fpdf2
 # PDF report to response
@@ -82,7 +96,7 @@ c) In all Typography comment out disableTypography
 
 # Working on 
 1.1 Sale amount with GST error
-1.2 Journal, When ASSEt GST is not allowed. Make it allowed for assets also
+1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
 1.3 In vouchers, if part selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid

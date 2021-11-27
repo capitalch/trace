@@ -41,7 +41,7 @@ function GenericDialoges({ loadDialog }: any) {
             loginScreenSize: '360px',
         },
     })
-    //For increasing width of dialog window when medium size i.e 960 px and up is achieved
+    
     // const temp:any = stateCodes
     // const tempArr = Object.keys(stateCodes).map((key:string)=>{
     //     return({
@@ -49,6 +49,7 @@ function GenericDialoges({ loadDialog }: any) {
     //         value: key
     //     })
     // })
+    //For increasing width of dialog window when medium size i.e 960 px and up is achieved
     const { isMediumSizeUp } = useTraceGlobal()
     if (isMediumSizeUp) {
         meta.current.dialogConfig.loginScreenSize = '360px'
@@ -472,13 +473,13 @@ const unitInfoJson: any = {
             label: 'State',
             // onChange: 'onAccTypeChange',
             validations: [{ name: 'required', message: 'State is required' }],
-            options: tempArr,
-            // Object.keys(stateCodes).map((key: string, i: number) => {
-            //     return {
-            //         label: key,
-            //         value: key,
-            //     }
-            // }),
+            options: 
+            Object.keys(stateCodes).map((key: string, i: number) => {
+                return {
+                    label: key,
+                    value: key,
+                }
+            }),
             // [
             //     { label: '---select---', value: '' },
             //     { label: 'Asset', value: 'A' },
@@ -545,61 +546,60 @@ const generalSettingsJson: any = {
     ],
 }
 
-const selectBuJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'TypeSelect',
-            name: 'buCode',
-            placeholder: 'Business units',
-            label: 'Select business unit',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a business unit',
-                },
-            ],
-        },
-    ],
-}
+// const selectBuJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'TypeSelect',
+//             name: 'buCode',
+//             placeholder: 'Business units',
+//             label: 'Select business unit',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a business unit',
+//                 },
+//             ],
+//         },
+//     ],
+// }
 
-const selectFinYearJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            // "type": "TypeSelect",
-            class: 'select-fin-year',
-            type: 'Select',
-            name: 'id',
-            placeholder: 'Financial years',
-            label: 'Select financial year',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a financial year',
-                },
-            ],
-        },
-    ],
-}
+// const selectFinYearJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             class: 'select-fin-year',
+//             type: 'Select',
+//             name: 'id',
+//             placeholder: 'Financial years',
+//             label: 'Select financial year',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a financial year',
+//                 },
+//             ],
+//         },
+//     ],
+// }
 
-const selectBranchJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'TypeSelect',
-            name: 'id',
-            placeholder: 'Branches',
-            label: 'Select branch',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a branch',
-                },
-            ],
-        },
-    ],
-}
+// const selectBranchJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'TypeSelect',
+//             name: 'id',
+//             placeholder: 'Branches',
+//             label: 'Select branch',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a branch',
+//                 },
+//             ],
+//         },
+//     ],
+// }
