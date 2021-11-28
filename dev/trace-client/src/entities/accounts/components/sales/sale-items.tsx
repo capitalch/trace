@@ -41,6 +41,7 @@ function SaleItems() {
 
     const {
         debounceEmit,
+        extractAmount,
         toDecimalFormat,
         TraceDialog,
     } = useSharedElements()
@@ -258,7 +259,7 @@ function SaleItems() {
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.productCode ? false : true}
-                            onChange={(e:any)=>{
+                            onChange={(e: any) => {
                                 rowData.productCode = e.target.value
                                 // meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
@@ -348,6 +349,7 @@ function SaleItems() {
                         <NumberFormat
                             allowNegative={false}
                             className="right-aligned-numeric"
+                            error={rowData?.gstRate > 30 ? true : false}
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
@@ -424,9 +426,9 @@ function SaleItems() {
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            onValueChange={(values: any) => {
-                                const { floatValue } = values
-                                rowData.price = floatValue || 0.0
+                            onChange={(e: any) => {
+                                const price = extractAmount(e.target.value)
+                                rowData.price = price || 0.0
                                 meta.current.isDataChanged = true
                                 setPriceGst(rowData)
                                 computeRow(rowData)
@@ -434,6 +436,21 @@ function SaleItems() {
                                 arbitraryData.salesCrownRefresh()
                                 meta.current.isMounted && setRefresh({})
                             }}
+                            // onValueChange={(values: any) => {
+                            //     const { floatValue } = values
+                            //     rowData.price = floatValue || 0.0
+                            //     meta.current.isDataChanged = true
+                            //     // meta.current.isPriceChanged = true
+                            //     // if (meta.current.isPriceGstChanged) {
+                            //     //     meta.current.isPriceGstChanged = false
+                            //     // } else {
+                            //         setPriceGst(rowData)
+                            //     // }
+                            //     computeRow(rowData)
+                            //     computeSummary()
+                            //     arbitraryData.salesCrownRefresh()
+                            //     meta.current.isMounted && setRefresh({})
+                            // }}
                             onFocus={(e) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
@@ -470,16 +487,32 @@ function SaleItems() {
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            onValueChange={(values: any) => {
-                                const { floatValue } = values
-                                rowData.priceGst = floatValue || 0.0
+                            onChange={(e: any) => {
+                                const priceGst = extractAmount(e.target.value)
+                                rowData.priceGst = priceGst || 0.0
                                 meta.current.isDataChanged = true
-                                setPrice(rowData) // sets the price based on priceGst and gstRate
+                                setPrice(rowData)
                                 computeRow(rowData)
                                 computeSummary()
                                 arbitraryData.salesCrownRefresh()
                                 meta.current.isMounted && setRefresh({})
                             }}
+                            onValueChange={(values: any) => {
+                                // const { floatValue } = values
+                                // rowData.priceGst = floatValue || 0.0
+                                // meta.current.isDataChanged = true
+                                //     // meta.current.isPriceGstChanged = true
+                                //     // if (meta.current.isPriceChanged) {
+                                //     //     meta.current.isPriceChanged = false
+                                //     // } else {
+                                //         // setPrice(rowData) // sets the price based on priceGst and gstRate
+                                //     // }
+                                // computeRow(rowData)
+                                // computeSummary()
+                                // arbitraryData.salesCrownRefresh()
+                                // meta.current.isMounted && setRefresh({})
+                            }}
+
                             onFocus={(e) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
@@ -621,11 +654,12 @@ function SaleItems() {
                     )
                 }}
                 footer={
-                    <span
+                    <div
                         style={{
                             display: 'flex',
+                            flexDirection: 'column',
                             alignItems: 'center',
-                            columnGap: '1rem',
+                            rowGap: '1rem',
                         }}>
                         <NumberFormat
                             allowNegative={false}
@@ -658,9 +692,9 @@ function SaleItems() {
                             size="small"
                             className="back-calculate"
                             onClick={handleBackCalculate}>
-                            Bk Cal
+                            Back Cal
                         </Button>
-                    </span>
+                    </div>
                 }
             />,
         ]

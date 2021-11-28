@@ -77,7 +77,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                         !!!curr.qty ||
                         arbitraryData.saleErrorMethods.errorMethods.getSlNoError(
                             arbitraryData.lineItems[index]
-                        )
+                        ) || (curr.gstRate > 30)
                     prev.isError = prev.isError || curr.isError
                     return prev
                 },

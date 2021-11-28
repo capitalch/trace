@@ -95,6 +95,14 @@ function useSaleItems(arbitraryData: any) {
         const discount = rowData.discount
         const qty = rowData.qty
         let amount, gst, sgst, cgst
+        // if(meta.current.isPriceChanged){
+        //     priceGst = price * (1 + gstRate / 100)
+        //     rowData.priceGst = priceGst
+        // }
+        // if(meta.current.isPriceGstChanged){
+        //     price = priceGst / (1 + gstRate / 100)
+        //     rowData.price = price
+        // }
         if (priceGst) {
             price = priceGst / (1 + gstRate / 100)
             rowData.price = price
@@ -274,7 +282,7 @@ function useSaleItems(arbitraryData: any) {
                     <TextareaAutosize
                         autoFocus={true}
                         className="serial-number"
-                        // rowsMin={5}
+                        rowsMin={5}
                         onChange={(e: any) => {
                             met.current.slNo = e.target.value
                             processCount()
@@ -311,6 +319,7 @@ function useSaleItems(arbitraryData: any) {
             rowData.serialNumbers = JSON.parse(
                 JSON.stringify(pre.serialNumbers)
             )
+            arbitraryData.salesCrownRefresh()
             meta.current.showDialog = false
             meta.current.isMounted && setRefresh({})
         }

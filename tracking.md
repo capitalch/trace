@@ -198,7 +198,7 @@ c) In all Typography comment out disableTypography
 # Pending
 
 # Working on 
-1.1 Sale amount with GST error
+1.1 
 1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
 1.3 In vouchers, if part selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
@@ -212,7 +212,7 @@ c) In all Typography comment out disableTypography
 4. Provide a way to come out of app in mobile. Presently there is no way
 
 ## Bug fixing
-1. Transfer of balances some issue
+1. 
 2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
 
 ## Functionality
@@ -258,6 +258,13 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 16-11-2021 - 28-11-2021
+1. Research on PDF
+2. fixed bug for transfer balances
+3. Sale amount with GST error, fixed
+4. Gst rate > 30 should be error completed
+5. Sales: serial no error now fixed
 
 # 13-11-2021 - 15-11-2021
 1. Research on print pdf, scss to css in Python, consuming css in HTML template
