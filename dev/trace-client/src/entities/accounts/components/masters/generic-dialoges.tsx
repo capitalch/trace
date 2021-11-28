@@ -41,18 +41,6 @@ function GenericDialoges({ loadDialog }: any) {
             loginScreenSize: '360px',
         },
     })
-<<<<<<< HEAD
-    
-    // const temp:any = stateCodes
-    // const tempArr = Object.keys(stateCodes).map((key:string)=>{
-    //     return({
-    //         label: temp[key],
-    //         value: key
-    //     })
-    // })
-=======
-
->>>>>>> 8a8e2ab3a5336801cebb32fecce6112334a32760
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
     const { isMediumSizeUp } = useTraceGlobal()
     if (isMediumSizeUp) {
@@ -497,23 +485,6 @@ const unitInfoJson: any = {
             name: 'state',
             label: 'State',
             validations: [{ name: 'required', message: 'State is required' }],
-<<<<<<< HEAD
-            options: 
-            Object.keys(stateCodes).map((key: string, i: number) => {
-                return {
-                    label: key,
-                    value: key,
-                }
-            }),
-            // [
-            //     { label: '---select---', value: '' },
-            //     { label: 'Asset', value: 'A' },
-            //     { label: 'Expence', value: 'E' },
-            //     { label: 'Income', value: 'I' },
-            //     { label: 'Liability', value: 'L' },
-            // ],
-=======
->>>>>>> 8a8e2ab3a5336801cebb32fecce6112334a32760
         },
     ],
 }
@@ -596,10 +567,7 @@ const generalSettingsJson: any = {
 //     class: 'generic-dialog',
 //     items: [
 //         {
-<<<<<<< HEAD
-=======
 //             // "type": "TypeSelect",
->>>>>>> 8a8e2ab3a5336801cebb32fecce6112334a32760
 //             class: 'select-fin-year',
 //             type: 'Select',
 //             name: 'id',
