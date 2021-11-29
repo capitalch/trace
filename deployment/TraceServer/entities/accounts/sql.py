@@ -1433,7 +1433,7 @@ allSqls = {
                                         and "accType" in ('A', 'L')
                                         and "accLeaf" in ('Y', 'S')
                         GROUP BY "accId", "dc", "finYearId", "branchId"
-                            union --"TranD"
+                            union all--"TranD"
                 select "accId", SUM("amount") as "amount", "dc", "finYearId", "branchId"
                     from "AccM" a
                         join "TranD" t

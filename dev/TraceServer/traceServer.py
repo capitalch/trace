@@ -4,7 +4,7 @@ import pdfkit
 from pdfkit.api import configuration
 # import asyncio
 # from flask_scss import Scss
-import sass
+# import sass
 from werkzeug.exceptions import HTTPException
 import simplejson as json
 from flask_mail import Mail, Message
@@ -48,7 +48,7 @@ app.register_blueprint(traceApp)
 # Scss(app, asset_dir='entities/legacy/assets',
 #      static_dir='entities/legacy/static')
 
-sass.compile(dirname=('entities/legacy/assets','entities/legacy/static'))
+# sass.compile(dirname=('entities/legacy/assets','entities/legacy/static'))
 CORS(app, expose_headers='SELECTION-CRITERIA')
 
 setMailConfig(app)

@@ -7,7 +7,6 @@ type AccountsQuery {
     genericView(value: Generic): Generic
     searchProduct(value: Generic): Generic
     trialBalance: Generic
-    
 }
 
 scalar Generic

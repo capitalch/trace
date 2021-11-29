@@ -1,7 +1,7 @@
 from os import name
 from flask import Blueprint, request, render_template, jsonify, make_response, url_for
 import pdfkit
-import sass
+# import sass
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
 from postgres import getPool, execSql, execGenericUpdateMaster,  genericView
 import pandas as pd
@@ -31,8 +31,8 @@ type_defs = load_schema_from_path('entities/accounts')
 
 accountsQuery = ObjectType("AccountsQuery")
 accountsMutation = ObjectType("AccountsMutation")
-sass.compile(dirname=('entities/accounts/templates/scss',
-             'entities/accounts/static'))
+# sass.compile(dirname=('entities/accounts/templates/scss',
+#              'entities/accounts/static'))
 traceApp = Blueprint('traceApp', __name__,
                      template_folder='templates', static_folder='static', url_prefix='/traceApp') #, static_url_path='/trace/view/css' )
 

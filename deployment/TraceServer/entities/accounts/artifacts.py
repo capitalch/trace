@@ -1,7 +1,9 @@
+from os import name
+from flask import Blueprint, request, render_template, jsonify, make_response, url_for
+import pdfkit
+import sass
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
 from postgres import getPool, execSql, execGenericUpdateMaster,  genericView
-from .sql import allSqls
-from entities.authentication.sql import allSqls as authSql
 import pandas as pd
 import simplejson as json
 import demjson as demJson
@@ -9,7 +11,8 @@ import re  # Python regex
 from time import sleep
 from urllib.parse import unquote
 from util import getErrorMessage
-
+from entities.authentication.sql import allSqls as authSql
+from .sql import allSqls
 from .artifactsHelper import trialBalanceHelper
 # tranHeaderAndDetails_helper,
 from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsLedgersHelper, accountsOpBalHelper
@@ -28,6 +31,10 @@ type_defs = load_schema_from_path('entities/accounts')
 
 accountsQuery = ObjectType("AccountsQuery")
 accountsMutation = ObjectType("AccountsMutation")
+sass.compile(dirname=('entities/accounts/templates/scss',
+             'entities/accounts/static'))
+traceApp = Blueprint('traceApp', __name__,
+                     template_folder='templates', static_folder='static', url_prefix='/traceApp') #, static_url_path='/trace/view/css' )
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
@@ -41,6 +48,26 @@ def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
     dbName = execSql(entryDb, sqlForDbName, {
                      'clientId': clientId, 'entityName': entityName}, isMultipleRows=False)['dbName']
     return dbName, buCode, clientId, finYearId, branchId
+
+
+@traceApp.route('/trace/testpdf', methods=['GET'])
+def test_pdf():
+    options = {
+        "enable-local-file-access": None
+    }
+    html = render_template('bill-template1.html', 
+    companyInfo={'addr1':'', 'addr2':'', 'pin':'', 'phone':'', 'gstin':'', 'email':''}, ref_no='xxx', date='21/12/2021', bill_memo='B', acc_name='', pin='', name='', mobile='', address='', gstin='', email='',stateCode='', products=[])
+    pdf = pdfkit.from_string(html, False, options=options)
+
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "inline; filename=output.pdf"
+    return(response, 200)
+    # pdfkit.from_file('data/bill-template1.html','data/bill-template1.pdf', options )#, configuration=config )
+    # return jsonify('pdf ok'), 200
+
+    # pathTo = 'data/wkhtmltopdf.exe'
+    # config = pdfkit.configuration(wkhtmltopdf=pathTo)
 
 
 @accountsQuery.field("accountsMasterGroupsLedgers")
