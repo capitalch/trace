@@ -1,12 +1,15 @@
-set search_path to demo_accounts;
-with cte1 as(
-	select "id", "tranDate", "autoRefNo", "remarks", "tranTypeId", "contactsId" 
-		from "TranH" t
-			join "Contacts" c
-				on c."id" = t."contactsId"
-			join "ExtBusinessContactsAccM" b
-				on 
-)
+set search_path to demounit1;
+with recursive cte as (
+	select "id", "accName", (select SUM(amount) from "Test" t where t."parentId" = te.id ) as "amount"
+		from "Test" te
+			where "parentId" is null
+	
+	union all
+	select t1.id, t1."accName", (select SUM(amount) from "Test" t where t."parentId" = t1.id ) as "amount"
+		from "Test" t1
+			join cte on
+				cte.id = t1."parentId"
+) select * from cte;
 ## party info JS:
 {
   "pin": "700065",
