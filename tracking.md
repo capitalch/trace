@@ -1,15 +1,42 @@
 set search_path to demounit1;
 with recursive cte as (
-	select "id", "accName", (select SUM(amount) from "Test" t where t."parentId" = te.id ) as "amount"
-		from "Test" te
-			where "parentId" is null
-	
-	union all
-	select t1.id, t1."accName", (select SUM(amount) from "Test" t where t."parentId" = t1.id ) as "amount"
-		from "Test" t1
-			join cte on
-				cte.id = t1."parentId"
-) select * from cte;
+  select "id", "accName", "amount", "parentId"
+    from "Test" t
+      where "parentId" =12
+  
+  union all
+  select t.id, t."accName", t.amount + cte.amount as amount, t."parentId"
+    from "Test" t
+      join cte on
+        cte."parentId" = t.id
+) select id, "accName", sum(amount), "parentId" 
+  from cte
+    group by id, "accName", "parentId"
+      order by id
+
+
+set search_path to demounit1;
+with cte1 as (
+                select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
+                , (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"
+                    from "AccM" a 
+                        where "accType" in ('A', 'L')
+                            order by "accType", "accName", a."id"
+                ),
+        cte2 as (
+            select "id" as "opId", "accId", "amount", "dc", "branchId"
+                from "AccOpBal"
+                    where "finYearId" = %(finYearId)s
+                        and "branchId" = %(branchId)s)
+        select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
+            , "parentId"
+            , CASE WHEN dc='D' then "amount" else 0  END as "debit"
+            , CASE WHEN dc='C' then "amount" else 0 end as "credit"
+            , "children"
+            from cte1 a
+                left outer join cte2 b
+                    on a."id" = b."accId"                                                           
+                            order by "accType","accLeaf", "accName" 
 ## party info JS:
 {
   "pin": "700065",

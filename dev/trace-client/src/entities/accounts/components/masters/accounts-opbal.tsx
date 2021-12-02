@@ -315,8 +315,8 @@ function AccountsOpBal() {
             function processChildren(itArray: any[]) {
                 for (const item of itArray) {
                     if (item.data) {
-                        debits = debits + item.data.debit
-                        credits = credits + item.data.credit
+                        debits = item.data.parentId ? debits: debits + item.data.debit
+                        credits = item.data.parentId ? credits: credits + item.data.credit
                     }
                     if (item.children) {
                         processChildren(item.children)

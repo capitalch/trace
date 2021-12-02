@@ -433,6 +433,48 @@ allSqls = {
     ''',
 
     "get_opBal": '''
+        with recursive cte as (
+			select "accMId", id, "opId", "accType", "accLeaf", "accName", "parentId", "debit", "credit", "children"
+				from cte3
+					where "opId" is not null
+			union all
+			select c."accMId", c.id, c."opId", c."accType", c."accLeaf", c."accName", c."parentId", c."debit" + cte."debit" as "debit", c."credit" + cte."credit" as "credit", c."children"
+				from cte3 c join cte
+					on cte."parentId" = c.id
+		), 
+
+	cte1 as (
+			select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
+			, (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"
+				from "AccM" a 
+					where "accType" in ('A', 'L')
+						order by "accType", "accName", a."id"
+			),
+        cte2 as (
+            select "id" as "opId", "accId", "amount", "dc", "branchId"
+                from "AccOpBal"
+                    where "finYearId" = %(finYearId)s
+                        and "branchId" = %(branchId)s
+		),
+		cte3 as (
+			select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
+				, "parentId"
+				, CASE WHEN dc='D' then "amount" else 0  END as "debit"
+				, CASE WHEN dc='C' then "amount" else 0 end as "credit"
+				, "children"
+				from cte1 a
+					left outer join cte2 b
+						on a."id" = b."accId"                                                           
+								order by "accType","accLeaf", "accName" )
+								
+		 select c3."accMId", c3.id, c3."opId", c3."accType", c3."accLeaf", c3."accName", c3."parentId", c3."children" , COALESCE(SUM(c."debit"),0) as "debit", COALESCE(SUM(c."credit"),0) as "credit" 
+		 	from cte3 c3 left outer join cte c
+					on c3.id = c.id
+		 		group by c3."accMId", c3.id, c3."opId", c3."accType", c3."accLeaf", c3."accName", c3."parentId", c3."children"
+		 			order by id
+    ''',
+    
+    "get_opBal1": '''
         with cte1 as (
                 select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
                 , (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"
@@ -440,20 +482,20 @@ allSqls = {
                         where "accType" in ('A', 'L')
                             order by "accType", "accName", a."id"
                 ),
-            cte2 as (
-                select "id" as "opId", "accId", "amount", "dc", "branchId"
-                    from "AccOpBal"
-                        where "finYearId" = %(finYearId)s
-                            and "branchId" = %(branchId)s)
-            select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
-                , "parentId"
-                , CASE WHEN dc='D' then "amount" else 0  END as "debit"
-                , CASE WHEN dc='C' then "amount" else 0 end as "credit"
-                , "children"
-                from cte1 a
-                    left outer join cte2 b
-                        on a."id" = b."accId"                                                           
-                                order by "accType","accLeaf", "accName" ''',
+        cte2 as (
+            select "id" as "opId", "accId", "amount", "dc", "branchId"
+                from "AccOpBal"
+                    where "finYearId" = %(finYearId)s
+                        and "branchId" = %(branchId)s)
+        select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
+            , "parentId"
+            , CASE WHEN dc='D' then "amount" else 0  END as "debit"
+            , CASE WHEN dc='C' then "amount" else 0 end as "credit"
+            , "children"
+            from cte1 a
+                left outer join cte2 b
+                    on a."id" = b."accId"                                                           
+                            order by "accType","accLeaf", "accName" ''',
 
     "get_product_on_upc_code": '''
         select p."id", 
