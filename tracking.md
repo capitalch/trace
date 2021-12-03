@@ -228,7 +228,7 @@ c) In all Typography comment out disableTypography
 # Pending
 
 # Working on 
-1.1 
+1.1 Accounts address entry, do it modal and make email address optional
 1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
 1.3 In vouchers, if part selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
