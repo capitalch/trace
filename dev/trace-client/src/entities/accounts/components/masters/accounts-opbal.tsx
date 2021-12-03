@@ -1,4 +1,13 @@
-import { hash, InputSwitch, NumberFormat, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import {
+    hash,
+    InputSwitch,
+    NumberFormat,
+    PrimeColumn,
+    TreeTable,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
 import {
     Typography,
     IconButton,
@@ -8,9 +17,17 @@ import {
     makeStyles,
 } from '../../../../imports/gui-imports'
 import { Save, SyncSharp } from '../../../../imports/icons-import'
-import { globalMessages, graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
+import {
+    globalMessages,
+    graphqlService,
+    manageEntitiesState,
+    queries,
+    useIbuki,
+    useTraceGlobal,
+    useTraceMaterialComponents,
+} from '../../../../imports/trace-imports'
 import styled from 'styled-components'
-import { } from '../../../../global-utils/esm'
+import {} from '../../../../global-utils/esm'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import messages from '../../json/accounts-messages.json'
 
@@ -40,16 +57,13 @@ function AccountsOpBal() {
     })
 
     const classes = useStyles({ meta: meta })
-    const {
-        getCurrentMediaSize,
-        isMediumSizeUp,
-        getCurrentWindowSize,
-    } = useTraceGlobal()
+    const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
+        useTraceGlobal()
     const { traceGlobalSearch } = useTraceMaterialComponents()
     const tableConfig = meta.current.tableConfig
     const headerConfig = meta.current.headerConfig
     const { queryGraphql } = graphqlService()
-    const { toDecimalFormat, saveForm } = utilMethods()
+    const {genericUpdateMasterNoForm, toDecimalFormat, saveForm } = utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
 
     useEffect(() => {
@@ -178,10 +192,14 @@ function AccountsOpBal() {
                                     data: diffObj,
                                 }
                                 try {
-                                    saveForm({
-                                        data: finalData,
-                                        queryId: 'accountsUpdateOpBal',
+                                    genericUpdateMasterNoForm({
+                                        data:finalData,
+
                                     })
+                                    // saveForm({
+                                    //     data: finalData,
+                                    //     queryId: 'accountsUpdateOpBal',
+                                    // })
                                 } catch (error) {
                                     emit('SHOW-MESSAGE', {
                                         message:
@@ -240,10 +258,11 @@ function AccountsOpBal() {
                         return (
                             <div
                                 style={{
-                                    backgroundColor: `${['Y', 'S'].includes(node.data.accLeaf)
-                                        ? 'yellow'
-                                        : 'white'
-                                        }`,
+                                    backgroundColor: `${
+                                        ['Y', 'S'].includes(node.data.accLeaf)
+                                            ? 'yellow'
+                                            : 'white'
+                                    }`,
                                 }}>
                                 {toDecimalFormat(node.data.debit)}
                             </div>
@@ -263,10 +282,11 @@ function AccountsOpBal() {
                         return (
                             <div
                                 style={{
-                                    backgroundColor: `${['Y', 'S'].includes(node.data.accLeaf)
-                                        ? 'yellow'
-                                        : 'white'
-                                        }`,
+                                    backgroundColor: `${
+                                        ['Y', 'S'].includes(node.data.accLeaf)
+                                            ? 'yellow'
+                                            : 'white'
+                                    }`,
                                 }}>
                                 {toDecimalFormat(node.data.credit)}
                             </div>
@@ -315,8 +335,12 @@ function AccountsOpBal() {
             function processChildren(itArray: any[]) {
                 for (const item of itArray) {
                     if (item.data) {
-                        debits = item.data.parentId ? debits: debits + item.data.debit
-                        credits = item.data.parentId ? credits: credits + item.data.credit
+                        debits = item.data.parentId
+                            ? debits
+                            : debits + item.data.debit
+                        credits = item.data.parentId
+                            ? credits
+                            : credits + item.data.credit
                     }
                     if (item.children) {
                         processChildren(item.children)
@@ -324,6 +348,13 @@ function AccountsOpBal() {
                 }
             }
             processChildren(itemArray)
+            const footer = itemArray.reduce((prev:any, curr:any)=>{
+                if(['Y','S'].includes(curr.data.accLeaf)){
+                    prev.debits = prev.debit + curr?.data.debit
+                    prev.credits = prev.credit + curr?.data.credit
+                }
+                return prev
+            },{debits:0, credits:0})
             meta.current.footer = { debits, credits }
         }
 
@@ -365,7 +396,18 @@ function AccountsOpBal() {
 
         function getFlatData(itemArray: any[]) {
             let flatData: any[] = []
+
             function processChildren(itArray: any[]) {
+                for (const item of itArray) {
+                    if (item.data && ['Y', 'S'].includes(item.data?.accLeaf)) {
+                        flatData.push(item.data)
+                    } else if (item.children) {
+                        processChildren(item.children)
+                    }
+                }
+            }
+
+            function processChildren1(itArray: any[]) {
                 for (const item of itArray) {
                     if (item.data) {
                         flatData.push(item.data)

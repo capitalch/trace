@@ -443,7 +443,7 @@ allSqls = {
 					on cte."parentId" = c.id
 		), 
 
-	cte1 as (
+	    cte1 as (
 			select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
 			, (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"
 				from "AccM" a 
