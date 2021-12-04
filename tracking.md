@@ -5,7 +5,7 @@
 4. Refresh after save
 5. Put logic to avoid double ntry which happened in past
 6. Enforce unique referential integrity
-
+7. Provide comments in client code
 ## party info JS:
 {
   "pin": "700065",
