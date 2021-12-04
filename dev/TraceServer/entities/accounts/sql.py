@@ -432,6 +432,7 @@ allSqls = {
                             "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s 
     ''',
 
+    # This method is working. it's for academic purpose. At present client side tree populating is done. This method populates the entire tree from child values
     "get_opBal1": '''
         with recursive cte as (
 			select "accMId", id, "opId", "accType", "accLeaf", "accName", "parentId", "debit", "credit", "children"
