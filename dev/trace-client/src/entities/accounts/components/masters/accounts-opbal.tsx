@@ -63,7 +63,8 @@ function AccountsOpBal() {
     const tableConfig = meta.current.tableConfig
     const headerConfig = meta.current.headerConfig
     const { queryGraphql } = graphqlService()
-    const {genericUpdateMasterNoForm, toDecimalFormat, saveForm } = utilMethods()
+    const { genericUpdateMasterNoForm, toDecimalFormat, saveForm } =
+        utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
 
     useEffect(() => {
@@ -110,8 +111,11 @@ function AccountsOpBal() {
             const pre = results.data.accounts.accountsOpBal
             const opBal = pre.opBal
             meta.current.allKeys = pre.allKeys
-            utilFunc().calculateFooter(opBal)
+            // utilFunc().calculateFooter(opBal)
             meta.current.data = JSON.parse(JSON.stringify(opBal))
+
+            utilFunc().flattenData()
+            utilFunc().processTree()
             meta.current.initialData = JSON.parse(JSON.stringify(opBal))
             meta.current.initialDataHash = hash(opBal)
             emit('SHOW-LOADING-INDICATOR', false)
@@ -193,8 +197,7 @@ function AccountsOpBal() {
                                 }
                                 try {
                                     genericUpdateMasterNoForm({
-                                        data:finalData,
-
+                                        data: finalData,
                                     })
                                     // saveForm({
                                     //     data: finalData,
@@ -348,14 +351,32 @@ function AccountsOpBal() {
                 }
             }
             processChildren(itemArray)
-            const footer = itemArray.reduce((prev:any, curr:any)=>{
-                if(['Y','S'].includes(curr.data.accLeaf)){
-                    prev.debits = prev.debit + curr?.data.debit
-                    prev.credits = prev.credit + curr?.data.credit
-                }
-                return prev
-            },{debits:0, credits:0})
+            const footer = itemArray.reduce(
+                (prev: any, curr: any) => {
+                    if (['Y', 'S'].includes(curr.data.accLeaf)) {
+                        prev.debits = prev.debit + curr?.data.debit
+                        prev.credits = prev.credit + curr?.data.credit
+                    }
+                    return prev
+                },
+                { debits: 0, credits: 0 }
+            )
             meta.current.footer = { debits, credits }
+        }
+
+        function flattenData() {
+            meta.current.flatData = {}
+            const fd = meta.current.flatData
+            processChildren(meta.current.data)
+
+            function processChildren(treedata: any) {
+                for (const item of treedata) {
+                    fd[item.data.id] = item.data
+                    if (item.children) {
+                        processChildren(item.children)
+                    }
+                }
+            }
         }
 
         function getNotAllowSubmit() {
@@ -420,7 +441,51 @@ function AccountsOpBal() {
             processChildren(itemArray)
             return flatData
         }
-        return { calculateFooter, getNotAllowSubmit, getDataDiff }
+
+        function processTree() {
+            const d = meta.current.data
+            const fd = meta.current.flatData
+            const footer = meta.current.footer
+            footer.debits = 0
+            footer.credits = 0
+            // for (const item of d) {
+            processChildren(d)
+            // }
+
+            function processChildren(children: any) {
+                for (const child of children) {
+                    if (child.children) {
+                        processChildren(child.children)
+                    } else {
+                        if (['Y', 'S'].includes(child.data.accLeaf)) {
+                            const delta = {
+                                debit: child.data.debit,
+                                credit: child.data.credit,
+                            }
+                            footer.debits = footer.debits + child.data.debit
+                            footer.credits = footer.credits + child.data.credit
+                            processParent(delta, child.data.parentId)
+                        }
+                    }
+                }
+            }
+
+            function processParent(delta: any, parentId: any) {
+                const fd = meta.current.flatData
+                fd[parentId].debit = fd[parentId].debit + delta.debit
+                fd[parentId].credit = fd[parentId].credit + delta.credit
+                if (fd[parentId]?.parentId) {
+                    processParent(delta, fd[parentId].parentId)
+                }
+            }
+        }
+        return {
+            calculateFooter,
+            flattenData,
+            getNotAllowSubmit,
+            getDataDiff,
+            processTree,
+        }
     }
 }
 

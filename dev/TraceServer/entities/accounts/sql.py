@@ -432,7 +432,7 @@ allSqls = {
                             "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s 
     ''',
 
-    "get_opBal": '''
+    "get_opBal1": '''
         with recursive cte as (
 			select "accMId", id, "opId", "accType", "accLeaf", "accName", "parentId", "debit", "credit", "children"
 				from cte3
@@ -474,7 +474,7 @@ allSqls = {
 		 			order by id
     ''',
     
-    "get_opBal1": '''
+    "get_opBal": '''
         with cte1 as (
                 select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
                 , (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"

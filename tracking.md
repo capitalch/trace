@@ -1,42 +1,11 @@
-set search_path to demounit1;
-with recursive cte as (
-  select "id", "accName", "amount", "parentId"
-    from "Test" t
-      where "parentId" =12
-  
-  union all
-  select t.id, t."accName", t.amount + cte.amount as amount, t."parentId"
-    from "Test" t
-      join cte on
-        cte."parentId" = t.id
-) select id, "accName", sum(amount), "parentId" 
-  from cte
-    group by id, "accName", "parentId"
-      order by id
+## Opening balance  new work
+1. Revert to old get_opbal in server
+2. Remove un-necessary code from client
+3. Put onChange code at client
+4. Refresh after save
+5. Put logic to avoid double ntry which happened in past
+6. Enforce unique referential integrity
 
-
-set search_path to demounit1;
-with cte1 as (
-                select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
-                , (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"
-                    from "AccM" a 
-                        where "accType" in ('A', 'L')
-                            order by "accType", "accName", a."id"
-                ),
-        cte2 as (
-            select "id" as "opId", "accId", "amount", "dc", "branchId"
-                from "AccOpBal"
-                    where "finYearId" = %(finYearId)s
-                        and "branchId" = %(branchId)s)
-        select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
-            , "parentId"
-            , CASE WHEN dc='D' then "amount" else 0  END as "debit"
-            , CASE WHEN dc='C' then "amount" else 0 end as "credit"
-            , "children"
-            from cte1 a
-                left outer join cte2 b
-                    on a."id" = b."accId"                                                           
-                            order by "accType","accLeaf", "accName" 
 ## party info JS:
 {
   "pin": "700065",
