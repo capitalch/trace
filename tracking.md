@@ -1,11 +1,3 @@
-## Opening balance  new work
-1. Revert to old get_opbal in server
-2. Remove un-necessary code from client
-3. Put onChange code at client
-4. Refresh after save
-5. Put logic to avoid double ntry which happened in past
-6. Enforce unique referential integrity
-7. Provide comments in client code
 ## party info JS:
 {
   "pin": "700065",
@@ -199,14 +191,14 @@ c) In all Typography comment out disableTypography
 # Working on 
 1.1 Accounts address entry, do it modal and make email address optional
 1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
-1.3 In vouchers, if part selected and its GSTIN available then display it
+1.3 In vouchers, if party selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
 1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
 1.9.1 Accounts creation email should be optional
 1.9.2 Print support for sales
 1.9.3 Easy sales implementation
 1.9.4 Sale SMS and mail provisions
-1.9.5 Opening balances: Don't show balance up in the hierarchy, only sho balances at lowest level
+1.9.5 
 2. Account balances in vouchers
 4. Provide a way to come out of app in mobile. Presently there is no way
 
@@ -257,6 +249,12 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 06-12-2021 - 13-12-2021
+1. Other works not for Trace
+
+# 29-11-2021 - 05-12-2021
+1. Opening balances final: Don't show balance up in the hierarchy, only show balances at lowest level
 
 # 16-11-2021 - 28-11-2021
 1. Research on PDF

@@ -1,47 +1,40 @@
+import ReactPDF, { PDFDownloadLink } from '@react-pdf/renderer'
 import React, { useEffect, useState } from 'react'
-import accData from '../data/acc-data.json'
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
-import { Growl } from 'primereact/growl';
+import  { Page, Text, View, Document, StyleSheet, PDFViewer,  } from '@react-pdf/renderer'
 
 
-// editable={true}
+const styles = StyleSheet.create({
+    page: {
+        flexDirection: 'row',
+        backgroundColor: '#E4E4E4'
+    },
+    section: {
+        margin: 10,
+        padding: 10,
+        flexGrow: 1
+    }
+})
+
+const MyDocument = () => (
+    <Document>
+        <Page size="A4" style={styles.page}>
+            <View style={styles.section}>
+                <Text>Section #1</Text>
+            </View>
+            <View style={styles.section}>
+                <Text>Section #2</Text>
+            </View>
+        </Page>
+    </Document>
+)
 
 function Component2() {
-    const data1: any[] = accData
-    const [data, setData]:any[] = useState([])
-
-    useEffect(()=>{
-        setData(accData)
-    }, [])
-
-    function onEditorValueChange(props: any, value: any) {
-        const updatedData = [...props.value];
-        updatedData[props.rowIndex][props.field] = value;
-        setData(updatedData);
-    }
-
-    function inputTextEditor(props: any, field: string) {
-        return <InputText type="text" value={props.rowData[field]} 
-        onChange={(e: any) => onEditorValueChange(props, e.target.value)} />;
-    }
-    function accCodeEditor(props:any){
-        return inputTextEditor(props, 'accCode')
-    }
-
-    function requiredValidator(props:any){
-        let value = props.rowData[props.field]
-        return value && value.length > 3
-    }
-
-    return <DataTable value={data} editMode="cell">
-        <Column field="accCode" editor={accCodeEditor} editorValidator={requiredValidator} header="Acc code" />
-        <Column field="accName" header="Acc Name" />
-        <Column field="accType" header="Type" />
-        <Column field="accLeaf" header="Leaf" />
-    </DataTable>
+    // return <PDFDownloadLink document={<MyDocument />} fileName='myFile.pdf'>Download now</PDFDownloadLink>
+    return(
+        <PDFViewer width={1000} height={800}>
+            <MyDocument />
+        </PDFViewer>
+    )
 }
 
 export { Component2 }
