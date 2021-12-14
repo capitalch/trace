@@ -432,6 +432,49 @@ allSqls = {
                             "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s 
     ''',
 
+    # This method is working. it's for academic purpose. At present client side tree populating is done. This method populates the entire tree from child values
+    "get_opBal1": '''
+        with recursive cte as (
+			select "accMId", id, "opId", "accType", "accLeaf", "accName", "parentId", "debit", "credit", "children"
+				from cte3
+					where "opId" is not null
+			union all
+			select c."accMId", c.id, c."opId", c."accType", c."accLeaf", c."accName", c."parentId", c."debit" + cte."debit" as "debit", c."credit" + cte."credit" as "credit", c."children"
+				from cte3 c join cte
+					on cte."parentId" = c.id
+		), 
+
+	    cte1 as (
+			select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
+			, (select array_agg(id) from "AccM" m where a."id" = m."parentId" ) as "children"
+				from "AccM" a 
+					where "accType" in ('A', 'L')
+						order by "accType", "accName", a."id"
+			),
+        cte2 as (
+            select "id" as "opId", "accId", "amount", "dc", "branchId"
+                from "AccOpBal"
+                    where "finYearId" = %(finYearId)s
+                        and "branchId" = %(branchId)s
+		),
+		cte3 as (
+			select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
+				, "parentId"
+				, CASE WHEN dc='D' then "amount" else 0  END as "debit"
+				, CASE WHEN dc='C' then "amount" else 0 end as "credit"
+				, "children"
+				from cte1 a
+					left outer join cte2 b
+						on a."id" = b."accId"                                                           
+								order by "accType","accLeaf", "accName" )
+								
+		 select c3."accMId", c3.id, c3."opId", c3."accType", c3."accLeaf", c3."accName", c3."parentId", c3."children" , COALESCE(SUM(c."debit"),0) as "debit", COALESCE(SUM(c."credit"),0) as "credit" 
+		 	from cte3 c3 left outer join cte c
+					on c3.id = c.id
+		 		group by c3."accMId", c3.id, c3."opId", c3."accType", c3."accLeaf", c3."accName", c3."parentId", c3."children"
+		 			order by id
+    ''',
+    
     "get_opBal": '''
         with cte1 as (
                 select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
@@ -440,20 +483,20 @@ allSqls = {
                         where "accType" in ('A', 'L')
                             order by "accType", "accName", a."id"
                 ),
-            cte2 as (
-                select "id" as "opId", "accId", "amount", "dc", "branchId"
-                    from "AccOpBal"
-                        where "finYearId" = %(finYearId)s
-                            and "branchId" = %(branchId)s)
-            select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
-                , "parentId"
-                , CASE WHEN dc='D' then "amount" else 0  END as "debit"
-                , CASE WHEN dc='C' then "amount" else 0 end as "credit"
-                , "children"
-                from cte1 a
-                    left outer join cte2 b
-                        on a."id" = b."accId"                                                           
-                                order by "accType","accLeaf", "accName" ''',
+        cte2 as (
+            select "id" as "opId", "accId", "amount", "dc", "branchId"
+                from "AccOpBal"
+                    where "finYearId" = %(finYearId)s
+                        and "branchId" = %(branchId)s)
+        select a."id" as "accMId", a."id", b."opId", "accType", "accLeaf", "accName"
+            , "parentId"
+            , CASE WHEN dc='D' then "amount" else 0  END as "debit"
+            , CASE WHEN dc='C' then "amount" else 0 end as "credit"
+            , "children"
+            from cte1 a
+                left outer join cte2 b
+                    on a."id" = b."accId"                                                           
+                            order by "accType","accLeaf", "accName" ''',
 
     "get_product_on_upc_code": '''
         select p."id", 
@@ -903,61 +946,61 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    "getJson_bankRecon1": '''
-        with cte1 as (select d."id"
-            , h."id" as "headerId"
-            , "tranDate"
-            , "userRefNo"
-            , h."remarks"
-            , "autoRefNo"
-            , "lineRefNo"
-            , "instrNo"
-            , d."remarks" as "lineRemarks"
-            , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
-            , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
-            , x."clearDate", "clearRemarks", x."id" as "bankReconId"
-                from "TranD" d
-                    left outer join "ExtBankReconTranD" x
-                        on d."id" = x."tranDetailsId"
-                    join "TranH" h
-                        on h."id" = d."tranHeaderId"
-            where "accId" = %(accId)s
-                and (("finYearId" = %(finYearId)s) or 
-                (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
-                )
-            order by h."id" DESC
-        ), 
-        cte2 as (
-            select "id", "amount", "dc"
-                from "BankOpBal"
-                    where "accId" = %(accId)s
-                        and "finYearId" = %(finYearId)s
-        ), 
-        cte3 as (
-            select "id", "amount", "dc"
-                from "BankOpBal"
-                    where "accId" = %(accId)s
-                        and "finYearId" = %(nextFinYearId)s
-        ),
-		cte4 as (
-			select c1.* 
-			, (
-				select string_agg("accName", ' ,')
-					from "TranD" d1
-						join "AccM" a
-							on a."id" = d1."accId"
-					where d1."tranHeaderId" = c1."headerId"
-						and "accId" <> %(accId)s
-				) as "accNames"
-			from cte1 c1
-				--order by c1."headerId" DESC
-		)
-        select json_build_object(
-            'bankRecon', (SELECT json_agg(row_to_json(a)) from cte4 a)
-            , 'opBal', (SELECT row_to_json(b) from cte2 b)
-            , 'closBal', (SELECT row_to_json(c) from cte3 c)
-        ) as "jsonResult"
-    ''',
+    # "getJson_bankRecon1": '''
+    #     with cte1 as (select d."id"
+    #         , h."id" as "headerId"
+    #         , "tranDate"
+    #         , "userRefNo"
+    #         , h."remarks"
+    #         , "autoRefNo"
+    #         , "lineRefNo"
+    #         , "instrNo"
+    #         , d."remarks" as "lineRemarks"
+    #         , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
+    #         , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
+    #         , x."clearDate", "clearRemarks", x."id" as "bankReconId"
+    #             from "TranD" d
+    #                 left outer join "ExtBankReconTranD" x
+    #                     on d."id" = x."tranDetailsId"
+    #                 join "TranH" h
+    #                     on h."id" = d."tranHeaderId"
+    #         where "accId" = %(accId)s
+    #             and (("finYearId" = %(finYearId)s) or 
+    #             (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
+    #             )
+    #         order by h."id" DESC
+    #     ), 
+    #     cte2 as (
+    #         select "id", "amount", "dc"
+    #             from "BankOpBal"
+    #                 where "accId" = %(accId)s
+    #                     and "finYearId" = %(finYearId)s
+    #     ), 
+    #     cte3 as (
+    #         select "id", "amount", "dc"
+    #             from "BankOpBal"
+    #                 where "accId" = %(accId)s
+    #                     and "finYearId" = %(nextFinYearId)s
+    #     ),
+	# 	cte4 as (
+	# 		select c1.* 
+	# 		, (
+	# 			select string_agg("accName", ' ,')
+	# 				from "TranD" d1
+	# 					join "AccM" a
+	# 						on a."id" = d1."accId"
+	# 				where d1."tranHeaderId" = c1."headerId"
+	# 					and "accId" <> %(accId)s
+	# 			) as "accNames"
+	# 		from cte1 c1
+	# 			--order by c1."headerId" DESC
+	# 	)
+    #     select json_build_object(
+    #         'bankRecon', (SELECT json_agg(row_to_json(a)) from cte4 a)
+    #         , 'opBal', (SELECT row_to_json(b) from cte2 b)
+    #         , 'closBal', (SELECT row_to_json(c) from cte3 c)
+    #     ) as "jsonResult"
+    # ''',
 
     "getJson_brands_categories_units": '''
         with cte1 as (
@@ -1142,129 +1185,6 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    # 'getJson_sale': '''
-    #     select h."id" as "tranHeaderId", "tranDate", "remarks", h."jData", "posId", "autoRefNo", "userRefNo",
-    #     (
-    #         with cte1 as (
-    #             select d."id" as "tranDetailsId", "accId", "remarks", "dc", d."amount", "instrNo",
-    #             g."id" as "extGstTranDId", "gstin", "rate", "cgst", "sgst", "igst", "isInput", g."hsn",
-    #             t."id" as "extProductTranTranDId", "qty", "price", t."discount",
-    #             p."id" as "productId", "upcCode", "productCode", "gstRate",  
-    #                 (select "catName" from "CategoryM" where "id" = p."catId") as "catName",
-    #                 (select "brandName" from "BrandM" where "id" = p."brandId" ) as "brandName",
-    #                 "label", "info"
-    #                 from "TranD" d
-    #                     left outer join "ExtGstTranD" g
-    #                         on d."id" = g."tranDetailsId"
-    #                     left outer join "ExtProductTranTranD" t
-    #                         on d."id" = t."tranDetailsId"
-    #                     join "ProductM" p
-    #                         on p."id" = t."productId"
-    #                 where "tranHeaderId" = h."id"
-    #                     and "dc" = 'C'
-    #         )
-    #         select json_agg(row_to_json(a)) from cte1 a 
-    #     ) as "sale",
-    #     (
-    #         with cte2 as (
-    #             select d."id" as "tranDetailsId", d."accId", "remarks", d."amount", "instrNo",
-	# 				"accClass", "isAutoSubledger", "accName"
-    #                 from "TranD" d
-	# 					JOIN "AccM" a
-	# 						on a."id" = d."accId"
-	# 					LEFT OUTER JOIN "ExtMiscAccM" e
-	# 						on a."id" = e."accId"
-	# 					JOIN "AccClassM" m
-	# 						on m."id" = a."classId"
-    #                 where "tranHeaderId" = h."id"
-    #                     and "dc" = 'D'
-    #                 order by d."id"
-    #         )
-    #         select json_agg(row_to_json(b)) from cte2 b
-    #     ) as "receipts",
-    #     row_to_json(c.*) as "contacts"
-        
-    #     from "TranH" h
-    #         left outer join "Contacts" c
-    #             on c."id" = h."contactsId"
-    #         where h."id" = %(id)s
-    # ''',
-
-    # "getJson_sales_return": '''
-    #     select h."id" as "tranHeaderId", "tranDate", "remarks", h."jData", "posId", "autoRefNo", "userRefNo",
-    #             (
-    #                 with cte1 as (
-    #                     select d."id" as "tranDetailsId", "accId", "remarks", "dc", d."amount", "instrNo",
-    #                     g."id" as "extGstTranDId", "gstin", "rate", "cgst", "sgst", "igst", "isInput", g."hsn",
-    #                     t."id" as "extProductTranTranDId", "qty", "price", t."discount",
-    #                     p."id" as "productId", "upcCode", "productCode", "gstRate",  
-    #                         (select "catName" from "CategoryM" where "id" = p."catId") as "catName",
-    #                         (select "brandName" from "BrandM" where "id" = p."brandId" ) as "brandName",
-    #                         "label", "info"
-    #                         from "TranD" d
-    #                             left outer join "ExtGstTranD" g
-    #                                 on d."id" = g."tranDetailsId"
-    #                             left outer join "ExtProductTranTranD" t
-    #                                 on d."id" = t."tranDetailsId"
-    #                             join "ProductM" p
-    #                                 on p."id" = t."productId"
-    #                         where "tranHeaderId" = h."id"
-    #                             and "dc" = 'D'
-    #                 )
-    #                 select json_agg(row_to_json(a)) from cte1 a 
-    #             ) as "sale",
-    #             (
-    #                 with cte2 as (
-    #                     select d."id" as "tranDetailsId", d."accId", "remarks", d."amount", "instrNo",
-    #                         "accClass", "isAutoSubledger", "accName"
-    #                         from "TranD" d
-    #                             JOIN "AccM" a
-    #                                 on a."id" = d."accId"
-    #                             LEFT OUTER JOIN "ExtMiscAccM" e
-    #                                 on a."id" = e."accId"
-    #                             JOIN "AccClassM" m
-    #                                 on m."id" = a."classId"
-    #                         where "tranHeaderId" = h."id"
-    #                             and "dc" = 'C'
-    #                         order by d."id"
-    #                 )
-    #                 select json_agg(row_to_json(b)) from cte2 b
-    #             ) as "creditAccount"
-                
-    #             from "TranH" h
-    #                 where h."id" = %(id)s
-    # ''',
-
-    # "getJson_sale_on_id": '''
-    #     select  h."id" as "tranHeaderId", "tranDate", "remarks", "autoRefNo",
-    #     (
-    #         with cte1 as (
-    #             select d."id" as "tranDetailsId", "accId", "remarks", d."amount",
-    #             g."id" as "extGstTranDId", "gstin", "rate", "cgst", "sgst", "igst", g."hsn",
-    #             t."id" as "extProductTranTranDId", "qty", "price", t."discount",
-    #             p."id" as "productId", "upcCode", "productCode", "gstRate",  
-    #                 (select "catName" from "CategoryM" where "id" = p."catId") as "catName",
-    #                 (select "brandName" from "BrandM" where "id" = p."brandId" ) as "brandName",
-    #                 "label", "info"
-    #                 from "TranD" d
-    #                     left outer join "ExtGstTranD" g
-    #                         on d."id" = g."tranDetailsId"
-    #                     left outer join "ExtProductTranTranD" t
-    #                         on d."id" = t."tranDetailsId"
-    #                     join "ProductM" p
-    #                         on p."id" = t."productId"
-    #                 where "tranHeaderId" = h."id"
-    #                     and "dc" = 'C'
-    #         )
-    #         select json_agg(row_to_json(a)) from cte1 a 
-    #     ) as "sale",        
-    #     row_to_json(c.*) as "contacts"        
-    #     from "TranH" h
-    #         left outer join "Contacts" c
-    #             on c."id" = h."contactsId"
-    #         where h."id" = %(id)s
-    # ''',
-
     "getJson_search_purchase_invoice": '''
         select  h."id", "autoRefNo", "tranDate", h."remarks", "userRefNo",
             string_agg(concat_ws(' ', p."label",  p."info", d."remarks"), ':'	) as "products",
@@ -1351,25 +1271,6 @@ allSqls = {
             ) as "jsonResult"
     ''',
 
-    # "getJson_tranHeader_details1": '''
-    #     with cte1 as (
-    #         select "id", "tranDate", "autoRefNo", "tags", 
-    #                 "remarks" , "userRefNo", "tranTypeId"
-    #         from "TranH"		
-    #             where "id" = %(id)s
-    #     ),
-    #     cte2 as (
-    #         select "id", "accId", "remarks", "dc", "amount", "tranHeaderId", "lineRefNo", "instrNo"
-    #             from "TranD"
-    #                 where "tranHeaderId" = %(id)s
-    #     )
-    #     SELECT
-    #         json_build_object(
-    #             'tranHeader', (SELECT (row_to_json(a)) from cte1 a)
-    #             , 'tranDetails', (SELECT json_agg(row_to_json(b)) from cte2 b)
-    #         ) as "jsonResult"
-    # ''',
-
     "insert_opBal": '''    
         insert into "AccOpBal" ("accId","finYearId","amount","dc", "branchId")
                 values (%(accId)s, %(finYearId)s, %(amount)s, %(dc)s, %(branchId)s)
@@ -1455,9 +1356,13 @@ allSqls = {
                     from "temp1"
                         GROUP BY accId;
 
+            INSERT into temp2(accId, amount)
+                select 4, 0 --capital account has accId = 4
+                    where not exists(select accId from temp2 where accId = 4);
+
             delete from "AccOpBal"
-                where "finYearId" = %(nextFinYearId)s													--change
-                    and "branchId" = %(branchId)s;														--change
+                where ("finYearId" = %(nextFinYearId)s													--change
+                    and "branchId" = %(branchId)s) or (amount = 0);														--change
 
             select coalesce(SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end),0) into profitOrLoss
                 from "AccM" a
