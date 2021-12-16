@@ -1,3 +1,6 @@
+## react-pdf invoice generator
+https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/
+https://pspdfkit.com/blog/2019/create-pdfs-with-react/
 ## party info JS:
 {
   "pin": "700065",
