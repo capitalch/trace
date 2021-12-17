@@ -2,7 +2,7 @@ import _ from 'lodash'
 import Paper from '@material-ui/core/Paper'
 import React, { useState, useEffect } from 'react'
 import { useIbuki } from '../utils/ibuki'
-import { Grid, Table, TableHeaderRow, TableSummaryRow } from '@devexpress/dx-react-grid-material-ui'
+// import { Grid, Table, TableHeaderRow, TableSummaryRow } from '@devexpress/dx-react-grid-material-ui'
 // import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 // import { Send } from '@material-ui/icons'
 // import mock from '../data/mockData.json'
@@ -10,7 +10,7 @@ import { Grid, Table, TableHeaderRow, TableSummaryRow } from '@devexpress/dx-rea
 import './component4.scss'
 
 import { Button } from '@material-ui/core'
-import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
+// import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
 import { ComputerTwoTone } from '@material-ui/icons'
 
 const Component4 = () => {

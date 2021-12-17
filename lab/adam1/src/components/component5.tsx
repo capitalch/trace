@@ -17,7 +17,7 @@ import {
 } from '@material-ui/x-grid'
 // import { DataGrid, useGridApiRef, GridToolbar } from '@material-ui/data-grid'
 import mock from '../data/mock-data.json'
-import { randomInt, randomUserName } from '@material-ui/x-grid-data-generator'
+// import { randomInt, randomUserName } from '@material-ui/x-grid-data-generator'
 let rows: any[] = []
 function Component5() {
     const [, setRefresh] = useState({})

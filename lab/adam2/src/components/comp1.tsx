@@ -6,13 +6,14 @@ function Comp1() {
     </div>
 
     function handlePdf(){
-        const doc = new jsPDF('p','pt')
+        const doc = new jsPDF('p','mm')
         // const options= {
         //     align:'right',
         //     maxWidth:600
         // }
         doc.text('this is first line', 20,20)
-        doc.cell(20,30,200,4,'Cell',12,'right')
+        doc.cell(100,10,100,12,'Cell',12,'right')
+        doc.cell(100,5,100,12,'Cell',12,'right')
         // doc.save('demo.pdf')
         window.open(doc.output('bloburl'))
     }

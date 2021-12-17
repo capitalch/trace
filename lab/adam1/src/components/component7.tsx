@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext, useCallback } from 'rea
 import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro'
 // import Button from '@material-ui/core/Button'
 import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
+// import MuiAlert from '@material-ui/lab/Alert'
 import makeStyles from '@material-ui/styles/makeStyles'
 import { useIbuki, Subject, debounceTime } from '../utils/ibuki'
 import { Component8 } from './component8'
@@ -11,11 +11,11 @@ import { Box, Button, Paper, Theme, useTheme, Typography, Table, TableContainer,
 import { border } from '@material-ui/system'
 import { UserProfileProvider, UserProfileContext, CounterContext } from './user-profile-provider'
 import { Subscription } from 'rxjs'
-import {
-    randomCreatedDate,
-    randomTraderName,
-    randomUpdatedDate,
-} from '@mui/x-data-grid-generator'
+// import {
+//     randomCreatedDate,
+//     randomTraderName,
+//     randomUpdatedDate,
+// } from '@mui/x-data-grid-generator'
 // import { red } from '@material-ui/core/colors'
 // import { TableFooter } from 'material-ui'
 
@@ -125,40 +125,40 @@ const columns = [
     },
 ];
 
-const rows = [
-    {
-        id: 1,
-        name: randomTraderName(),
-        age: 25,
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 2,
-        name: randomTraderName(),
-        age: 36,
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 3,
-        name: randomTraderName(),
-        age: 19,
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 4,
-        name: randomTraderName(),
-        age: 28,
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
-    {
-        id: 5,
-        name: randomTraderName(),
-        age: 23,
-        dateCreated: randomCreatedDate(),
-        lastLogin: randomUpdatedDate(),
-    },
+const rows:any[] = [
+    // {
+    //     id: 1,
+    //     name: randomTraderName(),
+    //     age: 25,
+    //     dateCreated: randomCreatedDate(),
+    //     lastLogin: randomUpdatedDate(),
+    // },
+    // {
+    //     id: 2,
+    //     name: randomTraderName(),
+    //     age: 36,
+    //     dateCreated: randomCreatedDate(),
+    //     lastLogin: randomUpdatedDate(),
+    // },
+    // {
+    //     id: 3,
+    //     name: randomTraderName(),
+    //     age: 19,
+    //     dateCreated: randomCreatedDate(),
+    //     lastLogin: randomUpdatedDate(),
+    // },
+    // {
+    //     id: 4,
+    //     name: randomTraderName(),
+    //     age: 28,
+    //     dateCreated: randomCreatedDate(),
+    //     lastLogin: randomUpdatedDate(),
+    // },
+    // {
+    //     id: 5,
+    //     name: randomTraderName(),
+    //     age: 23,
+    //     dateCreated: randomCreatedDate(),
+    //     lastLogin: randomUpdatedDate(),
+    // },
 ];
