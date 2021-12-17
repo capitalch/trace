@@ -8,7 +8,6 @@ https://pspdfkit.com/blog/2019/create-pdfs-with-react/
   "State": "19",
   "email": "demo@gmail.com",
   "gstin": "19AACCC5685L1Z3",
-  "state": "37",
   "address1": "23 Demo lane, Back portion",
   "address2": "adccs",
   "unitName": "Demo unit",
