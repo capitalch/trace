@@ -1,0 +1,22 @@
+.page {
+    display: flex;
+    font-size: 10pt;
+    width:595pt;
+    // margin: 10mm auto;
+    flex-direction: column;
+    .info-invoice {
+        display: flex;
+        flex-direction: row;
+        column-gap: 10;
+        justify-content: space-between;
+        .info {
+            display: flex;
+            flex-direction: column;
+        }
+        .invoice {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+

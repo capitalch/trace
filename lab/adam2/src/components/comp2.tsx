@@ -6,27 +6,31 @@ import {
     Image,
     StyleSheet,
     PDFViewer,
+    PDFDownloadLink,
 } from '@react-pdf/renderer'
 import ReactPDF from '@react-pdf/renderer'
-function Comp2() {
-    const MyDocument = () => (
-        <Document>
-            <Page size="A4">
-                <View>
-                    <Text>Section #1</Text>
-                </View>
-                <View>
-                    <Text>Section #2</Text>
-                </View>
-            </Page>
-        </Document>
-    )
 
-    return <button 
-    // onClick={() => {
-    //     ReactPDF.render(<MyDocument />,`${__dirname}/example.pdf`)
-    // }}
-    >PDF</button>
+const MyDocument = () => (
+    // <PDFViewer>
+    <Document>
+        <Page size="A4">
+            <View>
+                <Text>Section #1</Text>
+            </View>
+            <View>
+                <Text>Section #2</Text>
+            </View>
+        </Page>
+    </Document>
+    // </PDFViewer>
+)
+
+function Comp2() {
+    return <div>
+    <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
+        {({ loading }) => (loading ? 'Loading document...' : 'Download now!')}
+    </PDFDownloadLink>
+</div>
 }
 
 export { Comp2 }
