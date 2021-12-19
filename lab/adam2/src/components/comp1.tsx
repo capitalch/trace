@@ -1,5 +1,7 @@
 import jsPDF from 'jspdf'
 import './comp1.scss'
+// import * as html2pdf from 'html2pdf'
+// import html from './sample.html'
 function Comp1() {
     return (
         <div>
@@ -10,7 +12,7 @@ function Comp1() {
 
     function MyHtml() {
         return (
-            <div className="page" id="myId">
+            <div className="page" id="myId" >
                 <div className="info-invoice">
                     <div className="info">
                         <b>Capital</b>
@@ -25,14 +27,25 @@ function Comp1() {
 
     function handlePdf() {
         const html = `
-            <div>test</div>
+        <div className="page" id="myId" >
+            <div className="info-invoice">
+                <div className="info">
+                    <b>Capital</b>
+                </div>
+                <div className="invoice">
+                    <b>Bill no:</b>
+                </div>
+            </div>
+        </div>
         `
         const doc: any = new jsPDF('p', 'pt', 'a4')
-        
+
         doc.html(document.getElementById('myId'), {
             callback: (doc: any) => doc.save(),
             margin: 10,
             autoPaging: true,
+            // width:595,
+            // x:0
         })
         // const options= {
         //     align:'right',
