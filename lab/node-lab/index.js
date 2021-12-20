@@ -1,66 +1,33 @@
-const axios = require('axios')
+const puppeteer = require('puppeteer')
 const http = require('http')
+const fs = require('fs')
 
 const server = http.createServer((req, res) => {
     res.end('hello')
 })
 
-// const startDate = Date.now()
-// let endDate
-
-function func1(time) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(`func:${time}`)
-            console.log(`func1:${time}`)
-        }, time)
-    })
-    // return async function f() {
-    //     setTimeout(() => {
-    //         // reject(`func22:${time}`)
-    //         console.log(`func1:${time}`)
-    //     }, time)
-    // }
+async function pup() {
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    const html = fs.readFileSync(`${__dirname}/template3.html`, 'utf8')
+    await page.setContent(html, {
+        waitUntil: 'domcontentloaded'
+      })
+    // await page.goto('https://blog.risingstack.com', {
+    //     waitUntil: 'networkidle0',
+    // })
+    const pdf = await page.pdf({ format: 'A4', path:'abc.pdf' })
+    await browser.close()
 }
+pup()
 
-function func2(time) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            reject(`func22:${time}`)
-            console.log(`func2:${time}`)
-        }, time)
-    })
-}
-
-async function func() {
-    //serial
-    const startDate = Date.now()
-    const val1 = await func1(1000)
-    console.log(val1)
-    console.log(await func1(2000))
-    console.log(await func1(3000))
-    const endDate = Date.now()
-    console.log('Delta:', endDate - startDate)
-}
-
-async function funcP() {
-    try {
-        const startDate = Date.now()
-        await Promise.allSettled([
-            func1(1000),
-            func2(1000),
-            func1(1000),
-            func1(1000),
-        ])
-        // await Promise.all([func1(1000), func2(1000), func1(1000), func1(1000)])
-        const endDate = Date.now()
-        console.log('Delta:', endDate - startDate)
-    } catch (e) {
-        console.log(e.message)
-    }
-}
-
-funcP()
+// (async () => {
+//     const browser = await puppeteer.launch();
+//     const page = await browser.newPage();
+//     await page.goto('https://www.geeksforgeeks.org/');
+//     await page.screenshot({ path: 'GFG.png' });
+//     await browser.close();
+// })();
 
 server.listen(3000, async (err) => {
     console.log('server listening at port 3001')
