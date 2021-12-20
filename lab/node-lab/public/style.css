@@ -149,6 +149,7 @@ table th {
 table .service,
 table .desc {
   text-align: left;
+  color: red;
 }
 
 table td {
