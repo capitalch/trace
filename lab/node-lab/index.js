@@ -5,8 +5,6 @@ const server = http.createServer((req, res) => {
     res.end('hello')
 })
 
-// const startDate = Date.now()
-// let endDate
 
 function func1(time) {
     return new Promise((resolve, reject) => {
@@ -65,3 +63,7 @@ funcP()
 server.listen(3000, async (err) => {
     console.log('server listening at port 3001')
 })
+
+
+// const startDate = Date.now()
+// let endDate
