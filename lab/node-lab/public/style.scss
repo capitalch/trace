@@ -19,7 +19,8 @@ body {
   position: relative;
   width: 21cm;  
   height: 29.7cm; 
-  margin: 0 auto; 
+  /* margin: 10; */
+  /* padding: 10; */
   color: #001028;
   background: #FFFFFF; 
   font-size: 14px; 
@@ -105,7 +106,6 @@ h1 {
   text-align: center;
   border-top: 1px solid #5D6975;
   border-bottom: 1px solid #5D6975;
-  margin: 0 0 2em 0;
 }
 
 h1 small { 

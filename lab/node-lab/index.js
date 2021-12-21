@@ -44,7 +44,8 @@ async function pup () {
     await page.setContent(html, {
         waitUntil: 'domcontentloaded'
     })
-    const pdf = await page.pdf({ format: 'A4', path: 'abc.pdf', printBackground: true })    
+    await page.addStyleTag({path:'public/style.scss'})
+    const pdf = await page.pdf({ format: 'A4', path: 'abc.pdf', printBackground: true,  })    
     await browser.close()
     return pdf
 }

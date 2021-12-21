@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.17.2",
     "puppeteer": "^13.0.0",
-    "sass": "^1.32.11"
+    "sass": "^1.32.11",
+    "scss": "^0.2.4"
   }
 }
