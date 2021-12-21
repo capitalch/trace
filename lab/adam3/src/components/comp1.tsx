@@ -9,9 +9,13 @@ import {
     StyleSheet,
     PDFViewer,
     PDFDownloadLink,
-    BlobProvider
+    BlobProvider,
+    usePDF,
+    pdf
 } from '@react-pdf/renderer'
-import { DataTableCell, Table, TableHeader, TableBody, TableCell } from '@david.kucsai/react-pdf-table'
+// import { DataTableCell, Table, TableHeader, TableBody, TableCell } from '@david.kucsai/react-pdf-table'
+import { useEffect, useState } from 'react';
+import axios from 'axios'
 
 const styles: any = StyleSheet.create({
     page: {
@@ -50,21 +54,35 @@ const Main: any = () => (
 );
 
 function Invoice() {
+    const [, setRefresh] = useState({})
+
+    useEffect(() => {
+        getBlob()
+    }, [])
+
+    async function getBlob() {
+        const blob = await pdf(<Main />).toBlob()
+        const ret = await axios({
+            url: 'http://localhost:5000/trace/pdf',
+            method:'post',
+            headers:{
+                "content-type":"application/pdf"
+            },
+            data:blob
+        })
+        console.log(ret)
+        setRefresh({})
+    }
+
+    const url = 'kkk'
     return (
-        // <BlobProvider document={MyDocument}>
-        //     {({ blob, url, loading, error }) => {
-        //         // Do whatever you need with blob here
-        //         return <div>{url}</div>;
-        //     }}
-        // </BlobProvider>
-        <div>
+        // <div>{url}</div>
             <PDFViewer showToolbar={true} width='800' height='900'>
                 <Main />
             </PDFViewer>
-        </div>
-        // <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
-        //     {({ loading }) => (loading ? 'Loading document...' : 'Download now!')}
-        // </PDFDownloadLink>
+        // // <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
+        // //     {({ loading }) => (loading ? 'Loading document...' : 'Download now!')}
+        // // </PDFDownloadLink>
     )
 }
 
@@ -209,14 +227,14 @@ function CustomerDetails({ invoice }: any) {
 
 function ItemsTable() {
     return (
-        <View style={{marginTop:5}}>
-            <Table 
+        <View style={{ marginTop: 5 }}>
+            {/* <Table
                 data={[
                     { firstName: "John", lastName: "Smith", dob: new Date(2000, 1, 1), country: "Australia", phoneNumber: "xxx-0000-0000" }
                 ]}
             >
                 <TableHeader>
-                    <TableCell  textAlign='right' isHeader={true} includeRightBorder={false} includeLeftBorder={false} includeBottomBorder={false} includeTopBorder={false}>
+                    <TableCell textAlign='right' isHeader={true} includeRightBorder={false} includeLeftBorder={false} includeBottomBorder={false} includeTopBorder={false}>
                         First Name
                     </TableCell>
                     <TableCell includeRightBorder={false} includeLeftBorder={false} includeBottomBorder={false} includeTopBorder={false}>
@@ -239,7 +257,7 @@ function ItemsTable() {
                     <DataTableCell includeRightBorder={false} includeLeftBorder={false} includeBottomBorder={false} includeTopBorder={false} getContent={(r) => r.country} />
                     <DataTableCell includeRightBorder={false} includeLeftBorder={false} includeBottomBorder={false} includeTopBorder={false} getContent={(r) => r.phoneNumber} />
                 </TableBody>
-            </Table>
+            </Table> */}
         </View>
     )
 }

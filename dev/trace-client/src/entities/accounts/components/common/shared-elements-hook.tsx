@@ -1,6 +1,6 @@
-import { makeStyles, Theme, createStyles , } from '../../../../imports/gui-imports'
+import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
-
+import { Document, Line, Page, StyleSheet, Svg, Text, View, } from '@react-pdf/renderer'
 import {
     globalMessages,
     graphqlService,
@@ -66,7 +66,7 @@ function useSharedElements() {
         TraceFullWidthSubmitButton,
         TraceSearchBox,
     } = useTraceMaterialComponents()
-    const { getCurrentMediaSize,isMediumSizeDown, isMediumSizeUp, getCurrentWindowSize } =
+    const { getCurrentMediaSize, isMediumSizeDown, isMediumSizeUp, getCurrentWindowSize } =
         useTraceGlobal()
     const confirm = useConfirm()
     const {
@@ -96,6 +96,7 @@ function useSharedElements() {
         confirm,
         debounceEmit,
         debounceFilterOn,
+        Document,
         doFormRefresh,
         doValidateForm,
         emit,
@@ -145,10 +146,12 @@ function useSharedElements() {
         isValidForm,
         LedgerSubledger,
         LedgerSubledgerCascade,
+        Line,
         manageFormsState,
         map,
         messages,
         mutateGraphql,
+        Page,
         queries,
         queryGraphql,
         ReactForm,
@@ -159,6 +162,9 @@ function useSharedElements() {
         saveForm,
         setInBag,
         setFormError,
+        StyleSheet,
+        Svg,
+        Text,
         toDecimalFormat,
         TraceDialog,
         TraceFullWidthSubmitButton,
@@ -168,6 +174,7 @@ function useSharedElements() {
         useGeneric,
         useTraceMaterialComponents,
         useTraceGlobal,
+        View,
         XXGrid,
     }
 }

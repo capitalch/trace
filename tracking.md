@@ -1,3 +1,4 @@
+
 ## react-pdf invoice generator
 https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/
 https://pspdfkit.com/blog/2019/create-pdfs-with-react/
@@ -105,18 +106,9 @@ https://pspdfkit.com/blog/2019/create-pdfs-with-react/
 }
 
 ## invoice PDF logic
-1. Get complete invoice data from server against id
-2. draw_invoice py
-    a) draw_company_info
-    b) draw_tax_invoice
-    c) draw_bill_to
-    d) draw_ship_to
-    c) draw_item_details
-    d) draw_summary
-3. Byte array pdf send to client
-4. Client click submit, show PDF in a dialog ask for print / SMS / email
-5. Server mecanism for a link, on click opens the PDF of invoice
-6. Email PDF invoice
+1. Get complete invoice data from server against id or on saving of invoice get invoice data in return
+2. Using react-pdf/renderer create pdf and blob of pdf
+3. Show invoice in dialog, options for download, print, email, sms
 
 ## python pdf libs
 borb, reportlab, fpdf2

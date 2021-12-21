@@ -10,7 +10,7 @@ import demjson as demJson
 import re  # Python regex
 from time import sleep
 from urllib.parse import unquote
-from util import getErrorMessage
+from util import getErrorMessage, sendMail
 from entities.authentication.sql import allSqls as authSql
 from .sql import allSqls
 from .artifactsHelper import trialBalanceHelper
@@ -34,7 +34,7 @@ accountsMutation = ObjectType("AccountsMutation")
 # sass.compile(dirname=('entities/accounts/templates/scss',
 #              'entities/accounts/static'))
 traceApp = Blueprint('traceApp', __name__,
-                     template_folder='templates', static_folder='static', url_prefix='/traceApp') #, static_url_path='/trace/view/css' )
+                     template_folder='templates', static_folder='static') # , url_prefix='/traceApp' )
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
@@ -63,16 +63,17 @@ def test_pdf():
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=output.pdf"
     return(response, 200)
-    # pdfkit.from_file('data/bill-template1.html','data/bill-template1.pdf', options )#, configuration=config )
-    # return jsonify('pdf ok'), 200
 
-    # pathTo = 'data/wkhtmltopdf.exe'
-    # config = pdfkit.configuration(wkhtmltopdf=pathTo)
-
+@traceApp.route('/trace/pdf', methods=['POST','GET'])
+def pdf():
+    req = request
+    x = sendMail(['capitalch@gmail.com'], 'test','<b>This is a test mail</b>',attachment=req.data)
+    response = make_response('test')
+    return(response, 200)
 
 @accountsQuery.field("accountsMasterGroupsLedgers")
 def resolve_accounts_masters_groups_ledgers(parent, info):
-    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+    dbName, buZCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     return accountsMasterGroupsLedgersHelper(dbName, buCode)
 
