@@ -6,7 +6,8 @@ function useInvoiceA() {
         page: {
             fontSize: 12,
             flexDirection: 'column',
-            padding: 10
+            paddingTop: 40,
+            margin: 40
         }
     })
     function Main() {
@@ -22,7 +23,7 @@ function useInvoiceA() {
     function InvoiceHeading({ heading }: { heading: string }) {
         return (
             <View>
-                <Text style={{ fontSize: 18, textTransform: 'uppercase', fontWeight: 'bold' }}>{heading}</Text>
+                <Text style={{ fontSize: 25, textTransform: 'uppercase', fontWeight: 'bold' }}>{heading}</Text>
             </View>
         )
     }

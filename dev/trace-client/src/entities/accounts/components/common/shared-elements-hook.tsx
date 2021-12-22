@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
-import { Document, Line, Page, StyleSheet, Svg, Text, View, } from '@react-pdf/renderer'
+import { Document, Line, Page,pdf,PDFViewer, StyleSheet, Svg, Text, View, } from '@react-pdf/renderer'
 import {
     globalMessages,
     graphqlService,
@@ -152,6 +152,8 @@ function useSharedElements() {
         messages,
         mutateGraphql,
         Page,
+        pdf,
+        PDFViewer,
         queries,
         queryGraphql,
         ReactForm,
