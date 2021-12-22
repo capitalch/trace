@@ -1,7 +1,7 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
-import { Button, Typography } from '../../../../imports/gui-imports'
-import { Check, Error } from '../../../../imports/icons-import'
+import { Button, ButtonGroup, IconButton, Typography } from '../../../../imports/gui-imports'
+import { Check, EmailIcon, Error, PrintIcon, SmsIcon } from '../../../../imports/icons-import'
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 
@@ -33,14 +33,13 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         Total credits:{' '}
                         {toDecimalFormat(arbitraryData.summary.amount)}
                     </Typography>
-
                     <Typography
                         variant="subtitle1"
                         style={{
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                        arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -49,12 +48,25 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
+
+                    <ButtonGroup size='small' variant='contained'>
+                        <IconButton size='small' disabled={false}>
+                            <SmsIcon className='sms-icon' />
+                        </IconButton>
+                        <IconButton size='small' disabled={false}>
+                            <EmailIcon className='mail-icon' />
+                        </IconButton>
+                        <IconButton size='small' disabled={false}>
+                            <PrintIcon className='print-icon' />
+                        </IconButton>
+                    </ButtonGroup>
+
                     <Button
-                        className="submit"
+                        // className="submit"
                         variant="contained"
                         size="small"
                         color="secondary"

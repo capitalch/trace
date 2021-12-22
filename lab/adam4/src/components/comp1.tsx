@@ -23,7 +23,7 @@ function Comp1() {
     )
 
     function handlePup(event:any) {
-        axios.get('http://localhost:5001', {
+        axios.get('http://localhost:5002', {
             responseType: 'blob',
             headers: {
                 'Accept': 'application/pdf'

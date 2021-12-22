@@ -1,3 +1,13 @@
+## PDF Invoice works
+1. Creation of invoice at client
+2. Dialog box show invoice
+3. Get invoice json data from server
+4. Server mail invoice
+5. server SMS invoice
+6. Placement of icon buttons for print, mail and SMS
+
+
+
 
 ## react-pdf invoice generator
 https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/

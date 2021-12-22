@@ -7,9 +7,10 @@ import { SaleItems } from './sale-items'
 import { SaleFooter } from './sale-footer'
 import { SaleView } from './sale-view'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
-import { useReactToPrint } from 'react-to-print'
-import pspdfkit from 'pspdfkit'
+// import { useReactToPrint } from 'react-to-print'
+// import pspdfkit from 'pspdfkit'
 import { useRef } from 'react'
+// import axios from 'axios'
 
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
@@ -18,10 +19,10 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
         saleType,
         drillDownEditAttributes
     )
-    const pdfRef: any = useRef()
-    const handlePrint = useReactToPrint({
-        content: () => pdfRef.current,
-    })
+    // const pdfRef: any = useRef()
+    // const handlePrint = useReactToPrint({
+    //     content: () => pdfRef.current,
+    // })
     return (
         <div className={classes.content}>
             <SaleCrown
@@ -45,7 +46,7 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={handlePrint}
+                    onClick={handlePdfPrint}
                     color="primary">
                     Print
                 </Button>
@@ -64,33 +65,41 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                 <SaleView drillDownEditAttributes={drillDownEditAttributes} />
             </div>
 
-            {/* <div ref={pdfRef}> */}
-                <PDFViewer>
-                    <InvoiceA />
-                </PDFViewer>
-            {/* </div> */}
+            {/* <PDFViewer>
+                <InvoiceA />
+            </PDFViewer> */}
         </div>
     )
 
-    async function handlePdfPrint() {
+    async function handlePdfPrint() {        
         const blob = await pdf(<InvoiceA />).toBlob()
         const fileURL: any = URL.createObjectURL(blob)
-        // pspdfkit
-        //     .load({
-        //         document: fileURL,
-        //         container: pdfRef.current,
-        //     })
-        //     .then((instance) => {
-        //         instance.print()
-        //     })
-        // const w: any = window.open(
-        //     fileURL,
-        //     '_blank',
-        //     'height=400,width=600,top=200, left=200'
-        // )
-
+        const w: any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")
         // w.print()
     }
 }
 
 export { Sales }
+
+// const response = await axios.get('http://localhost:5002', {
+//     responseType: 'blob',
+//     headers: {
+//         'Accept': 'application/pdf'
+//     }
+// })
+// const blob:any = new Blob([response.data], { type: 'application/pdf' })
+//     const fileURL = URL.createObjectURL(blob)
+//     const w:any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")            
+//     w.print()
+
+// axios.get('http://localhost:5002', {
+//     responseType: 'blob',
+//     headers: {
+//         'Accept': 'application/pdf'
+//     }
+// }).then((response) => {
+//     const blob:any = new Blob([response.data], { type: 'application/pdf' })
+//     const fileURL = URL.createObjectURL(blob)
+//     const w:any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")            
+//     w.print()
+// })

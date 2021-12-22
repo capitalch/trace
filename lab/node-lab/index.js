@@ -25,7 +25,7 @@ const allowCrossDomain = function (req, res, next) {
 }
 app.use(allowCrossDomain)
 
-const PORT = 5001
+const PORT = 5002
 server = app.listen(PORT, function () {
     console.log(`Listening on port ${server.address().port}`)
 })

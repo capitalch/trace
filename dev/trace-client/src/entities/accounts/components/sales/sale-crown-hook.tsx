@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttributes: any) {
@@ -275,6 +276,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: theme.palette.blue.main,
                     fontWeight: 'bold',
                     marginLeft: 'auto',
+                    '& .print-icon':{
+                        color: theme.palette.orange.light
+                    },
+                    '& .mail-icon':{
+                        color: theme.palette.amber.dark
+                    },
+                    '& .sms-icon':{
+                        color: theme.palette.indigo.light
+                    }
                 },
             },
         },
