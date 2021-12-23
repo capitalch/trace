@@ -73,7 +73,7 @@ def pdf():
 
 @accountsQuery.field("accountsMasterGroupsLedgers")
 def resolve_accounts_masters_groups_ledgers(parent, info):
-    dbName, buZCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     return accountsMasterGroupsLedgersHelper(dbName, buCode)
 

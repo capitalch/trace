@@ -14,100 +14,186 @@ https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/
 https://pspdfkit.com/blog/2019/create-pdfs-with-react/
 ## party info JS:
 {
-  "pin": "700065",
-  "tin": "NNNNNNNNNNNNNLLLLLL",
-  "State": "19",
-  "email": "demo@gmail.com",
-  "gstin": "19AACCC5685L1Z3",
-  "address1": "23 Demo lane, Back portion",
-  "address2": "adccs",
-  "unitName": "Demo unit",
-  "shortName": "DemoCompany"
+    "pin": "700067",
+    "email": "invest@gmail.com",
+    "gstin": "19AACCC5685L1Z3",
+    "state": "19",
+    "webSite": "www.capital-investments.com",
+    "address1": "12, Ko Chi Minch Sarani, Efteel Towers",
+    "address2": "Behind Kutub Minar",
+    "unitName": "Capital Investments Pvt Ltd",
+    "landPhone": "23551699",
+    "shortName": "capitalInvestments",
+    "mobileNumber": "9155632145"
 }
 
-## sale data on id
+## sale data on id corporate
 {
   "jsonResult": {
     "tranH": {
-      "id": 9944,
-      "tranDate": "2021-11-24",
+      "id": 9931,
+      "tranDate": "2021-11-17",
       "userRefNo": null,
       "remarks": null,
-      "autoRefNo": "head\\SAL\\2911\\2021",
+      "autoRefNo": "head\\SAL\\2908\\2021",
       "jData": null
     },
     "billTo": null,
     "businessContacts": {
-      "id": 2,
-      "contactName": "ABC services pvt ltd",
-      "contactCode": "abcServices",
-      "mobileNumber": "8888888888",
+      "id": 4,
+      "contactName": "Billenium sales pvt ltd",
+      "contactCode": "billeniumSales",
+      "mobileNumber": "9555421232",
       "otherMobileNumber": "",
-      "landPhone": "",
-      "email": "hhh@ss.com",
+      "landPhone": "235512254",
+      "email": "bille@fgg.com",
       "otherEmail": "",
       "jAddress": [
         {
-          "pin": "700013",
+          "pin": "7000013",
           "city": "Kolkata",
           "state": "West Bengal",
           "country": "India",
-          "address1": "12 J. L. Nehru road",
-          "address2": "1st lane"
+          "address1": "23, Tootie lane",
+          "address2": ""
         }
       ],
       "descr": "",
-      "accId": 150,
+      "accId": 159,
       "jData": null,
-      "gstin": null,
+      "gstin": "37AADCB2230M2ZR",
       "timestamp": "2021-03-25T09:58:01+00:00",
       "stateCode": 19
     },
     "tranD": [
       {
-        "id": 19773,
+        "id": 19745,
         "accId": 167,
         "dc": "C",
-        "amount": 6652,
+        "amount": 5600,
         "instrNo": null,
         "remarks": null
       },
       {
-        "id": 19774,
-        "accId": 150,
+        "id": 19746,
+        "accId": 159,
         "dc": "D",
-        "amount": 6652,
+        "amount": 5600,
         "instrNo": null,
         "remarks": ""
       }
     ],
     "extGstTranD": {
-      "id": 9669,
-      "gstin": null,
-      "cgst": 356.36,
-      "sgst": 356.36,
+      "id": 9663,
+      "gstin": "37AADCB2230M2ZR",
+      "cgst": 300,
+      "sgst": 300,
       "igst": 0
     },
     "salePurchaseDetails": [
       {
-        "id": 9581,
-        "productId": 13,
+        "id": 9570,
+        "productId": 12,
         "qty": 1,
-        "price": 5939.29,
-        "priceGst": 6652,
+        "price": 5000,
+        "priceGst": 5600,
         "discount": 0,
-        "cgst": 356.36,
-        "sgst": 356.36,
+        "cgst": 300,
+        "sgst": 300,
         "igst": 0,
-        "amount": 6652,
-        "hsn": 122200,
+        "amount": 5600,
+        "hsn": 2222,
         "gstRate": 12,
-        "productCode": "1004",
-        "upcCode": "5",
+        "productCode": "1003",
+        "upcCode": "4",
         "catName": "OLED",
         "brandName": "SONY",
         "info": "",
-        "label": "DD-R31",
+        "label": "eeewwswqw",
+        "serialNumbers": "",
+        "remarks": null
+      }
+    ]
+  }
+}
+## individual
+{
+  "jsonResult": {
+    "tranH": {
+      "id": 9663,
+      "tranDate": "2021-07-14",
+      "userRefNo": "32375",
+      "remarks": "Service+ job no: J11174682",
+      "autoRefNo": "head\\SAL\\2853\\2021",
+      "jData": null
+    },
+    "billTo": {
+      "id": 250,
+      "contactName": "*****",
+      "mobileNumber": null,
+      "otherMobileNumber": null,
+      "landPhone": null,
+      "email": null,
+      "descr": null,
+      "jData": null,
+      "anniversaryDate": "1900-01-01",
+      "address1": "*****",
+      "address2": null,
+      "country": "India",
+      "state": "West Bengal",
+      "city": "Kolkata",
+      "gstin": null,
+      "pin": "999999",
+      "dateOfBirth": "1900-01-01",
+      "stateCode": null,
+      "timestamp": "2021-07-07T14:19:46.333481+00:00"
+    },
+    "businessContacts": null,
+    "tranD": [
+      {
+        "id": 19271,
+        "accId": 167,
+        "dc": "C",
+        "amount": 250,
+        "instrNo": null,
+        "remarks": null
+      },
+      {
+        "id": 19272,
+        "accId": 118,
+        "dc": "D",
+        "amount": 250,
+        "instrNo": null,
+        "remarks": "Service+ sale"
+      }
+    ],
+    "extGstTranD": {
+      "id": 9509,
+      "gstin": null,
+      "cgst": 19.07,
+      "sgst": 19.07,
+      "igst": 0
+    },
+    "salePurchaseDetails": [
+      {
+        "id": 9468,
+        "productId": 28,
+        "qty": 1,
+        "price": 211.86,
+        "priceGst": 250,
+        "discount": 0,
+        "cgst": 19.07,
+        "sgst": 19.07,
+        "igst": 0,
+        "amount": 250,
+        "hsn": 998729,
+        "gstRate": 18,
+        "productCode": "1018",
+        "upcCode": "14",
+        "catName": "OLED",
+        "brandName": "SONY",
+        "info": "Exclusive",
+        "label": "25\" Thin clear",
         "serialNumbers": "",
         "remarks": null
       }
