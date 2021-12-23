@@ -307,7 +307,6 @@ const invoice = {
         state: 'West Bengal',
         stateCode: 19,
     },
-
     items: [
         {
             sno: 1,
