@@ -14,18 +14,110 @@ https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/
 https://pspdfkit.com/blog/2019/create-pdfs-with-react/
 ## party info JS:
 {
-  "pin": "700065",
-  "tin": "NNNNNNNNNNNNNLLLLLL",
-  "State": "19",
-  "email": "demo@gmail.com",
-  "gstin": "19AACCC5685L1Z3",
-  "address1": "23 Demo lane, Back portion",
-  "address2": "adccs",
-  "unitName": "Demo unit",
-  "shortName": "DemoCompany"
+  "pin":"700069",
+  "tin":"NNNNNNNNNNNNNLLLLLL",
+  "State":"19",
+  "email":"capital@gmail.com",
+  "gstin":"19AACCC5685L1Z3",
+  "state":"19",
+  "webSite":"https://www.capital-chowringhee.com",
+  "address1":"23 Demo lane, Back portion",
+  "address2":"Ultadanga main road",
+  "unitName":"Demo India Pvt Ltd",
+  "shortName":"DemoIndia",
+  "mobileNumber":"5555666542"
 }
 
 ## sale data on id
+{
+  "jsonResult": {
+    "tranH": {
+      "id": 9931,
+      "tranDate": "2021-11-17",
+      "userRefNo": null,
+      "remarks": null,
+      "autoRefNo": "head\\SAL\\2908\\2021",
+      "jData": null
+    },
+    "billTo": null,
+    "businessContacts": {
+      "id": 4,
+      "contactName": "Billenium sales pvt ltd11",
+      "contactCode": "billeniumSales11",
+      "mobileNumber": "7777977778",
+      "otherMobileNumber": "",
+      "landPhone": "",
+      "email": "ddd@dd1.co",
+      "otherEmail": "",
+      "jAddress": [
+        {
+          "pin": "7000013",
+          "city": "Kolkata",
+          "state": "West Bengal",
+          "country": "India",
+          "address1": "Tootie lane",
+          "address2": ""
+        }
+      ],
+      "descr": "",
+      "accId": 159,
+      "jData": null,
+      "gstin": "37AADCB2230M2ZR",
+      "timestamp": "2021-03-25T09:58:01+00:00",
+      "stateCode": 20
+    },
+    "tranD": [
+      {
+        "id": 19745,
+        "accId": 167,
+        "dc": "C",
+        "amount": 5600,
+        "instrNo": null,
+        "remarks": null
+      },
+      {
+        "id": 19746,
+        "accId": 159,
+        "dc": "D",
+        "amount": 5600,
+        "instrNo": null,
+        "remarks": ""
+      }
+    ],
+    "extGstTranD": {
+      "id": 9663,
+      "gstin": "37AADCB2230M2ZR",
+      "cgst": 300,
+      "sgst": 300,
+      "igst": 0
+    },
+    "salePurchaseDetails": [
+      {
+        "id": 9570,
+        "productId": 12,
+        "qty": 1,
+        "price": 5000,
+        "priceGst": 5600,
+        "discount": 0,
+        "cgst": 300,
+        "sgst": 300,
+        "igst": 0,
+        "amount": 5600,
+        "hsn": 2222,
+        "gstRate": 12,
+        "productCode": "1003",
+        "upcCode": "4",
+        "catName": "OLED",
+        "brandName": "SONY",
+        "info": "",
+        "label": "eeewwswqw",
+        "serialNumbers": "",
+        "remarks": null
+      }
+    ]
+  }
+}
+
 {
   "jsonResult": {
     "tranH": {

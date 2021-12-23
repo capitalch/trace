@@ -55,6 +55,7 @@ export {
     TextareaAutosize,
     TextField,
     Toolbar,
+    Tooltip,
     Typography,
     useMediaQuery,
 } from '@material-ui/core'
