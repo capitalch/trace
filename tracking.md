@@ -6,9 +6,6 @@
 5. server SMS invoice
 6. Placement of icon buttons for print, mail and SMS
 
-
-
-
 ## react-pdf invoice generator
 https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/
 https://pspdfkit.com/blog/2019/create-pdfs-with-react/
