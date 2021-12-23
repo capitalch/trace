@@ -1,7 +1,19 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
-import { Button, ButtonGroup, IconButton, Typography } from '../../../../imports/gui-imports'
-import { Check, EmailIcon, Error, PrintIcon, SmsIcon } from '../../../../imports/icons-import'
+import {
+    Button,
+    ButtonGroup,
+    IconButton,
+    Tooltip,
+    Typography,
+} from '../../../../imports/gui-imports'
+import {
+    Check,
+    EmailIcon,
+    Error,
+    PrintIcon,
+    SmsIcon,
+} from '../../../../imports/icons-import'
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 
@@ -9,13 +21,13 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getError, handleSubmit, meta } = useSaleCrown(
+    const { getError, handleBillPrint, handleSubmit, meta } = useSaleCrown(
         arbitraryData,
         saleType,
         drillDownEditAttributes
     )
 
-    const { toDecimalFormat } = useSharedElements()
+    const { toDecimalFormat, TraceDialog } = useSharedElements()
 
     return (
         <div className={classes.content}>
@@ -39,7 +51,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                        arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -48,21 +60,29 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
-
-                    <ButtonGroup size='small' variant='contained'>
-                        <IconButton size='small' disabled={false}>
-                            <SmsIcon className='sms-icon' />
-                        </IconButton>
-                        <IconButton size='small' disabled={false}>
-                            <EmailIcon className='mail-icon' />
-                        </IconButton>
-                        <IconButton size='small' disabled={false}>
-                            <PrintIcon className='print-icon' />
-                        </IconButton>
+                    <ButtonGroup size="small" variant="contained">
+                        <Tooltip title="Send SMS">
+                            <IconButton size="small" disabled={false}>
+                                <SmsIcon className="sms-icon" />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Send mail">
+                            <IconButton size="small" disabled={false}>
+                                <EmailIcon className="mail-icon" />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Print">
+                            <IconButton
+                                size="small"
+                                disabled={false}
+                                onClick={handleBillPrint}>
+                                <PrintIcon className="print-icon" />
+                            </IconButton>
+                        </Tooltip>
                     </ButtonGroup>
 
                     <Button
@@ -83,6 +103,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                     </Button>
                 </div>
             </div>
+            <TraceDialog meta={meta} />
         </div>
     )
 }

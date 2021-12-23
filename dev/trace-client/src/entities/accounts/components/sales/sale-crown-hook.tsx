@@ -1,9 +1,22 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { InvoiceA } from '../pdf/invoices/invoiceA'
 
-function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttributes: any) {
+function useSaleCrown(
+    arbitraryData: any,
+    saleType: string,
+    drillDownEditAttributes: any
+) {
     const [, setRefresh] = useState({})
     const {
         emit,
@@ -12,6 +25,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
+        PDFViewer,
     } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
@@ -26,11 +40,12 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => <></>,
+            actions: () => {},
         },
         title: saleType === 'sal' ? 'Sales' : 'Sales return',
     })
+    const pre = meta.current
 
     function getError() {
         const ab = arbitraryData
@@ -38,7 +53,8 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
 
         function headError() {
             function dateError() {
-                errorObject.dateError = isInvalidDate(ab.tranDate) || (!ab.tranDate)
+                errorObject.dateError =
+                    isInvalidDate(ab.tranDate) || !ab.tranDate
                 return errorObject.dateError
             }
             function saleAccountError() {
@@ -78,7 +94,8 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                         !!!curr.qty ||
                         arbitraryData.saleErrorMethods.errorMethods.getSlNoError(
                             arbitraryData.lineItems[index]
-                        ) || (curr.gstRate > 30)
+                        ) ||
+                        curr.gstRate > 30
                     prev.isError = prev.isError || curr.isError
                     return prev
                 },
@@ -105,10 +122,12 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         }
 
         function debitCreditError() {
-            errorObject.debitCreditError = (Math.abs(
-                arbitraryData.footer.amount -
-                arbitraryData.summary.amount
-            ) === 0) ? false : true
+            errorObject.debitCreditError =
+                Math.abs(
+                    arbitraryData.footer.amount - arbitraryData.summary.amount
+                ) === 0
+                    ? false
+                    : true
             return errorObject.debitCreditError
         }
 
@@ -118,6 +137,18 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         const d = debitCreditError()
         const ret: boolean = h || i || f || d
         return ret
+    }
+
+    async function handleBillPrint() {
+        const dialog = pre.dialogConfig
+        dialog.title = 'Bill'
+        dialog.content = () => (
+            <PDFViewer showToolbar={true} width={600} height={800} >
+                <InvoiceA />
+            </PDFViewer>
+        )
+        pre.showDialog = true
+        pre.isMounted && setRefresh({})
     }
 
     async function handleSubmit() {
@@ -138,8 +169,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                 emit('SALES-HOOK-CHANGE-TAB', 3)
                 // arbitraryData.salesHookChangeTab(3)
                 arbitraryData.saleViewHookFetchData()
-            }
-            else {
+            } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
             ad.isViewBack = false // no go back to view
@@ -159,12 +189,14 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                 userRefNo: ad.userRefNo,
                 remarks: ad.commonRemarks,
                 tags: undefined,
-                jData: ad.shipTo?.address1 ? JSON.stringify({ shipTo: ad.shipTo }) : null,
+                jData: ad.shipTo?.address1
+                    ? JSON.stringify({ shipTo: ad.shipTo })
+                    : null,
                 finYearId: finYearId,
                 branchId: branchId,
                 posId: '1',
                 autoRefNo: ad.autoRefNo,
-                tranTypeId: (ad.saleType === 'sal') ? 4 : 9,
+                tranTypeId: ad.saleType === 'sal' ? 4 : 9,
                 details: [],
             }
             obj.data.push(item)
@@ -185,7 +217,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             const saleDataRow: any = {
                 id: ad.rowData.id || undefined,
                 accId: ad.rowData.accId,
-                dc: (ad.saleType === 'sal') ? 'C' : 'D',
+                dc: ad.saleType === 'sal' ? 'C' : 'D',
                 amount: ad.summary.amount,
                 details: [],
             }
@@ -194,11 +226,11 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             for (let item of ad.footer.items) {
                 saleTranD.data.push({
                     accId: item.accId,
-                    dc: (ad.saleType === 'sal') ? 'D' : 'C',
+                    dc: ad.saleType === 'sal' ? 'D' : 'C',
                     amount: item.amount,
                     remarks: item.remarks,
                     instrNo: item.instrNo,
-                    id: item.id || undefined
+                    id: item.id || undefined,
                 })
             }
 
@@ -212,7 +244,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                         cgst: ad.summary.cgst,
                         sgst: ad.summary.sgst,
                         igst: ad.summary.igst,
-                        isInput: (ad.saleType === 'sal') ? false : true,
+                        isInput: ad.saleType === 'sal' ? false : true,
                     },
                 ],
             }
@@ -250,7 +282,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         }
     }
 
-    return { handleSubmit, getError, meta }
+    return { handleBillPrint, handleSubmit, getError, meta }
 }
 
 export { useSaleCrown }
@@ -265,7 +297,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 backgroundColor: theme.palette.grey[100],
                 '& .crown-title': {
-                    color: theme.palette.secondary.main
+                    color: theme.palette.secondary.main,
                 },
                 '& .crown-content': {
                     display: 'flex',
@@ -276,15 +308,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: theme.palette.blue.main,
                     fontWeight: 'bold',
                     marginLeft: 'auto',
-                    '& .print-icon':{
-                        color: theme.palette.orange.light
+                    '& .print-icon': {
+                        color: theme.palette.orange.light,
                     },
-                    '& .mail-icon':{
-                        color: theme.palette.amber.dark
+                    '& .mail-icon': {
+                        color: theme.palette.amber.dark,
                     },
-                    '& .sms-icon':{
-                        color: theme.palette.indigo.light
-                    }
+                    '& .sms-icon': {
+                        color: theme.palette.indigo.light,
+                    },
                 },
             },
         },

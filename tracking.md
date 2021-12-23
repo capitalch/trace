@@ -6,25 +6,22 @@
 5. server SMS invoice
 6. Placement of icon buttons for print, mail and SMS
 
-
-
-
 ## react-pdf invoice generator
 https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/
 https://pspdfkit.com/blog/2019/create-pdfs-with-react/
 ## party info JS:
 {
-    "pin": "700067",
-    "email": "invest@gmail.com",
-    "gstin": "19AACCC5685L1Z3",
-    "state": "19",
-    "webSite": "www.capital-investments.com",
-    "address1": "12, Ko Chi Minch Sarani, Efteel Towers",
-    "address2": "Behind Kutub Minar",
-    "unitName": "Capital Investments Pvt Ltd",
-    "landPhone": "23551699",
-    "shortName": "capitalInvestments",
-    "mobileNumber": "9155632145"
+  "pin": "700067",
+  "email": "invest@gmail.com",
+  "gstin": "19AACCC5685L1Z3",
+  "state": "19",
+  "webSite": "www.capital-investments.com",
+  "address1": "12, Ko Chi Minch Sarani, Efteel Towers",
+  "address2": "Behind Kutub Minar",
+  "unitName": "Capital Investments Pvt Ltd",
+  "landPhone": "23551699",
+  "shortName": "capitalInvestments",
+  "mobileNumber": "9155632145"
 }
 
 ## sale data on id corporate

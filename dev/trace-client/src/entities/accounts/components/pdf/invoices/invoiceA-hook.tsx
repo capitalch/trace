@@ -1,34 +1,42 @@
-import { useSharedElements, } from '../../common/shared-elements-hook'
-function useInvoiceA() {
-    const { Document, Line, Page, StyleSheet, Svg, Text, View, } = useSharedElements()
+import { useSharedElements } from '../../common/shared-elements-hook'
+function useInvoiceA(invoice: any) {
+    const { Document, Line, Page, StyleSheet, Svg, Text, View } =
+        useSharedElements()
 
-    const styles = StyleSheet.create({
-        page: {
-            fontSize: 12,
-            flexDirection: 'column',
-            paddingTop: 40,
-            margin: 40
-        }
-    })
     function Main() {
+        const styles = StyleSheet.create({
+            page: {
+                fontSize: 12,
+                flexDirection: 'column',
+                padding:20,
+            },
+        })
+
         return (
             <Document>
-                <Page size='A4' style={styles.page}>
-                    <InvoiceHeading heading='TAX INVOICE' />
+                <Page size="A4" style={styles.page}>
+                    <InvoiceHeading heading="TAX INVOICE" />
                 </Page>
             </Document>
         )
+        
+        function InvoiceHeading({ heading }: { heading: string }) {
+            return (
+                <View>
+                    <Text
+                        style={{
+                            fontSize: 25,
+                            textTransform: 'uppercase',
+                            fontWeight: 'bold',
+                        }}>
+                        {heading}
+                    </Text>
+                </View>
+            )
+        }
     }
 
-    function InvoiceHeading({ heading }: { heading: string }) {
-        return (
-            <View>
-                <Text style={{ fontSize: 25, textTransform: 'uppercase', fontWeight: 'bold' }}>{heading}</Text>
-            </View>
-        )
-    }
-
-    return ({ Main })
+    return { Main }
 }
 export { useInvoiceA }
 
