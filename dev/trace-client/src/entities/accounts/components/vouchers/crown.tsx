@@ -1,8 +1,18 @@
-import { useState, useEffect, useContext } from '../../../../imports/regular-imports'
 import {
-    makeStyles, Theme, createStyles, Paper,
+    useState,
+    useEffect,
+    useContext,
+} from '../../../../imports/regular-imports'
+import {
+    IconButton,
+    makeStyles,
+    Theme,
+    Tooltip,
+    createStyles,
+    Paper,
     Typography,
 } from '../../../../imports/gui-imports'
+import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrown } from './crown-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
@@ -13,6 +23,7 @@ function Crown({ meta }: any) {
     const arbitraryData = ctx?.vouchers
     const {
         checkError,
+        handlePrint,
         ResetButton,
         SubmitButton,
         setRefresh,
@@ -20,23 +31,15 @@ function Crown({ meta }: any) {
         SummaryGst,
     } = useCrown(meta)
 
-    const {
-        emit,
-        filterOn,
-    } = useSharedElements()
+    const { emit, filterOn } = useSharedElements()
 
     useEffect(() => {
-        const subs1 = filterOn('CROWN-REFRESH').subscribe(
-            () => {
-                meta.current.errorMessage = ''
-                checkError(arbitraryData)
-                setRefresh({})
-                emit(
-                    'CROWN2-REFRESH',
-                    meta.current.errorMessage
-                )
-            }
-        )
+        const subs1 = filterOn('CROWN-REFRESH').subscribe(() => {
+            meta.current.errorMessage = ''
+            checkError(arbitraryData)
+            setRefresh({})
+            emit('CROWN2-REFRESH', meta.current.errorMessage)
+        })
         return () => {
             subs1.unsubscribe()
         }
@@ -51,7 +54,18 @@ function Crown({ meta }: any) {
             <Typography variant="subtitle2" className="error-message">
                 {meta.current.errorMessage}
             </Typography>
-            <SubmitButton ad={arbitraryData} meta={meta} />
+            <div>
+                <Tooltip title="Print">
+                    <IconButton
+                        className="print-button"
+                        size="small"
+                        disabled={false}
+                        onClick={handlePrint}>
+                        <PrintIcon className="print-icon" />
+                    </IconButton>
+                </Tooltip>
+                <SubmitButton ad={arbitraryData} meta={meta} />
+            </div>
         </Paper>
     )
 }
@@ -62,22 +76,18 @@ function Crown1({ meta }: any) {
     const arbitraryData = ctx?.vouchers
     // const arbitraryData = useContext(VoucherContext)
     const [, setRefresh] = useState({})
+    const { filterOn } = useSharedElements()
     const {
-        filterOn,
-
-    } = useSharedElements()
-    const {
+        handlePrint,
         ResetButton,
         SubmitButton,
         SummaryDebitsCredits,
         SummaryGst,
     } = useCrown(meta)
     useEffect(() => {
-        const subs1 = filterOn('CROWN2-REFRESH').subscribe(
-            (d: any) => {
-                setRefresh({})
-            }
-        )
+        const subs1 = filterOn('CROWN2-REFRESH').subscribe((d: any) => {
+            setRefresh({})
+        })
         return () => {
             subs1.unsubscribe()
         }
@@ -90,7 +100,18 @@ function Crown1({ meta }: any) {
             <Typography variant="subtitle2" className="error-message">
                 {meta.current.errorMessage}
             </Typography>
-            <SubmitButton ad={arbitraryData} meta={meta} />
+            <div>
+                <Tooltip title="Print">
+                    <IconButton
+                        className="print-button"
+                        size="small"
+                        disabled={false}
+                        onClick={handlePrint}>
+                        <PrintIcon className="print-icon" />
+                    </IconButton>
+                </Tooltip>
+                <SubmitButton ad={arbitraryData} meta={meta} />
+            </div>
         </Paper>
     )
 }
@@ -124,10 +145,16 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 fontWeight: 'bold',
             },
 
-            // '& .submit-button': {},
             '& .reset-button': {
                 backgroundColor: theme.palette.blue.main,
                 color: theme.palette.getContrastText(theme.palette.blue.main),
+            },
+
+            '& .print-button': {
+                marginRight: '1rem',
+                '& .print-icon': {
+                    color: theme.palette.indigo.dark,
+                },
             },
         },
     })

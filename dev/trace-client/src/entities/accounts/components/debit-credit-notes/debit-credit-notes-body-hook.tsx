@@ -33,96 +33,12 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     })
     const accounts = arbitraryData.body.accounts
 
-    // arbitraryData.body = arbitraryData.body || {
-    //     amount: 0.0,
-    //     autoRefNo: undefined,
-    //     commonRemarks: undefined,
-    //     ledgerSubledgerCredit: {},
-    //     ledgerSubledgerDebit: {},
-    //     lineRefNoDebit: undefined,
-    //     lineRefNoCredit: undefined,
-    //     lineRemarksDebit: undefined,
-    //     lineRemarksCredit: undefined,
-    //     tranDate: arbitraryData?.body?.tranDate || moment().format(isoFormat),
-    //     tranDetailsIdDebit: undefined,
-    //     tranDetailsIdCredit: undefined,
-    //     tranHeaderIdDebit: undefined,
-    //     tranHeaderIdCredit: undefined,
-    //     userRefNo: undefined,
-    //     isViewBack: false,
-    // }
-
     useEffect(() => {
         meta.current.isMounted = true
         setAccounts()
         setRefresh({})
-        // const pipe1: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-        //     map((d: any) =>
-        //         d.data.allAccounts.filter((el: any) => {
-        //             const accClasses = ['debtor', 'creditor']
-        //             let condition =
-        //                 accClasses.includes(el.accClass) &&
-        //                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        //             return condition
-        //         })
-        //     )
-        // )
-
-        // const pipe2: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-        //     map((d: any) =>
-        //         d.data.allAccounts.filter(
-        //             (el: any) =>
-        //                 ['purchase'].includes(el.accClass) &&
-        //                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        //         )
-        //     )
-        // )
-
-        // const pipe3: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-        //     map((d: any) =>
-        //         d.data.allAccounts.filter(
-        //             (el: any) =>
-        //                 ['sale'].includes(el.accClass) &&
-        //                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        //         )
-        //     )
-        // )
-
-        // const subs1 = pipe1.subscribe((d: any) => {
-        //     accounts.debtorCreditorLedgerAccounts = d.map((el: any) => {
-        //         return {
-        //             label: el.accName,
-        //             value: el.id,
-        //             accLeaf: el.accLeaf,
-        //             isAutoSubledger: !!el.isAutoSubledger,
-        //         } // !! converts falsy to boolean false
-        //     })
-        // })
-
-                    // const subs2 = pipe2.subscribe((d: any) => {
-                    //     accounts.purchaseLedgerAccounts = d.map((el: any) => {
-                    //         return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
-                    //     })
-                    // })
-
-                    // const subs3 = pipe3.subscribe((d: any) => {
-                    //     accounts.saleLedgerAccounts = d.map((el: any) => {
-                    //         return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
-                    //     })
-                    // })
-
-                    // const subs4: any = hotFilterOn(
-                    //     'DATACACHE-SUCCESSFULLY-LOADED'
-                    // ).subscribe((d: any) => {
-                    //     accounts.allAccounts = d.data.allAccounts
-                    // })
-        
         return () => {
             meta.current.isMounted = false
-            // subs1.unsubscribe()
-            // subs2.unsubscribe()
-            // subs3.unsubscribe()
-            // subs4.unsubscribe()
         }
     }, [])
 
@@ -264,9 +180,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .no': {
                     color: theme.palette.blue.main,
                 },
-                '& .submit': {
+                '& .print-submit': {
                     marginLeft: 'auto',
                     marginRight: theme.spacing(2),
+                    '& .print-button':{
+                        marginRight: theme.spacing(1),
+                        '& .print-icon':{
+                            color: theme.palette.indigo.dark
+                        }
+                    }
                 },
             },
             '& .body': {
@@ -305,11 +227,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         maxWidth: '20rem',
                         width: '100%',
                     },
-                    '& .submit': {
+                    '& .print-submit': {
                         marginTop: theme.spacing(8),
                         marginLeft: 'auto',
                         marginRight: theme.spacing(2),
                         height: theme.spacing(4),
+                        '& .print-button':{
+                            marginRight: theme.spacing(1),
+                            '& .print-icon':{
+                                color: theme.palette.indigo.dark
+                            }
+                        }
                     },
                 },
                 '& .gutter': {

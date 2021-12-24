@@ -6,14 +6,16 @@ import {
 } from '../../../../imports/regular-imports'
 import {
     Button,
+    Tooltip,
     Typography,
     Checkbox,
     FormControlLabel,
+    IconButton,
     InputAdornment,
     Radio,
     TextField,
 } from '../../../../imports/gui-imports'
-import { Error, Check } from '../../../../imports/icons-import'
+import { Error, Check, PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
@@ -30,25 +32,13 @@ function PurchaseBody({ purchaseType }: any) {
     const ad = multiData.purchases
     const errorObject = ad.errorObject
     const {
-        // allErrorMethods,
-        // getError,
-        // handleClear,
         handleIsGstInvoice,
+        handlePrint,
         preHandlePurchaseCashCredit,
         handleSubmit,
         meta,
         queryGstin,
     } = usePurchaseBody(ad, purchaseType)
-    // const {
-    //     getDateError,
-    //     getGstError,
-    //     getGstinError,
-    //     getInvoiceError,
-    //     getInvoiceAmountError,
-    //     getOtherAccountError,
-    //     getPurchaseAccountError,
-    //     getQtyError,
-    // } = allErrorMethods()
 
     const { accountsMessages, emit, getMappedAccounts, filterOn, TraceDialog } =
         useSharedElements()
@@ -171,7 +161,6 @@ function PurchaseBody({ purchaseType }: any) {
                     }}
                     value={ad.commonRemarks || ''}
                 />
-
                 <PurchaseCashCredit />
 
                 {/* gst invoice  */}
@@ -185,7 +174,18 @@ function PurchaseBody({ purchaseType }: any) {
                     }
                     label="Gst invoice"
                 />
-                <SubmitComponent />
+                <div className="print-submit-button">
+                    <Tooltip title="Print">
+                        <IconButton
+                            className='print-button'                            
+                            size="small"
+                            disabled={false}
+                            onClick={handlePrint}>
+                            <PrintIcon className="print-icon" />
+                        </IconButton>
+                    </Tooltip>
+                    <SubmitComponent />
+                </div>
             </div>
         )
     }
@@ -485,8 +485,18 @@ function PurchaseBody({ purchaseType }: any) {
                     }
                     label="Gst invoice"
                 />
-                {/* submit */}
-                <SubmitComponent />
+                <div className="print-submit-button">
+                    <Tooltip title="Print">
+                        <IconButton
+                            className='print-button'                            
+                            size="small"
+                            disabled={false}
+                            onClick={handlePrint}>
+                            <PrintIcon className="print-icon" />
+                        </IconButton>
+                    </Tooltip>
+                    <SubmitComponent />
+                </div>
             </div>
         )
     }
