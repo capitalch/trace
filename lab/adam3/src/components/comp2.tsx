@@ -40,6 +40,7 @@ function Comp2() {
         }
         i.invoiceInfo = {
             title: 'Tax Invoice',
+            titleRight:'Original for recipient',
             invoiceNo: ti.tranH.autoRefNo,
             invoiceDate: ti.tranH.tranDate,
             type: ti.tranH.tranTypeId == 4 ? 'Sale' : 'Sale Ret',
@@ -63,7 +64,7 @@ function Comp2() {
             address1: billTo.address1,
             address2: billTo.address2,
             pin: billTo.pin || billTo.jAddress?.pin,
-            phone: ''.concat(billTo.mobileNumber, ' ', billTo.landPhone),
+            phone: ''.concat(billTo.mobileNumber || '', ' ', billTo.landPhone || ''),
             email: billTo.email,
             gstin: billTo.gstin,
             stateName: billTo.state || billTo.jAddress?.state,
@@ -84,6 +85,11 @@ function Comp2() {
                 x.hsn
             ),
             qty: x.qty,
+            cgst: x.cgst,
+            sgst: x.sgst,
+            igst: x.igst,
+            gst:x.cgst + x.sgst + x.igst,
+            aggr: (x.price * x.qty) - x.discount,
             price: x.price,
             pricegst: x.priceGst,
             gstRate: x.gstRate,
@@ -95,6 +101,7 @@ function Comp2() {
             cgst: gst?.cgst,
             sgst: gst?.sgst,
             igst: gst?.igst,
+            // aggr: amou (cgst 
             amount: 0, // calculate amount from tranD
         }
         i.transactions = {}
@@ -152,7 +159,7 @@ const traceInvoiceIndividual = {
             gstin: null,
             pin: '999999',
             dateOfBirth: '1900-01-01',
-            stateCode: null,
+            stateCode: 19,
             timestamp: '2021-07-07T14:19:46.333481+00:00',
         },
         businessContacts: null,
