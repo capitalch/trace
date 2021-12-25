@@ -243,6 +243,10 @@ function useCrown(meta: any) {
         return { totalDebits, totalCredits, gstDebits, gstCredits }
     }
 
+    function handlePrint(){
+
+    }
+
     function ResetButton() {
         return (
             <Button
@@ -455,6 +459,7 @@ function useCrown(meta: any) {
 
     return {
         checkError,
+        handlePrint,
         ResetButton,
         SubmitButton,
         setRefresh,
