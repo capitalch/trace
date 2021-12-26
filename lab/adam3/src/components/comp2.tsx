@@ -13,7 +13,7 @@ function Comp2() {
 
     console.log(invoiceData)
     return (
-        <PDFViewer width={600} height={800}>
+        <PDFViewer width={760} height={800}>
             <InvoicePdf invoiceData={invoiceData} />
         </PDFViewer>
     )
@@ -28,7 +28,7 @@ function Comp2() {
             shipTo: any
             items: any[]
             summary: any
-            transactions: any
+            receipts: any[]
         } = {
             invoiceInfo: null,
             companyInfo: null,
@@ -36,11 +36,11 @@ function Comp2() {
             shipTo: null,
             items: [],
             summary: null,
-            transactions: null,
+            receipts: [],
         }
         i.invoiceInfo = {
             title: 'Tax Invoice',
-            titleRight:'Original for recipient',
+            titleRight: 'Original for recipient',
             invoiceNo: ti.tranH.autoRefNo,
             invoiceDate: ti.tranH.tranDate,
             type: ti.tranH.tranTypeId == 4 ? 'Sale' : 'Sale Ret',
@@ -70,7 +70,17 @@ function Comp2() {
             stateName: billTo.state || billTo.jAddress?.state,
             stateCode: billTo.stateCode,
         }
-        i.shipTo = {}
+        const shipTo = ti.tranH.jData?.shipTo
+        i.shipTo = {
+            name: shipTo?.contactName || '',
+            address1: shipTo?.address1 || '',
+            address2: shipTo?.address2 || '',
+            pin: shipTo?.pin || '',
+            phone: shipTo?.mobileNumber || '',
+            email: shipTo?.email || '',
+            state: shipTo?.state || '',
+            country: shipTo?.country || ''
+        }
         i.items = ti.salePurchaseDetails.map((x: any) => ({
             desc: ''.concat(
                 x.catName,
@@ -88,7 +98,7 @@ function Comp2() {
             cgst: x.cgst,
             sgst: x.sgst,
             igst: x.igst,
-            gst:x.cgst + x.sgst + x.igst,
+            gst: x.cgst + x.sgst + x.igst,
             aggr: (x.price * x.qty) - x.discount,
             price: x.price,
             pricegst: x.priceGst,
@@ -97,14 +107,34 @@ function Comp2() {
             amount: x.amount,
         }))
         const gst = ti.extGstTranD
+        const amt = 20000
         i.summary = {
-            cgst: gst?.cgst,
-            sgst: gst?.sgst,
-            igst: gst?.igst,
-            // aggr: amou (cgst 
-            amount: 0, // calculate amount from tranD
+            cgst: gst?.cgst || 0.00,
+            sgst: gst?.sgst || 0.00,
+            igst: gst?.igst || 0.00,
+            amount: 20000,
+            aggr: amt -  ((gst?.cgst || 0) + (gst?.cgst || 0) + (gst?.igst || 0)),
+             // calculate amount from tranD
         }
-        i.transactions = {}
+        i.receipts = [{
+            type: 'credit card',
+            instrument: '23223',
+            remarks:'Citi Bank',
+            amount: 2000
+        },
+        {
+            type: 'debit card',
+            instrument: '28873',
+            remarks:'HDFC Bank',
+            amount: 11000
+        },
+        {
+            type: 'ETransfer',
+            instrument: '78778888888',
+            remarks:'PAYTM',
+            amount: 1000
+        }
+    ]
         return i
     }
 
@@ -131,89 +161,373 @@ const traceCompany = {
 }
 
 const traceInvoiceIndividual = {
-    jsonResult: {
-        tranH: {
-            id: 9663,
-            tranDate: '2021-07-14',
-            userRefNo: '32375',
-            remarks: 'Service+ job no: J11174682',
-            autoRefNo: 'head\\SAL\\2853\\2021',
-            jData: null,
-            tranTypeId: 4,
-        },
-        billTo: {
-            id: 250,
-            contactName: '*****',
-            mobileNumber: null,
-            otherMobileNumber: null,
-            landPhone: null,
-            email: null,
-            descr: null,
-            jData: null,
-            anniversaryDate: '1900-01-01',
-            address1: '*****',
-            address2: null,
-            country: 'India',
-            state: 'West Bengal',
-            city: 'Kolkata',
-            gstin: null,
-            pin: '999999',
-            dateOfBirth: '1900-01-01',
-            stateCode: 19,
-            timestamp: '2021-07-07T14:19:46.333481+00:00',
-        },
-        businessContacts: null,
-        tranD: [
-            {
-                id: 19271,
-                accId: 167,
-                dc: 'C',
-                amount: 250,
-                instrNo: null,
-                remarks: null,
-            },
-            {
-                id: 19272,
-                accId: 118,
-                dc: 'D',
-                amount: 250,
-                instrNo: null,
-                remarks: 'Service+ sale',
-            },
-        ],
-        extGstTranD: {
-            id: 9509,
-            gstin: null,
-            cgst: 19.07,
-            sgst: 19.07,
-            igst: 0,
-        },
-        salePurchaseDetails: [
-            {
-                id: 9468,
-                productId: 28,
-                qty: 1,
-                price: 211.86,
-                priceGst: 250,
-                discount: 0,
-                cgst: 19.07,
-                sgst: 19.07,
-                igst: 0,
-                amount: 250,
-                hsn: 998729,
-                gstRate: 18,
-                productCode: '1018',
-                upcCode: '14',
-                catName: 'OLED',
-                brandName: 'SONY',
-                info: 'Exclusive',
-                label: '25" Thin clear',
-                serialNumbers: '',
-                remarks: null,
-            },
-        ],
-    },
-}
+    "jsonResult":{
+       "tranH":{
+          "id":9945,
+          "tranDate":"2021-11-28",
+          "userRefNo":null,
+          "remarks":null,
+          "autoRefNo":"head\\SAL\\2912\\2021",
+          "jData":{
+             "shipTo":{
+                "pin":"755587",
+                "city":"Kol",
+                "email":"csd@gmail.com",
+                "state":"WB",
+                "country":"India",
+                "address1":"12 Jagmohan Dalmia Street",
+                "contactName":"Ambala enterprises",
+                "mobileNumber":"9875655445"
+             }
+          },
+          "tranTypeId":4
+       },
+       "billTo":{
+          "id":143,
+          "contactName":"Blaze Clay",
+          "mobileNumber":"7104049395",
+          "otherMobileNumber":"5943599701",
+          "landPhone":null,
+          "email":"sed.facilisis@Aliquam.com",
+          "descr":null,
+          "jData":null,
+          "anniversaryDate":null,
+          "address1":"Ap #706-340 Non St.",
+          "address2":"4281 Iaculis Street",
+          "country":"Antarctica",
+          "state":"Alberta",
+          "city":"Breton",
+          "gstin":null,
+          "pin":"51213",
+          "dateOfBirth":null,
+          "stateCode":null,
+          "timestamp":"2021-03-25T09:56:39.710278+00:00"
+       },
+       "businessContacts":null,
+       "tranD":[
+          {
+             "id":19775,
+             "accId":167,
+             "dc":"C",
+             "amount":44000,
+             "instrNo":null,
+             "remarks":null
+          },
+          {
+             "id":19776,
+             "accId":118,
+             "dc":"D",
+             "amount":44000,
+             "instrNo":null,
+             "remarks":""
+          }
+       ],
+       "extGstTranD":{
+          "id":9670,
+          "gstin":null,
+          "cgst":0,
+          "sgst":0,
+          "igst":0
+       },
+       "salePurchaseDetails":[
+          {
+             "id":9582,
+             "productId":10,
+             "qty":2,
+             "price":22000,
+             "priceGst":22000,
+             "discount":0,
+             "cgst":100,
+             "sgst":200,
+             "igst":0,
+             "amount":44000,
+             "hsn":55542,
+             "gstRate":18,
+             "productCode":"1001",
+             "upcCode":"2",
+             "catName":"OLED",
+             "brandName":"SONY",
+             "info":"",
+             "label":"REC-002 This is new but good model, good for nothing, for testing",
+             "serialNumbers":"333,rrr",
+             "remarks":null
+          },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-002 This is new but good model, good for nothing, for testing",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         },{
+            "id":9582,
+            "productId":10,
+            "qty":2,
+            "price":22000,
+            "priceGst":22000,
+            "discount":0,
+            "cgst":100,
+            "sgst":200,
+            "igst":0,
+            "amount":44000,
+            "hsn":55542,
+            "gstRate":18,
+            "productCode":"1001",
+            "upcCode":"2",
+            "catName":"OLED",
+            "brandName":"SONY",
+            "info":"",
+            "label":"REC-001",
+            "serialNumbers":"333,rrr",
+            "remarks":null
+         }
+       ]
+    }
+ }
 
 const traceInvoiceParty = {
     jsonResult: {

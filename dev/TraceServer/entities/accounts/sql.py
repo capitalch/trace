@@ -1129,7 +1129,7 @@ allSqls = {
 
     'getJson_sale_purchase_on_id': '''
         with cte1 as (
-            select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData", "tranTypeId
+            select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData", "tranTypeId"
                 from "TranH"
                     where "id" = %(id)s
         ),
