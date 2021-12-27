@@ -28,7 +28,7 @@ function useComp2() {
                 paddingTop: 10,
                 paddingLeft: 20,
                 paddingRight: 20,
-                paddingBottom: 100,
+                paddingBottom: 20,
                 fontFamily: 'Helvetica',
             },
             pageNumber: {
@@ -41,15 +41,12 @@ function useComp2() {
                 color: 'grey',
             },
             summaryBlock: {
-                // position: 'absolute',
                 paddingTop: 8,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 paddingBottom: 8,
                 borderBottom: 1,
                 borderTop: 1,
-                // bottom: 20,
-                // left: 20
             },
             footer: {
                 position: 'absolute',
@@ -60,7 +57,6 @@ function useComp2() {
                 width: '100%',
                 left: 20,
             },
-
             normal: {
                 fontSize: 10,
                 marginTop: 2,
@@ -115,7 +111,7 @@ function useComp2() {
                         fontWeight: 'bold',
                     },
                     gstin: {
-                        marginTop: 5,
+                        marginTop: 3,
                         fontSize: 12,
                         fontWeight: 'bold',
                     },
@@ -161,6 +157,7 @@ function useComp2() {
                         fontWeight: 'bold',
                         fontSize: 14,
                         marginTop: 5,
+                        textTransform: 'uppercase',
                     },
                     buyersCopy: {
                         fontSize: 10,
@@ -181,12 +178,15 @@ function useComp2() {
                 const ii = invoiceData.invoiceInfo
                 return (
                     <View style={styles.headerInvoice}>
-                        <Text style={styles.taxInvoice}>
-                            {invoiceData.invoiceInfo.title}
-                        </Text>
-                        <Text style={styles.buyersCopy}>
-                            {invoiceData.invoiceInfo.titleRight}
-                        </Text>
+                        <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems:'center' }}>
+                            <Text style={styles.taxInvoice}>
+                                {invoiceData.invoiceInfo.title}
+                            </Text>
+                            <Text style={styles.buyersCopy}>
+                                {invoiceData.invoiceInfo.titleRight}
+                            </Text>
+                        </View>
+
                         <Text style={styles.invoiceNo}>
                             Invoice #: {ii.invoiceNo}
                         </Text>
@@ -196,9 +196,9 @@ function useComp2() {
                         <Text style={gStyles.normal}>
                             {''.concat('Type: ', ii.type)}
                         </Text>
-                        <Text style={gStyles.normal}>
+                        {/* <Text style={gStyles.normal}>
                             {''.concat('Terms: ', ii.terms)}
-                        </Text>
+                        </Text> */}
                     </View>
                 )
             }
@@ -224,6 +224,7 @@ function useComp2() {
                 bold: {
                     fontSize: 12,
                     fontWeight: 'bold',
+                    marginTop: 2,
                 },
             })
             const ib = invoiceData.billTo
@@ -357,8 +358,8 @@ function useComp2() {
                         <View
                             style={{
                                 flexDirection: 'row',
-                                paddingTop: 5,
-                                paddingBottom: 5,
+                                paddingTop: 3,
+                                // paddingBottom: 5,
                             }}
                             key={keyGen()}>
                             <Text style={[gStyles.normal, { width: 20 }]}>
@@ -440,7 +441,7 @@ function useComp2() {
                     },
                 })
                 return (
-                    <View style={styles.summary} debug>
+                    <View style={styles.summary}>
                         <View
                             style={{
                                 fontWeight: 'bold',
@@ -518,9 +519,7 @@ function useComp2() {
                         )
                     })
                     return (
-                        <View style={{ flexDirection: 'column' }} debug>
-                            {rows}
-                        </View>
+                        <View style={{ flexDirection: 'column' }}>{rows}</View>
                     )
                     function keyGen() {
                         return ++counter
@@ -551,8 +550,7 @@ function useComp2() {
                         style={{
                             flexDirection: 'column',
                             justifyContent: 'flex-end',
-                        }}
-                        debug>
+                        }}>
                         <Text></Text>
                         <Text></Text>
                         <Text style={styles.signatoryItem}>
@@ -577,30 +575,20 @@ function useComp2() {
             )
         }
 
-        // function Footer() {
-        //     return (
-        //         <View style={[gStyles.footer]} >
-        //             <Text style={{ fontSize: 10 }}>
-        //                 One lac twenty thousand only
-        //             </Text>
-        //             <Text
-        //                 style={{
-        //                     fontSize: 12,
-        //                     fontWeight: 'bold',
-        //                     textDecoration: 'underline',
-        //                 }}>
-        //                 Amount payable: 1200000
-        //             </Text>
-        //         </View>
-        //     )
-        // }
-
         function Footer() {
             return (
-                <View style={[gStyles.footer]} 
-                render = {()=><Text>Test</Text>} fixed
-                >
-                    
+                <View style={[gStyles.footer]}>
+                    <Text style={{ fontSize: 12 }}>
+                        One lac twenty thousand only
+                    </Text>
+                    <Text
+                        style={{
+                            fontSize: 12,
+                            fontWeight: 'bold',
+                            textDecoration: 'underline',
+                        }}>
+                        Amount payable: 1200000
+                    </Text>
                 </View>
             )
         }
@@ -620,18 +608,3 @@ function useComp2() {
     return { InvoicePdf }
 }
 export { useComp2 }
-
-// function HorLine() {
-//     return (
-//         <Svg height={15} fixed>
-//             <Line
-//                 x1="0"
-//                 y1="10"
-//                 x2='590'
-//                 y2="10"
-//                 strokeWidth={0.5}
-//                 stroke="rgb(0,0,0)"
-//             />
-//         </Svg>
-//     )
-// }

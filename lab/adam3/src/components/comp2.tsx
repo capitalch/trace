@@ -1,13 +1,10 @@
 import { PDFViewer } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
-import { useComp2 } from './comp2a-hook'
+import { useComp2 } from './comp2-hook'
 function Comp2() {
     const [, setRefresh] = useState({})
     const { InvoicePdf } = useComp2()
 
-    // useEffect(() => {
-    //     setRefresh({})
-    // }, [])
     const invoiceData = getInvoiceData(traceCompany, traceInvoiceIndividual)
     processInvoiceData(invoiceData)
 

@@ -1,9 +1,9 @@
 ## PDF Invoice works
-1. Re placement of Tax invoice, change of fonts, realign headers
-2. Creation of Summary
-3. Payment details
-4. Terms field
-5. Format of date and money
+1. Date and number format
+2. Amount in words library
+3. Preprocess: Type, receipts, total amount from TranD (sale), cgst, sgst, igst
+4. 
+5. 
 6. 
 
 ## react-pdf invoice generator
