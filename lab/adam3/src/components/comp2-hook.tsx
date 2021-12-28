@@ -25,10 +25,10 @@ function useComp2() {
         const gStyles = StyleSheet.create({
             page: {
                 flexDirection: 'column',
-                paddingTop: 10,
-                paddingLeft: 20,
-                paddingRight: 20,
-                paddingBottom: 20,
+                paddingTop: 20,
+                paddingLeft: 30,
+                paddingRight: 30,
+                paddingBottom: 30,
                 fontFamily: 'Helvetica',
             },
             pageNumber: {
@@ -50,19 +50,19 @@ function useComp2() {
             },
             footer: {
                 position: 'absolute',
-                bottom: 20,
+                bottom: 30,
                 fontWeight: 'bold',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 width: '100%',
-                left: 20,
+                left: 30,
             },
             normal: {
-                fontSize: 10,
+                fontSize: 8,
                 marginTop: 2,
             },
             bold: {
-                fontSize: 10,
+                fontSize: 8,
                 marginTop: 2,
             },
         })
@@ -107,16 +107,16 @@ function useComp2() {
                         width: '65%',
                     },
                     companyName: {
-                        fontSize: 18,
+                        fontSize: 14,
                         fontWeight: 'bold',
                     },
                     gstin: {
                         marginTop: 3,
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: 'bold',
                     },
                     address: {
-                        fontSize: 10,
+                        fontSize: 8,
                     },
                 })
                 const ci = invoiceData.companyInfo
@@ -155,12 +155,12 @@ function useComp2() {
                 const styles = StyleSheet.create({
                     taxInvoice: {
                         fontWeight: 'bold',
-                        fontSize: 14,
+                        fontSize: 12,
                         marginTop: 5,
                         textTransform: 'uppercase',
                     },
                     buyersCopy: {
-                        fontSize: 10,
+                        fontSize: 8,
                         color: 'gray',
                         marginTop: 3,
                     },
@@ -170,7 +170,7 @@ function useComp2() {
                         width: '33%',
                     },
                     invoiceNo: {
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: 'bold',
                         marginTop: 3,
                     },
@@ -222,7 +222,7 @@ function useComp2() {
                     width: '33%',
                 },
                 bold: {
-                    fontSize: 12,
+                    fontSize: 10,
                     fontWeight: 'bold',
                     marginTop: 2,
                 },
@@ -232,7 +232,7 @@ function useComp2() {
             return (
                 <View style={styles.SubHeaderBlock}>
                     <View style={styles.customerDetailsCont}>
-                        <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
+                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}>
                             Customer Details
                         </Text>
                         <Text style={styles.bold}>
@@ -429,7 +429,7 @@ function useComp2() {
                 const styles = StyleSheet.create({
                     summary: {
                         flexDirection: 'column',
-                        fontSize: 11,
+                        fontSize: 9,
                         textAlign: 'right',
                         marginTop: 5,
                     },
@@ -479,12 +479,12 @@ function useComp2() {
                     header: {
                         flexDirection: 'row',
                         fontWeight: 'bold',
-                        fontSize: 9,
+                        fontSize: 8,
                         textDecoration: 'underline',
                     },
                     receiptItems: {
                         flexDirection: 'row',
-                        fontSize: 9,
+                        fontSize: 8,
                     },
                 })
                 function Header() {
@@ -540,7 +540,7 @@ function useComp2() {
             function Signatory() {
                 const styles = StyleSheet.create({
                     signatoryItem: {
-                        fontSize: 10,
+                        fontSize: 8,
                         fontWeight: 'bold',
                         // width: 130
                     },
@@ -583,7 +583,7 @@ function useComp2() {
                     </Text>
                     <Text
                         style={{
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: 'bold',
                             textDecoration: 'underline',
                         }}>
