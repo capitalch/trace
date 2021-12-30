@@ -25,16 +25,19 @@ function useComp2() {
         const gStyles = StyleSheet.create({
             page: {
                 flexDirection: 'column',
-                paddingTop: 20,
+                // paddingTop: 20,
                 paddingLeft: 30,
                 paddingRight: 30,
                 paddingBottom: 30,
+                marginTop: 20,
+                marginBottom:50,
+
                 fontFamily: 'Helvetica',
             },
             pageNumber: {
                 position: 'absolute',
                 fontSize: 8,
-                bottom: 5,
+                bottom: 8,
                 left: 0,
                 right: 0,
                 textAlign: 'center',
@@ -44,13 +47,14 @@ function useComp2() {
                 paddingTop: 8,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                paddingBottom: 8,
+                marginBottom: 8,
+                paddingBottom:5,
                 borderBottom: 1,
                 borderTop: 1,
             },
             footer: {
                 position: 'absolute',
-                bottom: 30,
+                bottom: 40,
                 fontWeight: 'bold',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -104,7 +108,7 @@ function useComp2() {
                     headerCompany: {
                         flexDirection: 'column',
                         marginTop: 8,
-                        width: '65%',
+                        width: '60%',
                     },
                     companyName: {
                         fontSize: 14,
@@ -178,7 +182,12 @@ function useComp2() {
                 const ii = invoiceData.invoiceInfo
                 return (
                     <View style={styles.headerInvoice}>
-                        <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems:'center' }}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
                             <Text style={styles.taxInvoice}>
                                 {invoiceData.invoiceInfo.title}
                             </Text>
@@ -196,9 +205,6 @@ function useComp2() {
                         <Text style={gStyles.normal}>
                             {''.concat('Type: ', ii.type)}
                         </Text>
-                        {/* <Text style={gStyles.normal}>
-                            {''.concat('Terms: ', ii.terms)}
-                        </Text> */}
                     </View>
                 )
             }
@@ -210,12 +216,12 @@ function useComp2() {
                     marginTop: 5,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingBottom: 5,
-                    borderBottom: 1,
+                    paddingBottom: 7,
+                    // borderBottom: 1,
                 },
                 customerDetailsCont: {
                     flexDirection: 'column',
-                    width: '65%',
+                    width: '60%',
                 },
                 shippingAddressCont: {
                     flexDirection: 'column',
@@ -280,14 +286,7 @@ function useComp2() {
         }
 
         function ItemsTable({ invoiceData }: any) {
-            const styles = StyleSheet.create({
-                ItemsTable: {
-                    paddingTop: 5,
-                    flexDirection: 'row',
-                    paddingBottom: 5,
-                    // borderBottom: 1,
-                },
-            })
+            
             return (
                 <View>
                     <TableHeader />
@@ -296,57 +295,65 @@ function useComp2() {
             )
 
             function TableHeader() {
+                const styles = StyleSheet.create({
+                    header: {
+                        paddingTop: 5,
+                        flexDirection: 'row',
+                        paddingBottom: 5,
+                        marginBottom: 5,
+                    },
+                })
                 return (
-                    <View fixed>
-                        <View style={[styles.ItemsTable, { borderBottom: 1 }]}>
-                            <Text style={[gStyles.bold, { width: 20 }]}>#</Text>
-                            <Text style={[gStyles.bold, { width: 200 }]}>
-                                Items
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.bold,
-                                    { width: 30, textAlign: 'right' },
-                                ]}>
-                                Qty
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.bold,
-                                    { width: 60, textAlign: 'right' },
-                                ]}>
-                                Rate
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.bold,
-                                    { width: 40, textAlign: 'right' },
-                                ]}>
-                                Disc
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.bold,
-                                    { width: 80, textAlign: 'right' },
-                                ]}>
-                                Aggregate
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.bold,
-                                    { width: 70, textAlign: 'right' },
-                                ]}>
-                                Tax amount
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.bold,
-                                    { width: 80, textAlign: 'right' },
-                                ]}>
-                                Amount
-                            </Text>
-                        </View>
+                    // <View fixed>
+                    <View style={[styles.header, { borderBottom: 1 }]} fixed>
+                        <Text style={[gStyles.bold, { width: 20 }]}>#</Text>
+                        <Text style={[gStyles.bold, { width: 200 }]}>
+                            Items
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 30, textAlign: 'right' },
+                            ]}>
+                            Qty
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 60, textAlign: 'right' },
+                            ]}>
+                            Rate
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 40, textAlign: 'right' },
+                            ]}>
+                            Disc
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 80, textAlign: 'right' },
+                            ]}>
+                            Aggregate
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 70, textAlign: 'right' },
+                            ]}>
+                            Tax amount
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 80, textAlign: 'right' },
+                            ]}>
+                            Amount
+                        </Text>
                     </View>
+                    // </View>
                 )
             }
 
@@ -358,8 +365,9 @@ function useComp2() {
                         <View
                             style={{
                                 flexDirection: 'row',
-                                paddingTop: 3,
-                                // paddingBottom: 5,
+                                // paddingTop: 5,
+                                // marginTop: 5,
+                                paddingBottom: 5,
                             }}
                             key={keyGen()}>
                             <Text style={[gStyles.normal, { width: 20 }]}>
@@ -435,9 +443,11 @@ function useComp2() {
                     },
                     label: {
                         width: 100,
+                        marginBottom: 3,
                     },
                     value: {
                         width: 70,
+                        marginBottom: 3,
                     },
                 })
                 return (
@@ -481,10 +491,12 @@ function useComp2() {
                         fontWeight: 'bold',
                         fontSize: 8,
                         textDecoration: 'underline',
+                        marginBottom: 2,
                     },
                     receiptItems: {
                         flexDirection: 'row',
                         fontSize: 8,
+                        marginBottom: 2,
                     },
                 })
                 function Header() {
@@ -578,7 +590,7 @@ function useComp2() {
         function Footer() {
             return (
                 <View style={[gStyles.footer]}>
-                    <Text style={{ fontSize: 12 }}>
+                    <Text style={{ fontSize: 10 }}>
                         One lac twenty thousand only
                     </Text>
                     <Text
