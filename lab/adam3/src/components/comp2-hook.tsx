@@ -28,10 +28,10 @@ function useComp2() {
                 // paddingTop: 20,
                 paddingLeft: 30,
                 paddingRight: 30,
+                // paddingBottom: 30,
+                paddingTop: 20,
+                // marginBottom:30,
                 paddingBottom: 30,
-                marginTop: 20,
-                marginBottom:50,
-
                 fontFamily: 'Helvetica',
             },
             pageNumber: {
@@ -44,7 +44,8 @@ function useComp2() {
                 color: 'grey',
             },
             summaryBlock: {
-                paddingTop: 8,
+                paddingTop: 5,
+                // marginTop: 8,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom: 8,
@@ -54,7 +55,7 @@ function useComp2() {
             },
             footer: {
                 position: 'absolute',
-                bottom: 40,
+                bottom: 30,
                 fontWeight: 'bold',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -93,7 +94,7 @@ function useComp2() {
                     borderBottom: 1,
                     paddingBottom: 5,
                     borderBottomColor: 'grey',
-                    marginBottom: 1,
+                    marginBottom: 5,
                 },
             })
             return (
@@ -213,7 +214,7 @@ function useComp2() {
         function SubHeaderBlock({ invoiceData }: any) {
             const styles = StyleSheet.create({
                 SubHeaderBlock: {
-                    marginTop: 5,
+                    // marginTop: 5,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     paddingBottom: 7,
