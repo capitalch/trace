@@ -11,6 +11,7 @@ import {
     Check,
     EmailIcon,
     Error,
+    Preview,
     PrintIcon,
     SmsIcon,
 } from '../../../../imports/icons-import'
@@ -21,7 +22,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getError, handleBillPrint, handleSubmit, meta } = useSaleCrown(
+    const { getError, handleBillPreview, handleSubmit, meta } = useSaleCrown(
         arbitraryData,
         saleType,
         drillDownEditAttributes
@@ -64,8 +65,8 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             )
                         )}
                     </Typography>
-                    <ButtonGroup size="small" variant="contained">
-                        <Tooltip title="Send SMS">
+                    {/* <ButtonGroup size="small" variant="contained"> */}
+                    {/* <Tooltip title="Send SMS">
                             <IconButton size="small" disabled={false}>
                                 <SmsIcon className="sms-icon" />
                             </IconButton>
@@ -74,16 +75,16 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             <IconButton size="small" disabled={false}>
                                 <EmailIcon className="mail-icon" />
                             </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Print">
-                            <IconButton
-                                size="small"
-                                disabled={false}
-                                onClick={handleBillPrint}>
-                                <PrintIcon className="print-icon" />
-                            </IconButton>
-                        </Tooltip>
-                    </ButtonGroup>
+                        </Tooltip> */}
+                    <Tooltip title="Preview">
+                        <IconButton
+                            size="small"
+                            disabled={false}
+                            onClick={handleBillPreview}>
+                            <Preview className="preview-icon" />
+                        </IconButton>
+                    </Tooltip>
+                    {/* </ButtonGroup> */}
 
                     <Button
                         // className="submit"
@@ -102,8 +103,8 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         Submit
                     </Button>
                 </div>
-            </div>
-            <TraceDialog meta={meta} />
+            </div>            
+            <TraceDialog meta={meta}  />
         </div>
     )
 }

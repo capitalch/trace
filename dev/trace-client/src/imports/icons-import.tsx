@@ -56,6 +56,7 @@ export {
     PageviewTwoTone,
     Payment,
     People,
+    Preview,
     Print as PrintIcon,
     Receipt,
     Reorder,

@@ -2,15 +2,13 @@ import { PDFViewer } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
 import { useComp2 } from './comp2-hook'
 function Comp2() {
-    const [, setRefresh] = useState({})
     const { InvoicePdf } = useComp2()
-
     const invoiceData = getInvoiceData(traceCompany, traceInvoiceIndividual)
     processInvoiceData(invoiceData)
 
     console.log(invoiceData)
     return (
-        <PDFViewer width={760} height={800}>
+        <PDFViewer width={760} height={800} >
             <InvoicePdf invoiceData={invoiceData} />
         </PDFViewer>
     )

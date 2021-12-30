@@ -1,36 +1,19 @@
 import {
     Page,
     Document,
-    Font,
     View,
-    Svg,
-    Line,
     Text,
-    Image,
     StyleSheet,
-    PDFViewer,
-    PDFDownloadLink,
-    BlobProvider,
-    usePDF,
-    pdf,
 } from '@react-pdf/renderer'
-import { generateKey } from 'crypto'
 
 function useComp2() {
     function InvoicePdf({ invoiceData }: any) {
-        Font.register({
-            family: 'Lato',
-            fonts: [{ src: '../fonts/Lato-Thin.ttf', fontWeight: 700 }],
-        })
         const gStyles = StyleSheet.create({
             page: {
                 flexDirection: 'column',
-                // paddingTop: 20,
                 paddingLeft: 30,
                 paddingRight: 30,
-                // paddingBottom: 30,
                 paddingTop: 20,
-                // marginBottom:30,
                 paddingBottom: 30,
                 fontFamily: 'Helvetica',
             },
@@ -45,7 +28,6 @@ function useComp2() {
             },
             summaryBlock: {
                 paddingTop: 5,
-                // marginTop: 8,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 marginBottom: 8,

@@ -42,7 +42,7 @@ function useTraceMaterialComponents() {
             <Dialog
                 fullWidth={true}
                 className={classes.dialog}
-                {...options.materialDialogProps}
+                {...options.materialDialogProps}                
                 open={options.meta.current.showDialog}
                 onClose={options.onClose || handleClose}>
                 <DialogTitle

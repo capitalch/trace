@@ -139,11 +139,11 @@ function useSaleCrown(
         return ret
     }
 
-    async function handleBillPrint() {
+    async function handleBillPreview() {
         const dialog = pre.dialogConfig
-        dialog.title = 'Bill'
+        dialog.title = 'Sale invoice'
         dialog.content = () => (
-            <PDFViewer showToolbar={true} width={600} height={800} >
+            <PDFViewer showToolbar={true} width={800} height={900} >
                 <InvoiceA />
             </PDFViewer>
         )
@@ -282,7 +282,7 @@ function useSaleCrown(
         }
     }
 
-    return { handleBillPrint, handleSubmit, getError, meta }
+    return { handleBillPreview, handleSubmit, getError, meta }
 }
 
 export { useSaleCrown }
@@ -308,7 +308,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: theme.palette.blue.main,
                     fontWeight: 'bold',
                     marginLeft: 'auto',
-                    '& .print-icon': {
+                    '& ..preview-icon': {
                         color: theme.palette.orange.light,
                     },
                     '& .mail-icon': {
