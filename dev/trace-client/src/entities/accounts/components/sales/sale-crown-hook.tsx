@@ -143,7 +143,7 @@ function useSaleCrown(
         const dialog = pre.dialogConfig
         dialog.title = 'Sale invoice'
         dialog.content = () => (
-            <PDFViewer showToolbar={true} width={800} height={900} >
+            <PDFViewer showToolbar={true} width={800} >
                 <InvoiceA />
             </PDFViewer>
         )
@@ -282,7 +282,7 @@ function useSaleCrown(
         }
     }
 
-    return { handleBillPreview, handleSubmit, getError, meta }
+    return { handleBillPreview, handleSubmit, getError, meta, setRefresh }
 }
 
 export { useSaleCrown }

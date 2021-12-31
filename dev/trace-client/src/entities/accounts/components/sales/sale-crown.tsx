@@ -3,6 +3,11 @@ import { useSaleCrown, useStyles } from './sale-crown-hook'
 import {
     Button,
     ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
     IconButton,
     Tooltip,
     Typography,
@@ -17,18 +22,16 @@ import {
 } from '../../../../imports/icons-import'
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
+import { InvoiceA } from '../pdf/invoices/invoiceA'
 
 function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getError, handleBillPreview, handleSubmit, meta } = useSaleCrown(
-        arbitraryData,
-        saleType,
-        drillDownEditAttributes
-    )
+    const { getError, handleBillPreview, handleSubmit, meta, setRefresh } =
+        useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
 
-    const { toDecimalFormat, TraceDialog } = useSharedElements()
+    const { PDFViewer, toDecimalFormat, TraceDialog } = useSharedElements()
 
     return (
         <div className={classes.content}>
@@ -103,10 +106,46 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         Submit
                     </Button>
                 </div>
-            </div>            
-            <TraceDialog meta={meta}  />
+            </div>
+            {/* <div
+                style={{ display: meta.current.showDialog ? 'block' : 'none' }}>
+                <Button
+                    onClick={() => {
+                        meta.current.showDialog = false
+                        setRefresh({})
+                    }}>
+                    Close
+                </Button>
+                <PDFViewer showToolbar={true} width={800} height={600}>
+                    <InvoiceA />
+                </PDFViewer>
+            </div> */}
+            {/* <TraceDialog meta={meta} materialDialogProps={{maxWidth:'md', height:'800'}}  /> */}
+            <div>                
+                <Dialog open={meta.current.showDialog} onClose={handleClose} fullWidth={true} maxWidth='md'>
+                    <DialogTitle>Greetings from GeeksforGeeks</DialogTitle>
+                    <DialogContent>
+                        <PDFViewer showToolbar={true} width={840} height={600}>
+                            <InvoiceA />
+                        </PDFViewer>
+                    </DialogContent>
+                    {/* <DialogActions>
+                        <Button onClick={handleClose} color="primary">
+                            Close
+                        </Button>
+                        <Button onClick={handleClose} color="primary" autoFocus>
+                            Yes
+                        </Button>
+                    </DialogActions> */}
+                </Dialog>
+            </div>
         </div>
     )
+
+    function handleClose() {
+        meta.current.showDialog = false
+        setRefresh({})
+    }
 }
 
 export { SaleCrown }
