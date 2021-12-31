@@ -199,6 +199,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
             console.log(JSON.stringify(ret))
+            arbitraryData.rawSaleData = ret
             prepareArbitraryData(ret)
             arbitraryData.saleItemsRefresh()
             // arbitraryData.salesHookChangeTab(0)

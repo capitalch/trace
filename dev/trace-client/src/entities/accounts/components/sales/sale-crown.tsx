@@ -4,9 +4,7 @@ import {
     Button,
     ButtonGroup,
     Dialog,
-    DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
     IconButton,
     Tooltip,
@@ -18,23 +16,30 @@ import {
     EmailIcon,
     Error,
     Preview,
-    PrintIcon,
     SmsIcon,
 } from '../../../../imports/icons-import'
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
-import { ContentCopy } from '@mui/icons-material'
 
 function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getError, handleBillPreview, handleClose, handleEmail, handleSms, handleSubmit, meta, setRefresh } =
-        useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
+    const {
+        getError,
+        handleBillPreview,
+        handleClose,
+        handleEmail,
+        handleSms,
+        handleSubmit,
+        meta,
+        setRefresh,
+    } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
 
-    const { PDFViewer, toDecimalFormat, TraceDialog } = useSharedElements()
-
+    const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog } =
+        useSharedElements()
+    const unitInfo = getFromBag('unitInfo')
     return (
         <div className={classes.content}>
             <div className="sales-crown">
@@ -57,7 +62,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                        arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -66,21 +71,10 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
-                    {/* <ButtonGroup size="small" variant="contained"> */}
-                    {/* <Tooltip title="Send SMS">
-                            <IconButton size="small" disabled={false}>
-                                <SmsIcon className="sms-icon" />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Send mail">
-                            <IconButton size="small" disabled={false}>
-                                <EmailIcon className="mail-icon" />
-                            </IconButton>
-                        </Tooltip> */}
                     <Tooltip title="Preview">
                         <IconButton
                             size="small"
@@ -89,10 +83,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             <Preview className="preview-icon" />
                         </IconButton>
                     </Tooltip>
-                    {/* </ButtonGroup> */}
-
                     <Button
-                        // className="submit"
                         variant="contained"
                         size="small"
                         color="secondary"
@@ -109,49 +100,51 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                     </Button>
                 </div>
             </div>
-            {/* <TraceDialog meta={meta} materialDialogProps={{maxWidth:'md', height:'800'}}  /> */}
-            {/* <div>                 */}
-            <Dialog open={meta.current.showDialog} onClose={handleClose} fullWidth={true} maxWidth='md'>
-                <DialogTitle >
+            <Dialog
+                open={meta.current.showDialog}
+                onClose={handleClose}
+                fullWidth={true}
+                maxWidth="md">
+                <DialogTitle>
                     <div className={classes.previewTitle}>
                         <div>{meta.current.dialogConfig.title}</div>
                         <ButtonGroup>
-                            <Tooltip title='Email'>
+                            <Tooltip title="Email">
                                 <IconButton
                                     size="small"
                                     disabled={false}
                                     onClick={handleEmail}>
-                                    <EmailIcon className='email-icon' />
+                                    <EmailIcon className="email-icon" />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title='SMS'>
+                            <Tooltip title="SMS">
                                 <IconButton
                                     size="small"
                                     disabled={false}
                                     onClick={handleSms}>
-                                    <SmsIcon className='sms-icon' />
+                                    <SmsIcon className="sms-icon" />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title='Close'>
+                            <Tooltip title="Close">
                                 <IconButton
                                     size="small"
                                     disabled={false}
-                                    onClick={handleClose} >
+                                    onClick={handleClose}>
                                     <CloseSharp />
                                 </IconButton>
                             </Tooltip>
                         </ButtonGroup>
-
-
                     </div>
                 </DialogTitle>
                 <DialogContent>
                     <PDFViewer showToolbar={true} width={840} height={600}>
-                        <InvoiceA />
+                        <InvoiceA
+                            rawSaleData={arbitraryData.rawSaleData}
+                            unitInfo={unitInfo}
+                        />
                     </PDFViewer>
                 </DialogContent>
             </Dialog>
-            {/* </div> */}
         </div>
     )
 }

@@ -32,7 +32,7 @@ function getSalesArbitraryData() {
         ledgerAccounts: [],
         lineItems: [], // for product details of SalePurchaseDetails table
         rowData: {},
-
+        rawSaleData: null,
         saleErrorMethods: {
             headError: () => false,
             itemsError: () => false,

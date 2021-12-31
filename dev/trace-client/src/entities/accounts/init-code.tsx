@@ -190,7 +190,7 @@ function initCode() {
         setInBag('allSettings', allSettings)
         const info = allSettings.find((item) => item.key === 'unitInfo')
         const unitInfo = info?.jData
-
+        setInBag('unitInfo', unitInfo)
         console.log(JSON.stringify(unitInfo))
         setInBag('generalSettings', generalSettings)
         setInBag('auditLockDate', generalSettings?.auditLockDate || '')

@@ -1,11 +1,13 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useInvoiceA, } from './invoiceA-hook'
+import { moment } from '../../../../../imports/regular-imports'
 
-function InvoiceA({ invoice }: any) {
-    const { Document, Line, Page, Svg, Text, View } = useSharedElements()
-    const { InvoicePdf } = useInvoiceA(invoice)
-
-    const invoiceData = getInvoiceData(traceCompany, traceInvoiceIndividual)
+function InvoiceA({ rawSaleData, unitInfo }: any) {
+    const { getFromBag, toDecimalFormat} = useSharedElements()
+    const { InvoicePdf } = useInvoiceA()
+    const dateFormat = getFromBag('dateFormat')
+   //  const invoiceData = getInvoiceData(traceCompany, traceInvoiceIndividual)
+    const invoiceData = getInvoiceData(unitInfo, rawSaleData)
     processInvoiceData(invoiceData)
 
     return <InvoicePdf invoiceData={invoiceData} />
@@ -34,7 +36,7 @@ function InvoiceA({ invoice }: any) {
             title: 'Tax Invoice',
             titleRight: 'Original for recipient',
             invoiceNo: ti.tranH.autoRefNo,
-            invoiceDate: ti.tranH.tranDate,
+            invoiceDate:  moment(ti.tranH.tranDate).format(dateFormat),
             type: ti.tranH.tranTypeId == 4 ? 'Sale' : 'Sale Ret',
             terms: '',
         }
@@ -80,23 +82,21 @@ function InvoiceA({ invoice }: any) {
                 x.brandName,
                 ', ',
                 x.label,
-                ', ',
-                'Serial nos ',
-                x.serialNumbers,
+                x.serialNumbers ? ', Sl nos:'.concat(x.serialNumbers): '',
                 ', HSN ',
                 x.hsn
             ),
             qty: x.qty,
-            cgst: x.cgst,
-            sgst: x.sgst,
-            igst: x.igst,
-            gst: x.cgst + x.sgst + x.igst,
-            aggr: (x.price * x.qty) - x.discount,
-            price: x.price,
-            pricegst: x.priceGst,
-            gstRate: x.gstRate,
-            discount: x.discount,
-            amount: x.amount,
+            cgst: toDecimalFormat(x.cgst),
+            sgst: toDecimalFormat(x.sgst),
+            igst: toDecimalFormat(x.igst),
+            gst: toDecimalFormat(x.cgst + x.sgst + x.igst),
+            aggr: toDecimalFormat((x.price * x.qty) - x.discount),
+            price: toDecimalFormat(x.price),
+            pricegst: toDecimalFormat(x.priceGst),
+            gstRate: toDecimalFormat(x.gstRate),
+            discount: toDecimalFormat(x.discount),
+            amount: toDecimalFormat(x.amount),
         }))
         const gst = ti.extGstTranD
         const amt = 20000
