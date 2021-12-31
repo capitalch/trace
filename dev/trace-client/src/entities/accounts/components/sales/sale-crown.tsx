@@ -14,6 +14,7 @@ import {
 } from '../../../../imports/gui-imports'
 import {
     Check,
+    CloseSharp,
     EmailIcon,
     Error,
     Preview,
@@ -23,12 +24,13 @@ import {
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
+import { ContentCopy } from '@mui/icons-material'
 
 function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getError, handleBillPreview, handleSubmit, meta, setRefresh } =
+    const { getError, handleBillPreview, handleClose, handleEmail, handleSms, handleSubmit, meta, setRefresh } =
         useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
 
     const { PDFViewer, toDecimalFormat, TraceDialog } = useSharedElements()
@@ -55,7 +57,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                        arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -64,7 +66,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
@@ -107,45 +109,51 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                     </Button>
                 </div>
             </div>
-            {/* <div
-                style={{ display: meta.current.showDialog ? 'block' : 'none' }}>
-                <Button
-                    onClick={() => {
-                        meta.current.showDialog = false
-                        setRefresh({})
-                    }}>
-                    Close
-                </Button>
-                <PDFViewer showToolbar={true} width={800} height={600}>
-                    <InvoiceA />
-                </PDFViewer>
-            </div> */}
             {/* <TraceDialog meta={meta} materialDialogProps={{maxWidth:'md', height:'800'}}  /> */}
-            <div>                
-                <Dialog open={meta.current.showDialog} onClose={handleClose} fullWidth={true} maxWidth='md'>
-                    <DialogTitle>Greetings from GeeksforGeeks</DialogTitle>
-                    <DialogContent>
-                        <PDFViewer showToolbar={true} width={840} height={600}>
-                            <InvoiceA />
-                        </PDFViewer>
-                    </DialogContent>
-                    {/* <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Close
-                        </Button>
-                        <Button onClick={handleClose} color="primary" autoFocus>
-                            Yes
-                        </Button>
-                    </DialogActions> */}
-                </Dialog>
-            </div>
+            {/* <div>                 */}
+            <Dialog open={meta.current.showDialog} onClose={handleClose} fullWidth={true} maxWidth='md'>
+                <DialogTitle >
+                    <div className={classes.previewTitle}>
+                        <div>{meta.current.dialogConfig.title}</div>
+                        <ButtonGroup>
+                            <Tooltip title='Email'>
+                                <IconButton
+                                    size="small"
+                                    disabled={false}
+                                    onClick={handleEmail}>
+                                    <EmailIcon className='email-icon' />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title='SMS'>
+                                <IconButton
+                                    size="small"
+                                    disabled={false}
+                                    onClick={handleSms}>
+                                    <SmsIcon className='sms-icon' />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title='Close'>
+                                <IconButton
+                                    size="small"
+                                    disabled={false}
+                                    onClick={handleClose} >
+                                    <CloseSharp />
+                                </IconButton>
+                            </Tooltip>
+                        </ButtonGroup>
+
+
+                    </div>
+                </DialogTitle>
+                <DialogContent>
+                    <PDFViewer showToolbar={true} width={840} height={600}>
+                        <InvoiceA />
+                    </PDFViewer>
+                </DialogContent>
+            </Dialog>
+            {/* </div> */}
         </div>
     )
-
-    function handleClose() {
-        meta.current.showDialog = false
-        setRefresh({})
-    }
 }
 
 export { SaleCrown }

@@ -41,7 +41,7 @@ function useSaleCrown(
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => {},
+            actions: () => { },
         },
         title: saleType === 'sal' ? 'Sales' : 'Sales return',
     })
@@ -142,13 +142,22 @@ function useSaleCrown(
     async function handleBillPreview() {
         const dialog = pre.dialogConfig
         dialog.title = 'Sale invoice'
-        dialog.content = () => (
-            <PDFViewer showToolbar={true} width={800} >
-                <InvoiceA />
-            </PDFViewer>
-        )
+        // dialog.content = () => (
+        //     <PDFViewer showToolbar={true} width={800} >
+        //         <InvoiceA />
+        //     </PDFViewer>
+        // )
         pre.showDialog = true
         pre.isMounted && setRefresh({})
+    }
+
+    async function handleEmail(){}
+
+    async function handleSms(){}
+
+    function handleClose() {
+        meta.current.showDialog = false
+        setRefresh({})
     }
 
     async function handleSubmit() {
@@ -282,13 +291,24 @@ function useSaleCrown(
         }
     }
 
-    return { handleBillPreview, handleSubmit, getError, meta, setRefresh }
+    return { handleBillPreview, handleClose, handleEmail, handleSms, handleSubmit, getError, meta, setRefresh }
 }
 
 export { useSaleCrown }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
+        previewTitle: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            '& .email-icon': {
+                color: theme.palette.yellow.dark
+            },
+            '& .sms-icon': {
+                color: theme.palette.blue.main,
+                marginRight:theme.spacing(4)
+            }
+        },
         content: {
             '& .sales-crown': {
                 display: 'flex',
@@ -318,8 +338,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         color: theme.palette.indigo.light,
                     },
                 },
+
             },
         },
+
     })
 )
 
