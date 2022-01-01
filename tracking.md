@@ -1,6 +1,6 @@
 ## PDF Invoice works
-0.1 Create invoice from real data
-1. Date and number format
+                  0.1 Create invoice from real data
+                    1. Date and number format
 2. Amount in words library
 3. Preprocess: Type, receipts, total amount from TranD (sale), cgst, sgst, igst
 4. Show / hide the preview icon as per availability of data

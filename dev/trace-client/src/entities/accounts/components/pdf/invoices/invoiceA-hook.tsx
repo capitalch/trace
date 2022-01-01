@@ -1,7 +1,15 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
 function useInvoiceA() {
-    const { Document, Line, Page, StyleSheet, Svg, Text, View } =
-        useSharedElements()
+    const {
+        Document,
+        Line,
+        Page,
+        StyleSheet,
+        toDecimalFormat,
+        Svg,
+        Text,
+        View,
+    } = useSharedElements()
 
     function InvoicePdf({ invoiceData }: any) {
         const gStyles = StyleSheet.create({
@@ -57,7 +65,7 @@ function useInvoiceA() {
                     <SubHeaderBlock invoiceData={invoiceData} />
                     <ItemsTable invoiceData={invoiceData} />
                     <SummaryBlock invoiceData={invoiceData} />
-                    <Footer />
+                    <Footer invoiceData={invoiceData} />
                     <PageNo />
                 </Page>
             </Document>
@@ -221,7 +229,7 @@ function useInvoiceA() {
                             Customer Details
                         </Text>
                         <Text style={styles.bold}>
-                            {''.concat('GSTIN: ', ib.gstin || '')}
+                            {''.concat('GSTIN ', ib.gstin || '')}
                         </Text>
                         <Text style={gStyles.normal}>
                             {''.concat(
@@ -320,7 +328,7 @@ function useInvoiceA() {
                                 gStyles.bold,
                                 { width: 60, textAlign: 'right' },
                             ]}>
-                            Tax amount 
+                            Tax amount &nbsp;
                         </Text>
                         <Text
                             style={[
@@ -349,8 +357,6 @@ function useInvoiceA() {
                         <View
                             style={{
                                 flexDirection: 'row',
-                                // paddingTop: 5,
-                                // marginTop: 5,
                                 paddingBottom: 5,
                             }}
                             key={keyGen()}>
@@ -393,10 +399,14 @@ function useInvoiceA() {
                                     gStyles.normal,
                                     { width: 60, textAlign: 'right' },
                                 ]}>
-                                {x.gst}
+                                {x.gst} &nbsp;
                             </Text>
-                            <Text style={[gStyles.normal, { width: 6, textAlign: 'right' }]}>
-                            {''.concat(' (', x.gstRate, '%)')}
+                            <Text
+                                style={[
+                                    gStyles.normal,
+                                    { width: 6, textAlign: 'right' },
+                                ]}>
+                                {''.concat(' (', x.gstRate, ')')}
                             </Text>
                             <Text
                                 style={[
@@ -574,7 +584,7 @@ function useInvoiceA() {
             )
         }
 
-        function Footer() {
+        function Footer({ invoiceData }: any) {
             return (
                 <View style={[gStyles.footer]}>
                     <Text style={{ fontSize: 10 }}>
@@ -586,7 +596,8 @@ function useInvoiceA() {
                             fontWeight: 'bold',
                             textDecoration: 'underline',
                         }}>
-                        Amount payable: 1200000
+                        Amount payable:{' '}
+                        {toDecimalFormat(invoiceData?.summary?.amount || 0)}
                     </Text>
                 </View>
             )

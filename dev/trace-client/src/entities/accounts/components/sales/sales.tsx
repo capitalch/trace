@@ -72,10 +72,10 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
     )
 
     async function handlePdfPrint() {        
-        const blob = await pdf(<InvoiceA />).toBlob()
-        const fileURL: any = URL.createObjectURL(blob)
-        const w: any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")
-        // w.print()
+        // const blob = await pdf(<InvoiceA />).toBlob()
+        // const fileURL: any = URL.createObjectURL(blob)
+        // const w: any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")
+        // // w.print()
     }
 }
 

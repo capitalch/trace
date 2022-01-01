@@ -63,7 +63,6 @@ function initCode() {
             branchCode: 'main',
         })
         
-        // hotEmit('DATACACHE-SUCCESSFULLY-LOADED', datacache)
         emit('LOAD-LEFT-MENU', '')
          // Remove following line. This loads the journals by default
          emit('TRACE-SUBHEADER:JUST-REFRESH', '')

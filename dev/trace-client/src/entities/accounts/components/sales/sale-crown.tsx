@@ -139,8 +139,8 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                 <DialogContent>
                     <PDFViewer showToolbar={true} width={840} height={600}>
                         <InvoiceA
-                            rawSaleData={arbitraryData.rawSaleData}
                             unitInfo={unitInfo}
+                            rawSaleData={arbitraryData.rawSaleData}
                         />
                     </PDFViewer>
                 </DialogContent>
