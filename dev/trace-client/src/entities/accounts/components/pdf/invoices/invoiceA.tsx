@@ -110,12 +110,21 @@ function InvoiceA({
         }))
         const gstObj = ti.extGstTranD
         i.summary = {
-            cgst: gstObj?.cgst || 0.0,
-            sgst: gstObj?.sgst || 0.0,
-            igst: gstObj?.igst || 0.0,
+            cgst: toDecimalFormat(gstObj?.cgst || 0.0),
+            sgst: toDecimalFormat(gstObj?.sgst || 0.0),
+            igst: toDecimalFormat(gstObj?.igst || 0.0),
             amount: 0,
             aggr: 0,
+            taxAmount: toDecimalFormat((gstObj?.cgst || 0.0) + (gstObj?.sgst || 0.0) + (gstObj?.igst || 0.0)),
+            qty: 0,
+            discount: 0,
         }
+        const temp = ti.salePurchaseDetails.reduce((prev:any, current:any)=>{
+            const obj = {qty: prev.qty + (current.qty || 0), discount: (prev.discount + current.discount || 0)}
+            return(obj)
+        },{qty:0, discount:0})
+        i.summary.qty = temp.qty
+        i.summary.discount = toDecimalFormat(temp.discount)
         i.receipts = []
         for (const item of ti.tranD) {
             const accClass = getAccountClass(item.accId)
@@ -132,7 +141,7 @@ function InvoiceA({
             } else {
                 i.receipts.push({
                     type: accClass,
-                    instrument: item.instr || '',
+                    instrument: item.instrNo || '',
                     remarks: ''.concat(
                         item.lineRefNo || '',
                         item.remarks || ''

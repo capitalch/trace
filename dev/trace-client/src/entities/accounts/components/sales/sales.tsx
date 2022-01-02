@@ -14,7 +14,7 @@ import { useRef } from 'react'
 
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const { pdf, PDFViewer, emit } = useSharedElements()
+    const { pdf, PDFViewer, emit, setInBag } = useSharedElements()
     const { multiData, handleChangeTab, meta } = useSales(
         saleType,
         drillDownEditAttributes
@@ -41,15 +41,18 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                 <Button
                     className="reset"
                     variant="contained"
-                    onClick={() => emit('LAUNCH-PAD:LOAD-COMPONENT', null)}>
+                    onClick={() => {
+                        emit('LAUNCH-PAD:LOAD-COMPONENT', null)
+                        setInBag('rawSaleData', null)
+                    }}>
                     Reset
                 </Button>
-                <Button
+                {/* <Button
                     variant="contained"
                     onClick={handlePdfPrint}
                     color="primary">
                     Print
-                </Button>
+                </Button> */}
             </Tabs>
             <div hidden={multiData.sales.tabValue !== 0}>
                 <SaleHeader />

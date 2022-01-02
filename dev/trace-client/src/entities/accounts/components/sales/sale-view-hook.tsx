@@ -32,6 +32,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         getFromBag,
         getMappedAccounts,
         isAllowedUpdate,
+        setInBag,
         toDecimalFormat,
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
@@ -199,7 +200,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
             console.log(JSON.stringify(ret))
-            arbitraryData.rawSaleData = ret
+            // arbitraryData.rawSaleData = ret
+            setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
             prepareArbitraryData(ret)
             arbitraryData.saleItemsRefresh()
             // arbitraryData.salesHookChangeTab(0)

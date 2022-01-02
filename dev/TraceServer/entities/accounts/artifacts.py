@@ -156,21 +156,22 @@ def resolve_generic_update_master_details(parent, info, value):
         if updateCodeBlock is not None:
             item['updateCodeBlock'] = allSqls[updateCodeBlock]
         # inject finYearId and branchId
-        autoRefNo = genericUpdateMasterDetailsHelper(dbName, buCode, item)
+        ret = genericUpdateMasterDetailsHelper(dbName, buCode, item)
+        return(ret)
+        # print(autoRefNo)
 
     value = unquote(value)
     valueData = json.loads(value)
+    ret = None
     if type(valueData) is list:
         for item in valueData:
-            processData(item)
+            ret = processData(item)
     else:
-        processData(valueData)
+        ret = processData(valueData)
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
         sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
-    # from app.socket import voucherUpdatedSocket
-    # voucherUpdatedSocket(info.context)
-    return True
+    return ret # returns the id of first item, if there are multiple items
 
 
 @accountsQuery.field("genericView")

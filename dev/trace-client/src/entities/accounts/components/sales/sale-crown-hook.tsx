@@ -20,12 +20,14 @@ function useSaleCrown(
     const [, setRefresh] = useState({})
     const {
         emit,
+        execGenericView,
         getCurrentComponent,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         PDFViewer,
+        setInBag,
     } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
@@ -142,11 +144,6 @@ function useSaleCrown(
     async function handleBillPreview() {
         const dialog = pre.dialogConfig
         dialog.title = 'Sale invoice'
-        // dialog.content = () => (
-        //     <PDFViewer showToolbar={true} width={800} >
-        //         <InvoiceA />
-        //     </PDFViewer>
-        // )
         pre.showDialog = true
         pre.isMounted && setRefresh({})
     }
@@ -162,21 +159,36 @@ function useSaleCrown(
 
     async function handleSubmit() {
         const ad = arbitraryData
+        // ad.rawSaleData = null
+        setInBag('rawSaleData', null)
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        const ret = await genericUpdateMasterDetails([header])
+        let ret = await genericUpdateMasterDetails([header])
         console.log(JSON.stringify(header))
         if (ret.error) {
             console.log(ret.error)
         } else {
+            const id = ret?.data?.accounts?.genericUpdateMasterDetails
+            if(id){
+                ret = await execGenericView({
+                    isMultipleRows: false,
+                    sqlKey: 'getJson_sale_purchase_on_id',
+                    args: {
+                        id: id,
+                    },
+                })
+                if(ret){
+                    setInBag('rawSaleData', ret)
+                    ad.rawSaleData = ret
+                    setRefresh({})
+                }
+            }
             if (ad.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
             } else if (ad.isViewBack) {
-                // arbitraryData.salesHookResetData()
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('SALES-HOOK-CHANGE-TAB', 3)
-                // arbitraryData.salesHookChangeTab(3)
                 arbitraryData.saleViewHookFetchData()
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())

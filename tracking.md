@@ -2,10 +2,12 @@
                   0.1 Create invoice from real data
                     1. Date and number format
 2. Amount in words library
-3. Preprocess: Type, receipts, total amount from TranD (sale), cgst, sgst, igst
+                    3. Preprocess: Type, receipts, total amount from TranD (sale), cgst, sgst, igst
 4. Show / hide the preview icon as per availability of data
 5. SMS
 6. Email
+7. Totals
+9. Give state
 
 ## react-pdf invoice generator
 https://kags.me.ke/post/generate-dynamic-pdf-incoice-using-react-pdf/

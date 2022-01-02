@@ -1,4 +1,5 @@
 import { useSharedElements } from '../common/shared-elements-hook'
+import { _ } from '../../../../imports/regular-imports'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 import {
     Button,
@@ -62,7 +63,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                        arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -71,11 +72,11 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
-                    <Tooltip title="Preview">
+                    <Tooltip title="Preview" style={{ display: `${_.isEmpty(getFromBag('rawSaleData')) ? 'none' : 'block'}` }}>
                         <IconButton
                             size="small"
                             disabled={false}
@@ -140,7 +141,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                     <PDFViewer showToolbar={true} width={840} height={600}>
                         <InvoiceA
                             unitInfo={unitInfo}
-                            rawSaleData={arbitraryData.rawSaleData}
+                            rawSaleData={getFromBag('rawSaleData') || {}}
                         />
                     </PDFViewer>
                 </DialogContent>

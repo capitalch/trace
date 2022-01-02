@@ -2,15 +2,23 @@ import { PDFViewer } from '@react-pdf/renderer'
 import { useEffect, useState } from 'react'
 import { useComp2 } from './comp2-hook'
 function Comp2() {
-    const { InvoicePdf } = useComp2()
+    const { InvoicePdf, wordify } = useComp2()
     const invoiceData = getInvoiceData(traceCompany, traceInvoiceIndividual)
-    processInvoiceData(invoiceData)
+   //  processInvoiceData(invoiceData)
 
-    console.log(invoiceData)
+   //  console.log(invoiceData)
     return (
-        <PDFViewer width={760} height={800} >
-            <InvoicePdf invoiceData={invoiceData} />
-        </PDFViewer>
+       <div>
+          <button
+          onClick={()=>{
+               const ret = wordify('100.32')
+               console.log(ret)
+          }}
+          >To words</button>
+       </div>
+      //   <PDFViewer width={760} height={800} >
+      //       <InvoicePdf invoiceData={invoiceData} />
+      //   </PDFViewer>
     )
 
     function getInvoiceData(traceCompany: any, traceInvoice: any) {

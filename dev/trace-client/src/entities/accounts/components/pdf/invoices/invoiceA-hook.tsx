@@ -37,7 +37,7 @@ function useInvoiceA() {
                 marginBottom: 8,
                 paddingBottom: 5,
                 borderBottom: 1,
-                borderTop: 1,
+                // borderTop: 1,
             },
             footer: {
                 position: 'absolute',
@@ -277,13 +277,14 @@ function useInvoiceA() {
                 <View>
                     <TableHeader />
                     <TableItems />
+                    <TableFooter />
                 </View>
             )
 
             function TableHeader() {
                 const styles = StyleSheet.create({
                     header: {
-                        paddingTop: 5,
+                        paddingTop: 3,
                         flexDirection: 'row',
                         paddingBottom: 5,
                         marginBottom: 5,
@@ -345,7 +346,6 @@ function useInvoiceA() {
                             Amount
                         </Text>
                     </View>
-                    // </View>
                 )
             }
 
@@ -357,7 +357,7 @@ function useInvoiceA() {
                         <View
                             style={{
                                 flexDirection: 'row',
-                                paddingBottom: 5,
+                                paddingBottom: 5,                               
                             }}
                             key={keyGen()}>
                             <Text style={[gStyles.normal, { width: 20 }]}>
@@ -418,11 +418,80 @@ function useInvoiceA() {
                         </View>
                     )
                 })
-                return <View style={{ flexDirection: 'column' }}>{rows}</View>
+                return <View style={{ flexDirection: 'column',  borderBottom:1, }}>{rows}</View>
 
                 function keyGen() {
                     return ++counter
                 }
+            }
+
+            function TableFooter() {
+                const s = invoiceData.summary
+                const styles = StyleSheet.create({
+                    footer: {
+                        paddingTop: 2,
+                        flexDirection: 'row',
+                        paddingBottom: 2,
+                        // marginBottom: 2,
+                        borderBottom:1,
+                    },
+                })
+                return (
+                    <View style={[styles.footer]} fixed>
+                        <Text style={[gStyles.bold, { width: 20 }]}></Text>
+                        <Text style={[gStyles.bold, { width: 200 }]}>
+                            Total
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 30, textAlign: 'right' },
+                            ]}>
+                            {s.qty}
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 60, textAlign: 'right' },
+                            ]}>
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 40, textAlign: 'right' },
+                            ]}>
+                            {s.discount}
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 80, textAlign: 'right' },
+                            ]}>
+                            {s.aggr}
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 60, textAlign: 'right' },
+                            ]}>
+                            {s.taxAmount} &nbsp;
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 6, textAlign: 'right' },
+                            ]}>
+                        </Text>
+                        <Text
+                            style={[
+                                gStyles.bold,
+                                { width: 90, textAlign: 'right' },
+                            ]}>
+                            {s.amount}
+                        </Text>
+                    </View>
+                    // </View>
+                )
             }
         }
 
@@ -474,7 +543,7 @@ function useInvoiceA() {
                                 fontWeight: 'bold',
                                 flexDirection: 'row',
                             }}>
-                            <Text style={styles.label}>Total:</Text>
+                            <Text style={styles.label}>Total amount:</Text>
                             <Text style={styles.value}>{s.amount}</Text>
                         </View>
                     </View>
@@ -551,7 +620,6 @@ function useInvoiceA() {
                     signatoryItem: {
                         fontSize: 8,
                         fontWeight: 'bold',
-                        // width: 130
                     },
                 })
                 return (

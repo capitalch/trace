@@ -68,7 +68,6 @@ def processData(sqlObject, cursor,data, fkeyValue, buCode='public'):
     sql, tup = getSql(sqlObject, data, fkeyValue)
     if sql is not None:
         try:
-            # cursor.execute(sql, tup)
             cursor.execute(f'{searchPathSql};{sql}', tup)
             try:
                 if cursor.rowcount > 0:
@@ -88,8 +87,8 @@ def processData(sqlObject, cursor,data, fkeyValue, buCode='public'):
         else:
             execSqlObject(details, cursor, id, buCode)
     # Following two lines are new and need testing
-    else:                   
-        return id
+    # else:                   
+    return id
 
 def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
     tableName = sqlObject.get("tableName")
@@ -116,7 +115,9 @@ def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
             for dt in data:                
                 ret = processData(sqlObject, cursor, dt, fkeyValue, buCode)
         else:           
-            ret = processData(sqlObject, cursor, data, fkeyValue, buCode)
+            ret1 = processData(sqlObject, cursor, data, fkeyValue, buCode)
+            if(ret is None):
+                ret = ret1
     if ret is None:
         ret = True
     return ret
