@@ -56,7 +56,7 @@ function useSharedElements() {
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
-        execGenericView,
+        execGenericView,        
         toDecimalFormat,
     } = utilMethods()
     const { hotEmit, hotFilterOn, emit, filterOn, debounceEmit, debounceFilterOn } = useIbuki()
@@ -70,6 +70,7 @@ function useSharedElements() {
         useTraceGlobal()
     const confirm = useConfirm()
     const {
+        execSaleInvoiceView,
         getAccountClass,
         getAccountName,
         getAccountClassWithAutoSubledger,
@@ -101,6 +102,7 @@ function useSharedElements() {
         doValidateForm,
         emit,
         execGenericView,
+        execSaleInvoiceView,
         extractAmount,
         filterOn,
         genericUpdateMaster,

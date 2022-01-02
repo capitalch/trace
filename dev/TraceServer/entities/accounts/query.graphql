@@ -5,6 +5,7 @@ type AccountsQuery {
     balanceSheetProfitLoss: Generic
     configuration: Generic 
     genericView(value: Generic): Generic
+    saleInvoiceView(value: Generic): Generic
     searchProduct(value: Generic): Generic
     trialBalance: Generic
 }

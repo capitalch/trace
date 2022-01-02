@@ -26,6 +26,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         confirm,
         emit,
         execGenericView,
+        execSaleInvoiceView,
         filterOn,
         genericUpdateMaster,
         getAccountClassWithAutoSubledger,
@@ -190,7 +191,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         // isModify: if isEdit then id's of tables are there so as to enforce modify sql. Otherwise id's of table are reset to undefined, so new rows are inserted in tables
         const ad = arbitraryData
         emit('SHOW-LOADING-INDICATOR', true)
-        const ret = await execGenericView({
+        // const ret = await execGenericView({
+        //     isMultipleRows: false,
+        //     sqlKey: 'getJson_sale_purchase_on_id',
+        //     args: {
+        //         id: id,
+        //     },
+        // })
+        const ret = await execSaleInvoiceView({
             isMultipleRows: false,
             sqlKey: 'getJson_sale_purchase_on_id',
             args: {

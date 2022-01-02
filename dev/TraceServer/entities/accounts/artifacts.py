@@ -189,6 +189,24 @@ def resolve_generic_view(parent, info, value):
     valueDict['isMultipleRows'] = valueDict.get('isMultipleRows', False)
     return genericView(dbName, sqlString, valueDict, buCode)
 
+@accountsQuery.field("saleInvoiceView")
+def resolve_sale_invoice_view(parent, info, value):
+    ret = resolve_generic_view(parent, info, value)
+    # set amount in words in ret
+    return(ret)
+    # dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+    #     info.context)
+    # value = unquote(value)
+    # valueDict = demJson.decode(value)
+    # sqlKey = valueDict['sqlKey']
+    # sqlString = allSqls[sqlKey]
+    # valueDict['args']['clientId'] = clientId
+    # if 'finYearId' not in valueDict['args']:
+    #     valueDict['args']['finYearId'] = finYearId
+    # valueDict['args']['branchId'] = branchId
+    # valueDict['isMultipleRows'] = valueDict.get('isMultipleRows', False)
+    # return genericView(dbName, sqlString, valueDict, buCode)
+
 
 @accountsQuery.field("searchProduct")
 def resolve_search_product(parent, info, value):

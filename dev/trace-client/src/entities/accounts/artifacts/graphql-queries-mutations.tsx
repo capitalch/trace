@@ -11,19 +11,19 @@ const graphqlQueries: any = {
     }`
     return gql(str)
   },
-  // genericView1: (value: GenericViewValues, entityName: string ) => gql`
-  //   query genericView {
-  //     ${entityName} {
-  //         genericView(value:"${value}")
-  // }}`
+  saleInvoiceView: (value: GenericViewValues, entityName: string ) => gql`
+    query saleInvoiceView {
+      ${entityName} {
+        saleInvoiceView(value:"${value}")
+  }}`
 
 }
 
-// interface GenericViewValues {
-//   sqlKey: string
-//   isMultipleRows: boolean
-//   args: any[]
-// }
+interface GenericViewValues {
+  sqlKey: string
+  isMultipleRows: boolean
+  args: any[]
+}
 
 export default graphqlQueries
 
