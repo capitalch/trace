@@ -1141,9 +1141,13 @@ allSqls = {
 					where  h."id" = %(id)s
 		),
         cte2 as (
-            select d."id", d."accId", "dc", "amount", d."instrNo", d."remarks"
+            select d."id", d."accId", "dc", "amount", d."instrNo", d."remarks", "accClass"
                 from "cte1" c1 join "TranD" d 
                     on c1."id" = d."tranHeaderId"
+                join "AccM" m
+				  	on m."id" = d."accId"
+                join "AccClassM" c2
+                      on c2."id" = m."classId"
         ),
         cte3 as (
             select x."id", "gstin", "cgst", "sgst", "igst"

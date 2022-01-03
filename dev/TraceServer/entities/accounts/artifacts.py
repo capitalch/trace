@@ -193,6 +193,7 @@ def resolve_generic_view(parent, info, value):
 def resolve_sale_invoice_view(parent, info, value):
     ret = resolve_generic_view(parent, info, value)
     # set amount in words in ret
+    
     return(ret)
     # dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
     #     info.context)
