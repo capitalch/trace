@@ -1,5 +1,5 @@
 import { useSharedElements } from '../common/shared-elements-hook'
-import { _ } from '../../../../imports/regular-imports'
+import { _ , useEffect} from '../../../../imports/regular-imports'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 import {
     Button,
@@ -22,6 +22,7 @@ import {
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
+import { BlobProvider } from '@react-pdf/renderer'
 
 function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
@@ -38,9 +39,18 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
         setRefresh,
     } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
 
-    const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog } =
+    const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog, usePDF } =
         useSharedElements()
     const unitInfo = getFromBag('unitInfo')
+    // const doc = <InvoiceA
+    //     unitInfo={unitInfo}
+    //     rawSaleData={getFromBag('rawSaleData') || {}}
+    // />
+    // const [instance] = usePDF({ document: doc })
+    // const blob = instance.blob
+    // useEffect(()=>{
+        
+    // },[])
     return (
         <div className={classes.content}>
             <div className="sales-crown">

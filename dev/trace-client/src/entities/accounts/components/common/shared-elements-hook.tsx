@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
-import { Document, Line, Page,pdf,PDFViewer, StyleSheet, Svg, Text, View, } from '@react-pdf/renderer'
+import { Document,BlobProvider, Line, Page,pdf,PDFViewer, StyleSheet, Svg, Text,usePDF, View, } from '@react-pdf/renderer'
 import {
     globalMessages,
     graphqlService,
@@ -93,6 +93,7 @@ function useSharedElements() {
     } = utils()
     return {
         accountsMessages,
+        BlobProvider,
         clearServerError,
         confirm,
         debounceEmit,
@@ -178,6 +179,7 @@ function useSharedElements() {
         useGeneric,
         useTraceMaterialComponents,
         useTraceGlobal,
+        usePDF,
         View,
         XXGrid,
     }

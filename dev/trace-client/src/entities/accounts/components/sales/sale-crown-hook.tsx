@@ -19,6 +19,7 @@ function useSaleCrown(
 ) {
     const [, setRefresh] = useState({})
     const {
+        BlobProvider,
         emit,
         execGenericView,
         getCurrentComponent,
@@ -27,6 +28,7 @@ function useSaleCrown(
         isInvalidDate,
         isInvalidGstin,
         PDFViewer,
+        execSaleInvoiceView,
         setInBag,
     } = useSharedElements()
     useEffect(() => {
@@ -171,7 +173,7 @@ function useSaleCrown(
         } else {
             const id = ret?.data?.accounts?.genericUpdateMasterDetails
             if(id){
-                ret = await execGenericView({
+                ret = await execSaleInvoiceView({
                     isMultipleRows: false,
                     sqlKey: 'getJson_sale_purchase_on_id',
                     args: {

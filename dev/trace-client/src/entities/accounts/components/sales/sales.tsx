@@ -19,10 +19,6 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
         saleType,
         drillDownEditAttributes
     )
-    // const pdfRef: any = useRef()
-    // const handlePrint = useReactToPrint({
-    //     content: () => pdfRef.current,
-    // })
     return (
         <div className={classes.content}>
             <SaleCrown

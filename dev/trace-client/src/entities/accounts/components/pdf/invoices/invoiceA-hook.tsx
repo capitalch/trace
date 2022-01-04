@@ -656,7 +656,7 @@ function useInvoiceA() {
             return (
                 <View style={[gStyles.footer]}>
                     <Text style={{ fontSize: 10 }}>
-                        One lac twenty thousand only
+                        {invoiceData?.summary?.amountInWords || ''}
                     </Text>
                     <Text
                         style={{
