@@ -84,8 +84,9 @@ const graphqlService = () => {
         return ret
     }
 
-    const mutateGraphql = async (m: string) => {
+    const mutateGraphql = async (m: string,) => {
         const client = getClient()
+
         const ret = await client.mutate({
             mutation: m,
         })

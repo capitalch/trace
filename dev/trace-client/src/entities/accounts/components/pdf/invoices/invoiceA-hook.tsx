@@ -655,7 +655,7 @@ function useInvoiceA() {
         function Footer({ invoiceData }: any) {
             return (
                 <View style={[gStyles.footer]}>
-                    <Text style={{ fontSize: 10 }}>
+                    <Text style={{ fontSize: 10, flexWrap:'wrap', width:'72%' }}>
                         {invoiceData?.summary?.amountInWords || ''}
                     </Text>
                     <Text

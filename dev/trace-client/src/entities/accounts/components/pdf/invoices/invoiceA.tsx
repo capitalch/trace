@@ -153,12 +153,6 @@ function InvoiceA({
         }
         return i
     }
-
-    // function processInvoiceData(invoiceData: any) {
-    //     // update sale terms
-    //     // update transactions
-    //     // update summary
-    // }
 }
 
 export { InvoiceA }

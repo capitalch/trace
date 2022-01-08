@@ -1,4 +1,5 @@
 import {
+    axios,
     useState,
     useEffect,
     useRef,
@@ -27,8 +28,10 @@ function useSaleCrown(
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
+        pdf,
         PDFViewer,
         execSaleInvoiceView,
+        sendEmail,
         setInBag,
     } = useSharedElements()
     useEffect(() => {
@@ -39,13 +42,16 @@ function useSaleCrown(
         }
     }, [])
 
+    const unitInfo = getFromBag('unitInfo')
+    const rawSaleData = getFromBag('rawSaleData') || {}
+
     const meta: any = useRef({
         isMounted: false,
         showDialog: false,
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => { },
+            actions: () => {},
         },
         title: saleType === 'sal' ? 'Sales' : 'Sales return',
     })
@@ -150,9 +156,48 @@ function useSaleCrown(
         pre.isMounted && setRefresh({})
     }
 
-    async function handleEmail(){}
+    async function handleEmail() {
+        const Doc = () => (
+            <InvoiceA unitInfo={unitInfo} rawSaleData={rawSaleData} />
+        )
+        const blob = await pdf(<Doc />).toBlob()
 
-    async function handleSms(){}
+        const reader = new FileReader()
+        reader.onloadend = async () => {
+            const base64String:any = reader.result
+            const base64Data = base64String.substr(base64String.indexOf(',') + 1)
+            console.log(base64Data)
+            const ret = await sendEmail(
+                escape(
+                    JSON.stringify({
+                        data: base64Data,
+                    })
+                )
+            )
+            console.log(ret)
+        }
+        reader.readAsDataURL(blob)
+        // const ret = await sendEmail(
+        //     escape(
+        //         JSON.stringify({
+        //             data: 'My Test data',
+        //         })
+        //     )
+        // )
+
+
+        // const ret = await axios({
+        //     url: 'http://localhost:5000/trace/pdf',
+        //     method:'post',
+        //     headers:{
+        //         "content-type":"application/pdf"
+        //     },
+        //     data:blob
+        // })
+        // console.log(ret)
+    }
+
+    async function handleSms() {}
 
     function handleClose() {
         meta.current.showDialog = false
@@ -172,7 +217,7 @@ function useSaleCrown(
             console.log(ret.error)
         } else {
             const id = ret?.data?.accounts?.genericUpdateMasterDetails
-            if(id){
+            if (id) {
                 ret = await execSaleInvoiceView({
                     isMultipleRows: false,
                     sqlKey: 'getJson_sale_purchase_on_id',
@@ -180,7 +225,7 @@ function useSaleCrown(
                         id: id,
                     },
                 })
-                if(ret){
+                if (ret) {
                     setInBag('rawSaleData', ret)
                     ad.rawSaleData = ret
                     setRefresh({})
@@ -305,7 +350,16 @@ function useSaleCrown(
         }
     }
 
-    return { handleBillPreview, handleClose, handleEmail, handleSms, handleSubmit, getError, meta, setRefresh }
+    return {
+        handleBillPreview,
+        handleClose,
+        handleEmail,
+        handleSms,
+        handleSubmit,
+        getError,
+        meta,
+        setRefresh,
+    }
 }
 
 export { useSaleCrown }
@@ -316,12 +370,12 @@ const useStyles: any = makeStyles((theme: Theme) =>
             display: 'flex',
             justifyContent: 'space-between',
             '& .email-icon': {
-                color: theme.palette.yellow.dark
+                color: theme.palette.yellow.dark,
             },
             '& .sms-icon': {
                 color: theme.palette.blue.main,
-                marginRight:theme.spacing(4)
-            }
+                marginRight: theme.spacing(4),
+            },
         },
         content: {
             '& .sales-crown': {
@@ -352,10 +406,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         color: theme.palette.indigo.light,
                     },
                 },
-
             },
         },
-
     })
 )
 

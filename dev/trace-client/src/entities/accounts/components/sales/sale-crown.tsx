@@ -22,12 +22,16 @@ import {
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
-import { BlobProvider } from '@react-pdf/renderer'
+import { BlobProvider, pdf } from '@react-pdf/renderer'
 
 function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
+    const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog, usePDF } =
+        useSharedElements()
+    const unitInfo = getFromBag('unitInfo')
+    const rawSaleData=getFromBag('rawSaleData') || {}
     const {
         getError,
         handleBillPreview,
@@ -37,20 +41,15 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
         handleSubmit,
         meta,
         setRefresh,
-    } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
-
-    const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog, usePDF } =
-        useSharedElements()
-    const unitInfo = getFromBag('unitInfo')
-    // const doc = <InvoiceA
-    //     unitInfo={unitInfo}
-    //     rawSaleData={getFromBag('rawSaleData') || {}}
-    // />
+    } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes,)
+    
+    // const unitInfo = getFromBag('unitInfo')
+    
     // const [instance] = usePDF({ document: doc })
     // const blob = instance.blob
-    // useEffect(()=>{
-        
-    // },[])
+    useEffect(()=> {
+        // const blob = await pdf(<Doc />).toBlob()
+    },[])
     return (
         <div className={classes.content}>
             <div className="sales-crown">
