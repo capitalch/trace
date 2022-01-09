@@ -60,6 +60,15 @@ const graphqlQueries: any = {
       }`
         return gql(str)
     },
+    sendSms: (value: any, entityName: string) => {
+      const str = `
+    mutation sendSms {
+      ${entityName} {
+        sendSms(value:"${value}")
+      }
+    }`
+      return gql(str)
+  },
 }
 
 export { graphqlQueries }

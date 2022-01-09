@@ -21,6 +21,7 @@ function useNewEditContact(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const billTo = arbitraryData.billTo
     const classes = useStyles(arbitraryData.billTo)
+
     useEffect(() => {
         meta.current.isMounted = true
         setDefaultValues()
@@ -129,7 +130,7 @@ function useNewEditContact(arbitraryData: any) {
             mobileNumber: billTo.mobileNumber,
             otherMobileNumber: billTo.otherMobileNumber,
             landPhone: billTo.landPhone,
-            email: billTo.email,
+            email: billTo.email || null,
             descr: billTo.descr,
             anniversaryDate: billTo.anniversaryDate,
             address1: billTo.address1,
@@ -140,14 +141,14 @@ function useNewEditContact(arbitraryData: any) {
             gstin: billTo.gstin,
             pin: billTo.pin,
             dateOfBirth: billTo.dateOfBirth,
-            stateCode: billTo.stateCode,
+            stateCode: billTo.state.stateCode,
         }
         obj.data.push(item)
         const ret = await genericUpdateMasterNoForm({
             data: item,
             tableName: 'Contacts',
         })
-        billTo.id = ret
+        billTo.id = billTo.id || ret || null // To take care when ret = false, or the save fails
         if (ret) {
             meta.current.showDialog = false
             meta.current.isMounted && setRefresh({})
@@ -268,7 +269,7 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     error={isInvalidEmail(arbitraryData.billTo.email)}
-                    value={arbitraryData.billTo.email || ''}
+                    value={arbitraryData.billTo.email || null}
                     onChange={(e) => {
                         arbitraryData.billTo.email = e.target.value
                         setRefresh({})

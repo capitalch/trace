@@ -1,5 +1,5 @@
 import {
-    axios,
+    // axios,
     useState,
     useEffect,
     useRef,
@@ -9,7 +9,7 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { PrintIcon } from '../../../../imports/icons-import'
+// import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
 
@@ -20,18 +20,21 @@ function useSaleCrown(
 ) {
     const [, setRefresh] = useState({})
     const {
-        BlobProvider,
+        accountsMessages,
+        // BlobProvider,
+        confirm,
         emit,
-        execGenericView,
+        // execGenericView,
         getCurrentComponent,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         pdf,
-        PDFViewer,
+        // PDFViewer,
         execSaleInvoiceView,
         sendEmail,
+        sendSms,
         setInBag,
     } = useSharedElements()
     useEffect(() => {
@@ -157,47 +160,84 @@ function useSaleCrown(
     }
 
     async function handleEmail() {
+        const rawSaleData = getFromBag('rawSaleData') || {}
+        const emailAddress = rawSaleData?.jsonResult?.billTo?.email
+        const options = {
+            description: accountsMessages.emailNotFound,
+            confirmationText: 'Ok',
+            cancellationText: '',
+        }
+        if (!emailAddress) {
+            confirm(options)
+                .then(() => {})
+                .catch(() => {})
+            return
+        }
         const Doc = () => (
             <InvoiceA unitInfo={unitInfo} rawSaleData={rawSaleData} />
         )
         const blob = await pdf(<Doc />).toBlob()
-
+        // Convert blob to Base64, remove the first few chars till the character ',' from the base64 string and send it to server
         const reader = new FileReader()
         reader.onloadend = async () => {
-            const base64String:any = reader.result
-            const base64Data = base64String.substr(base64String.indexOf(',') + 1)
-            console.log(base64Data)
+            const base64String: any = reader.result
+            const base64Data = base64String.substr(
+                base64String.indexOf(',') + 1
+            )
             const ret = await sendEmail(
                 escape(
                     JSON.stringify({
                         data: base64Data,
+                        subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
+                        body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
+                        emailAddress: emailAddress,
                     })
                 )
             )
             console.log(ret)
         }
         reader.readAsDataURL(blob)
-        // const ret = await sendEmail(
-        //     escape(
-        //         JSON.stringify({
-        //             data: 'My Test data',
-        //         })
-        //     )
-        // )
-
-
-        // const ret = await axios({
-        //     url: 'http://localhost:5000/trace/pdf',
-        //     method:'post',
-        //     headers:{
-        //         "content-type":"application/pdf"
-        //     },
-        //     data:blob
-        // })
-        // console.log(ret)
     }
 
-    async function handleSms() {}
+    async function handleSms() {
+        const rawSaleData = getFromBag('rawSaleData') || {}
+        const mobileNumber = rawSaleData?.jsonResult?.billTo?.mobileNumber
+        const options = {
+            description: accountsMessages.mobileNumberNotFound,
+            confirmationText: 'Ok',
+            cancellationText: '',
+        }
+        if (!mobileNumber) {
+            confirm(options)
+                .then(() => {})
+                .catch(() => {})
+            return
+        }
+        const Doc = () => (
+            <InvoiceA unitInfo={unitInfo} rawSaleData={rawSaleData} />
+        )
+        const blob = await pdf(<Doc />).toBlob()
+        // Convert blob to Base64, remove the first few chars till the character ',' from the base64 string and send it to server
+        const reader = new FileReader()
+        reader.onloadend = async () => {
+            const base64String: any = reader.result
+            const base64Data = base64String.substr(
+                base64String.indexOf(',') + 1
+            )
+            const ret = await sendSms(
+                escape(
+                    JSON.stringify({
+                        data: base64Data,
+                        // subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
+                        // body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
+                        mobileNumber: mobileNumber,
+                    })
+                )
+            )
+            console.log(ret)
+        }
+        reader.readAsDataURL(blob)
+    }
 
     function handleClose() {
         meta.current.showDialog = false
@@ -412,3 +452,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
+
+// const ret = await axios({
+//     url: 'http://localhost:5000/trace/pdf',
+//     method:'post',
+//     headers:{
+//         "content-type":"application/pdf"
+//     },
+//     data:blob
+// })
+// console.log(ret)

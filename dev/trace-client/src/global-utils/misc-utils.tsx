@@ -368,6 +368,37 @@ function utilMethods() {
         return ret
     }
 
+    async function sendSms(value: any){
+        let ret = false
+        const currentEntityName = getCurrentEntity()
+        try {
+            const queries = await import(
+                `../entities/${currentEntityName}/artifacts/graphql-queries-mutations`
+            )
+            
+            const q = queries.default['sendSms'](
+                value,
+                currentEntityName
+            )
+            const result = await mutateGraphql(q)
+            ret =
+                result.data[currentEntityName]
+                    .sendSms
+            if (ret) {
+                emit('SHOW-MESSAGE', {})
+            } else {
+                throw new Error('')
+            }
+        } catch (error: any) {
+            emit('SHOW-MESSAGE', {
+                message: error.message || messages['errorInOperation'],
+                severity: 'error',
+                duration: null,
+            })
+        }
+        return ret
+    }
+
     function toDecimalFormat(s: any) {
         s ?? (s = '')
         if (s === '') {
@@ -398,6 +429,7 @@ function utilMethods() {
         removeProp,
         saveForm,
         sendEmail,
+        sendSms,
         toDecimalFormat,
     }
 }

@@ -1,5 +1,5 @@
 import { useSharedElements } from '../common/shared-elements-hook'
-import { _ , useEffect} from '../../../../imports/regular-imports'
+import { _, useEffect } from '../../../../imports/regular-imports'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 import {
     Button,
@@ -31,7 +31,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog, usePDF } =
         useSharedElements()
     const unitInfo = getFromBag('unitInfo')
-    const rawSaleData=getFromBag('rawSaleData') || {}
+    // const rawSaleData = getFromBag('rawSaleData') || {}
     const {
         getError,
         handleBillPreview,
@@ -41,15 +41,15 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
         handleSubmit,
         meta,
         setRefresh,
-    } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes,)
-    
+    } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
+
     // const unitInfo = getFromBag('unitInfo')
-    
+
     // const [instance] = usePDF({ document: doc })
     // const blob = instance.blob
-    useEffect(()=> {
+    useEffect(() => {
         // const blob = await pdf(<Doc />).toBlob()
-    },[])
+    }, [])
     return (
         <div className={classes.content}>
             <div className="sales-crown">
@@ -72,7 +72,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                        arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -81,11 +81,19 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
-                    <Tooltip title="Preview" style={{ display: `${_.isEmpty(getFromBag('rawSaleData')) ? 'none' : 'block'}` }}>
+                    <Tooltip
+                        title="Preview"
+                        style={{
+                            display: `${
+                                _.isEmpty(getFromBag('rawSaleData'))
+                                    ? 'none'
+                                    : 'block'
+                            }`,
+                        }}>
                         <IconButton
                             size="small"
                             disabled={false}

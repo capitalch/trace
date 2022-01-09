@@ -1,4 +1,5 @@
 import {
+    Button,
     Card,
     Theme,
     createStyles,
@@ -7,7 +8,8 @@ import {
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useAllTransactions } from './all-reports/all-transactions'
-import { _, useEffect } from '../../../../imports/regular-imports'
+import { _, useEffect, useRef } from '../../../../imports/regular-imports'
+// import { useReactToPrint } from 'react-to-print'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
@@ -22,17 +24,26 @@ function GenericReports({ loadReport }: any) {
         summaryColNames,
         title,
     } = selectLogic[loadReport]()
-
-    const { accountsMessages, confirm, emit, filterOn, genericUpdateMaster, isGoodToDelete, } = useSharedElements()
+    // const reportRef:any = useRef()
+    const {
+        accountsMessages,
+        confirm,
+        emit,
+        filterOn,
+        genericUpdateMaster,
+        isGoodToDelete,
+    } = useSharedElements()
     const classes = useStyles()
 
     useEffect(() => {
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
             emit(actionMessages.fetchIbukiMessage, null)
         })
-        const subs2 = filterOn(actionMessages.deleteIbukiMessage).subscribe((d: any) => {
-            doDelete(d.data)
-        })
+        const subs2 = filterOn(actionMessages.deleteIbukiMessage).subscribe(
+            (d: any) => {
+                doDelete(d.data)
+            }
+        )
         emit(actionMessages.fetchIbukiMessage, null)
 
         return () => {
@@ -40,9 +51,16 @@ function GenericReports({ loadReport }: any) {
             subs2.unsubscribe()
         }
     }, [])
-
+    // const handlePrint = useReactToPrint({
+    //     content: () => reportRef.current,
+    // })
     return (
-        <Card className={classes.container}>
+        <Card className={classes.container} 
+        // ref={reportRef}
+        >
+            {/* <Button color="primary" size="small" onClick={handlePrint}>
+                Pdf print
+            </Button> */}
             <XXGrid
                 gridActionMessages={actionMessages}
                 columns={columns}
@@ -76,13 +94,10 @@ function GenericReports({ loadReport }: any) {
                         tableName: 'TranH',
                     })
                     emit('SHOW-MESSAGE', {})
-                    emit(
-                        actionMessages.fetchIbukiMessage,
-                        null
-                    )
+                    emit(actionMessages.fetchIbukiMessage, null)
                     // setRefresh({})
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 }

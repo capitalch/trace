@@ -233,6 +233,7 @@ function useInvoiceA() {
                         </Text>
                         <Text style={gStyles.normal}>
                             {''.concat(
+                                ib.name,', ',
                                 ib.address1,
                                 ' ',
                                 ib.address2 || '',
@@ -247,9 +248,9 @@ function useInvoiceA() {
                         <Text style={gStyles.bold}>
                             {''.concat(
                                 'Place of supply:',
-                                ib.stateName || '',
+                                ib?.stateName?.label || '',
                                 ' State Code: ',
-                                ib.stateCode || ''
+                                ib?.stateName?.stateCode || ''
                             )}
                         </Text>
                     </View>

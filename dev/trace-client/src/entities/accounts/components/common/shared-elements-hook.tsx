@@ -57,7 +57,8 @@ function useSharedElements() {
         genericUpdateMasterNoForm,
         isControlDisabled,
         execGenericView,  
-        sendEmail,      
+        sendEmail,
+        sendSms,      
         toDecimalFormat,
     } = utilMethods()
     const { hotEmit, hotFilterOn, emit, filterOn, debounceEmit, debounceFilterOn } = useIbuki()
@@ -167,6 +168,7 @@ function useSharedElements() {
         resetAllFormErrors,
         saveForm,
         sendEmail,
+        sendSms,
         setInBag,
         setFormError,
         StyleSheet,

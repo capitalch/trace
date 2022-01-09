@@ -25,10 +25,7 @@ function utils() {
                 isMultipleRows: options.isMultipleRows,
             })
         )
-        const entityNameDashed = 'accounts'// getDashedEntityName(currentEntityName)
-        // const queries = await import(
-        //     `../entities/${entityNameDashed}/artifacts/graphql-queries-mutations`
-        // )
+        const entityNameDashed = 'accounts'
         const queries:any = await import("./artifacts/graphql-queries-mutations")
         const q = queries.default['saleInvoiceView'](
             sqlQueryObject,
