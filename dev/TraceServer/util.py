@@ -80,7 +80,7 @@ def sendMail(recipients, message, htmlBody, attachment=None):
         # msg.body = body
         msg.html = htmlBody
         if(attachment != None):
-            msg.attach('mypdf.pdf','applicayion/pdf', attachment)
+            msg.attach('document.pdf','applicayion/pdf', attachment)
         mail.send(msg)
         return True
     except (Exception) as e:

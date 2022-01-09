@@ -3,6 +3,7 @@ type AccountsMutation {
     genericUpdateMaster(value:Generic): Generic
     genericUpdateMasterDetails(value:Generic): String
     sendEmail(value: Generic): Generic
+    sendSms(value: Generic): Generic
     transferClosingBalances: String
 }
 
