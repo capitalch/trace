@@ -71,7 +71,7 @@ function InvoiceA({
             ),
             email: billTo.email,
             gstin: billTo.gstin,
-            stateName: billTo.state || billTo.jAddress?.state,
+            stateName: billTo.selectedStateOption?.label || billTo?.state || billTo.jAddress?.state,
             stateCode: billTo.stateCode,
         }
         const shipTo = ti.tranH.jData?.shipTo

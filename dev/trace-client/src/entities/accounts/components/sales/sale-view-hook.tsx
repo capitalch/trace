@@ -207,6 +207,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
+            // ret.jsonResult.billTo['stateName'] = ret.jsonResult.billTo['state']
+            // delete ret.jsonResult.billTo['state']
             console.log(JSON.stringify(ret))
             // arbitraryData.rawSaleData = ret
             setInBag('rawSaleData', ret) // for printing in sale-crown.tsx

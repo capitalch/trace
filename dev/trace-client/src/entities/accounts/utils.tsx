@@ -278,7 +278,8 @@ function utils() {
 
     function isInvalidStateCode(stateCode: any) {
         let validCode = false
-        if (_.isNumber(stateCode)) {
+        
+        if (_.isNumber(parseInt(stateCode))) {
             if (_.inRange(stateCode, 1, 38)) {
                 validCode = true
             }

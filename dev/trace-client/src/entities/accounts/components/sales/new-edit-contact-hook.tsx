@@ -20,11 +20,19 @@ import cities from '../../../../data/cities.json'
 function useNewEditContact(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const billTo = arbitraryData.billTo
+
+    // billTo.countryOptions = [] //getCountries()
+    // billTo.selectedCountryOption = {}
+    // billTo.stateOptions = []
+    // billTo.selectedStateOption = {}
+    // billTo.cityOptions = []
+    // billTo.selectedCityOption = {}
+
     const classes = useStyles(arbitraryData.billTo)
 
     useEffect(() => {
         meta.current.isMounted = true
-        setDefaultValues()
+        setOptions()
         setRefresh({})
         return () => {
             meta.current.isMounted = false
@@ -60,62 +68,35 @@ function useNewEditContact(arbitraryData: any) {
         }),
     }
 
-    function getCountries() {
-        return countries.map((x) => {
-            return {
-                value: x.id,
-                label: x.name,
-            }
-        })
-    }
-
-    function getStates() {
-        return states
-            .filter(
-                (x: any) =>
-                    parseInt(x.country_id) ===
-                    arbitraryData?.billTo?.country?.value //101 countryId for India
-            )
-            .map((x: any) => {
-                return {
-                    label: x.name,
-                    value: parseInt(x.id),
-                    stateCode: x.stateCode,
-                }
-            })
-    }
-
-    function getCities() {
-        return cities
-            .filter(
-                (x: any) =>
-                    parseInt(x.state_id) ===
-                    (arbitraryData?.billTo?.state?.value || 41)
-            )
-            .map((x: any) => {
-                return {
-                    label: x.name,
-                    value: parseInt(x.id),
-                }
-            })
-    }
-
-    function handleCityChange(e: any) {
-        billTo.city = { value: e.value, label: e.label }
-        meta.current.isMounted && setRefresh({})
-    }
 
     function handleCountryChange(e: any) {
-        billTo.country = { value: e.value, label: e.label }
-        billTo.state = { value: null, label: null }
-        billTo.city = { value: null, label: null }
+        billTo.selectedCountryOption = { value: e.value, label: e.label }
+        billTo.selectedStateOption = { label: null, value: null, stateCode: 0 }
+        billTo.selectedCityOption = { label: null, value: null, stateCode: 0 }
+        setStateOptions()
+        // billTo.country = { value: e.value, label: e.label }
+        // billTo.state = { value: null, label: null }
+        // billTo.city = { value: null, label: null }
         meta.current.isMounted && setRefresh({})
     }
 
     function handleStateChange(e: any) {
-        billTo.state = { value: e.value, label: e.label }
-        billTo.city = { value: null, label: null }
-        billTo.state.stateCode = e.stateCode
+        billTo.selectedStateOption = {
+            value: e.value,
+            label: e.label,
+            stateCode: e.stateCode,
+        }
+        setCityOptions()
+        billTo.selectedCityOption = { label: null, value: null, stateCode: 0 }
+        // billTo.state = { value: e.value, label: e.label }
+        // billTo.city = { value: null, label: null }
+        billTo.stateCode = e.stateCode
+        meta.current.isMounted && setRefresh({})
+    }
+
+    function handleCityChange(e: any) {
+        billTo.selectedCityOption = { value: e.value, label: e.label }
+        // billTo.city = { value: e.value, label: e.label }
         meta.current.isMounted && setRefresh({})
     }
 
@@ -135,13 +116,13 @@ function useNewEditContact(arbitraryData: any) {
             anniversaryDate: billTo.anniversaryDate,
             address1: billTo.address1,
             address2: billTo.address2,
-            country: billTo.country.label,
-            state: billTo.state.label,
-            city: billTo.city.label,
+            country: billTo.selectedCountryOption.label,
+            state: billTo.selectedStateOption.label,
+            city: billTo.selectedCityOption.label,
             gstin: billTo.gstin,
             pin: billTo.pin,
             dateOfBirth: billTo.dateOfBirth,
-            stateCode: billTo.state.stateCode,
+            stateCode: billTo.stateCode,
         }
         obj.data.push(item)
         const ret = await genericUpdateMasterNoForm({
@@ -162,40 +143,72 @@ function useNewEditContact(arbitraryData: any) {
             !billTo.contactName ||
             isInvalidEmail(billTo.email) ||
             !billTo.address1 ||
-            !billTo.country.value ||
-            !billTo.state.value ||
-            !billTo.city.value ||
+            !billTo?.selectedCountryOption?.label ||
+            !billTo?.selectedStateOption?.label ||
+            !billTo?.selectedCityOption?.label ||
             !billTo.address1 ||
             isInvalidIndiaPin(billTo.pin) ||
-            isInvalidStateCode(billTo.state.stateCode) ||
+            isInvalidStateCode(billTo.stateCode) ||
             isInvalidGstin(billTo.gstin) ||
             isImproperDate(billTo.dateOfBirth) ||
             isImproperDate(billTo.anniversaryDate)
         return !!ret
     }
 
-    function setDefaultValues() {
-        !billTo?.country?.value &&
-            (arbitraryData.billTo.country = {
-                label: 'India',
-                value: 101,
-            })
+    function setStateOptions() {
+        billTo.stateOptions = states
+            .filter(
+                (x: any) =>
+                    parseInt(x.country_id) ===
+                    billTo?.selectedCountryOption?.value
+            )
+            .map((x: any) => ({
+                label: x.name,
+                value: parseInt(x.id),
+                stateCode: x.stateCode,
+            }))
+    }
 
-        !billTo?.state?.value &&
-            (arbitraryData.billTo.state = {
-                label: 'West Bengal',
-                value: 41,
-                stateCode: 19,
-            })
+    function setCityOptions() {
+        billTo.cityOptions = cities
+            .filter(
+                (x: any) =>
+                    parseInt(x.state_id) === billTo?.selectedStateOption?.value
+            )
+            .map((x: any) => ({
+                label: x.name,
+                value: parseInt(x.id),
+            }))
+    }
 
-        !billTo?.city?.value &&
-            (arbitraryData.billTo.city = {
-                label: 'Kolkata',
-                value: 5583,
-            })
+    function setOptions() {
+        billTo.country = billTo?.selectedCountryOption?.label || billTo.country || 'India'
+        billTo.state = billTo.selectedStateOption?.label || billTo.state || 'West Bengal'
+        billTo.city = billTo.selectedCityOption?.label || billTo.city || 'Kolkata'
+        billTo.countryOptions = getCountries()
+        billTo.selectedCountryOption = billTo.countryOptions.find(
+            (x: any) => x.label === billTo.country
+        )
+        setStateOptions()
+
+        billTo.selectedStateOption = billTo.stateOptions.find(
+            (x: any) => x.label === billTo.state
+        )
+        billTo.stateCode = billTo.stateCode || billTo?.selectedStateOption?.stateCode
+        setCityOptions()
+        billTo.selectedCityOption = billTo.cityOptions.find((x:any)=>x.label === billTo.city)
 
         !billTo.dateOfBirth && (billTo.dateOfBirth = '1900-01-01')
         !billTo.anniversaryDate && (billTo.anniversaryDate = '1900-01-01')
+
+        function getCountries() {
+            return countries.map((x) => {
+                return {
+                    value: x.id,
+                    label: x.name,
+                }
+            })
+        }
     }
 
     function Form() {
@@ -307,10 +320,12 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleCountryChange}
                     placeholder="Select country"
-                    options={getCountries()}
+                    // options={getCountries()}
+                    options={billTo.countryOptions}
                     styles={styles}
                     className="react-select-country"
-                    value={arbitraryData.billTo.country || {}}></ReactSelect>
+                    // value={arbitraryData.billTo.country || {}}
+                    value={billTo.selectedCountryOption}></ReactSelect>
 
                 {/* States */}
                 <ReactSelect
@@ -318,10 +333,12 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleStateChange}
                     placeholder="Select State"
-                    options={getStates()}
+                    // options={getStates()}
+                    options={billTo.stateOptions}
                     styles={styles}
                     className="react-select-state"
-                    value={arbitraryData.billTo.state || {}}></ReactSelect>
+                    // value={arbitraryData.billTo.state || {}}
+                    value={billTo.selectedStateOption}></ReactSelect>
 
                 {/* Cities */}
                 <ReactSelect
@@ -329,10 +346,11 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleCityChange}
                     placeholder="Select State"
-                    options={getCities()}
+                    options={billTo.cityOptions}
                     styles={styles}
                     className="react-select-city"
-                    value={arbitraryData.billTo.city || {}}></ReactSelect>
+                    // value={arbitraryData.billTo.city || {}}
+                    value={billTo.selectedCityOption}></ReactSelect>
 
                 {/* Pin */}
                 <InputMask
@@ -357,15 +375,15 @@ function useNewEditContact(arbitraryData: any) {
                     mask="99"
                     alwaysShowMask={true}
                     onChange={(e) => {
-                        billTo.state.stateCode = parseInt(e.target.value)
+                        billTo.stateCode = parseInt(e.target.value)
                         setRefresh({})
                     }}
-                    value={billTo.state?.stateCode || ''}>
+                    value={billTo.stateCode || ''}>
                     {() => (
                         <TextField
                             label="State code"
                             variant="standard"
-                            error={isInvalidStateCode(billTo?.state?.stateCode)}
+                            error={isInvalidStateCode(billTo?.stateCode)}
                             className="short-text-field"
                         />
                     )}
@@ -467,21 +485,21 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .react-select-country': {
                 width: '15rem',
                 border: (billTo: any) => {
-                    const isError = !billTo?.country?.value
+                    const isError = !billTo?.selectedCountryOption?.label
                     return isError ? '3px solid red' : ''
                 },
             },
             '& .react-select-state': {
                 width: '15rem',
                 border: (billTo: any) => {
-                    const isError = !billTo?.state?.value
+                    const isError = !billTo?.selectedStateOption?.label
                     return isError ? '3px solid red' : ''
                 },
             },
             '& .react-select-city': {
                 width: '15rem',
                 border: (billTo: any) => {
-                    const isError = !billTo?.city?.value
+                    const isError = !billTo?.selectedCityOption?.label
                     return isError ? '3px solid red' : ''
                 },
             },
