@@ -35,7 +35,7 @@ accountsMutation = ObjectType("AccountsMutation")
 # sass.compile(dirname=('entities/accounts/templates/scss',
 #              'entities/accounts/static'))
 traceApp = Blueprint('traceApp', __name__,
-                     template_folder='templates', static_folder='static') # , url_prefix='/traceApp' )
+                     template_folder='templates', static_folder='static')  # , url_prefix='/traceApp' )
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
@@ -56,8 +56,8 @@ def test_pdf():
     options = {
         "enable-local-file-access": None
     }
-    html = render_template('bill-template1.html', 
-    companyInfo={'addr1':'', 'addr2':'', 'pin':'', 'phone':'', 'gstin':'', 'email':''}, ref_no='xxx', date='21/12/2021', bill_memo='B', acc_name='', pin='', name='', mobile='', address='', gstin='', email='',stateCode='', products=[])
+    html = render_template('bill-template1.html',
+                           companyInfo={'addr1': '', 'addr2': '', 'pin': '', 'phone': '', 'gstin': '', 'email': ''}, ref_no='xxx', date='21/12/2021', bill_memo='B', acc_name='', pin='', name='', mobile='', address='', gstin='', email='', stateCode='', products=[])
     pdf = pdfkit.from_string(html, False, options=options)
 
     response = make_response(pdf)
@@ -65,12 +65,15 @@ def test_pdf():
     response.headers["Content-Disposition"] = "inline; filename=output.pdf"
     return(response, 200)
 
-@traceApp.route('/trace/pdf', methods=['POST','GET'])
+
+@traceApp.route('/trace/pdf', methods=['POST', 'GET'])
 def pdf():
     req = request
-    x = sendMail(['capitalch@gmail.com'], 'test','<b>This is a test mail</b>',attachment=req.data)
+    x = sendMail(['capitalch@gmail.com'], 'test',
+                 '<b>This is a test mail</b>', attachment=req.data)
     response = make_response('test')
     return(response, 200)
+
 
 @accountsQuery.field("accountsMasterGroupsLedgers")
 def resolve_accounts_masters_groups_ledgers(parent, info):
@@ -143,24 +146,35 @@ def resolve_generic_update_master(parent, info, value):
     id = execGenericUpdateMaster(dbName, valueDict, buCode)
     return id
 
+
 @accountsMutation.field("sendEmail")
 def do_email(parent, info, value):
     value = unquote(value)
     valueDict = json.loads(value)
     attachment = base64.b64decode(valueDict.get('data'))
-    x = sendMail([valueDict.get('emailAddress')], valueDict.get('subject', 'Electronic communication'),valueDict.get('body','<b>Electronic communication</b>'),attachment=attachment)
+    x = sendMail([valueDict.get('emailAddress')], valueDict.get('subject', 'Electronic communication'),
+                 valueDict.get('body', '<b>Electronic communication</b>'), attachment=attachment)
     response = make_response('ok')
     return(response, 200)
 
+
 @accountsMutation.field("sendSms")
 def do_sms(parent, info, value):
+    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+        info.context)
     value = unquote(value)
     valueDict = json.loads(value)
     # attachment = base64.b64decode(valueDict.get('data'))
     # update tranH table jData.pdfBase64 = valueDict.data
     # send SMS
+    sqlKey = valueDict.get('sqlKey')
+    id = valueDict.get('id')
+    execSql(dbName, sqlString=allSqls[sqlKey], args={
+            'id': id, 'data':'XYZ'}, isMultipleRows=False, buCode=buCode)
+
     response = make_response('ok')
     return(response, 200)
+
 
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
@@ -190,7 +204,7 @@ def resolve_generic_update_master_details(parent, info, value):
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
         sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
-    return ret # returns the id of first item, if there are multiple items
+    return ret  # returns the id of first item, if there are multiple items
 
 
 @accountsQuery.field("genericView")
@@ -208,15 +222,18 @@ def resolve_generic_view(parent, info, value):
     valueDict['isMultipleRows'] = valueDict.get('isMultipleRows', False)
     return genericView(dbName, sqlString, valueDict, buCode)
 
+
 @accountsQuery.field("saleInvoiceView")
 def resolve_sale_invoice_view(parent, info, value):
     ret = resolve_generic_view(parent, info, value)
     # set amount in words in ret
     tranDList = ret['jsonResult']["tranD"]
-    saleAmount = [item["amount"] for item in tranDList if item['accClass'] == 'sale'][0]
+    saleAmount = [item["amount"]
+                  for item in tranDList if item['accClass'] == 'sale'][0]
     amountInWords = convertToWord(saleAmount)
     ret['jsonResult']["amountInWords"] = amountInWords
     return(ret)
+
 
 @accountsQuery.field("searchProduct")
 def resolve_search_product(parent, info, value):

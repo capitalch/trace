@@ -224,12 +224,15 @@ function useSaleCrown(
             const base64Data = base64String.substr(
                 base64String.indexOf(',') + 1
             )
+            const id = rawSaleData?.jsonResult?.tranH?.id
             const ret = await sendSms(
                 escape(
                     JSON.stringify({
                         data: base64Data,
                         // subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
                         // body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
+                        id: id,
+                        sqlKey:'update_pdf_invoice',
                         mobileNumber: mobileNumber,
                     })
                 )
