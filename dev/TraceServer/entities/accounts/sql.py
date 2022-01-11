@@ -1523,9 +1523,15 @@ allSqls = {
 
     "update_pdf_invoice":'''
         update "TranH"
-            set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfInvoice}','"6866786667"', true)
+            set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfSaleInvoice}', %(data)s, true)
                 where "id" = %(id)s
     ''',
+
+    # "update_pdf_invoice_test":'''
+    #     update "Test"
+    #         set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfInvoice}', %(data)s, true)
+    #             where "id" = %(id)s
+    # ''',
 
     "updateBlock_editAccount": '''
         do $$

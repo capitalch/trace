@@ -1,5 +1,6 @@
 from os import name
 import base64
+import zlib
 from flask import Blueprint, request, render_template, jsonify, make_response, url_for
 import pdfkit
 # import sass
@@ -19,7 +20,7 @@ from .artifactsHelper import trialBalanceHelper
 from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsLedgersHelper, accountsOpBalHelper
 from .artifactsHelper import genericUpdateMasterDetailsHelper, accountsUpdateOpBalHelper, allCategoriesHelper, transferClosingBalancesHelper
 from .artifactsHelper import searchProductHelper
-from .accounts_utils import getRoomFromCtx
+from .accounts_utils import getRoomFromCtx, traceSendSmsForBill
 from app.link_client import sendToRoom, isLinkConnected
 import loadConfig
 # from app import socketio
@@ -71,6 +72,13 @@ def pdf():
     req = request
     x = sendMail(['capitalch@gmail.com'], 'test',
                  '<b>This is a test mail</b>', attachment=req.data)
+    response = make_response('test')
+    return(response, 200)
+
+@traceApp.route('/trace/view', methods=['GET'])
+def trace_view():
+    req = request
+    
     response = make_response('test')
     return(response, 200)
 
@@ -169,9 +177,15 @@ def do_sms(parent, info, value):
     # send SMS
     sqlKey = valueDict.get('sqlKey')
     id = valueDict.get('id')
+    
+    data = valueDict.get('data')
+    # mobileNumber = valueDict.get('mobileNumber')
     execSql(dbName, sqlString=allSqls[sqlKey], args={
-            'id': id, 'data':'XYZ'}, isMultipleRows=False, buCode=buCode)
-
+            'id': id, 'data': f'"{data}"'}, isMultipleRows=False, buCode=buCode)
+    traceSendSmsForBill({
+        'mobileNumber': valueDict.get('mobileNumber'),
+        'id': valueDict.get('id')
+    })
     response = make_response('ok')
     return(response, 200)
 
