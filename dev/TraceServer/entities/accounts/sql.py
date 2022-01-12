@@ -498,6 +498,12 @@ allSqls = {
                     on a."id" = b."accId"                                                           
                             order by "accType","accLeaf", "accName" ''',
 
+    "get_pdf_sale_bill": '''
+        select "jData"->'pdfSaleBill' as "pdfSaleBill"
+            from "TranH"
+                where "id" = %(id)s
+    ''',
+
     "get_product_on_upc_code": '''
         select p."id", 
             "catName", "isActive","brandName",             
@@ -1523,7 +1529,7 @@ allSqls = {
 
     "update_pdf_invoice":'''
         update "TranH"
-            set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfSaleInvoice}', %(data)s, true)
+            set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfSaleBill}', %(data)s, true)
                 where "id" = %(id)s
     ''',
 

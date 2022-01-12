@@ -5,6 +5,7 @@ from flask import Blueprint, request, render_template, jsonify, make_response, u
 import pdfkit
 # import sass
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
+from requests.models import Response
 from postgres import getPool, execSql, execGenericUpdateMaster,  genericView
 import pandas as pd
 import simplejson as json
@@ -75,10 +76,26 @@ def pdf():
     response = make_response('test')
     return(response, 200)
 
-@traceApp.route('/trace/view', methods=['GET'])
-def trace_view():
-    req = request
-    
+
+@traceApp.route('/view/<encodedPayload>', methods=['GET'])
+def trace_view(encodedPayload):
+    payload = base64.urlsafe_b64decode(encodedPayload).decode()
+    if(payload is not None):
+        tokens = payload.split(',')
+        if(isinstance(tokens, list) and len(tokens) == 3):
+            dbName = tokens[0].split(':')[1]
+            buCode = tokens[1].split(':')[1]
+            id = tokens[2].split(':')[1]
+            sqlString = allSqls['get_pdf_sale_bill']
+            ret = execSql(dbName, sqlString, args={
+                          'id': id}, isMultipleRows=False, buCode=buCode)
+            base64PdfSaleBill = ret.get('pdfSaleBill')
+            pdfData = base64.b64decode(base64PdfSaleBill)
+            return pdfData, 200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'inline; filename="invoice.pdf"'
+            }
+
     response = make_response('test')
     return(response, 200)
 
@@ -172,21 +189,20 @@ def do_sms(parent, info, value):
         info.context)
     value = unquote(value)
     valueDict = json.loads(value)
-    # attachment = base64.b64decode(valueDict.get('data'))
-    # update tranH table jData.pdfBase64 = valueDict.data
-    # send SMS
+
     sqlKey = valueDict.get('sqlKey')
     id = valueDict.get('id')
-    
     data = valueDict.get('data')
-    # mobileNumber = valueDict.get('mobileNumber')
+    # save pdf invoice data in table TranH against id
     execSql(dbName, sqlString=allSqls[sqlKey], args={
             'id': id, 'data': f'"{data}"'}, isMultipleRows=False, buCode=buCode)
-    traceSendSmsForBill({
+    ret = traceSendSmsForBill({
         'mobileNumber': valueDict.get('mobileNumber'),
-        'id': valueDict.get('id')
+        'id': id,
+        'dbName': dbName,
+        'buCode': buCode
     })
-    response = make_response('ok')
+    response = make_response(str(ret))
     return(response, 200)
 
 
