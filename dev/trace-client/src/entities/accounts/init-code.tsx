@@ -198,7 +198,6 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('TRACE-MAIN:JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-        // setVouchersArbitraryData()
         function getRoom() {
             const clientId = getLoginData()?.clientId
             const buCode = getFromBag('buCode')

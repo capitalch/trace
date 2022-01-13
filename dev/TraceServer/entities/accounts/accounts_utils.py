@@ -18,6 +18,7 @@ def traceSendSmsForBill(options):
     try:
         dbName = options.get('dbName')
         buCode = options.get('buCode')
+        unitName = options.get('unitName')
         mobileNumber = options.get('mobileNumber')
         id = options.get('id')
         payload = f'dbName:{dbName},buCode:{buCode},id:{id}'
@@ -40,7 +41,7 @@ def traceSendSmsForBill(options):
             "Content-Type": "application/x-www-form-urlencoded",
             "Cache-Control": "no-cache"
         }
-        company = 'capital'
+        company = unitName # 'capital'
         jsonBody = {
             "route": dltConfig['route'],
             "sender_id": dltConfig['senderId'],
@@ -50,15 +51,15 @@ def traceSendSmsForBill(options):
 
             "language": "english",
             "flash": 0,
-            "numbers": mobileNumber # '9831052332'  # itemData.get('mobile'),
+            "numbers": mobileNumber  # '9831052332'  # itemData.get('mobile'),
         }
 
-        # response = requests.request('POST', apiUrl, data=jsonBody, headers=headers)
-        # respString = response.text
-        # respObj = djson.decode(respString)
-        # result = respObj.get('return')
-        # if(result):
-        #     ret = True
+        response = requests.request('POST', apiUrl, data=jsonBody, headers=headers)
+        respString = response.text
+        respObj = djson.decode(respString)
+        result = respObj.get('return')
+        if(result):
+            ret = True
     except(Exception) as error:
         print(error)
     return(ret)

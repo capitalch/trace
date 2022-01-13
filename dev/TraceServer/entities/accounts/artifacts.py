@@ -198,6 +198,7 @@ def do_sms(parent, info, value):
             'id': id, 'data': f'"{data}"'}, isMultipleRows=False, buCode=buCode)
     ret = traceSendSmsForBill({
         'mobileNumber': valueDict.get('mobileNumber'),
+        'unitName': valueDict.get('unitName'),
         'id': id,
         'dbName': dbName,
         'buCode': buCode
