@@ -1,4 +1,6 @@
 import {
+    _,
+    moment,
     useContext,
     useState,
     useEffect,
@@ -14,11 +16,18 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, filterOn, getFromBag, setInBag } = useSharedElements()
+    const {
+        emit,
+        execGenericView,
+        filterOn,
+        getAccountName,
+        getFromBag,
+        setInBag,
+    } = useSharedElements()
     const multiData: any = useContext(MultiDataContext)
     // const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
-    const arbitraryData:any = multiData.vouchers
-    
+    const arbitraryData: any = multiData.vouchers
+
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
         meta.current.isMounted = true
@@ -100,6 +109,8 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
                 sqlKey: 'getJson_tranHeader_details',
             })
             populateData(ret?.jsonResult)
+            preparePdfVoucher()
+            meta.current.isMounted && setRefresh({})
         } catch (e: any) {
             console.log(e.message)
         } finally {
@@ -129,7 +140,6 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             }
             doReIndexKeys('debits')
             doReIndexKeys('credits')
-            meta.current.isMounted && setRefresh({})
 
             function doReIndexKeys(tp: string) {
                 let ind = 0
@@ -140,6 +150,24 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
                     it.key = incr()
                 }
             }
+        }
+
+        function preparePdfVoucher() {
+            const ad = arbitraryData
+            const dateFormat = getFromBag('dateFormat')
+            ad.pdfVoucher = {}
+            const vou = ad.pdfVoucher
+            vou.heading = _.capitalize(loadComponent)
+            vou.unitInfo = getFromBag('unitInfo')
+            vou.tranDate = moment(ad.header.tranDate).format(dateFormat)
+            vou.debits = ad.debits.map((item: any) => ({
+                ...item,
+                accName: getAccountName(item.accId),
+            }))
+            vou.credits = ad.credits.map((item: any) => ({
+                ...item,
+                accName: getAccountName(item.accId),
+            }))
         }
     }
 

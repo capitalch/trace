@@ -12,9 +12,7 @@ function InvoiceA({
     const { getAccountClass, getFromBag, toDecimalFormat } = useSharedElements()
     const { InvoicePdf } = useInvoiceA()
     const dateFormat = getFromBag('dateFormat')
-    //  const invoiceData = getInvoiceData(traceCompany, traceInvoiceIndividual)
     const invoiceData = getInvoiceData(unitInfo, rawSaleData)
-    // processInvoiceData(invoiceData)
 
     return <InvoicePdf invoiceData={invoiceData} />
 

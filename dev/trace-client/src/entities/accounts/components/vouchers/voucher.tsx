@@ -24,7 +24,6 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
 
     return (
         <div className={classes.content}>
-            {/* <VoucherContext.Provider value={arbitraryData}> */}
             <Typography component="div" variant="subtitle1" color="secondary">
                 {meta.current.title}
             </Typography>
@@ -38,11 +37,9 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
             </Tabs>
             <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
             <VoucherView
-                hidden={meta.current.tabValue !== 1}
-                // hidden={false}
+                hidden={meta.current.tabValue !== 1}                
                 tranTypeId={getTranTypeId()}
             />
-            {/* </VoucherContext.Provider> */}
         </div>
     )
 }

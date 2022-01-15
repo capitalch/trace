@@ -40,16 +40,8 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
         handleSms,
         handleSubmit,
         meta,
-        setRefresh,
     } = useSaleCrown(arbitraryData, saleType, drillDownEditAttributes)
 
-    // const unitInfo = getFromBag('unitInfo')
-
-    // const [instance] = usePDF({ document: doc })
-    // const blob = instance.blob
-    useEffect(() => {
-        // const blob = await pdf(<Doc />).toBlob()
-    }, [])
     return (
         <div className={classes.content}>
             <div className="sales-crown">

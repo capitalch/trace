@@ -1,20 +1,30 @@
-import { _, useState } from '../../../../imports/regular-imports'
+import { _, useState, useContext, useRef } from '../../../../imports/regular-imports'
 import { Button, Typography } from '../../../../imports/gui-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-
-function useCrown(meta: any) {
+import { MultiDataContext } from '../common/multi-data-bridge'
+// import {useReactToPrint} from 'react-to-print'
+function useCrown(meta: any, componentRef:any) {
     const [, setRefresh] = useState({})
+    meta.current.dialogConfig = {}
+    meta.current.dialogConfig.title = 'Voucher'
     const {
         accountsMessages,
         emit,
         genericUpdateMasterDetails,
+        // getAccountName,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         toDecimalFormat,
     } = useSharedElements()
 
+    const ctx: any = useContext(MultiDataContext)
+    const ad = ctx?.vouchers
+
+    // const handlePrintPdf = useReactToPrint({
+    //     content : () => componentRef.current
+    // })
     function checkError(ad: any) {
         function headerError() {
             function dateError() {
@@ -204,7 +214,7 @@ function useCrown(meta: any) {
     }
 
     function computeSummary(ad: any) {
-       ad && (ad.summary = {})
+        ad && (ad.summary = {})
         const debitsSummary = getSummary('debits')
         const creditsSummary = getSummary('credits')
 
@@ -243,10 +253,6 @@ function useCrown(meta: any) {
         return { totalDebits, totalCredits, gstDebits, gstCredits }
     }
 
-    function handlePrint(){
-
-    }
-
     function ResetButton() {
         return (
             <Button
@@ -259,6 +265,16 @@ function useCrown(meta: any) {
                 Reset
             </Button>
         )
+    }
+
+    function handleClose() {
+        meta.current.showDialog = false
+        setRefresh({})
+    }
+
+    function handleOpen(){
+        meta.current.showDialog = true
+        setRefresh({})
     }
 
     function SubmitButton({ ad }: any) {
@@ -459,7 +475,8 @@ function useCrown(meta: any) {
 
     return {
         checkError,
-        handlePrint,
+        handleClose,
+        handleOpen,
         ResetButton,
         SubmitButton,
         setRefresh,

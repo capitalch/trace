@@ -152,7 +152,7 @@ const App: React.FC = () => {
 
     return (
         <ThemeProvider theme={theme}>
-                <Component8 />
+                <Component6 />
         </ThemeProvider>
     )
 }
