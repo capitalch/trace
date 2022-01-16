@@ -137,6 +137,7 @@ c) In all Typography comment out disableTypography
 # 14-12-2021 - 16-01-2022
 1. Printing of sale invoice, mail, SMS
 2. Print vouchers
+3. Print general ledger
 
 # 06-12-2021 - 13-12-2021
 1. Other works not for Trace
