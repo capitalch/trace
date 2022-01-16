@@ -2,11 +2,11 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 function useInvoiceA() {
     const {
         Document,
-        Line,
+        // Line,
         Page,
         StyleSheet,
         toDecimalFormat,
-        Svg,
+        // Svg,
         Text,
         View,
     } = useSharedElements()
@@ -37,7 +37,6 @@ function useInvoiceA() {
                 marginBottom: 8,
                 paddingBottom: 5,
                 borderBottom: 1,
-                // borderTop: 1,
             },
             footer: {
                 position: 'absolute',
@@ -117,25 +116,25 @@ function useInvoiceA() {
                         <Text style={styles.gstin}>GSTIN {ci.gstin}</Text>
                         <Text style={styles.address}>
                             {''.concat(
-                                ci.address1,
+                                ci.address1 || '',
                                 ' ',
-                                ci.address2,
+                                ci.address2 || '',
                                 ' PIN: ',
-                                ci.pin,
+                                ci.pin || '',
                                 ' Ph: ',
-                                ci.phone,
+                                ci.phone || '',
                                 ' email: ',
-                                ci.email,
+                                ci.email || '',
                                 ' Web: ',
-                                ci.web
+                                ci.web || ''
                             )}
                         </Text>
                         <Text style={styles.address}>
                             {''.concat(
-                                ci.stateName,
+                                ci.stateName || '',
                                 ' ',
                                 'State code: ',
-                                ci.stateCode
+                                ci.stateCode || ''
                             )}
                         </Text>
                     </View>
@@ -200,11 +199,9 @@ function useInvoiceA() {
         function SubHeaderBlock({ invoiceData }: any) {
             const styles = StyleSheet.create({
                 SubHeaderBlock: {
-                    // marginTop: 5,
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     paddingBottom: 7,
-                    // borderBottom: 1,
                 },
                 customerDetailsCont: {
                     flexDirection: 'column',
@@ -229,15 +226,14 @@ function useInvoiceA() {
                             Customer Details
                         </Text>
                         <Text style={styles.bold}>
-                            {ib.name}
+                            {ib.name || ''}
                         </Text>
                         <Text style={styles.bold}>
                             {''.concat('GSTIN ', ib.gstin || '')}
                         </Text>
                         <Text style={gStyles.normal}>
                             {''.concat(
-                                // ib.name,', ',
-                                ib.address1,
+                                ib.address1 || '',
                                 ' ',
                                 ib.address2 || '',
                                 ' Pin: ',
@@ -436,7 +432,6 @@ function useInvoiceA() {
                         paddingTop: 2,
                         flexDirection: 'row',
                         paddingBottom: 2,
-                        // marginBottom: 2,
                         borderBottom:1,
                     },
                 })

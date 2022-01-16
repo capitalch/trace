@@ -1,6 +1,5 @@
 import { useStyles } from './xx-grid-hook'
-import React from 'react'
-import { _, clsx, useState } from '../../../../imports/regular-imports'
+import { _, clsx, } from '../../../../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -66,7 +65,6 @@ interface GridActionMessagesOptions {
 }
 
 interface XXGridOptions {
-    // allRows?: any[]
     autoFetchData?: boolean
     className?: string
     columns: any[]
@@ -97,7 +95,6 @@ interface XXGridOptions {
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
-        // allRows,
         className,
         gridActionMessages,
         columns,
@@ -113,16 +110,16 @@ function XXGrid(gridOptions: XXGridOptions) {
     gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
         fetchRows,
-        fillColumnBalance,
-        // handleEditRowsModelChange,
+        fillColumnBalance,        
         injectDailySummary,
-        meta,
-        // onCellValueChange,
+        meta,        
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,
         setRefresh,
         toggleOrder,
+        // onCellValueChange,
+        // handleEditRowsModelChange,
     } = useXXGrid(gridOptions)
 
     const { debounceEmit, emit, isMediumSizeDown, toDecimalFormat } =
@@ -131,10 +128,6 @@ function XXGrid(gridOptions: XXGridOptions) {
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
     addSpecialColumns(specialColumns, gridActionMessages)
-    // if (allRows && allRows.length > 0) {
-    //     meta.current.allRows = allRows
-    //     meta.current.filteredRows = allRows
-    // }
     return (
         <DataGridPro
             getRowClassName={(params: any) => {

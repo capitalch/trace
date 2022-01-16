@@ -41,7 +41,7 @@ function InvoiceA({
             titleRight: 'Original for recipient',
             invoiceNo: ti.tranH.autoRefNo,
             invoiceDate: moment(ti.tranH.tranDate).format(dateFormat),
-            type: ti.tranH.tranTypeId == 4 ? 'Sale on Cash' : 'Sale Ret',
+            type: ti.tranH.tranTypeId == 4 ? 'Sale' : 'Sale Ret',
             terms: '',
         }
         i.companyInfo = {
@@ -136,7 +136,7 @@ function InvoiceA({
                             (gstObj?.igst || 0))
                 )
             } else if (['debtor', 'creditor'].includes(accClass)) {
-                i.invoiceInfo.type.concat(' ', 'on credit')
+                i.invoiceInfo.type = i.invoiceInfo.type.concat(' ', 'on credit')
             } else {
                 i.receipts.push({
                     type: accClass,
