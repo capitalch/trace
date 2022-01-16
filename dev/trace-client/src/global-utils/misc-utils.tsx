@@ -269,6 +269,106 @@ function utilMethods() {
         return !ret
     }
 
+    function numberToWordsInRs(value: any) {
+        var fraction = Math.round(frac(value) * 100)
+        var f_text = ''
+
+        if (fraction > 0) {
+            f_text = 'AND ' + convert_number(fraction) + ' PAISE'
+        }
+
+        return convert_number(value) + ' RUPEE ' + f_text + ' ONLY'
+        
+        function frac(f: any) {
+            return f % 1
+        }
+
+        function convert_number(number: any) {
+            if (number < 0 || number > 999999999) {
+                return 'NUMBER OUT OF RANGE!'
+            }
+            var Gn = Math.floor(number / 10000000) /* Crore */
+            number -= Gn * 10000000
+            var kn = Math.floor(number / 100000) /* lakhs */
+            number -= kn * 100000
+            var Hn = Math.floor(number / 1000) /* thousand */
+            number -= Hn * 1000
+            var Dn = Math.floor(number / 100) /* Tens (deca) */
+            number = number % 100 /* Ones */
+            var tn = Math.floor(number / 10)
+            var one = Math.floor(number % 10)
+            var res = ''
+
+            if (Gn > 0) {
+                res += convert_number(Gn) + ' CRORE'
+            }
+            if (kn > 0) {
+                res += (res == '' ? '' : ' ') + convert_number(kn) + ' LAKH'
+            }
+            if (Hn > 0) {
+                res += (res == '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
+            }
+
+            if (Dn) {
+                res += (res == '' ? '' : ' ') + convert_number(Dn) + ' HUNDRED'
+            }
+
+            var ones = Array(
+                '',
+                'ONE',
+                'TWO',
+                'THREE',
+                'FOUR',
+                'FIVE',
+                'SIX',
+                'SEVEN',
+                'EIGHT',
+                'NINE',
+                'TEN',
+                'ELEVEN',
+                'TWELVE',
+                'THIRTEEN',
+                'FOURTEEN',
+                'FIFTEEN',
+                'SIXTEEN',
+                'SEVENTEEN',
+                'EIGHTEEN',
+                'NINETEEN'
+            )
+            var tens = Array(
+                '',
+                '',
+                'TWENTY',
+                'THIRTY',
+                'FOURTY',
+                'FIFTY',
+                'SIXTY',
+                'SEVENTY',
+                'EIGHTY',
+                'NINETY'
+            )
+
+            if (tn > 0 || one > 0) {
+                if (!(res == '')) {
+                    res += ' AND '
+                }
+                if (tn < 2) {
+                    res += ones[tn * 10 + one]
+                } else {
+                    res += tens[tn]
+                    if (one > 0) {
+                        res += '-' + ones[one]
+                    }
+                }
+            }
+
+            if (res == '') {
+                res = 'zero'
+            }
+            return res
+        }
+    }
+
     function objectPropsToDecimalFormat(obj: any) {
         for (const prop in obj) {
             obj[prop] = toDecimalFormat(obj[prop])
@@ -336,7 +436,7 @@ function utilMethods() {
         return ret
     }
 
-    async function sendEmail(value: any){
+    async function sendEmail(value: any) {
         let ret = false
         const currentEntityName = getCurrentEntity()
         try {
@@ -344,15 +444,10 @@ function utilMethods() {
             const queries = await import(
                 `../entities/${currentEntityName}/artifacts/graphql-queries-mutations`
             )
-            
-            const q = queries.default['sendEmail'](
-                value,
-                currentEntityName
-            )
+
+            const q = queries.default['sendEmail'](value, currentEntityName)
             const result = await mutateGraphql(q)
-            ret =
-                result.data[currentEntityName]
-                    .sendEmail
+            ret = result.data[currentEntityName].sendEmail
             if (ret) {
                 emit('SHOW-MESSAGE', {})
             } else {
@@ -368,22 +463,17 @@ function utilMethods() {
         return ret
     }
 
-    async function sendSms(value: any){
+    async function sendSms(value: any) {
         let ret = false
         const currentEntityName = getCurrentEntity()
         try {
             const queries = await import(
                 `../entities/${currentEntityName}/artifacts/graphql-queries-mutations`
             )
-            
-            const q = queries.default['sendSms'](
-                value,
-                currentEntityName
-            )
+
+            const q = queries.default['sendSms'](value, currentEntityName)
             const result = await mutateGraphql(q)
-            ret =
-                result.data[currentEntityName]
-                    .sendSms
+            ret = result.data[currentEntityName].sendSms
             if (ret) {
                 emit('SHOW-MESSAGE', {})
             } else {
@@ -425,6 +515,7 @@ function utilMethods() {
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
+        numberToWordsInRs,
         objectPropsToDecimalFormat,
         removeProp,
         saveForm,

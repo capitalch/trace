@@ -1,11 +1,15 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { _, moment, useContext, useEffect } from '../../../../../imports/regular-imports'
-import { style, textAlign } from '@mui/system'
-// import { MultiDataContext } from '../../common/multi-data-bridge'
+import {
+    _,
+    moment,
+    useEffect,
+} from '../../../../../imports/regular-imports'
 
 function PdfVoucher({ arbitraryData }: any) {
     const {
+        accountsMessages,
         Document,
+        numberToWordsInRs,
         Page,
         StyleSheet,
         Text,
@@ -16,9 +20,7 @@ function PdfVoucher({ arbitraryData }: any) {
     } = useSharedElements()
     const ad = arbitraryData
 
-    useEffect(()=>{
-
-    },[])
+    useEffect(() => {}, [])
 
     const gStyles = StyleSheet.create({
         page: {
@@ -28,7 +30,7 @@ function PdfVoucher({ arbitraryData }: any) {
             paddingTop: 20,
             paddingBottom: 30,
             fontFamily: 'Helvetica',
-        },        
+        },
         normal: {
             fontSize: 8,
             marginTop: 2,
@@ -46,6 +48,7 @@ function PdfVoucher({ arbitraryData }: any) {
             <Page size="A4" style={gStyles.page}>
                 <HeaderBlock vou={ad.pdfVoucher} />
                 <TransactionBlock vou={ad.pdfVoucher} />
+                <SummaryBlock vou={ad.pdfVoucher} />
             </Page>
         </Document>
     )
@@ -114,13 +117,12 @@ function PdfVoucher({ arbitraryData }: any) {
                 headerVoucher: {
                     flexDirection: 'column',
                     marginTop: 3,
-                    width: '33%',
+                    width: '30%',
                 },
                 voucherType: {
                     fontWeight: 'bold',
                     fontSize: 10,
                     marginTop: 5,
-                    // textTransform: 'uppercase',
                 },
             })
 
@@ -154,24 +156,27 @@ function PdfVoucher({ arbitraryData }: any) {
         return (
             <View style={styles.transactions}>
                 <Text
-                    style={{ fontSize: 10, fontWeight: 'bold', marginTop: 2, textDecoration:'underline', marginBottom:2 }}>
+                    style={{
+                        fontSize: 10,
+                        fontWeight: 'bold',
+                        marginTop: 2,
+                        textDecoration: 'underline',
+                        marginBottom: 2,
+                    }}>
                     Transactions
                 </Text>
                 <TranHeader vou={vou} />
                 <TranDetails vou={vou} />
-                <TranFooter vou = {vou} />
+                <TranFooter vou={vou} />
             </View>
         )
 
         function TranHeader({ vou }: any) {
             const styles = StyleSheet.create({
                 transactionHeader: {
-                    // fontSize: 11,
-                    // fontWeight: 'bold',
                     flexDirection: 'row',
                     paddingBottom: 3,
                     borderBottom: 1,
-                    // flexWrap:'wrap'
                 },
             })
 
@@ -194,7 +199,6 @@ function PdfVoucher({ arbitraryData }: any) {
                     <Text style={[gStyles.bold, { width: 60 }]}>Instr no</Text>
                     <Text style={[gStyles.bold, { width: 60 }]}>Ref no</Text>
                     <Text style={[gStyles.bold, { width: 70 }]}>Remarks</Text>
-                    {/* <Text style={[gStyles.bold, { width: 250 }]}  ></Text> */}
                     <Text
                         style={[
                             gStyles.bold,
@@ -270,22 +274,56 @@ function PdfVoucher({ arbitraryData }: any) {
             }
         }
 
-        function TranFooter({vou}:any){
-            return(<View style={{flexDirection:'row', fontSize:8, borderTop:1, paddingTop: 5, borderBottom:1, paddingBottom:5}}>
-                <Text style={{width:20}}></Text>
-                <Text style={{width:130}}>Total</Text>
-                <Text style={{width:190}}></Text>
-                <Text style={{width:70, textAlign:'right'}}>{toDecimalFormat(vou.summary.totalDebits)}</Text>
-                <Text style={{width:70, textAlign:'right'}}>{toDecimalFormat(vou.summary.totalCredits)}</Text>
-            </View>)
+        function TranFooter({ vou }: any) {
+            return (
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        fontSize: 8,
+                        borderTop: 1,
+                        paddingTop: 5,
+                        borderBottom: 1,
+                        paddingBottom: 5,
+                    }}>
+                    <Text style={{ width: 20 }}></Text>
+                    <Text style={{ width: 130 }}>Total</Text>
+                    <Text style={{ width: 190 }}></Text>
+                    <Text style={{ width: 70, textAlign: 'right' }}>
+                        {toDecimalFormat(vou.summary.totalDebits)}
+                    </Text>
+                    <Text style={{ width: 70, textAlign: 'right' }}>
+                        {toDecimalFormat(vou.summary.totalCredits)}
+                    </Text>
+                </View>
+            )
         }
+    }
+
+    function SummaryBlock({ vou }: any) {
+        return (
+            <View
+                style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    fontSize: 9,
+                    position: 'absolute',
+                    bottom: 30,
+                    left: 30,
+                    width: '100%'
+                }}>
+                <Text style={{ width: '65%' }}>{vou.summary.comments}</Text>
+                <View style={{ flexDirection: 'column', width: '30%' }}>
+                    <Text>For {vou.unitInfo.unitName}</Text>
+                    <Text style={{ marginTop: 20 }}>Authorised signatory</Text>
+                </View>
+            </View>
+        )
     }
 
     function preparePdfVoucherObject() {
         const dateFormat = getFromBag('dateFormat')
         ad.pdfVoucher = {}
         const vou: any = ad.pdfVoucher
-        // vou.heading = _.capitalize(loadComponent)
         vou.unitInfo = getFromBag('unitInfo')
         vou.unitInfo.phone = ''.concat(
             vou.unitInfo.landPhone || '',
@@ -308,6 +346,20 @@ function PdfVoucher({ arbitraryData }: any) {
         vou.header = ad.header
         vou.header.voucherType = getVoucherType(vou.header.tranTypeId)
         vou.summary = ad.summary
+        vou.summary.amountInWords = numberToWordsInRs(
+            vou.summary.totalDebits || 0
+        )
+        if (vou.header.tranTypeId === 3) {
+            vou.summary.comments = accountsMessages.receivedWithThanks
+                .replace('$rs', vou.summary.amountInWords)
+                .replace('$person', credits[0].accName)
+        } else {
+            vou.summary.comments = accountsMessages.totalTransactions.replace(
+                '$rs',
+                vou.summary.amountInWords
+            )
+        }
+
         function getVoucherType(typeId: number) {
             const logic: any = {
                 1: 'Journal',

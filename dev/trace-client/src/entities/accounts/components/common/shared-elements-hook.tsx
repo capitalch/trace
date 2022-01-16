@@ -48,14 +48,16 @@ function useSharedElements() {
     } = manageFormsState()
     const { doValidateForm, isValidForm } = getValidationFabric()
     const {
+        execGenericView,  
         extractAmount,
         getDateMaskMap,
-        saveForm,
+        
         genericUpdateMaster,
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
-        execGenericView,  
+        numberToWordsInRs,
+        saveForm,        
         sendEmail,
         sendSms,      
         toDecimalFormat,
@@ -155,6 +157,7 @@ function useSharedElements() {
         map,
         messages,
         mutateGraphql,
+        numberToWordsInRs,
         Page,
         pdf,
         PDFViewer,
