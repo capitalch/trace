@@ -12,12 +12,13 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import {MultiDataContext} from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
     const multiData: any = useContext(MultiDataContext)
+    multiData.sales.saleType = saleType
     const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
 
     useEffect(() => {
@@ -33,12 +34,12 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             multiData.sales.shouldCloseParentOnSave = true
         }
 
-        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {
-            meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
+        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {            
+            multiData.sales.tabValue = d.data
             setRefresh({})
         })
 
-        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(()=>{
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
             setInBag('salesData', multiData.sales)
         })
 
@@ -53,7 +54,6 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         isMounted: false,
         saleTypeLabel: 'Sale',
         showDialog: false,
-        tabValue: 0,
         dialogConfig: {
             title: '',
             content: () => {},
@@ -61,12 +61,117 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         },
     })
 
-    const salesData  = getFromBag('salesData')
-    if(salesData){
+    const salesData = getFromBag('salesData')
+    if (salesData) {
         multiData.sales = salesData
         setInBag('salesData', undefined)
     }
-    
+
+    function handleChangeTab(e: any, newValue: number) {
+        multiData.sales.tabValue = newValue
+        if (newValue === 3) {
+            // view
+            multiData.sales.saleViewHookFetchData()
+        } else {
+            multiData.sales.salesCrownRefresh()
+        }
+        meta.current.isMounted && setRefresh({})
+    }
+
+    function setAccounts() {
+        //saleAccounts
+        const allAccounts = getFromBag('allAccounts') || []
+        multiData.sales.allAccounts = allAccounts
+        const saleAccounts = allAccounts.filter(
+            (el: any) =>
+                ['sale'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        multiData.sales.ledgerAccounts = saleAccounts
+
+        // Cash bank accounts
+        const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+        const cashBankAccountsWithLedgers = allAccounts.filter(
+            (el: any) =>
+                cashBankArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        multiData.sales.accounts.cashBankAccountsWithLedgers =
+            cashBankAccountsWithLedgers
+
+        const cashBankAccountsWithSubledgers = allAccounts.filter(
+            (el: any) =>
+                cashBankArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'S')
+        )
+        multiData.sales.accounts.cashBankAccountsWithSubledgers =
+            cashBankAccountsWithSubledgers
+        // Debtors creditors accounts
+        const debtorCreditorAccountsWithLedgers = allAccounts
+            .filter(
+                (el: any) =>
+                    ['debtor', 'creditor'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                    !el.isAutoSubledger
+            )
+            .sort((a: any, b: any) => {
+                if (a.accName > b.accName) return 1
+                if (a.accName < b.accName) return -1
+                return 0
+            })
+        multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
+            debtorCreditorAccountsWithLedgers
+        const debtorCreditorAccountsWithSubledgers = allAccounts
+            .filter(
+                (el: any) =>
+                    ['debtor', 'creditor'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'S') &&
+                    !el.isAutoSubledger
+            )
+            .sort((a: any, b: any) => {
+                if (a.accName > b.accName) return 1
+                if (a.accName < b.accName) return -1
+                return 0
+            })
+        multiData.sales.accounts.debtorCreditorAccountsWithSubledgers =
+            debtorCreditorAccountsWithSubledgers
+        // auto subledger accounts
+        const autoSubledgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['debtor'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                el.isAutoSubledger
+        )
+        multiData.sales.accounts.autoSubledgerAccounts = autoSubledgerAccounts
+    }
+
+    return { multiData, handleChangeTab, meta }
+}
+
+export { useSales }
+
+const useStyles: any = makeStyles((theme: Theme) =>
+    createStyles({
+        content: {
+            '& .tabs': {
+                backgroundColor: 'dodgerBlue',
+                color: theme.palette.common.white,
+                marginTop: theme.spacing(0.5),
+                '& .reset':{
+                    backgroundColor: theme.palette.amber.main,
+                    color: theme.palette.amber.contrastText,
+                    height: theme.spacing(4),
+                    margin:'auto',
+                    // marginRight: '20%'
+                }
+            },
+        },
+    })
+)
+
+export { useStyles }
+
+
     // const arbitraryData: any = useRef({
     //     accounts: {
     //         cashBankAccountsWithLedgers: [],
@@ -117,99 +222,3 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     //     tranDate: moment().format(isoDateFormat),
     //     isViewBack: false,
     // })
-   
-
-    function handleChangeTab(e: any, newValue: number) {
-        meta.current.tabValue = newValue
-        if (newValue === 3) {
-            // view
-            multiData.sales.saleViewHookFetchData()
-        }
-        meta.current.isMounted && setRefresh({})
-    }
-
-    function setAccounts() {
-        //saleAccounts
-        const allAccounts = getFromBag('allAccounts') || []
-        multiData.sales.allAccounts = allAccounts
-        const saleAccounts = allAccounts.filter(
-            (el: any) =>
-                ['sale'].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        multiData.sales.ledgerAccounts = saleAccounts
-
-        // Cash bank accounts
-        const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-        const cashBankAccountsWithLedgers = allAccounts.filter(
-            (el: any) =>
-                cashBankArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        multiData.sales.accounts.cashBankAccountsWithLedgers =
-            cashBankAccountsWithLedgers
-
-        const cashBankAccountsWithSubledgers = allAccounts.filter(
-            (el: any) =>
-                cashBankArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'S')
-        )
-        multiData.sales.accounts.cashBankAccountsWithSubledgers =
-            cashBankAccountsWithSubledgers
-        // Debtors creditors accounts
-        const debtorCreditorAccountsWithLedgers = allAccounts
-            .filter(
-                (el: any) =>
-                    ['debtor', 'creditor'].includes(el.accClass) &&
-                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                    !el.isAutoSubledger
-            )
-            .sort((a: any, b: any) => {
-                if (a.accName > b.accName) return 1
-                if (a.accName < b.accName) return -1
-                return 0
-            })
-            multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
-            debtorCreditorAccountsWithLedgers
-        const debtorCreditorAccountsWithSubledgers = allAccounts
-            .filter(
-                (el: any) =>
-                    ['debtor', 'creditor'].includes(el.accClass) &&
-                    (el.accLeaf === 'Y' || el.accLeaf === 'S') &&
-                    !el.isAutoSubledger
-            )
-            .sort((a: any, b: any) => {
-                if (a.accName > b.accName) return 1
-                if (a.accName < b.accName) return -1
-                return 0
-            })
-            multiData.sales.accounts.debtorCreditorAccountsWithSubledgers =
-            debtorCreditorAccountsWithSubledgers
-        // auto subledger accounts
-        const autoSubledgerAccounts = allAccounts.filter(
-            (el: any) =>
-                ['debtor'].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                el.isAutoSubledger
-        )
-        multiData.sales.accounts.autoSubledgerAccounts = autoSubledgerAccounts
-    }
-
-    return { multiData, handleChangeTab, meta }
-}
-
-export { useSales }
-
-const useStyles: any = makeStyles((theme: Theme) =>
-    createStyles({
-        content: {
-            '& .tabs': {
-                backgroundColor: 'dodgerBlue',
-                color: theme.palette.common.white,
-                marginTop: theme.spacing(0.5),
-            },
-        },
-    })
-)
-
-export { useStyles }

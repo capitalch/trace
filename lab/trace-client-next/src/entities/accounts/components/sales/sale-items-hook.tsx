@@ -21,14 +21,27 @@ function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const lineItems = arbitraryData.lineItems
 
-    const { confirm, emit, filterOn, messages } = useSharedElements()
+    const { confirm, messages, debounceFilterOn } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
-        arbitraryData.saleItemsRefresh = ()=>{setRefresh({})}        
+        arbitraryData.saleItemsRefresh = () => {
+            setRefresh({})
+        }
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(
+            (d: any) => {
+                arbitraryData.salesCrownRefresh()
+                if (d.data.source === 'upcCode') {
+                    searchProductOnUpcCode(d.data.value)
+                } else if (d.data.source === 'productCode') {
+                    searchProductOnProductCode(d.data.value)
+                }
+            }
+        )
         return () => {
             meta.current.isMounted = false
+            subs1.unsubscribe()
         }
     }, [])
 
@@ -85,6 +98,14 @@ function useSaleItems(arbitraryData: any) {
         const discount = rowData.discount
         const qty = rowData.qty
         let amount, gst, sgst, cgst
+        // if(meta.current.isPriceChanged){
+        //     priceGst = price * (1 + gstRate / 100)
+        //     rowData.priceGst = priceGst
+        // }
+        // if(meta.current.isPriceGstChanged){
+        //     price = priceGst / (1 + gstRate / 100)
+        //     rowData.price = price
+        // }
         if (priceGst) {
             price = priceGst / (1 + gstRate / 100)
             rowData.price = price
@@ -264,7 +285,7 @@ function useSaleItems(arbitraryData: any) {
                     <TextareaAutosize
                         autoFocus={true}
                         className="serial-number"
-                        // rowsMin={5}
+                        minRows={5}
                         onChange={(e: any) => {
                             met.current.slNo = e.target.value
                             processCount()
@@ -301,6 +322,7 @@ function useSaleItems(arbitraryData: any) {
             rowData.serialNumbers = JSON.parse(
                 JSON.stringify(pre.serialNumbers)
             )
+            arbitraryData.salesCrownRefresh()
             meta.current.showDialog = false
             meta.current.isMounted && setRefresh({})
         }

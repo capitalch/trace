@@ -215,7 +215,7 @@ function TrialBalance() {
                     <InputSwitch
                         checked={getFromBag('trialBalExpandAll') || false}
                         style={{ float: 'right', marginRight: '0.5rem' }}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             const val = e.target.value
                             setInBag('trialBalExpandAll', val)
                             if (val) {
@@ -254,7 +254,7 @@ function TrialBalance() {
                 value={meta.current.data}
                 expandedKeys={getFromBag('trialBalExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e) => {
+                onToggle={(e:any) => {
                     setInBag('trialBalExpandedKeys', e.value)
                     meta.current.isMounted && setRefresh({})
                 }}>

@@ -6,13 +6,12 @@ import {
     Typography,
     TextField,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleHeader, useStyles } from './sale-header-hook'
 import { BillTo } from './bill-to'
 import { ShipTo } from './ship-to'
 import { SaleBillNoSelect } from './sale-bill-no-select'
-import { MultiDataContext } from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function SaleHeader() {
     const classes = useStyles()
@@ -83,14 +82,12 @@ function SaleHeader() {
                             arbitraryData.tranDate = e.target.value
                             setRefresh({})
                             arbitraryData.salesCrownRefresh()
-                            // emit('SALES-CROWN-REFRESH', null)
                         }}
-                        onFocus={(e) => e.target.select()}
+                        onFocus={(e:any) => e.target.select()}
                         value={arbitraryData.tranDate || ''}
                     />
 
-                    {arbitraryData.isAssignmentReturn && SaleBillNoSelect('')}
-
+                    {(arbitraryData.saleType === 'ret') && <SaleBillNoSelect />}
                     {/* remarks */}
                     <TextField
                         label="Common remarks"
@@ -103,7 +100,7 @@ function SaleHeader() {
                         value={arbitraryData.commonRemarks || ''}
                     />
                     {/* <SaleVariety /> */}
-                    {arbitraryData.isSales && SaleVariety()}
+                    {(arbitraryData.saleType === 'sal') && SaleVariety()}
 
                     {/* Sale account */}
                     <div>
@@ -131,7 +128,7 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 handleSaleVariety('r')
                                 resetAddresses()
                                 handleRetailCashBankSales()
@@ -147,7 +144,7 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 handleSaleVariety('a')
                                 resetAddresses()
                                 handleAutoSubledgerSales()
@@ -163,7 +160,7 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 handleSaleVariety('i')
                                 resetAddresses()
                                 handleInstitutionSales()

@@ -154,7 +154,7 @@ function useTraceHeader({ setRefresh }: any) {
     function getDialogTitle() {
         return (
             <DialogTitle
-                disableTypography
+                // disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
                 <h2>{meta.current.dialogConfig.title}</h2>
@@ -183,7 +183,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={0}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', superAdminMenuJson)
                         emit('LOAD-MAIN-COMPONENT', '')
@@ -201,7 +201,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={1}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', adminMenuJson)
                         emit('LOAD-MAIN-COMPONENT', '')
@@ -219,7 +219,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={2}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.dialogConfig.title = 'Uid change'
                         meta.current.dialogConfig.formId = 'changeUid'
                         changeUidJson.items[0].value = meta.current.uid
@@ -244,7 +244,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={3}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.dialogConfig.title = 'Change password'
                         meta.current.dialogConfig.formId = 'changePwd'
                         changePwdJson.items[0].value = meta.current.uid
@@ -270,7 +270,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={4}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         logout()
                         meta.current.showDialog = false
                         meta.current.isMounted && setRefresh({})
@@ -316,7 +316,7 @@ function useTraceHeader({ setRefresh }: any) {
                         size="small"
                         variant="text"
                         className={classes.forgotPwdButton}
-                        onClick={(e) => {
+                        onClick={(e:any) => {
                             meta.current.dialogConfig.title = 'Forgot password'
                             meta.current.dialogConfig.formId = 'forgotPwd'
                             meta.current.dialogConfig.formJson = forgotPwdJson

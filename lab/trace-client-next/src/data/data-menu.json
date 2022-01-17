@@ -55,7 +55,7 @@
                             }
                         },
                         {
-                            "name": "assignmentReturnSubMenu",
+                            "name": "salesReturnSubMenu",
                             "label": "Sales return",
                             "componentName": "sales",
                             "args":{
@@ -71,7 +71,7 @@
                             }
                         },
                         {
-                            "name": "assignmentReturnedSubMenu",
+                            "name": "purchasesReturnSubMenu",
                             "label": "Purchase return",
                             "componentName": "purchases",
                             "args": {

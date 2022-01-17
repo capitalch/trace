@@ -9,6 +9,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { useFlexLayout } from 'react-table'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
@@ -17,7 +18,6 @@ function useGeneralLedger(getArtifacts: any) {
         emit,
         filterOn,
         getFromBag,
-        isAllowedUpdate,
     } = useSharedElements()
 
     useEffect(() => {
@@ -61,18 +61,31 @@ function useGeneralLedger(getArtifacts: any) {
         isDailySummary: false,
         isMounted: false,
         isReverseOrder: false,
+        sharedData : {},
         showDialog: false,
+        showLedgerDialog: false,
         transactions: [],
         ledgerSubledger: {},
         sqlQueryArgs: null,
         dialogConfig: {
             title: '',
+            ledgerViewTitle:'',
             content: () => {},
             actions: () => {},
         },
     })
 
-    return { meta }
+    function handleLedgerDialogClose(){
+        meta.current.showLedgerDialog = false
+        setRefresh({})
+    }
+
+    function handleLedgerPreview(){
+        meta.current.showLedgerDialog = true
+        setRefresh({})
+    }
+
+    return {handleLedgerDialogClose,handleLedgerPreview, meta }
 }
 
 export { useGeneralLedger }
@@ -105,23 +118,12 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .data-grid': {
                 height: 'calc(100vh - 303px)',
             },
-            // '& .data-table': {
-            //     '& .p-datatable-tfoot': {
-            //         '& tr': {
-            //             '& td': {
-            //                 fontSize: '0.8rem',
-            //                 color: 'dodgerBlue !important',
-            //             }
-            //         }
-            //     },
-            //     '& .ledger-summary': {
-            //         color: theme.palette.blue.dark,
-            //         backgroundColor: '#FFFAFA',
-            //         fontFamily: 'Lato',
-            //         fontWeight: 'bold'
-            //     }
-            // },
         },
+        previewTitle: {
+            display: 'flex',
+            flexDirection:'row',
+            justifyContent:'space-between'
+        }
     })
 )
 

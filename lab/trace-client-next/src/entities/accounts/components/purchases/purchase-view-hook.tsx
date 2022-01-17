@@ -39,7 +39,6 @@ function usePurchaseView(
         getAccountClass,
         getFromBag,
         isAllowedUpdate,
-        isDateAuditLocked,
         toDecimalFormat,
     } = useSharedElements()
 
@@ -74,7 +73,6 @@ function usePurchaseView(
     useEffect(() => {
         const subs = filterOn('PURCHASE-VIEW-HOOK-FETCH-DATA').subscribe(
             (d: any) => {
-                // emit('XX-GRID-FETCH-DATA', null)
                 emit(
                     getXXGridParams().gridActionMessages.fetchIbukiMessage,
                     null

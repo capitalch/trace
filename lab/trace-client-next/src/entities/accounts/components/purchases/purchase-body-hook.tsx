@@ -1,5 +1,14 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import {Button, makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    Button,
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseBody(arbitraryData: any, purchaseType: string) {
@@ -11,15 +20,16 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         genericUpdateMasterDetails,
         getCurrentComponent,
         getFromBag,
-        hotFilterOn,
         isInvalidDate,
         isInvalidGstin,
-        map,
-        registerAccounts,
     } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
+        setAccounts()
+        setPurchaseErrorObject()
+        handlePurchaseCashCredit('credit')
+        setRefresh({})
         const subs1 = filterOn(
             'PURCHASE-BODY-HANDLE-PURCHASE-CASH-CREDIT'
         ).subscribe((d: any) => {
@@ -41,193 +51,44 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             content: () => {},
             actions: () => {},
         },
-        test: '',
     })
-
-    useEffect(() => {
-        // Debtor / creditor
-        const pipe1: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter((el: any) => {
-                    const accClasses = ['debtor', 'creditor']
-                    let condition =
-                        accClasses.includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                        !el.isAutoSubledger
-                    return condition
-                })
-            )
-        )
-
-        // Purchase
-        const pipe2: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter(
-                    (el: any) =>
-                        ['purchase'].includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                )
-            )
-        )
-
-        // cash / bank / ecash /card
-        const pipe3: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter(
-                    (el: any) =>
-                        ['cash', 'bank', 'ecash', 'card'].includes(
-                            el.accClass
-                        ) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                )
-            )
-        )
-
-        const subs1 = pipe1.subscribe((d: any) => {
-            meta.current.debtorCreditorLedgerAccounts = d.map((el: any) => {
-                return {
-                    label: el.accName,
-                    value: el.id,
-                    accLeaf: el.accLeaf,
-                }
-            })
-        })
-
-        const subs2 = pipe2.subscribe((d: any) => {
-            meta.current.purchaseLedgerAccounts = d.map((el: any) => {
-                return {
-                    label: el.accName,
-                    value: el.id,
-                    accLeaf: el.accLeaf,
-                }
-            })
-        })
-
-        const subs3 = pipe3.subscribe((d: any) => {
-            meta.current.cashBankLedgerAccounts = d.map((el: any) => {
-                return {
-                    label: el.accName,
-                    value: el.id,
-                    accLeaf: el.accLeaf,
-                }
-            })
-        })
-
-        const subs4: any = hotFilterOn(
-            'DATACACHE-SUCCESSFULLY-LOADED'
-        ).subscribe((d: any) => {
-            meta.current.allAccounts = d.data.allAccounts
-            registerAccounts(meta.current.allAccounts)
-        })
-        // subs1.add(subs2).add(subs3).add(subs4)
-        setRefresh({})
-        return () => {
-            subs1.unsubscribe()
-            subs2.unsubscribe()
-            subs3.unsubscribe()
-            subs4.unsubscribe()
-        }
-    }, [])
-
-    useEffect(() => {
-        meta.current.ledgerAccounts = meta.current.debtorCreditorLedgerAccounts
-    }, [])
     const ad = arbitraryData
+    function setAccounts() {
+        // allAccounts
+        const allAccounts = getFromBag('allAccounts') || []
+        ad.accounts.allAccounts = allAccounts
 
-    function allErrorMethods() {
-        const err = meta.current.errorsObject
-        const ab = arbitraryData
+        //purchaseLedgerAccounts
+        const purchaseLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['purchase'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        ad.accounts.purchaseLedgerAccounts = purchaseLedgerAccounts
 
-        function getDateError() {
-            err.dateError = isInvalidDate(ab.tranDate) || undefined
-            return err.dateError
-        }
-        function getInvoiceError() {
-            // logic for invoice no for purchase or purchase ret
-            if (purchaseType === 'pur') {
-                err.invoiceNoError = ab.userRefNo ? undefined : true
-            } else {
-                err.invoiceNoError = undefined
-            }
+        // cashBankLedgerAccounts
+        const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+        const cashBankLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                cashBankArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        ad.accounts.cashBankLedgerAccounts = cashBankLedgerAccounts
 
-            return err.invoiceNoError
-        }
-        function getPurchaseAccountError() {
-            err.purchaseAccountError =
-                ab.ledgerSubledgerPurchase.isLedgerSubledgerError || undefined
-            return err.purchaseAccountError
-        }
-        function getOtherAccountError() {
-            err.otherAccountError =
-                ab.ledgerSubledgerOther.isLedgerSubledgerError || undefined
-            return err.otherAccountError
-        }
-        function getGstError() {
-            if (arbitraryData.isGstInvoice) {
-                if ((ab.cgst > 0 && ab.sgst > 0) || ab.igst > 0) {
-                    err.gstError = undefined
-                } else {
-                    err.gstError = true
-                }
-            } else {
-                err.gstError = undefined
-            }
-            return err.gstError
-        }
-        function getGstinError() {
-            if (arbitraryData.isGstInvoice) {
-                if (ab.gstin) {
-                    err.gstinError = isInvalidGstin(ab.gstin)
-                } else {
-                    err.gstinError = true
-                }
-            } else {
-                err.gstinError = undefined
-            }
-            return err.gstinError
-        }
-
-        function getInvoiceAmountError() {
-            if (arbitraryData.isGstInvoice) {
-                err.invoiceAmountError = ab.invoiceAmount ? undefined : true
-            } else {
-                err.invoiceAmountError = undefined
-            }
-            return err.invoiceAmountError
-        }
-        function getLineItemsError() {
-            const lineItemsErrors = arbitraryData.lineItems.map((item: any) => {
-                return Object.values(item.errorsObject).some((x: any) => !!x)
-            })
-            const ret = lineItemsErrors.some((x: any) => !!x) || undefined
-            err.lineItemsError = ret
-            return ret
-        }
-        function getQtyError() {
-            if (arbitraryData.qty) {
-                err.qtyError = undefined
-            } else {
-                err.qtyError = true
-            }
-            return err.qtyError
-        }
-
-        return {
-            getDateError,
-            getGstError,
-            getGstinError,
-            getInvoiceAmountError,
-            getInvoiceError,
-            getLineItemsError,
-            getOtherAccountError,
-            getPurchaseAccountError,
-            getQtyError,
-        }
+        // debtorCreditorLedgerAccounts
+        const drCrArray = ['debtor', 'creditor']
+        const debtorCreditorLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                drCrArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf == 'L') &&
+                !el.isAutoSubledger
+        )
+        ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
     }
 
     function checkIfValidInvoice() {
         const errorAllowed = 0.99
-        const amountErrorAllowed = arbitraryData.invoiceAmount * 0.5/100 // 0.5 % error in total amount is allowed
+        const amountErrorAllowed = (arbitraryData.invoiceAmount * 0.5) / 100 // 0.5 % error in total amount is allowed
         meta.current.amountQtyGstErrors = {}
         const errorObject: any = meta.current.amountQtyGstErrors
         if (
@@ -275,18 +136,128 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         return ret
     }
 
-    function getError(): boolean {
-        let ret: boolean = true
-        const errors = Object.values(allErrorMethods())
-        for (let f of errors) {
-            f()
-        }
-        ret = Object.values(meta.current.errorsObject).some((x: any) => x)
-        return ret
-    }
+    function setPurchaseErrorObject() {
+        const errorObject = ad.errorObject
 
-    function handleClear() {
-        emit('PURCHASE-CLEAR-ALL', null)
+        errorObject.isDateError = () => isInvalidDate(ad.tranDate) || false
+        errorObject.isInvoiceError = () => {
+            let ret = false
+            if (purchaseType === 'pur') {
+                ret = ad.userRefNo ? false : true
+            }
+            return ret
+        }
+        errorObject.isHeadError = () => {
+            return errorObject.isDateError() || errorObject.isInvoiceError()
+        }
+
+        errorObject.isPurchaseAccountError = () => {
+            return ad.ledgerSubledgerPurchase.isLedgerSubledgerError || false
+        }
+        errorObject.isOtherAccountError = () => {
+            return ad.ledgerSubledgerOther.isLedgerSubledgerError || false
+        }
+        errorObject.isGstinError = () => {
+            let ret = true
+            if (ad.isGstInvoice) {
+                if (ad.gstin) {
+                    ret = isInvalidGstin(ad.gstin)
+                }
+            } else {
+                ret = false
+            }
+            return ret
+        }
+        errorObject.isGstError = () => {
+            let ret = true
+            if (ad.isGstInvoice) {
+                if ((ad.cgst > 0 && ad.sgst > 0) || ad.igst > 0) {
+                    ret = false
+                }
+            } else {
+                ret = false
+            }
+            return ret
+        }
+        errorObject.isInvoiceAmountError = () => {
+            let ret = false
+            if (ad.isGstInvoice) {
+                ret = ad.invoiceAmount ? false : true
+            }
+            return ret
+        }
+        errorObject.isTotalQtyError = () => {
+            let ret = true
+            if (ad.qty) {
+                ret = false
+            }
+            return ret
+        }
+        errorObject.isBodyError = () => {
+            return (
+                errorObject.isPurchaseAccountError() ||
+                errorObject.isOtherAccountError() ||
+                errorObject.isGstinError() ||
+                errorObject.isGstError() ||
+                errorObject.isInvoiceAmountError() ||
+                errorObject.isTotalQtyError()
+            )
+        }
+
+        errorObject.isProductCodeError = (curr: any) =>
+            curr?.productCode ? false : true
+        errorObject.isHsnError = (curr: any) => {
+            let ret = false
+            if (ad.isGstInvoice) {
+                ret = curr.hsn ? false : true
+            }
+            return ret
+        }
+        errorObject.isQtyError = (curr: any) => (curr?.qty ? false : true)
+        errorObject.isGstRateError = (curr: any) => {
+            let ret = false
+            if (ad.isGstInvoice) {
+                ret = curr.gstRate ? false : true
+            }
+            return ret
+        }
+        errorObject.isDiscountError = (curr: any) =>
+            curr.price >= curr.discount ? undefined : true
+        errorObject.isSlNoError = (curr: any) => {
+            function getCount() {
+                return (
+                    curr?.serialNumbers.split(',').filter(Boolean).length || 0
+                )
+            }
+            const ok = getCount() === curr.qty || getCount() === 0
+            return !ok
+        }
+        errorObject.isItemError = (curr: any) => {
+            const a = errorObject.isProductCodeError(curr)
+            const b = errorObject.isHsnError(curr)
+            const c = errorObject.isGstRateError(curr)
+            const d = errorObject.isDiscountError(curr)
+            const e = errorObject.isQtyError(curr)
+            const f = errorObject.isDiscountError(curr)
+            const g = errorObject.isSlNoError(curr)
+            return a || b || c || d || e || f || g
+        }
+
+        errorObject.isItemsError = () => {
+            const a =
+                ad.lineItems.reduce((prev: boolean, curr: any) => {
+                    prev = prev || errorObject.isItemError(curr)
+                    return prev
+                }, false) ?? true
+            return a
+        }
+
+        errorObject.isError = () => {
+            const a = errorObject.isHeadError()
+            const b = errorObject.isBodyError()
+            const c = errorObject.isItemsError()
+            return a || b || c
+        }
     }
 
     function handleIsGstInvoice(e: any) {
@@ -302,17 +273,24 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         meta.current.isMounted && setRefresh({})
     }
 
-    function handlePurchaseCashCredit(purchaseCashCredit: string) {
+    function handlePrint() {}
+
+    function preHandlePurchaseCashCredit(purchaseCashCredit: string) {
         arbitraryData.ledgerSubledgerOther = {
             accId: undefined,
             isLedgerSubledgerError: true,
         }
+        handlePurchaseCashCredit(purchaseCashCredit)
+    }
+
+    function handlePurchaseCashCredit(purchaseCashCredit: string) {
         if (purchaseCashCredit === 'credit') {
-            meta.current.ledgerAccounts =
-                meta.current.debtorCreditorLedgerAccounts
+            arbitraryData.accounts.ledgerAccounts =
+                arbitraryData.accounts.debtorCreditorLedgerAccounts
             arbitraryData.purchaseCashCredit = 'credit'
         } else {
-            meta.current.ledgerAccounts = meta.current.cashBankLedgerAccounts
+            arbitraryData.accounts.ledgerAccounts =
+                arbitraryData.accounts.cashBankLedgerAccounts
             arbitraryData.purchaseCashCredit = 'cash'
         }
         meta.current.isMounted && setRefresh({})
@@ -373,21 +351,22 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         const details = extractDetails()
 
         header.data[0].details = details
-        
+
         const ret = await genericUpdateMasterDetails([header])
         if (ret.error) {
             console.log(ret.error)
         } else {
             if (ad.shouldCloseParentOnSave) {
-                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', null)
-            }  else if(ad.isViewBack){
+                emit(
+                    'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG',
+                    null
+                )
+            } else if (ad.isViewBack) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('PURCHASES-HOOK-CHANGE-TAB', 1)
                 emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
                 // emit('PURCHASE-HOOK-RESET-DATA', null)
-            }
-            
-            else {
+            } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
         }
@@ -496,11 +475,9 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     }
 
     return {
-        allErrorMethods,
-        getError,
-        handleClear,
         handleIsGstInvoice,
-        handlePurchaseCashCredit,
+        handlePrint,
+        preHandlePurchaseCashCredit,
         handleSubmit,
         meta,
         queryGstin,
@@ -527,8 +504,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .common-remarks': {
                     maxWidth: '10rem',
                 },
-                '& .submit': {
+                '& .print-submit-button': {
                     marginLeft: 'auto',
+                    '& .print-button':{
+                        marginRight:theme.spacing(1),
+                        '& .print-icon':{
+                            color: theme.palette.indigo.dark,
+                        }
+                    }
                 },
                 '& .purchase-type': {
                     position: 'relative',
@@ -541,35 +524,50 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
 
             '& .body-line-2': {
-                marginTop: theme.spacing(1),
+                marginTop: theme.spacing(3),
                 alignItems: 'center',
                 display: 'flex',
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(2),
-                columnGap: theme.spacing(4),
+                justifyContent: 'space-between',
 
-                '& .ledger-subledger': {
-                    marginTop: theme.spacing(0.2),
-                },
-
-                '& .reset': {
-                    marginLeft: 'auto',
-                },
-                '& .invoice': {
+                '& .left': {
                     display: 'flex',
-                    flexDirection: 'column',
-                    rowGap: theme.spacing(0.5),
-                    maxWidth: '9rem',
-                    '& input': {
-                        textAlign: 'end',
+                    flexWrap: 'wrap',
+                    rowGap: theme.spacing(2),
+                    columnGap: theme.spacing(4),
+                    '& .ledger-subledger': {
+                        marginTop: theme.spacing(0.2),
                     },
                 },
-                '& .gst': {
+
+                '& .right': {
+                    // marginLeft: 'auto',
                     display: 'flex',
-                    flexDirection: 'column',
-                    maxWidth: '8rem',
-                    '& input': {
-                        textAlign: 'end',
+                    rowGap: theme.spacing(2),
+                    columnGap: theme.spacing(4),
+                    backgroundColor: theme.palette.grey[100],
+                    // border: '1px solid grey',
+                    // padding: theme.spacing(4),
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    '& .invoice': {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        rowGap: theme.spacing(1),
+                        maxWidth: '9rem',
+                        '& input': {
+                            textAlign: 'end',
+                        },
+                    },
+                    '& .gst': {
+                        display: 'flex',
+                        flexDirection: 'column',
+                        rowGap: '0.25rem',
+                        maxWidth: '8rem',
+                        '& input': {
+                            textAlign: 'end',
+                        },
                     },
                 },
             },

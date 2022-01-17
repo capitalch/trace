@@ -21,18 +21,23 @@ import {
     manageEntitiesState,
     useIbuki,
 } from '../../../../imports/trace-imports'
-import { utils } from '../../utils'
 import { Voucher } from '../vouchers/voucher'
 import { Sales } from '../sales/sales'
 import { Purchases } from '../purchases/purchases'
 import { DebitNotes } from '../debit-credit-notes/debit-notes'
 import { CreditNotes } from '../debit-credit-notes/credit-notes'
 import { truncateSync } from 'fs'
+import {
+    MultiDataContext,
+    getPurchasesArbitraryData,
+    getSalesArbitraryData,
+    getDebitCreditNotesArbitraryData,
+    getVouchersArbitraryData,
+} from '../../components/common/multi-data-bridge'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
     const { getFromBag } = manageEntitiesState()
-    // const confirm = useConfirm()
     const {
         accountsMessages,
         confirm,
@@ -125,7 +130,7 @@ function AccountsLedgerDialog() {
                 fullWidth={true}
                 onClose={closeDialog}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
                     <h3>{'Account: '.concat(meta.current.accName)}</h3>
@@ -169,7 +174,7 @@ function AccountsLedgerDialog() {
                 // fullScreen={true}
             >
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-child-dialog-title"
                     className="dialog-title">
                     <h3>{meta.current.childDialogTiitle}</h3>
@@ -183,7 +188,6 @@ function AccountsLedgerDialog() {
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
                     <DrillDownEditComponent />
-                    {/* <Voucher loadComponent='journal' /> */}
                 </DialogContent>
                 <DialogActions></DialogActions>
             </Dialog>
@@ -258,7 +262,17 @@ function AccountsLedgerDialog() {
             // credit notes
             ret = <CreditNotes drillDownEditAttributes={attrs} />
         }
-        return ret
+        return (
+            <MultiDataContext.Provider
+                value={{
+                    sales: getSalesArbitraryData(),
+                    purchases: getPurchasesArbitraryData(),
+                    debitCreditNotes: getDebitCreditNotesArbitraryData(),
+                    vouchers: getVouchersArbitraryData()
+                }}>
+                {ret}
+            </MultiDataContext.Provider>
+        )
     }
 
     function getArtifacts() {

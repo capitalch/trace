@@ -6,7 +6,7 @@ import {
 } from '../../../../imports/regular-imports'
 import { makeStyles, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { getArtifacts } from '../../../../imports/trace-imports'
+// import { getArtifacts } from '../../../../imports/trace-imports'
 
 function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
     const [, setRefresh] = useState({})
@@ -18,7 +18,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
         getFromBag,
         genericUpdateMaster,
         isAllowedUpdate,
-        isDateAuditLocked,
+        // isDateAuditLocked,
         accountsMessages,
         toDecimalFormat,
     } = useSharedElements()
@@ -214,11 +214,14 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
             ah.lineRemarksDebit = ret?.debits[0]?.remarks
             ah.tranDetailsIdDebit = ret?.debits[0]?.tranDetailsId
             ah.tranDetailsIdCredit = ret?.credits[0]?.tranDetailsId
+        
+            arbitraryData.tabValue = 0
+            arbitraryData.isViewBack = true
+            emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 0)
+            setRefresh({})
         }
 
-        arbitraryData.value = 0
-        arbitraryData.body.isViewBack = true
-        arbitraryData.setRefresh({})
+        
     }
 
     return { getXXGridParams, loadDataOnId, meta }

@@ -4,38 +4,54 @@ import {
     moment,
     useState,
 } from '../../../../imports/regular-imports'
-import { Typography } from '../../../../imports/gui-imports'
+import { Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography } from '../../../../imports/gui-imports'
+import {
+    CloseSharp,
+    Preview,
+} from '../../../../imports/icons-import'
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
+import {PdfLedger} from '../pdf/ledgers/pdf-ledger'
 
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const { meta } = useGeneralLedger(getArtifacts)
+    const { handleLedgerDialogClose, handleLedgerPreview, meta } = useGeneralLedger(getArtifacts)
 
     const {
         accountsMessages,
         emit,
-        // getGeneralLedger,
         getAccountName,
         LedgerSubledger,
+        PDFViewer,
         toDecimalFormat,
     } = useSharedElements()
-
-    // const { fetchData, getLedgerColumns, LedgerDataTable } =
-    //     getGeneralLedger(meta)
 
     return (
         <div className={classes.content}>
             <div className="header">
+
                 <Typography variant="h6" className="heading" component="span">
                     {meta.current.accName}
                 </Typography>
+
                 <div className="select-ledger">
-                    <Typography component="label" variant="subtitle2">
-                        Select ledger account
-                    </Typography>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography component="label" variant="subtitle2">
+                            Select ledger account
+                        </Typography>
+                        <Tooltip
+                            title="Print preview">
+                            <IconButton
+                                size="small"
+                                disabled={false}
+                                onClick={handleLedgerPreview}>
+                                <Preview className="preview-icon" />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+
                     <LedgerSubledger
                         className="ledger-subledger"
                         allAccounts={meta.current.allAccounts}
@@ -59,28 +75,28 @@ function GeneralLedger() {
                                 emit('XX-GRID-RESET', null)
                             }
                             meta.current.isMounted && setRefresh({})
-                        }}
-                    />
+                        }} />
                 </div>
             </div>
+
             <div className="data-grid">
                 <XXGrid
-                    gridActionMessages={getArtifacts().gridActionMessages}
                     autoFetchData={false}
                     columns={getArtifacts().columns}
+                    gridActionMessages={getArtifacts().gridActionMessages}
                     hideViewLimit={true}
+                    jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
+                    sharedData={meta.current.sharedData}
                     summaryColNames={getArtifacts().summaryColNames}
-                    title="Ledger view"
                     sqlQueryId="get_accountsLedger"
                     sqlQueryArgs={meta.current.sqlQueryArgs}
                     specialColumns={getArtifacts().specialColumns}
+                    title="Ledger view"
                     toShowOpeningBalance={true}
-                    toShowColumnBalance={true}
+                    toShowColumnBalanceCheckBox={true}
                     toShowClosingBalance={true}
                     toShowDailySummary={true}
                     toShowReverseCheckbox={true}
-                    // xGridProps={{ disableSelectionOnClick: true }}
-                    jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                 />
             </div>
             <PrimeDialog
@@ -92,6 +108,29 @@ function GeneralLedger() {
                 }}>
                 {accountsMessages.selectAccountDetails}
             </PrimeDialog>
+            <Dialog
+                open={meta.current.showLedgerDialog}
+                fullWidth={true}
+                maxWidth="md">
+                <DialogTitle>
+                    <div className={classes.previewTitle}>
+                        <div>Ledger view: {meta.current.accName}</div>
+                        <Tooltip title="Close">
+                            <IconButton
+                                size="small"
+                                disabled={false}
+                                onClick={handleLedgerDialogClose}>
+                                <CloseSharp />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                </DialogTitle>
+                <DialogContent>
+                    <PDFViewer showToolbar={true} width={840} height={600}>
+                        <PdfLedger ledgerData={meta.current.sharedData.filteredRows} accName={meta.current.accName} />
+                    </PDFViewer>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 
@@ -186,7 +225,7 @@ function GeneralLedger() {
         const specialColumns = {
             isEdit: true,
             isDelete: true,
-            
+
         }
         const gridActionMessages = {
             fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-GENERAL-LEDGER-DATA',

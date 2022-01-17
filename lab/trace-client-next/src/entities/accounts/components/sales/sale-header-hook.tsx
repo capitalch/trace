@@ -171,6 +171,7 @@ function useSaleHeader(arbitraryData: any) {
 
     function handleSaleVariety(variety: string) {
         arbitraryData.saleVariety = variety
+        arbitraryData.salesCrownRefresh()
         meta.current.isMounted && setRefresh({})
     }
 
@@ -182,6 +183,7 @@ function useSaleHeader(arbitraryData: any) {
 
     function onChangeLedgerSubledger() {
         localStorage.setItem('saleAccountId', arbitraryData.rowData.accId)
+        arbitraryData.salesCrownRefresh()
         meta.current.isMounted && setRefresh({})
     }
 

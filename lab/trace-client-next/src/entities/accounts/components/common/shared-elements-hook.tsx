@@ -1,6 +1,6 @@
-import { makeStyles, Theme, createStyles , } from '../../../../imports/gui-imports'
+import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
-
+import { Document,BlobProvider, Line, Page,pdf,PDFViewer, StyleSheet, Svg, Text,usePDF, View, } from '@react-pdf/renderer'
 import {
     globalMessages,
     graphqlService,
@@ -10,12 +10,12 @@ import {
     manageFormsState,
     queries,
     ReactForm,
+    useIbuki,
     usingIbuki,
     useTraceGlobal,
     useTraceMaterialComponents,
     XXGrid,
 } from '../../../../imports/trace-imports'
-
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import accountsMessages from '../../json/accounts-messages.json'
 import messages from '../../../../messages.json'
@@ -48,26 +48,32 @@ function useSharedElements() {
     } = manageFormsState()
     const { doValidateForm, isValidForm } = getValidationFabric()
     const {
+        execGenericView,  
         extractAmount,
-        saveForm,
+        getDateMaskMap,
+        
         genericUpdateMaster,
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
-        execGenericView,
+        numberToWordsInRs,
+        saveForm,        
+        sendEmail,
+        sendSms,      
         toDecimalFormat,
     } = utilMethods()
-    const { hotEmit, hotFilterOn, emit, filterOn } = usingIbuki()
+    const { hotEmit, hotFilterOn, emit, filterOn, debounceEmit, debounceFilterOn } = useIbuki()
     const {
         TraceDialog,
         traceGlobalSearch,
         TraceFullWidthSubmitButton,
         TraceSearchBox,
     } = useTraceMaterialComponents()
-    const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
+    const { getCurrentMediaSize, isMediumSizeDown, isMediumSizeUp, getCurrentWindowSize } =
         useTraceGlobal()
     const confirm = useConfirm()
     const {
+        execSaleInvoiceView,
         getAccountClass,
         getAccountName,
         getAccountClassWithAutoSubledger,
@@ -90,12 +96,17 @@ function useSharedElements() {
     } = utils()
     return {
         accountsMessages,
+        BlobProvider,
         clearServerError,
         confirm,
+        debounceEmit,
+        debounceFilterOn,
+        Document,
         doFormRefresh,
         doValidateForm,
         emit,
         execGenericView,
+        execSaleInvoiceView,
         extractAmount,
         filterOn,
         genericUpdateMaster,
@@ -109,6 +120,7 @@ function useSharedElements() {
         getCurrentEntity,
         getCurrentMediaSize,
         getCurrentWindowSize,
+        getDateMaskMap,
         getFromBag,
         getFormData,
         getFormObject,
@@ -128,6 +140,7 @@ function useSharedElements() {
         isDateAuditLocked,
         isDateNotAuditLocked,
         isGoodToDelete,
+        isMediumSizeDown,
         isMediumSizeUp,
         isImproperDate,
         isInvalidDate,
@@ -139,10 +152,15 @@ function useSharedElements() {
         isValidForm,
         LedgerSubledger,
         LedgerSubledgerCascade,
+        Line,
         manageFormsState,
         map,
         messages,
         mutateGraphql,
+        numberToWordsInRs,
+        Page,
+        pdf,
+        PDFViewer,
         queries,
         queryGraphql,
         ReactForm,
@@ -151,8 +169,13 @@ function useSharedElements() {
         resetForm,
         resetAllFormErrors,
         saveForm,
+        sendEmail,
+        sendSms,
         setInBag,
         setFormError,
+        StyleSheet,
+        Svg,
+        Text,
         toDecimalFormat,
         TraceDialog,
         TraceFullWidthSubmitButton,
@@ -162,6 +185,8 @@ function useSharedElements() {
         useGeneric,
         useTraceMaterialComponents,
         useTraceGlobal,
+        usePDF,
+        View,
         XXGrid,
     }
 }

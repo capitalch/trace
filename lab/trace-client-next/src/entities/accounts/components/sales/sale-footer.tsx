@@ -8,7 +8,7 @@ import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
 import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useSaleFooter, useStyles } from './sale-footer-hook'
-import { MultiDataContext } from '../common/multi-data-util'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function SaleFooter() {
     const [, setRefresh] = useState({})
@@ -92,13 +92,14 @@ function SaleFooter() {
                         decimalScale={2}
                         error={rowData.amount === 0 ? true : false}
                         fixedDecimalScale={true}
-                        onFocus={(e) => {
+                        onFocus={(e:any) => {
                             e.target.select()
                         }}
                         onValueChange={(values: any) => {
                             const { floatValue } = values
                             rowData.amount = floatValue || 0.0
                             computeSummary()
+                            arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
                         }}
                         thousandSeparator={true}
@@ -115,8 +116,9 @@ function SaleFooter() {
                 body={(rowData: any) => (
                     <TextField
                         variant="standard"
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             rowData.instrNo = e.target.value
+                            arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
                         }}
                         value={rowData.instrNo || ''}
@@ -132,7 +134,7 @@ function SaleFooter() {
                     <TextField
                         variant="standard"
                         fullWidth={true}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             rowData.remarks = e.target.value
                             meta.current.isMounted && setRefresh({})
                         }}

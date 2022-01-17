@@ -147,7 +147,7 @@ function useManageRoles(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={async (e) => {
+                        onClick={async (e:any) => {
                             resetPermission()
                             meta.current.dialogConfig.permissionConfig.isPermission = true
                             meta.current.dialogConfig.isEditMode = true
@@ -211,7 +211,7 @@ function useManageRoles(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={(e) => deleteRow(node, manageRoles.read)}>
+                        onClick={(e:any) => deleteRow(node, manageRoles.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,

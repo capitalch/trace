@@ -1,5 +1,6 @@
 import {
     _,
+    useContext,
     useState,
     useEffect,
     useRef,
@@ -9,15 +10,16 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { useIbuki } from '../../../../imports/trace-imports'
+import { MultiDataContext } from '../common/multi-data-bridge'
+import {useSharedElements} from '../common/shared-elements-hook'
 
 function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
     const [, setRefresh] = useState({})
-    const { emit, filterOn } = useIbuki()
+    const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
+    const multiData: any = useContext(MultiDataContext)
     const meta: any = useRef({
         isMounted: false,
         setRefresh: setRefresh,
-        value: 0,
     })
     useEffect(() => {
         meta.current.isMounted = true
@@ -28,7 +30,8 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
                     'DEBIT-CREDIT-NOTES-FETCH-DATA-ON-ID-DRILL-DOWN-EDIT',
                     drillDownEditAttributes.tranHeaderId
                 )
-            meta.current.shouldCloseParentOnSave = true
+            // meta.current.shouldCloseParentOnSave = true
+            multiData.debitCreditNotes.shouldCloseParentOnSave = true
         }
         return () => {
             meta.current.isMounted = false
@@ -38,23 +41,32 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
     useEffect(() => {
         const subs1 = filterOn('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB').subscribe(
             (d: any) => {
-                handleOnChange(null, d.data)
+                handleOnTabChange(null, d.data)
             }
         )
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+            setInBag('debitCreditNotesData', multiData.debitCreditNotes)
+        })
         return () => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
-
-    function handleOnChange(e: any, newValue: number) {
-        meta.current.value = newValue
+    const debitCreditNotesData = getFromBag('debitCreditNotesData')
+    if(debitCreditNotesData){
+        multiData.debitCreditNotes = debitCreditNotesData
+        setInBag('debitCreditNotesData', undefined)
+    }
+    function handleOnTabChange(e: any, newValue: number) {
+        // meta.current.value = newValue
+        multiData.debitCreditNotes.tabValue = newValue
         if (newValue === 1) {
             emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA', null)
         }
         meta.current.isMounted && setRefresh({})
     }
 
-    return { handleOnChange, meta }
+    return { handleOnTabChange, meta, multiData }
 }
 
 export { useDebitCreditNotes }
@@ -66,6 +78,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: theme.palette.common.white,
                 backgroundColor: 'dodgerBlue',
                 marginTop: theme.spacing(0.5),
+                '& .reset':{
+                    backgroundColor: theme.palette.amber.main,
+                    color: theme.palette.amber.contrastText,
+                    height: theme.spacing(4),
+                    margin:'auto',
+                    // marginRight: '20%'
+                }
             },
         },
     })

@@ -24,8 +24,8 @@ function BillTo({ arbitraryData }: any) {
         onSearchBoxFilter,
     } = useBillTo(arbitraryData)
 
-    const { emit, TraceDialog } = useSharedElements()
-
+    const { TraceDialog } = useSharedElements()
+    // console.log('saleType:', arbitraryData.saleType)
     const { billToError, gstinError } = allErrors()
     return (
         <Paper elevation={2} className={classes.content}>
@@ -52,7 +52,7 @@ function BillTo({ arbitraryData }: any) {
                                 <InputAdornment position="end">
                                     <IconButton
                                         size="small"
-                                        onClick={(e) => {
+                                        onClick={(e:any) => {
                                             meta.current.searchFilter = ''
                                             meta.current.isMounted &&
                                                 setRefresh({})
@@ -62,8 +62,9 @@ function BillTo({ arbitraryData }: any) {
                                 </InputAdornment>
                             ),
                         }}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             meta.current.searchFilter = e.target.value
+                            arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
                         }}
                         onKeyDown={(e: any) => {
@@ -105,7 +106,7 @@ function BillTo({ arbitraryData }: any) {
                         placeholder="Gstin"
                         error={gstinError()}
                         value={arbitraryData.billTo.gstin || ''}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             arbitraryData.billTo.gstin = e.target.value
                             meta.current.isMounted && setRefresh({})
                             arbitraryData.salesCrownRefresh()
@@ -156,7 +157,7 @@ function BillTo({ arbitraryData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled={arbitraryData.isAssignmentReturn}
+                    disabled={(arbitraryData.saleType === 'ret')}
                     onClick={handleClear}>
                     <CloseSharp />
                 </IconButton>

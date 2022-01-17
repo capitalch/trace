@@ -67,7 +67,7 @@ const Set = (props: any) => {
         const button = (
             <IconButton
                 className="x-minus"
-                onClick={(e) => {
+                onClick={(e:any) => {
                     const ret = removeItem && removeItem(index)
                     // all the controls whose names start with this set controlId are made undefined
                     ret && resetControlsInSet(formId, controlId)
@@ -82,7 +82,7 @@ const Set = (props: any) => {
         const button = (
             <IconButton
                 className="x-add"
-                onClick={(e) => {
+                onClick={(e:any) => {
                     addItem && addItem(index + 1)
                 }}>
                 <Add className="x-add-icon" color="secondary"></Add>

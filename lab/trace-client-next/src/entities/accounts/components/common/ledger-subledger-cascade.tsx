@@ -26,7 +26,7 @@ function LedgerSubledgerCascade({
                 optionGroupChildren={['subledgers']}
                 style={{ minWidth: '14rem' }}
                 placeholder={'All parties'}
-                onChange={(e) => {
+                onChange={(e:any) => {
                     if (!e.value?.id) {
                         rowData.selectedAccount = undefined
                     } else {

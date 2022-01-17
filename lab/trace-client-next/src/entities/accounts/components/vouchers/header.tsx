@@ -5,22 +5,20 @@ import {
 } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { VoucherContext } from './voucher-context'
+// import { VoucherContext } from './voucher-context'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function Header({ allowHeaderGst }: any) {
     const classes = useStyles()
     const [, setRefresh] = useState({})
-    const arbitraryData: any = useContext(VoucherContext)
+    const ctx: any = useContext(MultiDataContext)
+    const arbitraryData = ctx?.vouchers
+    // const arbitraryData: any = useContext(VoucherContext)
     const {
-        // _,
         accountsMessages,
-
         emit,
-
         isInvalidDate,
         isInvalidGstin,
-        // NumberFormat,
-
     } = useSharedElements()
     return (
         <Paper elevation={1} className={classes.contentHeader}>
@@ -48,7 +46,7 @@ function Header({ allowHeaderGst }: any) {
                         emit('CROWN-REFRESH', '')
                         setRefresh({})
                     }}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     value={arbitraryData.header.tranDate || ''}
                 />
             </div>

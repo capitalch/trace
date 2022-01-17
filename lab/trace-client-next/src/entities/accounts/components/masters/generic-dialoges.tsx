@@ -1,15 +1,32 @@
-import { _, useEffect, useState, useRef } from '../../../../imports/regular-imports'
+import {
+    _,
+    useEffect,
+    useState,
+    useRef,
+} from '../../../../imports/regular-imports'
 import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions, IconButton, makeStyles, Theme, createStyles
+    DialogActions,
+    IconButton,
+    makeStyles,
+    Theme,
+    createStyles,
 } from '../../../../imports/gui-imports'
 import { CloseSharp } from '../../../../imports/icons-import'
-import { manageEntitiesState, ReactForm, manageFormsState, useIbuki, useTraceMaterialComponents, useTraceGlobal } from '../../../../imports/trace-imports'
+import {
+    manageEntitiesState,
+    ReactForm,
+    manageFormsState,
+    useIbuki,
+    useTraceMaterialComponents,
+    useTraceGlobal,
+} from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import { initCode } from '../../init-code'
 import messages from '../../../../messages.json'
+import stateCodes from '../../../../data/india-states-with-codes-gst.json'
 
 function GenericDialoges({ loadDialog }: any) {
     const meta: any = useRef({
@@ -46,11 +63,8 @@ function GenericDialoges({ loadDialog }: any) {
     } = manageEntitiesState()
     const { emit } = useIbuki()
     const [, setRefresh] = useState({})
-    const {
-        execGenericView,
-        genericUpdateMaster,
-        isControlDisabled,
-    } = utilMethods()
+    const { execGenericView, genericUpdateMaster, isControlDisabled } =
+        utilMethods()
     const {
         resetAllValidators,
         clearServerError,
@@ -77,7 +91,7 @@ function GenericDialoges({ loadDialog }: any) {
 
     return (
         <>
-            <Dialog
+            <Dialog fullWidth={true}
                 classes={{
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper,
@@ -87,7 +101,7 @@ function GenericDialoges({ loadDialog }: any) {
                     closeDialog()
                 }}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h2>{meta.current.dialogConfig.title}</h2>
@@ -115,6 +129,13 @@ function GenericDialoges({ loadDialog }: any) {
         </>
     )
 
+    function closeDialog() {
+        meta.current.showDialog = false
+        resetForm(meta.current.dialogConfig.formId)
+        setCurrentComponent({})
+        emit('TRACE-MAIN:JUST-REFRESH', '') //this is necessary otherwise on click of accounts this dialog window opens automatically
+    }
+
     function dialogSelectLogic() {
         const entityName = getCurrentEntity()
         const logic: any = {
@@ -124,6 +145,7 @@ function GenericDialoges({ loadDialog }: any) {
                     meta.current.dialogConfig.title = 'Unit info'
                     meta.current.dialogConfig.jsonObject = unitInfoJson
                     emit('SHOW-LOADING-INDICATOR', true)
+                    fillStateCodesForUnitInfo()
                     meta.current.showDialog = true
                     const ret = await execGenericView({
                         isMultipleRows: false,
@@ -157,7 +179,7 @@ function GenericDialoges({ loadDialog }: any) {
                         data: { jData: formData },
                         setRefresh: setRefresh,
                     })
-                    if ((ret === true) || (ret?.length <= 9)) {
+                    if (ret === true || ret?.length <= 9) {
                         execDataCache()
                         emit('SHOW-MESSAGE', {})
                         closeDialog()
@@ -221,7 +243,7 @@ function GenericDialoges({ loadDialog }: any) {
                         data: { jData: formData },
                         setRefresh: setRefresh,
                     })
-                    if ((ret === true) || (ret?.length <= 9)) {
+                    if (ret === true || ret?.length <= 9) {
                         setLastBuCodeFinYearIdBranchId()
                         emit('SHOW-MESSAGE', {})
                         emit('TRACE-MAIN:JUST-REFRESH', null)
@@ -260,11 +282,19 @@ function GenericDialoges({ loadDialog }: any) {
         )
     }
 
-    function closeDialog() {
-        meta.current.showDialog = false
-        resetForm(meta.current.dialogConfig.formId)
-        setCurrentComponent({})
-        emit('TRACE-MAIN:JUST-REFRESH', '') //this is necessary otherwise on click of accounts this dialog window opens automatically
+    function fillStateCodesForUnitInfo() {
+        const temp: any = stateCodes
+        let tempArr = Object.keys(stateCodes).map((key: string) => {
+            return {
+                label: temp[key],
+                value: key,
+            }
+        })
+        tempArr = _.sortBy(tempArr, ['label'])
+        const stateSelect = unitInfoJson.items.find(
+            (x: any) => x.name === 'state'
+        )
+        stateSelect && (stateSelect.options = tempArr)
     }
 }
 
@@ -380,6 +410,33 @@ const unitInfoJson: any = {
         },
         {
             type: 'TextMaterial',
+            name: 'landPhone',
+            class: 'textField',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            label: 'Land phone',
+            validations: [],
+        },
+        {
+            type: 'TextMaterial',
+            name: 'mobileNumber',
+            class: 'textField',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            label: 'Mobile number',
+            validations: [
+                {
+                    name: 'phoneNumber',
+                    message: 'Invalid mobile number',
+                },
+            ],
+        },
+        {
+            type: 'TextMaterial',
             name: 'email',
             placeholder: 'Email',
             label: 'Email',
@@ -396,14 +453,38 @@ const unitInfoJson: any = {
         },
         {
             type: 'TextMaterial',
-            name: 'tin',
-            placeholder: 'Tin',
+            name: 'webSite',
+            placeholder: 'Web site',
+            label: 'Web site',
             materialProps: {
                 size: 'small',
                 fullWidth: true,
             },
-            label: 'Tin',
-            validations: [],
+            validations: [
+            ],
+        },
+        {
+            type: 'TextMaterial',
+            class: 'textField',
+            name: 'gstin',
+            placeholder: 'Gstin',
+            materialProps: {
+                size: 'small',
+                fullWidth: true,
+            },
+            label: 'Gstin number',
+            validations: [
+                {
+                    name: 'gstinValidation',
+                    message: 'Invalid GSTIN',
+                },
+            ],
+        },
+        {
+            type: 'Select',
+            name: 'state',
+            label: 'State',
+            validations: [{ name: 'required', message: 'State is required' }],
         },
     ],
 }
@@ -463,61 +544,61 @@ const generalSettingsJson: any = {
     ],
 }
 
-const selectBuJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'TypeSelect',
-            name: 'buCode',
-            placeholder: 'Business units',
-            label: 'Select business unit',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a business unit',
-                },
-            ],
-        },
-    ],
-}
+// const selectBuJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'TypeSelect',
+//             name: 'buCode',
+//             placeholder: 'Business units',
+//             label: 'Select business unit',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a business unit',
+//                 },
+//             ],
+//         },
+//     ],
+// }
 
-const selectFinYearJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            // "type": "TypeSelect",
-            class: 'select-fin-year',
-            type: 'Select',
-            name: 'id',
-            placeholder: 'Financial years',
-            label: 'Select financial year',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a financial year',
-                },
-            ],
-        },
-    ],
-}
+// const selectFinYearJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             // "type": "TypeSelect",
+//             class: 'select-fin-year',
+//             type: 'Select',
+//             name: 'id',
+//             placeholder: 'Financial years',
+//             label: 'Select financial year',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a financial year',
+//                 },
+//             ],
+//         },
+//     ],
+// }
 
-const selectBranchJson: any = {
-    class: 'generic-dialog',
-    items: [
-        {
-            type: 'TypeSelect',
-            name: 'id',
-            placeholder: 'Branches',
-            label: 'Select branch',
-            options: [],
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Please select a branch',
-                },
-            ],
-        },
-    ],
-}
+// const selectBranchJson: any = {
+//     class: 'generic-dialog',
+//     items: [
+//         {
+//             type: 'TypeSelect',
+//             name: 'id',
+//             placeholder: 'Branches',
+//             label: 'Select branch',
+//             options: [],
+//             validations: [
+//                 {
+//                     name: 'required',
+//                     message: 'Please select a branch',
+//                 },
+//             ],
+//         },
+//     ],
+// }

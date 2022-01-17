@@ -29,7 +29,7 @@ function Taxation() {
                         meta.current.startDate = e.target.value
                         meta.current.isMounted && setRefresh({})
                     }}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     value={meta.current.startDate || ''}
                 />
 
@@ -38,7 +38,7 @@ function Taxation() {
                     variant="standard"
                     InputLabelProps={{ shrink: true }}
                     label="To date"
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     onChange={(e: any) => {
                         meta.current.endDate = e.target.value
                         meta.current.isMounted && setRefresh({})

@@ -23,7 +23,7 @@ function ShipTo({ arbitraryData }: any) {
                 onClick={handleNewEdit}
                 variant="contained"
                 color="primary"
-                disabled={arbitraryData.isAssignmentReturn}
+                disabled={arbitraryData.saleType === 'ret'}
                 className="new-button">
                 New / Edit
             </Button>
@@ -58,7 +58,7 @@ function ShipTo({ arbitraryData }: any) {
                 <IconButton
                     aria-label="clear"
                     size="small"
-                    disabled={arbitraryData.isAssignmentReturn}
+                    disabled={arbitraryData.saleType === 'ret'}
                     onClick={handleClear}>
                     <CloseSharp />
                 </IconButton>

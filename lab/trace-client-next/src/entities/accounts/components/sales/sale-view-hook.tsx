@@ -26,12 +26,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         confirm,
         emit,
         execGenericView,
+        execSaleInvoiceView,
         filterOn,
         genericUpdateMaster,
         getAccountClassWithAutoSubledger,
         getFromBag,
         getMappedAccounts,
         isAllowedUpdate,
+        setInBag,
         toDecimalFormat,
     } = useSharedElements()
     const dateFormat = getFromBag('dateFormat')
@@ -158,12 +160,12 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         ]
         const queryId = 'get_sale_purchase_headers'
         const queryArgs = {
-            tranTypeId: arbitraryData.isSales ? 4 : 9,
+            tranTypeId: (arbitraryData.saleType ==='sal') ? 4 : 9,
             no: 100,
             accId: meta.current.selectedAccount?.id
                 ? meta.current.selectedAccount.id + ''
                 : '%',
-            tranDc: arbitraryData.isSales ? 'C' : 'D',
+            tranDc: (arbitraryData.saleType==='sal') ? 'C' : 'D',
         }
         const summaryColNames: string[] = ['amount']
         const specialColumns = {
@@ -189,7 +191,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         // isModify: if isEdit then id's of tables are there so as to enforce modify sql. Otherwise id's of table are reset to undefined, so new rows are inserted in tables
         const ad = arbitraryData
         emit('SHOW-LOADING-INDICATOR', true)
-        const ret = await execGenericView({
+        // const ret = await execGenericView({
+        //     isMultipleRows: false,
+        //     sqlKey: 'getJson_sale_purchase_on_id',
+        //     args: {
+        //         id: id,
+        //     },
+        // })
+        const ret = await execSaleInvoiceView({
             isMultipleRows: false,
             sqlKey: 'getJson_sale_purchase_on_id',
             args: {
@@ -198,6 +207,11 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
+            // ret.jsonResult.billTo['stateName'] = ret.jsonResult.billTo['state']
+            // delete ret.jsonResult.billTo['state']
+            console.log(JSON.stringify(ret))
+            // arbitraryData.rawSaleData = ret
+            setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
             prepareArbitraryData(ret)
             arbitraryData.saleItemsRefresh()
             // arbitraryData.salesHookChangeTab(0)

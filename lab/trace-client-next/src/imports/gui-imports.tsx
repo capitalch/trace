@@ -1,6 +1,12 @@
-export { createStyles, makeStyles, useTheme } from '@material-ui/core/styles'
-export { Alert as MuiAlert } from '@material-ui/lab'
-export type { Theme } from '@material-ui/core'
+// import { makeStyles } from '@mui/styles'
+
+// export { createStyles, makeStyles, useTheme } from '@material-ui/core/styles'
+export {   Alert as MuiAlert  } from '@mui/material'
+export {useTheme, createStyles, makeStyles, } from '@mui/styles'
+// export { Alert as MuiAlert } from '@material-ui/lab'
+// export { Alert as MuiAlert } from '@mui/material'
+// export type { Theme } from '@material-ui/core'
+export type { Theme } from '@mui/material'
 export {
     AppBar,
     Avatar,
@@ -10,6 +16,7 @@ export {
     CircularProgress,
     Container,
     Button,
+    ButtonGroup,
     Card,
     Checkbox,
     Chip,
@@ -19,6 +26,7 @@ export {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogContentText,
     DialogTitle,
     Divider,
     Drawer,
@@ -39,8 +47,8 @@ export {
     Paper,
     Radio,
     RadioGroup,
+    Select,
     Snackbar,
-    // StyledEngineProvider,
     Switch,
     Tab,
     Table,
@@ -53,6 +61,7 @@ export {
     TextareaAutosize,
     TextField,
     Toolbar,
+    Tooltip,
     Typography,
     useMediaQuery,
-} from '@material-ui/core'
+} from '@mui/material' // '@material-ui/core'

@@ -163,7 +163,7 @@ function GenericCRUD({ loadComponent }: any) {
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
                 <DialogTitle
-                    disableTypography
+                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>

@@ -30,7 +30,7 @@ const componentStore: any = {
         return (
             <button
                 className={className}
-                onClick={(e) => {
+                onClick={(e:any) => {
                     customMethods[item.methodName](props)
                     setRefresh({})
                 }}>
@@ -48,7 +48,7 @@ const componentStore: any = {
             <Button
                 className={className}
                 label={item.label}
-                onClick={(e) => {
+                onClick={(e:any) => {
                     customMethods[item.methodName](props)
                     setRefresh({})
                 }}></Button>
@@ -77,7 +77,7 @@ const componentStore: any = {
                     name={xName}
                     value={xValue}
                     checked={(!xValue ? false : true) || false}
-                    onChange={(e) => onChangeEvent(e.target.checked)}
+                    onChange={(e:any) => onChangeEvent(e.target.checked)}
                     className={xClassName}
                     style={xStyle}
                     {...htmlProps}
@@ -166,7 +166,7 @@ const componentStore: any = {
                         await doValidateControl(formId, controlId)
                         setRefresh({})
                     }}
-                    onFocus={(e) => {
+                    onFocus={(e:any) => {
                         e.target.select()
                     }}
                     value={getField(parent, item.name) || ''}></TextField>
@@ -216,7 +216,7 @@ const componentStore: any = {
                         await doValidateControl(formId, controlId)
                         setRefresh({})
                     }}
-                    onFocus={(e) => {
+                    onFocus={(e:any) => {
                         e.target.select()
                     }}
                     value={getField(parent, item.name) || ''}
@@ -349,14 +349,14 @@ const componentStore: any = {
                     value={xValue || ''}
                     placeholder={xPlaceholder}
                     name={xName}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         let val = e.target.value
                         setRefresh({})
                         onChangeEvent(val)
                     }}
                     {...htmlProps}
                     {...materialProps}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     className={xClassName}
                     disabled={getDisabled()}
                     style={xStyle}></Input>
@@ -392,13 +392,13 @@ const componentStore: any = {
                     customInput={item.isNormal ? null : TextField}
                     fixedDecimalScale={true}
                     decimalScale={2}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     allowNegative={false}
                     disabled={item.disabled}
                     value={xValue || 0.0}
                     name={xName}
-                    onChange={(e) => onChangeEvent(e.target.value)}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onChange={(e:any) => onChangeEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     className={xClassName}
                     style={{ ...rightAligned, ...xStyle }}
                     label={<XLabel></XLabel>}
@@ -428,14 +428,14 @@ const componentStore: any = {
             <>
                 <NumberFormat
                     customInput={item.isNormal ? null : TextField}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     allowNegative={false}
                     disabled={item.disabled}
                     value={xValue || 0.0}
                     placeholder={item.placeholder}
                     name={xName}
-                    onChange={(e) => onChangeEvent(e.target.value)}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onChange={(e:any) => onChangeEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     className={xClassName}
                     style={{ ...rightAligned, ...xStyle }}
                     label={<XLabel></XLabel>}
@@ -468,8 +468,8 @@ const componentStore: any = {
                     value={xValue || ''}
                     placeholder={xPlaceholder}
                     name={xName}
-                    onChange={(e) => onChangeEvent(e.target.value)}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onChange={(e:any) => onChangeEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     className={xClassName}
                     style={xStyle}></input>
                 <XErrorDisplay />
@@ -503,7 +503,7 @@ const componentStore: any = {
                                     checked={xValue === option.value}
                                     value={option.value}
                                     name={xName}
-                                    onChange={(e) =>
+                                    onChange={(e:any) =>
                                         onChangeEvent(e.target.value)
                                     }
                                     className={xClassName}
@@ -556,7 +556,7 @@ const componentStore: any = {
                     </div>
                 )}
                 <select
-                    onChange={(e) => onChangeEvent(e.target.value)}
+                    onChange={(e:any) => onChangeEvent(e.target.value)}
                     name={xName}
                     value={xValue}
                     className={xClassName}
@@ -639,7 +639,7 @@ const componentStore: any = {
             <button
                 className={className}
                 style={xStyle}
-                onClick={(e) => {
+                onClick={(e:any) => {
                     submitOnClick(e)
                 }}>
                 {item.label}
@@ -657,7 +657,7 @@ const componentStore: any = {
                 icon="pi pi-check"
                 style={xStyle}
                 label={item.label}
-                onClick={(e) => {
+                onClick={(e:any) => {
                     submitOnClick(e)
                 }}></Button>
         )
@@ -700,13 +700,13 @@ const componentStore: any = {
                     value={xValue || ''}
                     placeholder={xPlaceholder}
                     name={xName}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         let val = e.target.value
                         setRefresh({})
                         onChangeEvent(val)
                     }}
                     {...htmlProps}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     className={xClassName}
                     disabled={getDisabled()}
                     style={xStyle}></input>
@@ -781,14 +781,14 @@ const componentStore: any = {
                     value={xValue || ''}
                     placeholder={xPlaceholder}
                     name={xName}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         let val = e.target.value
                         setRefresh({})
                         onChangeEvent(val)
                     }}
                     {...htmlProps}
                     {...materialProps}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     className={xClassName}
                     disabled={getDisabled()}
                     style={xStyle}></TextField>
@@ -821,11 +821,11 @@ const componentStore: any = {
                     value={xValue || ''}
                     placeholder={xPlaceholder}
                     name={xName}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         setRefresh({})
                         onChangeEvent(e.target.value)
                     }}
-                    onBlur={(e) => onBlurEvent(e.target.value)}
+                    onBlur={(e:any) => onBlurEvent(e.target.value)}
                     style={xStyle}
                 />
                 <XErrorDisplay />
