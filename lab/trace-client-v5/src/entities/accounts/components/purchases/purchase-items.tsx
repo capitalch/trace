@@ -6,16 +6,13 @@ import { ZoomIn, ZoomOut, } from '../../../../imports/icons-import'
 
 function PurchaseItems({ arbitraryData }: any) {
     const [, setRefresh] = useState({})
-
     const {
         getColumns,
         meta,
     } = usePurchaseItems(arbitraryData)
     const classes = useStyles(meta)
     const {
-
         TraceDialog,
-
     } = useSharedElements()
 
     return (
@@ -44,7 +41,6 @@ function PurchaseItems({ arbitraryData }: any) {
                 <DataTable
                     rowHover={true}
                     scrollable={true}
-
                     scrollHeight={meta.current.zoomIn ? '36vh' : '55vh'}
                     className="items"
                     value={arbitraryData.lineItems}>

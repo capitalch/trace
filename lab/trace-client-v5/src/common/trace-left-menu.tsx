@@ -39,7 +39,7 @@ function TraceLeftMenu(props: any) {
                     button
                     key={index}
                     disabled={isControlDisabled(item.name)}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         if (item.children) {
                             const currentItemIndex =
                                 meta.current.openArray[index]

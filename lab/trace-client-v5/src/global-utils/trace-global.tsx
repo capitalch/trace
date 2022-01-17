@@ -8,6 +8,7 @@ function useTraceGlobal() {
     const lgEquals = useMediaQuery(theme.breakpoints.only('lg'), { noSsr: true })
     const xlEquals = useMediaQuery(theme.breakpoints.only('xl'), { noSsr: true })
     const isMediumSizeUp = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true })
+    const isMediumSizeDown = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true })
 
     function getCurrentMediaSize() {
         let ret = 'xs'
@@ -35,7 +36,7 @@ function useTraceGlobal() {
         return isDrawyerOpen ? 'calc(100vw - 260px - 72px)' : ''
     }
 
-    return { getFromGlobalBag, setInGlobalBag, getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize }
+    return { getFromGlobalBag, setInGlobalBag, getCurrentMediaSize,isMediumSizeDown, isMediumSizeUp, getCurrentWindowSize }
 }
 
 export { useTraceGlobal }

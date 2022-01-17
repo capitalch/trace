@@ -6,14 +6,47 @@ import { manageEntitiesState } from '../../global-utils/esm'
 import { usingIbuki } from '../../global-utils/ibuki'
 import moment from 'moment'
 import accountsMessages from '../accounts/json/accounts-messages.json'
-
+import messages from '../../messages.json'
 const accStore: any = {}
 
 function utils() {
     const { extractAmount } = utilMethods()
-    const { mutateGraphql } = graphqlService()
+    const { mutateGraphql, queryGraphql } = graphqlService()
     const { getFromBag, getCurrentEntity } = manageEntitiesState()
     const { emit } = usingIbuki()
+   
+    async function execSaleInvoiceView(options: {sqlKey?:string, isMultipleRows: boolean,args?:{}}) {
+        let ret: any = undefined
+        // const currentEntityName = getCurrentEntity()
+        const sqlQueryObject: any = escape(
+            JSON.stringify({
+                sqlKey: options.sqlKey,
+                args: options.args || {},
+                isMultipleRows: options.isMultipleRows,
+            })
+        )
+        const entityNameDashed = 'accounts'
+        const queries:any = await import("./artifacts/graphql-queries-mutations")
+        const q = queries.default['saleInvoiceView'](
+            sqlQueryObject,
+            'accounts'
+        )
+        try {
+            if (q) {
+                const result: any = await queryGraphql(q)
+                ret =
+                    result.data['accounts']
+                        .saleInvoiceView
+            }
+        } catch (error) {
+            emit('SHOW-MESSAGE', {
+                message: messages['errorInOperation'],
+                severity: 'error',
+                duration: null,
+            })
+        }
+        return ret
+    }
 
     function extractGst(x: any) {
         const clone: any = { ...x }
@@ -33,7 +66,7 @@ function utils() {
 
     function getAccountClass(accId: number) {
         let ret = undefined
-        const allAccounts: any[] = accStore['allAccounts']
+        const allAccounts: any[] = getFromBag('allAccounts')
         const account = allAccounts.find((x) => x.id === accId)
         account && (ret = account.accClass)
         return ret
@@ -245,7 +278,8 @@ function utils() {
 
     function isInvalidStateCode(stateCode: any) {
         let validCode = false
-        if (_.isNumber(stateCode)) {
+        
+        if (_.isNumber(parseInt(stateCode))) {
             if (_.inRange(stateCode, 1, 38)) {
                 validCode = true
             }
@@ -289,6 +323,7 @@ function utils() {
         isInvalidIndiaPin,
         isInvalidStateCode,
         registerAccounts,
+        execSaleInvoiceView,
         transferClosingBalances,
     }
 }

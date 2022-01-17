@@ -203,13 +203,13 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, valueDict):
             autoRefNo = f'{branchCode}\{tranCode}\{lastNo}\{finYearId}'
             valueDict["data"][0]["autoRefNo"] = autoRefNo
 
-        execSqlObject(valueDict, cursor, buCode=buCode)
+        ret = execSqlObject(valueDict, cursor, buCode=buCode)
         sqlString = allSqls['update_last_no']
-        if not 'id' in valueDict["data"][0]:  # insert mode only
+        if not 'id' in valueDict["data"][0]:  # for insert mode only
             execSql(dbName, sqlString, {'lastNo': lastNo + 1, 'branchId': branchId,
                                         'tranTypeId': tranTypeId, 'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
         connection.commit()
-        return autoRefNo
+        return ret
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)
         if connection:

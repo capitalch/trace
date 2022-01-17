@@ -1,27 +1,35 @@
-import { _, useState, } from '../../../../imports/regular-imports'
-import {
-    Button, Typography,
-} from '../../../../imports/gui-imports'
+import { _, useState, useContext, useRef } from '../../../../imports/regular-imports'
+import { Button, Typography } from '../../../../imports/gui-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-
-function useCrown(meta: any) {
+import { MultiDataContext } from '../common/multi-data-bridge'
+// import {useReactToPrint} from 'react-to-print'
+function useCrown(meta: any, componentRef:any) {
     const [, setRefresh] = useState({})
+    meta.current.dialogConfig = {}
+    meta.current.dialogConfig.title = 'Voucher'
     const {
         accountsMessages,
         emit,
         genericUpdateMasterDetails,
+        // getAccountName,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         toDecimalFormat,
     } = useSharedElements()
 
+    const ctx: any = useContext(MultiDataContext)
+    const ad = ctx?.vouchers
+
+    // const handlePrintPdf = useReactToPrint({
+    //     content : () => componentRef.current
+    // })
     function checkError(ad: any) {
         function headerError() {
             function dateError() {
                 let m = ''
-                if (isInvalidDate(ad.header.tranDate)) {
+                if (isInvalidDate(ad?.header?.tranDate)) {
                     m = accountsMessages.dateRangeAuditLockMessage
                 }
                 return m
@@ -128,11 +136,14 @@ function useCrown(meta: any) {
                     const accId = row.accId
                     if (accId) {
                         const accountClass = getAccountClass(row?.accId)
-                        if (['ecash', 'bank', 'card'].includes(accountClass) && (!row.instrNo)) {
+                        if (
+                            ['ecash', 'bank', 'card'].includes(accountClass) &&
+                            !row.instrNo
+                        ) {
                             m = accountsMessages.instrNoRequired
                         }
                     }
-                    return (m)
+                    return m
                 }
 
                 function getAccountClass(accId: number) {
@@ -167,9 +178,7 @@ function useCrown(meta: any) {
             const debits: any[] = ad.debits
             const credits: any[] = ad.credits
             for (let row of debits) {
-                const ret = credits.findIndex(
-                    (x: any) => row.accId === x.accId
-                )
+                const ret = credits.findIndex((x: any) => row.accId === x.accId)
                 if (ret !== -1) {
                     m = accountsMessages.commonAccountCodesInDebitsCredits
                     break
@@ -201,19 +210,18 @@ function useCrown(meta: any) {
             debitsCreditsNotEqualError() ||
             gstError() ||
             commonAccountError()
-        return (meta.current.errorMessage)
+        return meta.current.errorMessage
     }
 
     function computeSummary(ad: any) {
-        ad.summary = {}
+        ad && (ad.summary = {})
         const debitsSummary = getSummary('debits')
         const creditsSummary = getSummary('credits')
 
         function getSummary(summType: string) {
             return ad[summType].reduce(
                 (prev: any, curr: any) => {
-                    prev.amount =
-                        (prev?.amount || 0.0) + (curr?.amount || 0.0)
+                    prev.amount = (prev?.amount || 0.0) + (curr?.amount || 0.0)
                     prev.gst.igst =
                         (prev?.gst.igst || 0.0) + (curr?.gst?.igst || 0.0)
                     prev.gst.cgst =
@@ -257,6 +265,16 @@ function useCrown(meta: any) {
                 Reset
             </Button>
         )
+    }
+
+    function handleClose() {
+        meta.current.showDialog = false
+        setRefresh({})
+    }
+
+    function handleOpen(){
+        meta.current.showDialog = true
+        setRefresh({})
     }
 
     function SubmitButton({ ad }: any) {
@@ -336,7 +354,10 @@ function useCrown(meta: any) {
                     }
                     emit('VOUCHER-RESET', '')
                     if (ad.shouldCloseParentOnSave) {
-                        emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+                        emit(
+                            'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG',
+                            ''
+                        )
                     }
                 }
 
@@ -410,14 +431,19 @@ function useCrown(meta: any) {
                     Credits: {toDecimalFormat(totalCredits || 0.0)}
                 </Typography>
                 &nbsp;&nbsp;
-                {(!!Math.abs(getDiff())) && <Typography variant="subtitle2" component="span" color="error">
-                    Diff: {toDecimalFormat(Math.abs(getDiff()))} {what()}
-                </Typography>}
+                {!!Math.abs(getDiff()) && (
+                    <Typography
+                        variant="subtitle2"
+                        component="span"
+                        color="error">
+                        Diff: {toDecimalFormat(Math.abs(getDiff()))} {what()}
+                    </Typography>
+                )}
             </div>
         )
 
         function getDiff() {
-            return ((totalDebits || 0.0) - (totalCredits || 0.0))
+            return (totalDebits || 0.0) - (totalCredits || 0.0)
         }
 
         function what() {
@@ -428,7 +454,7 @@ function useCrown(meta: any) {
             } else if (diff < 0) {
                 wh = 'Cr'
             }
-            return (wh)
+            return wh
         }
     }
 
@@ -449,6 +475,8 @@ function useCrown(meta: any) {
 
     return {
         checkError,
+        handleClose,
+        handleOpen,
         ResetButton,
         SubmitButton,
         setRefresh,

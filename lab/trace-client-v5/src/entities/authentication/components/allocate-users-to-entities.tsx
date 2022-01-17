@@ -130,7 +130,7 @@ function useAllocateUsersToEntities(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={(e) => {
+                        onClick={(e:any) => {
                             meta.current.dialogConfig.permissionConfig.isPermission = true
                             meta.current.dialogConfig.isEditMode = true
                             if (_.isEmpty(node.permissions)) {
@@ -175,7 +175,7 @@ function useAllocateUsersToEntities(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={(e) =>
+                        onClick={(e:any) =>
                             deleteRow(node, allocateUsersToEntities.read)
                         }>
                         <CloseSharp></CloseSharp>

@@ -113,7 +113,7 @@ function CategoriesMaster() {
                 scrollHeight="calc(100vh - 22rem)"
                 expandedKeys={getFromBag('categoriesExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e) => {
+                onToggle={(e:any) => {
                     setInBag('categoriesExpandedKeys', e.value)
                     utilFunc().saveScrollPos()
                     meta.current.isMounted && setRefresh({})
@@ -226,7 +226,6 @@ function CategoriesMaster() {
             </TreeTable>
 
             <TraceDialog meta={meta} />
-            {/* materialDialogProps={{ className: classes.dialog }}  */}
         </div>
     )
 
@@ -330,7 +329,7 @@ function CategoriesMaster() {
                     selectionMode="single"
                     onSelect={(e: any) => {
                         destinationPath = e.node.data.path
-                        // console.log(e)
+                        // console.log(e:any)
                     }}
                     onSelectionChange={(e: any) => {
                         newParentId = e.value
@@ -413,7 +412,7 @@ function CategoriesMaster() {
                     await saveForm(options)
                 })
                 .catch(() => {})
-        } catch (e) {
+        } catch (e:any) {
             console.log(e)
         }
     }

@@ -202,7 +202,7 @@ function BalanceSheetProfitLoss() {
                                 ? getFromBag('bsLeftExpandedKeys') || {}
                                 : getFromBag('plLeftExpandedKeys') || {}
                         }
-                        onToggle={(e) => {
+                        onToggle={(e:any) => {
                             meta.current.isBs
                                 ? setInBag('bsLeftExpandedKeys', e.value)
                                 : setInBag('plLeftExpandedKeys', e.value)
@@ -223,7 +223,7 @@ function BalanceSheetProfitLoss() {
                                         float: 'right',
                                         marginRight: '0.5rem',
                                     }}
-                                    onChange={(e) => {
+                                    onChange={(e:any) => {
                                         const val = e.target.value
                                         meta.current.isBs
                                             ? setInBag('bsLeftExpandAll', val)
@@ -308,7 +308,7 @@ function BalanceSheetProfitLoss() {
                                 ? getFromBag('bsRightExpandedKeys') || {}
                                 : getFromBag('plRightExpandedKeys') || {}
                         }
-                        onToggle={(e) => {
+                        onToggle={(e:any) => {
                             meta.current.isBs
                                 ? setInBag('bsRightExpandedKeys', e.value)
                                 : setInBag('plRightExpandedKeys', e.value)
@@ -329,7 +329,7 @@ function BalanceSheetProfitLoss() {
                                         float: 'right',
                                         marginRight: '0.5rem',
                                     }}
-                                    onChange={(e) => {
+                                    onChange={(e:any) => {
                                         const val = e.target.value
                                         meta.current.isBs
                                             ? setInBag('bsRightExpandAll', val)

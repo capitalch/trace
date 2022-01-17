@@ -1,5 +1,5 @@
 import { useStyles } from './xx-grid-hook'
-import { _, clsx } from '../../../../imports/regular-imports'
+import { _, clsx, } from '../../../../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -55,38 +55,47 @@ interface SpecialColumnOptions {
 
 interface GridActionMessagesOptions {
     addIbukiMessage?: any
+    calculateBalanceIbukiMessage?: any
     fetchIbukiMessage?: any
     editIbukiMessage?: any
+    justRefreshIbukiMessage?: any
     deleteIbukiMessage?: any
     drillDownIbukiMessage?: any
     resetIbukiMessage?: any
 }
 
 interface XXGridOptions {
-    gridActionMessages?: GridActionMessagesOptions
     autoFetchData?: boolean
-    columns: any[]
     className?: string
+    columns: any[]
+    disableSelectionOnClick?: boolean
+    editableFields?: string[]
+    gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
+    isReverseOrderByDefault?: boolean
+    isReverseOrderChecked?: boolean
+    isShowColBalanceByDefault?: boolean
+    jsonFieldPath?: any // if input is a json object then give the path of json field
+    postFetchMethod?: any // method to call after fetching of data
+    sharedData?: any // data shared with parent
     sqlQueryArgs?: any
     sqlQueryId?: any
+    specialColumns: SpecialColumnOptions
     summaryColNames: string[]
+    title?: string
     toShowAddButton?: boolean
     toShowClosingBalance?: boolean
-    toShowColumnBalance?: boolean
+    toShowColumnBalanceCheckBox?: boolean
     toShowDailySummary?: boolean
     toShowOpeningBalance?: boolean
     toShowReverseCheckbox?: boolean
-    title?: string
-    specialColumns: SpecialColumnOptions
-    xGridProps?: any
-    disableSelectionOnClick?: boolean
-    jsonFieldPath?: any // if input is a json object then give the path of json field
     viewLimit?: string
+    xGridProps?: any
 }
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
+        className,
         gridActionMessages,
         columns,
         disableSelectionOnClick,
@@ -98,37 +107,45 @@ function XXGrid(gridOptions: XXGridOptions) {
         viewLimit,
     }: any = gridOptions
     const apiRef: any = useGridApiRef()
+    gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
         fetchRows,
-        fillColumnBalance,
+        fillColumnBalance,        
         injectDailySummary,
-        meta,
+        meta,        
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,
         setRefresh,
-        toggleReverseOrder,
+        toggleOrder,
+        // onCellValueChange,
+        // handleEditRowsModelChange,
     } = useXXGrid(gridOptions)
-    const { emit, toDecimalFormat } = useSharedElements()
+
+    const { debounceEmit, emit, isMediumSizeDown, toDecimalFormat } =
+        useSharedElements()
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
+    meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
     addSpecialColumns(specialColumns, gridActionMessages)
-
     return (
         <DataGridPro
             getRowClassName={(params: any) => {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
             }}
+            // autoHeight={!!isMediumSizeDown}
+            // autoHeight={true}
             disableSelectionOnClick={disableSelectionOnClick || true}
-            className={clsx(gridOptions.className || '', classes.content)}
+            className={clsx(className || '', classes.content)}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
             columns={columns}
             rows={meta.current.filteredRows}
             rowHeight={32}
-            // autoHeight={true}
+            //
             // disableSelectionOnClick={true}
+            disableColumnMenu={true}
             components={{
                 Toolbar: CustomGridToolbar,
                 Footer: CustomGridFooter,
@@ -137,8 +154,18 @@ function XXGrid(gridOptions: XXGridOptions) {
             componentsProps={{
                 toolbar: {
                     value: meta.current.searchText,
-                    onChange: (event: any) => requestSearch(event.target.value),
-                    clearSearch: () => requestSearch(''),
+                    onChange: (event: any) => {
+                        meta.current.searchText = event.target.value
+                        meta.current.isMounted && setRefresh({})
+                        debounceEmit(
+                            'XX-GRID-SEARCH-DEBOUNCE',
+                            event.target.value
+                        )
+                    },
+                    clearSearch: () => {
+                        meta.current.searchText = ''
+                        requestSearch('')
+                    },
                 },
                 footer: {
                     selectedSummary: meta.current.selectedSummary,
@@ -146,19 +173,32 @@ function XXGrid(gridOptions: XXGridOptions) {
                     allSummary: meta.current.allSummary,
                 },
             }}
+
             onSelectionModelChange={onSelectModelChange}
+            // onCellClick={(item:any)=>{
+            //     if(gridOptions.editableFields){
+            //         if(gridOptions.editableFields.includes(item.field)){
+            //             apiRef.current.setCellMode(item.id, item.field, 'edit')
+            //         } else {
+            //             // apiRef.current.setCellMode(item.id, item.field, '')
+            //             gridOptions.editableFields.forEach((x:string)=>{
+            //                 apiRef.current.setCellMode(item.id, x, 'read')
+            //             })
+            //         }
+            //     } 
+            // }}
+            // editRowsModel={editRowsModel}
+
+            // onEditRowsModelChange={handleEditRowsModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
-            // onPageChange= {()=>{}}
-            // onRowsPerPageChange={()=>{}}
         />
-        // </div>
     )
 
     function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className="custom-toolbar">
-                <Box className='toolbar-left-items'>
+                <Box className="toolbar-left-items">
                     <Typography className="toolbar-title">{title}</Typography>
                     <div>
                         <GridToolbarColumnsButton color="secondary" />
@@ -179,9 +219,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                         className={classes.syncSharpButton}
                         size="medium"
                         color="secondary"
-                        onClick={(e: any) =>
-                            fetchRows(sqlQueryId, sqlQueryArgs)
-                        }>
+                        onClick={(e: any) => {
+                            emit(gridOptions.gridActionMessages?.fetchIbukiMessage, null)
+                            // fetchRows(sqlQueryId, sqlQueryArgs)
+                            // setRefresh({})
+                        }}>
                         <SyncSharp></SyncSharp>
                     </IconButton>
                     {!!!gridOptions.hideViewLimit && (
@@ -194,7 +236,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     width: '4rem',
                                     marginLeft: '0.1rem',
                                 }}
-                                onChange={(e) => {
+                                onChange={(e:any) => {
                                     meta.current.viewLimit = e.target.value
                                     fetchRows(sqlQueryId, sqlQueryArgs)
                                     meta.current.isMounted && setRefresh({})
@@ -213,7 +255,8 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     onChange={(e: any) => {
                                         meta.current.isReverseOrder =
                                             e.target.checked
-                                        toggleReverseOrder()
+                                        toggleOrder()
+                                        meta.current.isMounted && setRefresh({})
                                     }}
                                 />
                             }
@@ -235,7 +278,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             label="Daily summary"
                         />
                     )}
-                    {!!gridOptions.toShowColumnBalance && (
+                    {!!gridOptions.toShowColumnBalanceCheckBox && (
                         <FormControlLabel
                             control={
                                 <Checkbox
@@ -244,6 +287,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                         meta.current.isColumnBalance =
                                             e.target.checked
                                         fillColumnBalance()
+                                        meta.current.isMounted && setRefresh({})
                                     }}
                                 />
                             }
@@ -365,6 +409,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                         <span
                             style={{
                                 color: suffix === 'Dr' ? 'inherit' : 'red',
+                                marginRight: '0.2rem'
                             }}>
                             {suffix}&nbsp;
                         </span>

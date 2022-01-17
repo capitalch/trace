@@ -23,7 +23,7 @@ const Tabs = (props: any): any => {
                                 (isActive ? 'x-tab-button-active' : '')
                             }
                             key={index}
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 setActiveItemIndex(index)
                             }}>
                             {it.label}
@@ -75,7 +75,7 @@ const Tabs = (props: any): any => {
             })}
             <button
                 className="x-submit"
-                onClick={(e) => {
+                onClick={(e:any) => {
                     submit()
                 }}>
                 Submit

@@ -69,6 +69,10 @@ c) In all Typography comment out disableTypography
 	b) In components where x-grid-prof is existing, the css does not work correctly, Colors changes and spacing issues occured
 	c) even upgraded @mui/x-data-grid-pro@next whcich installed version '5.0.0-beta.4', this also not worked
 
+4. Upgradation attempt on 17/01/2022 for all libraries upgrade
+    a) Use yarn instead of npm install
+    b) use yarn add eslint-config-react-app -D to evade some errors
+
 # Pending
 
 # Working on

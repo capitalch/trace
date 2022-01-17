@@ -25,7 +25,7 @@ function SaleBillNoSelect({ value }: any) {
                             <InputAdornment position="start">
                                 <IconButton
                                     size="small"
-                                    onClick={(e) => {
+                                    onClick={(e:any) => {
                                         emit('SALE-BILL-NO-CLEARED', '')
                                     }}>
                                     {/* don't show icon when less than medium device */}

@@ -146,7 +146,7 @@ function useManageBu(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={(e) => deleteRow(node, manageBu.read)}>
+                        onClick={(e:any) => deleteRow(node, manageBu.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,

@@ -163,7 +163,7 @@ function useManageUsers(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={(e) => deleteRow(node, manageUsers.read)}>
+                        onClick={(e:any) => deleteRow(node, manageUsers.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 )}></Column>,

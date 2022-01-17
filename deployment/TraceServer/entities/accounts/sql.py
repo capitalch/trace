@@ -498,6 +498,12 @@ allSqls = {
                     on a."id" = b."accId"                                                           
                             order by "accType","accLeaf", "accName" ''',
 
+    "get_pdf_sale_bill": '''
+        select "jData"->'pdfSaleBill' as "pdfSaleBill"
+            from "TranH"
+                where "id" = %(id)s
+    ''',
+
     "get_product_on_upc_code": '''
         select p."id", 
             "catName", "isActive","brandName",             
@@ -1129,7 +1135,7 @@ allSqls = {
 
     'getJson_sale_purchase_on_id': '''
         with cte1 as (
-            select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData"
+            select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData", "tranTypeId"
                 from "TranH"
                     where "id" = %(id)s
         ),
@@ -1141,9 +1147,13 @@ allSqls = {
 					where  h."id" = %(id)s
 		),
         cte2 as (
-            select d."id", d."accId", "dc", "amount", d."instrNo", d."remarks"
+            select d."id", d."accId", "dc", "amount", d."instrNo", d."remarks", "accClass"
                 from "cte1" c1 join "TranD" d 
                     on c1."id" = d."tranHeaderId"
+                join "AccM" m
+				  	on m."id" = d."accId"
+                join "AccClassM" c2
+                      on c2."id" = m."classId"
         ),
         cte3 as (
             select x."id", "gstin", "cgst", "sgst", "igst"
@@ -1516,6 +1526,18 @@ allSqls = {
         update "AccOpBal" set "amount" = %(amount)s, "dc" = %(dc)s
                 where "id" = %(id)s
     ''',
+
+    "update_pdf_invoice":'''
+        update "TranH"
+            set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfSaleBill}', %(data)s, true)
+                where "id" = %(id)s
+    ''',
+
+    # "update_pdf_invoice_test":'''
+    #     update "Test"
+    #         set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfInvoice}', %(data)s, true)
+    #             where "id" = %(id)s
+    # ''',
 
     "updateBlock_editAccount": '''
         do $$

@@ -42,11 +42,11 @@ function useTraceMaterialComponents() {
             <Dialog
                 fullWidth={true}
                 className={classes.dialog}
-                {...options.materialDialogProps}
+                {...options.materialDialogProps}                
                 open={options.meta.current.showDialog}
                 onClose={options.onClose || handleClose}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
                     <h3>{pre.title}</h3>
@@ -68,7 +68,7 @@ function useTraceMaterialComponents() {
                                 options.meta.current?.dialogConfig
                                     ?.searchBoxFilter || ''
                             }
-                            onChange={(e) => {
+                            onChange={(e:any) => {
                                 pre.searchBoxFilter = e.target.value
                                 options.onSearchBoxFilter &&
                                     options.onSearchBoxFilter()
@@ -82,7 +82,7 @@ function useTraceMaterialComponents() {
                             endAdornment={
                                 <IconButton
                                     size="small"
-                                    onClick={(e) => {
+                                    onClick={(e:any) => {
                                         pre.searchBoxFilter = ''
                                         options.onSearchBoxFilter &&
                                             options.onSearchBoxFilter()
@@ -147,7 +147,7 @@ function useTraceMaterialComponents() {
                         <InputAdornment position="end">
                             <IconButton
                                 size="small"
-                                onClick={(e) => {
+                                onClick={(e:any) => {
                                     meta.current.globalFilter = ''
                                     meta.current.isMounted && setRefresh({})
                                 }}>
@@ -157,7 +157,7 @@ function useTraceMaterialComponents() {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => {
+                onChange={(e:any) => {
                     meta.current.globalFilter = e.target.value
                     meta.current.isMounted && setRefresh({})
                 }}></TextField>
@@ -189,7 +189,7 @@ function useTraceMaterialComponents() {
                             handleSearchButtonClick()
                         }
                     }}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         options.meta.current.searchFilter = e.target.value
                         options.meta.current.searchResult = ''
                         options.meta.current.isMounted && setRefresh({})
@@ -205,7 +205,7 @@ function useTraceMaterialComponents() {
                             <InputAdornment position="start">
                                 <IconButton
                                     size="small"
-                                    onClick={(e) => {
+                                    onClick={(e:any) => {
                                         options.meta.current.searchFilter = ''
                                         options.meta.current.isMounted &&
                                             setRefresh({})

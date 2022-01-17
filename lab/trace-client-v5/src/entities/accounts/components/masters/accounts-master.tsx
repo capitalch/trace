@@ -168,7 +168,7 @@ function AccountsMaster() {
                     <InputSwitch
                         checked={getFromBag('accMasterExpandAll') || false}
                         style={{ float: 'right', marginRight: '0.5rem' }}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             const val = e.target.value
                             setInBag('accMasterExpandAll', val)
                             if (val) {
@@ -205,7 +205,7 @@ function AccountsMaster() {
                 value={data}
                 expandedKeys={getFromBag('accMasterExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e) => {
+                onToggle={(e:any) => {
                     setInBag('accMasterExpandedKeys', e.value)
                     utilFunc().saveScrollPos()
                     meta.current.isMounted && setRefresh({})
@@ -491,7 +491,7 @@ function AccountsMaster() {
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.dialogConfig.title}</h3>
@@ -520,7 +520,7 @@ function AccountsMaster() {
                 fullWidth={true}
                 className={classes.addressEntry}>
                 <DialogTitle
-                    // disableTypography
+                    disableTypography
                     id="generic-address-dialog-title"
                     className={classes.dialogTitle}>
                     <h3>{meta.current.addressDialogConfig.title}</h3>

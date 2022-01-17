@@ -35,7 +35,7 @@ function CommonUtilities() {
                                     variant="contained"
                                     color="secondary"
                                     size='small'
-                                    onClick={async (e) => {
+                                    onClick={async (e:any) => {
                                         emit('SHOW-LOADING-INDICATOR', true)
                                         const ret = await transferClosingBalances()
                                         emit('SHOW-LOADING-INDICATOR', false)

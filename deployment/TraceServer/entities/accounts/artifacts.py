@@ -1,8 +1,11 @@
 from os import name
+import base64
+import zlib
 from flask import Blueprint, request, render_template, jsonify, make_response, url_for
 import pdfkit
 # import sass
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
+from requests.models import Response
 from postgres import getPool, execSql, execGenericUpdateMaster,  genericView
 import pandas as pd
 import simplejson as json
@@ -10,7 +13,7 @@ import demjson as demJson
 import re  # Python regex
 from time import sleep
 from urllib.parse import unquote
-from util import getErrorMessage
+from util import getErrorMessage, sendMail, convertToWord
 from entities.authentication.sql import allSqls as authSql
 from .sql import allSqls
 from .artifactsHelper import trialBalanceHelper
@@ -18,7 +21,7 @@ from .artifactsHelper import trialBalanceHelper
 from .artifactsHelper import balanceSheetProfitLossHelper, accountsMasterGroupsLedgersHelper, accountsOpBalHelper
 from .artifactsHelper import genericUpdateMasterDetailsHelper, accountsUpdateOpBalHelper, allCategoriesHelper, transferClosingBalancesHelper
 from .artifactsHelper import searchProductHelper
-from .accounts_utils import getRoomFromCtx
+from .accounts_utils import getRoomFromCtx, traceSendSmsForBill
 from app.link_client import sendToRoom, isLinkConnected
 import loadConfig
 # from app import socketio
@@ -34,7 +37,7 @@ accountsMutation = ObjectType("AccountsMutation")
 # sass.compile(dirname=('entities/accounts/templates/scss',
 #              'entities/accounts/static'))
 traceApp = Blueprint('traceApp', __name__,
-                     template_folder='templates', static_folder='static', url_prefix='/traceApp') #, static_url_path='/trace/view/css' )
+                     template_folder='templates', static_folder='static')  # , url_prefix='/traceApp' )
 
 
 def getDbNameBuCodeClientIdFinYearIdBranchId(ctx):
@@ -55,19 +58,46 @@ def test_pdf():
     options = {
         "enable-local-file-access": None
     }
-    html = render_template('bill-template1.html', 
-    companyInfo={'addr1':'', 'addr2':'', 'pin':'', 'phone':'', 'gstin':'', 'email':''}, ref_no='xxx', date='21/12/2021', bill_memo='B', acc_name='', pin='', name='', mobile='', address='', gstin='', email='',stateCode='', products=[])
+    html = render_template('bill-template1.html',
+                           companyInfo={'addr1': '', 'addr2': '', 'pin': '', 'phone': '', 'gstin': '', 'email': ''}, ref_no='xxx', date='21/12/2021', bill_memo='B', acc_name='', pin='', name='', mobile='', address='', gstin='', email='', stateCode='', products=[])
     pdf = pdfkit.from_string(html, False, options=options)
 
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "inline; filename=output.pdf"
     return(response, 200)
-    # pdfkit.from_file('data/bill-template1.html','data/bill-template1.pdf', options )#, configuration=config )
-    # return jsonify('pdf ok'), 200
 
-    # pathTo = 'data/wkhtmltopdf.exe'
-    # config = pdfkit.configuration(wkhtmltopdf=pathTo)
+
+@traceApp.route('/trace/pdf', methods=['POST', 'GET'])
+def pdf():
+    req = request
+    x = sendMail(['capitalch@gmail.com'], 'test',
+                 '<b>This is a test mail</b>', attachment=req.data)
+    response = make_response('test')
+    return(response, 200)
+
+
+@traceApp.route('/view/<encodedPayload>', methods=['GET'])
+def trace_view(encodedPayload):
+    payload = base64.urlsafe_b64decode(encodedPayload).decode()
+    if(payload is not None):
+        tokens = payload.split(',')
+        if(isinstance(tokens, list) and len(tokens) == 3):
+            dbName = tokens[0].split(':')[1]
+            buCode = tokens[1].split(':')[1]
+            id = tokens[2].split(':')[1]
+            sqlString = allSqls['get_pdf_sale_bill']
+            ret = execSql(dbName, sqlString, args={
+                          'id': id}, isMultipleRows=False, buCode=buCode)
+            base64PdfSaleBill = ret.get('pdfSaleBill')
+            pdfData = base64.b64decode(base64PdfSaleBill)
+            return pdfData, 200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'inline; filename="invoice.pdf"'
+            }
+
+    response = make_response('test')
+    return(response, 200)
 
 
 @accountsQuery.field("accountsMasterGroupsLedgers")
@@ -142,6 +172,41 @@ def resolve_generic_update_master(parent, info, value):
     return id
 
 
+@accountsMutation.field("sendEmail")
+def do_email(parent, info, value):
+    value = unquote(value)
+    valueDict = json.loads(value)
+    attachment = base64.b64decode(valueDict.get('data'))
+    x = sendMail([valueDict.get('emailAddress')], valueDict.get('subject', 'Electronic communication'),
+                 valueDict.get('body', '<b>Electronic communication</b>'), attachment=attachment)
+    response = make_response('ok')
+    return(response, 200)
+
+
+@accountsMutation.field("sendSms")
+def do_sms(parent, info, value):
+    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+        info.context)
+    value = unquote(value)
+    valueDict = json.loads(value)
+
+    sqlKey = valueDict.get('sqlKey')
+    id = valueDict.get('id')
+    data = valueDict.get('data')
+    # save pdf invoice data in table TranH against id
+    execSql(dbName, sqlString=allSqls[sqlKey], args={
+            'id': id, 'data': f'"{data}"'}, isMultipleRows=False, buCode=buCode)
+    ret = traceSendSmsForBill({
+        'mobileNumber': valueDict.get('mobileNumber'),
+        'unitName': valueDict.get('unitName'),
+        'id': id,
+        'dbName': dbName,
+        'buCode': buCode
+    })
+    response = make_response(str(ret))
+    return(response, 200)
+
+
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
@@ -155,21 +220,22 @@ def resolve_generic_update_master_details(parent, info, value):
         if updateCodeBlock is not None:
             item['updateCodeBlock'] = allSqls[updateCodeBlock]
         # inject finYearId and branchId
-        autoRefNo = genericUpdateMasterDetailsHelper(dbName, buCode, item)
+        ret = genericUpdateMasterDetailsHelper(dbName, buCode, item)
+        return(ret)
+        # print(autoRefNo)
 
     value = unquote(value)
     valueData = json.loads(value)
+    ret = None
     if type(valueData) is list:
         for item in valueData:
-            processData(item)
+            ret = processData(item)
     else:
-        processData(valueData)
+        ret = processData(valueData)
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
         sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
-    # from app.socket import voucherUpdatedSocket
-    # voucherUpdatedSocket(info.context)
-    return True
+    return ret  # returns the id of first item, if there are multiple items
 
 
 @accountsQuery.field("genericView")
@@ -186,6 +252,18 @@ def resolve_generic_view(parent, info, value):
     valueDict['args']['branchId'] = branchId
     valueDict['isMultipleRows'] = valueDict.get('isMultipleRows', False)
     return genericView(dbName, sqlString, valueDict, buCode)
+
+
+@accountsQuery.field("saleInvoiceView")
+def resolve_sale_invoice_view(parent, info, value):
+    ret = resolve_generic_view(parent, info, value)
+    # set amount in words in ret
+    tranDList = ret['jsonResult']["tranD"]
+    saleAmount = [item["amount"]
+                  for item in tranDList if item['accClass'] == 'sale'][0]
+    amountInWords = convertToWord(saleAmount)
+    ret['jsonResult']["amountInWords"] = amountInWords
+    return(ret)
 
 
 @accountsQuery.field("searchProduct")

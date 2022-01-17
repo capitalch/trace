@@ -5,12 +5,17 @@ import {
     Typography,
     createStyles,
 } from '../../imports/gui-imports'
-import {} from '@material-ui/core'
 import { usingIbuki, manageEntitiesState } from '../../imports/trace-imports'
 import { getArtifacts } from '../../react-form/common/react-form-hook'
-import {} from '../../global-utils/esm'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 import { utils } from './utils'
+import {
+    MultiDataContext,
+    getPurchasesArbitraryData,
+    getSalesArbitraryData,
+    getDebitCreditNotesArbitraryData,
+    getVouchersArbitraryData,
+} from './components/common/multi-data-bridge'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -50,12 +55,24 @@ function LaunchPad() {
         }
     }, [])
 
+    const salesData = getSalesArbitraryData()
+    const purchasesData = getPurchasesArbitraryData()
+    const debitCreditNotesData = getDebitCreditNotesArbitraryData()
+    const vouchersArbitraryData = getVouchersArbitraryData()
     return (
         <>
             <Typography variant="h6" className={classes.title}>
                 {meta.current.mainHeading}
             </Typography>
-            <Comp></Comp>
+            <MultiDataContext.Provider
+                value={{
+                    sales: salesData,
+                    purchases: purchasesData,
+                    debitCreditNotes: debitCreditNotesData,
+                    vouchers: vouchersArbitraryData,
+                }}>
+                <Comp></Comp>
+            </MultiDataContext.Provider>
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>
     )
@@ -99,7 +116,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         title: {
             color: theme.palette.primary.dark,
-            marginTop: theme.spacing(0.2),
+            marginTop: theme.spacing(1),
             marginBottom: theme.spacing(0.2),
         },
     })

@@ -1,5 +1,6 @@
 import {
     _,
+    hash,
     useEffect,
     useState,
     useRef,
@@ -16,9 +17,11 @@ function useXXGrid(gridOptions: any) {
     let { sqlQueryArgs, sqlQueryId, summaryColNames } = gridOptions
     const meta: any = useRef({
         allRows: [],
+        allSummary: {},
         filteredRows: [],
         filteredSummary: {},
-        allSummary: {},
+        hashCurrentData: null,
+        hashInitialData: null,
         isColumnBalance: false,
         isDailySummary: false,
         isMounted: false,
@@ -31,6 +34,7 @@ function useXXGrid(gridOptions: any) {
 
     const {
         emit,
+        debounceFilterOn,
         filterOn,
         getCurrentEntity,
         getFromBag,
@@ -41,38 +45,58 @@ function useXXGrid(gridOptions: any) {
     useEffect(() => {
         meta.current.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
-        const fetchIbukiMessage = gridOptions?.gridActionMessages?.fetchIbukiMessage || 'XX-GRID-FETCH-DATA'
-        // const subs1 = filterOn('XX-GRID-FETCH-DATA').subscribe((d: any) => {
-        const subs1 = filterOn(fetchIbukiMessage).subscribe((d: any) => {
+        const fetchIbukiMessage =
+            gridOptions?.gridActionMessages?.fetchIbukiMessage ||
+            'XX-GRID-FETCH-DATA'
+        const subs1 = filterOn(fetchIbukiMessage).subscribe(async (d: any) => {
             if (d.data) {
                 sqlQueryArgs = d.data
             }
-            fetchRows(sqlQueryId, sqlQueryArgs)
+            await fetchRows(sqlQueryId, sqlQueryArgs)
+            setRefresh({})
         })
         const subs2 = filterOn('XX-GRID-RESET').subscribe(() => {
             meta.current.filteredRows = []
             setRefresh({})
         })
+        const subs3 = debounceFilterOn('XX-GRID-SEARCH-DEBOUNCE').subscribe(
+            (d: any) => {
+                requestSearch(d.data)
+            }
+        )
+        const subs4 = filterOn(
+            gridOptions?.gridActionMessages?.justRefreshIbukiMessage
+        ).subscribe(() => {
+            setRefresh({})
+        })
+
+        const subs5 = filterOn(
+            gridOptions?.gridActionMessages?.calculateBalanceIbukiMessage
+        ).subscribe((d: any) => {
+            const sortFunction: any = d.data // got sort function from bank-recon
+            sortFunction(pre)
+            fillColumnBalance()
+            setRefresh({})
+        })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
+            subs4.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
     const entityName = getCurrentEntity()
     const pre: any = meta.current
-
-    function toggleReverseOrder() {
-        let rows = [...pre.filteredRows]
-        rows.reverse()
-        pre.filteredRows = rows
-
-        pre.isMounted && setRefresh({})
+    if(gridOptions.isReverseOrderChecked){
+        meta.current.isReverseOrder = true
     }
 
     async function fetchRows(queryId: string, queryArgs: any) {
-        if (!queryId || !queryArgs) {
+        if ((!queryId) || (!queryArgs)) { //|| (!queryArgs?.accId)
             return
         }
         queryArgs['no'] =
@@ -82,73 +106,103 @@ function useXXGrid(gridOptions: any) {
         if (pre.isDailySummary) {
             injectDailySummary()
         }
-        setUniqueIds()
+
         requestSearch(meta.current.searchText)
 
-        pre.isMounted && setRefresh({})
+        if (gridOptions.isReverseOrderByDefault) {
+            pre.isReverseOrder = true
+            toggleOrder()
+        }
+
+        if (gridOptions.isShowColBalanceByDefault) {
+            pre.isColumnBalance = true
+            fillColumnBalance()
+        }
+
+        if (gridOptions.sharedData) {
+            gridOptions.sharedData['filteredRows'] = pre.filteredRows
+            gridOptions.sharedData['allRows'] = pre.allRows
+        }
 
         async function fetch() {
             // populates meta.current.filteredRows
+            let i = 1 // for creating unique id's
             pre.isReverseOrder = false
             pre.isDailySummary = false
             pre.isColumnBalance = false
+
             emit('SHOW-LOADING-INDICATOR', true)
-            const ret1: any = await execGenericView({
+            let ret1: any = await execGenericView({
                 isMultipleRows: gridOptions.jsonFieldPath ? false : true,
                 sqlKey: queryId,
                 args: queryArgs || null,
                 entityName: entityName,
             })
             emit('SHOW-LOADING-INDICATOR', false)
-            injectOpBalance(ret1)
+            const path = gridOptions.jsonFieldPath
+            let rows = ret1
+            const opBalance = ret1?.jsonResult?.opBalance || {
+                debit: 0,
+                credit: 0,
+                id: 0,
+                id1: 0,
+            }
+            path && (rows = _.get(ret1, path, []))
+            rows = rows || []
+            for (const row of rows) {
+                row.id1 = row.id
+                row.balance = 0
+                row.id = incr()
+                row.isDataChanged = false
+            }
+            gridOptions.toShowOpeningBalance && injectOpBalance(rows, opBalance)
 
-            function injectOpBalance(ret1: any) {
-                pre.opBalance = ret1?.jsonResult?.opBalance || {
-                    debit: 0,
-                    credit: 0,
-                }
-                let ret: any[]
-                if (gridOptions.jsonFieldPath) {
-                    ret = _.get(ret1, gridOptions.jsonFieldPath)
-                } else {
-                    ret = ret1
-                }
-                ret = ret || []
-                ret = ret.map((item: any) => {
-                    return {
-                        ...item,
-                        balance: 0,
-                    }
+            pre.filteredRows = rows || []
+
+            pre.allRows = rows.map((x: any) => ({ ...x })) // this is cloning at object level of array and better than just [...rows]
+
+            function injectOpBalance(rows: any[], opBalance: any) {
+                rows.unshift({
+                    otherAccounts: 'Opening balance',
+                    id: 0,
+                    id1: 0,
+                    debit: opBalance.debit,
+                    credit: opBalance.credit,
+                    tranDate: getFromBag('finYearObject').isoStartDate,
+                    clearDate: getFromBag('finYearObject').isoStartDate,
                 })
+            }
 
-                gridOptions.toShowOpeningBalance &&
-                    ret.unshift({
-                        otherAccounts: 'Opening balance',
-                        debit: pre.opBalance.debit,
-                        credit: pre.opBalance.credit,
-                        tranDate: getFromBag('finYearObject').isoStartDate,
-                    })
-                pre.filteredRows = ret || []
-                pre.allRows = [...ret]
+            function incr() {
+                return i++
             }
         }
     }
 
     function fillColumnBalance() {
-        const rows: any[] = [...pre.allRows]
+        let rows: any[] = pre.filteredRows
+        const fn = (prev: any, current: any) => {
+            if (current && current.isDailySummary) {
+                current.balance = prev.balance || 0.0
+            } else {
+                current.balance =
+                    prev.balance +
+                    (current.debit || 0.0) -
+                    (current.credit || 0.0)
+            }
+            return current
+        }
         if (pre.isColumnBalance) {
-            let op: number = 0.0
-            for (let row of rows) {
-                row.balance = op + (row.debit || 0.0) - (row.credit || 0.0)
-                op = row.balance
+            if (pre.isReverseOrder) {
+                rows.reduceRight(fn, { balance: 0.0 })
+            } else {
+                rows.reduce(fn, { balance: 0.0 })
             }
         } else {
             for (let row of rows) {
                 row.balance = undefined
             }
         }
-        pre.filteredRows = rows
-        pre.isMounted && setRefresh({})
     }
 
     function injectDailySummary() {
@@ -156,7 +210,7 @@ function useXXGrid(gridOptions: any) {
             meta.current.isMounted && setRefresh({})
             return
         }
-        let rows = [...pre.allRows] // clone
+        let rows = pre.allRows.map((x: any) => ({ ...x })) // clone
         if (pre.isDailySummary) {
             const summaryRows = getSummaryRows(rows)
             rows = rows.concat(summaryRows)
@@ -166,8 +220,11 @@ function useXXGrid(gridOptions: any) {
             pre.isReverseOrder = false
         }
         pre.filteredRows = rows
-        pre.isReverseOrder && toggleReverseOrder()
-        setUniqueIds()
+        pre.isReverseOrder && toggleOrder()
+        reIndexId(pre.filteredRows)
+        if (pre.isColumnBalance) {
+            fillColumnBalance()
+        }
         pre.isMounted && setRefresh({})
 
         function getSummaryRows(arr: any[]) {
@@ -182,7 +239,6 @@ function useXXGrid(gridOptions: any) {
             const acc: any = {
                 tranDate: '',
                 op: +opBalance,
-
                 debit: 0,
                 credit: 0,
                 clos: +opBalance,
@@ -194,10 +250,8 @@ function useXXGrid(gridOptions: any) {
 
             for (let item of arr) {
                 if (item.tranDate === acc.tranDate) {
-                    // if(item.id1){
                     acc.debit = +acc.debit + (item.debit || 0)
                     acc.credit = +acc.credit + (item.credit || 0)
-                    // }
                 } else {
                     //push
                     acc.clos = (item.id1 ? +acc.op : 0) + acc.debit - acc.credit // This iif was necessary to skip initial opbalance which is already taken in debit or credit
@@ -251,17 +305,40 @@ function useXXGrid(gridOptions: any) {
         meta.current.isMounted && setRefresh({})
     }
 
+    function reIndexId(rows: any[]) {
+        let i = 1
+        for (const row of rows) {
+            row.id = incr()
+        }
+        function incr() {
+            return i++
+        }
+    }
+
     function requestSearch(searchValue: string) {
-        meta.current.searchText = searchValue
-        const searchRegex = new RegExp(searchValue, 'i')
-        meta.current.filteredRows = meta.current.allRows.filter((row: any) => {
-            return Object.keys(row).some((field) => {
-                const temp = row[field] ? row[field].toString() : ''
-                return searchRegex.test(temp)
-            })
-        })
-        pre.isReverseOrder = false
-        // pre.isDailySummary = false
+        if (searchValue) {
+            meta.current.searchText = searchValue
+            // const searchRegex = new RegExp(searchValue, 'i')
+            meta.current.filteredRows = meta.current.allRows.filter(
+                (row: any) => {
+                    return Object.keys(row).some((field) => {
+                        const temp: string = row[field]
+                            ? row[field].toString()
+                            : ''
+                        return temp
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                        // return searchRegex.test(temp)
+                    })
+                }
+            )
+        } else {
+            meta.current.filteredRows = meta.current.allRows.map((x: any) => ({
+                ...x,
+            }))
+        }
+        // gridOptions.isReverseOrderByDefault && meta.current.filteredRows.reverse()
+        // pre.isReverseOrder = false
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
     }
@@ -292,20 +369,14 @@ function useXXGrid(gridOptions: any) {
         )
     }
 
-    function setUniqueIds() {
-        let i = 1
-        function incr() {
-            return i++
-        }
-        pre.filteredRows = pre.filteredRows.map((x: any) => {
-            if (!x.isDailySummary) {
-                if (!x['id1']) {
-                    x['id1'] = x.id
-                }
-            }
-            x.id = incr()
-            return x
-        })
+    function toggleOrder() {
+        const hash1 = hash(pre.filteredRows)
+        console.log(hash1)
+        const rows = [...pre.filteredRows]
+        rows.reverse()
+        pre.filteredRows = rows
+        const hash2 = hash(pre.filteredRows)
+        console.log(hash2)
     }
 
     return {
@@ -317,7 +388,7 @@ function useXXGrid(gridOptions: any) {
         requestSearch,
         setFilteredSummary,
         setRefresh,
-        toggleReverseOrder,
+        toggleOrder,
     }
 }
 
@@ -328,7 +399,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             height: '100%',
             width: '100%',
-
+            minHeight: '65vh',
             '& .ledger-summary': {
                 color: theme.palette.blue.dark,
                 backgroundColor: '#FFFAFA',
@@ -346,12 +417,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 columnGap: '1.5rem',
                 borderBottom: '1px solid lightgrey',
-                justifyContent:'space-between',
+                justifyContent: 'space-between',
 
                 '& .toolbar-left-items': {
                     display: 'flex',
                     alignItems: 'center',
-                    
+                    flexWrap: 'wrap',
+                    columnGap: theme.spacing(0.5),
                     '& .toolbar-title': {
                         color: 'dodgerblue',
                         fontSize: '1.2rem',
@@ -361,24 +433,22 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         display: 'flex',
                         columnGap: '0.5rem',
                         color: theme.palette.secondary.main,
+                        marginRight: '1rem',
                         '& select': {
                             borderColor: 'grey',
                             color: theme.palette.primary.main,
-                            // height: '1.5rem'
                         },
                     },
                 },
 
-                
                 '& .global-search': {
                     marginLeft: 'auto',
                     marginRight: '1rem',
                 },
-                
-                '& .add-button':{
-                    // marginLeft: 'auto',
+
+                '& .add-button': {
                     marginRight: theme.spacing(1),
-                }
+                },
             },
             '& .custom-footer': {
                 display: 'flex',
@@ -406,3 +476,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
+
+// const handleEditRowsModelChange = useCallback((newModel: any) => {
+//     const filteredRows: any[] = meta.current.filteredRows
+//     Object.keys(newModel).forEach((key: any) => {
+//         if (newModel[key]?.clearDate?.value) {
+//             const foundRow = filteredRows.find((x: any) => x.id === +key)
+//             foundRow.clearDate = newModel[key].clearDate.value
+//             foundRow.isDataChanged = true
+//         }
+//     })
+// }, [])

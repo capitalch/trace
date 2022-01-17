@@ -161,7 +161,7 @@ function useAssociateAdminUserWithClientAndEntity(meta: any) {
                     <IconButton
                         size="medium"
                         color="secondary"
-                        onClick={(e) =>
+                        onClick={(e:any) =>
                             deleteRow(
                                 node,
                                 associateAdminUserWithClientAndEntity.read

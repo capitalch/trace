@@ -48,7 +48,7 @@ function useProductUtils(
                 }
                 meta.current.isMounted && setRefresh({})
             }
-        } catch (e) {
+        } catch (e:any) {
             console.log(e)
         }
         emit('SHOW-LOADING-INDICATOR', false)

@@ -1,6 +1,7 @@
 import {
     _,
     moment,
+    useContext,
     useState,
     useEffect,
     useRef,
@@ -10,13 +11,15 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
     const isoDateFormat = 'YYYY-MM-DD'
-    const { emit, filterOn, getFromBag } = useSharedElements()
+    const multiData: any = useContext(MultiDataContext)
+    multiData.sales.saleType = saleType
+    const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
 
     useEffect(() => {
         meta.current.isMounted = true
@@ -28,26 +31,22 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                     'SALE-VIEW-HOOK-GET-SALE-ON-ID',
                     drillDownEditAttributes.tranHeaderId
                 )
-            arbitraryData.current.shouldCloseParentOnSave = true
+            multiData.sales.shouldCloseParentOnSave = true
         }
 
-        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d:any)=>{
-            meta.current.tabValue = d.data // changes the tab. if d.data is 0 then new purchase tab is selected
+        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {            
+            multiData.sales.tabValue = d.data
             setRefresh({})
         })
 
-        // arbitraryData.current.salesHookChangeTab = (tabValue: number) => {
-        //     meta.current.tabValue = tabValue // changes the tab. if d.data is 0 then new purchase tab is selected
-        //     setRefresh({})
-        // }
-
-        // arbitraryData.current.salesHookResetData = () => {
-        //     resetArbitraryData()
-        // }
+        const subs2 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+            setInBag('salesData', multiData.sales)
+        })
 
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
@@ -55,7 +54,6 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         isMounted: false,
         saleTypeLabel: 'Sale',
         showDialog: false,
-        tabValue: 0,
         dialogConfig: {
             title: '',
             content: () => {},
@@ -63,61 +61,19 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         },
     })
 
-    const arbitraryData: any = useRef({
-        accounts: {
-            cashBankAccountsWithLedgers: [],
-            cashBankAccountsWithSubledgers: [],
-            debtorCreditorAccountsWithLedgers: [],
-            debtorCreditorAccountsWithSubledgers: [],
-            autoSubledgerAccounts: [],
-        },
-
-        allAccounts: [],
-        autoRefNo: undefined,
-        backCalulateAmount: 0.0,
-        billTo: {
-            id: undefined,
-        },
-
-        commonRemarks: undefined,
-        deletedSalePurchaseIds: [],
-        footer: {
-            items: [], // for TranD table
-            deletedIds: [],
-        },
-        id: undefined,
-        isIgst: false,
-        isAssignmentReturn: saleType === 'ret',
-        isSales: saleType === 'sal',
-        ledgerAccounts: [],
-        lineItems: [], // for product details of SalePurchaseDetails table
-        rowData: {},
-
-        saleErrorMethods: {
-            headError: () => false,
-            itemsError: () => false,
-            footerError: () => false,
-            errorMethods: {
-                getSlNoError: () => false,
-            },
-        },
-
-        saleErrorObject: {},
-
-        saleVariety: 'r',
-        shipTo: {},
-        summary: {},
-        totalCredits: 0.0,
-        totalDebits: 0.0,
-        tranDate: moment().format(isoDateFormat),
-        isViewBack: false,
-    })
+    const salesData = getFromBag('salesData')
+    if (salesData) {
+        multiData.sales = salesData
+        setInBag('salesData', undefined)
+    }
 
     function handleChangeTab(e: any, newValue: number) {
-        meta.current.tabValue = newValue
+        multiData.sales.tabValue = newValue
         if (newValue === 3) {
             // view
-            arbitraryData.current.saleViewHookFetchData()
+            multiData.sales.saleViewHookFetchData()
+        } else {
+            multiData.sales.salesCrownRefresh()
         }
         meta.current.isMounted && setRefresh({})
     }
@@ -125,13 +81,13 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     function setAccounts() {
         //saleAccounts
         const allAccounts = getFromBag('allAccounts') || []
-        arbitraryData.current.allAccounts = allAccounts
+        multiData.sales.allAccounts = allAccounts
         const saleAccounts = allAccounts.filter(
             (el: any) =>
                 ['sale'].includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.current.ledgerAccounts = saleAccounts
+        multiData.sales.ledgerAccounts = saleAccounts
 
         // Cash bank accounts
         const cashBankArray = ['cash', 'bank', 'card', 'ecash']
@@ -140,7 +96,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 cashBankArray.includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'L')
         )
-        arbitraryData.current.accounts.cashBankAccountsWithLedgers =
+        multiData.sales.accounts.cashBankAccountsWithLedgers =
             cashBankAccountsWithLedgers
 
         const cashBankAccountsWithSubledgers = allAccounts.filter(
@@ -148,7 +104,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 cashBankArray.includes(el.accClass) &&
                 (el.accLeaf === 'Y' || el.accLeaf === 'S')
         )
-        arbitraryData.current.accounts.cashBankAccountsWithSubledgers =
+        multiData.sales.accounts.cashBankAccountsWithSubledgers =
             cashBankAccountsWithSubledgers
         // Debtors creditors accounts
         const debtorCreditorAccountsWithLedgers = allAccounts
@@ -163,7 +119,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.current.accounts.debtorCreditorAccountsWithLedgers =
+        multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
             debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
@@ -177,7 +133,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 if (a.accName < b.accName) return -1
                 return 0
             })
-        arbitraryData.current.accounts.debtorCreditorAccountsWithSubledgers =
+        multiData.sales.accounts.debtorCreditorAccountsWithSubledgers =
             debtorCreditorAccountsWithSubledgers
         // auto subledger accounts
         const autoSubledgerAccounts = allAccounts.filter(
@@ -186,11 +142,10 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 el.isAutoSubledger
         )
-        arbitraryData.current.accounts.autoSubledgerAccounts =
-            autoSubledgerAccounts
+        multiData.sales.accounts.autoSubledgerAccounts = autoSubledgerAccounts
     }
 
-    return { arbitraryData, handleChangeTab, meta }
+    return { multiData, handleChangeTab, meta }
 }
 
 export { useSales }
@@ -202,9 +157,68 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 backgroundColor: 'dodgerBlue',
                 color: theme.palette.common.white,
                 marginTop: theme.spacing(0.5),
+                '& .reset':{
+                    backgroundColor: theme.palette.amber.main,
+                    color: theme.palette.amber.contrastText,
+                    height: theme.spacing(4),
+                    margin:'auto',
+                    // marginRight: '20%'
+                }
             },
         },
     })
 )
 
 export { useStyles }
+
+
+    // const arbitraryData: any = useRef({
+    //     accounts: {
+    //         cashBankAccountsWithLedgers: [],
+    //         cashBankAccountsWithSubledgers: [],
+    //         debtorCreditorAccountsWithLedgers: [],
+    //         debtorCreditorAccountsWithSubledgers: [],
+    //         autoSubledgerAccounts: [],
+    //     },
+
+    //     allAccounts: [],
+    //     autoRefNo: undefined,
+    //     backCalulateAmount: 0.0,
+    //     billTo: {
+    //         id: undefined,
+    //     },
+
+    //     commonRemarks: undefined,
+    //     deletedSalePurchaseIds: [],
+    //     footer: {
+    //         items: [], // for TranD table
+    //         deletedIds: [],
+    //         amount: 0,
+    //     },
+    //     id: undefined,
+    //     isIgst: false,
+    //     isAssignmentReturn: saleType === 'ret',
+    //     isSales: saleType === 'sal',
+    //     ledgerAccounts: [],
+    //     lineItems: [], // for product details of SalePurchaseDetails table
+    //     rowData: {},
+
+    //     saleErrorMethods: {
+    //         headError: () => false,
+    //         itemsError: () => false,
+    //         footerError: () => false,
+    //         errorMethods: {
+    //             getSlNoError: () => false,
+    //         },
+    //     },
+
+    //     saleErrorObject: {},
+
+    //     saleVariety: 'r',
+    //     shipTo: {},
+    //     summary: {},
+    //     totalCredits: 0.0,
+    //     totalDebits: 0.0,
+    //     tranDate: moment().format(isoDateFormat),
+    //     isViewBack: false,
+    // })

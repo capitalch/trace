@@ -63,7 +63,6 @@ function initCode() {
             branchCode: 'main',
         })
         
-        // hotEmit('DATACACHE-SUCCESSFULLY-LOADED', datacache)
         emit('LOAD-LEFT-MENU', '')
          // Remove following line. This loads the journals by default
          emit('TRACE-SUBHEADER:JUST-REFRESH', '')
@@ -188,6 +187,10 @@ function initCode() {
         )
 
         setInBag('allSettings', allSettings)
+        const info = allSettings.find((item) => item.key === 'unitInfo')
+        const unitInfo = info?.jData
+        setInBag('unitInfo', unitInfo)
+        console.log(JSON.stringify(unitInfo))
         setInBag('generalSettings', generalSettings)
         setInBag('auditLockDate', generalSettings?.auditLockDate || '')
         setInBag('allAccounts', allAccounts)
@@ -195,7 +198,6 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('TRACE-MAIN:JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-        setVouchersArbitraryData()
         function getRoom() {
             const clientId = getLoginData()?.clientId
             const buCode = getFromBag('buCode')
@@ -205,23 +207,6 @@ function initCode() {
                 clientId
             )}:${buCode}:${finYearId}:${branchId}`
             return room
-        }
-
-        function setVouchersArbitraryData(){
-            const temp:any = {
-                accounts: {
-                    all: [],
-                    journal: [],
-                },
-                header: {},
-                deletedDetailsIds: [],
-                debits: [{ key: 0 }],
-                credits: [{ key: 0 }],
-            }
-            setInBag('journal-voucher',JSON.parse(JSON.stringify(temp)))
-            setInBag('payment-voucher', JSON.parse(JSON.stringify(temp)))
-            setInBag('receipt-voucher', JSON.parse(JSON.stringify(temp)))
-            setInBag('contra-voucher', JSON.parse(JSON.stringify(temp)))
         }
     }
 

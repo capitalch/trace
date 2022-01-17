@@ -1,16 +1,41 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    // axios,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
+// import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { InvoiceA } from '../pdf/invoices/invoiceA'
 
-function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttributes: any) {
+function useSaleCrown(
+    arbitraryData: any,
+    saleType: string,
+    drillDownEditAttributes: any
+) {
     const [, setRefresh] = useState({})
     const {
+        accountsMessages,
+        // BlobProvider,
+        confirm,
         emit,
+        // execGenericView,
         getCurrentComponent,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
+        pdf,
+        // PDFViewer,
+        execSaleInvoiceView,
+        sendEmail,
+        sendSms,
+        setInBag,
     } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
@@ -20,16 +45,20 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         }
     }, [])
 
+    const unitInfo = getFromBag('unitInfo')
+    const rawSaleData = getFromBag('rawSaleData') || {}
+
     const meta: any = useRef({
         isMounted: false,
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => <></>,
+            actions: () => {},
         },
         title: saleType === 'sal' ? 'Sales' : 'Sales return',
     })
+    const pre = meta.current
 
     function getError() {
         const ab = arbitraryData
@@ -37,7 +66,8 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
 
         function headError() {
             function dateError() {
-                errorObject.dateError = isInvalidDate(ab.tranDate) || (!ab.tranDate)
+                errorObject.dateError =
+                    isInvalidDate(ab.tranDate) || !ab.tranDate
                 return errorObject.dateError
             }
             function saleAccountError() {
@@ -77,7 +107,8 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                         !!!curr.qty ||
                         arbitraryData.saleErrorMethods.errorMethods.getSlNoError(
                             arbitraryData.lineItems[index]
-                        )
+                        ) ||
+                        curr.gstRate > 30
                     prev.isError = prev.isError || curr.isError
                     return prev
                 },
@@ -104,10 +135,12 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         }
 
         function debitCreditError() {
-            errorObject.debitCreditError = (Math.abs(
-                arbitraryData.footer.amount -
-                arbitraryData.summary.amount
-            ) === 0) ? false : true
+            errorObject.debitCreditError =
+                Math.abs(
+                    arbitraryData.footer.amount - arbitraryData.summary.amount
+                ) === 0
+                    ? false
+                    : true
             return errorObject.debitCreditError
         }
 
@@ -116,29 +149,139 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         const f = footerError()
         const d = debitCreditError()
         const ret: boolean = h || i || f || d
-        // console.log(errorObject)
         return ret
+    }
+
+    async function handleBillPreview() {
+        const dialog = pre.dialogConfig
+        dialog.title = 'Sale invoice'
+        pre.showDialog = true
+        pre.isMounted && setRefresh({})
+    }
+
+    async function handleEmail() {
+        const rawSaleData = getFromBag('rawSaleData') || {}
+        const emailAddress = rawSaleData?.jsonResult?.billTo?.email
+        const options = {
+            description: accountsMessages.emailNotFound,
+            confirmationText: 'Ok',
+            cancellationText: '',
+        }
+        if (!emailAddress) {
+            confirm(options)
+                .then(() => {})
+                .catch(() => {})
+            return
+        }
+        const Doc = () => (
+            <InvoiceA unitInfo={unitInfo} rawSaleData={rawSaleData} />
+        )
+        const blob = await pdf(<Doc />).toBlob()
+        // Convert blob to Base64, remove the first few chars till the character ',' from the base64 string and send it to server
+        const reader = new FileReader()
+        reader.onloadend = async () => {
+            const base64String: any = reader.result
+            const base64Data = base64String.substr(
+                base64String.indexOf(',') + 1
+            )
+            const ret = await sendEmail(
+                escape(
+                    JSON.stringify({
+                        data: base64Data,
+                        subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
+                        body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
+                        emailAddress: emailAddress,
+                    })
+                )
+            )
+            console.log(ret)
+        }
+        reader.readAsDataURL(blob)
+    }
+
+    async function handleSms() {
+        const rawSaleData = getFromBag('rawSaleData') || {}
+        const mobileNumber = rawSaleData?.jsonResult?.billTo?.mobileNumber
+        const options = {
+            description: accountsMessages.mobileNumberNotFound,
+            confirmationText: 'Ok',
+            cancellationText: '',
+        }
+        if (!mobileNumber) {
+            confirm(options)
+                .then(() => {})
+                .catch(() => {})
+            return
+        }
+        const Doc = () => (
+            <InvoiceA unitInfo={unitInfo} rawSaleData={rawSaleData} />
+        )
+        const blob = await pdf(<Doc />).toBlob()
+        // Convert blob to Base64, remove the first few chars till the character ',' from the base64 string and send it to server
+        const reader = new FileReader()
+        reader.onloadend = async () => {
+            const base64String: any = reader.result
+            const base64Data = base64String.substr(
+                base64String.indexOf(',') + 1
+            )
+            const id = rawSaleData?.jsonResult?.tranH?.id
+            const ret = await sendSms(
+                escape(
+                    JSON.stringify({
+                        data: base64Data,
+                        // subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
+                        // body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
+                        id: id,
+                        sqlKey:'update_pdf_invoice',
+                        mobileNumber: mobileNumber,
+                        unitName: unitInfo?.shortName || 'Trace'
+                    })
+                )
+            )
+            console.log(ret)
+        }
+        reader.readAsDataURL(blob)
+    }
+
+    function handleClose() {
+        meta.current.showDialog = false
+        setRefresh({})
     }
 
     async function handleSubmit() {
         const ad = arbitraryData
+        // ad.rawSaleData = null
+        setInBag('rawSaleData', null)
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        const ret = await genericUpdateMasterDetails([header])
+        let ret = await genericUpdateMasterDetails([header])
+        console.log(JSON.stringify(header))
         if (ret.error) {
             console.log(ret.error)
         } else {
+            const id = ret?.data?.accounts?.genericUpdateMasterDetails
+            if (id) {
+                ret = await execSaleInvoiceView({
+                    isMultipleRows: false,
+                    sqlKey: 'getJson_sale_purchase_on_id',
+                    args: {
+                        id: id,
+                    },
+                })
+                if (ret) {
+                    setInBag('rawSaleData', ret)
+                    ad.rawSaleData = ret
+                    setRefresh({})
+                }
+            }
             if (ad.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
             } else if (ad.isViewBack) {
-                // arbitraryData.salesHookResetData()
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('SALES-HOOK-CHANGE-TAB', 3)
-                // arbitraryData.salesHookChangeTab(3)
                 arbitraryData.saleViewHookFetchData()
-            }
-            else {
+            } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
             ad.isViewBack = false // no go back to view
@@ -158,12 +301,14 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                 userRefNo: ad.userRefNo,
                 remarks: ad.commonRemarks,
                 tags: undefined,
-                jData: ad.shipTo?.address1 ? JSON.stringify({ shipTo: ad.shipTo }) : null,
+                jData: ad.shipTo?.address1
+                    ? JSON.stringify({ shipTo: ad.shipTo })
+                    : null,
                 finYearId: finYearId,
                 branchId: branchId,
                 posId: '1',
                 autoRefNo: ad.autoRefNo,
-                tranTypeId: ad.isSales ? 4 : 9,
+                tranTypeId: ad.saleType === 'sal' ? 4 : 9,
                 details: [],
             }
             obj.data.push(item)
@@ -184,7 +329,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             const saleDataRow: any = {
                 id: ad.rowData.id || undefined,
                 accId: ad.rowData.accId,
-                dc: ad.isSales ? 'C' : 'D',
+                dc: ad.saleType === 'sal' ? 'C' : 'D',
                 amount: ad.summary.amount,
                 details: [],
             }
@@ -193,11 +338,11 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
             for (let item of ad.footer.items) {
                 saleTranD.data.push({
                     accId: item.accId,
-                    dc: ad.isSales ? 'D' : 'C',
+                    dc: ad.saleType === 'sal' ? 'D' : 'C',
                     amount: item.amount,
                     remarks: item.remarks,
                     instrNo: item.instrNo,
-                    id: item.id || undefined
+                    id: item.id || undefined,
                 })
             }
 
@@ -211,7 +356,7 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
                         cgst: ad.summary.cgst,
                         sgst: ad.summary.sgst,
                         igst: ad.summary.igst,
-                        isInput: ad.isSales ? false : true,
+                        isInput: ad.saleType === 'sal' ? false : true,
                     },
                 ],
             }
@@ -249,13 +394,33 @@ function useSaleCrown(arbitraryData: any, saleType: string, drillDownEditAttribu
         }
     }
 
-    return { handleSubmit, getError, meta }
+    return {
+        handleBillPreview,
+        handleClose,
+        handleEmail,
+        handleSms,
+        handleSubmit,
+        getError,
+        meta,
+        setRefresh,
+    }
 }
 
 export { useSaleCrown }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
+        previewTitle: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            '& .email-icon': {
+                color: theme.palette.yellow.dark,
+            },
+            '& .sms-icon': {
+                color: theme.palette.blue.main,
+                marginRight: theme.spacing(4),
+            },
+        },
         content: {
             '& .sales-crown': {
                 display: 'flex',
@@ -264,7 +429,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 backgroundColor: theme.palette.grey[100],
                 '& .crown-title': {
-                    color: theme.palette.secondary.main
+                    color: theme.palette.secondary.main,
                 },
                 '& .crown-content': {
                     display: 'flex',
@@ -275,6 +440,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: theme.palette.blue.main,
                     fontWeight: 'bold',
                     marginLeft: 'auto',
+                    '& ..preview-icon': {
+                        color: theme.palette.orange.light,
+                    },
+                    '& .mail-icon': {
+                        color: theme.palette.amber.dark,
+                    },
+                    '& .sms-icon': {
+                        color: theme.palette.indigo.light,
+                    },
                 },
             },
         },
@@ -282,3 +456,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
+
+// const ret = await axios({
+//     url: 'http://localhost:5000/trace/pdf',
+//     method:'post',
+//     headers:{
+//         "content-type":"application/pdf"
+//     },
+//     data:blob
+// })
+// console.log(ret)

@@ -3,64 +3,85 @@ import { manageEntitiesState } from '../global-utils/esm'
 
 const { getCurrentEntity } = manageEntitiesState()
 const graphqlQueries: any = {
-
-  genericUpdateMaster: (arg: any, entityName: string) => {
-    const str = `
+    genericUpdateMaster: (arg: any, entityName: string) => {
+        const str = `
     mutation genericUpdateMaster {
       ${entityName} {
         genericUpdateMaster(value:"${arg}")
       }
     }`
-    return gql(str)
-  }
+        return gql(str)
+    },
 
-  , genericUpdateMasterDetails: (arg: any, entityName: string) => {
-    const str = `
+    genericUpdateMasterDetails: (arg: any, entityName: string) => {
+        const str = `
     mutation genericUpdateMasterDetails {
      ${entityName} {
       genericUpdateMasterDetails(value:"${arg}")
      }
     }`
-    return gql(str)
-  }
+        return gql(str)
+    },
 
-  , genericView: (value: GenericViewValues, entityName: string = 'authentication') => gql`
+    genericView: (
+        value: GenericViewValues,
+        entityName: string = 'authentication'
+    ) => gql`
     query genericView {
       ${entityName} {
           genericView(value:"${value}")
-  }}`
+  }}`,
 
-  , genericQueryBuilder: (options: GenericQueryBuilderOptions) => {
-    function logic() {
-      let ret: any
-      if (options.args && (Object.keys(options.args).length > 0)) {
-        ret = `(value:"${options.args}")`
-      } else {
-        ret = ''
-      }
-      return ret
-    }
-    const str = `
+    genericQueryBuilder: (options: GenericQueryBuilderOptions) => {
+        function logic() {
+            let ret: any
+            if (options.args && Object.keys(options.args).length > 0) {
+                ret = `(value:"${options.args}")`
+            } else {
+                ret = ''
+            }
+            return ret
+        }
+        const str = `
     ${options.queryType || 'query'} ${options.queryName} {
       ${options.entityName || getCurrentEntity()} {
         ${options.queryName} ${logic()}
       }
     }`
-    return gql(str)
-  }
+        return gql(str)
+    },
+
+    sendEmail: (value: any, entityName: string) => {
+        const str = `
+      mutation sendEmail {
+        ${entityName} {
+          sendEmail(value:"${value}")
+        }
+      }`
+        return gql(str)
+    },
+    sendSms: (value: any, entityName: string) => {
+      const str = `
+    mutation sendSms {
+      ${entityName} {
+        sendSms(value:"${value}")
+      }
+    }`
+      return gql(str)
+  },
 }
 
 export { graphqlQueries }
 
 interface GenericViewValues {
-  sqlKey: string
-  isMultipleRows: boolean
-  args: any[]
+    sqlKey: string
+    isMultipleRows: boolean
+    args: any[]
 }
 
 interface GenericQueryBuilderOptions {
-  queryName: string
-  queryType?: string // query / mutation
-  args?: any
-  entityName?: string
+    queryName: string
+    queryType?: string // query / mutation
+    args?: any
+    entityName?: string
 }

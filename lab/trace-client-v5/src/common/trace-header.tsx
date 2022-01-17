@@ -138,7 +138,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                                 size="large"
                                 className={classes.appBarButton}
                                 key={index}
-                                onClick={(e) => {
+                                onClick={(e:any) => {
                                     handleEntityClicked(item)
                                 }}>
                                 {item.label}
@@ -202,7 +202,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper,
                 }}
-                onKeyDown={(e) => {
+                onKeyDown={(e:any) => {
                     if (e.key === 'Escape') {
                         closeDialog()
                     } else if (e.key === 'Enter') {

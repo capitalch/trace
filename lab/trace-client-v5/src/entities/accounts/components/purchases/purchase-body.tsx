@@ -1,51 +1,47 @@
-import { NumberFormat, useState, useEffect, useContext } from '../../../../imports/regular-imports'
 import {
-    Button, Typography,
-    Checkbox, FormControlLabel,
+    NumberFormat,
+    useState,
+    useEffect,
+    useContext,
+} from '../../../../imports/regular-imports'
+import {
+    Button,
+    Tooltip,
+    Typography,
+    Checkbox,
+    FormControlLabel,
+    IconButton,
     InputAdornment,
     Radio,
     TextField,
 } from '../../../../imports/gui-imports'
-import { Error, Check } from '../../../../imports/icons-import'
+import { Error, Check, PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
-import { ClearAll } from '../../../../imports/icons-import'
-import { PurchasesContext } from './purchases-provider'
+// import { ClearAll } from '../../../../imports/icons-import'
+// import { PurchasesContext } from './purchases-provider'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function PurchaseBody({ purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const arbitraryData: any = useContext(PurchasesContext)
+    const multiData: any = useContext(MultiDataContext)
+    const ad = multiData.purchases
+    const errorObject = ad.errorObject
     const {
-        allErrorMethods,
-        getError,
-        handleClear,
         handleIsGstInvoice,
-        handlePurchaseCashCredit,
+        handlePrint,
+        preHandlePurchaseCashCredit,
         handleSubmit,
         meta,
         queryGstin,
-    } = usePurchaseBody(arbitraryData, purchaseType)
-    const {
-        getDateError,
-        getGstError,
-        getGstinError,
-        getInvoiceError,
-        getInvoiceAmountError,
-        getOtherAccountError,
-        getPurchaseAccountError,
-        getQtyError,
-    } = allErrorMethods()
+    } = usePurchaseBody(ad, purchaseType)
 
-    const {
-        accountsMessages,
-        emit,
-        filterOn,
-        TraceDialog,
-    } = useSharedElements()
+    const { accountsMessages, emit, getMappedAccounts, filterOn, TraceDialog } =
+        useSharedElements()
 
     return (
         <div className={classes.content}>
@@ -71,12 +67,13 @@ function PurchaseBody({ purchaseType }: any) {
                     setRefresh({})
                 }
             )
-
             return () => {
                 subs1.unsubscribe()
             }
         }, [])
-
+        const isError: boolean = errorObject?.isError
+            ? ad.errorObject.isError()
+            : true //getError()
         return (
             <Button
                 className="submit"
@@ -85,13 +82,13 @@ function PurchaseBody({ purchaseType }: any) {
                 color="secondary"
                 onClick={handleSubmit}
                 startIcon={
-                    getError() ? (
+                    isError ? (
                         <Error color="error" />
                     ) : (
                         <Check style={{ color: 'white' }} />
                     )
                 }
-                disabled={getError()}>
+                disabled={isError}>
                 Submit
             </Button>
         )
@@ -104,53 +101,66 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* auto ref no */}
                 <TextField
                     className="auto-ref-no"
-                    variant='standard'
+                    variant="standard"
                     disabled={true}
                     label="Ref no"
-                    value={arbitraryData.autoRefNo || ''}
+                    value={ad?.autoRefNo || ''}
                 />
                 {/* date */}
                 <TextField
-                    label={arbitraryData.tranDate ? 'Date' : undefined}
-                    variant='standard'
-                    error={getDateError()}
-                    helperText={
-                        getDateError()
-                            ? 'Date range / Audit lock error'
-                            : undefined
+                    label={ad.tranDate ? 'Date' : undefined}
+                    variant="standard"
+                    error={
+                        errorObject?.isDateError
+                            ? errorObject.isDateError()
+                            : true
                     }
+                    helperText={(() => {
+                        let ret
+                        if (errorObject.isDateError) {
+                            if (errorObject.isDateError()) {
+                                ret = 'Date range / Audit lock error'
+                            }
+                        } else {
+                            ret = 'Date range / Audit lock error'
+                        }
+                        return ret
+                    })()}
                     type="date"
                     onChange={(e: any) => {
-                        arbitraryData.tranDate = e.target.value
+                        ad.tranDate = e.target.value
                         setRefresh({})
                     }}
-                    onFocus={(e) => e.target.select()}
-                    value={arbitraryData.tranDate || ''}
+                    onFocus={(e:any) => e.target.select()}
+                    value={ad.tranDate || ''}
                 />
                 {/* invoice no  */}
                 <TextField
                     label="Invoice no"
-                    variant='standard'
+                    variant="standard"
                     className="invoice-no"
-                    error={getInvoiceError()}
+                    error={
+                        errorObject.isInvoiceError
+                            ? errorObject.isInvoiceError()
+                            : true
+                    }
                     onChange={(e: any) => {
-                        arbitraryData.userRefNo = e.target.value
+                        ad.userRefNo = e.target.value
                         setRefresh({})
                     }}
-                    value={arbitraryData.userRefNo || ''}
+                    value={ad.userRefNo || ''}
                 />
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
-                    variant='standard'
+                    variant="standard"
                     className="common-remarks"
                     onChange={(e: any) => {
-                        arbitraryData.commonRemarks = e.target.value
+                        ad.commonRemarks = e.target.value
                         setRefresh({})
                     }}
-                    value={arbitraryData.commonRemarks || ''}
+                    value={ad.commonRemarks || ''}
                 />
-
                 <PurchaseCashCredit />
 
                 {/* gst invoice  */}
@@ -158,21 +168,24 @@ function PurchaseBody({ purchaseType }: any) {
                     className="gst-invoice"
                     control={
                         <Checkbox
-                            checked={arbitraryData.isGstInvoice}
-                            onChange={
-                                handleIsGstInvoice
-                                // (
-                                //     e: any) => {
-                                //     arbitraryData.isGstInvoice = e.target.checked
-                                //     setRefresh({})
-                                // }
-                            }
+                            checked={ad.isGstInvoice}
+                            onChange={handleIsGstInvoice}
                         />
                     }
                     label="Gst invoice"
                 />
-                {/* submit */}
-                <SubmitComponent />
+                <div className="print-submit-button">
+                    <Tooltip title="Print">
+                        <IconButton
+                            className='print-button'                            
+                            size="small"
+                            disabled={false}
+                            onClick={handlePrint}>
+                            <PrintIcon className="print-icon" />
+                        </IconButton>
+                    </Tooltip>
+                    <SubmitComponent />
+                </div>
             </div>
         )
     }
@@ -181,196 +194,229 @@ function PurchaseBody({ purchaseType }: any) {
         const [, setRefresh] = useState({})
         return (
             <div className="body-line-2">
-                <div>
-                    <Typography variant="caption">Purchase a/c</Typography>
-                    {/* purchase */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.purchaseLedgerAccounts}
-                        onChange={() => {
-                            getPurchaseAccountError()
+                <div className="left">
+                    <div>
+                        <Typography variant="caption">Purchase a/c</Typography>
+                        {/* purchase */}
+                        <LedgerSubledger
+                            // allAccounts={meta.current.allAccounts}
+                            allAccounts={ad.accounts.allAccounts}
+                            className="ledger-subledger"
+                            // ledgerAccounts={meta.current.purchaseLedgerAccounts}
+                            ledgerAccounts={getMappedAccounts(
+                                ad.accounts.purchaseLedgerAccounts
+                            )}
+                            onChange={() => {
+                                // getPurchaseAccountError()
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={ad.ledgerSubledgerPurchase}
+                        />
+                    </div>
+                    <div>
+                        <Typography variant="caption">Credit a/c</Typography>
+                        {/* credit account */}
+                        <LedgerSubledger
+                            // allAccounts={meta.current.allAccounts}
+                            allAccounts={ad.accounts.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={getMappedAccounts(
+                                ad.accounts.ledgerAccounts
+                            )}
+                            onChange={async () => {
+                                // getOtherAccountError()
+                                const gstin: string = await queryGstin(
+                                    ad.ledgerSubledgerOther?.accId
+                                )
+                                ad.gstin = gstin
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={ad.ledgerSubledgerOther}
+                        />
+                    </div>
+                    {/* gstin */}
+                    <TextField
+                        className="gstin"
+                        variant="standard"
+                        label="Gstin no"
+                        // error={getGstinError()}
+                        error={
+                            errorObject.isGstinError
+                                ? errorObject.isGstinError()
+                                : true
+                        }
+                        onChange={(e: any) => {
+                            ad.gstin = e.target.value
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={arbitraryData.ledgerSubledgerPurchase}
+                        value={ad.gstin || ''}
                     />
                 </div>
-                <div>
-                    <Typography variant="caption">Credit a/c</Typography>
-                    {/* credit account */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.ledgerAccounts}
-                        onChange={async () => {
-                            getOtherAccountError()
-                            const gstin: string = await queryGstin(
-                                arbitraryData.ledgerSubledgerOther?.accId
-                            )
-                            arbitraryData.gstin = gstin
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        rowData={arbitraryData.ledgerSubledgerOther}
-                    />
-                </div>
-                {/* gstin */}
-                <TextField
-                    className="gstin"
-                    variant='standard'
-                    label="Gstin no"
-                    error={getGstinError()}
-                    onChange={(e: any) => {
-                        arbitraryData.gstin = e.target.value
-                        setRefresh({})
-                        emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                    }}
-                    value={arbitraryData.gstin || ''}
-                />
-                <div className="invoice">
-                    {/* Invoice amount */}
-                    <NumberFormat
-                        className="total-amount"
-                        label="Invoice amount"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getInvoiceAmountError()}
-                        fixedDecimalScale={true}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            //using onChange event stores formatted value
-                            const { floatValue } = values
-                            arbitraryData.invoiceAmount = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={arbitraryData.invoiceAmount || 0.0}
-                    />
-                    <NumberFormat
-                        label="Total qty"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getQtyError()}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.qty = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={arbitraryData.qty || 0}
-                    />
-                </div>
+                <div className="right">
+                    <div className="invoice">
+                        {/* Invoice amount */}
+                        <NumberFormat
+                            className="total-amount"
+                            label="Invoice amount"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getInvoiceAmountError()}
+                            error={
+                                errorObject.isInvoiceAmountError
+                                    ? errorObject.isInvoiceAmountError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            onFocus={(e:any) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                //using onChange event stores formatted value
+                                const { floatValue } = values
+                                ad.invoiceAmount = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={ad.invoiceAmount || 0.0}
+                        />
+                        <NumberFormat
+                            label="Total qty"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getQtyError()}
+                            error={
+                                errorObject.isTotalQtyError
+                                    ? errorObject.isTotalQtyError()
+                                    : true
+                            }
+                            onFocus={(e:any) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.qty = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={ad.qty || 0}
+                        />
+                    </div>
 
-                <div className="gst">
-                    {/* cgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Cgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={arbitraryData.cgst || 0.0}
-                    />
-                    {/* sgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Sgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={arbitraryData.sgst || 0.0}
-                    />
-                    {/* igst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Igst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.cgst = 0.0
-                            arbitraryData.sgst = 0.0
-                            arbitraryData.igst = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={arbitraryData.igst || 0.0}
-                    />
+                    <div className="gst">
+                        {/* cgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getGstError()}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Cgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = floatValue
+                                ad.sgst = floatValue
+                                ad.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e:any) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.cgst || 0.0}
+                        />
+                        {/* sgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getGstError()}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Sgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = floatValue
+                                ad.sgst = floatValue
+                                ad.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e:any) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.sgst || 0.0}
+                        />
+                        {/* igst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getGstError()}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Igst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = 0.0
+                                ad.sgst = 0.0
+                                ad.igst = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e:any) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.igst || 0.0}
+                        />
+                    </div>
                 </div>
-                <Button
-                    className="reset"
-                    size="small"
-                    color="secondary"
-                    onClick={handleClear}
-                    startIcon={<ClearAll />}>
-                    Clear all
-                </Button>
             </div>
         )
     }
@@ -382,60 +428,75 @@ function PurchaseBody({ purchaseType }: any) {
                 {/* auto ref no */}
                 <TextField
                     className="auto-ref-no"
-                    variant='standard'
+                    variant="standard"
                     disabled={true}
                     label="Ref no"
-                    value={arbitraryData.autoRefNo || ''}
+                    value={ad.autoRefNo || ''}
                 />
                 {/* date */}
                 <TextField
-                    label={arbitraryData.tranDate ? 'Date' : undefined}
-                    variant='standard'
-                    error={getDateError()}
-                    helperText={
-                        getDateError()
-                            ? accountsMessages.dateRangeAuditLockMessage
-                            : undefined
+                    label={ad.tranDate ? 'Date' : undefined}
+                    variant="standard"
+                    // error={getDateError()}
+                    error={
+                        errorObject?.isDateError
+                            ? errorObject.isDateError()
+                            : true
                     }
+                    helperText={(() => {
+                        let ret
+                        if (errorObject.isDateError) {
+                            if (errorObject.isDateError()) {
+                                ret = 'Date range / Audit lock error'
+                            }
+                        } else {
+                            ret = 'Date range / Audit lock error'
+                        }
+                        return ret
+                    })()}
                     type="date"
                     onChange={(e: any) => {
-                        arbitraryData.tranDate = e.target.value
+                        ad.tranDate = e.target.value
                         setRefresh({})
                     }}
-                    onFocus={(e) => e.target.select()}
-                    value={arbitraryData.tranDate || ''}
+                    onFocus={(e:any) => e.target.select()}
+                    value={ad.tranDate || ''}
                 />
-                <PurchaseInvoiceNoSelect arbitraryData={arbitraryData} />
+                <PurchaseInvoiceNoSelect arbitraryData={ad} />
                 {/* remarks */}
                 <TextField
                     label="Common remarks"
-                    variant='standard'
+                    variant="standard"
                     className="common-remarks"
                     onChange={(e: any) => {
-                        arbitraryData.commonRemarks = e.target.value
+                        ad.commonRemarks = e.target.value
                         setRefresh({})
                     }}
-                    value={arbitraryData.commonRemarks || ''}
+                    value={ad.commonRemarks || ''}
                 />
                 {/* gst invoice  */}
                 <FormControlLabel
                     className="gst-invoice"
                     control={
                         <Checkbox
-                            checked={arbitraryData.isGstInvoice}
-                            onChange={
-                                handleIsGstInvoice
-                                //     (e: any) => {
-                                //     arbitraryData.isGstInvoice = e.target.checked
-                                //     setRefresh({})
-                                // }
-                            }
+                            checked={ad.isGstInvoice}
+                            onChange={handleIsGstInvoice}
                         />
                     }
                     label="Gst invoice"
                 />
-                {/* submit */}
-                <SubmitComponent />
+                <div className="print-submit-button">
+                    <Tooltip title="Print">
+                        <IconButton
+                            className='print-button'                            
+                            size="small"
+                            disabled={false}
+                            onClick={handlePrint}>
+                            <PrintIcon className="print-icon" />
+                        </IconButton>
+                    </Tooltip>
+                    <SubmitComponent />
+                </div>
             </div>
         )
     }
@@ -444,196 +505,223 @@ function PurchaseBody({ purchaseType }: any) {
         const [, setRefresh] = useState({})
         return (
             <div className="body-line-2">
-                <div>
-                    <Typography variant="caption">Purchase a/c</Typography>
-                    {/* purchase */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.purchaseLedgerAccounts}
-                        onChange={() => {
-                            getPurchaseAccountError()
+                <div className="left">
+                    <div>
+                        <Typography variant="caption">Purchase a/c</Typography>
+                        {/* purchase */}
+                        <LedgerSubledger
+                            allAccounts={ad.accounts.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={getMappedAccounts(
+                                ad.accounts.purchaseLedgerAccounts
+                            )}
+                            onChange={() => {
+                                // getPurchaseAccountError()
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={ad.ledgerSubledgerPurchase}
+                        />
+                    </div>
+                    <div>
+                        <Typography variant="caption">Debit a/c</Typography>
+                        {/* debit account */}
+                        <LedgerSubledger
+                            allAccounts={ad.accounts.allAccounts}
+                            className="ledger-subledger"
+                            ledgerAccounts={getMappedAccounts(
+                                ad.accounts.ledgerAccounts
+                            )}
+                            onChange={async () => {
+                                // getOtherAccountError()
+                                const gstin: string = await queryGstin(
+                                    ad.ledgerSubledgerOther?.accId
+                                )
+                                ad.gstin = gstin
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            rowData={ad.ledgerSubledgerOther}
+                        />
+                    </div>
+                    {/* gstin */}
+                    <TextField
+                        className="gstin"
+                        variant="standard"
+                        label="Gstin no"
+                        error={
+                            errorObject.isGstinError
+                                ? errorObject.isGstinError()
+                                : true
+                        }
+                        onChange={(e: any) => {
+                            ad.gstin = e.target.value
                             setRefresh({})
                             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                         }}
-                        rowData={arbitraryData.ledgerSubledgerPurchase}
+                        value={ad.gstin || ''}
                     />
                 </div>
-                <div>
-                    <Typography variant="caption">Debit a/c</Typography>
-                    {/* debit account */}
-                    <LedgerSubledger
-                        allAccounts={meta.current.allAccounts}
-                        className="ledger-subledger"
-                        ledgerAccounts={meta.current.ledgerAccounts}
-                        onChange={async () => {
-                            getOtherAccountError()
-                            const gstin: string = await queryGstin(
-                                arbitraryData.ledgerSubledgerOther?.accId
-                            )
-                            arbitraryData.gstin = gstin
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        rowData={arbitraryData.ledgerSubledgerOther}
-                    />
-                </div>
-                {/* gstin */}
-                <TextField
-                    className="gstin"
-                    variant='standard'
-                    label="Gstin no"
-                    error={getGstinError()}
-                    onChange={(e: any) => {
-                        arbitraryData.gstin = e.target.value
-                        setRefresh({})
-                        emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                    }}
-                    value={arbitraryData.gstin || ''}
-                />
-                <div className="invoice">
-                    {/* Invoice amount */}
-                    <NumberFormat
-                        className="total-amount"
-                        label="Invoice amount"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getInvoiceAmountError()}
-                        fixedDecimalScale={true}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            //using onChange event stores formatted value
-                            const { floatValue } = values
-                            arbitraryData.invoiceAmount = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={arbitraryData.invoiceAmount || 0.0}
-                    />
-                    <NumberFormat
-                        label="Total qty"
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getQtyError()}
-                        onFocus={(e) => {
-                            e.target.select()
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.qty = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        thousandSeparator={true}
-                        value={arbitraryData.qty || 0}
-                    />
-                </div>
+                <div className="right">
+                    <div className="invoice">
+                        {/* Invoice amount */}
+                        <NumberFormat
+                            className="total-amount"
+                            label="Invoice amount"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getInvoiceAmountError()}
+                            error={
+                                errorObject.isInvoiceAmountError
+                                    ? errorObject.isInvoiceAmountError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            onFocus={(e:any) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                //using onChange event stores formatted value
+                                const { floatValue } = values
+                                ad.invoiceAmount = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={ad.invoiceAmount || 0.0}
+                        />
+                        <NumberFormat
+                            label="Total qty"
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getQtyError()}
+                            error={
+                                errorObject.isTotalQtyError
+                                    ? errorObject.isTotalQtyError()
+                                    : true
+                            }
+                            onFocus={(e:any) => {
+                                e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.qty = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            thousandSeparator={true}
+                            value={ad.qty || 0}
+                        />
+                    </div>
 
-                <div className="gst">
-                    {/* cgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Cgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={arbitraryData.cgst || 0.0}
-                    />
-                    {/* sgst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Sgst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.cgst = floatValue
-                            arbitraryData.sgst = floatValue
-                            arbitraryData.igst = 0.0
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={arbitraryData.sgst || 0.0}
-                    />
-                    {/* igst */}
-                    <NumberFormat
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        error={getGstError()}
-                        fixedDecimalScale={true}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Typography
-                                        variant="caption"
-                                        component="span">
-                                        Igst
-                                    </Typography>
-                                </InputAdornment>
-                            ),
-                        }}
-                        onValueChange={(values: any) => {
-                            const { floatValue } = values
-                            arbitraryData.cgst = 0.0
-                            arbitraryData.sgst = 0.0
-                            arbitraryData.igst = floatValue
-                            setRefresh({})
-                            emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                        }}
-                        onFocus={(e) => e.target.select()}
-                        thousandSeparator={true}
-                        value={arbitraryData.igst || 0.0}
-                    />
+                    <div className="gst">
+                        {/* cgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            // error={getGstError()}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Cgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = floatValue
+                                ad.sgst = floatValue
+                                ad.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e:any) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.cgst || 0.0}
+                        />
+                        {/* sgst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Sgst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = floatValue
+                                ad.sgst = floatValue
+                                ad.igst = 0.0
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e:any) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.sgst || 0.0}
+                        />
+                        {/* igst */}
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            error={
+                                errorObject.isGstError
+                                    ? errorObject.isGstError()
+                                    : true
+                            }
+                            fixedDecimalScale={true}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <Typography
+                                            variant="caption"
+                                            component="span">
+                                            Igst
+                                        </Typography>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                ad.cgst = 0.0
+                                ad.sgst = 0.0
+                                ad.igst = floatValue
+                                setRefresh({})
+                                emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                            }}
+                            onFocus={(e:any) => e.target.select()}
+                            thousandSeparator={true}
+                            value={ad.igst || 0.0}
+                        />
+                    </div>
                 </div>
-                <Button
-                    className="reset"
-                    size="small"
-                    color="secondary"
-                    onClick={handleClear}
-                    startIcon={<ClearAll />}>
-                    Clear all
-                </Button>
             </div>
         )
     }
@@ -644,14 +732,12 @@ function PurchaseBody({ purchaseType }: any) {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
-                                handlePurchaseCashCredit('credit')
+                            onClick={(e:any) => {
+                                preHandlePurchaseCashCredit('credit')
                             }}
                             size="small"
                             color="secondary"
-                            checked={
-                                arbitraryData.purchaseCashCredit === 'credit'
-                            }
+                            checked={ad.purchaseCashCredit === 'credit'}
                         />
                     }
                     label="Credit purchase"
@@ -660,14 +746,12 @@ function PurchaseBody({ purchaseType }: any) {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
-                                handlePurchaseCashCredit('cash')
+                            onClick={(e:any) => {
+                                preHandlePurchaseCashCredit('cash')
                             }}
                             size="small"
                             color="secondary"
-                            checked={
-                                arbitraryData.purchaseCashCredit === 'cash'
-                            }
+                            checked={ad.purchaseCashCredit === 'cash'}
                         />
                     }
                     label="Cash purchase"

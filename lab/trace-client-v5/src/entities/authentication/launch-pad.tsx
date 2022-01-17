@@ -9,17 +9,19 @@ function LaunchPad() {
         output: () => null,
     })
     const [, setRefresh] = useState({})
-    const { getFromBag, setInBag } = manageEntitiesState()
+    const { getCurrentComponent, getFromBag, setInBag } = manageEntitiesState()
     const { filterOn, emit } = usingIbuki()
 
     useEffect(() => {
         meta.current.isMounted = true
-        const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe((d: any) => {
-            if (d.data) {
-                setInBag('currentComponent', d.data)
+        const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
+            (d: any) => {
+                if (d.data) {
+                    setInBag('currentComponent', d.data)
+                }
+                meta.current.isMounted && setRefresh({})
             }
-            meta.current.isMounted && setRefresh({})
-        })
+        )
         return () => {
             subs.unsubscribe()
             meta.current.isMounted = false
@@ -39,6 +41,7 @@ function LaunchPad() {
             ))
         return ret
     }
+
     return <Comp></Comp>
 }
 

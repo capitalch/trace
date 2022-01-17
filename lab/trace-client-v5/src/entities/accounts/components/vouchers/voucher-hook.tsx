@@ -1,12 +1,33 @@
-import { useState, useEffect, useRef } from '../../../../imports/regular-imports'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    _,
+    moment,
+    useContext,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
+} from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, filterOn, getFromBag } =
-        useSharedElements()
-    const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
+    const {
+        emit,
+        execGenericView,
+        filterOn,
+        getAccountName,
+        getFromBag,
+        setInBag,
+    } = useSharedElements()
+    const multiData: any = useContext(MultiDataContext)
+    // const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
+    const arbitraryData: any = multiData.vouchers
+
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
         meta.current.isMounted = true
@@ -36,24 +57,32 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             handleOnTabChange(null, d.data?.tabValue || 1)
         })
 
-        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe((d: any) => {
-            const tranHeaderId = d.data?.tranHeaderId
-            tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
-            arbitraryData.shouldCloseParentOnSave = true
-            handleOnTabChange(null, 0)
+        const subs4 = filterOn('VOUCHER-HANDLE-DRILL-DOWN-EDIT').subscribe(
+            async (d: any) => {
+                const tranHeaderId = d.data?.tranHeaderId
+                tranHeaderId && (await fetchAndPopulateDataOnId(tranHeaderId))
+                arbitraryData.shouldCloseParentOnSave = true
+                handleOnTabChange(null, 0)
+            }
+        )
+
+        const subs5 = filterOn('DRAWER-STATUS-CHANGED').subscribe(() => {
+            setInBag('vouchersData', multiData.vouchers)
         })
+
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
     useEffect(() => {
         emit('VOUCHER-HANDLE-DRILL-DOWN-EDIT', {
-            tranHeaderId: drillDownEditAttributes?.tranHeaderId
+            tranHeaderId: drillDownEditAttributes?.tranHeaderId,
         })
     }, [drillDownEditAttributes?.tranHeaderId])
 
@@ -62,6 +91,12 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         title: getTitle(),
         tabValue: 0,
     })
+
+    const vouchersData = getFromBag('vouchersData')
+    if (vouchersData) {
+        multiData.vouchers = vouchersData
+        setInBag('vouchersData', undefined)
+    }
 
     async function fetchAndPopulateDataOnId(tranHeaderId: number) {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -74,6 +109,8 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
                 sqlKey: 'getJson_tranHeader_details',
             })
             populateData(ret?.jsonResult)
+            preparePdfVoucher()
+            meta.current.isMounted && setRefresh({})
         } catch (e: any) {
             console.log(e.message)
         } finally {
@@ -103,7 +140,6 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             }
             doReIndexKeys('debits')
             doReIndexKeys('credits')
-            meta.current.isMounted && setRefresh({})
 
             function doReIndexKeys(tp: string) {
                 let ind = 0
@@ -114,6 +150,24 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
                     it.key = incr()
                 }
             }
+        }
+
+        function preparePdfVoucher() {
+            const ad = arbitraryData
+            const dateFormat = getFromBag('dateFormat')
+            ad.pdfVoucher = {}
+            const vou = ad.pdfVoucher
+            vou.heading = _.capitalize(loadComponent)
+            vou.unitInfo = getFromBag('unitInfo')
+            vou.tranDate = moment(ad.header.tranDate).format(dateFormat)
+            vou.debits = ad.debits.map((item: any) => ({
+                ...item,
+                accName: getAccountName(item.accId),
+            }))
+            vou.credits = ad.credits.map((item: any) => ({
+                ...item,
+                accName: getAccountName(item.accId),
+            }))
         }
     }
 

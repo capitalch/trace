@@ -26,103 +26,53 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     const isoFormat = 'YYYY-MM-DD'
     const meta: any = useRef({
         isMounted: false,
-        debtorCreditorLedgerAccounts: [],
-        saleLedgerAccounts: [],
-        purchaseLedgerAccounts: [],
-        allAccounts: [],
+        // debtorCreditorLedgerAccounts: [],
+        // saleLedgerAccounts: [],
+        // purchaseLedgerAccounts: [],
+        // allAccounts: [],
     })
-
-    arbitraryData.body = arbitraryData.body || {
-        amount: 0.0,
-        autoRefNo: undefined,
-        commonRemarks: undefined,
-        ledgerSubledgerCredit: {},
-        ledgerSubledgerDebit: {},
-        lineRefNoDebit: undefined,
-        lineRefNoCredit: undefined,
-        lineRemarksDebit: undefined,
-        lineRemarksCredit: undefined,
-        tranDate: arbitraryData?.body?.tranDate || moment().format(isoFormat),
-        tranDetailsIdDebit: undefined,
-        tranDetailsIdCredit: undefined,
-        tranHeaderIdDebit: undefined,
-        tranHeaderIdCredit: undefined,
-        userRefNo: undefined,
-        isViewBack: false,
-    }
+    const accounts = arbitraryData.body.accounts
 
     useEffect(() => {
         meta.current.isMounted = true
-        const pipe1: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter((el: any) => {
-                    const accClasses = ['debtor', 'creditor']
-                    let condition =
-                        accClasses.includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                    return condition
-                })
-            )
-        )
-
-        const pipe2: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter(
-                    (el: any) =>
-                        ['purchase'].includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                )
-            )
-        )
-
-        const pipe3: any = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').pipe(
-            map((d: any) =>
-                d.data.allAccounts.filter(
-                    (el: any) =>
-                        ['sale'].includes(el.accClass) &&
-                        (el.accLeaf === 'Y' || el.accLeaf === 'L')
-                )
-            )
-        )
-
-        const subs1 = pipe1.subscribe((d: any) => {
-            meta.current.debtorCreditorLedgerAccounts = d.map((el: any) => {
-                return {
-                    label: el.accName,
-                    value: el.id,
-                    accLeaf: el.accLeaf,
-                    isAutoSubledger: !!el.isAutoSubledger,
-                } // !! converts falsy to boolean false
-            })
-        })
-
-        const subs2 = pipe2.subscribe((d: any) => {
-            meta.current.purchaseLedgerAccounts = d.map((el: any) => {
-                return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
-            })
-        })
-
-        const subs3 = pipe3.subscribe((d: any) => {
-            meta.current.saleLedgerAccounts = d.map((el: any) => {
-                return { label: el.accName, value: el.id, accLeaf: el.accLeaf }
-            })
-        })
-
-        const subs4: any = hotFilterOn(
-            'DATACACHE-SUCCESSFULLY-LOADED'
-        ).subscribe((d: any) => {
-            meta.current.allAccounts = d.data.allAccounts
-        })
-        // subs1.add(subs2).add(subs3).add(subs4)
+        setAccounts()
         setRefresh({})
         return () => {
             meta.current.isMounted = false
-            subs1.unsubscribe()
-            subs2.unsubscribe()
-            subs3.unsubscribe()
-            subs4.unsubscribe()
         }
     }, [])
+
+    function setAccounts() {
+        // allAccounts
+        const allAccounts = getFromBag('allAccounts') || []
+        accounts.allAccounts = allAccounts
+
+        //purchaseLedgerAccounts
+        const purchaseLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['purchase'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        accounts.purchaseLedgerAccounts = purchaseLedgerAccounts
+
+        //saleLedgerAccounts
+        const saleLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['sale'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        accounts.saleLedgerAccounts = saleLedgerAccounts
+
+        // debtorCreditorLedgerAccounts
+        const drCrArray = ['debtor', 'creditor']
+        const debtorCreditorLedgerAccounts = allAccounts.filter(
+            (el: any) =>
+                drCrArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf == 'L') &&
+                !el.isAutoSubledger
+        )
+        accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
+    }
 
     function getError() {
         const ret =
@@ -143,7 +93,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         } else {
             if (arbitraryData.shouldCloseParentOnSave) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-            } else if (arbitraryData.body.isViewBack) {
+            } else if (arbitraryData.isViewBack) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 // arbitraryData.body.isViewBack = false
                 emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 1)
@@ -151,28 +101,6 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
-        }
-    }
-
-    function resetData() {
-        arbitraryData.body = {
-            amount: 0.0,
-            autoRefNo: undefined,
-            commonRemarks: undefined,
-            ledgerSubledgerCredit: {},
-            ledgerSubledgerDebit: {},
-            lineRefNoDebit: undefined,
-            lineRefNoCredit: undefined,
-            lineRemarksDebit: undefined,
-            lineRemarksCredit: undefined,
-            tranDate:
-                arbitraryData?.body?.tranDate || moment().format(isoFormat),
-            tranDetailsIdDebit: undefined,
-            tranDetailsIdCredit: undefined,
-            tranHeaderIdDebit: undefined,
-            tranHeaderIdCredit: undefined,
-            userRefNo: undefined,
-            isViewBack: false,
         }
     }
 
@@ -252,9 +180,15 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .no': {
                     color: theme.palette.blue.main,
                 },
-                '& .submit': {
+                '& .print-submit': {
                     marginLeft: 'auto',
                     marginRight: theme.spacing(2),
+                    '& .print-button':{
+                        marginRight: theme.spacing(1),
+                        '& .print-icon':{
+                            color: theme.palette.indigo.dark
+                        }
+                    }
                 },
             },
             '& .body': {
@@ -293,11 +227,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         maxWidth: '20rem',
                         width: '100%',
                     },
-                    '& .submit': {
+                    '& .print-submit': {
                         marginTop: theme.spacing(8),
                         marginLeft: 'auto',
                         marginRight: theme.spacing(2),
                         height: theme.spacing(4),
+                        '& .print-button':{
+                            marginRight: theme.spacing(1),
+                            '& .print-icon':{
+                                color: theme.palette.indigo.dark
+                            }
+                        }
                     },
                 },
                 '& .gutter': {
