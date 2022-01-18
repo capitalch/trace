@@ -72,6 +72,15 @@ c) In all Typography comment out disableTypography
 4. Upgradation attempt on 17/01/2022 for all libraries upgrade
     a) Use yarn instead of npm install
     b) use yarn add eslint-config-react-app -D to evade some errors
+    c) Comment out disableTypography
+    d) In some places because of TypeScript: must use e: any in error handling
+    e) In MultiLineTextBox: rowsMin -> minRows
+    f) Convert @material-ui/core to @mui/material
+    g) for useTheme, createStyles. makeStyles use @mui/styles
+    h) for Theme use @mui/material
+    i) Make changes in App.tsx for themeProvider and colors etc
+    j) converted x-data-grid-pro to latest version
+    j) After doing all this, still the UI breaks. So need to learn mui v5 from begining specially theme
 
 # Pending
 
