@@ -1,5 +1,5 @@
 import { Box, Button } from '@mui/material'
-import { useTheme} from '@mui/styles'
+import { useTheme} from '@mui/material/styles'
 
 function Comp1({ props }: any) {
     const theme:any = useTheme()

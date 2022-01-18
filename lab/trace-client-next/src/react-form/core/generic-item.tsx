@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { Theme, createStyles, makeStyles } from '@material-ui/core'
+import { createStyles, makeStyles } from '@mui/styles'
+import { Theme } from '@mui/material'
 import { ErrorDisplay } from './error-display'
 import { manageFormsState } from './fsm'
 import { useAjax } from '../common/ajax'
@@ -108,7 +109,7 @@ const useGeneric = (props: any) => {
 
     async function onChangeEvent(value: any) {
         setField(parent, item.name, value)
-        await doValidateControl(formId, controlId)        
+        await doValidateControl(formId, controlId)
         item.onChange &&
             customMethods[item.onChange] &&
             customMethods[item.onChange](value, parent)
@@ -147,7 +148,7 @@ const useGeneric = (props: any) => {
             const valueName = itemOptions.valueName
             let method = itemOptions.httpmethod
             method = method || 'httpPost'
-            let temp:any
+            let temp: any
             if (method === 'httpPost') {
                 temp = await httpPost(itemOptions.url, {})
             } else {

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { manageFormsState } from './fsm'
 import clsx from 'clsx'
-import { Check } from '@material-ui/icons'
+import { Check } from '@mui/icons-material'
 
 import {
     Tabs,
@@ -11,7 +11,7 @@ import {
     Paper,
     Card,
     Icon,
-} from '@material-ui/core'
+} from '@mui/material'
 
 function TabsMaterial({
     arbitraryData,

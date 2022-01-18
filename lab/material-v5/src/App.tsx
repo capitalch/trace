@@ -23,7 +23,7 @@ declare module '@mui/material/styles'{
 }
 
 function App() {
-    const theme: Theme = createTheme({
+    const theme: any = createTheme({
         // status: {
         //     danger: green[500],
         // },

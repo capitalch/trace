@@ -5,11 +5,12 @@ import {
     InputAdornment,
     NativeSelect,
     useTheme,
-    makeStyles,
     TextField,
     IconButton,
-} from '@material-ui/core'
-import { Clear } from '@material-ui/icons'
+    Theme
+} from '@mui/material'
+import { makeStyles } from '@mui/styles'
+import { Clear } from '@mui/icons-material'
 import { Button } from 'primereact/button'
 import { useGeneric } from '../core/generic-item'
 import { useSubmit } from '../core/submit'
@@ -833,56 +834,6 @@ const componentStore: any = {
         )
     },
 
-    //react-select library
-    // TypeSelect1: (props: any) => {
-    //     let { showLabel } = props
-    //     const {
-    //         xValue,
-    //         item,
-    //         XLabel,
-    //         XErrorDisplay,
-    //         onChangeEvent,
-    //         doInitForSelect,
-    //         selectOptions,
-    //     } = useGeneric(props)
-
-    //     if (showLabel === undefined) {
-    //         showLabel = true
-    //     }
-
-    //     useEffect(() => {
-    //         let subs: any = {}
-    //         doInitForSelect(subs)
-    //         return () => {
-    //             subs.sub1 &&
-    //                 Object.keys(subs.sub1).length > 0 &&
-    //                 subs.sub1.unsubscribe()
-    //         }
-    //     }, [])
-
-    //     const valueObject = selectOptions.find((x: any) => x.value === xValue)
-
-    //     const disabled = props?.item?.disabled || false
-    //     const Comp = (
-    //         <>
-    //             {showLabel && (
-    //                 <div>
-    //                     <XLabel></XLabel>
-    //                 </div>
-    //             )}
-    //             <Select
-    //                 options={selectOptions}
-    //                 value={valueObject}
-    //                 placeholder={item.placeholder}
-    //                 onChange={(e: any) => onChangeEvent(e.value)}
-    //                 isDisabled={disabled}></Select>
-    //             <XErrorDisplay />
-    //         </>
-    //     )
-    //     return Comp
-    // },
-
-    // using rwWidgets dropdown control
     TypeSelect: (props: any) => {
         let { showLabel } = props
         const {
@@ -937,7 +888,7 @@ const componentStore: any = {
 
 export { componentStore }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme:Theme) => ({
     container: {
         zIndex: 999999,
     },
@@ -945,6 +896,3 @@ const useStyles = makeStyles((theme) => ({
     textField: {},
 }))
 
-/*
-
-*/

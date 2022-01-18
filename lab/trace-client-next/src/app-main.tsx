@@ -1,7 +1,7 @@
 import { clsx, useEffect, useState } from './imports/regular-imports'
 import 'fontsource-roboto'
-import { createStyles, makeStyles } from './imports/gui-imports'
-import { Theme } from '@material-ui/core/styles'
+import { createStyles, makeStyles, Theme } from './imports/gui-imports'
+// import { Theme } from '@material-ui/core/styles'
 import {Box,  CssBaseline, AppBar } from './imports/gui-imports'
 import {
     TraceLoadingIndicator,
@@ -47,7 +47,7 @@ function AppMain() {
 
     return (
         <Box className={classes.root}>
-            <CssBaseline />
+            {/* <CssBaseline /> */}
             {/* header */}
             <AppBar
                 position="fixed"

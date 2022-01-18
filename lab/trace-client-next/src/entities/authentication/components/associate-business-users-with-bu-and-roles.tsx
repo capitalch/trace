@@ -188,7 +188,7 @@ function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
                     <IconButton
                         size='medium'
                         color='secondary'
-                        onClick={e => deleteRow(node, associateBusinessUsersWithRolesAndBu.read)}>
+                        onClick={(e:any) => deleteRow(node, associateBusinessUsersWithRolesAndBu.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 }

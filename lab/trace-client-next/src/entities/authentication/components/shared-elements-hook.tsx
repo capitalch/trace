@@ -6,12 +6,12 @@ import {
     Theme,
     useTheme,
     createStyles,
-    makeStyles,
-} from '@material-ui/core'
+} from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
-import Edit from '@material-ui/icons/Edit'
-import CloseSharp from '@material-ui/icons/Close'
-import Settings from '@material-ui/icons/Settings'
+import Edit from '@mui/icons-material/Edit'
+import CloseSharp from '@mui/icons-material/Close'
+import Settings from '@mui/icons-material/Settings'
 import _ from 'lodash'
 import { useTraceMaterialComponents } from '../../../common/trace-material-components'
 import { Column } from 'primereact/column'

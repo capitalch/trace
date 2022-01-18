@@ -177,7 +177,7 @@ function useManageClientsEntities(meta:any){
                     <IconButton
                         size='medium'
                         color='secondary'
-                        onClick={e => deleteRow(node, manageClients.read)}>
+                        onClick={(e:any) => deleteRow(node, manageClients.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 }
@@ -219,7 +219,7 @@ function useManageClientsEntities(meta:any){
                     <IconButton
                         size='medium'
                         color='secondary'
-                        onClick={e => deleteRow(node, manageEntities.read)}>
+                        onClick={(e:any) => deleteRow(node, manageEntities.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 }
