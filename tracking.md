@@ -81,6 +81,7 @@ c) In all Typography comment out disableTypography
     i) Make changes in App.tsx for themeProvider and colors etc
     j) converted x-data-grid-pro to latest version
     j) After doing all this, still the UI breaks. So need to learn mui v5 from begining specially theme
+    k) makeStyles is deprecated. All deprecated items are kept in @mui/styles. It will be removed in V6. The correct styling package to use is @mui/material/styles
 
 # Pending
 
