@@ -282,7 +282,7 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     error={isInvalidEmail(arbitraryData.billTo.email)}
-                    value={arbitraryData.billTo.email || null}
+                    value={arbitraryData.billTo.email || ''}
                     onChange={(e:any) => {
                         arbitraryData.billTo.email = e.target.value
                         setRefresh({})
@@ -441,7 +441,6 @@ function useNewEditContact(arbitraryData: any) {
                         setRefresh({})
                     }}
                 />
-
                 {/* Submit */}
                 <Button
                     color="secondary"

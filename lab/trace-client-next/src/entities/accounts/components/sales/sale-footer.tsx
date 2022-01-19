@@ -88,6 +88,7 @@ function SaleFooter() {
                     <NumberFormat
                         allowNegative={false}
                         className="right-aligned-numeric"
+                        variant='standard'
                         customInput={TextField}
                         decimalScale={2}
                         error={rowData.amount === 0 ? true : false}

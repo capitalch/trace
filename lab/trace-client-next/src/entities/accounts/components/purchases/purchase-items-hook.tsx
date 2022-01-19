@@ -1,16 +1,28 @@
-import { Big, NumberFormat, PrimeColumn, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
-    makeStyles, Theme, createStyles,
+    Big,
+    NumberFormat,
+    PrimeColumn,
+    useState,
+    useEffect,
+    useRef,
+} from '../../../../imports/regular-imports'
+import {
+    makeStyles,
+    Theme,
+    createStyles,
     Badge,
     TextField,
     IconButton,
     TextareaAutosize,
-    Button, Typography,
+    Button,
+    Typography,
     Checkbox,
     Chip,
 } from '../../../../imports/gui-imports'
 import {
-    AddCircle, Search, ClearAll,
+    AddCircle,
+    Search,
+    ClearAll,
     CloseSharp,
 } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
@@ -54,14 +66,15 @@ function usePurchaseItems(arbitraryData: any) {
             meta.current.isMounted && setRefresh({})
         })
 
-        const subs3 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe((d: any) => {
-            if (d.data.source === 'upcCode') {
-                searchProductOnUpcCode(d.data.value)
-            } else if (d.data.source === 'productCode') {
-                searchProductOnProductCode(d.data.value)
+        const subs3 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(
+            (d: any) => {
+                if (d.data.source === 'upcCode') {
+                    searchProductOnUpcCode(d.data.value)
+                } else if (d.data.source === 'productCode') {
+                    searchProductOnProductCode(d.data.value)
+                }
             }
-
-        })
+        )
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -80,8 +93,8 @@ function usePurchaseItems(arbitraryData: any) {
         tranType: 'purchase',
         dialogConfig: {
             title: '',
-            content: () => { },
-            actions: () => { },
+            content: () => {},
+            actions: () => {},
             serialNumbers: '',
         },
         isMounted: false,
@@ -285,7 +298,7 @@ function usePurchaseItems(arbitraryData: any) {
                     <TextareaAutosize
                         autoFocus={true}
                         className="serial-number"
-                        minRows={5}                        
+                        minRows={5}
                         onChange={(e: any) => {
                             met.current.slNo = e.target.value
                             processCount()
@@ -303,9 +316,8 @@ function usePurchaseItems(arbitraryData: any) {
                         }}>
                         Ok
                     </Button>
-                </div>)
-
-
+                </div>
+            )
 
             function processCount() {
                 met.current.count = met.current.slNo
@@ -356,10 +368,10 @@ function usePurchaseItems(arbitraryData: any) {
                 component="span"
                 variant="body2"
                 className="gst-details">{`Cgst: ${toDecimalFormat(
-                    rowData?.cgst
-                )}, Sgst: ${toDecimalFormat(rowData?.sgst)}, Igst:${toDecimalFormat(
-                    rowData?.igst
-                )},`}</Typography>
+                rowData?.cgst
+            )}, Sgst: ${toDecimalFormat(rowData?.sgst)}, Igst:${toDecimalFormat(
+                rowData?.igst
+            )},`}</Typography>
         )
     }
 
@@ -394,7 +406,11 @@ function usePurchaseItems(arbitraryData: any) {
                                 handleDelete(e, rowData)
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            disabled={arbitraryData.lineItems.length === 1 ? true : false}>
+                            disabled={
+                                arbitraryData.lineItems.length === 1
+                                    ? true
+                                    : false
+                            }>
                             <CloseSharp className="delete-icon" />
                         </IconButton>
                         {rowData.index}
@@ -428,7 +444,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* product search */}
                         <TextField
                             autoFocus={true}
-                            variant='standard'
+                            variant="standard"
                             style={{ maxWidth: '12rem' }}
                             placeholder="Product(abc, def,...)"
                             value={rowData.searchFilter || ''}
@@ -440,7 +456,7 @@ function usePurchaseItems(arbitraryData: any) {
                                     meta.current.isMounted && setRefresh({})
                                 }
                             }}
-                            onChange={(e:any) => {
+                            onChange={(e: any) => {
                                 rowData.searchFilter = e.target.value
                                 meta.current.isMounted && setRefresh({})
                             }}
@@ -461,7 +477,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
-                            variant='standard'
+                            variant="standard"
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
                                 rowData.upcCode = e.target.value
@@ -471,12 +487,15 @@ function usePurchaseItems(arbitraryData: any) {
                                 // meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData?.upcCode) {
-                                    debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'upcCode', value: rowData })
+                                    debounceEmit('DEBOUNCE-ON-CHANGE', {
+                                        source: 'upcCode',
+                                        value: rowData,
+                                    })
                                 } else {
                                     clearRow(rowData)
                                 }
                             }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 // meta.current.isDataChanged = false
                                 e.target.select()
                             }}
@@ -504,6 +523,7 @@ function usePurchaseItems(arbitraryData: any) {
                             placeholder="Product code"
                             allowNegative={false}
                             customInput={TextField}
+                            variant="standard"
                             // error={allErrorMethods().getProductCodeError(
                             //     rowData
                             // )}
@@ -512,7 +532,10 @@ function usePurchaseItems(arbitraryData: any) {
                                 rowData.productCode = e.target.value
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData.productCode) {
-                                    debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
+                                    debounceEmit('DEBOUNCE-ON-CHANGE', {
+                                        source: 'productCode',
+                                        value: rowData,
+                                    })
                                 } else {
                                     clearRow(rowData)
                                 }
@@ -532,7 +555,7 @@ function usePurchaseItems(arbitraryData: any) {
                             //     // meta.current.isDataChanged = true
 
                             // }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 // meta.current.isDataChanged = false
                                 e.target.select()
                             }}
@@ -550,6 +573,7 @@ function usePurchaseItems(arbitraryData: any) {
                             placeholder="Hsn"
                             allowNegative={false}
                             customInput={TextField}
+                            variant="standard"
                             // error={allErrorMethods().getHsnError(rowData)}
                             error={errorObject.isHsnError(rowData)}
                             onValueChange={(values: any) => {
@@ -559,7 +583,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 meta.current.isMounted && setRefresh({})
                             }}
                             value={rowData.hsn || ''}
-                            onFocus={(e:any) => e.target.select()}
+                            onFocus={(e: any) => e.target.select()}
                         />
                     </div>
                 )}
@@ -588,6 +612,7 @@ function usePurchaseItems(arbitraryData: any) {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
+                            variant="standard"
                             // error={allErrorMethods().getGstRateError(rowData)}
                             error={errorObject.isGstRateError(rowData)}
                             fixedDecimalScale={true}
@@ -600,7 +625,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                                 // meta.current.isDataChanged = false
                             }}
@@ -627,6 +652,7 @@ function usePurchaseItems(arbitraryData: any) {
                 body={(rowData: any) => {
                     return (
                         <NumberFormat
+                            variant="standard"
                             allowNegative={false}
                             className="center-aligned-numeric"
                             customInput={TextField}
@@ -643,7 +669,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                                 // meta.current.isDataChanged = false
                             }}
@@ -671,6 +697,7 @@ function usePurchaseItems(arbitraryData: any) {
                 body={(rowData: any) => {
                     return (
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             className="right-aligned-numeric"
                             customInput={TextField}
@@ -688,7 +715,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                                 // meta.current.isDataChanged = false
                             }}
@@ -717,6 +744,7 @@ function usePurchaseItems(arbitraryData: any) {
                     return (
                         <NumberFormat
                             allowNegative={false}
+                            variant='standard'
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
@@ -732,13 +760,14 @@ function usePurchaseItems(arbitraryData: any) {
                                 meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
                             onBlur={(e: any) => {
                                 rowData.price =
-                                    (+extractAmount(e.target.value)) / (1 + rowData.gstRate / 100)
+                                    +extractAmount(e.target.value) /
+                                    (1 + rowData.gstRate / 100)
                                 computeRow(rowData)
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
@@ -769,6 +798,7 @@ function usePurchaseItems(arbitraryData: any) {
                     return (
                         <NumberFormat
                             allowNegative={false}
+                            variant='standard'
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
@@ -784,7 +814,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
@@ -804,7 +834,7 @@ function usePurchaseItems(arbitraryData: any) {
                     arbitraryData?.summary?.discount || 0.0
                 )}
             />,
-
+            
             //Sub total
             <PrimeColumn
                 key={incr()}
@@ -814,6 +844,7 @@ function usePurchaseItems(arbitraryData: any) {
                 body={(rowData: any) => {
                     return (
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             className="right-aligned-numeric"
                             customInput={TextField}
@@ -851,11 +882,18 @@ function usePurchaseItems(arbitraryData: any) {
                             {toDecimalFormat(rowData.amount)}
                         </div>
                         <GstDetails rowData={rowData} />
-                        <Button style={{ padding: '.6rem', marginLeft: '.2rem' }} color='primary' variant='text' size='small' onClick={() => {
-                            computeRow(rowData)
-                            computeSummary()
-                            meta.current.isMounted && setRefresh({})
-                        }}>Recalc</Button>
+                        <Button
+                            style={{ padding: '.6rem', marginLeft: '.2rem' }}
+                            color="primary"
+                            variant="text"
+                            size="small"
+                            onClick={() => {
+                                computeRow(rowData)
+                                computeSummary()
+                                meta.current.isMounted && setRefresh({})
+                            }}>
+                            Recalc
+                        </Button>
                     </div>
                 )}
                 footer={
@@ -874,48 +912,48 @@ function usePurchaseItems(arbitraryData: any) {
                 header="Serial / remarks"
                 // style={{ width: '8rem' }}
                 body={(rowData: any) => {
-                    return (<>
-                        {/* Boolean keyword removes falsy values from array */}
-                        <Badge
-                            badgeContent={
-                                rowData.serialNumbers
-                                    .split(',')
-                                    .filter(Boolean).length // .filter(Boolean) removes empty values from the array
-                            }
-                            // color={
-                            // allErrorMethods().getSlNoError(rowData)
-                            //     ? 'error'
-                            //     : 'secondary'
-                            // }
-                            color={
-                                errorObject.isSlNoError(rowData)
-                                    ? 'error'
-                                    : 'secondary'
-                            }
-                            showZero={true}>
-                            <Chip
-                                size="small"
-                                label="Serial no's"
-                                color="primary"
-                                onClick={() => handleSerialNo(rowData)}
+                    return (
+                        <>
+                            {/* Boolean keyword removes falsy values from array */}
+                            <Badge
+                                badgeContent={
+                                    rowData.serialNumbers
+                                        .split(',')
+                                        .filter(Boolean).length // .filter(Boolean) removes empty values from the array
+                                }
+                                // color={
+                                // allErrorMethods().getSlNoError(rowData)
+                                //     ? 'error'
+                                //     : 'secondary'
+                                // }
+                                color={
+                                    errorObject.isSlNoError(rowData)
+                                        ? 'error'
+                                        : 'secondary'
+                                }
+                                showZero={true}>
+                                <Chip
+                                    size="small"
+                                    label="Serial no's"
+                                    color="primary"
+                                    onClick={() => handleSerialNo(rowData)}
+                                />
+                            </Badge>
+                            <TextField
+                                placeholder="Remarks"
+                                variant="standard"
+                                value={rowData.remarks || ''}
+                                onChange={(e: any) => {
+                                    rowData.remarks = e.target.value
+                                    meta.current.isMounted && setRefresh({})
+                                }}
+                                onFocus={(e: any) => {
+                                    e.target.select()
+                                }}
                             />
-                        </Badge>
-                        <TextField
-                            placeholder="Remarks"
-                            variant='standard'
-                            value={rowData.remarks || ''}
-                            onChange={(e: any) => {
-                                rowData.remarks = e.target.value
-                                meta.current.isMounted && setRefresh({})
-                            }}
-                            onFocus={(e:any) => {
-                                e.target.select()
-                            }}
-                        />
-                    </>
+                        </>
                     )
                 }}
-
             />,
         ]
     }
@@ -1027,108 +1065,108 @@ const useStyles: any = makeStyles((theme: Theme) =>
 export { useStyles }
 
 // function allErrorMethods() {
-    //     function getDiscountError(rowData: any) {
-    //         const ret = rowData.price - rowData.discount >= 0 ? undefined : true
-    //         return ret
-    //     }
+//     function getDiscountError(rowData: any) {
+//         const ret = rowData.price - rowData.discount >= 0 ? undefined : true
+//         return ret
+//     }
 
-    //     function setDiscountError(rowData: any) {
-    //         const er = getDiscountError(rowData)
-    //         if (er !== rowData.errorsObject.discountError) {
-    //             rowData.errorsObject.discountError = er
-    //             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-    //         }
-    //     }
+//     function setDiscountError(rowData: any) {
+//         const er = getDiscountError(rowData)
+//         if (er !== rowData.errorsObject.discountError) {
+//             rowData.errorsObject.discountError = er
+//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+//         }
+//     }
 
-    //     function getHsnError(rowData: any) {
-    //         let ret = undefined
-    //         if (arbitraryData.isGstInvoice) {
-    //             ret = rowData.hsn ? undefined : true
-    //         }
-    //         return ret
-    //     }
+//     function getHsnError(rowData: any) {
+//         let ret = undefined
+//         if (arbitraryData.isGstInvoice) {
+//             ret = rowData.hsn ? undefined : true
+//         }
+//         return ret
+//     }
 
-    //     function setHsnError(rowData: any) {
-    //         const er = getHsnError(rowData)
-    //         if (er !== rowData.errorsObject.hsnError) {
-    //             rowData.errorsObject.hsnError = er
-    //             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-    //         }
-    //     }
+//     function setHsnError(rowData: any) {
+//         const er = getHsnError(rowData)
+//         if (er !== rowData.errorsObject.hsnError) {
+//             rowData.errorsObject.hsnError = er
+//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+//         }
+//     }
 
-    //     function getGstRateError(rowData: any) {
-    //         let ret = undefined
-    //         if (arbitraryData.isGstInvoice) {
-    //             ret =
-    //                 rowData.gstRate > 0 && rowData.gstRate < 100
-    //                     ? undefined
-    //                     : true
-    //         } else {
-    //             ret = rowData.gstRate === 0 ? undefined : true
-    //         }
-    //         return ret
-    //     }
+//     function getGstRateError(rowData: any) {
+//         let ret = undefined
+//         if (arbitraryData.isGstInvoice) {
+//             ret =
+//                 rowData.gstRate > 0 && rowData.gstRate < 100
+//                     ? undefined
+//                     : true
+//         } else {
+//             ret = rowData.gstRate === 0 ? undefined : true
+//         }
+//         return ret
+//     }
 
-    //     function setGstRateError(rowData: any) {
-    //         const er = getGstRateError(rowData)
-    //         if (er !== rowData.errorsObject.gstRateError) {
-    //             rowData.errorsObject.gstRateError = er
-    //             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-    //         }
-    //     }
+//     function setGstRateError(rowData: any) {
+//         const er = getGstRateError(rowData)
+//         if (er !== rowData.errorsObject.gstRateError) {
+//             rowData.errorsObject.gstRateError = er
+//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+//         }
+//     }
 
-    //     function getProductCodeError(rowData: any) {
-    //         return rowData.productCode ? undefined : true
-    //     }
+//     function getProductCodeError(rowData: any) {
+//         return rowData.productCode ? undefined : true
+//     }
 
-    //     function setProductCodeError(rowData: any) {
-    //         const er = getProductCodeError(rowData)
-    //         if (er !== rowData.errorsObject.productCodeError) {
-    //             rowData.errorsObject.productCodeError = er
-    //             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-    //         }
-    //     }
+//     function setProductCodeError(rowData: any) {
+//         const er = getProductCodeError(rowData)
+//         if (er !== rowData.errorsObject.productCodeError) {
+//             rowData.errorsObject.productCodeError = er
+//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+//         }
+//     }
 
-    //     function getQtyError(rowData: any) {
-    //         return rowData.qty ? undefined : true
-    //     }
+//     function getQtyError(rowData: any) {
+//         return rowData.qty ? undefined : true
+//     }
 
-    //     function setQtyError(rowData: any) {
-    //         const er = rowData.qty ? undefined : true
-    //         if (er !== rowData.errorsObject.qtyError) {
-    //             rowData.errorsObject.qtyError = er
-    //             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-    //         }
-    //     }
+//     function setQtyError(rowData: any) {
+//         const er = rowData.qty ? undefined : true
+//         if (er !== rowData.errorsObject.qtyError) {
+//             rowData.errorsObject.qtyError = er
+//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+//         }
+//     }
 
-    //     function getSlNoError(rowData: any) {
-    //         function getCount() {
-    //             return rowData.serialNumbers.split(',').filter(Boolean).length
-    //         }
-    //         const ok = getCount() === rowData.qty || getCount() === 0
-    //         return !ok
-    //     }
+//     function getSlNoError(rowData: any) {
+//         function getCount() {
+//             return rowData.serialNumbers.split(',').filter(Boolean).length
+//         }
+//         const ok = getCount() === rowData.qty || getCount() === 0
+//         return !ok
+//     }
 
-    //     function setSlNoError(rowData: any) {
-    //         const er = getSlNoError(rowData)
-    //         if (er !== rowData.errorsObject.slNoError) {
-    //             rowData.errorsObject.slNoError = er
-    //             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-    //         }
-    //     }
+//     function setSlNoError(rowData: any) {
+//         const er = getSlNoError(rowData)
+//         if (er !== rowData.errorsObject.slNoError) {
+//             rowData.errorsObject.slNoError = er
+//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+//         }
+//     }
 
-    //     return {
-    //         getDiscountError,
-    //         setDiscountError,
-    //         getGstRateError,
-    //         getHsnError,
-    //         getProductCodeError,
-    //         getQtyError,
-    //         getSlNoError,
-    //         setGstRateError,
-    //         setHsnError,
-    //         setProductCodeError,
-    //         setQtyError,
-    //         setSlNoError,
-    //     }
-    // }
+//     return {
+//         getDiscountError,
+//         setDiscountError,
+//         getGstRateError,
+//         getHsnError,
+//         getProductCodeError,
+//         getQtyError,
+//         getSlNoError,
+//         setGstRateError,
+//         setHsnError,
+//         setProductCodeError,
+//         setQtyError,
+//         setSlNoError,
+//     }
+// }

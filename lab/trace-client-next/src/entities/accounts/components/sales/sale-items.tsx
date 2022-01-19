@@ -256,6 +256,7 @@ function SaleItems() {
                     <div>
                         <NumberFormat
                             placeholder="Product code"
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.productCode ? false : true}
@@ -310,6 +311,7 @@ function SaleItems() {
                         {/* hsn */}
                         <NumberFormat
                             placeholder="Hsn"
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.hsn ? false : true}
@@ -348,6 +350,7 @@ function SaleItems() {
                     <div>
                         <NumberFormat
                             allowNegative={false}
+                            variant='standard'
                             className="right-aligned-numeric"
                             error={rowData?.gstRate > 30 ? true : false}
                             customInput={TextField}
@@ -391,6 +394,7 @@ function SaleItems() {
                         <NumberFormat
                             allowNegative={false}
                             className="center-aligned-numeric"
+                            variant='standard'
                             customInput={TextField}
                             error={rowData.qty ? undefined : true}
                             onValueChange={(values: any) => {
@@ -425,6 +429,7 @@ function SaleItems() {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
+                            variant='standard'
                             fixedDecimalScale={true}
                             onChange={(e: any) => {
                                 const price = extractAmount(e.target.value)
@@ -485,6 +490,7 @@ function SaleItems() {
                             allowNegative={false}
                             className="right-aligned-numeric"
                             customInput={TextField}
+                            variant='standard'
                             decimalScale={2}
                             fixedDecimalScale={true}
                             onChange={(e: any) => {
@@ -547,6 +553,7 @@ function SaleItems() {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
+                            variant='standard'
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
@@ -667,6 +674,7 @@ function SaleItems() {
                                 'right-aligned-numeric',
                                 'total-amount'
                             )}
+                            variant='standard'
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}

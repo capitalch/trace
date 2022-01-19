@@ -20,7 +20,6 @@ function useSaleBillNoSelect() {
     const {  emit, execGenericView, getFromBag, toDecimalFormat, TraceSearchBox } = useSharedElements()
     useEffect(() => {
         meta.current.isMounted = true
-
         return (() => { meta.current.isMounted = false })
     }, [])
     const classes = useStyles()
@@ -119,9 +118,7 @@ export { useSaleBillNoSelect }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         content: {
-            // width: '100%',
             marginTop: theme.spacing(2),
             '& .button': {
                 marginLeft: theme.spacing(5),

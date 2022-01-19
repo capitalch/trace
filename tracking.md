@@ -87,6 +87,7 @@ c) In all Typography comment out disableTypography
     n) Still material-table being used in authentication/generic-crud, this has dependency on @material-ui/core, needs to be removed
     o) remove <h3> and use div instead in all <DialogTitle>
     p) Issue with Alert of snackbar, breaks. Fixed it by not using MuiAlert
+    q) In NumberFormat and TextBoxes do variant='standard'
 
 5. Bugfixing required for material-ui V5 migration
                                               a) snackbar Alert fix
@@ -94,9 +95,11 @@ c) In all Typography comment out disableTypography
   c) Sales tab color fixing
   d) All transactions Reverse checkbox uncheck not working
   e) Remove material-table from authentication/generic-crud; its using old version of material-ui
-  f) New contact in sales warning: 'value of input should not be null, it should be empty'
+                                              f) New contact in sales warning: 'value of input should not be null, it should be empty'
   g) Many text boxes a box is coming
   h) Voucher tab color problem
+  i) Bank recon after bank select not working
+  j) Product grid not working properly
 
 # Pending
 
