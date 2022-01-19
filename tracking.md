@@ -84,6 +84,19 @@ c) In all Typography comment out disableTypography
     k) makeStyles is deprecated. All deprecated items are kept in @mui/styles. It will be removed in V6. The correct styling package to use is @mui/material/styles
     l) Need to use StyledEngineProvider injectFirst, in the App.tsx
     m) Made several changes for makeStyles to be imported from @mui/styles; It will be deprecated in v6
+    n) Still material-table being used in authentication/generic-crud, this has dependency on @material-ui/core, needs to be removed
+    o) remove <h3> and use div instead in all <DialogTitle>
+    p) Issue with Alert of snackbar, breaks. Fixed it by not using MuiAlert
+
+5. Bugfixing required for material-ui V5 migration
+                                              a) snackbar Alert fix
+  b) PdfPrint dialog not appearing
+  c) Sales tab color fixing
+  d) All transactions Reverse checkbox uncheck not working
+  e) Remove material-table from authentication/generic-crud; its using old version of material-ui
+  f) New contact in sales warning: 'value of input should not be null, it should be empty'
+  g) Many text boxes a box is coming
+  h) Voucher tab color problem
 
 # Pending
 

@@ -50,7 +50,7 @@ function useTraceMaterialComponents() {
                     // disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
-                    <h3>{pre.title}</h3>
+                    <div>{pre.title}</div>
                     <IconButton
                         size="small"
                         color="default"

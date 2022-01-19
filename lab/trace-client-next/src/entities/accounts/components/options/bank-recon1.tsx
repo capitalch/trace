@@ -353,7 +353,7 @@ function BankRecon() {
                     // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
-                    <h3>{meta.current.dialogConfig.title}</h3>
+                    <div>{meta.current.dialogConfig.title}</div>
                     <IconButton
                         size="small"
                         color="default"

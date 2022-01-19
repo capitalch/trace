@@ -219,7 +219,6 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 {meta.current.dialogConfig.dialogContent}
                 {meta.current.dialogConfig.dialogActions}
             </Dialog>
-
             <Snackbar
                 style={{ bottom: '0.6rem', right: '0.5rem' }}
                 anchorOrigin={{
@@ -229,9 +228,10 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 open={snackbar.current.open}
                 autoHideDuration={snackbar.current.duration}
                 onClose={handleClose}>
-                <Alert
+                <Alert variant='filled'
                     onClose={handleClose}
-                    severity={snackbar.current.severity}>
+                    severity={snackbar.current.severity}
+                    >
                     {snackbar.current.message}
                 </Alert>
             </Snackbar>

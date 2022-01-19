@@ -55,10 +55,7 @@ function GenericDialoges({ loadDialog }: any) {
     const { TraceFullWidthSubmitButton }: any = useTraceMaterialComponents()
     // const { getUnitHeading } = utils()
     const {
-        // getLoginData,
         getCurrentEntity,
-        // setInBag,
-        // getFromBag,
         setCurrentComponent,
     } = manageEntitiesState()
     const { emit } = useIbuki()
@@ -104,7 +101,7 @@ function GenericDialoges({ loadDialog }: any) {
                     // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
-                    <h3>{meta.current.dialogConfig.title}</h3>
+                    <div>{meta.current.dialogConfig.title}</div>
                     <IconButton
                         size="small"
                         color="default"

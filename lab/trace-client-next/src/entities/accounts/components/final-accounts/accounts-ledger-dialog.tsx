@@ -133,7 +133,7 @@ function AccountsLedgerDialog() {
                     // disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
-                    <h3>{'Account: '.concat(meta.current.accName)}</h3>
+                    <div>{'Account: '.concat(meta.current.accName)}</div>
                     <IconButton
                         size="small"
                         color="default"
@@ -177,7 +177,7 @@ function AccountsLedgerDialog() {
                     // disableTypography
                     id="generic-child-dialog-title"
                     className="dialog-title">
-                    <h3>{meta.current.childDialogTiitle}</h3>
+                    <div>{meta.current.childDialogTiitle}</div>
                     <IconButton
                         size="small"
                         color="default"

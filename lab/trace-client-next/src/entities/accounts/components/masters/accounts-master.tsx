@@ -494,7 +494,7 @@ function AccountsMaster() {
                     // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
-                    <h3>{meta.current.dialogConfig.title}</h3>
+                    <div>{meta.current.dialogConfig.title}</div>
                     <IconButton
                         size="small"
                         color="default"
@@ -523,7 +523,7 @@ function AccountsMaster() {
                     // disableTypography
                     id="generic-address-dialog-title"
                     className={classes.dialogTitle}>
-                    <h3>{meta.current.addressDialogConfig.title}</h3>
+                    <div>{meta.current.addressDialogConfig.title}</div>
                     <IconButton
                         size="small"
                         color="default"

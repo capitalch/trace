@@ -1,5 +1,6 @@
 import { useRef } from '../imports/regular-imports'
 import {
+    Alert,
     Button,
     IconButton,
     Avatar,
@@ -13,7 +14,7 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    MuiAlert,
+    // MuiAlert,
     Theme,
 } from '../imports/gui-imports'
 import {
@@ -82,7 +83,7 @@ function useTraceHeader({ setRefresh }: any) {
     const { doValidateForm, isValidForm } = getValidationFabric()
     const { TraceFullWidthSubmitButton }: any = useTraceMaterialComponents()
     const classes = useStyles()
-    const snackbar = useRef({
+    const snackbar:any = useRef({
         severity: 'success',
         open: false,
         message: globalMessages['operationSuccessful'],
@@ -90,9 +91,9 @@ function useTraceHeader({ setRefresh }: any) {
     })
 
     // for material snackbar
-    function Alert(props: any) {
-        return <MuiAlert elevation={6} variant="filled" {...props} />
-    }
+    // function Alert(props: any) {
+    //     return <MuiAlert elevation={6} variant="filled" {...props} />
+    // }
 
     // for closing snackbar
     function handleClose() {
@@ -157,7 +158,7 @@ function useTraceHeader({ setRefresh }: any) {
                 // disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
-                <h3>{meta.current.dialogConfig.title}</h3>
+                <div>{meta.current.dialogConfig.title}</div>
                 <IconButton
                     size="small"
                     color="default"

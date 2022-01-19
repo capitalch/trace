@@ -164,9 +164,8 @@ function GenericCRUD({ loadComponent }: any) {
                 onClose={closeDialog}>
                 <DialogTitle
                     // disableTypography
-                    id="generic-dialog-title"
                     className={classes.dialogTitle}>
-                    <h3>{meta.current.dialogConfig.title}</h3>
+                    <div>{meta.current.dialogConfig.title}</div>
                     <IconButton
                         size="small"
                         color="default"
@@ -246,7 +245,7 @@ function GenericCRUD({ loadComponent }: any) {
                     showTitle: false,
                 }}
                 components={{
-                    Toolbar: (props) => (
+                    Toolbar: (props:any) => (
                         <div className={classes.permissionTemplate}>
                             <div className="template">
                                 <Typography className="title">
