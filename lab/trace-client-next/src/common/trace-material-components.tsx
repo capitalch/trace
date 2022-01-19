@@ -8,6 +8,7 @@ import {
     DialogTitle,
     DialogContent,
     makeStyles,
+    Theme,
     createStyles,
     TextField,
     InputAdornment,
@@ -254,7 +255,7 @@ function useTraceMaterialComponents() {
 }
 export { useTraceMaterialComponents }
 
-const useStyles: any = makeStyles((theme:any) =>
+const useStyles: any = makeStyles((theme:Theme) =>
     createStyles({
         content: {},
 

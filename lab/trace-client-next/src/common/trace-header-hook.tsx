@@ -157,7 +157,7 @@ function useTraceHeader({ setRefresh }: any) {
                 // disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
-                <h2>{meta.current.dialogConfig.title}</h2>
+                <h3>{meta.current.dialogConfig.title}</h3>
                 <IconButton
                     size="small"
                     color="default"
