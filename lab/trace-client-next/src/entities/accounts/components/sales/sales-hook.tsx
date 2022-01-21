@@ -154,8 +154,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                backgroundColor: 'dodgerBlue',
-                color: theme.palette.common.white,
+                backgroundColor: theme.palette.grey[200],
+                color: theme.palette.primary.dark,
                 marginTop: theme.spacing(0.5),
                 '& .reset':{
                     backgroundColor: theme.palette.amber.main,
@@ -171,54 +171,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
 export { useStyles }
 
-
-    // const arbitraryData: any = useRef({
-    //     accounts: {
-    //         cashBankAccountsWithLedgers: [],
-    //         cashBankAccountsWithSubledgers: [],
-    //         debtorCreditorAccountsWithLedgers: [],
-    //         debtorCreditorAccountsWithSubledgers: [],
-    //         autoSubledgerAccounts: [],
-    //     },
-
-    //     allAccounts: [],
-    //     autoRefNo: undefined,
-    //     backCalulateAmount: 0.0,
-    //     billTo: {
-    //         id: undefined,
-    //     },
-
-    //     commonRemarks: undefined,
-    //     deletedSalePurchaseIds: [],
-    //     footer: {
-    //         items: [], // for TranD table
-    //         deletedIds: [],
-    //         amount: 0,
-    //     },
-    //     id: undefined,
-    //     isIgst: false,
-    //     isAssignmentReturn: saleType === 'ret',
-    //     isSales: saleType === 'sal',
-    //     ledgerAccounts: [],
-    //     lineItems: [], // for product details of SalePurchaseDetails table
-    //     rowData: {},
-
-    //     saleErrorMethods: {
-    //         headError: () => false,
-    //         itemsError: () => false,
-    //         footerError: () => false,
-    //         errorMethods: {
-    //             getSlNoError: () => false,
-    //         },
-    //     },
-
-    //     saleErrorObject: {},
-
-    //     saleVariety: 'r',
-    //     shipTo: {},
-    //     summary: {},
-    //     totalCredits: 0.0,
-    //     totalDebits: 0.0,
-    //     tranDate: moment().format(isoDateFormat),
-    //     isViewBack: false,
-    // })

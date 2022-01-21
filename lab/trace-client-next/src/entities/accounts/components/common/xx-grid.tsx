@@ -72,8 +72,8 @@ interface XXGridOptions {
     editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
-    isReverseOrderByDefault?: boolean
-    isReverseOrderChecked?: boolean
+    isReverseOrderByDefault?: boolean // does reverse of data at fetching
+    isReverseOrderChecked?: boolean // does not do reversing of data. Only makes the reverse checkbox as checked
     isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
     postFetchMethod?: any // method to call after fetching of data
@@ -118,8 +118,6 @@ function XXGrid(gridOptions: XXGridOptions) {
         setFilteredSummary,
         setRefresh,
         toggleOrder,
-        // onCellValueChange,
-        // handleEditRowsModelChange,
     } = useXXGrid(gridOptions)
 
     const { debounceEmit, emit, isMediumSizeDown, toDecimalFormat } =
@@ -134,8 +132,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
             }}
-            // autoHeight={!!isMediumSizeDown}
-            // autoHeight={true}
             disableSelectionOnClick={disableSelectionOnClick || true}
             className={clsx(className || '', classes.content)}
             {...gridOptions.xGridProps}
@@ -143,8 +139,6 @@ function XXGrid(gridOptions: XXGridOptions) {
             columns={columns}
             rows={meta.current.filteredRows}
             rowHeight={32}
-            //
-            // disableSelectionOnClick={true}
             disableColumnMenu={true}
             components={{
                 Toolbar: CustomGridToolbar,
@@ -175,21 +169,6 @@ function XXGrid(gridOptions: XXGridOptions) {
             }}
 
             onSelectionModelChange={onSelectModelChange}
-            // onCellClick={(item:any)=>{
-            //     if(gridOptions.editableFields){
-            //         if(gridOptions.editableFields.includes(item.field)){
-            //             apiRef.current.setCellMode(item.id, item.field, 'edit')
-            //         } else {
-            //             // apiRef.current.setCellMode(item.id, item.field, '')
-            //             gridOptions.editableFields.forEach((x:string)=>{
-            //                 apiRef.current.setCellMode(item.id, x, 'read')
-            //             })
-            //         }
-            //     } 
-            // }}
-            // editRowsModel={editRowsModel}
-
-            // onEditRowsModelChange={handleEditRowsModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
         />
@@ -203,7 +182,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                     <div>
                         <GridToolbarColumnsButton color="secondary" />
                         <GridToolbarFilterButton color="secondary" />
-                        {/* <GridToolbarDensitySelector color="secondary" /> */}
                         <GridToolbarExport color="secondary" />
                     </div>
                     <Button

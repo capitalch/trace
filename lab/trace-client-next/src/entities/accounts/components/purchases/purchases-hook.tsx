@@ -75,8 +75,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             // marginTop: theme.spacing(2),
             '& .tabs': {
-                backgroundColor: 'dodgerBlue',
-                color: theme.palette.common.white,
+                backgroundColor: theme.palette.grey[200],
+                color: theme.palette.primary.dark,
                 marginTop: theme.spacing(0.5),
 
                 '& .reset':{

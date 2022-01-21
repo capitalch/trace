@@ -259,7 +259,7 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="invoice">
                         {/* Invoice amount */}
                         <NumberFormat
-                        variant='standard'
+                            variant='standard'
                             className="total-amount"
                             label="Invoice amount"
                             allowNegative={false}
@@ -314,7 +314,7 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="gst">
                         {/* cgst */}
                         <NumberFormat
-                        variant='standard'
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
@@ -571,6 +571,7 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="invoice">
                         {/* Invoice amount */}
                         <NumberFormat
+                            variant='standard'
                             className="total-amount"
                             label="Invoice amount"
                             allowNegative={false}
@@ -597,6 +598,7 @@ function PurchaseBody({ purchaseType }: any) {
                             value={ad.invoiceAmount || 0.0}
                         />
                         <NumberFormat
+                            variant='standard'
                             label="Total qty"
                             allowNegative={false}
                             customInput={TextField}
@@ -624,6 +626,7 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="gst">
                         {/* cgst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
@@ -659,6 +662,7 @@ function PurchaseBody({ purchaseType }: any) {
                         />
                         {/* sgst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
@@ -693,6 +697,7 @@ function PurchaseBody({ purchaseType }: any) {
                         />
                         {/* igst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}

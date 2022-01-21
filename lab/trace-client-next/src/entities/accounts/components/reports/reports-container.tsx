@@ -24,7 +24,6 @@ function GenericReports({ loadReport }: any) {
         summaryColNames,
         title,
     } = selectLogic[loadReport]()
-    // const reportRef:any = useRef()
     const {
         accountsMessages,
         confirm,
@@ -51,16 +50,8 @@ function GenericReports({ loadReport }: any) {
             subs2.unsubscribe()
         }
     }, [])
-    // const handlePrint = useReactToPrint({
-    //     content: () => reportRef.current,
-    // })
     return (
-        <Card className={classes.container} 
-        // ref={reportRef}
-        >
-            {/* <Button color="primary" size="small" onClick={handlePrint}>
-                Pdf print
-            </Button> */}
+        <Card className={classes.container}>
             <XXGrid
                 gridActionMessages={actionMessages}
                 columns={columns}

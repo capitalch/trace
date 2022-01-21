@@ -87,19 +87,24 @@ c) In all Typography comment out disableTypography
     n) Still material-table being used in authentication/generic-crud, this has dependency on @material-ui/core, needs to be removed
     o) remove <h3> and use div instead in all <DialogTitle>
     p) Issue with Alert of snackbar, breaks. Fixed it by not using MuiAlert
-    q) In NumberFormat and TextBoxes do variant='standard'
+    q) In NumberFormat and TextBoxes do variant='standard'. Fixed Purchases and sales many textboxes
+    r) Voucher and sales, purchases tab color problems fixed
+    s) Bank recon after select a bank error, fixed
+    t)
 
 5. Bugfixing required for material-ui V5 migration
                                               a) snackbar Alert fix
   b) PdfPrint dialog not appearing
-  c) Sales tab color fixing
-  d) All transactions Reverse checkbox uncheck not working
+                                              c) Sales tab color fixing
+                                              d) All transactions Reverse checkbox uncheck not working
   e) Remove material-table from authentication/generic-crud; its using old version of material-ui
                                               f) New contact in sales warning: 'value of input should not be null, it should be empty'
-  g) Many text boxes a box is coming
-  h) Voucher tab color problem
-  i) Bank recon after bank select not working
+                                              g) Many text boxes a box is coming
+                                              h) Voucher tab color problem
+                                              i) Bank recon after bank select not working
   j) Product grid not working properly
+                                              k) Purchase return fix
+  l) Debit notes / credit notes tab color
 
 # Pending
 
@@ -165,6 +170,9 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 17-01-2022 = 20-01-2022
+1. Working on migration of v4.x to version 5.x
 
 # 14-12-2021 - 16-01-2022
 1. Printing of sale invoice, mail, SMS

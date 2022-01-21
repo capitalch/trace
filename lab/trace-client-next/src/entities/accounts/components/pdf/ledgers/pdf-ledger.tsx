@@ -20,7 +20,8 @@ function PdfLedger({ ledgerData, accName }: any) {
     const startDate = moment(finObject.startDate, dateFormat).format(dateFormat)
     const endDate = moment(finObject.endDate, dateFormat).format(dateFormat)
     let closingBalance = 0
-    const gStyles = StyleSheet.create({
+    const gStyles =  //{page:{},pageNumber:{}, normal:{}, bold:{}} 
+    StyleSheet.create({
         page: {
             flexDirection: 'column',
             paddingLeft: 30,
@@ -52,6 +53,7 @@ function PdfLedger({ ledgerData, accName }: any) {
 
     prepareData()
     return (
+        // <div>Test</div>
         <Document>
             <Page size="A4" style={gStyles.page}>
                 <HeaderBlock />

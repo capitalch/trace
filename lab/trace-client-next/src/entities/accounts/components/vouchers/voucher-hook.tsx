@@ -263,8 +263,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                color: theme.palette.common.white,
-                backgroundColor: theme.palette.grey[600],
+                color: theme.palette.primary.dark,
+                backgroundColor: theme.palette.grey[200],
             },
         },
     })

@@ -91,12 +91,12 @@ function useXXGrid(gridOptions: any) {
 
     const entityName = getCurrentEntity()
     const pre: any = meta.current
-    if(gridOptions.isReverseOrderChecked){
-        meta.current.isReverseOrder = true
-    }
+    // if(gridOptions.isReverseOrderChecked){
+    //     meta.current.isReverseOrder = true
+    // }
 
     async function fetchRows(queryId: string, queryArgs: any) {
-        if ((!queryId) || (!queryArgs)) { //|| (!queryArgs?.accId)
+        if ((!queryId) || (!queryArgs)) { 
             return
         }
         queryArgs['no'] =
@@ -127,7 +127,7 @@ function useXXGrid(gridOptions: any) {
         async function fetch() {
             // populates meta.current.filteredRows
             let i = 1 // for creating unique id's
-            pre.isReverseOrder = false
+            pre.isReverseOrder = gridOptions.isReverseOrderChecked
             pre.isDailySummary = false
             pre.isColumnBalance = false
 
@@ -337,8 +337,7 @@ function useXXGrid(gridOptions: any) {
                 ...x,
             }))
         }
-        // gridOptions.isReverseOrderByDefault && meta.current.filteredRows.reverse()
-        // pre.isReverseOrder = false
+       
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
     }
@@ -371,12 +370,12 @@ function useXXGrid(gridOptions: any) {
 
     function toggleOrder() {
         const hash1 = hash(pre.filteredRows)
-        console.log(hash1)
+        // console.log(hash1)
         const rows = [...pre.filteredRows]
         rows.reverse()
         pre.filteredRows = rows
-        const hash2 = hash(pre.filteredRows)
-        console.log(hash2)
+        // const hash2 = hash(pre.filteredRows)
+        // console.log(hash2)
     }
 
     return {

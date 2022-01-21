@@ -7,6 +7,7 @@ import {
     useRef,
 } from '../../../../imports/regular-imports'
 import {
+    Box,
     makeStyles,
     Theme,
     createStyles,
@@ -477,6 +478,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
+                            sx={{mt:1}}
                             variant="standard"
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
@@ -571,6 +573,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* hsn */}
                         <NumberFormat
                             placeholder="Hsn"
+                            sx={{mt:1}}
                             allowNegative={false}
                             customInput={TextField}
                             variant="standard"
@@ -913,7 +916,7 @@ function usePurchaseItems(arbitraryData: any) {
                 // style={{ width: '8rem' }}
                 body={(rowData: any) => {
                     return (
-                        <>
+                        <Box >
                             {/* Boolean keyword removes falsy values from array */}
                             <Badge
                                 badgeContent={
@@ -921,11 +924,7 @@ function usePurchaseItems(arbitraryData: any) {
                                         .split(',')
                                         .filter(Boolean).length // .filter(Boolean) removes empty values from the array
                                 }
-                                // color={
-                                // allErrorMethods().getSlNoError(rowData)
-                                //     ? 'error'
-                                //     : 'secondary'
-                                // }
+                                
                                 color={
                                     errorObject.isSlNoError(rowData)
                                         ? 'error'
@@ -942,6 +941,8 @@ function usePurchaseItems(arbitraryData: any) {
                             <TextField
                                 placeholder="Remarks"
                                 variant="standard"
+                                autoComplete='off'
+                                sx={{mt:1}}
                                 value={rowData.remarks || ''}
                                 onChange={(e: any) => {
                                     rowData.remarks = e.target.value
@@ -951,7 +952,7 @@ function usePurchaseItems(arbitraryData: any) {
                                     e.target.select()
                                 }}
                             />
-                        </>
+                        </Box>
                     )
                 }}
             />,

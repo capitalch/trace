@@ -205,6 +205,7 @@ function SaleItems() {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
+                            sx={{mt:1}}
                             variant='standard'
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
@@ -312,6 +313,7 @@ function SaleItems() {
                         <NumberFormat
                             placeholder="Hsn"
                             variant='standard'
+                            sx={{mt:1}}
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.hsn ? false : true}
@@ -646,7 +648,9 @@ function SaleItems() {
                             </Badge>
                             <TextField
                                 placeholder="Remarks"
+                                autoComplete='off'
                                 variant='standard'
+                                sx={{mt:1}}
                                 value={rowData.remarks || ''}
                                 onChange={(e: any) => {
                                     rowData.remarks = e.target.value
