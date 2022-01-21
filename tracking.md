@@ -90,11 +90,13 @@ c) In all Typography comment out disableTypography
     q) In NumberFormat and TextBoxes do variant='standard'. Fixed Purchases and sales many textboxes
     r) Voucher and sales, purchases tab color problems fixed
     s) Bank recon after select a bank error, fixed
-    t) react-scripts ver 4.x works well, but if it is upgraded to react-scripts v5.x, there is some module error problem which is related to webpack v5, which is associated with react-scripts v5. At present I don't have a remedy, so I stick to react-scripts v4.x in package.json.
+    t) react-scripts ver 4.x works well, but if it is upgraded to react-scripts v5.x, there is some module error problem which is related to webpack v5, which is associated with react-scripts v5. At present I don't have a remedy, so I stick to react-scripts v4.x in package.json
+    u) Use the useTheme() instead of theme all over
+    v) Need to delete node_modules and lock files, then yarn or npm install
 
 5. Bugfixing required for material-ui V5 migration
                                               a) snackbar Alert fix
-  b) PdfPrint dialog not appearing
+                                              b) PdfPrint dialog not appearing
                                               c) Sales tab color fixing
                                               d) All transactions Reverse checkbox uncheck not working
   e) Remove material-table from authentication/generic-crud; its using old version of material-ui
