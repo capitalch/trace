@@ -7,11 +7,12 @@ import {
     DialogActions,
     DialogTitle,
     DialogContent,
+    InputAdornment,
     makeStyles,
     Theme,
     createStyles,
     TextField,
-    InputAdornment,
+    useTheme,
 } from '../imports/gui-imports'
 
 import {
@@ -265,12 +266,12 @@ const useStyles: any = makeStyles((theme:Theme) =>
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingBottom: '0px',
-                paddingRight: theme.spacing(2.0),
+                paddingRight: useTheme().spacing(2.0),
             },
 
             '& .MuiInputBase-root': {
-                width: theme.spacing(50),
-                marginBottom: theme.spacing(2),
+                width: useTheme().spacing(50),
+                marginBottom: useTheme().spacing(2),
             },
         },
 
@@ -281,14 +282,14 @@ const useStyles: any = makeStyles((theme:Theme) =>
         },
 
         submitButtonStyle: {
-            marginLeft: theme.spacing(2),
-            marginTop: -theme.spacing(1),
-            marginRight: theme.spacing(2),
+            marginLeft: useTheme().spacing(2),
+            marginTop: -useTheme().spacing(1),
+            marginRight: useTheme().spacing(2),
         },
 
         searchBox: {
             '& .search-button': {
-                marginLeft: theme.spacing(2),
+                marginLeft: useTheme().spacing(2),
             },
         },
 

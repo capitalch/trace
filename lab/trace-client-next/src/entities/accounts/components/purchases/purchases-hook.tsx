@@ -80,11 +80,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 marginTop: theme.spacing(0.5),
 
                 '& .reset':{
-                    backgroundColor: theme.palette.amber.main,
-                    color: theme.palette.amber.contrastText,
+                    backgroundColor: theme.palette.blue.main,
+                    color: theme.palette.getContrastText(theme.palette.blue.main),
                     height: theme.spacing(4),
                     margin:'auto',
-                    // marginRight: '20%'
                 }
             },
             '& .purchase-body': {

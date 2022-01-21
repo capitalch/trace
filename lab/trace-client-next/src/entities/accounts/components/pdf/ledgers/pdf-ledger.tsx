@@ -2,17 +2,15 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 import { moment } from '../../../../../imports/regular-imports'
 function PdfLedger({ ledgerData, accName }: any) {
     const {
-        accountsMessages,
         Document,
-        numberToWordsInRs,
         Page,
         StyleSheet,
         Text,
         View,
-        getAccountName,
         getFromBag,
         toDecimalFormat,
     } = useSharedElements()
+
     const ld = ledgerData
     const unitInfo = getFromBag('unitInfo')
     const finObject = getFromBag('finYearObject')
@@ -20,8 +18,7 @@ function PdfLedger({ ledgerData, accName }: any) {
     const startDate = moment(finObject.startDate, dateFormat).format(dateFormat)
     const endDate = moment(finObject.endDate, dateFormat).format(dateFormat)
     let closingBalance = 0
-    const gStyles =  //{page:{},pageNumber:{}, normal:{}, bold:{}} 
-    StyleSheet.create({
+    const gStyles = StyleSheet.create({
         page: {
             flexDirection: 'column',
             paddingLeft: 30,
@@ -53,7 +50,6 @@ function PdfLedger({ ledgerData, accName }: any) {
 
     prepareData()
     return (
-        // <div>Test</div>
         <Document>
             <Page size="A4" style={gStyles.page}>
                 <HeaderBlock />
@@ -84,7 +80,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                     <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
                         {unitInfo.unitName}
                     </Text>
-                    <Text style={[gStyles.normal,{lineHeight:1.6}]}>
+                    <Text style={[gStyles.normal, { lineHeight: 1.6 }]}>
                         {''.concat(
                             'GSTIN:',
                             unitInfo.gstin,
@@ -220,7 +216,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 {x.ledgerBal >= 0
                                     ? toDecimalFormat(x.ledgerBal) + ' Dr'
                                     : toDecimalFormat(Math.abs(x.ledgerBal)) +
-                                      ' Cr'}
+                                    ' Cr'}
                             </Text>
                             <Text
                                 style={[

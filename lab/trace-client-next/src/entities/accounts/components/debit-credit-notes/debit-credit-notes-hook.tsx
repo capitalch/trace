@@ -75,15 +75,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                color: theme.palette.common.white,
-                backgroundColor: 'dodgerBlue',
+                color: theme.palette.primary.dark,
+                backgroundColor: theme.palette.grey[200],
                 marginTop: theme.spacing(0.5),
                 '& .reset':{
-                    backgroundColor: theme.palette.amber.main,
-                    color: theme.palette.amber.contrastText,
+                    backgroundColor: theme.palette.blue.main,
+                    color: theme.palette.getContrastText(theme.palette.blue.main),
                     height: theme.spacing(4),
                     margin:'auto',
-                    // marginRight: '20%'
                 }
             },
         },

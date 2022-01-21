@@ -90,7 +90,7 @@ c) In all Typography comment out disableTypography
     q) In NumberFormat and TextBoxes do variant='standard'. Fixed Purchases and sales many textboxes
     r) Voucher and sales, purchases tab color problems fixed
     s) Bank recon after select a bank error, fixed
-    t)
+    t) react-scripts ver 4.x works well, but if it is upgraded to react-scripts v5.x, there is some module error problem which is related to webpack v5, which is associated with react-scripts v5. At present I don't have a remedy, so I stick to react-scripts v4.x in package.json.
 
 5. Bugfixing required for material-ui V5 migration
                                               a) snackbar Alert fix
@@ -104,7 +104,7 @@ c) In all Typography comment out disableTypography
                                               i) Bank recon after bank select not working
   j) Product grid not working properly
                                               k) Purchase return fix
-  l) Debit notes / credit notes tab color
+                                              l) Debit notes / credit notes tab color
 
 # Pending
 
@@ -129,7 +129,7 @@ c) In all Typography comment out disableTypography
 
 ## Functionality
 	1. Auto subledger create bill
-	3. 
+	3. Data grid, provision for subtitle: useful for showing ledger of party
 	4. Footer Trace version copyright
 	5. 
 	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
