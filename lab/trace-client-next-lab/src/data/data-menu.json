@@ -1,0 +1,522 @@
+{
+    "menu": [
+        {
+            "name": "accounts",
+            "label": "Accounts",
+            "children": [
+                {
+                    "name": "vouchersMenu",
+                    "label": "Vouchers",
+                    "children": [                        
+                        {
+                            "name": "journalsSubMenu",
+                            "label": "Journals",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "journal"
+                            }
+                        },
+                        {
+                            "name": "paymentsSubMenu",
+                            "label": "Payments",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "payment"
+                            }
+                        },
+                        {
+                            "name": "receiptsSubMenu",
+                            "label": "Receipts",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "receipt"
+                            }
+                        },
+                        {
+                            "name": "contraSubMenu",
+                            "label": "Contra",
+                            "componentName": "vouchers",
+                            "args": {
+                                "loadComponent": "contra"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "salesPurchasesMenu",
+                    "label": "Sales / purchases",
+                    "children": [
+                        {
+                            "name": "salesSubMenu",
+                            "label": "Sales",
+                            "componentName": "sales",
+                            "args":{
+                                "saleType": "sal"
+                            }
+                        },
+                        {
+                            "name": "salesReturnSubMenu",
+                            "label": "Sales return",
+                            "componentName": "sales",
+                            "args":{
+                                "saleType": "ret"
+                            }
+                        },
+                        {
+                            "name": "purchasesSubMenu",
+                            "label": "Purchases",
+                            "componentName": "purchases",
+                            "args": {
+                                "purchaseType": "pur"
+                            }
+                        },
+                        {
+                            "name": "purchasesReturnSubMenu",
+                            "label": "Purchase return",
+                            "componentName": "purchases",
+                            "args": {
+                                "purchaseType": "ret"
+                            }
+                        },
+                        {
+                            "name": "debitNotesSubMenu",
+                            "label": "Debit notes",
+                            "componentName": "debitNotes"
+                        },
+                        {
+                            "name": "creditNotesSubMenu",
+                            "label": "Credit notes",
+                            "componentName": "creditNotes"
+                        }
+                    ]
+                },
+                {
+                    "name": "mastersMenu",
+                    "label": "Masters",
+                    "children": [
+                        {
+                            "name": "unitInfoSubMenu",
+                            "label": "Unit info",
+                            "componentName": "genericDialoges",
+                            "args": {
+                                "loadDialog": "unitInfo"
+                            }
+                        },
+                        {
+                            "name": "generalSettingsSubMenu",
+                            "label": "General settings",
+                            "componentName": "genericDialoges",
+                            "args": {
+                                "loadDialog": "generalSettings"
+                            }
+                        },
+                        {
+                            "name": "accountsSubMenu",
+                            "label": "Accounts",
+                            "componentName": "accountsMaster"
+                        },
+                        {
+                            "name": "accountsOpBalSubMenu",
+                            "label": "Opening balances",
+                            "componentName": "accountsOpBal"
+                        },
+                        {
+                            "name": "branchesSubMenu",
+                            "label": "Branches",
+                            "componentName": "branches"                            
+                        },
+                        {
+                            "name": "financialYearsSubMenu",
+                            "label": "Financial years",
+                            "componentName": "financialYears"
+                        }
+                    ]
+                },
+                {
+                    "name": "finalAccountsMenu",
+                    "label": "Final accounts",
+                    "children": [
+                        {
+                            "name": "trialBalanceSubMenu",
+                            "label": "Trial balance",
+                            "componentName": "trialBalance"
+                        },
+                        {
+                            "name": "balanceSheetSubMenu",
+                            "label": "Balance sheet",
+                            "componentName": "balanceSheet"
+                        },
+                        {
+                            "name": "profitLossSubMenu",
+                            "label": "PL account",
+                            "componentName": "profitLoss"
+                        },
+                        {
+                            "name": "generalLedgerSubMenu",
+                            "label":"General ledger",
+                            "componentName": "generalLedger"
+                        }
+                    ]
+                },
+                {
+                    "name": "optionsMenu",
+                    "label": "Options",
+                    "children": [
+                        {
+                            "name": "bankReconSubMenu",
+                            "label": "Bank reconcillation",
+                            "componentName": "bankRecon"
+                        },                        
+                        {
+                            "name": "commonUtilitiesSubMenu",
+                            "label": "Common utilities",
+                            "componentName": "commonUtilities"
+                        },
+                        {
+                            "name": "genericExportsSubMenu",
+                            "label": "Exports",
+                            "componentName": "genericExports"
+                        }
+                    ]
+                },
+                {
+                    "name": "reportsMenu",
+                    "label": "Reports",
+                    "children": [
+                        {
+                            "name": "allTransactionsSubMenu",
+                            "label": "All transactions",
+                            "componentName": "genericReports",
+                            "args": {
+                                "loadReport": "allTransactions"
+                            }
+                        },
+                        {
+                            "name": "taxationSubMenu",
+                            "label": "Taxation",
+                            "componentName": "taxation"
+                        }
+                    ]
+                },
+                {
+                    "name": "inventoryMenu",
+                    "label": "Inventory",
+                    "children": [
+                        {
+                            "name": "categoriesSubMenu",
+                            "label": "Categories",
+                            "componentName": "categoriesMaster"
+                        },
+                        {
+                            "name": "brandsSubMenu",
+                            "label": "Brands",
+                            "componentName": "brands"
+                        },
+                        {
+                            "name": "productsSubMenu",
+                            "label": "Products",
+                            "componentName": "products"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "payroll",
+            "label": "Payroll",
+            "children": [
+                {
+                    "name": "transactions",
+                    "label": "Transactions",
+                    "children": [
+                        {
+                            "name": "timeSheet",
+                            "label": "Time Sheet",
+                            "children": []
+                        },
+                        {
+                            "name": "leaves",
+                            "label": "Leaves",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "processing",
+                    "label": "Processing",
+                    "children": [
+                        {
+                            "name": "processPayroll",
+                            "label": "Process Payroll",
+                            "children": []
+                        },
+                        {
+                            "name": "undoProcessing",
+                            "label": "Undo Processing",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "stationary",
+                    "label": "Stationary",
+                    "children": [
+                        {
+                            "name": "payslips",
+                            "label": "Payslips",
+                            "children": []
+                        },
+                        {
+                            "name": "loanAccount",
+                            "label": "Loan Account",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "reports",
+                    "label": "Reports",
+                    "children": [
+                        {
+                            "name": "providentFund",
+                            "label": "ProvidentFund",
+                            "children": []
+                        },
+                        {
+                            "name": "esi",
+                            "label": "ESI",
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "marketing",
+            "label": "Marketing",
+            "children": [
+                {
+                    "name": "mission",
+                    "label": "Mission",
+                    "children": [
+                        {
+                            "name": "missionStatement",
+                            "label": "Mission Statement",
+                            "children": []
+                        },
+                        {
+                            "name": "objectives",
+                            "label": "Objectives",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "analysis",
+                    "label": "Analysis",
+                    "children": [
+                        {
+                            "name": "opportunities",
+                            "label": "Opportunities",
+                            "children": []
+                        },
+                        {
+                            "name": "5canalysis",
+                            "label": "5C Analysis",
+                            "children": []
+                        },
+                        {
+                            "name": "swotAnalysis",
+                            "label": "SWOT Analysis",
+                            "children": []
+                        },
+                        {
+                            "name": "pestAnalysis",
+                            "label": "PEST Analysis",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "strategy",
+                    "label": "Strategy",
+                    "children": [
+                        {
+                            "name": "targetAudience",
+                            "label": "Target Audience",
+                            "children": []
+                        },
+                        {
+                            "name": "measurableGoals",
+                            "label": "Measurable Goals",
+                            "children": []
+                        },
+                        {
+                            "name": "budget",
+                            "label": "Budget",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "marketingMix",
+                    "label": "Marketing Mix",
+                    "children": [
+                        {
+                            "name": "productDevelopment",
+                            "label": "Product Dev",
+                            "children": []
+                        },
+                        {
+                            "name": "pricing",
+                            "label": "Pricing",
+                            "children": []
+                        },
+                        {
+                            "name": "promotion",
+                            "label": "Promotion",
+                            "children": []
+                        },
+                        {
+                            "name": "placeAndDistribution",
+                            "label": "Place and Distribution",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "implementation",
+                    "label": "Implementation",
+                    "children": [
+                        {
+                            "name": "planToAction",
+                            "label": "Plan to Action",
+                            "children": []
+                        },
+                        {
+                            "name": "monitorResults",
+                            "label": "Monitor Results",
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "recruitment",
+            "label": "Recruitment",
+            "children": [
+                {
+                    "name": "planning",
+                    "label": "Planning",
+                    "children": [
+                        {
+                            "name": "vacancy",
+                            "label": "Vacancy",
+                            "children": []
+                        },
+                        {
+                            "name": "resumesScreening",
+                            "label": "Resume Screening",
+                            "children": []
+                        },
+                        {
+                            "name": "jobAnalysis",
+                            "label": "Job Analysis",
+                            "children": []
+                        },
+                        {
+                            "name": "jobDescription",
+                            "label": "Job Description",
+                            "children": []
+                        },
+                        {
+                            "name": "jobSpecification",
+                            "label": "Job Specification",
+                            "children": []
+                        },
+                        {
+                            "name": "jobEvaluation",
+                            "label": "Job Evaluation",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "execution",
+                    "label": "Execution",
+                    "children": [
+                        {
+                            "name": "directRecruitment",
+                            "label": "Direct Recruitment",
+                            "children": []
+                        },
+                        {
+                            "name": "employmentExchange",
+                            "label": "Employment Exch.",
+                            "children": []
+                        },
+                        {
+                            "name": "employmentAgencies",
+                            "label": "Employment Ag.",
+                            "children": []
+                        },
+                        {
+                            "name": "advertisement",
+                            "label": "Advertisement",
+                            "children": []
+                        },
+                        {
+                            "name": "professionalAssociation",
+                            "label": "Proff Associations",
+                            "children": []
+                        },
+                        {
+                            "name": "campusRecruitment",
+                            "label": "Campus Recruit",
+                            "children": []
+                        },
+                        {
+                            "name": "wordOfMouth",
+                            "label": "Word Of Mouth",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "screening",
+                    "label": "Screening",
+                    "children": [
+                        {
+                            "name": "processing",
+                            "label": "Processing",
+                            "children": []
+                        },
+                        {
+                            "name": "finalization",
+                            "label": "Finalization",
+                            "children": []
+                        }
+                    ]
+                },
+                {
+                    "name": "stationary",
+                    "label": "Stationary",
+                    "children": [
+                        {
+                            "name": "coverLetter",
+                            "label": "Cover Letter",
+                            "children": []
+                        },
+                        {
+                            "name": "appointmentLetter",
+                            "label": "Appointment Letter",
+                            "children": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+
