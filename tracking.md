@@ -1,30 +1,6 @@
 
 ## python pdf libs
 borb, reportlab, fpdf2
-# PDF report to response
-https://tutorial101.blogspot.com/2021/06/generate-pdf-report-using-python-flask.html
-## Logic and functionality for pdf print of sale bill and money receipt
-1. Create HTML template for sale bill
-2. function in python: GetInvoicePDF(id)
-	Pulls invoice data from postgresql against id
-	creates HTML and then PDF from data
-3. Functionality
-	a) Save invoice: Saves invoice: Get new saved invoice: Get PDF: returns PDF
-	b) PDF displayed and ask for print
-	c) Settings for auto SMS message and email: General settings stored: each time sending isSMS, isEmail
-	d) If isSMS and isEmail send generated PDF through link / email
-	e) In view, a column for print: Gives option for print, SMS, email in dialog box and does the needful
-
-
-GST
-Capital Chowr. Pvt Ltd	: 19AACCC5685L1Z3
-Capital Electronics old	: 19ADMPA9760G1Z9
-Capital Electronics 	: AA190917007566R
-CCPL					: 19AACCC5685L1Z3
-Nav technology 			: 19AEVPA1583K1Z0
-NTPL 					: 19AABCN7935M1ZU
-SSPL 					: 19AAJCS0651F1ZD
-Netwoven 				: 19AACCN3894N1ZP
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
@@ -57,121 +33,53 @@ create installer from innosetup
 ## Testing strategy
 1. Delete all orphan entries in TranH table
 
-## Notes
-1. 09-10-2021: 1st attempt to transfer to Material-UI version 5.x failed because xgrid breaks the UI
-2. Reverted back, Can redo by:
-a) replace with @mui in imports
-b) Some work in App.tsx
-c) In all Typography comment out disableTypography
+# Priority 1
+1.0 Auto subledger create bill
+2.0 Category-> Product hierarchy with stock qty and value, search on product
+3.0 Purchase invoice scanned pdf save
+4.0 Opening stock entry mechanism
+5.0 Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
+6.0 Provision to input product price. At present cannot input product price
+7.0 When new account code is created that should immediately be visible at payment options
 
-3. On 17-10-2021 2nd attempt to migrate to v5 in folder trace-client-v5: failed
-	a) Everything worked fine in those screens where x-grid-prof is not there
-	b) In components where x-grid-prof is existing, the css does not work correctly, Colors changes and spacing issues occured
-	c) even upgraded @mui/x-data-grid-pro@next whcich installed version '5.0.0-beta.4', this also not worked
+# Fixing short pending
+1. Bill fixing
+1.1 Convert Authentication, complete system to x-data-grid-prof from material-table
+1.2 Account balances in vouchers
+1.3 Uplift x-data-grid-prof to top level common, maybe global-components folder
+1.4 Remove material-table from authentication/generic-crud; its using old version of material-ui
+2. Debit credit notes printing
+3. In Grid view provide title, header and subtitle. Check if alteration possible while PDF printing
+4. Accounts master, when edited, data is not refreshed after save
+5. Accounts address entry, do it modal and make email address optional
+6. Journal, When ASSET GST is not allowed. Make it allowed for assets also
+7. In vouchers, if party selected and its GSTIN available then display it
+8. Accounts creation email should be optional
+9. Export of PL, BL and TB should be lowest and highest levels, in PDF print
+10. Show ledger balance at the time of data entry
+11. Purchase entry unable to enter gst price of an item
 
-4. Upgradation attempt on 17/01/2022 for all libraries upgrade
-    a) Use yarn instead of npm install
-    b) use yarn add eslint-config-react-app -D to evade some errors
-    c) Comment out disableTypography
-    d) In some places because of TypeScript: must use e: any in error handling
-    e) In MultiLineTextBox: rowsMin -> minRows
-    f) Convert @material-ui/core to @mui/material
-    g) for useTheme, createStyles. makeStyles use @mui/styles
-    h) for Theme use @mui/material
-    i) Make changes in App.tsx for themeProvider and colors etc
-    j) converted x-data-grid-pro to latest version
-    j) After doing all this, still the UI breaks. So need to learn mui v5 from begining specially theme
-    k) makeStyles is deprecated. All deprecated items are kept in @mui/styles. It will be removed in V6. The correct styling package to use is @mui/material/styles
-    l) Need to use StyledEngineProvider injectFirst, in the App.tsx
-    m) Made several changes for makeStyles to be imported from @mui/styles; It will be deprecated in v6
-    n) Still material-table being used in authentication/generic-crud, this has dependency on @material-ui/core, needs to be removed
-    o) remove <h3> and use div instead in all <DialogTitle>
-    p) Issue with Alert of snackbar, breaks. Fixed it by not using MuiAlert
-    q) In NumberFormat and TextBoxes do variant='standard'. Fixed Purchases and sales many textboxes
-    r) Voucher and sales, purchases tab color problems fixed
-    s) Bank recon after select a bank error, fixed
-    t) react-scripts ver 4.x works well, but if it is upgraded to react-scripts v5.x, there is some module error problem which is related to webpack v5, which is associated with react-scripts v5. At present I don't have a remedy, so I stick to react-scripts v4.x in package.json
-    u) Use the useTheme() instead of theme all over
-    v) Need to delete node_modules and lock files, then yarn or npm install
-
-5. Bugfixing required for material-ui V5 migration
-                                              a) snackbar Alert fix
-                                              b) PdfPrint dialog not appearing
-                                              c) Sales tab color fixing
-                                              d) All transactions Reverse checkbox uncheck not working
-  e) Remove material-table from authentication/generic-crud; its using old version of material-ui
-                                              f) New contact in sales warning: 'value of input should not be null, it should be empty'
-                                              g) Many text boxes a box is coming
-                                              h) Voucher tab color problem
-                                              i) Bank recon after bank select not working
-                                              j) Product grid not working properly
-                                              k) Purchase return fix
-                                              l) Debit notes / credit notes tab color
-
-# Pending
-
-# Working on
-1.0 Accounts master, when edited, data is not refreshed after save
-1.1 Accounts address entry, do it modal and make email address optional
-1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
-1.3 In vouchers, if party selected and its GSTIN available then display it
-1.8 Convert sales and purchases to div and remove table, to make them more responsive
-1.9 Convert Authentication, complete system to x-data-grid-prof from material-table
-1.9.1 Accounts creation email should be optional
-1.9.2 
-1.9.3 Easy sales implementation
-
-1.9.5 
-2. Account balances in vouchers
-4. Provide a way to come out of app in mobile. Presently there is no way
-
-## Bug fixing
-1. 
-2. GSTIN starting with 19 check for CGST, SGST. In sales and purchases, Violation of rule should be allowed due to SEZ
-
-## Functionality
-	1. Auto subledger create bill
-	3. Data grid, provision for header, Title, subtitle: useful for showing ledger of party. Check if pdf download can be changed on the fly in x-data-grid-prof
-	4. Footer Trace version copyright
-	5. Uplift x-data-grid-prof to top level common, maybe global-components folder
-	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
-	7. Provision to input product price. At present cannot input product price
-	8. Subscribe to some event so that update possible through socket
-	9. 
-	10. Universally make it responsive
-	11. Remove references to datacache for accounts and use getFromBag concept
-	13. Export of PL, BL and TB should be lowest and highest levels, in PDF print
-	14. 
-	15. Show ledger balance at the time of data entry
-	16. When new account code is created that should immediately be visible at payment options
-	17. Purchase entry unable to enter gst price of an item
-	18. Wherever possible auto update reports with sockets
-
-## New features
-	1. Purchase invoice upload and search on metadata. Click will show invoice in PDF
-	2. Bill wise payment
-	3. 
-	4. First page reporting charts
-	5. Approval of transactions
-	6. Document storage of purchase bills with meta data
-	7. Edit from Bank Recon
-	8. From Voucher entry add master accounts
-
-## Future work
-	1. Try out gzip in apache server, which is not working at present
-	2. Rework on accounts master. It is too big and new contact save takes twice at first time
-	3. Server logs, client logs
-	4. Mechanism to connect to local or any other database on cloud
-	5. Provide a writeup on how GST is taken care in Trace
-	6. Database backup strategy
-	7. Think of same user iD / email in multiple clients
-	8. Independent databases
-
-## Maintainance
-1.30 Github release management
-1.31 Encryption of core libraries
-5.1 Backup and restore strategy
-5.2 Upgraded database for all instances
+# Long term
+1. Convert sales and purchases to div and remove table, to make them more responsive
+2. Easy sales implementation
+3. Provide a way to come out of app in mobile. Presently there is no way
+4. Footer Trace version copyright
+5. Universally make it responsive
+6. Remove references to datacache for accounts and use getFromBag concept
+7. Purchase invoice upload and search on metadata. Click will show invoice in PDF
+8. Bill wise payment
+9. First page reporting charts
+10. Approval of transactions
+11. Edit from Bank Recon
+12. From Voucher entry add master accounts
+13. Rework on accounts master. It is too big and new contact save takes twice at first time
+14. Server logs, client logs
+15. Mechanism to connect to local or any other database on cloud
+16. Provide a writeup on how GST is taken care in Trace
+17. Database backup strategy
+18. Payment gateway for purchase of Trace
+19. Backup and restore strategy
+20. Upgrade database for all instances 
 
 # 21-01-2022 - 23-01-2022
 1. Complete upgrade of all libraries
@@ -179,6 +87,17 @@ c) In all Typography comment out disableTypography
 3. General ledger save as pdf, bug fix
 4. Several bug fixes which cropped up due to upgradation of libraries and material UI
 5. Fixed many warnings
+6. Snackbar Alert fix
+7. PdfPrint dialog not appearing
+8. Sales tab color fixing
+9. All transactions Reverse checkbox uncheck not working
+10. New contact in sales warning: 'value of input should not be null, it should be empty'
+11. Many text boxes a box is coming
+12. Voucher tab color problem
+13. Bank recon after bank select not working
+14. Product grid not working properly
+15. Purchase return fix
+16. Debit notes / credit notes tab color
 
 # 17-01-2022 = 20-01-2022
 1. Working on migration of v4.x to version 5.x
@@ -915,3 +834,13 @@ select h."id" as "tranHeaderId", "autoRefNo", "userRefNo", h."remarks" as "commo
  		join "TranD" d
  			on h."id" = d."tranHeaderId"
 	where "tranTypeId" = 7
+
+GST
+Capital Chowr. Pvt Ltd  : 19AACCC5685L1Z3
+Capital Electronics old : 19ADMPA9760G1Z9
+Capital Electronics   : AA190917007566R
+CCPL          : 19AACCC5685L1Z3
+Nav technology      : 19AEVPA1583K1Z0
+NTPL          : 19AABCN7935M1ZU
+SSPL          : 19AAJCS0651F1ZD
+Netwoven        : 19AACCN3894N1ZP

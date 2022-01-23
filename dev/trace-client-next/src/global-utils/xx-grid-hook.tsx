@@ -1,15 +1,7 @@
-import {
-    _,
-    useEffect,
-    useState,
-    useRef,
-} from '../../../../imports/regular-imports'
-import {
-    Theme,
-    createStyles,
-    makeStyles,
-} from '../../../../imports/gui-imports'
-import { useSharedElements } from './shared-elements-hook'
+import { _, useEffect, useState, useRef } from '../imports/regular-imports'
+import { Theme, createStyles, makeStyles } from '../imports/gui-imports'
+import { useIbuki, utilMethods } from '../imports/trace-imports'
+import { manageEntitiesState } from './esm'
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
@@ -31,20 +23,13 @@ function useXXGrid(gridOptions: any) {
         viewLimit: 0,
     })
 
-    const {
-        emit,
-        debounceFilterOn,
-        filterOn,
-        getCurrentEntity,
-        getFromBag,
-        execGenericView,
-        toDecimalFormat,
-    } = useSharedElements()
+    const { emit, debounceFilterOn, filterOn } = useIbuki()
+    const { execGenericView, toDecimalFormat } = utilMethods()
+    const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const pre: any = meta.current
 
     useEffect(() => {
-        let {sqlQueryArgs, sqlQueryId, } = gridOptions
-        // const curr = meta.current
+        let { sqlQueryArgs, sqlQueryId } = gridOptions
         pre.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
         const fetchIbukiMessage =
@@ -94,7 +79,7 @@ function useXXGrid(gridOptions: any) {
     const entityName = getCurrentEntity()
 
     async function fetchRows(queryId: string, queryArgs: any) {
-        if ((!queryId) || (!queryArgs)) {
+        if (!queryId || !queryArgs) {
             return
         }
         queryArgs['no'] =
@@ -276,14 +261,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }

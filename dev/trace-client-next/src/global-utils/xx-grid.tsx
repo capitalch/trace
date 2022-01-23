@@ -1,5 +1,5 @@
 import { useStyles } from './xx-grid-hook'
-import { _, clsx, } from '../../../../imports/regular-imports'
+import { _, clsx, } from '../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -8,15 +8,14 @@ import {
     Button,
     TextField,
     Checkbox,
-} from '../../../../imports/gui-imports'
+} from '../imports/gui-imports'
 import {
     CloseSharp,
     DeleteForever,
     Search,
     SyncSharp,
     Edit,
-} from '../../../../imports/icons-import'
-
+} from '../imports/icons-import'
 import {
     DataGridPro,
     GridToolbarFilterButton,
@@ -30,8 +29,8 @@ import {
     GridCellParams,
 } from '@mui/x-data-grid-pro'
 
-import { useSharedElements } from './shared-elements-hook'
 import { useXXGrid } from './xx-grid-hook'
+import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
 
 interface SpecialColumnOptions {
     isEdit?: boolean
@@ -108,8 +107,10 @@ function XXGrid(gridOptions: XXGridOptions) {
         toggleOrder,
     } = useXXGrid(gridOptions)
 
-    const { debounceEmit, emit, isMediumSizeDown, toDecimalFormat } =
-        useSharedElements()
+    const {debounceEmit, emit} = useIbuki()
+    const {isMediumSizeDown} = useTraceGlobal()
+    const {toDecimalFormat} = utilMethods()
+    
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
