@@ -63,7 +63,7 @@ function ReactForm(props: ReactFormParams) {
                 {formJson.items && formJson.items.map((item: any, index: number) => {
                     const Tag = componentStore[item.type]
 
-                    if (initialValues /* && (Object.keys(initialValues).length > 0) */) {
+                    if (initialValues) {
                         item.value = initialValues[item.name]  // || item.value
                     }
                     let Comp =
@@ -106,7 +106,4 @@ function ReactForm(props: ReactFormParams) {
     return getForm()
 }
 
-export default ReactForm;
-/*
-
-*/
+export default ReactForm

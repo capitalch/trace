@@ -33,7 +33,7 @@ function CategoriesMaster() {
         return () => {
             meta.current.isMounted = false
         }
-    }, [])
+    }, [getData, meta])
 
     const {
         confirm,
@@ -113,7 +113,7 @@ function CategoriesMaster() {
                 scrollHeight="calc(100vh - 22rem)"
                 expandedKeys={getFromBag('categoriesExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e:any) => {
+                onToggle={(e: any) => {
                     setInBag('categoriesExpandedKeys', e.value)
                     utilFunc().saveScrollPos()
                     meta.current.isMounted && setRefresh({})
@@ -145,7 +145,6 @@ function CategoriesMaster() {
                         ret = (
                             <div>
                                 <Button
-                                    // variant="contained"
                                     color="primary"
                                     size="small"
                                     startIcon={<Edit />}
@@ -156,7 +155,6 @@ function CategoriesMaster() {
                                 <span> </span>
                                 {isAddChildAllowed && (
                                     <Button
-                                        // variant="contained"
                                         color="secondary"
                                         size="small"
                                         startIcon={<Add />}
@@ -329,7 +327,6 @@ function CategoriesMaster() {
                     selectionMode="single"
                     onSelect={(e: any) => {
                         destinationPath = e.node.data.path
-                        // console.log(e:any)
                     }}
                     onSelectionChange={(e: any) => {
                         newParentId = e.value
@@ -411,8 +408,8 @@ function CategoriesMaster() {
                 .then(async () => {
                     await saveForm(options)
                 })
-                .catch(() => {})
-        } catch (e:any) {
+                .catch(() => { })
+        } catch (e: any) {
             console.log(e)
         }
     }

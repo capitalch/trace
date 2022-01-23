@@ -6,7 +6,7 @@ import { DebitCreditNotesView } from './debit-credit-notes-view'
 
 function CreditNotes({ drillDownEditAttributes }: any = {}) {
     const classes = useStyles()
-    const { handleOnTabChange, meta, multiData } = useDebitCreditNotes(
+    const { handleOnTabChange, multiData } = useDebitCreditNotes(
         drillDownEditAttributes
     )
     const { emit } = useSharedElements()

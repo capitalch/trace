@@ -14,7 +14,6 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    // MuiAlert,
     Theme,
 } from '../imports/gui-imports'
 import {
@@ -468,7 +467,7 @@ function useTraceHeader({ setRefresh }: any) {
             const data = JSON.parse(JSON.stringify(dt))
             try {
                 if (formId === 'login') {
-                    const res = await processLogin(data)
+                    await processLogin(data)
                 } else if (formId === 'changeUid') {
                     await processChangeUid(data)
                 } else if (formId === 'changePwd') {

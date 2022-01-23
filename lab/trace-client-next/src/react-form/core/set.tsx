@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { IconButton } from '@mui/material'
-// import Add from '@material-ui/icons/AddCircle'
 import Add from '@mui/icons-material/AddCircle'
 import RemoveCircleOutline from '@mui/icons-material/Cancel'
 import { ErrorDisplay } from './error-display'
@@ -145,6 +144,3 @@ const Set = (props: any) => {
 }
 
 export { Set }
-
-/*
- */

@@ -20,7 +20,6 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
         queryArgs,
         specialColumns,
         summaryColNames,
-        title,
     } = getXXGridParams()
     return (
         <div className={classes.content}>

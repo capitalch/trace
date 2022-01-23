@@ -15,7 +15,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const ctx: any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
     const {

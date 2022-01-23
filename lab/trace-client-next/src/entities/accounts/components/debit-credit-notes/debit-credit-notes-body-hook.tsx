@@ -18,18 +18,11 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         getCurrentComponent,
         getFromBag,
         genericUpdateMasterDetails,
-        hotFilterOn,
         isInvalidDate,
-        map,
     } = useSharedElements()
 
-    const isoFormat = 'YYYY-MM-DD'
     const meta: any = useRef({
         isMounted: false,
-        // debtorCreditorLedgerAccounts: [],
-        // saleLedgerAccounts: [],
-        // purchaseLedgerAccounts: [],
-        // allAccounts: [],
     })
     const accounts = arbitraryData.body.accounts
 
@@ -40,7 +33,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         return () => {
             meta.current.isMounted = false
         }
-    }, [])
+    }, [setAccounts])
 
     function setAccounts() {
         // allAccounts
@@ -68,7 +61,7 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
         const debtorCreditorLedgerAccounts = allAccounts.filter(
             (el: any) =>
                 drCrArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf == 'L') &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 !el.isAutoSubledger
         )
         accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
@@ -95,7 +88,6 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
             } else if (arbitraryData.isViewBack) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-                // arbitraryData.body.isViewBack = false
                 emit('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB', 1)
                 emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA', null)
             } else {
@@ -183,9 +175,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .print-submit': {
                     marginLeft: 'auto',
                     marginRight: theme.spacing(2),
-                    '& .print-button':{
+                    '& .print-button': {
                         marginRight: theme.spacing(1),
-                        '& .print-icon':{
+                        '& .print-icon': {
                             color: theme.palette.indigo.dark
                         }
                     }
@@ -232,9 +224,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         marginLeft: 'auto',
                         marginRight: theme.spacing(2),
                         height: theme.spacing(4),
-                        '& .print-button':{
+                        '& .print-button': {
                             marginRight: theme.spacing(1),
-                            '& .print-icon':{
+                            '& .print-icon': {
                                 color: theme.palette.indigo.dark
                             }
                         }

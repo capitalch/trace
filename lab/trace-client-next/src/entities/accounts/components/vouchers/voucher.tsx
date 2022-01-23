@@ -5,12 +5,10 @@ import { Payment } from './voucher-type/payment'
 import { Receipt } from './voucher-type/receipt'
 import { Contra } from './voucher-type/contra'
 import { VoucherView } from './voucher-view'
-import { MultiDataContext } from '../common/multi-data-bridge'
-// import { VoucherContext } from './voucher-context'
 
 function Voucher({ loadComponent, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const { arbitraryData, getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent, drillDownEditAttributes)
+    const { getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent, drillDownEditAttributes)
 
     function SelectedVoucherComponent({ hidden }: any) {
         const logic: any = {
@@ -37,7 +35,7 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
             </Tabs>
             <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
             <VoucherView
-                hidden={meta.current.tabValue !== 1}                
+                hidden={meta.current.tabValue !== 1}
                 tranTypeId={getTranTypeId()}
             />
         </div>

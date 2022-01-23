@@ -1,6 +1,5 @@
 import {
     moment,
-    useConfirm,
     useState,
     useEffect,
     useRef,
@@ -119,7 +118,7 @@ function AccountsLedgerDialog() {
             subs3.unsubscribe()
             meta.current.isMounted = false
         }
-    }, [])
+    }, [doDelete, emit, filterOn, getAccountName, getArtifacts, isAllowedUpdate])
 
     return (
         <div>
@@ -130,7 +129,6 @@ function AccountsLedgerDialog() {
                 fullWidth={true}
                 onClose={closeDialog}>
                 <DialogTitle
-                    // disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
                     <div>{'Account: '.concat(meta.current.accName)}</div>
@@ -155,10 +153,8 @@ function AccountsLedgerDialog() {
                         specialColumns={getArtifacts().specialColumns}
                         toShowOpeningBalance={true}
                         toShowClosingBalance={true}
-                        // toShowColumnBalance={true}
                         toShowDailySummary={true}
                         toShowReverseCheckbox={true}
-                        // xGridProps={{ disableSelectionOnClick: true }}
                         jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                     />
                 </DialogContent>
@@ -171,10 +167,8 @@ function AccountsLedgerDialog() {
                 maxWidth="xl"
                 fullWidth={true}
                 onClose={closeChildDialog}
-                // fullScreen={true}
             >
                 <DialogTitle
-                    // disableTypography
                     id="generic-child-dialog-title"
                     className="dialog-title">
                     <div>{meta.current.childDialogTiitle}</div>
@@ -226,7 +220,7 @@ function AccountsLedgerDialog() {
                     )
                     setRefresh({})
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -243,7 +237,6 @@ function AccountsLedgerDialog() {
                 />
             )
         } else if (attrs.tranTypeId === 4) {
-            // 4: Sales, 9: sales return
             ret = <Sales saleType="sal" drillDownEditAttributes={attrs} />
         } else if (attrs.tranTypeId === 9) {
             ret = <Sales saleType="ret" drillDownEditAttributes={attrs} />

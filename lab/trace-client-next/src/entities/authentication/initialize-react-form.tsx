@@ -2,7 +2,6 @@ import { initialize } from '../../react-form/common/react-form-hook'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { usingIbuki } from '../../global-utils/ibuki'
 import formLevelValidators from './artifacts/form-level-validators'
-// import customMethods from './artifacts/custom-methods'
 import { sharedArtifacts } from '../../shared-artifacts/shared-artifacts-map'
 import graphqlQueries from './artifacts/graphql-queries-mutations'
 
@@ -13,6 +12,5 @@ initialize({
     , usingIbuki: usingIbuki
     , sharedArtifacts: sharedArtifacts
     , formLevelValidators: formLevelValidators
-    // , customMethods: customMethods
     , graphqlQueries: graphqlQueries
 })

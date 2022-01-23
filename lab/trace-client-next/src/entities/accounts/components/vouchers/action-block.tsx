@@ -20,7 +20,6 @@ function ActionBlock({
     const [, setRefresh] = useState({})
     const ctx:any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
-    // const arbitraryData: any = useContext(VoucherContext)
     const isGst = !!arbitraryData.header.isGst
     const tranTypeId = arbitraryData.header.tranTypeId
     const classes = useStyles({ actionType, isGst, tranTypeId })
@@ -44,7 +43,6 @@ function ActionBlock({
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
-            // subs3.unsubscribe()
         }
     }, [])
     return (
@@ -154,7 +152,6 @@ function ActionBlock({
                             className="right-aligned-numeric gst-rate"
                             customInput={TextField}
                             decimalScale={2}
-                            // error={item.amount ? false : true}
                             fixedDecimalScale={true}
                             onFocus={(e:any) => {
                                 e.target.select()
@@ -441,7 +438,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
             '& .instr-no': {
                 width: theme.spacing(12),
-                // marginLeft: 0,
             },
             '& .gst-block': {
                 display: 'flex',
@@ -454,7 +450,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     fontSize: '0.8rem',
                 },
                 marginLeft: ({ actionType, isGst }: any) => {
-                    // actionType === 'debits' ? 'auto' : 0,{
                     const { gstBlock }: any = getLeftMargin(actionType, isGst)
                     return gstBlock
                 },
@@ -464,8 +459,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     const { lineRef }: any = getLeftMargin(actionType, isGst, tranTypeId)
                     return lineRef
                 },
-                // actionType === 'credits' ? 0 : isGst ? 0 : 'auto',
-                // getLineRefLeftMargin(isGst, actionType),
             },
             '& .line-remarks': {
                 width: ({ isGst }: any) =>
@@ -478,7 +471,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .action-row': {
                 display: 'flex',
                 marginBottom: theme.spacing(1),
-                // justifyContent: 'space-between',
                 columnGap: theme.spacing(4),
                 flexWrap: 'wrap',
                 rowGap: theme.spacing(2),
@@ -488,7 +480,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         const { amount }: any = getLeftMargin(actionType, isGst)
                         return amount
                     },
-                    // actionType === 'credits' ? 'auto' : 0,
                 },
             },
         },

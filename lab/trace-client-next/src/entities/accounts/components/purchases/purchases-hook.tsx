@@ -73,7 +73,6 @@ export { usePurchases }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            // marginTop: theme.spacing(2),
             '& .tabs': {
                 backgroundColor: theme.palette.grey[200],
                 color: theme.palette.primary.dark,

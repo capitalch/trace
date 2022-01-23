@@ -31,7 +31,7 @@ const customControls = {
         useEffect(() => {
             const val = moment().format(dateFormat)
             parent[item.name] || (parent[item.name] = val)
-        }, [])
+        }, [dateFormat, item.name, parent])
         const maskMap: any = {
             'DD/MM/YYYY': '99/99/9999',
             'MM/DD/YYYY': '99/99/9999',

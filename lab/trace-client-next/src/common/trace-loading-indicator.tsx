@@ -22,7 +22,7 @@ function TraceLoadingIndicator() {
             subs.unsubscribe()
             meta.current.isMounted = false
         })
-    }, [])
+    }, [filterOn])
 
     return <div>
         <Backdrop

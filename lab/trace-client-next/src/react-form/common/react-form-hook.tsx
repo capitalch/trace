@@ -92,7 +92,6 @@ async function initialize(options: any = {}) {
 }
 
 async function registerCustomMethod(options: any) {}
-// , dFormat: any
 function getAllForms(
     entityName: string,
     allFormTemplates: any,

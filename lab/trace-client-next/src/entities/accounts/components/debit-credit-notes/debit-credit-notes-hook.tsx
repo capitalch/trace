@@ -11,7 +11,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { MultiDataContext } from '../common/multi-data-bridge'
-import {useSharedElements} from '../common/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
     const [, setRefresh] = useState({})
@@ -30,13 +30,12 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
                     'DEBIT-CREDIT-NOTES-FETCH-DATA-ON-ID-DRILL-DOWN-EDIT',
                     drillDownEditAttributes.tranHeaderId
                 )
-            // meta.current.shouldCloseParentOnSave = true
             multiData.debitCreditNotes.shouldCloseParentOnSave = true
         }
         return () => {
             meta.current.isMounted = false
         }
-    }, [])
+    }, [drillDownEditAttributes, emit, multiData.debitCreditNo])
 
     useEffect(() => {
         const subs1 = filterOn('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB').subscribe(
@@ -51,14 +50,13 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
             subs1.unsubscribe()
             subs2.unsubscribe()
         }
-    }, [])
+    }, [filterOn, handleOnTabChange, multiData.debitCreditNotes])
     const debitCreditNotesData = getFromBag('debitCreditNotesData')
-    if(debitCreditNotesData){
+    if (debitCreditNotesData) {
         multiData.debitCreditNotes = debitCreditNotesData
         setInBag('debitCreditNotesData', undefined)
     }
     function handleOnTabChange(e: any, newValue: number) {
-        // meta.current.value = newValue
         multiData.debitCreditNotes.tabValue = newValue
         if (newValue === 1) {
             emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA', null)
@@ -78,11 +76,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: theme.palette.primary.dark,
                 backgroundColor: theme.palette.grey[200],
                 marginTop: theme.spacing(0.5),
-                '& .reset':{
+                '& .reset': {
                     backgroundColor: theme.palette.blue.main,
                     color: theme.palette.getContrastText(theme.palette.blue.main),
                     height: theme.spacing(4),
-                    margin:'auto',
+                    margin: 'auto',
                 }
             },
         },

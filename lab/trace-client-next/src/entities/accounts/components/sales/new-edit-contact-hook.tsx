@@ -20,14 +20,6 @@ import cities from '../../../../data/cities.json'
 function useNewEditContact(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const billTo = arbitraryData.billTo
-
-    // billTo.countryOptions = [] //getCountries()
-    // billTo.selectedCountryOption = {}
-    // billTo.stateOptions = []
-    // billTo.selectedStateOption = {}
-    // billTo.cityOptions = []
-    // billTo.selectedCityOption = {}
-
     const classes = useStyles(arbitraryData.billTo)
 
     useEffect(() => {
@@ -74,9 +66,6 @@ function useNewEditContact(arbitraryData: any) {
         billTo.selectedStateOption = { label: null, value: null, stateCode: 0 }
         billTo.selectedCityOption = { label: null, value: null, stateCode: 0 }
         setStateOptions()
-        // billTo.country = { value: e.value, label: e.label }
-        // billTo.state = { value: null, label: null }
-        // billTo.city = { value: null, label: null }
         meta.current.isMounted && setRefresh({})
     }
 
@@ -88,15 +77,12 @@ function useNewEditContact(arbitraryData: any) {
         }
         setCityOptions()
         billTo.selectedCityOption = { label: null, value: null, stateCode: 0 }
-        // billTo.state = { value: e.value, label: e.label }
-        // billTo.city = { value: null, label: null }
         billTo.stateCode = e.stateCode
         meta.current.isMounted && setRefresh({})
     }
 
     function handleCityChange(e: any) {
         billTo.selectedCityOption = { value: e.value, label: e.label }
-        // billTo.city = { value: e.value, label: e.label }
         meta.current.isMounted && setRefresh({})
     }
 
@@ -320,11 +306,9 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleCountryChange}
                     placeholder="Select country"
-                    // options={getCountries()}
                     options={billTo.countryOptions}
                     styles={styles}
                     className="react-select-country"
-                    // value={arbitraryData.billTo.country || {}}
                     value={billTo.selectedCountryOption}></ReactSelect>
 
                 {/* States */}
@@ -333,11 +317,9 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleStateChange}
                     placeholder="Select State"
-                    // options={getStates()}
                     options={billTo.stateOptions}
                     styles={styles}
                     className="react-select-state"
-                    // value={arbitraryData.billTo.state || {}}
                     value={billTo.selectedStateOption}></ReactSelect>
 
                 {/* Cities */}
@@ -349,7 +331,6 @@ function useNewEditContact(arbitraryData: any) {
                     options={billTo.cityOptions}
                     styles={styles}
                     className="react-select-city"
-                    // value={arbitraryData.billTo.city || {}}
                     value={billTo.selectedCityOption}></ReactSelect>
 
                 {/* Pin */}

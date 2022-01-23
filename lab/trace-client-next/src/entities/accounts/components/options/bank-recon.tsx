@@ -29,16 +29,6 @@ function BankRecon() {
     const classes = useStyles()
     const { getCurrentWindowSize } = useTraceGlobal()
 
-    function handleDisabled() {
-        let ret = false
-        if (isControlDisabled('doBankRecon')) {
-            ret = true
-        } else {
-            ret = isDataNotChanged()
-        }
-        return (ret)
-    }
-
     const {
         columns,
         gridActionMessages,
@@ -120,12 +110,10 @@ function BankRecon() {
 
                     {/* submit */}
                     <Button
-                        // disabled={handleDisabled()}
                         color="secondary"
                         size="medium"
                         startIcon={<Save></Save>}
                         onClick={submitBankRecon}
-                        // onClick={utilFunc().submitBankRecon}
                         variant="contained">
                         Submit
                     </Button>

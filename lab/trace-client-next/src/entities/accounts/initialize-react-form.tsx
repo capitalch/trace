@@ -1,4 +1,3 @@
-// import customMethods from './artifacts/custom-methods'
 import customControls from './artifacts/custom-controls'
 import graphqlQueries from './artifacts/graphql-queries-mutations'
 import { initialize } from '../../react-form/common/react-form-hook'
@@ -19,7 +18,6 @@ initialize({
     entityName: getCurrentEntity()
     , usingIbuki: usingIbuki
     , sharedArtifacts: sharedArtifacts
-    // , customMethods: customMethods
     , customComponents: customComponents
     , customControls: customControls
     , setLevelValidators: setLevelValidators

@@ -43,7 +43,6 @@ function useBillTo(arbitraryData: any) {
             meta.current.searchFilter = ''
             setRefresh({})
         })
-        // subs1.add(subs2)
         return () => {
             meta.current.isMounted = false
             subs1.unsubscribe()
@@ -84,7 +83,6 @@ function useBillTo(arbitraryData: any) {
         meta.current.searchFilter = ''
         meta.current.isMounted && setRefresh({})
         arbitraryData.salesCrownRefresh()
-        // emit('SALES-CROWN-REFRESH', null)
     }
 
     function handleNewEdit() {
@@ -164,7 +162,6 @@ function useBillTo(arbitraryData: any) {
                                     setCountryStateCityValuesFromLabels()
                                     meta.current.isMounted && setRefresh({})
                                     arbitraryData.salesCrownRefresh()
-                                    // emit('SALES-CROWN-REFRESH', null)
                                 }}
                                 key={index}
                                 dense={true}

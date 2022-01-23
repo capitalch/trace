@@ -1,16 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { manageFormsState } from './fsm'
 import clsx from 'clsx'
-import { Check } from '@mui/icons-material'
 
 import {
     Tabs,
     Tab,
-    Box,
-    Typography,
-    Paper,
     Card,
-    Icon,
 } from '@mui/material'
 
 function TabsMaterial({
@@ -30,7 +25,6 @@ function TabsMaterial({
     const [, setRefresh] = useState({})
     const { getUseIbuki, initField } = manageFormsState()
     const usingIbuki = getUseIbuki()
-    const { filterOn } = usingIbuki()
 
     useEffect(() => {
         meta.current.isMounted = true

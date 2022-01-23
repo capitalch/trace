@@ -31,7 +31,6 @@ import { useProductUtils } from '../common/product-utils-hook'
 
 function usePurchaseItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
-    // const al = arbitraryData.lineItems
     const errorObject = arbitraryData.errorObject
     const {
         confirm,
@@ -334,7 +333,6 @@ function usePurchaseItems(arbitraryData: any) {
             rowData.serialNumbers = JSON.parse(
                 JSON.stringify(pre.serialNumbers)
             )
-            // allErrorMethods().setSlNoError(rowData)
             meta.current.showDialog = false
             meta.current.isMounted && setRefresh({})
 
@@ -437,7 +435,6 @@ function usePurchaseItems(arbitraryData: any) {
                             variant="body1">
                             Search
                         </Typography>
-                        {/* <NewProduct isIconButton={false} /> */}
                     </div>
                 }
                 body={(rowData: any) => (
@@ -485,8 +482,6 @@ function usePurchaseItems(arbitraryData: any) {
                                 rowData.upcCode = e.target.value
                                 rowData.isGstInvoice =
                                     arbitraryData.isGstInvoice
-                                // allErrorMethods().setUpcCodeError(rowData)
-                                // meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData?.upcCode) {
                                     debounceEmit('DEBOUNCE-ON-CHANGE', {
@@ -498,12 +493,10 @@ function usePurchaseItems(arbitraryData: any) {
                                 }
                             }}
                             onFocus={(e: any) => {
-                                // meta.current.isDataChanged = false
                                 e.target.select()
                             }}
                             onKeyDown={(e: any) => {
                                 if (e.keyCode === 13) {
-                                    // e.target.blur()
                                 } else if (e.keyCode === 27) {
                                     rowData.upcCode = undefined
                                     meta.current.isMounted && setRefresh({})
@@ -526,9 +519,6 @@ function usePurchaseItems(arbitraryData: any) {
                             allowNegative={false}
                             customInput={TextField}
                             variant="standard"
-                            // error={allErrorMethods().getProductCodeError(
-                            //     rowData
-                            // )}
                             error={errorObject.isProductCodeError(rowData)}
                             onChange={(e: any) => {
                                 rowData.productCode = e.target.value
@@ -541,24 +531,8 @@ function usePurchaseItems(arbitraryData: any) {
                                 } else {
                                     clearRow(rowData)
                                 }
-                                // allErrorMethods().setProductCodeError(rowData)
                             }}
-                            // onValueChange={(values: any) => {
-                            //     const { value } = values
-
-                            //     rowData.productCode = value
-                            //     meta.current.isMounted && setRefresh({})
-                            //     if (rowData.productCode) {
-                            //         debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
-                            //     } else {
-                            //         clearRow(rowData)
-                            //     }
-                            //     allErrorMethods().setProductCodeError(rowData)
-                            //     // meta.current.isDataChanged = true
-
-                            // }}
                             onFocus={(e: any) => {
-                                // meta.current.isDataChanged = false
                                 e.target.select()
                             }}
                             onKeyDown={(e: any) => {
@@ -577,12 +551,10 @@ function usePurchaseItems(arbitraryData: any) {
                             allowNegative={false}
                             customInput={TextField}
                             variant="standard"
-                            // error={allErrorMethods().getHsnError(rowData)}
                             error={errorObject.isHsnError(rowData)}
                             onValueChange={(values: any) => {
                                 const { value } = values
                                 rowData.hsn = value
-                                // allErrorMethods().setHsnError(rowData)
                                 meta.current.isMounted && setRefresh({})
                             }}
                             value={rowData.hsn || ''}
@@ -616,25 +588,21 @@ function usePurchaseItems(arbitraryData: any) {
                             customInput={TextField}
                             decimalScale={2}
                             variant="standard"
-                            // error={allErrorMethods().getGstRateError(rowData)}
                             error={errorObject.isGstRateError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
                                 rowData.gstRate = floatValue || 0.0
                                 meta.current.isDataChanged = true
-                                // allErrorMethods().setGstRateError(rowData)
                                 computeRow(rowData)
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
                             }}
                             onFocus={(e: any) => {
                                 e.target.select()
-                                // meta.current.isDataChanged = false
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    // meta.current.isDataChanged &&
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false
@@ -659,14 +627,12 @@ function usePurchaseItems(arbitraryData: any) {
                             allowNegative={false}
                             className="center-aligned-numeric"
                             customInput={TextField}
-                            // error={allErrorMethods().getQtyError(rowData)}
                             error={errorObject.isQtyError(rowData)}
                             fixedDecimalScale={false}
                             onValueChange={(values: any) => {
                                 //using onChange event stores formatted value
                                 const { floatValue } = values
                                 rowData.qty = floatValue || 0.0
-                                // allErrorMethods().setQtyError(rowData)
                                 meta.current.isDataChanged = true
                                 computeRow(rowData)
                                 computeSummary()
@@ -674,11 +640,9 @@ function usePurchaseItems(arbitraryData: any) {
                             }}
                             onFocus={(e: any) => {
                                 e.target.select()
-                                // meta.current.isDataChanged = false
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    // meta.current.isDataChanged &&
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false
@@ -705,14 +669,12 @@ function usePurchaseItems(arbitraryData: any) {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
-                            // error={allErrorMethods().getDiscountError(rowData)}
                             error={errorObject.isDiscountError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 //using onChange event stores formatted value
                                 const { floatValue } = values
                                 rowData.price = floatValue || 0.0
-                                // allErrorMethods().setDiscountError(rowData)
                                 meta.current.isDataChanged = true
                                 computeRow(rowData)
                                 computeSummary()
@@ -720,11 +682,9 @@ function usePurchaseItems(arbitraryData: any) {
                             }}
                             onFocus={(e: any) => {
                                 e.target.select()
-                                // meta.current.isDataChanged = false
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    // meta.current.isDataChanged &&
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false
@@ -752,14 +712,11 @@ function usePurchaseItems(arbitraryData: any) {
                             customInput={TextField}
                             decimalScale={2}
                             isNumericString={true}
-                            // error={allErrorMethods().getDiscountError(rowData)}
                             error={errorObject.isDiscountError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 const { floatValue, value } = values
                                 rowData.priceGst = floatValue || 0.0
-
-                                // allErrorMethods().setDiscountError(rowData)
                                 meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                             }}
@@ -778,7 +735,6 @@ function usePurchaseItems(arbitraryData: any) {
                             }}
                             onKeyDown={(e: any) => {
                                 if ([9, 13].includes(e.keyCode)) {
-                                    // meta.current.isDataChanged &&
                                     computeRow(rowData)
                                     computeSummary()
                                     meta.current.isDataChanged = false
@@ -805,14 +761,12 @@ function usePurchaseItems(arbitraryData: any) {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
-                            // error={allErrorMethods().getDiscountError(rowData)}
                             error={errorObject.isDiscountError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
                                 meta.current.isDataChanged = true
                                 rowData.discount = floatValue || 0.0
-                                // allErrorMethods().setDiscountError(rowData)
                                 computeRow(rowData)
                                 computeSummary()
                                 meta.current.isMounted && setRefresh({})
@@ -981,7 +935,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 justifyContent: 'space-between',
             },
             '& .items': {
-                // minWidth: '100rem',
                 '& .delete-icon': {
                     fontSize: '1.5rem',
                     color: theme.palette.secondary.main,
@@ -1064,110 +1017,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
-
-// function allErrorMethods() {
-//     function getDiscountError(rowData: any) {
-//         const ret = rowData.price - rowData.discount >= 0 ? undefined : true
-//         return ret
-//     }
-
-//     function setDiscountError(rowData: any) {
-//         const er = getDiscountError(rowData)
-//         if (er !== rowData.errorsObject.discountError) {
-//             rowData.errorsObject.discountError = er
-//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-//         }
-//     }
-
-//     function getHsnError(rowData: any) {
-//         let ret = undefined
-//         if (arbitraryData.isGstInvoice) {
-//             ret = rowData.hsn ? undefined : true
-//         }
-//         return ret
-//     }
-
-//     function setHsnError(rowData: any) {
-//         const er = getHsnError(rowData)
-//         if (er !== rowData.errorsObject.hsnError) {
-//             rowData.errorsObject.hsnError = er
-//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-//         }
-//     }
-
-//     function getGstRateError(rowData: any) {
-//         let ret = undefined
-//         if (arbitraryData.isGstInvoice) {
-//             ret =
-//                 rowData.gstRate > 0 && rowData.gstRate < 100
-//                     ? undefined
-//                     : true
-//         } else {
-//             ret = rowData.gstRate === 0 ? undefined : true
-//         }
-//         return ret
-//     }
-
-//     function setGstRateError(rowData: any) {
-//         const er = getGstRateError(rowData)
-//         if (er !== rowData.errorsObject.gstRateError) {
-//             rowData.errorsObject.gstRateError = er
-//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-//         }
-//     }
-
-//     function getProductCodeError(rowData: any) {
-//         return rowData.productCode ? undefined : true
-//     }
-
-//     function setProductCodeError(rowData: any) {
-//         const er = getProductCodeError(rowData)
-//         if (er !== rowData.errorsObject.productCodeError) {
-//             rowData.errorsObject.productCodeError = er
-//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-//         }
-//     }
-
-//     function getQtyError(rowData: any) {
-//         return rowData.qty ? undefined : true
-//     }
-
-//     function setQtyError(rowData: any) {
-//         const er = rowData.qty ? undefined : true
-//         if (er !== rowData.errorsObject.qtyError) {
-//             rowData.errorsObject.qtyError = er
-//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-//         }
-//     }
-
-//     function getSlNoError(rowData: any) {
-//         function getCount() {
-//             return rowData.serialNumbers.split(',').filter(Boolean).length
-//         }
-//         const ok = getCount() === rowData.qty || getCount() === 0
-//         return !ok
-//     }
-
-//     function setSlNoError(rowData: any) {
-//         const er = getSlNoError(rowData)
-//         if (er !== rowData.errorsObject.slNoError) {
-//             rowData.errorsObject.slNoError = er
-//             emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-//         }
-//     }
-
-//     return {
-//         getDiscountError,
-//         setDiscountError,
-//         getGstRateError,
-//         getHsnError,
-//         getProductCodeError,
-//         getQtyError,
-//         getSlNoError,
-//         setGstRateError,
-//         setHsnError,
-//         setProductCodeError,
-//         setQtyError,
-//         setSlNoError,
-//     }
-// }

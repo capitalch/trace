@@ -26,7 +26,3 @@ interface GenericViewValues {
 }
 
 export default graphqlQueries
-
-/*
-
-*/

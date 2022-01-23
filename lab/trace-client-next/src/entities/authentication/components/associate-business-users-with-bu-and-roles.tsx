@@ -11,7 +11,6 @@ function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
         emit,
         execGenericView,
         getLoginData,
-        hash,
         IconButton,
         resetForm,
         deleteRow,
@@ -173,8 +172,7 @@ function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
                     <IconButton
                         size='medium'
                         color='secondary'
-                        onClick={() => associateBusinessUsersWithRolesAndBu.update(node)}
-                    >
+                        onClick={() => associateBusinessUsersWithRolesAndBu.update(node)}>
                         <Edit></Edit>
                     </IconButton>
                 }

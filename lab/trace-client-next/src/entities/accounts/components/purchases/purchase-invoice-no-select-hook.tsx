@@ -5,7 +5,6 @@ import {
     ListItemAvatar, Typography,
     ListItemText,
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseInvoiceNoSelect(arbitraryData: any) {

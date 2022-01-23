@@ -14,7 +14,6 @@ function VoucherView({ hidden, tranTypeId }: any) {
     } = useVoucherView(hidden, tranTypeId)
 
     const { XXGrid } = useSharedElements()
-    // (!hidden) &&
     return (
         <Box className={classes.content} hidden={hidden}>
             {
@@ -26,7 +25,6 @@ function VoucherView({ hidden, tranTypeId }: any) {
                     sqlQueryId={sqlQueryId}
                     sqlQueryArgs={args}
                     specialColumns={specialColumns}
-                    // xGridProps={{ disableSelectionOnClick: true }}
                     viewLimit="100"
                 />
             }

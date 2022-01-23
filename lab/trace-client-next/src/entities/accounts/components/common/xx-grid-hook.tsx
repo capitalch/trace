@@ -1,6 +1,5 @@
 import {
     _,
-    hash,
     useEffect,
     useState,
     useRef,
@@ -91,12 +90,9 @@ function useXXGrid(gridOptions: any) {
 
     const entityName = getCurrentEntity()
     const pre: any = meta.current
-    // if(gridOptions.isReverseOrderChecked){
-    //     meta.current.isReverseOrder = true
-    // }
 
     async function fetchRows(queryId: string, queryArgs: any) {
-        if ((!queryId) || (!queryArgs)) { 
+        if ((!queryId) || (!queryArgs)) {
             return
         }
         queryArgs['no'] =
@@ -278,14 +274,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -318,7 +314,6 @@ function useXXGrid(gridOptions: any) {
     function requestSearch(searchValue: string) {
         if (searchValue) {
             meta.current.searchText = searchValue
-            // const searchRegex = new RegExp(searchValue, 'i')
             meta.current.filteredRows = meta.current.allRows.filter(
                 (row: any) => {
                     return Object.keys(row).some((field) => {
@@ -328,7 +323,6 @@ function useXXGrid(gridOptions: any) {
                         return temp
                             .toLowerCase()
                             .includes(searchValue.toLowerCase())
-                        // return searchRegex.test(temp)
                     })
                 }
             )
@@ -337,7 +331,7 @@ function useXXGrid(gridOptions: any) {
                 ...x,
             }))
         }
-       
+
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
     }
@@ -369,13 +363,9 @@ function useXXGrid(gridOptions: any) {
     }
 
     function toggleOrder() {
-        const hash1 = hash(pre.filteredRows)
-        // console.log(hash1)
         const rows = [...pre.filteredRows]
         rows.reverse()
         pre.filteredRows = rows
-        // const hash2 = hash(pre.filteredRows)
-        // console.log(hash2)
     }
 
     return {
@@ -475,14 +465,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
-
-// const handleEditRowsModelChange = useCallback((newModel: any) => {
-//     const filteredRows: any[] = meta.current.filteredRows
-//     Object.keys(newModel).forEach((key: any) => {
-//         if (newModel[key]?.clearDate?.value) {
-//             const foundRow = filteredRows.find((x: any) => x.id === +key)
-//             foundRow.clearDate = newModel[key].clearDate.value
-//             foundRow.isDataChanged = true
-//         }
-//     })
-// }, [])

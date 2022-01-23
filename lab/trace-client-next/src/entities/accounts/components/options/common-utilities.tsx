@@ -10,9 +10,6 @@ import { Send } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function CommonUtilities() {
-    const meta: any = useRef({
-        isBusy: false,
-    })
     const classes = useStyles()
     const { accountsMessages, emit, isControlDisabled, transferClosingBalances } = useSharedElements()
 

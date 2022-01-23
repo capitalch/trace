@@ -11,21 +11,20 @@ import {
     Chip,
     Dialog,
     Theme,
-    useTheme,
 } from '../imports/gui-imports'
 
 import { ArrowDropDownSharp, Menu } from '../imports/icons-import'
-import {manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
+import { manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import menu from '../data/data-menu.json'
 import '../entities/authentication/initialize-react-form'
 import { useTraceHeader } from './trace-header-hook'
 
 function TraceHeader({ open, handleDrawerOpen }: any) {
     const { filterOn, emit } = useIbuki()
-    const { getLoginData, setLoginData, setCurrentEntity, resetBag }: any =
+    const { getLoginData, setCurrentEntity, resetBag }: any =
         manageEntitiesState() //login data is independent of any entity
     const [, setRefresh] = useState({})
-    const { getFromBag } = manageEntitiesState()
+    // const { getFromBag } = manageEntitiesState()
     const {
         Alert,
         closeDialog,
@@ -39,11 +38,10 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         snackbar,
         submitDialog,
     } = useTraceHeader({ setRefresh })
-    const theme = useTheme()
 
     //Inactivity timeout auto log out
-    const generalSettings = getFromBag('generalSettings')
-    const autoLogoutTime = generalSettings?.['autoLogoutTimeInMins']
+    // const generalSettings = getFromBag('generalSettings')
+    // const autoLogoutTime = generalSettings?.['autoLogoutTimeInMins']
 
     // useIdleTimer({
     //     timeout: 1000 * 60 * autoLogoutTime || 1000 * 50 * 20,
@@ -87,7 +85,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         })
 
         const subs3: any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(
-            (d:any) => {
+            () => {
                 // Only doing refresh, because by now the datacache is already loaded. This code is for autoLogout execution. The autoLogoutTimeInMins is tal=ken from generalSettings of global bag which is populated in initcode datacache
                 setRefresh({})
             }
@@ -100,7 +98,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
             subs2.unsubscribe()
             subs3.unsubscribe()
         }
-    }, [])
+    }, [filterOn, meta, shortCircuit, snackbar])
 
     function handleLoginClick(e: any) {
         const item = { name: 'authentication' }
@@ -138,7 +136,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                                 size="large"
                                 className={classes.appBarButton}
                                 key={index}
-                                onClick={(e:any) => {
+                                onClick={(e: any) => {
                                     handleEntityClicked(item)
                                 }}>
                                 {item.label}
@@ -202,7 +200,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper,
                 }}
-                onKeyDown={(e:any) => {
+                onKeyDown={(e: any) => {
                     if (e.key === 'Escape') {
                         closeDialog()
                     } else if (e.key === 'Enter') {
@@ -231,7 +229,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 <Alert variant='filled'
                     onClose={handleClose}
                     severity={snackbar.current.severity}
-                    >
+                >
                     {snackbar.current.message}
                 </Alert>
             </Snackbar>

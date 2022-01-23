@@ -1,4 +1,4 @@
-import { _, Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     IconButton,
     Typography,
@@ -117,7 +117,7 @@ function TrialBalance() {
             meta.current.isMounted = false
             subs1.unsubscribe()
         }
-    }, [])
+    }, [filterOn, getData])
 
     if (isMediumSizeUp) {
         dialogConfig.dialogWidth = '360px'
@@ -215,7 +215,7 @@ function TrialBalance() {
                     <InputSwitch
                         checked={getFromBag('trialBalExpandAll') || false}
                         style={{ float: 'right', marginRight: '0.5rem' }}
-                        onChange={(e:any) => {
+                        onChange={(e: any) => {
                             const val = e.target.value
                             setInBag('trialBalExpandAll', val)
                             if (val) {
@@ -246,15 +246,12 @@ function TrialBalance() {
                 })}
             </Box>
             <TreeTable
-                // selectionMode="multiple"
-                // selection={selectedItems}
-                // onSelectionChange={(e: any) => setSelectedItems(e.value)}
                 scrollable={true}
                 scrollHeight="calc(100vh - 22rem)"
                 value={meta.current.data}
                 expandedKeys={getFromBag('trialBalExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e:any) => {
+                onToggle={(e: any) => {
                     setInBag('trialBalExpandedKeys', e.value)
                     meta.current.isMounted && setRefresh({})
                 }}>

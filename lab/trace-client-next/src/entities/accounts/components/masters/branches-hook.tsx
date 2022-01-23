@@ -20,8 +20,8 @@ function useBranches() {
             title: '',
             tableName: 'BranchM',
             formId: 'trace-branch-master',
-            ibukiFetchDataMessage:FETCH_DATA_MESSAGE,
-            actions: () => {},
+            ibukiFetchDataMessage: FETCH_DATA_MESSAGE,
+            actions: () => { },
             content: () => <></>,
         },
         setRefresh: setRefresh,
@@ -41,7 +41,7 @@ function useBranches() {
     } = useSharedElements()
     const { resetAllValidators, } =
         manageFormsState()
-    
+
     useEffect(() => {
         const subs1 = filterOn(FETCH_DATA_MESSAGE).subscribe(() => {
             emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
@@ -52,7 +52,7 @@ function useBranches() {
         ).subscribe((d: any) => {
             //edit
             const pre = meta.current.dialogConfig
-            const { id, id1, branchName, branchCode } = d.data?.row
+            const { id1, branchName, branchCode } = d.data?.row
             meta.current.showDialog = true
             pre.isEditMode = true
             pre.title = 'Edit branch'
@@ -86,7 +86,6 @@ function useBranches() {
             meta.current.showDialog = true
             pre.isEditMode = false
             pre.title = 'New branch'
-            // pre.formId = 'trace-branch-master'
             pre.idInsert = true
             pre.codeBlock = 'create_branch'
             pre.id = undefined
@@ -104,7 +103,7 @@ function useBranches() {
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [])
+    }, [TraceFullWidthSubmitButton, emit, filterOn, getReactFormContent, handleDelete, handleSubmit, resetAllValidators])
 
     function getXXGridParams() {
         const columns = [

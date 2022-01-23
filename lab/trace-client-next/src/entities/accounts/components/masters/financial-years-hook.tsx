@@ -23,7 +23,7 @@ function useFinancialYears() {
             formId: 'trace-financial-year-master',
             ibukiFetchDataMessage: FINANCIAL_YEARS_FETCH_DATA,
             tableName: 'FinYearM',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
         setRefresh: setRefresh,
@@ -61,11 +61,10 @@ function useFinancialYears() {
         ).subscribe((d: any) => {
             //edit
             const pre = meta.current.dialogConfig
-            const { id, id1, startDate, endDate } = d.data?.row
+            const { id1, startDate, endDate } = d.data?.row
             meta.current.showDialog = true
             pre.isEditMode = true
             pre.title = 'Edit financial year'
-            // pre.formId = 'trace-financial-year-master'
             pre.id = id1
             pre.idInsert = undefined
             pre.codeBlock = undefined
@@ -113,7 +112,7 @@ function useFinancialYears() {
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [])
+    }, [TraceFullWidthSubmitButton, dateFormat, emit, filterOn, getReactFormContent, getXXGridParams, handleDelete, handlePreSubmit, resetAllValidators])
 
     function getXXGridParams() {
         const columns = [
@@ -129,7 +128,6 @@ function useFinancialYears() {
                 description: 'Financial year',
                 field: 'id1',
                 flex: 1,
-                // width: 200,
             },
             {
                 headerName: 'Start date',
@@ -138,7 +136,6 @@ function useFinancialYears() {
                 valueFormatter: (params: any) =>
                     moment(params.value).format(dateFormat),
                 flex: 1,
-                // width: 220,
             },
             {
                 headerName: 'End date',
@@ -147,7 +144,6 @@ function useFinancialYears() {
                 valueFormatter: (params: any) =>
                     moment(params.value).format(dateFormat),
                 flex: 1,
-                // width: 220,
             },
         ]
 

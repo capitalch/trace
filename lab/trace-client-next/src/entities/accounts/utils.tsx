@@ -17,7 +17,6 @@ function utils() {
    
     async function execSaleInvoiceView(options: {sqlKey?:string, isMultipleRows: boolean,args?:{}}) {
         let ret: any = undefined
-        // const currentEntityName = getCurrentEntity()
         const sqlQueryObject: any = escape(
             JSON.stringify({
                 sqlKey: options.sqlKey,
@@ -25,7 +24,6 @@ function utils() {
                 isMultipleRows: options.isMultipleRows,
             })
         )
-        const entityNameDashed = 'accounts'
         const queries:any = await import("./artifacts/graphql-queries-mutations")
         const q = queries.default['saleInvoiceView'](
             sqlQueryObject,
@@ -221,7 +219,6 @@ function utils() {
                 lockDate = startDate.subtract(1, 'days')
             }
             lockDate = moment(lockDate)
-            // const tranDate = moment(mDate)
             const tranDate: any =
                 mDate === undefined ? undefined : moment(mDate)
             const isInValidDate =

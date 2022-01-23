@@ -153,9 +153,7 @@ function AccountsMaster() {
 
     return (
         <div
-            className={classes.content}
-        // style={{ width: getCurrentWindowSize() }}
-        >
+            className={classes.content}>
             <Box className={classes.header}>
                 <Typography
                     color="primary"
@@ -168,7 +166,7 @@ function AccountsMaster() {
                     <InputSwitch
                         checked={getFromBag('accMasterExpandAll') || false}
                         style={{ float: 'right', marginRight: '0.5rem' }}
-                        onChange={(e:any) => {
+                        onChange={(e: any) => {
                             const val = e.target.value
                             setInBag('accMasterExpandAll', val)
                             if (val) {
@@ -205,7 +203,7 @@ function AccountsMaster() {
                 value={data}
                 expandedKeys={getFromBag('accMasterExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e:any) => {
+                onToggle={(e: any) => {
                     setInBag('accMasterExpandedKeys', e.value)
                     utilFunc().saveScrollPos()
                     meta.current.isMounted && setRefresh({})
@@ -491,7 +489,6 @@ function AccountsMaster() {
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
                 <DialogTitle
-                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <div>{meta.current.dialogConfig.title}</div>
@@ -549,7 +546,7 @@ function AccountsMaster() {
         try {
             emit('SHOW-LOADING-INDICATOR', true)
             const val = e.target.checked
-            const ret: any = await genericUpdateMasterNoForm({
+            await genericUpdateMasterNoForm({
                 customCodeBlock: 'upsert_autoSubledger',
                 data: {
                     accId: node.data.id,
@@ -692,67 +689,6 @@ function AccountsMaster() {
         meta.current.isMounted && setRefresh({})
     }
 
-    function AddressComp1() {
-        const [, setRefresh] = useState({})
-        const addressMeta = useRef({
-            isMounted: false,
-            reactForm: <></>,
-        })
-
-        useEffect(() => {
-            addressMeta.current.isMounted = true
-            meta.current.showAddressDialog && asyncWrapper()
-            return () => {
-                addressMeta.current.isMounted = false
-            }
-        }, [])
-
-        return addressMeta.current.reactForm
-
-        async function asyncWrapper() {
-            const ret: any = await getAddressData()
-            addressMeta.current.reactForm = getReactForm()
-            if (ret) {
-                let formData = getFormData(
-                    meta.current.addressDialogConfig.formId
-                )
-                Object.keys(ret).forEach((x) => {
-                    formData[x] = ret[x]
-                })
-            }
-            meta.current.isMounted && setRefresh({})
-        }
-
-        async function getAddressData() {
-            if (!meta.current.addressDialogConfig.id) {
-                return null
-            }
-            emit('SHOW-LOADING-INDICATOR', true)
-            const ret = await execGenericView({
-                isMultipleRows: false,
-                sqlKey: 'get_extBusinessContactsAccM',
-                args: { id: meta.current.addressDialogConfig.id },
-            })
-            emit('SHOW-LOADING-INDICATOR', false)
-            return ret
-        }
-
-        function getReactForm() {
-            const addressClone = JSON.parse(JSON.stringify(addressEntry))
-            const jAddressClone = JSON.parse(JSON.stringify(jAddressEntry))
-            addressClone.items = addressClone.items.concat(
-                jAddressClone,
-            )
-            const addressCloneString = JSON.stringify(addressClone)
-            return (
-                <ReactForm
-                    formId={meta.current.addressDialogConfig.formId}
-                    jsonText={addressCloneString}
-                    name={getCurrentEntity()}></ReactForm>
-            )
-        }
-    }
-
     function AddressComp() {
         const [, setRefresh] = useState({})
         const addressMeta = useRef({
@@ -789,20 +725,6 @@ function AccountsMaster() {
                 })
             }
             addressMeta.current.isMounted && setRefresh({})
-        }
-
-        async function getAddressData() {
-            if (!meta.current.addressDialogConfig.id) {
-                return null
-            }
-            emit('SHOW-LOADING-INDICATOR', true)
-            const ret = await execGenericView({
-                isMultipleRows: false,
-                sqlKey: 'get_extBusinessContactsAccM',
-                args: { id: meta.current.addressDialogConfig.id },
-            })
-            emit('SHOW-LOADING-INDICATOR', false)
-            return ret
         }
 
         function getReactForm() {
@@ -1284,10 +1206,6 @@ const addressEntry: any = {
             class: 'textField',
             name: 'stateCode',
             placeholder: 'State code',
-            // materialProps: {
-            //     size: 'small',
-            //     fullWidth: true,
-            // },
             label: 'State code',
             validations: [
                 {

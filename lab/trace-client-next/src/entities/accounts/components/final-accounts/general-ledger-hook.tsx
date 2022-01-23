@@ -9,7 +9,6 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { useFlexLayout } from 'react-table'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
@@ -50,7 +49,7 @@ function useGeneralLedger(getArtifacts: any) {
             meta.current.isMounted = false
             subs1.unsubscribe()
         }
-    }, [])
+    }, [emit, filterOn, getArtifacts,getFromBag])
 
     const meta: any = useRef({
         accId: 0,

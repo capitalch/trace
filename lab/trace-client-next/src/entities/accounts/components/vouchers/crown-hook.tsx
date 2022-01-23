@@ -3,7 +3,6 @@ import { Button, Typography } from '../../../../imports/gui-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
-// import {useReactToPrint} from 'react-to-print'
 function useCrown(meta: any, componentRef:any) {
     const [, setRefresh] = useState({})
     meta.current.dialogConfig = {}
@@ -12,7 +11,6 @@ function useCrown(meta: any, componentRef:any) {
         accountsMessages,
         emit,
         genericUpdateMasterDetails,
-        // getAccountName,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
@@ -20,11 +18,7 @@ function useCrown(meta: any, componentRef:any) {
     } = useSharedElements()
 
     const ctx: any = useContext(MultiDataContext)
-    const ad = ctx?.vouchers
 
-    // const handlePrintPdf = useReactToPrint({
-    //     content : () => componentRef.current
-    // })
     function checkError(ad: any) {
         function headerError() {
             function dateError() {

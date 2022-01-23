@@ -22,14 +22,12 @@ function TraceSubHeader() {
         const subs2 = filterOn('TRACE-SUBHEADER:JUST-REFRESH').subscribe((d) => {
             meta.current.isMounted && setRefresh({})
         })
-       
-        // subs1.add(subs2)
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
             meta.current.isMounted = false
         }
-    }, [])
+    }, [filterOn])
 
     const displayLogic: any = {
         accounts: () => {

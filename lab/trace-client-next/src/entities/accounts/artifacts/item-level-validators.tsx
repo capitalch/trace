@@ -20,7 +20,6 @@ const itemLevelValidators: any = {
         const { getDateValidatorFormat } = manageFormsState()
         const dateFormat = getFromBag('dateFormat')
         const isoDateFormat = 'YYYY-MM-DD'
-        const auditLockDate = getFromBag('auditLockDate')
 
         const dateValidatorFormat =
             getDateValidatorFormat(a.formId, a.controlId) || isoDateFormat
@@ -29,7 +28,7 @@ const itemLevelValidators: any = {
         const finYearObject = getFromBag('finYearObject')
         const startDate = moment(finYearObject.startDate, dateFormat)
         const endDate = moment(finYearObject.endDate, dateFormat)
-        const tranDate = moment(value, dateValidatorFormat) //,dateFormat
+        const tranDate = moment(value, dateValidatorFormat)
         if (tranDate.isBetween(startDate, endDate, undefined, '[]')) {
             // from and to dates are included
             ret = undefined
@@ -39,21 +38,15 @@ const itemLevelValidators: any = {
 
     dateInFinYear: (a: any, value: any, putErrors: any) => {
         const { getFromBag } = manageEntitiesState()
-        const { getDateValidatorFormat } = manageFormsState()
         const { isDateAuditLocked } = utils()
 
         const dateFormat = getFromBag('dateFormat')
-        const isoDateFormat = 'YYYY-MM-DD'
-        const auditLockDate = getFromBag('auditLockDate')
-
-        const dateValidatorFormat =
-            getDateValidatorFormat(a.formId, a.controlId) || isoDateFormat
 
         let ret: any = a.message || messages.dateRangeError
         const finYearObject = getFromBag('finYearObject')
         const startDate = moment(finYearObject.startDate, dateFormat)
         const endDate = moment(finYearObject.endDate, dateFormat)
-        const tranDate = moment(value) //, dateValidatorFormat)
+        const tranDate = moment(value)
         if (tranDate.isBetween(startDate, endDate, undefined, '[]')) {
             // from and to dates are included
             if (isDateAuditLocked(value)) {
@@ -78,7 +71,7 @@ const itemLevelValidators: any = {
         const finYearObject = getFromBag('finYearObject')
         const startDate = moment(finYearObject.startDate, dateFormat)
         const endDate = moment(finYearObject.endDate, dateFormat)
-        const tranDate = moment(value, dateValidatorFormat) //,dateFormat
+        const tranDate = moment(value, dateValidatorFormat)
         if (!value || (tranDate >= startDate && tranDate <= endDate)) {
             ret = undefined
         }

@@ -20,8 +20,6 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
-// import { ClearAll } from '../../../../imports/icons-import'
-// import { PurchasesContext } from './purchases-provider'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
 function PurchaseBody({ purchaseType }: any) {
@@ -40,7 +38,7 @@ function PurchaseBody({ purchaseType }: any) {
         queryGstin,
     } = usePurchaseBody(ad, purchaseType)
 
-    const { accountsMessages, emit, getMappedAccounts, filterOn, TraceDialog } =
+    const { emit, getMappedAccounts, filterOn, TraceDialog } =
         useSharedElements()
 
     return (
@@ -73,7 +71,7 @@ function PurchaseBody({ purchaseType }: any) {
         }, [])
         const isError: boolean = errorObject?.isError
             ? ad.errorObject.isError()
-            : true //getError()
+            : true
         return (
             <Button
                 className="submit"
@@ -199,15 +197,12 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Purchase a/c</Typography>
                         {/* purchase */}
                         <LedgerSubledger
-                            // allAccounts={meta.current.allAccounts}
                             allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            // ledgerAccounts={meta.current.purchaseLedgerAccounts}
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts.purchaseLedgerAccounts
                             )}
                             onChange={() => {
-                                // getPurchaseAccountError()
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
@@ -218,14 +213,12 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Credit a/c</Typography>
                         {/* credit account */}
                         <LedgerSubledger
-                            // allAccounts={meta.current.allAccounts}
                             allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts.ledgerAccounts
                             )}
                             onChange={async () => {
-                                // getOtherAccountError()
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId
                                 )
@@ -241,7 +234,6 @@ function PurchaseBody({ purchaseType }: any) {
                         className="gstin"
                         variant="standard"
                         label="Gstin no"
-                        // error={getGstinError()}
                         error={
                             errorObject.isGstinError
                                 ? errorObject.isGstinError()
@@ -265,7 +257,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getInvoiceAmountError()}
                             error={
                                 errorObject.isInvoiceAmountError
                                     ? errorObject.isInvoiceAmountError()
@@ -291,7 +282,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getQtyError()}
                             error={
                                 errorObject.isTotalQtyError
                                     ? errorObject.isTotalQtyError()
@@ -318,7 +308,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -354,7 +343,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -390,7 +378,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -442,7 +429,6 @@ function PurchaseBody({ purchaseType }: any) {
                 <TextField
                     label={ad.tranDate ? 'Date' : undefined}
                     variant="standard"
-                    // error={getDateError()}
                     error={
                         errorObject?.isDateError
                             ? errorObject.isDateError()
@@ -521,7 +507,6 @@ function PurchaseBody({ purchaseType }: any) {
                                 ad.accounts.purchaseLedgerAccounts
                             )}
                             onChange={() => {
-                                // getPurchaseAccountError()
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
@@ -538,7 +523,6 @@ function PurchaseBody({ purchaseType }: any) {
                                 ad.accounts.ledgerAccounts
                             )}
                             onChange={async () => {
-                                // getOtherAccountError()
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId
                                 )
@@ -577,7 +561,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getInvoiceAmountError()}
                             error={
                                 errorObject.isInvoiceAmountError
                                     ? errorObject.isInvoiceAmountError()
@@ -603,7 +586,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getQtyError()}
                             error={
                                 errorObject.isTotalQtyError
                                     ? errorObject.isTotalQtyError()
@@ -630,7 +612,6 @@ function PurchaseBody({ purchaseType }: any) {
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()

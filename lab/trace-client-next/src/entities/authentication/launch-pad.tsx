@@ -9,8 +9,8 @@ function LaunchPad() {
         output: () => null,
     })
     const [, setRefresh] = useState({})
-    const { getCurrentComponent, getFromBag, setInBag } = manageEntitiesState()
-    const { filterOn, emit } = usingIbuki()
+    const { getFromBag, setInBag } = manageEntitiesState()
+    const { filterOn, } = usingIbuki()
 
     useEffect(() => {
         meta.current.isMounted = true

@@ -93,6 +93,3 @@ const Range = (props: any) => {
     )
 }
 export { Range }
-/*
-
-*/

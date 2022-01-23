@@ -31,7 +31,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog, usePDF } =
         useSharedElements()
     const unitInfo = getFromBag('unitInfo')
-    // const rawSaleData = getFromBag('rawSaleData') || {}
+    
     const {
         getError,
         handleBillPreview,

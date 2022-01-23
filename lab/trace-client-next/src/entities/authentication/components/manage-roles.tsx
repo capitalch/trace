@@ -267,10 +267,6 @@ export { useManageRoles }
 const newRoleJson: any = {
     class: 'generic-dialog',
     validations: [
-        // {
-        //     "name": "roleExists"
-        //     , "message": "This user role already exists. Duplicate roles are not allowed"
-        // }
     ],
     items: [
         {

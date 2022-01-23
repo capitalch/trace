@@ -2,11 +2,9 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 function useInvoiceA() {
     const {
         Document,
-        // Line,
         Page,
         StyleSheet,
         toDecimalFormat,
-        // Svg,
         Text,
         View,
     } = useSharedElements()

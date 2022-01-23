@@ -83,7 +83,6 @@ function useSaleBillNoSelect() {
                                 <Avatar>{index + 1}</Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                // primary={`${moment(item.tranDate).format('DD/MM/YYYY')}, ${item.autoRefNo}, ${toDecimalFormat(item.amount)}`}
                                 primary={
                                     <div className='primary'>
                                         <Typography component='li' variant='body1'>{moment(item.tranDate).format(dateFormat)}</Typography>
@@ -94,7 +93,6 @@ function useSaleBillNoSelect() {
 
                                 secondary={
                                     <>
-                                        {/* <Typography component='li' variant = 'body1' className='amount'>{toDecimalFormat(item.amount)}</Typography> */}
                                         <Typography component='li' variant='body2'>{item.products}</Typography>
                                         <Typography component='li' variant='body2'>{item.remarks}</Typography>
                                         <Typography component='li' variant='body2'>{Object.values(item.contacts || '').join(',')}</Typography>

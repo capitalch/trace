@@ -1,6 +1,5 @@
 import {
     _,
-    moment,
     useContext,
     useState,
     useEffect,
@@ -16,7 +15,6 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const isoDateFormat = 'YYYY-MM-DD'
     const multiData: any = useContext(MultiDataContext)
     multiData.sales.saleType = saleType
     const { emit, filterOn, getFromBag, setInBag } = useSharedElements()

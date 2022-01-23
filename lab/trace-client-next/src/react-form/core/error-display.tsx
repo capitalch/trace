@@ -32,7 +32,3 @@ const ErrorDisplay = (props: any) => {
     return comp;
 }
 export { ErrorDisplay };
-
-/*
-
-*/

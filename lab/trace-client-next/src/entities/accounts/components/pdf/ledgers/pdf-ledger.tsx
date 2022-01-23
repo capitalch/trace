@@ -240,7 +240,6 @@ function PdfLedger({ ledgerData, accName }: any) {
                 })
                 .concat(
                     <View style={{ flexDirection: 'row' }} key={-1}>
-                        {/* <Text style={{width:147}}></Text> */}
                         <Text style={[gStyles.normal, { width: 20 }]}> </Text>
                         <Text style={[gStyles.normal, { width: 47 }]}> </Text>
                         <Text style={[gStyles.normal, { width: 80 }]}> </Text>

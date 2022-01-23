@@ -77,7 +77,7 @@ function useProducts() {
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [])
+    }, [emit, filterOn, handleAdd,handleDelete, handleEdit])
 
     function getXXGridParams() {
         const columns = [

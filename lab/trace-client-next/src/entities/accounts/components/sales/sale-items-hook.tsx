@@ -98,14 +98,6 @@ function useSaleItems(arbitraryData: any) {
         const discount = rowData.discount
         const qty = rowData.qty
         let amount, gst, sgst, cgst
-        // if(meta.current.isPriceChanged){
-        //     priceGst = price * (1 + gstRate / 100)
-        //     rowData.priceGst = priceGst
-        // }
-        // if(meta.current.isPriceGstChanged){
-        //     price = priceGst / (1 + gstRate / 100)
-        //     rowData.price = price
-        // }
         if (priceGst) {
             price = priceGst / (1 + gstRate / 100)
             rowData.price = price
@@ -139,7 +131,6 @@ function useSaleItems(arbitraryData: any) {
             const summ = arbitraryData.summary
             summ.amount = 0.0
             summ.count = 0.0
-            // summ.discount = 0.0
             summ.qty = 0.0
             summ.cgst = 0
             summ.sgst = 0
@@ -153,9 +144,6 @@ function useSaleItems(arbitraryData: any) {
                     prev.cgst = +Big(curr.cgst || 0).plus(Big(prev.cgst || 0))
                     prev.sgst = +Big(curr.sgst || 0).plus(Big(prev.sgst || 0))
                     prev.igst = +Big(curr.igst || 0).plus(Big(prev.igst || 0))
-                    // prev.discount = +Big(curr.discount || 0).plus(
-                    //     Big(prev.discount || 0)
-                    // )
                     prev.qty = +Big(curr.qty).plus(Big(prev.qty))
                     return prev
                 },
@@ -171,7 +159,6 @@ function useSaleItems(arbitraryData: any) {
         }
         meta.current.isMounted && setRefresh({})
         arbitraryData.salesCrownRefresh()
-        // emit('SALES-CROWN-REFRESH', null)
     }
 
     function getEmptyRowData() {

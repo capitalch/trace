@@ -53,7 +53,6 @@ function GenericDialoges({ loadDialog }: any) {
         loginScreenSize: meta.current.dialogConfig.loginScreenSize,
     })
     const { TraceFullWidthSubmitButton }: any = useTraceMaterialComponents()
-    // const { getUnitHeading } = utils()
     const {
         getCurrentEntity,
         setCurrentComponent,
@@ -98,7 +97,6 @@ function GenericDialoges({ loadDialog }: any) {
                     closeDialog()
                 }}>
                 <DialogTitle
-                    // disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
                     <div>{meta.current.dialogConfig.title}</div>
@@ -540,62 +538,3 @@ const generalSettingsJson: any = {
         },
     ],
 }
-
-// const selectBuJson: any = {
-//     class: 'generic-dialog',
-//     items: [
-//         {
-//             type: 'TypeSelect',
-//             name: 'buCode',
-//             placeholder: 'Business units',
-//             label: 'Select business unit',
-//             options: [],
-//             validations: [
-//                 {
-//                     name: 'required',
-//                     message: 'Please select a business unit',
-//                 },
-//             ],
-//         },
-//     ],
-// }
-
-// const selectFinYearJson: any = {
-//     class: 'generic-dialog',
-//     items: [
-//         {
-//             // "type": "TypeSelect",
-//             class: 'select-fin-year',
-//             type: 'Select',
-//             name: 'id',
-//             placeholder: 'Financial years',
-//             label: 'Select financial year',
-//             options: [],
-//             validations: [
-//                 {
-//                     name: 'required',
-//                     message: 'Please select a financial year',
-//                 },
-//             ],
-//         },
-//     ],
-// }
-
-// const selectBranchJson: any = {
-//     class: 'generic-dialog',
-//     items: [
-//         {
-//             type: 'TypeSelect',
-//             name: 'id',
-//             placeholder: 'Branches',
-//             label: 'Select branch',
-//             options: [],
-//             validations: [
-//                 {
-//                     name: 'required',
-//                     message: 'Please select a branch',
-//                 },
-//             ],
-//         },
-//     ],
-// }

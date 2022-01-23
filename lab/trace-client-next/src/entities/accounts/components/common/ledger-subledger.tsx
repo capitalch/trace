@@ -1,8 +1,6 @@
-import { clsx,  useState, useEffect, useRef} from '../../../../imports/regular-imports'
-
+import { clsx, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import Select, { components } from 'react-select'
 import { makeStyles, createStyles, Theme } from '../../../../imports/gui-imports'
-import { useIbuki } from '../../../../imports/trace-imports'
 
 interface LedgerSubledgerOptions {
     allAccounts: any[]
@@ -21,7 +19,6 @@ function LedgerSubledger({
     showAutoSubledgerValues,
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
-    const { emit } = useIbuki()
     useEffect(() => {
         meta.current.isMounted = true
         const value = rowData?.accId
@@ -66,7 +63,7 @@ function LedgerSubledger({
         return () => {
             meta.current.isMounted = false
         }
-    }, [rowData, ledgerAccounts, allAccounts, rowData.accId])
+    }, [computeError, getItemFromValue, getSubledgerOptions, rowData, ledgerAccounts, allAccounts, rowData.accId])
 
     const meta: any = useRef({
         isMounted: false,
@@ -149,7 +146,7 @@ function LedgerSubledger({
     }
 
     function computeError() {
-        rowData.isLedgerSubledgerError = getError()        
+        rowData.isLedgerSubledgerError = getError()
     }
 
     function getItemFromValue(val: number) {
@@ -203,7 +200,6 @@ function LedgerSubledger({
             meta.current.subledgerOptions = []
             rowData.accId = item.value
             setSubledgerDisabled(true)
-            // onChange && onChange()
         }
         onChange && onChange()
         meta.current.subledgerItem = { label: null, value: undefined }
@@ -225,11 +221,11 @@ function LedgerSubledger({
 export { LedgerSubledger }
 
 
-const useStyles: any = makeStyles((theme:Theme) =>
+const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             minWidth: theme.spacing(30),
-            width:theme.spacing(35),
+            width: theme.spacing(35),
             maxWidth: theme.spacing(50),
             border: (meta: any) => {
                 const isError = meta.current.getError()

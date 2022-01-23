@@ -103,10 +103,10 @@ const componentStore: any = {
 
         const [, setRefresh] = useState({})
 
-        function handleChange(e: any) {
-            parent[item.name] = !parent[item.name]
-            setRefresh({})
-        }
+        // function handleChange(e: any) {
+        //     parent[item.name] = !parent[item.name]
+        //     setRefresh({})
+        // }
         return (
             <>
                 <div>
@@ -190,7 +190,6 @@ const componentStore: any = {
         useEffect(() => {
             const curr = moment().format(isoDateFormat)
             const dt = getField(parent, item.name)
-            // dt || setField(parent, item.name, curr)
             setRefresh({})
         }, [])
 
@@ -649,9 +648,9 @@ const componentStore: any = {
     },
 
     SubmitPrime: (props: any) => {
-        const { item, xClassName, xStyle } = props
+        const { item, xStyle } = props
         const { submitOnClick } = useSubmit(props)
-        const className = xClassName || 'x-submit'
+        // const className = xClassName || 'x-submit'
         return (
             <Button
                 className="p-button-success"
@@ -877,7 +876,6 @@ const componentStore: any = {
                     disabled={disabled}
                     textField="label"
                     dataKey="value"
-                    // valueField="value"
                     filter="contains"></Combobox>
                 <XErrorDisplay />
             </>

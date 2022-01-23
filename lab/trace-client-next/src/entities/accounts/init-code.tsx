@@ -3,10 +3,8 @@ import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { utilMethods } from '../../global-utils/misc-utils'
 import accountsMessages from './json/accounts-messages.json'
-// import datacache from '../../data/datacache.json'
 import queries from './artifacts/graphql-queries-mutations'
 import { graphqlService } from '../../global-utils/graphql-service'
-// import { test } from '../accounts/test/functions'
 import { usingLinkClient } from '../../global-utils/link-client'
 const { emit, hotEmit } = usingIbuki()
 
@@ -68,10 +66,6 @@ function initCode() {
          emit('TRACE-SUBHEADER:JUST-REFRESH', '')
          emit('TRACE-MAIN:JUST-REFRESH', '')
         await execDataCache()
-        //  emit('LAUNCH-PAD:LOAD-COMPONENT', {
-        //     componentName: 'journals', args: undefined, name: 'accounts'
-        // })
-        //
     }
 
     async function setNowFinYearIdDatesFinYearsBranches(branchId: number) {

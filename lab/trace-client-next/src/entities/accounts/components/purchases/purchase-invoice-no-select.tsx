@@ -15,7 +15,6 @@ import {
 } from './purchase-invoice-no-select-hook'
 
 function PurchaseInvoiceNoSelect({ arbitraryData }: any) {
-    const [, setRefresh] = useState({})
     const classes = useStyles()
     const {
         handleClear,

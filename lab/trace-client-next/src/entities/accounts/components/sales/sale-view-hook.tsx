@@ -25,7 +25,6 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         accountsMessages,
         confirm,
         emit,
-        execGenericView,
         execSaleInvoiceView,
         filterOn,
         genericUpdateMaster,
@@ -191,13 +190,6 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         // isModify: if isEdit then id's of tables are there so as to enforce modify sql. Otherwise id's of table are reset to undefined, so new rows are inserted in tables
         const ad = arbitraryData
         emit('SHOW-LOADING-INDICATOR', true)
-        // const ret = await execGenericView({
-        //     isMultipleRows: false,
-        //     sqlKey: 'getJson_sale_purchase_on_id',
-        //     args: {
-        //         id: id,
-        //     },
-        // })
         const ret = await execSaleInvoiceView({
             isMultipleRows: false,
             sqlKey: 'getJson_sale_purchase_on_id',
@@ -207,14 +199,10 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
-            // ret.jsonResult.billTo['stateName'] = ret.jsonResult.billTo['state']
-            // delete ret.jsonResult.billTo['state']
             console.log(JSON.stringify(ret))
-            // arbitraryData.rawSaleData = ret
             setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
             prepareArbitraryData(ret)
             arbitraryData.saleItemsRefresh()
-            // arbitraryData.salesHookChangeTab(0)
             emit('SALES-HOOK-CHANGE-TAB', 0)
         }
 

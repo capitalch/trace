@@ -22,8 +22,6 @@ import { useCrown } from './crown-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
 import {PdfVoucher} from '../pdf/vouchers/pdf-voucher'
 
-// import { useReactToPrint } from 'react-to-print'
-
 function Crown({ meta }: any) {
     const classes = useStyles()
     const ctx: any = useContext(MultiDataContext)
@@ -42,17 +40,6 @@ function Crown({ meta }: any) {
     } = useCrown(meta, componentRef)
 
     const { emit, filterOn, PDFViewer } = useSharedElements()
-
-    const pageStyle = `
-        @page {
-            size: 80mm 50mm;
-        }
-    `
-
-    // const handlePrint = useReactToPrint({
-    //     content: () => componentRef.current,
-    //     pageStyle:pageStyle
-    // })
 
     useEffect(() => {
         const subs1 = filterOn('CROWN-REFRESH').subscribe(() => {
@@ -115,10 +102,6 @@ function Crown({ meta }: any) {
                 <DialogContent>
                     <PDFViewer showToolbar={true} width={840} height={600}>
                         <PdfVoucher arbitraryData={arbitraryData} />
-                        {/* <InvoiceA
-                            unitInfo={unitInfo}
-                            rawSaleData={getFromBag('rawSaleData') || {}}
-                        /> */}
                     </PDFViewer>
                 </DialogContent>
             </Dialog>
@@ -131,11 +114,9 @@ function Crown1({ meta }: any) {
     const ctx: any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
     const componentRef: any = useRef()
-    // const arbitraryData = useContext(VoucherContext)
     const [, setRefresh] = useState({})
     const { filterOn } = useSharedElements()
     const {
-        // handlePrint,
         ResetButton,
         SubmitButton,
         SummaryDebitsCredits,
@@ -159,15 +140,6 @@ function Crown1({ meta }: any) {
                 {meta.current.errorMessage}
             </Typography>
             <div>
-                {/* <Tooltip title="Print">
-                    <IconButton
-                        className="print-button"
-                        size="small"
-                        disabled={false}
-                        onClick={handlePrint}>
-                        <PrintIcon className="print-icon" />
-                    </IconButton>
-                </Tooltip> */}
                 <SubmitButton ad={arbitraryData} meta={meta} />
             </div>
         </Paper>
@@ -222,10 +194,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
     })
 )
-
-//     <div style={{ display: 'none' }}>
-//         <div ref={componentRef} className='myClass'>
-//             <span>{ad?.pdfVoucher?.heading || ''}</span>
-//             <span>{ad?.pdfVoucher?.tranDate}</span>
-//         </div>
-//     </div>

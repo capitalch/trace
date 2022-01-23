@@ -19,7 +19,6 @@ function useAllTransactions() {
             type: 'date',
             field: 'tranDate',
             width: 120,
-            // valueGetter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
             valueFormatter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
         },
         { headerName: 'Ref', field: 'autoRefNo', width: 200 },
@@ -81,11 +80,9 @@ function useAllTransactions() {
 
     const summaryColNames = ['debit', 'credit']
     const specialColumns = {
-        // toShowClosingBalance: true,
         isHide: true,
         isEdit: true,
-        isDelete: true,        
-        // isDrillDown: true,
+        isDelete: true,
     }
     const actionMessages = {
         fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ALL-TRANSACTIONS',

@@ -14,7 +14,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 function usePurchaseView(
     arbitraryData: any,
     purchaseType: string,
-    drillDownEditAttributes: any
+    // drillDownEditAttributes:any
 ) {
     const [, setRefresh] = useState({})
     const meta: any = useRef({

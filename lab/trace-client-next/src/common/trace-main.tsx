@@ -1,10 +1,10 @@
-import {clsx, useState, useEffect, useRef } from '../imports/regular-imports'
+import { clsx, useState, useEffect, useRef } from '../imports/regular-imports'
 import {
     Container,
     makeStyles,
     createStyles,
 } from '../imports/gui-imports'
-import {manageEntitiesState, useIbuki, useTraceGlobal} from '../imports/trace-imports'
+import { manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 
@@ -13,7 +13,7 @@ function TraceMain({ open }: any) {
         setCurrentComponent,
         getCurrentEntity,
     } = manageEntitiesState()
-    const { filterOn} = useIbuki()
+    const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
     const meta = useRef({
         isMounted: false,
@@ -50,12 +50,12 @@ function TraceMain({ open }: any) {
                 : null
             meta.current.isMounted && setRefresh({})
         })
-       
+
         return () => {
             subs.unsubscribe()
             meta.current.isMounted = false
         }
-    }, [])
+    }, [filterOn, getCurrentEntity, setCurrentComponent])
 
     // For every entity there is separate launch-pad file. Its exported object is mapped in launchMap
     function LaunchPad() {
@@ -75,7 +75,7 @@ function TraceMain({ open }: any) {
 export { TraceMain }
 
 const drawerWidth = 260
-const useStyles: any = makeStyles((theme:any) =>
+const useStyles: any = makeStyles((theme: any) =>
     createStyles({
         content: {
             transition: theme.transitions.create('margin', {

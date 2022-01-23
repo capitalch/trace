@@ -1,5 +1,4 @@
 import {
-    Button,
     Card,
     Theme,
     createStyles,
@@ -8,8 +7,7 @@ import {
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useAllTransactions } from './all-reports/all-transactions'
-import { _, useEffect, useRef } from '../../../../imports/regular-imports'
-// import { useReactToPrint } from 'react-to-print'
+import { _, useEffect, } from '../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
@@ -63,7 +61,6 @@ function GenericReports({ loadReport }: any) {
                 toShowOpeningBalance={false}
                 toShowReverseCheckbox={true}
                 isReverseOrderChecked={true}
-                // xGridProps={{ disableSelectionOnClick: true }}
                 viewLimit="1000"
             />
         </Card>
@@ -86,7 +83,6 @@ function GenericReports({ loadReport }: any) {
                     })
                     emit('SHOW-MESSAGE', {})
                     emit(actionMessages.fetchIbukiMessage, null)
-                    // setRefresh({})
                 })
                 .catch(() => {}) // important to have otherwise eror
         }

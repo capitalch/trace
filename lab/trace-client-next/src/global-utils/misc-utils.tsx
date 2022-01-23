@@ -419,8 +419,6 @@ function utilMethods() {
             const mode = getCurrentComponent().mode
             if (mode === 'new' && options.formRefresh === undefined) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent()) // To reload the form for resetting all controls
-            } else if (mode === 'edit') {
-                // emit('LOAD-MAIN-COMPONENT-VIEW', getCurrentComponent())
             }
             options.afterMethod()
         } catch (e: any) {
@@ -440,7 +438,6 @@ function utilMethods() {
         let ret = false
         const currentEntityName = getCurrentEntity()
         try {
-            // const entityNameDashed = getDashedEntityName(currentEntityName)
             const queries = await import(
                 `../entities/${currentEntityName}/artifacts/graphql-queries-mutations`
             )
@@ -526,6 +523,3 @@ function utilMethods() {
 }
 
 export { utilMethods }
-/*
-
-*/

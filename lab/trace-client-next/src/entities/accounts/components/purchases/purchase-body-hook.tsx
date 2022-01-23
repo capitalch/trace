@@ -365,7 +365,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('PURCHASES-HOOK-CHANGE-TAB', 1)
                 emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
-                // emit('PURCHASE-HOOK-RESET-DATA', null)
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
@@ -542,13 +541,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
 
                 '& .right': {
-                    // marginLeft: 'auto',
                     display: 'flex',
                     rowGap: theme.spacing(2),
                     columnGap: theme.spacing(4),
                     backgroundColor: theme.palette.grey[100],
-                    // border: '1px solid grey',
-                    // padding: theme.spacing(4),
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     '& .invoice': {

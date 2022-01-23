@@ -16,18 +16,6 @@ import {
     SyncSharp,
     Edit,
 } from '../../../../imports/icons-import'
-// import {
-//     DataGrid,
-//     GridToolbarFilterButton,
-//     GridToolbarExport,
-//     GridToolbarContainer,
-//     GridToolbarColumnsButton,
-//     GridFooterContainer,
-//     GridRowId,
-//     GridRowData,
-//     useGridApiRef,
-//     GridCellParams,
-// } from '@mui/x-data-grid'
 
 import {
     DataGridPro,
@@ -199,8 +187,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                         color="secondary"
                         onClick={(e: any) => {
                             emit(gridOptions.gridActionMessages?.fetchIbukiMessage, null)
-                            // fetchRows(sqlQueryId, sqlQueryArgs)
-                            // setRefresh({})
                         }}>
                         <SyncSharp></SyncSharp>
                     </IconButton>

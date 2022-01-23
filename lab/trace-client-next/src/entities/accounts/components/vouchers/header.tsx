@@ -5,7 +5,6 @@ import {
 } from '../../../../imports/gui-imports'
 import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-// import { VoucherContext } from './voucher-context'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
 function Header({ allowHeaderGst }: any) {
@@ -13,7 +12,6 @@ function Header({ allowHeaderGst }: any) {
     const [, setRefresh] = useState({})
     const ctx: any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
-    // const arbitraryData: any = useContext(VoucherContext)
     const {
         accountsMessages,
         emit,
@@ -55,7 +53,6 @@ function Header({ allowHeaderGst }: any) {
                 label="User ref"
                 className="user-ref"
                 variant='standard'
-                // error={getInvoiceError()}
                 onChange={(e: any) => {
                     arbitraryData.header.userRefNo = e.target.value
                     setRefresh({})

@@ -25,7 +25,6 @@ function BillTo({ arbitraryData }: any) {
     } = useBillTo(arbitraryData)
 
     const { TraceDialog } = useSharedElements()
-    // console.log('saleType:', arbitraryData.saleType)
     const { billToError, gstinError } = allErrors()
     return (
         <Paper elevation={2} className={classes.content}>
@@ -110,7 +109,6 @@ function BillTo({ arbitraryData }: any) {
                             arbitraryData.billTo.gstin = e.target.value
                             meta.current.isMounted && setRefresh({})
                             arbitraryData.salesCrownRefresh()
-                            // emit('SALES-CROWN-REFRESH', null)
                         }}
                     />
                 </div>

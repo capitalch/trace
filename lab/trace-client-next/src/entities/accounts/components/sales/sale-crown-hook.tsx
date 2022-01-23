@@ -9,7 +9,6 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-// import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
 
@@ -21,17 +20,14 @@ function useSaleCrown(
     const [, setRefresh] = useState({})
     const {
         accountsMessages,
-        // BlobProvider,
         confirm,
         emit,
-        // execGenericView,
         getCurrentComponent,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         pdf,
-        // PDFViewer,
         execSaleInvoiceView,
         sendEmail,
         sendSms,
@@ -229,8 +225,6 @@ function useSaleCrown(
                 escape(
                     JSON.stringify({
                         data: base64Data,
-                        // subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
-                        // body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
                         id: id,
                         sqlKey:'update_pdf_invoice',
                         mobileNumber: mobileNumber,
@@ -250,7 +244,6 @@ function useSaleCrown(
 
     async function handleSubmit() {
         const ad = arbitraryData
-        // ad.rawSaleData = null
         setInBag('rawSaleData', null)
         const header = extractHeader()
         const details = extractDetails()
@@ -456,13 +449,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
-
-// const ret = await axios({
-//     url: 'http://localhost:5000/trace/pdf',
-//     method:'post',
-//     headers:{
-//         "content-type":"application/pdf"
-//     },
-//     data:blob
-// })
-// console.log(ret)
