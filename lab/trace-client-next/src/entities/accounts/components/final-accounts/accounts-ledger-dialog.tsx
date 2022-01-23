@@ -76,11 +76,12 @@ function AccountsLedgerDialog() {
     meta.current.dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
-            meta.current.showDialog = true
-            meta.current.accId = d.data
-            meta.current.accName = getAccountName(d.data)
+            curr.showDialog = true
+            curr.accId = d.data
+            curr.accName = getAccountName(d.data)
             setRefresh({})
         })
         const subs1 = filterOn(
@@ -88,18 +89,18 @@ function AccountsLedgerDialog() {
         ).subscribe((d: any) => {
             const { tranDate, clearDate, id1, tranTypeId } = d.data?.row
             if (isAllowedUpdate({ tranDate, clearDate })) {
-                meta.current.showChildDialog = true
-                meta.current.drillDownEditAttributes.tranHeaderId = id1
-                meta.current.drillDownEditAttributes.tranTypeId = tranTypeId
+                curr.showChildDialog = true
+                curr.drillDownEditAttributes.tranHeaderId = id1
+                curr.drillDownEditAttributes.tranTypeId = tranTypeId
                 setRefresh({})
             }
         })
         const subs2 = filterOn(
             'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG'
         ).subscribe(() => {
-            meta.current.showChildDialog = false
+            curr.showChildDialog = false
             setRefresh({})
-            if (meta.current.showDialog) {
+            if (curr.showDialog) {
                 emit(getArtifacts().gridActionMessages.fetchIbukiMessage, null) // If main dialog is open then only xx-grid fetch data
             } else {
                 emit('ROOT-WINDOW-REFRESH', '') // otherwise refresh data in root window
@@ -116,9 +117,9 @@ function AccountsLedgerDialog() {
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [doDelete, emit, filterOn, getAccountName, getArtifacts, isAllowedUpdate])
+    }, [isAllowedUpdate])
 
     return (
         <div>

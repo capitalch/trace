@@ -95,18 +95,19 @@ function AccountsMaster() {
     }
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         getData()
         const subs = hotFilterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(
             (d: any) => {
-                meta.current.accClassMRef = d.data.allClasses.map((x: any) => {
+                curr.accClassMRef = d.data.allClasses.map((x: any) => {
                     return { value: x.id, label: x.accClass }
                 })
             }
         )
         return () => {
             utilFunc().saveScrollPos()
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs.unsubscribe()
         }
     }, [])
@@ -697,17 +698,17 @@ function AccountsMaster() {
         })
 
         useEffect(() => {
-            addressMeta.current.isMounted = true
+            const address = addressMeta.current
+            address.isMounted = true
             meta.current.showAddressDialog && asyncWrapper()
             return () => {
-                addressMeta.current.isMounted = false
+                address.isMounted = false
             }
-        }, [])
+        }, [addressMeta, meta])
 
         return addressMeta.current.reactForm
 
         async function asyncWrapper() {
-            // const ret: any = await getAddressData()
             emit('SHOW-LOADING-INDICATOR', true)
             const ret = await execGenericView({
                 isMultipleRows: false,
@@ -904,7 +905,7 @@ function AccountsMaster() {
                     )
                 }
                 accEntryTemp.items.push(accLeafTemp)
-                formData = getFormData(getFormId())
+                // formData = getFormData(getFormId())
                 return accEntryTemp
             },
             editSelf: () => {

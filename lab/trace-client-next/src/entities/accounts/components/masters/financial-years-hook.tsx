@@ -112,7 +112,7 @@ function useFinancialYears() {
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [TraceFullWidthSubmitButton, dateFormat, emit, filterOn, getReactFormContent, getXXGridParams, handleDelete, handlePreSubmit, resetAllValidators])
+    }, [dateFormat])
 
     function getXXGridParams() {
         const columns = [

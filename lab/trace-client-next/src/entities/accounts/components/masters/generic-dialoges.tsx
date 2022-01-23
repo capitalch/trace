@@ -73,10 +73,11 @@ function GenericDialoges({ loadDialog }: any) {
     const { setLastBuCodeFinYearIdBranchId, execDataCache } = initCode()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         dialogSelectLogic()[loadDialog].read()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

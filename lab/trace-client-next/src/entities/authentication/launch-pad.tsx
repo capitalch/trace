@@ -13,18 +13,19 @@ function LaunchPad() {
     const { filterOn, } = usingIbuki()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
             (d: any) => {
                 if (d.data) {
                     setInBag('currentComponent', d.data)
                 }
-                meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
             }
         )
         return () => {
             subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

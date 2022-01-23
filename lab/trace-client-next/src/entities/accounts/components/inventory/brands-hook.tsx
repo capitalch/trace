@@ -101,7 +101,7 @@ function useBrands() {
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [TraceFullWidthSubmitButton, emit, filterOn, getReactFormContent, handleDelete, handleSubmit, resetAllValidators])
+    }, [])
 
     function getXXGridParams() {
         const columns = [

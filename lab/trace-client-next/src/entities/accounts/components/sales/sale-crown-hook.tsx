@@ -33,16 +33,17 @@ function useSaleCrown(
         sendSms,
         setInBag,
     } = useSharedElements()
+
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.salesCrownRefresh = () => setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
     const unitInfo = getFromBag('unitInfo')
-    const rawSaleData = getFromBag('rawSaleData') || {}
 
     const meta: any = useRef({
         isMounted: false,

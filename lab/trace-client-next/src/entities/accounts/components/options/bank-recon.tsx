@@ -16,11 +16,9 @@ import { useBankRecon, useStyles } from './bank-recon-hook'
 
 function BankRecon() {
     const { doSortOnClearDateTranDateAndId, getXXGridParams, handleCloseDialog,
-        handleOnSelectBankClick, isDataNotChanged,
-        handleOpBalanceButtonClick, meta, setRefresh, submitBankRecon } = useBankRecon()
+        handleOnSelectBankClick, handleOpBalanceButtonClick, meta, setRefresh, submitBankRecon } = useBankRecon()
     const {
         emit,
-        isControlDisabled,
         TraceDialog,
         useTraceGlobal,
         XXGrid,

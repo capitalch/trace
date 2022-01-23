@@ -13,7 +13,7 @@ import { useSharedElements } from './shared-elements-hook'
 
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
-    let { sqlQueryArgs, sqlQueryId, summaryColNames } = gridOptions
+    let { summaryColNames } = gridOptions
     const meta: any = useRef({
         allRows: [],
         allSummary: {},
@@ -40,9 +40,12 @@ function useXXGrid(gridOptions: any) {
         execGenericView,
         toDecimalFormat,
     } = useSharedElements()
+    const pre: any = meta.current
 
     useEffect(() => {
-        meta.current.isMounted = true
+        let {sqlQueryArgs, sqlQueryId, } = gridOptions
+        // const curr = meta.current
+        pre.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
         const fetchIbukiMessage =
             gridOptions?.gridActionMessages?.fetchIbukiMessage ||
@@ -55,7 +58,7 @@ function useXXGrid(gridOptions: any) {
             setRefresh({})
         })
         const subs2 = filterOn('XX-GRID-RESET').subscribe(() => {
-            meta.current.filteredRows = []
+            pre.filteredRows = []
             setRefresh({})
         })
         const subs3 = debounceFilterOn('XX-GRID-SEARCH-DEBOUNCE').subscribe(
@@ -79,17 +82,16 @@ function useXXGrid(gridOptions: any) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            pre.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
             subs5.unsubscribe()
         }
-    }, [])
+    }, [pre])
 
     const entityName = getCurrentEntity()
-    const pre: any = meta.current
 
     async function fetchRows(queryId: string, queryArgs: any) {
         if ((!queryId) || (!queryArgs)) {

@@ -20,31 +20,32 @@ function LedgerSubledger({
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const value = rowData?.accId
         if (value) {
             const item = getItemFromValue(value)
             if (['Y', 'L'].includes(item?.accLeaf)) {
                 // Leaf or ledger as auto subledger
-                meta.current.ledgerItem = {
+                curr.ledgerItem = {
                     label: item?.accName,
                     value: item?.id,
                 }
-                meta.current.subledgerItem = { label: null, value: undefined }
-                meta.current.subledgerOptions = []
+                curr.subledgerItem = { label: null, value: undefined }
+                curr.subledgerOptions = []
                 setSubledgerDisabled(true)
             } else {
                 //subledger account hence get also its parent as ledger
                 const parentItem = item && getItemFromValue(item.parentId)
-                meta.current.ledgerItem = {
+                curr.ledgerItem = {
                     label: parentItem?.accName,
                     value: parentItem?.id,
                 }
-                meta.current.subledgerOptions = getSubledgerOptions(
+                curr.subledgerOptions = getSubledgerOptions(
                     parentItem?.id
                 )
                 setSubledgerDisabled(false)
-                meta.current.subledgerItem = {
+                curr.subledgerItem = {
                     label: item?.accName,
                     value: item?.id,
                 }
@@ -52,18 +53,18 @@ function LedgerSubledger({
             computeError()
             setRefresh({})
         } else if (value === undefined) {
-            meta.current.ledgerItem = {
+            curr.ledgerItem = {
                 label: null,
                 value: undefined,
             }
-            meta.current.subledgerItem = { label: null, value: undefined }
+            curr.subledgerItem = { label: null, value: undefined }
             setRefresh({})
         }
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [computeError, getItemFromValue, getSubledgerOptions, rowData, ledgerAccounts, allAccounts, rowData.accId])
+    }, [ rowData, ledgerAccounts, allAccounts, rowData.accId])
 
     const meta: any = useRef({
         isMounted: false,

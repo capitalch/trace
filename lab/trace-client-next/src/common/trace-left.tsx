@@ -73,7 +73,7 @@ function TraceLeft({ open, matches, handleDrawerClose }: any) {
             subs1.unsubscribe()
             subs2.unsubscribe()
         }
-    }, [filterOn, loadEntity])
+    }, [])
 
     return (
         <Drawer

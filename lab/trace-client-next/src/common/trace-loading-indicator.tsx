@@ -12,17 +12,18 @@ function TraceLoadingIndicator() {
     const classes = useStyles()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs = filterOn('SHOW-LOADING-INDICATOR').subscribe(d => {
-            meta.current.isLoading = d.data
-            meta.current.isMounted && setRefresh({})
+            curr.isLoading = d.data
+            curr.isMounted && setRefresh({})
         })
 
         return (() => {
             subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         })
-    }, [filterOn])
+    }, [])
 
     return <div>
         <Backdrop

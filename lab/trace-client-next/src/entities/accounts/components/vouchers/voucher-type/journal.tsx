@@ -2,7 +2,6 @@ import { useEffect, useRef, } from '../../../../../imports/regular-imports'
 import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
-import { truncate } from 'lodash'
 
 function Journal({ hidden}: any) {
 
@@ -11,9 +10,10 @@ function Journal({ hidden}: any) {
                 errorMessage: '',
         })
         useEffect(() => {
-                meta.current.isMounted = truncate
+                const curr = meta.current
+                curr.isMounted = true
                 return () => {
-                        meta.current.isMounted = false
+                        curr.isMounted = false
                 }
         }, [])
 

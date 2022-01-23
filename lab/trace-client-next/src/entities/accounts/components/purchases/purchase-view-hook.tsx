@@ -43,10 +43,11 @@ function usePurchaseView(
     } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const allAccounts = getFromBag('allAccounts') || []
-        meta.current.allAccounts = allAccounts
-        meta.current.ledgerAccounts = allAccounts
+        curr.allAccounts = allAccounts
+        curr.ledgerAccounts = allAccounts
             .filter(
                 (el: any) =>
                     ['debtor', 'creditor'].includes(el.accClass) &&
@@ -61,12 +62,12 @@ function usePurchaseView(
                     subledgers: el.accLeaf === 'L' ? [] : null,
                 }
             })
-        meta.current.ledgerAccounts.unshift({
+            curr.ledgerAccounts.unshift({
             accName: 'All parties',
             id: undefined,
         })
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

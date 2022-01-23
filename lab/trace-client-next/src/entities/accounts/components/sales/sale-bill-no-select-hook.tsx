@@ -19,8 +19,9 @@ function useSaleBillNoSelect() {
     })
     const {  emit, execGenericView, getFromBag, toDecimalFormat, TraceSearchBox } = useSharedElements()
     useEffect(() => {
-        meta.current.isMounted = true
-        return (() => { meta.current.isMounted = false })
+        const curr = meta.current
+        curr.isMounted = true
+        return (() => { curr.isMounted = false })
     }, [])
     const classes = useStyles()
 

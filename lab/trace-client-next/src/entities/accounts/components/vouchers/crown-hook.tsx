@@ -1,9 +1,8 @@
-import { _, useState, useContext, useRef } from '../../../../imports/regular-imports'
+import { _, useState } from '../../../../imports/regular-imports'
 import { Button, Typography } from '../../../../imports/gui-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { MultiDataContext } from '../common/multi-data-bridge'
-function useCrown(meta: any, componentRef:any) {
+function useCrown(meta: any, componentRef: any) {
     const [, setRefresh] = useState({})
     meta.current.dialogConfig = {}
     meta.current.dialogConfig.title = 'Voucher'
@@ -17,7 +16,7 @@ function useCrown(meta: any, componentRef:any) {
         toDecimalFormat,
     } = useSharedElements()
 
-    const ctx: any = useContext(MultiDataContext)
+    // const ctx: any = useContext(MultiDataContext)
 
     function checkError(ad: any) {
         function headerError() {
@@ -266,7 +265,7 @@ function useCrown(meta: any, componentRef:any) {
         setRefresh({})
     }
 
-    function handleOpen(){
+    function handleOpen() {
         meta.current.showDialog = true
         setRefresh({})
     }

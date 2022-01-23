@@ -41,7 +41,7 @@ function InvoiceA({
             titleRight: 'Original for recipient',
             invoiceNo: ti.tranH.autoRefNo,
             invoiceDate: moment(ti.tranH.tranDate).format(dateFormat),
-            type: ti.tranH.tranTypeId == 4 ? 'Sale' : 'Sale Ret',
+            type: ti.tranH.tranTypeId === 4 ? 'Sale' : 'Sale Ret',
             terms: '',
         }
         i.companyInfo = {

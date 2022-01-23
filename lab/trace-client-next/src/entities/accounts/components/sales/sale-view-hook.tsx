@@ -1,5 +1,4 @@
 import {
-    _,
     moment,
     useEffect,
     useRef,
@@ -38,7 +37,8 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
     const dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.saleViewHookFetchData = () =>
             emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
 
@@ -90,7 +90,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()

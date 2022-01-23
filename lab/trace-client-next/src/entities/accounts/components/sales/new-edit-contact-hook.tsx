@@ -23,11 +23,12 @@ function useNewEditContact(arbitraryData: any) {
     const classes = useStyles(arbitraryData.billTo)
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         setOptions()
         setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

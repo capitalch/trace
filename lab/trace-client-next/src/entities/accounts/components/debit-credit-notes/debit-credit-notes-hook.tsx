@@ -22,7 +22,8 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
         setRefresh: setRefresh,
     })
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         if (drillDownEditAttributes && !_.isEmpty(drillDownEditAttributes)) {
             // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
             drillDownEditAttributes.showChildDialog &&
@@ -33,9 +34,9 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
             multiData.debitCreditNotes.shouldCloseParentOnSave = true
         }
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [drillDownEditAttributes, emit, multiData.debitCreditNo])
+    }, [multiData.debitCreditNo])
 
     useEffect(() => {
         const subs1 = filterOn('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB').subscribe(
@@ -50,7 +51,7 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
             subs1.unsubscribe()
             subs2.unsubscribe()
         }
-    }, [filterOn, handleOnTabChange, multiData.debitCreditNotes])
+    }, [multiData.debitCreditNotes])
     const debitCreditNotesData = getFromBag('debitCreditNotesData')
     if (debitCreditNotesData) {
         multiData.debitCreditNotes = debitCreditNotesData
@@ -64,7 +65,7 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
         meta.current.isMounted && setRefresh({})
     }
 
-    return { handleOnTabChange, meta, multiData }
+    return {handleOnTabChange, multiData }
 }
 
 export { useDebitCreditNotes }

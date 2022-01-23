@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { createStyles, makeStyles } from '@mui/styles'
-import { Theme } from '@mui/material'
 import { ErrorDisplay } from './error-display'
 import { manageFormsState } from './fsm'
 import { useAjax } from '../common/ajax'
@@ -41,8 +39,7 @@ const useGeneric = (props: any) => {
     const doValidationsExist: boolean =
         validations && Array.isArray(validations) && validations.length > 0
     let [selectOptions, setSelectOptions]: any = useState([]) // for select controls
-    const classes = useStyles()
-
+    
     const XLabel = () => {
         const isRequired: Boolean =
             Array.isArray(item.validations) &&
@@ -63,18 +60,19 @@ const useGeneric = (props: any) => {
     )
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         let subs: any = {}
         if (item.ibukiFilterOnMessage) {
             const message = item.ibukiFilterOnMessage
             subs = filterOn(message).subscribe((d: any) => {
                 setField(parent, item.name, d.data)
-                meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
             })
         }
         return () => {
             subs && Object.keys(subs).length > 0 && subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -105,7 +103,7 @@ const useGeneric = (props: any) => {
                 () => parent[item.name]
             )
         meta.current.isMounted && setRefresh({})
-    }, [formId])
+    }, [controlId, formId, props.name])
 
     async function onChangeEvent(value: any) {
         setField(parent, item.name, value)
@@ -213,14 +211,3 @@ const useGeneric = (props: any) => {
 }
 
 export { useGeneric }
-
-const useStyles: any = makeStyles((theme: Theme) =>
-    createStyles({
-        labelMmargin: {},
-    })
-)
-
-/*
-
-
-*/

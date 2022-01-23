@@ -79,10 +79,9 @@ function usingLinkClient() {
             throw new Error(errNotConnected)
         }
     }
-
-    function isLinkConnected() {
-        return zLink.connected
-    }
+    // function isLinkConnected() {
+    //     return zLink.connected
+    // }
 
     function onReceiveData() {
         const subject = new Subject()

@@ -1,5 +1,4 @@
 import {
-    _,
     useState,
     useEffect,
     useRef,
@@ -15,7 +14,6 @@ import {
     ListItemText,
     Typography,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { NewEditContact } from './new-edit-contact'
 import countries from '../../../../data/countries.json'
@@ -32,24 +30,7 @@ function useBillTo(arbitraryData: any) {
         filterOn,
         isInvalidGstin,
     } = useSharedElements()
-
-    useEffect(() => {
-        meta.current.isMounted = true
-        const subs1 = filterOn('BILL-TO-CLOSE-DIALOG').subscribe(() => {
-            meta.current.showDialog = false
-            setRefresh({})
-        })
-        const subs2 = filterOn('BILL-TO-REFRESH').subscribe(() => {
-            meta.current.searchFilter = ''
-            setRefresh({})
-        })
-        return () => {
-            meta.current.isMounted = false
-            subs1.unsubscribe()
-            subs2.unsubscribe()
-        }
-    }, [])
-
+    
     const meta: any = useRef({
         isMounted: false,
         searchFilter: '',
@@ -63,6 +44,24 @@ function useBillTo(arbitraryData: any) {
         },
     })
     const pre = meta.current.dialogConfig
+    
+    useEffect(() => {
+        const curr = meta.current
+        curr.isMounted = true
+        const subs1 = filterOn('BILL-TO-CLOSE-DIALOG').subscribe(() => {
+            curr.showDialog = false
+            setRefresh({})
+        })
+        const subs2 = filterOn('BILL-TO-REFRESH').subscribe(() => {
+            curr.searchFilter = ''
+            setRefresh({})
+        })
+        return () => {
+            curr.isMounted = false
+            subs1.unsubscribe()
+            subs2.unsubscribe()
+        }
+    }, [])
 
     function allErrors() {
         function gstinError() {
@@ -256,9 +255,9 @@ function useBillTo(arbitraryData: any) {
             const stateValue: any = states.find(
                 (x) => x.name.toLowerCase() === billTo.state.toLowerCase()
             )
-            const cityValue: any = cities.find(
-                (x) => x.name.toLowerCase() === billTo.city.toLowerCase()
-            )
+            // const cityValue: any = cities.find(
+            //     (x) => x.name.toLowerCase() === billTo.city.toLowerCase()
+            // )
             billTo.country = {
                 name: billTo.country,
                 value: parseInt(countryValue),

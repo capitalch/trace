@@ -28,12 +28,13 @@ function CategoriesMaster() {
     const classes = useStyles()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         getData()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [getData, meta])
+    }, [meta])
 
     const {
         confirm,

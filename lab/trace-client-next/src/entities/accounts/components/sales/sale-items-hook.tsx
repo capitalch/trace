@@ -24,7 +24,8 @@ function useSaleItems(arbitraryData: any) {
     const { confirm, messages, debounceFilterOn } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
         arbitraryData.saleItemsRefresh = () => {
             setRefresh({})
@@ -40,7 +41,7 @@ function useSaleItems(arbitraryData: any) {
             }
         )
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])

@@ -44,7 +44,8 @@ function usePurchaseItems(arbitraryData: any) {
     } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.summary = {
             gst: {
                 cgst: 0.0,
@@ -63,7 +64,7 @@ function usePurchaseItems(arbitraryData: any) {
             }
         )
         const subs2 = filterOn('PURCHASE-ITEMS-REFRESH').subscribe(() => {
-            meta.current.isMounted && setRefresh({})
+            curr.isMounted && setRefresh({})
         })
 
         const subs3 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(
@@ -76,7 +77,7 @@ function usePurchaseItems(arbitraryData: any) {
             }
         )
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
@@ -715,7 +716,7 @@ function usePurchaseItems(arbitraryData: any) {
                             error={errorObject.isDiscountError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
-                                const { floatValue, value } = values
+                                const { floatValue} = values
                                 rowData.priceGst = floatValue || 0.0
                                 meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})

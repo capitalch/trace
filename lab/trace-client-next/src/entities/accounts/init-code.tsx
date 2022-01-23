@@ -9,7 +9,7 @@ import { usingLinkClient } from '../../global-utils/link-client'
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {
-    const { getFromBag, getLoginData,setCurrentComponent, setInBag } = manageEntitiesState()
+    const { getFromBag, getLoginData, setInBag } = manageEntitiesState()
     const { execGenericView } = utilMethods()
     const { connectToLinkServer, joinRoom, onReceiveData } = usingLinkClient()
     const { queryGraphql } = graphqlService()
@@ -20,7 +20,7 @@ function initCode() {
     // testIsInvalidStateCode()
 
     async function setLastBuCodeFinYearIdBranchId(brId: any = undefined) {
-        const userId = getLoginData().id
+        // const userId = getLoginData().id
         const buCode = getLoginData().lastUsedBuCode
         
         //Uncomment following lines
@@ -184,7 +184,7 @@ function initCode() {
         const info = allSettings.find((item) => item.key === 'unitInfo')
         const unitInfo = info?.jData
         setInBag('unitInfo', unitInfo)
-        console.log(JSON.stringify(unitInfo))
+        // console.log(JSON.stringify(unitInfo))
         setInBag('generalSettings', generalSettings)
         setInBag('auditLockDate', generalSettings?.auditLockDate || '')
         setInBag('allAccounts', allAccounts)

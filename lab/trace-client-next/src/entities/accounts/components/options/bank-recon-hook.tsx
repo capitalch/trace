@@ -67,7 +67,8 @@ function useBankRecon() {
     const dialogConfig = meta.current.dialogConfig
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
             emit(
                 getXXGridParams().gridActionMessages.fetchIbukiMessage,
@@ -82,7 +83,7 @@ function useBankRecon() {
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -495,7 +496,7 @@ function useBankRecon() {
 
             async function doSubmit() {
                 try {
-                    const ret = await genericUpdateMasterNoForm({
+                    await genericUpdateMasterNoForm({
                         tableName: 'BankOpBal',
                         data: {
                             id: opBalId,

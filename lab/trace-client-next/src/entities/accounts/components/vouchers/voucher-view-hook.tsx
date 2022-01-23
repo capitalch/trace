@@ -1,7 +1,5 @@
 import {
-    _,
     moment,
-    useState,
     useEffect,
     useRef,
     useContext,
@@ -15,7 +13,6 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useVoucherView(hidden: boolean, tranTypeId: number) {
-    // const [, setRefresh] = useState({})
     const ctx: any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
     const {
@@ -35,7 +32,8 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
     })
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {
                 const { tranDate, clearDate } = d.data?.row
@@ -58,7 +56,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()

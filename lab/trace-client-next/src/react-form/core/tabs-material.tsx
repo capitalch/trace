@@ -23,13 +23,13 @@ function TabsMaterial({
     })
 
     const [, setRefresh] = useState({})
-    const { getUseIbuki, initField } = manageFormsState()
-    const usingIbuki = getUseIbuki()
+    const { initField } = manageFormsState()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -56,9 +56,9 @@ function TabsMaterial({
                 }}>
                 {itemCount > 0 &&
                     item.items.map((it: any, index: number) => {
-                        const isError: boolean =
-                            arbitraryData[it?.tabName || '']?.isError ||
-                            arbitraryData[it?.tabName || '']?.summary?.isError
+                        // const isError: boolean =
+                        //     arbitraryData[it?.tabName || '']?.isError ||
+                        //     arbitraryData[it?.tabName || '']?.summary?.isError
                         return (
                             <Tab
                                 label={it.tabLabel || it.label}

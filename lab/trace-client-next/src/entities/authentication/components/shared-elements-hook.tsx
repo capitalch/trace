@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, } from 'react'
 import hash from 'object-hash'
 import {
     Checkbox,
@@ -85,7 +85,7 @@ function useSharedElements(meta: any = {}) {
                     tableName: meta.current.dialogConfig.tableName,
                     deletedIds: [id],
                 })
-                if ((ret === true) || (ret?.length <=9)) {
+                if ((ret === true) || (ret?.length <= 9)) {
                     emit('SHOW-MESSAGE', {})
                     afterMethod && afterMethod()
                 } else if (ret && ret.message) {
@@ -101,7 +101,7 @@ function useSharedElements(meta: any = {}) {
                         duration: null,
                     })
                 }
-            } catch (error:any) {
+            } catch (error: any) {
                 emit('SHOW-MESSAGE', {
                     severity: 'error',
                     message: error.message || messages['errorInOperation'],
@@ -152,7 +152,7 @@ function useSharedElements(meta: any = {}) {
                             duration: null,
                         })
                     }
-                } catch (err:any) {
+                } catch (err: any) {
                     emit('SHOW-MESSAGE', {
                         severity: 'error',
                         message: err.message || messages['errorInOperation'],
@@ -190,7 +190,7 @@ function useSharedElements(meta: any = {}) {
             } else {
                 doFormRefresh(formId) // this shows validation messages
             }
-        } catch (e:any) {
+        } catch (e: any) {
             showServerError(meta.current.dialogConfig.formId, e.message)
         }
     }

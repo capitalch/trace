@@ -1,5 +1,4 @@
 import {
-    _,
     useState,
     useEffect,
     useRef,
@@ -22,12 +21,13 @@ function useSaleHeader(arbitraryData: any) {
     const { emit, execGenericView, getMappedAccounts } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.rowData.accId =
             localStorage.getItem('saleAccountId') || null
         setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -36,8 +36,8 @@ function useSaleHeader(arbitraryData: any) {
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
     })
 
@@ -52,7 +52,7 @@ function useSaleHeader(arbitraryData: any) {
             </>
         )
 
-        function getListItems(mapFunction = (x: any) => {}) {
+        function getListItems(mapFunction = (x: any) => { }) {
             return meta.current.dialogConfig.data.map(
                 (item: any, index: number) => {
                     return (
@@ -62,7 +62,7 @@ function useSaleHeader(arbitraryData: any) {
                             button={true}
                             onClick={async () => {
                                 arbitraryData.saleVarietyAccId = item.id
-                                arbitraryData.saleVarietyAccName = item.accName                                
+                                arbitraryData.saleVarietyAccName = item.accName
                                 arbitraryData.footer.items[0].accId =
                                     arbitraryData.saleVarietyAccId
                                 emit('SALE-FOOTER-REFRESH', null)
@@ -104,7 +104,7 @@ function useSaleHeader(arbitraryData: any) {
         meta.current.dialogConfig.data =
             arbitraryData.accounts.autoSubledgerAccounts
         meta.current.dialogConfig.content = () => <AccountsList />
-        meta.current.dialogConfig.actions = () => {}
+        meta.current.dialogConfig.actions = () => { }
         setFooterRow(arbitraryData.accounts.autoSubledgerAccounts)
         meta.current.isMounted && setRefresh({})
     }
@@ -117,7 +117,7 @@ function useSaleHeader(arbitraryData: any) {
         meta.current.dialogConfig.content = () => (
             <AccountsList mapFunction={mapBillTo} />
         )
-        meta.current.dialogConfig.actions = () => {}
+        meta.current.dialogConfig.actions = () => { }
         setFooterRow(arbitraryData.accounts.debtorCreditorAccountsWithLedgers)
         meta.current.isMounted && setRefresh({})
 
@@ -156,7 +156,7 @@ function useSaleHeader(arbitraryData: any) {
         meta.current.dialogConfig.data =
             arbitraryData.accounts.cashBankAccountsWithSubledgers
         meta.current.dialogConfig.content = () => (
-            <AccountsList mapFunction={() => {}} />
+            <AccountsList mapFunction={() => { }} />
         )
         setFooterRow(arbitraryData.accounts.cashBankAccountsWithLedgers)
         meta.current.isMounted && setRefresh({})

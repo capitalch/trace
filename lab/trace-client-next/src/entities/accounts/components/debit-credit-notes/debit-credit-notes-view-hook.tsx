@@ -23,7 +23,8 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
     const dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn(
             'DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA'
         ).subscribe(() => {
@@ -69,13 +70,13 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
             }
         })
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [accountsMessages.transactionDelete, arbitraryData, confirm, emit, filterOn, genericUpdateMaster, getXXGridParams, isAllowedUpdate, loadDataOnId])
+    }, [accountsMessages.transactionDelete, arbitraryData, isAllowedUpdate, ])
 
     const meta: any = useRef({
         isMounted: false,

@@ -27,13 +27,14 @@ function useDebitCreditNoteBody(arbitraryData: any, tranType: string) {
     const accounts = arbitraryData.body.accounts
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         setAccounts()
         setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [setAccounts])
+    }, [])
 
     function setAccounts() {
         // allAccounts

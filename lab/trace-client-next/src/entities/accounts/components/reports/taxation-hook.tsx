@@ -1,5 +1,4 @@
 import {
-    _,
     moment,
     PrimeColumn,
     DataTable,
@@ -22,9 +21,10 @@ function useTaxation() {
         useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

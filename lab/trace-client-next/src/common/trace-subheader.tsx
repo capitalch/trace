@@ -14,20 +14,21 @@ function TraceSubHeader() {
     const classes = useStyles()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn('TOP-MENU-ITEM-CLICKED').subscribe((d: any) => {
-            meta.current.topMenuItem = d.data
-            meta.current.isMounted && setRefresh({})
+            curr.topMenuItem = d.data
+            curr.isMounted && setRefresh({})
         })
         const subs2 = filterOn('TRACE-SUBHEADER:JUST-REFRESH').subscribe((d) => {
-            meta.current.isMounted && setRefresh({})
+            curr.isMounted && setRefresh({})
         })
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [filterOn])
+    }, [])
 
     const displayLogic: any = {
         accounts: () => {

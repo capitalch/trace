@@ -29,7 +29,8 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
 
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.shouldViewReload = true
         arbitraryData.shouldGoBackToView = false
         setAccounts()
@@ -70,7 +71,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()

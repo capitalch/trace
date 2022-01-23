@@ -69,7 +69,6 @@ function useInvoiceA() {
         )
 
         function HeaderBlock({ invoiceData }: any) {
-            const ii = invoiceData.invoiceInfo
             const styles = StyleSheet.create({
                 headerBlock: {
                     flexDirection: 'row',

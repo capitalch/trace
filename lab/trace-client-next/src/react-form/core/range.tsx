@@ -29,7 +29,7 @@ const Range = (props: any) => {
         if (setsInRange.length > 1) {
             window.scrollTo(0, 9999)
         }
-    })
+    }, [parent, item.name, patternObj])
 
     function add(index: number = setsInRange.length) {
         parent[item.name].splice(index, 0, {})

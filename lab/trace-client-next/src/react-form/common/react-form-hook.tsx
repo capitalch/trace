@@ -91,7 +91,7 @@ async function initialize(options: any = {}) {
     }
 }
 
-async function registerCustomMethod(options: any) {}
+// async function registerCustomMethod(options: any) {}
 function getAllForms(
     entityName: string,
     allFormTemplates: any,

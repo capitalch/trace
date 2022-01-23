@@ -1,5 +1,4 @@
 import {
-    _,
     DataTable,
     hash,
     MaterialTable,
@@ -97,10 +96,11 @@ function GenericCRUD({ loadComponent }: any) {
     }
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         selectLogic()[loadComponent].read()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

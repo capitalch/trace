@@ -42,7 +42,8 @@ function BalanceSheetProfitLoss() {
     const theme: Theme = useTheme()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
             () => {
                 setTimeout(() => {
@@ -52,10 +53,10 @@ function BalanceSheetProfitLoss() {
         )
         getData()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
-    }, [filterOn, getData])
+    }, [])
 
     function actionTemplate(node: any) {
         let ret = <></>

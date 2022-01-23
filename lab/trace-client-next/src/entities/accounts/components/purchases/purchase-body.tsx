@@ -24,7 +24,7 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 
 function PurchaseBody({ purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const ad = multiData.purchases

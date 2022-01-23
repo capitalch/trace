@@ -25,7 +25,8 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         setAccounts()
         setPurchaseErrorObject()
         handlePurchaseCashCredit('credit')
@@ -36,7 +37,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             handlePurchaseCashCredit(d.data)
         })
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])
@@ -80,7 +81,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         const debtorCreditorLedgerAccounts = allAccounts.filter(
             (el: any) =>
                 drCrArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf == 'L') &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 !el.isAutoSubledger
         )
         ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts

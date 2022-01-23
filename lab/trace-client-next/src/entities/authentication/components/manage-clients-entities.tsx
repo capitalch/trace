@@ -1,7 +1,7 @@
-import {_, useState } from '../../../imports/regular-imports'
+import { useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 
-function useManageClientsEntities(meta:any){
+function useManageClientsEntities(meta: any) {
     const [, setRefresh] = useState({})
     const {
         Checkbox,
@@ -63,7 +63,7 @@ function useManageClientsEntities(meta:any){
         submit:
             () => {
                 submitDialog({
-                    tableName: 'TraceClient',                    
+                    tableName: 'TraceClient',
                     graphQlKey: 'genericUpdateMaster',
                     afterMethod: manageClients.read
                 })
@@ -161,8 +161,8 @@ function useManageClientsEntities(meta:any){
                 body={(node: any) =>
                     <IconButton
                         size='medium'
-                        color='secondary'                        
-                        onClick = {()=>manageClients.update(node)}
+                        color='secondary'
+                        onClick={() => manageClients.update(node)}
                     >
                         <Edit></Edit>
                     </IconButton>
@@ -177,7 +177,7 @@ function useManageClientsEntities(meta:any){
                     <IconButton
                         size='medium'
                         color='secondary'
-                        onClick={(e:any) => deleteRow(node, manageClients.read)}>
+                        onClick={(e: any) => deleteRow(node, manageClients.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 }
@@ -204,8 +204,8 @@ function useManageClientsEntities(meta:any){
                 body={(node: any) =>
                     <IconButton
                         size='medium'
-                        color='secondary'                        
-                        onClick={()=> manageEntities.update(node)}>
+                        color='secondary'
+                        onClick={() => manageEntities.update(node)}>
                         <Edit></Edit>
                     </IconButton>
                 }
@@ -219,7 +219,7 @@ function useManageClientsEntities(meta:any){
                     <IconButton
                         size='medium'
                         color='secondary'
-                        onClick={(e:any) => deleteRow(node, manageEntities.read)}>
+                        onClick={(e: any) => deleteRow(node, manageEntities.read)}>
                         <CloseSharp></CloseSharp>
                     </IconButton>
                 }
@@ -227,10 +227,10 @@ function useManageClientsEntities(meta:any){
         ]
     }
 
-    return {manageClients, manageEntities}
+    return { manageClients, manageEntities }
 }
 
-export {useManageClientsEntities}
+export { useManageClientsEntities }
 
 const clientJson: any = {
     "class": "generic-dialog",

@@ -5,7 +5,7 @@ import {
 import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import {MultiDataContext} from '../common/multi-data-bridge'
+import { MultiDataContext } from '../common/multi-data-bridge'
 
 function ActionBlock({
     actionType,
@@ -18,7 +18,7 @@ function ActionBlock({
     allowFreeze,
 }: any) {
     const [, setRefresh] = useState({})
-    const ctx:any = useContext(MultiDataContext)
+    const ctx: any = useContext(MultiDataContext)
     const arbitraryData = ctx?.vouchers
     const isGst = !!arbitraryData.header.isGst
     const tranTypeId = arbitraryData.header.tranTypeId
@@ -104,7 +104,7 @@ function ActionBlock({
             return () => {
                 subs1.unsubscribe()
             }
-        }, [])
+        }, [ad])
 
         const isGst = !!ad.header.isGst
         const actionRows: any[] = ad[actionType]
@@ -153,7 +153,7 @@ function ActionBlock({
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                             }}
                             onBlur={() => {
@@ -180,7 +180,7 @@ function ActionBlock({
                             allowNegative={false}
                             {...{ label: 'Hsn' }}
                             customInput={TextField}
-                            onFocus={(e:any) => {
+                            onFocus={(e: any) => {
                                 e.target.select()
                             }}
                             onChange={(e: any) => {
@@ -203,7 +203,7 @@ function ActionBlock({
                         decimalScale={2}
                         error={item.amount ? false : true}
                         fixedDecimalScale={true}
-                        onFocus={(e:any) => {
+                        onFocus={(e: any) => {
                             e.target.select()
                         }}
                         onValueChange={(values: any) => {

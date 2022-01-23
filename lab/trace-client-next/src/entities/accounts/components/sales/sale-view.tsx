@@ -8,7 +8,7 @@ function SaleView({ drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getXXGridParams, meta } = useSaleView(
+    const { getXXGridParams, } = useSaleView(
         arbitraryData,
         drillDownEditAttributes
     )

@@ -10,7 +10,7 @@ import { SaleView } from './sale-view'
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const { emit, setInBag } = useSharedElements()
-    const { multiData, handleChangeTab, meta } = useSales(
+    const { multiData, handleChangeTab, } = useSales(
         saleType,
         drillDownEditAttributes
     )

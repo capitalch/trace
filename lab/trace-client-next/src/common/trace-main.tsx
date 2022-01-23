@@ -35,7 +35,8 @@ function TraceMain({ open }: any) {
     const classes = useStyles({ meta: meta })
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const launchMap: any = {
             accounts: <LaunchPadAccounts></LaunchPadAccounts>,
             authentication: <LaunchPadAuthentication></LaunchPadAuthentication>,
@@ -45,17 +46,17 @@ function TraceMain({ open }: any) {
             if (d.data === 'reset') {
                 setCurrentComponent({})
             }
-            meta.current.launchPad = currentEntity
+            curr.launchPad = currentEntity
                 ? launchMap[currentEntity]
                 : null
-            meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
         })
 
         return () => {
             subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [filterOn, getCurrentEntity, setCurrentComponent])
+    }, [])
 
     // For every entity there is separate launch-pad file. Its exported object is mapped in launchMap
     function LaunchPad() {

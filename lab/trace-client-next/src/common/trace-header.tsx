@@ -24,7 +24,6 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     const { getLoginData, setCurrentEntity, resetBag }: any =
         manageEntitiesState() //login data is independent of any entity
     const [, setRefresh] = useState({})
-    // const { getFromBag } = manageEntitiesState()
     const {
         Alert,
         closeDialog,
@@ -59,20 +58,21 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     }
     const classes = useStyles({
         loginScreenSize: meta.current.dialogConfig.loginScreenSize,
-    }) //{width: '620px'}
+    })
 
     useEffect(() => {
-        meta.current.isMounted = true
-        meta.current.menuHead = menu
+        const curr = meta.current
+        curr.isMounted = true
+        curr.menuHead = menu
         const subs: any = filterOn('TRACE-HEADER-LOAD-MENU').subscribe(() => {
-            meta.current.menuHead = menu
+            curr.menuHead = menu
             shortCircuit() // This line is for doing autologin for demo mode
-            meta.current.isMounted && setRefresh({})
+            curr.isMounted && setRefresh({})
         })
 
         const subs1: any = filterOn('LOGIN-SUCCESSFUL').subscribe((d: any) => {
-            meta.current.uid = d.data
-            meta.current.isMounted && setRefresh({})
+            curr.uid = d.data
+            curr.isMounted && setRefresh({})
         })
         const subs2: any = filterOn('SHOW-MESSAGE').subscribe((d: any) => {
             snackbar.current.open = true
@@ -81,7 +81,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 d.data.message || 'Operation was successful'
             snackbar.current.duration =
                 d.data.duration !== undefined ? d.data.duration : 4000
-            meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
         })
 
         const subs3: any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(
@@ -92,13 +92,13 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         )
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs.unsubscribe()
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
         }
-    }, [filterOn, meta, shortCircuit, snackbar])
+    }, [meta, snackbar])
 
     function handleLoginClick(e: any) {
         const item = { name: 'authentication' }

@@ -3,13 +3,12 @@ import { useContext } from '../../../../imports/regular-imports'
 import { usePurchaseView, useStyles } from './purchase-view-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
-function PurchaseView({ purchaseType, drillDownEditAttributes }: any) {
+function PurchaseView({ purchaseType}: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
-    const { meta, getXXGridParams } = usePurchaseView(
+    const { getXXGridParams } = usePurchaseView(
         multiData.purchases,
         purchaseType,
-        // drillDownEditAttributes
     )
 
     const { XXGrid } = useSharedElements()

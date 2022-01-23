@@ -11,7 +11,7 @@ import messages from '../messages.json'
 const { emit } = getIbuki()
 
 function utilMethods() {
-    const { getCurrentEntity, getCurrentComponent, getLoginData, getFromBag } =
+    const { getCurrentEntity, getCurrentComponent, getLoginData, } =
         manageEntitiesState()
     const artifacts = getArtifacts(getCurrentEntity())
     const { mutateGraphql, queryGraphql }: any = graphqlService()
@@ -278,7 +278,7 @@ function utilMethods() {
         }
 
         return convert_number(value) + ' RUPEE ' + f_text + ' ONLY'
-        
+
         function frac(f: any) {
             return f % 1
         }
@@ -303,17 +303,17 @@ function utilMethods() {
                 res += convert_number(Gn) + ' CRORE'
             }
             if (kn > 0) {
-                res += (res == '' ? '' : ' ') + convert_number(kn) + ' LAKH'
+                res += (res === '' ? '' : ' ') + convert_number(kn) + ' LAKH'
             }
             if (Hn > 0) {
-                res += (res == '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
+                res += (res === '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
             }
 
             if (Dn) {
-                res += (res == '' ? '' : ' ') + convert_number(Dn) + ' HUNDRED'
+                res += (res === '' ? '' : ' ') + convert_number(Dn) + ' HUNDRED'
             }
 
-            var ones = Array(
+            let ones = [
                 '',
                 'ONE',
                 'TWO',
@@ -334,8 +334,8 @@ function utilMethods() {
                 'SEVENTEEN',
                 'EIGHTEEN',
                 'NINETEEN'
-            )
-            var tens = Array(
+            ]
+            let tens = [
                 '',
                 '',
                 'TWENTY',
@@ -346,10 +346,10 @@ function utilMethods() {
                 'SEVENTY',
                 'EIGHTY',
                 'NINETY'
-            )
+            ]
 
             if (tn > 0 || one > 0) {
-                if (!(res == '')) {
+                if (!(res === '')) {
                     res += ' AND '
                 }
                 if (tn < 2) {
@@ -362,7 +362,7 @@ function utilMethods() {
                 }
             }
 
-            if (res == '') {
+            if (res === '') {
                 res = 'zero'
             }
             return res
@@ -401,7 +401,7 @@ function utilMethods() {
     const saveForm = async (options: SaveFormOptions) => {
         emit('SHOW-LOADING-INDICATOR', true)
         options.queryId || (options.queryId = 'genericUpdateMasterDetails')
-        options.afterMethod || (options.afterMethod = () => {})
+        options.afterMethod || (options.afterMethod = () => { })
         const json: any = escape(JSON.stringify(options.data))
         const currentEntityName = getCurrentEntity()
         let ret: any = {}

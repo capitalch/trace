@@ -15,12 +15,12 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 
 function usePurchases(drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const isoFormat = 'YYYY-MM-DD'
     const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
     const multiData: any = useContext(MultiDataContext)
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         if (drillDownEditAttributes && !_.isEmpty(drillDownEditAttributes)) {
             // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
             drillDownEditAttributes.showChildDialog &&
@@ -39,7 +39,7 @@ function usePurchases(drillDownEditAttributes: any) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
         }

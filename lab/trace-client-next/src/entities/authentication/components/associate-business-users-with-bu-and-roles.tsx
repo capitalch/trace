@@ -4,7 +4,6 @@ import { useSharedElements } from './shared-elements-hook'
 function useAssociateBusinessUsersWithRolesAndBu(meta: any) {
     const [, setRefresh] = useState({})
     const {
-        _,
         CloseSharp,
         Column,
         Edit,

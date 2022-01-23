@@ -68,10 +68,11 @@ function AccountsOpBal() {
     const { getFromBag, setInBag } = manageEntitiesState()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         getData()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
