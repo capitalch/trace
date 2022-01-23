@@ -112,8 +112,7 @@ function useProducts() {
             {
                 headerName: 'Label',
                 field: 'label',
-                minWidth: '180',
-                flex: 1
+                width: '180',
             },
             {
                 headerName: 'HSN',

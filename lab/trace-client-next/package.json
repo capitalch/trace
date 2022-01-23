@@ -13,7 +13,6 @@
     "@mui/icons-material": "^5.3.0",
     "@mui/material": "^5.3.0",
     "@mui/styles": "^5.3.0",
-    "@mui/x-data-grid": "^5.3.0",
     "@mui/x-data-grid-pro": "^5.3.0",
     "@react-pdf/renderer": "^2.1.0",
     "@types/axios": "^0.14.0",

@@ -138,10 +138,10 @@ function useTraceHeader() {
     function getDialogActions() {
         return (
             <DialogActions>
-                {/* <TraceFullWidthSubmitButton
+                <TraceFullWidthSubmitButton
                     onClick={() => {
                         submitDialog()
-                    }}></TraceFullWidthSubmitButton> */}
+                    }}></TraceFullWidthSubmitButton>
             </DialogActions>
         )
     }

@@ -104,7 +104,7 @@ c) In all Typography comment out disableTypography
                                               g) Many text boxes a box is coming
                                               h) Voucher tab color problem
                                               i) Bank recon after bank select not working
-  j) Product grid not working properly
+                                              j) Product grid not working properly
                                               k) Purchase return fix
                                               l) Debit notes / credit notes tab color
 
@@ -116,9 +116,9 @@ c) In all Typography comment out disableTypography
 1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
 1.3 In vouchers, if party selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
-1.9 , maybe download pdf as generic type in x-grid
+1.9 Convert Authentication, complete system to x-data-grid-prof from material-table
 1.9.1 Accounts creation email should be optional
-1.9.2 Print support for sales
+1.9.2 
 1.9.3 Easy sales implementation
 
 1.9.5 
@@ -131,16 +131,16 @@ c) In all Typography comment out disableTypography
 
 ## Functionality
 	1. Auto subledger create bill
-	3. Data grid, provision for subtitle: useful for showing ledger of party
+	3. Data grid, provision for header, Title, subtitle: useful for showing ledger of party. Check if pdf download can be changed on the fly in x-data-grid-prof
 	4. Footer Trace version copyright
-	5. 
+	5. Uplift x-data-grid-prof to top level common, maybe global-components folder
 	6. Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
 	7. Provision to input product price. At present cannot input product price
 	8. Subscribe to some event so that update possible through socket
 	9. 
 	10. Universally make it responsive
 	11. Remove references to datacache for accounts and use getFromBag concept
-	13. Export of PL, BL and TB should be lowest and highest levels
+	13. Export of PL, BL and TB should be lowest and highest levels, in PDF print
 	14. 
 	15. Show ledger balance at the time of data entry
 	16. When new account code is created that should immediately be visible at payment options
@@ -178,6 +178,7 @@ c) In all Typography comment out disableTypography
 2. Complete migration of material ui from v4 to v5
 3. General ledger save as pdf, bug fix
 4. Several bug fixes which cropped up due to upgradation of libraries and material UI
+5. Fixed many warnings
 
 # 17-01-2022 = 20-01-2022
 1. Working on migration of v4.x to version 5.x
