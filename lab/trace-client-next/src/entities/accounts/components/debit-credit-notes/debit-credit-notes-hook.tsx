@@ -51,7 +51,7 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
             subs1.unsubscribe()
             subs2.unsubscribe()
         }
-    }, [multiData.debitCreditNotes])
+    }, [])
     const debitCreditNotesData = getFromBag('debitCreditNotesData')
     if (debitCreditNotesData) {
         multiData.debitCreditNotes = debitCreditNotesData

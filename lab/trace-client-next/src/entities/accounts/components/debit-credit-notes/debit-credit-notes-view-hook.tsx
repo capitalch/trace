@@ -76,7 +76,7 @@ function useDebitCreditNotesView(arbitraryData: any, tranType: string) {
             subs3.unsubscribe()
             subs4.unsubscribe()
         }
-    }, [accountsMessages.transactionDelete, arbitraryData, isAllowedUpdate, ])
+    }, [accountsMessages.transactionDelete, isAllowedUpdate, ])
 
     const meta: any = useRef({
         isMounted: false,

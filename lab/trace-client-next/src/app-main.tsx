@@ -22,14 +22,14 @@ function AppMain() {
     useEffect(() => {
         setInGlobalBag('isDrawyerOpen', isMediumSizeUp)
         setOpen(isMediumSizeUp)
-    }, [isMediumSizeUp, setInGlobalBag, setOpen])
+    }, [isMediumSizeUp])
 
     useEffect(() => {
         try {
             emit('TRACE-HEADER-LOAD-MENU', null)
         } catch (exception) { }
         return () => { }
-    }, [emit])
+    }, [])
 
     function handleDrawerOpen() {
         setInGlobalBag('isDrawyerOpen', true)

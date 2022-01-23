@@ -1,6 +1,5 @@
-import { useRef } from '../imports/regular-imports'
+import { useRef, useState } from '../imports/regular-imports'
 import {
-    Alert,
     Button,
     IconButton,
     Avatar,
@@ -39,7 +38,8 @@ import {
 import '../entities/authentication/initialize-react-form'
 import messages from '../entities/authentication/messages.json'
 
-function useTraceHeader({ setRefresh }: any) {
+function useTraceHeader() {
+    const [, setRefresh] = useState({})
     const meta: any = useRef({
         isMounted: true,
         menuHead: [],
@@ -88,11 +88,6 @@ function useTraceHeader({ setRefresh }: any) {
         message: globalMessages['operationSuccessful'],
         duration: 5000,
     })
-
-    // for material snackbar
-    // function Alert(props: any) {
-    //     return <MuiAlert elevation={6} variant="filled" {...props} />
-    // }
 
     // for closing snackbar
     function handleClose() {
@@ -143,10 +138,10 @@ function useTraceHeader({ setRefresh }: any) {
     function getDialogActions() {
         return (
             <DialogActions>
-                <TraceFullWidthSubmitButton
+                {/* <TraceFullWidthSubmitButton
                     onClick={() => {
                         submitDialog()
-                    }}></TraceFullWidthSubmitButton>
+                    }}></TraceFullWidthSubmitButton> */}
             </DialogActions>
         )
     }
@@ -154,7 +149,6 @@ function useTraceHeader({ setRefresh }: any) {
     function getDialogTitle() {
         return (
             <DialogTitle
-                // disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
                 <div>{meta.current.dialogConfig.title}</div>
@@ -531,7 +525,6 @@ function useTraceHeader({ setRefresh }: any) {
     }
 
     return {
-        Alert,
         closeDialog,
         doLogin,
         handleClose,
@@ -539,6 +532,7 @@ function useTraceHeader({ setRefresh }: any) {
         isUserLoggedIn,
         logout,
         meta,
+        setRefresh,
         shortCircuit,
         showDialogMenu,
         snackbar,

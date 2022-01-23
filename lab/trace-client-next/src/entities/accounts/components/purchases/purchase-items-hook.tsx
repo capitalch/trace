@@ -928,6 +928,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
         content: {
             marginTop: theme.spacing(4),
             position: 'relative',
+            zIndex: 0, //without zIndex: 0 the purchase items grid come to front and it covers the ledger-subledger drop down list
             top: (meta: any) => (meta.current.zoomIn ? '0rem' : '-13rem'),
 
             '& .search-header': {

@@ -1,5 +1,6 @@
-import { clsx, useState, useEffect } from '../imports/regular-imports'
+import { clsx, useEffect } from '../imports/regular-imports'
 import {
+    Alert,
     makeStyles,
     createStyles,
     Snackbar,
@@ -23,21 +24,25 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     const { filterOn, emit } = useIbuki()
     const { getLoginData, setCurrentEntity, resetBag }: any =
         manageEntitiesState() //login data is independent of any entity
-    const [, setRefresh] = useState({})
+    const { isMediumSizeUp } = useTraceGlobal()
+    
     const {
-        Alert,
         closeDialog,
         doLogin,
         handleClose,
         handleEntityClicked,
         isUserLoggedIn,
         meta,
+        setRefresh,
         shortCircuit,
         showDialogMenu,
         snackbar,
         submitDialog,
-    } = useTraceHeader({ setRefresh })
+    } = useTraceHeader()
 
+    const classes = useStyles({
+        loginScreenSize: meta.current.dialogConfig.loginScreenSize,
+    })
     //Inactivity timeout auto log out
     // const generalSettings = getFromBag('generalSettings')
     // const autoLogoutTime = generalSettings?.['autoLogoutTimeInMins']
@@ -50,15 +55,13 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     //     debounce: 500
     // })
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
-    const { isMediumSizeUp } = useTraceGlobal()
+
+    
     if (isMediumSizeUp) {
         meta.current.dialogConfig.loginScreenSize = '360px'
     } else {
         meta.current.dialogConfig.loginScreenSize = '290px'
     }
-    const classes = useStyles({
-        loginScreenSize: meta.current.dialogConfig.loginScreenSize,
-    })
 
     useEffect(() => {
         const curr = meta.current
@@ -87,7 +90,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         const subs3: any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(
             () => {
                 // Only doing refresh, because by now the datacache is already loaded. This code is for autoLogout execution. The autoLogoutTimeInMins is tal=ken from generalSettings of global bag which is populated in initcode datacache
-                setRefresh({})
+                curr.isMounted && setRefresh({})
             }
         )
 
@@ -98,7 +101,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
             subs2.unsubscribe()
             subs3.unsubscribe()
         }
-    }, [meta, snackbar])
+    }, [])
 
     function handleLoginClick(e: any) {
         const item = { name: 'authentication' }
@@ -159,7 +162,9 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     classes={{ endIcon: classes.loginButtonEndIcon }} //this is over riding. endIcon name is taken from material api documentation of Button
                     endIcon={<ArrowDropDownSharp></ArrowDropDownSharp>}
                     onClick={handleLoginClick}>
-                    {meta.current.uid ? (
+                    {
+                    meta.current.uid ? 
+                    (
                         <Chip
                             className={classes.loginButtonChip}
                             size="small"
@@ -177,7 +182,8 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                             }></Chip>
                     ) : (
                         'Login'
-                    )}
+                    )
+                    }
                 </Button>
             )
         }
@@ -185,7 +191,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     }
 
     return (
-        <Toolbar>
+         <Toolbar>
             <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -228,12 +234,11 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 onClose={handleClose}>
                 <Alert variant='filled'
                     onClose={handleClose}
-                    severity={snackbar.current.severity}
-                >
+                    severity={snackbar.current.severity}>
                     {snackbar.current.message}
                 </Alert>
             </Snackbar>
-        </Toolbar>
+         </Toolbar>
     )
 }
 export { TraceHeader }
@@ -272,6 +277,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
     })
 )
 
-/*
-
-*/

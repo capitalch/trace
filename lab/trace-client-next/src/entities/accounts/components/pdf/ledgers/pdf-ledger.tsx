@@ -300,7 +300,7 @@ function PdfLedger({ ledgerData, accName }: any) {
             },
             { ledgerBal: 0 }
         )
-        closingBalance = ld[ld.length - 1].ledgerBal
+        closingBalance = ld[ld.length - 1]?.ledgerBal
     }
 }
 

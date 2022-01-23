@@ -126,7 +126,7 @@ function GeneralLedger() {
                 </DialogTitle>
                 <DialogContent>
                     <PDFViewer showToolbar={true} width={840} height={600}>
-                        <PdfLedger ledgerData={meta.current.sharedData.filteredRows} accName={meta.current.accName} />
+                        <PdfLedger ledgerData={meta.current.sharedData.filteredRows || []} accName={meta.current.accName} />
                     </PDFViewer>
                 </DialogContent>
             </Dialog>

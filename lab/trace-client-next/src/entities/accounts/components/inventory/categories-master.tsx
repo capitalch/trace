@@ -34,7 +34,7 @@ function CategoriesMaster() {
         return () => {
             curr.isMounted = false
         }
-    }, [meta])
+    }, [])
 
     const {
         confirm,

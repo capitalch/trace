@@ -104,7 +104,7 @@ function ActionBlock({
             return () => {
                 subs1.unsubscribe()
             }
-        }, [ad])
+        }, [])
 
         const isGst = !!ad.header.isGst
         const actionRows: any[] = ad[actionType]
@@ -147,6 +147,7 @@ function ActionBlock({
                     {/* Gst rate */}
                     {allowRowGst && isGst && (
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             {...{ label: 'Gst rate' }}
                             className="right-aligned-numeric gst-rate"
@@ -176,6 +177,7 @@ function ActionBlock({
                     {/* HSN */}
                     {allowRowGst && isGst && (
                         <NumberFormat
+                            variant='standard'
                             className="hsn"
                             allowNegative={false}
                             {...{ label: 'Hsn' }}

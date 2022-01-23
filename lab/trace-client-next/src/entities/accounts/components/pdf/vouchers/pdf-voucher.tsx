@@ -2,7 +2,6 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 import {
     _,
     moment,
-    useEffect,
 } from '../../../../../imports/regular-imports'
 
 function PdfVoucher({ arbitraryData }: any) {
@@ -19,8 +18,6 @@ function PdfVoucher({ arbitraryData }: any) {
         toDecimalFormat,
     } = useSharedElements()
     const ad = arbitraryData
-
-    useEffect(() => {}, [])
 
     const gStyles = StyleSheet.create({
         page: {

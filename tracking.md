@@ -116,7 +116,7 @@ c) In all Typography comment out disableTypography
 1.2 Journal, When ASSET GST is not allowed. Make it allowed for assets also
 1.3 In vouchers, if party selected and its GSTIN available then display it
 1.8 Convert sales and purchases to div and remove table, to make them more responsive
-1.9 General ledger save as pdf, maybe download pdf as generic type in x-grid
+1.9 , maybe download pdf as generic type in x-grid
 1.9.1 Accounts creation email should be optional
 1.9.2 Print support for sales
 1.9.3 Easy sales implementation
@@ -172,6 +172,12 @@ c) In all Typography comment out disableTypography
 1.31 Encryption of core libraries
 5.1 Backup and restore strategy
 5.2 Upgraded database for all instances
+
+# 21-01-2022 - 23-01-2022
+1. Complete upgrade of all libraries
+2. Complete migration of material ui from v4 to v5
+3. General ledger save as pdf, bug fix
+4. Several bug fixes which cropped up due to upgradation of libraries and material UI
 
 # 17-01-2022 = 20-01-2022
 1. Working on migration of v4.x to version 5.x

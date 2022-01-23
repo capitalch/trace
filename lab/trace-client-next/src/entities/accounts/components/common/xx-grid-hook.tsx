@@ -89,7 +89,7 @@ function useXXGrid(gridOptions: any) {
             subs4.unsubscribe()
             subs5.unsubscribe()
         }
-    }, [pre])
+    }, [])
 
     const entityName = getCurrentEntity()
 

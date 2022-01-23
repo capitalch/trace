@@ -64,7 +64,7 @@ function LedgerSubledger({
         return () => {
             curr.isMounted = false
         }
-    }, [ rowData, ledgerAccounts, allAccounts, rowData.accId])
+    }, [ rowData.accId])
 
     const meta: any = useRef({
         isMounted: false,

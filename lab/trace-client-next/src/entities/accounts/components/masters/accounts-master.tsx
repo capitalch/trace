@@ -704,7 +704,7 @@ function AccountsMaster() {
             return () => {
                 address.isMounted = false
             }
-        }, [addressMeta, meta])
+        }, [])
 
         return addressMeta.current.reactForm
 
