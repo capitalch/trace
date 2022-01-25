@@ -8,6 +8,7 @@ import {
     createStyles,
 } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import {useConfirm} from '../../../imports/regular-imports'
 
 import Edit from '@mui/icons-material/Edit'
 import CloseSharp from '@mui/icons-material/Close'
@@ -25,6 +26,7 @@ import queries from '../artifacts/graphql-queries-mutations'
 import { graphqlService } from '../../../global-utils/graphql-service'
 
 function useSharedElements(meta: any = {}) {
+    const confirm = useConfirm()
     const { getCurrentEntity, getFromBag, getLoginData } = manageEntitiesState()
     const {
         showServerError,
@@ -48,6 +50,7 @@ function useSharedElements(meta: any = {}) {
     const isoDateFormat = 'YYYY-MM-DD'
     const { genericUpdateMasterNoForm } = utilMethods()
     const {
+        TraceDialog,
         traceGlobalSearch,
         TraceFullWidthSubmitButton,
     } = useTraceMaterialComponents()
@@ -200,6 +203,7 @@ function useSharedElements(meta: any = {}) {
         clearServerError,
         CloseSharp,
         Column,
+        confirm,
         Checkbox,
         closeDialog,
         dateFormat,
@@ -224,6 +228,7 @@ function useSharedElements(meta: any = {}) {
         isoDateFormat,
         isMediumSizeUp,
         isValidForm,
+        messages,
         mutateGraphql,
         queryGraphql,
         queries,
@@ -234,8 +239,10 @@ function useSharedElements(meta: any = {}) {
         showServerError,
         submitDialog,
         theme,
+        TraceDialog,
         TraceFullWidthSubmitButton,
         traceGlobalSearch,
+        
         useStyles,
     }
 }

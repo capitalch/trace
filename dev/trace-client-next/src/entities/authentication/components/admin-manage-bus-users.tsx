@@ -5,13 +5,13 @@ import { useSharedElements } from './shared-elements-hook'
 import { useAdminManageBusUsers } from './admin-manage-bus-users-hook'
 
 function AdminManageBusUsers() {
-    const meta: any = useRef({
-        title: 'Admin manage business users',
-    })
-    const {} = useSharedElements()
+
+    const { TraceDialog } = useSharedElements()
     const {
         columns,
         gridActionMessages,
+        handleCloseDialog,
+        meta,
         queryArgs,
         queryId,
         specialColumns,
@@ -19,7 +19,7 @@ function AdminManageBusUsers() {
     } = useAdminManageBusUsers()
 
     return (
-        <Box>
+        <Box sx={{ height: 'calc(100vh - 180px)' }}>
             <Typography
                 variant="subtitle1"
                 component="div"
@@ -31,12 +31,13 @@ function AdminManageBusUsers() {
                 // className="xx-grid"
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
-                sx= {{mt:2}}
+                sx={{ mt: 2 }}
                 specialColumns={specialColumns}
                 summaryColNames={summaryColNames}
                 toShowAddButton={true}
                 viewLimit="100"
             />
+            <TraceDialog meta={meta} onClose={handleCloseDialog} />
         </Box>
     )
 }

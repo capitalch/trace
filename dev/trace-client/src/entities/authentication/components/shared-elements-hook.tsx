@@ -224,6 +224,7 @@ function useSharedElements(meta: any = {}) {
         isoDateFormat,
         isMediumSizeUp,
         isValidForm,
+        messages,
         mutateGraphql,
         queryGraphql,
         queries,

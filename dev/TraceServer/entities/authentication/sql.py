@@ -118,7 +118,7 @@ allSqls = {
         select "id", "uid", "userEmail", "isActive", "descr", "parentId",  "userName"
             from "TraceUser"
                 where "parentId" = %(parentId)s
-                    order by "id" DESC
+                    order by "id" DESC limit (%(no)s)
     ''',
 
     'get_clientEntityId': '''
