@@ -1,5 +1,5 @@
 import { useStyles } from './xx-grid-hook'
-import { _, clsx, } from '../imports/regular-imports'
+import { _, clsx } from '../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -69,6 +69,7 @@ interface XXGridOptions {
     sqlQueryId?: any
     specialColumns: SpecialColumnOptions
     summaryColNames: string[]
+    sx?: any
     title?: string
     toShowAddButton?: boolean
     toShowClosingBalance?: boolean
@@ -90,6 +91,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         sqlQueryArgs,
         sqlQueryId,
         summaryColNames,
+        sx,
         title,
         viewLimit,
     }: any = gridOptions
@@ -97,9 +99,9 @@ function XXGrid(gridOptions: XXGridOptions) {
     gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
         fetchRows,
-        fillColumnBalance,        
+        fillColumnBalance,
         injectDailySummary,
-        meta,        
+        meta,
         onSelectModelChange,
         requestSearch,
         setFilteredSummary,
@@ -107,10 +109,10 @@ function XXGrid(gridOptions: XXGridOptions) {
         toggleOrder,
     } = useXXGrid(gridOptions)
 
-    const {debounceEmit, emit} = useIbuki()
-    const {isMediumSizeDown} = useTraceGlobal()
-    const {toDecimalFormat} = utilMethods()
-    
+    const { debounceEmit, emit } = useIbuki()
+    const { isMediumSizeDown } = useTraceGlobal()
+    const { toDecimalFormat } = utilMethods()
+
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
@@ -125,6 +127,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             className={clsx(className || '', classes.content)}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
+            sx={sx}
             columns={columns}
             rows={meta.current.filteredRows}
             rowHeight={32}
@@ -156,7 +159,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                     allSummary: meta.current.allSummary,
                 },
             }}
-
             onSelectionModelChange={onSelectModelChange}
             showColumnRightBorder={true}
             showCellRightBorder={true}
@@ -187,7 +189,11 @@ function XXGrid(gridOptions: XXGridOptions) {
                         size="medium"
                         color="secondary"
                         onClick={(e: any) => {
-                            emit(gridOptions.gridActionMessages?.fetchIbukiMessage, null)
+                            emit(
+                                gridOptions.gridActionMessages
+                                    ?.fetchIbukiMessage,
+                                null
+                            )
                         }}>
                         <SyncSharp></SyncSharp>
                     </IconButton>
@@ -201,7 +207,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     width: '4rem',
                                     marginLeft: '0.1rem',
                                 }}
-                                onChange={(e:any) => {
+                                onChange={(e: any) => {
                                     meta.current.viewLimit = e.target.value
                                     fetchRows(sqlQueryId, sqlQueryArgs)
                                     meta.current.isMounted && setRefresh({})
@@ -374,7 +380,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                         <span
                             style={{
                                 color: suffix === 'Dr' ? 'inherit' : 'red',
-                                marginRight: '0.2rem'
+                                marginRight: '0.2rem',
                             }}>
                             {suffix}&nbsp;
                         </span>

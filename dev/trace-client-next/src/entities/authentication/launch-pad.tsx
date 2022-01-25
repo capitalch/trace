@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
-import { AdminManageBusinessUsers } from './components/admin-manage-business-users'
+import { AdminManageBusUsers } from './components/admin-manage-bus-users'
 
 function LaunchPad() {
     const meta: any = useRef({
@@ -14,7 +14,7 @@ function LaunchPad() {
     const { getFromBag, setInBag } = manageEntitiesState()
     const { filterOn } = usingIbuki()
     const components: any = {
-        adminManageBusinessUsers: AdminManageBusinessUsers,
+        adminManageBusUsers: AdminManageBusUsers,
     }
     useEffect(() => {
         const curr = meta.current
