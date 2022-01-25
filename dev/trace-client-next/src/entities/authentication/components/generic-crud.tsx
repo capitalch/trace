@@ -80,13 +80,13 @@ function GenericCRUD({ loadComponent }: any) {
     const { useStyles, closeDialog, theme } = useSharedElements(meta)
     const classes = useStyles({ meta: meta })
     const { manageUsers } = useManageUsers(meta)
-    const { associateAdminUserWithClientAndEntity } =
-        useAssociateAdminUserWithClientAndEntity(meta)
-    const { manageClients, manageEntities } = useManageClientsEntities(meta)
-    const { manageBu } = useManageBu(meta)
-    const { manageRoles } = useManageRoles(meta)
-    const { associateBusinessUsersWithRolesAndBu } =
-        useAssociateBusinessUsersWithRolesAndBu(meta)
+    // const { associateAdminUserWithClientAndEntity } =
+    //     useAssociateAdminUserWithClientAndEntity(meta)
+    // const { manageClients, manageEntities } = useManageClientsEntities(meta)
+    // const { manageBu } = useManageBu(meta)
+    // const { manageRoles } = useManageRoles(meta)
+    // const { associateBusinessUsersWithRolesAndBu } =
+    //     useAssociateBusinessUsersWithRolesAndBu(meta)
 
     if (isMediumSizeUp) {
         dialogConfig.dialogWidth = '350px'
@@ -108,21 +108,21 @@ function GenericCRUD({ loadComponent }: any) {
     function selectLogic() {
         const logic: any = {
             manageUsers: manageUsers,
-            manageBu: manageBu,
-            manageClients: manageClients,
-            manageEntities: manageEntities,
-            associateAdminUserWithClientAndEntity:
-                associateAdminUserWithClientAndEntity,
-            manageRoles: manageRoles,
-            associateBusinessUsersWithRolesAndBu:
-                associateBusinessUsersWithRolesAndBu,
+            // manageBu: manageBu,
+            // manageClients: manageClients,
+            // manageEntities: manageEntities,
+            // associateAdminUserWithClientAndEntity:
+            //     associateAdminUserWithClientAndEntity,
+            // manageRoles: manageRoles,
+            // associateBusinessUsersWithRolesAndBu:
+            //     associateBusinessUsersWithRolesAndBu,
         }
         return logic
     }
 
     return (
         <div className={classes.content}>
-            <Box className={classes.header}>
+            {/* <Box className={classes.header}>
                 <Typography
                     color="primary"
                     variant={meta.current.headerConfig.textVariant || 'h6'}
@@ -149,17 +149,17 @@ function GenericCRUD({ loadComponent }: any) {
                         <Add></Add>
                     </IconButton>
                 </Box>
-            </Box>
-            <DataTable
+            </Box> */}
+            {/* <DataTable
                 className={classes.bodyBreak}
                 style={{ minWidth: meta.current.minWidth }}
                 value={meta.current.data}>
                 {selectLogic()[
                     meta.current.dialogConfig.formId
                 ]?.dataTableColumns()}
-            </DataTable>
+            </DataTable> */}
 
-            <Dialog //material-ui dialog
+            {/* <Dialog //material-ui dialog
                 classes={{ paper: classes.dialogPaper }} // Adjust dialog width as per device
                 open={meta.current.showDialog}
                 onClose={closeDialog}>
@@ -186,147 +186,147 @@ function GenericCRUD({ loadComponent }: any) {
                             ].submit()
                         }></TraceFullWidthSubmitButton>
                 </DialogActions>
-            </Dialog>
+            </Dialog> */}
         </div>
     )
 
-    function PermissionControl() {
-        const [, setRefresh] = useState({})
-        return (
-            <MaterialTable
-                style={{ marginBottom: '2rem' }}
-                columns={[
-                    {
-                        title: 'Id',
-                        field: 'controlId',
-                        headerStyle: { fontWeight: 'bold' },
-                    },
-                    {
-                        title: 'Control name',
-                        field: 'controlName',
-                        headerStyle: { fontWeight: 'bold' },
-                    },
-                    {
-                        title: 'Active',
-                        field: 'isActive',
-                        headerStyle: { fontWeight: 'bold' },
-                        render: (rowData: any) => {
-                            return (
-                                <Checkbox
-                                    checked={
-                                        meta.current.dialogConfig.permissionConfig.data.find(
-                                            (item: any) =>
-                                                item.controlId ===
-                                                rowData.controlId
-                                        ).isActive
-                                    }
-                                    onClick={() => {
-                                        const item =
-                                            meta.current.dialogConfig.permissionConfig.data.find(
-                                                (item: any) =>
-                                                    item.controlId ===
-                                                    rowData.controlId
-                                            )
-                                        item.isActive = !item.isActive
-                                        setRefresh({}) // local setRefresh
-                                    }}></Checkbox>
-                            )
-                        },
-                    },
-                    {
-                        title: 'Descr',
-                        field: 'descr',
-                        headerStyle: { fontWeight: 'bold' },
-                    },
-                ]}
-                data={meta.current.dialogConfig.permissionConfig.data}
-                options={{
-                    paging: false,
-                    showTitle: false,
-                }}
-                components={{
-                    Toolbar: (props:any) => (
-                        <div className={classes.permissionTemplate}>
-                            <div className="template">
-                                <Typography className="title">
-                                    Start with a new template
-                                </Typography>
-                                <Chip
-                                    onClick={() => {
-                                        handleChipClick('base')
-                                    }}
-                                    clickable={true}
-                                    className="chip"
-                                    label="Base"
-                                    color="secondary"
-                                />
-                                <Chip
-                                    onClick={() => {
-                                        handleChipClick('operator')
-                                    }}
-                                    clickable={true}
-                                    className="chip"
-                                    label="Operator"
-                                    color="secondary"
-                                    style={{ marginRight: 5 }}
-                                />
-                                <Chip
-                                    onClick={() => {
-                                        handleChipClick('accountant')
-                                    }}
-                                    clickable={true}
-                                    className="chip"
-                                    label="Accountant"
-                                    color="secondary"
-                                    style={{ marginRight: 5 }}
-                                />
-                                <Chip
-                                    onClick={() => {
-                                        handleChipClick('manager')
-                                    }}
-                                    clickable={true}
-                                    className="chip"
-                                    label="Manager"
-                                    color="secondary"
-                                    style={{ marginRight: 5 }}
-                                />
-                            </div>
-                            <MTableToolbar {...props}></MTableToolbar>
-                        </div>
-                    ),
-                }}></MaterialTable>
-        )
-    }
+    // function PermissionControl() {
+    //     const [, setRefresh] = useState({})
+    //     return (
+    //         <MaterialTable
+    //             style={{ marginBottom: '2rem' }}
+    //             columns={[
+    //                 {
+    //                     title: 'Id',
+    //                     field: 'controlId',
+    //                     headerStyle: { fontWeight: 'bold' },
+    //                 },
+    //                 {
+    //                     title: 'Control name',
+    //                     field: 'controlName',
+    //                     headerStyle: { fontWeight: 'bold' },
+    //                 },
+    //                 {
+    //                     title: 'Active',
+    //                     field: 'isActive',
+    //                     headerStyle: { fontWeight: 'bold' },
+    //                     render: (rowData: any) => {
+    //                         return (
+    //                             <Checkbox
+    //                                 checked={
+    //                                     meta.current.dialogConfig.permissionConfig.data.find(
+    //                                         (item: any) =>
+    //                                             item.controlId ===
+    //                                             rowData.controlId
+    //                                     ).isActive
+    //                                 }
+    //                                 onClick={() => {
+    //                                     const item =
+    //                                         meta.current.dialogConfig.permissionConfig.data.find(
+    //                                             (item: any) =>
+    //                                                 item.controlId ===
+    //                                                 rowData.controlId
+    //                                         )
+    //                                     item.isActive = !item.isActive
+    //                                     setRefresh({}) // local setRefresh
+    //                                 }}></Checkbox>
+    //                         )
+    //                     },
+    //                 },
+    //                 {
+    //                     title: 'Descr',
+    //                     field: 'descr',
+    //                     headerStyle: { fontWeight: 'bold' },
+    //                 },
+    //             ]}
+    //             data={meta.current.dialogConfig.permissionConfig.data}
+    //             options={{
+    //                 paging: false,
+    //                 showTitle: false,
+    //             }}
+    //             components={{
+    //                 Toolbar: (props:any) => (
+    //                     <div className={classes.permissionTemplate}>
+    //                         <div className="template">
+    //                             <Typography className="title">
+    //                                 Start with a new template
+    //                             </Typography>
+    //                             <Chip
+    //                                 onClick={() => {
+    //                                     handleChipClick('base')
+    //                                 }}
+    //                                 clickable={true}
+    //                                 className="chip"
+    //                                 label="Base"
+    //                                 color="secondary"
+    //                             />
+    //                             <Chip
+    //                                 onClick={() => {
+    //                                     handleChipClick('operator')
+    //                                 }}
+    //                                 clickable={true}
+    //                                 className="chip"
+    //                                 label="Operator"
+    //                                 color="secondary"
+    //                                 style={{ marginRight: 5 }}
+    //                             />
+    //                             <Chip
+    //                                 onClick={() => {
+    //                                     handleChipClick('accountant')
+    //                                 }}
+    //                                 clickable={true}
+    //                                 className="chip"
+    //                                 label="Accountant"
+    //                                 color="secondary"
+    //                                 style={{ marginRight: 5 }}
+    //                             />
+    //                             <Chip
+    //                                 onClick={() => {
+    //                                     handleChipClick('manager')
+    //                                 }}
+    //                                 clickable={true}
+    //                                 className="chip"
+    //                                 label="Manager"
+    //                                 color="secondary"
+    //                                 style={{ marginRight: 5 }}
+    //                             />
+    //                         </div>
+    //                         <MTableToolbar {...props}></MTableToolbar>
+    //                     </div>
+    //                 ),
+    //             }}></MaterialTable>
+    //     )
+    // }
 
-    function handleChipClick(templateName: string) {
-        const pre = meta.current.dialogConfig.permissionConfig
-        pre.data = pre[templateName]
-        meta.current.isMounted && setRefresh({})
-    }
+    // function handleChipClick(templateName: string) {
+    //     const pre = meta.current.dialogConfig.permissionConfig
+    //     pre.data = pre[templateName]
+    //     meta.current.isMounted && setRefresh({})
+    // }
 
-    function DlgContent() {
-        let ret
-        resetAllValidators(meta.current.dialogConfig.formId)
-        useEffect(() => {
-            const dataObject = getFormData(meta.current.dialogConfig.formId)
-            meta.current.origDataHash = hash(dataObject)
-        })
+    // function DlgContent() {
+    //     let ret
+    //     resetAllValidators(meta.current.dialogConfig.formId)
+    //     useEffect(() => {
+    //         const dataObject = getFormData(meta.current.dialogConfig.formId)
+    //         meta.current.origDataHash = hash(dataObject)
+    //     })
 
-        if (meta.current.dialogConfig.permissionConfig.isPermission) {
-            ret = <PermissionControl></PermissionControl>
-        } else {
-            ret = (
-                <ReactForm
-                    className="common-text-select"
-                    formId={meta.current.dialogConfig.formId}
-                    jsonText={JSON.stringify(
-                        meta.current.dialogConfig.jsonObject
-                    )}
-                    name={getCurrentEntity()}></ReactForm>
-            )
-        }
-        return ret
-    }
+    //     if (meta.current.dialogConfig.permissionConfig.isPermission) {
+    //         ret = <PermissionControl></PermissionControl>
+    //     } else {
+    //         ret = (
+    //             <ReactForm
+    //                 className="common-text-select"
+    //                 formId={meta.current.dialogConfig.formId}
+    //                 jsonText={JSON.stringify(
+    //                     meta.current.dialogConfig.jsonObject
+    //                 )}
+    //                 name={getCurrentEntity()}></ReactForm>
+    //         )
+    //     }
+    //     return ret
+    // }
 }
 
 export { GenericCRUD }

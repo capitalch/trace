@@ -654,7 +654,8 @@ const adminMenuJson: any = {
                 {
                     name: 'manageUsers',
                     label: 'Manage business users',
-                    componentName: 'genericCRUD',
+                    componentName: 'adminManageBusinessUsers',
+                    // componentName: 'genericCRUD',
                     args: {
                         loadComponent: 'manageUsers',
                     },
