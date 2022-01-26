@@ -49,6 +49,7 @@ interface GridActionMessagesOptions {
     deleteIbukiMessage?: any
     drillDownIbukiMessage?: any
     resetIbukiMessage?: any
+    onDataFetchedIbukiMessage?: any
 }
 
 interface XXGridOptions {

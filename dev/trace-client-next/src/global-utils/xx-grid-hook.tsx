@@ -121,6 +121,11 @@ function useXXGrid(gridOptions: any) {
                 args: queryArgs || null,
                 entityName: entityName,
             })
+            // gridOptions.sharedData && (gridOptions.sharedData['fetchedData'] = ret1)
+            // send message with fetched data if onDataFetchedIbukiMessage is present
+            if(gridOptions?.gridActionMessages?.onDataFetchedIbukiMessage){
+                emit(gridOptions.gridActionMessages.onDataFetchedIbukiMessage, ret1)
+            }
             emit('SHOW-LOADING-INDICATOR', false)
             const path = gridOptions.jsonFieldPath
             let rows = ret1

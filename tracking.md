@@ -81,6 +81,8 @@ create installer from innosetup
 19. Backup and restore strategy
 20. Upgrade database for all instances 
 
+# 24-01-2022 - 26-01-2022
+1. Working on authentication, rework on code to convert to x-grid-prof from material-table and prime data-table
 # 21-01-2022 - 23-01-2022
 1. Complete upgrade of all libraries
 2. Complete migration of material ui from v4 to v5

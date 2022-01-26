@@ -111,7 +111,7 @@ def createBuInEntityHelper(value, clientId):
 # Even for edit a new uid and pwd is generated for security purposes
 def createUserHelper(value):
     value = unquote(value)
-    # demjson allows dirty json. You could use simplejson. But it used demjson experimentally
+    # demjson allows dirty json. You could use simplejson. But I used demjson experimentally
     valueDict = demJson.decode(value)
     uid = util.getRandomUserId()
     pwd = util.getRandomPassword()

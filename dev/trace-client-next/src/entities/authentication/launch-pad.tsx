@@ -3,6 +3,7 @@ import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
 import { AdminManageBusUsers } from './components/admin-manage-bus-users'
+import { AdminManageBu } from './components/admin-manage-bu'
 
 function LaunchPad() {
     const meta: any = useRef({
@@ -15,6 +16,7 @@ function LaunchPad() {
     const { filterOn } = usingIbuki()
     const components: any = {
         adminManageBusUsers: AdminManageBusUsers,
+        adminManageBu: AdminManageBu
     }
     useEffect(() => {
         const curr = meta.current

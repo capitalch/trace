@@ -656,13 +656,14 @@ const adminMenuJson: any = {
                     label: 'Manage business users',
                     componentName: 'adminManageBusUsers',
                     // componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageUsers',
-                    },
+                    // args: {
+                    //     loadComponent: 'manageUsers',
+                    // },
                 },
                 {
                     name: 'manageRoles',
                     label: 'Manage roles',
+                    
                     componentName: 'genericCRUD',
                     args: {
                         loadComponent: 'manageRoles',
@@ -671,10 +672,11 @@ const adminMenuJson: any = {
                 {
                     name: 'manageBu',
                     label: 'Manage business unit (Bu)',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageBu',
-                    },
+                    componentName: 'adminManageBu',
+                    // componentName: 'genericCRUD',
+                    // args: {
+                    //     loadComponent: 'manageBu',
+                    // },
                 },
                 {
                     name: 'associateBusinessUsersWithRolesAndBu',

@@ -2,15 +2,16 @@ import { useEffect, useRef, useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { ReactForm, useIbuki } from '../../../imports/trace-imports'
 
-function useAdminManageBusUsers() {
+function useAdminManageBu() {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
-        title: 'Admin manage business users',
+        title: 'Admin manage business unit(Bu)',
         showDialog: false,
+        sharedData: undefined,
         dialogConfig: {
             title: '',
             tableName: 'TraceUser',
-            formId: 'admin-manage-bus-users',
+            formId: 'admin-manage-bu',
             actions: () => { },
             content: () => <></>,
         },
@@ -31,7 +32,6 @@ function useAdminManageBusUsers() {
         resetForm,
         TraceFullWidthSubmitButton,
     } = useSharedElements()
-    const id = getLoginData().id
     const { emit, filterOn } = useIbuki()
     const pre = meta.current.dialogConfig
     useEffect(() => {
@@ -42,7 +42,7 @@ function useAdminManageBusUsers() {
         const subs2 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {
                 //edit
-                handleEdit(d.data?.row)
+                // handleEdit(d.data?.row)
             }
         )
 
@@ -55,9 +55,21 @@ function useAdminManageBusUsers() {
         )
 
         const subs4 = filterOn(gridActionMessages.addIbukiMessage).subscribe(
-            (d: any) => {
+            (d: any) => {                
                 //Add
                 handleAdd()
+            }
+        )
+
+        const subs5 = filterOn(gridActionMessages.onDataFetchedIbukiMessage).subscribe(
+            // To populate the Entities drop down 
+            (d:any)=>{                
+                const entities = d.data?.jsonResult?.entities || []
+                pre.entities = entities.map((x:any)=>({
+                    label: x.entityName,
+                    value: x.id
+                }))
+                manageBuJson.items[0].options = pre.entities
             }
         )
 
@@ -66,6 +78,7 @@ function useAdminManageBusUsers() {
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
@@ -84,34 +97,22 @@ function useAdminManageBusUsers() {
             width: 90,
         },
         {
-            headerName: 'Uid',
-            description: 'Uid',
-            field: 'uid',
-            width: 150,
+            headerName: 'Entity name',
+            description: 'Entity name',
+            field: 'entityName',
+            width: 200,
         },
         {
-            headerName: 'User name',
-            description: 'User name',
-            field: 'userName',
+            headerName: 'Business unit short name',
+            description: 'Business unit short name',
+            field: 'buCode',
             width: 250,
         },
         {
-            headerName: 'Email',
-            description: 'Id',
-            field: 'userEmail',
-            width: 250,
-        },
-        {
-            headerName: 'Description',
-            description: 'Description',
-            field: 'descr',
-            width: 250,
-        },
-        {
-            headerName: 'Active',
-            description: 'Active',
-            field: 'isActive',
-            width: 90,
+            headerName: 'Business unit name',
+            description: 'Business unit name',
+            field: 'buName',
+            width: 300,
         },
     ]
 
@@ -129,8 +130,8 @@ function useAdminManageBusUsers() {
     function handleAdd() {
         resetForm(pre.formId)
         meta.current.showDialog = true
-        pre.title = 'Add new user'
-        const addJsonString = JSON.stringify(manageUsersJson)
+        pre.title = 'Add new Bu'
+        const addJsonString = JSON.stringify(manageBuJson)
         setDialogContentAction(addJsonString)
         setRefresh({})
     }
@@ -150,36 +151,15 @@ function useAdminManageBusUsers() {
             .then(async () => {
                 const id = +id1 // to make it numeric from string
                 emit('SHOW-LOADING-INDICATOR', true)
-                await genericUpdateMaster({
-                    deletedIds: [id],
-                    tableName: 'TraceUser',
-                })
+                // await genericUpdateMaster({
+                //     deletedIds: [id],
+                //     tableName: 'ClientEntityBu',
+                // })
                 emit('SHOW-LOADING-INDICATOR', false)
                 emit('SHOW-MESSAGE', {})
                 emit(gridActionMessages.fetchIbukiMessage, null)
             })
             .catch(() => { }) // important to have otherwise eror
-    }
-
-    function handleEdit(node:any){
-        resetForm(pre.formId)
-        const formData = getFormData(pre.formId)
-        formData.id = node.id1 // for edit purpose
-        const jsonObject = JSON.parse(JSON.stringify(manageUsersJson))
-            jsonObject.items[0].value = node['userEmail']
-            jsonObject.items[1].value = node['userName']
-            jsonObject.items[2].value = node['descr']
-            jsonObject.items[3].value = node['isActive']
-            jsonObject.validations.pop()
-            jsonObject.validations.push({
-                name: 'userEmailExistsUpdate',
-                message:
-                    'This email already exists. Please try out another email',
-            })
-            pre.title = 'Edit user'
-            setDialogContentAction(JSON.stringify(jsonObject))
-            meta.current.showDialog = true
-            setRefresh({})
     }
 
     async function handleSubmit() {
@@ -232,21 +212,22 @@ function useAdminManageBusUsers() {
     }
 
     const gridActionMessages = {
-        fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-USERS',
-        editIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-EDIT-CLICKED',
+        fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-BU',
+        editIbukiMessage: 'ADMIN-MANAGE-BU-HOOK-XX-GRID-EDIT-CLICKED',
         deleteIbukiMessage:
-            'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-DELETE-CLICKED',
-        addIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-ADD-CLICKED',
+            'ADMIN-MANAGE-BU-HOOK-XX-GRID-DELETE-CLICKED',
+        addIbukiMessage: 'ADMIN-MANAGE-BU-HOOK-XX-GRID-ADD-CLICKED',
+        onDataFetchedIbukiMessage:'ADMIN-MANAGE-BU-HOOK-XX-GRID-DATA-FETCHED'
     }
-    const queryId = 'get_businessUsers'
-    const queryArgs = { parentId: id }
+    const queryId = 'getJson_entities_bu'
+    const queryArgs = {}
     const specialColumns = {
         isEdit: true,
         isDelete: true,
     }
     const summaryColNames: string[] = []
 
-    return {
+    return ({
         columns,
         gridActionMessages,
         handleCloseDialog,
@@ -255,56 +236,59 @@ function useAdminManageBusUsers() {
         queryId,
         specialColumns,
         summaryColNames,
-    }
+    })
 }
 
-export { useAdminManageBusUsers }
+export { useAdminManageBu }
 
-const manageUsersJson: any = {
+const manageBuJson: any = {
     class: 'generic-dialog',
     validations: [
         {
-            name: 'userEmailExists',
-            message: 'This email already exists. Please try out another email',
+            name: 'buCodeExists',
+            message:
+                'This business unit for your client and entity already exists. Duplicate business units are not allowed',
         },
     ],
     items: [
         {
-            type: 'Text',
-            name: 'userEmail',
-            placeholder: 'Email',
-            label: 'User email',
+            type: 'TypeSelect',
+            class: 'type-select',
+            name: 'entityId',
+            placeholder: 'Entities',
+            label: 'Select entity',
+            options: [],
             validations: [
                 {
                     name: 'required',
-                    message: 'Email field is required',
-                },
-                {
-                    name: 'email',
-                    message: 'Invalid email',
+                    message: 'Please select an entity',
                 },
             ],
         },
         {
             type: 'Text',
-            name: 'userName',
-            placeholder: 'User name',
-            label: 'User name',
-            validations: [],
+            name: 'buCode',
+            placeholder: 'Business unit',
+            label: 'Business unit short name',
+            validations: [
+                {
+                    name: 'noWhiteSpaceOrSpecialChar',
+                    message:
+                        'White space or special characters are not allowed',
+                },
+            ],
         },
         {
             type: 'Text',
-            name: 'descr',
-            placeholder: 'Description',
-            label: 'Description',
-            validations: [],
-        },
-        {
-            type: 'Checkbox',
-            name: 'isActive',
-            placeholder: 'Active',
-            label: 'Active',
-            validations: [],
+            name: 'buName',
+            placeholder: 'Business unit name',
+            label: 'Business unit name',
+            validations: [
+                {
+                    name: 'required',
+                    message: 'Business unit name is required',
+                },
+            ],
         },
     ],
 }

@@ -1,20 +1,18 @@
 import { XXGrid } from '../../../global-utils/xx-grid'
 import { Box, Typography } from '../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
-import { useAdminManageBusUsers } from './admin-manage-bus-users-hook'
+import { useAdminManageBu } from './admin-manage-bu-hook'
 
-function AdminManageBusUsers() {
+function AdminManageBu() {
     const { TraceDialog } = useSharedElements()
-    const {
-        columns,
+    const { columns,
         gridActionMessages,
         handleCloseDialog,
         meta,
         queryArgs,
         queryId,
         specialColumns,
-        summaryColNames,
-    } = useAdminManageBusUsers()
+        summaryColNames, } = useAdminManageBu()
 
     return (
         <Box sx={{ height: 'calc(100vh - 180px)' }}>
@@ -26,6 +24,8 @@ function AdminManageBusUsers() {
                 gridActionMessages={gridActionMessages}
                 autoFetchData={true}
                 columns={columns}
+                jsonFieldPath='jsonResult.entitiesBu'
+                sharedData={meta.current.sharedData} // to get entities from original fetched data
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 sx={{ mt: 2 }}
@@ -39,4 +39,4 @@ function AdminManageBusUsers() {
     )
 }
 
-export { AdminManageBusUsers }
+export { AdminManageBu }
