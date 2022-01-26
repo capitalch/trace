@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
-import { useIbuki } from '../../../imports/trace-imports'
+import { ReactForm, useIbuki } from '../../../imports/trace-imports'
 
 function useAdminManageBusUsers() {
     const [, setRefresh] = useState({})
@@ -10,13 +10,20 @@ function useAdminManageBusUsers() {
         dialogConfig: {
             title: '',
             tableName: 'TraceUser',
-            // formId: 'trace-brand-master',
+            formId: 'admin-manage-bus-users',
             // ibukiFetchDataMessage:FETCH_DATA_MESSAGE,
-            actions: () => { },
+            actions: () => {},
             content: () => <></>,
         },
     })
-    const { confirm, genericUpdateMaster, getLoginData, messages } = useSharedElements()
+    const {
+        confirm,
+        genericUpdateMaster,
+        getCurrentEntity,
+        getLoginData,
+        messages,
+        TraceFullWidthSubmitButton,
+    } = useSharedElements()
     const id = getLoginData().id
     const { emit, filterOn } = useIbuki()
     const pre = meta.current.dialogConfig
@@ -25,33 +32,33 @@ function useAdminManageBusUsers() {
             emit(gridActionMessages.fetchIbukiMessage, null)
         })
 
-        const subs2 = filterOn(
-            gridActionMessages.editIbukiMessage
-        ).subscribe((d: any) => {
-            //edit
-            // handleEdit(d.data)
-        })
+        const subs2 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
+            (d: any) => {
+                //edit
+                // handleEdit(d.data)
+            }
+        )
 
-        const subs3 = filterOn(
-            gridActionMessages.deleteIbukiMessage
-        ).subscribe((d: any) => {
-            //delete
-            const { id1 } = d.data?.row
-            handleDelete(id1)
-        })
+        const subs3 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe(
+            (d: any) => {
+                //delete
+                const { id1 } = d.data?.row
+                handleDelete(id1)
+            }
+        )
 
-        const subs4 = filterOn(
-            gridActionMessages.addIbukiMessage
-        ).subscribe((d: any) => {
-            //Add
-            handleAdd()
-        })
+        const subs4 = filterOn(gridActionMessages.addIbukiMessage).subscribe(
+            (d: any) => {
+                //Add
+                handleAdd()
+            }
+        )
 
-        return (() => {
+        return () => {
             subs1.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
-        })
+        }
     }, [])
 
     const columns: any[] = [
@@ -103,9 +110,16 @@ function useAdminManageBusUsers() {
     function handleAdd() {
         meta.current.showDialog = true
         pre.title = 'Add new user'
-        const addJson = JSON.parse(
-            JSON.stringify(manageUsersJson)
+        const addJsonString = JSON.stringify(manageUsersJson)
+        pre.content = () => (
+            <ReactForm
+                jsonText={addJsonString}
+                name={getCurrentEntity()}
+                formId={pre.formId}
+            />
         )
+        pre.actions = () => <TraceFullWidthSubmitButton onClick={() => {}} />
+
         setRefresh({})
     }
 
@@ -132,12 +146,13 @@ function useAdminManageBusUsers() {
                 emit('SHOW-MESSAGE', {})
                 emit(gridActionMessages.fetchIbukiMessage, null)
             })
-            .catch(() => { }) // important to have otherwise eror
+            .catch(() => {}) // important to have otherwise eror
     }
     const gridActionMessages = {
         fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-USERS',
         editIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-EDIT-CLICKED',
-        deleteIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-DELETE-CLICKED',
+        deleteIbukiMessage:
+            'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-DELETE-CLICKED',
         addIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-ADD-CLICKED',
     }
     const queryId = 'get_businessUsers'
@@ -148,7 +163,16 @@ function useAdminManageBusUsers() {
     }
     const summaryColNames: string[] = []
 
-    return { columns, gridActionMessages, handleCloseDialog, meta, queryArgs, queryId, specialColumns, summaryColNames }
+    return {
+        columns,
+        gridActionMessages,
+        handleCloseDialog,
+        meta,
+        queryArgs,
+        queryId,
+        specialColumns,
+        summaryColNames,
+    }
 }
 
 export { useAdminManageBusUsers }

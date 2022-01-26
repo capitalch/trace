@@ -49,9 +49,7 @@ function useTraceMaterialComponents() {
                 {...options.materialDialogProps}
                 open={options.meta.current.showDialog}
                 onClose={options.onClose || handleClose}>
-                <DialogTitle
-                    id="generic-dialog-title"
-                    className="dialog-title">
+                <DialogTitle id="generic-dialog-title" className="dialog-title">
                     <div>{pre.title}</div>
                     <IconButton
                         size="small"
@@ -63,7 +61,7 @@ function useTraceMaterialComponents() {
                 </DialogTitle>
                 <DialogContent
                     sx={styles.dialogContent}
-                // className={classes.dialogContent}
+                    // className={classes.dialogContent}
                 >
                     {pre.isSearchBox && (
                         <Input
@@ -121,7 +119,11 @@ function useTraceMaterialComponents() {
         onClick,
         disabled,
         style = {},
-    }: any) {
+    }: {
+        onClick: any
+        disabled?: boolean
+        style?: any
+    }) {
         const btn = (
             <Button
                 style={{ ...style }}
@@ -143,7 +145,7 @@ function useTraceMaterialComponents() {
         return (
             <TextField
                 id="global-search-field"
-                variant='standard'
+                variant="standard"
                 value={meta.current.globalFilter}
                 placeholder="Global search"
                 InputProps={{
@@ -189,7 +191,7 @@ function useTraceMaterialComponents() {
             <Box
                 sx={styles.searchBox}
                 className={options.className}
-            // className={clsx(classes.searchBox, options.className)}
+                // className={clsx(classes.searchBox, options.className)}
             >
                 <TextField
                     className="input-box"
@@ -274,7 +276,7 @@ const styles = {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingBottom: '0px',
-            paddingRight: 2.0 // useTheme().spacing(2.0),
+            paddingRight: 2.0, // useTheme().spacing(2.0),
         },
 
         '& .MuiInputBase-root': {
@@ -291,8 +293,8 @@ const styles = {
 
     submitButtonStyle: {
         marginLeft: 2, //useTheme().spacing(2),
-        marginTop: -1,//-useTheme().spacing(1),
-        marginRight: 2,//useTheme().spacing(2),
+        marginTop: -4, //-useTheme().spacing(1),
+        marginRight: 2, //useTheme().spacing(2),
     },
 
     searchBox: {
