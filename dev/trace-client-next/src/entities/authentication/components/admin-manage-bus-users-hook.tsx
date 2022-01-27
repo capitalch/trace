@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { ReactForm, useIbuki } from '../../../imports/trace-imports'
+import { useCommonArtifacts } from './common-artifacts-hook'
 
 function useAdminManageBusUsers() {
     const [, setRefresh] = useState({})
@@ -11,7 +12,7 @@ function useAdminManageBusUsers() {
             title: '',
             tableName: 'TraceUser',
             formId: 'admin-manage-bus-users',
-            actions: () => { },
+            actions: () => {},
             content: () => <></>,
         },
     })
@@ -31,6 +32,7 @@ function useAdminManageBusUsers() {
         resetForm,
         TraceFullWidthSubmitButton,
     } = useSharedElements()
+    const { gridActionMessages, handleDelete } = useCommonArtifacts()
     const id = getLoginData().id
     const { emit, filterOn } = useIbuki()
     const pre = meta.current.dialogConfig
@@ -50,7 +52,7 @@ function useAdminManageBusUsers() {
             (d: any) => {
                 //delete
                 const { id1 } = d.data?.row
-                handleDelete(id1)
+                handleDelete(id1, 'TraceUser')
             }
         )
 
@@ -115,7 +117,7 @@ function useAdminManageBusUsers() {
         },
     ]
 
-    function setDialogContentAction(jsonString:any){
+    function setDialogContentAction(jsonString: any) {
         pre.content = () => (
             <ReactForm
                 jsonText={jsonString}
@@ -123,7 +125,9 @@ function useAdminManageBusUsers() {
                 formId={pre.formId}
             />
         )
-        pre.actions = () => <TraceFullWidthSubmitButton onClick={handleSubmit} />
+        pre.actions = () => (
+            <TraceFullWidthSubmitButton onClick={handleSubmit} />
+        )
     }
 
     function handleAdd() {
@@ -140,46 +144,45 @@ function useAdminManageBusUsers() {
         setRefresh({})
     }
 
-    function handleDelete(id1: any) {
-        const options = {
-            description: messages.deleteConfirm,
-            confirmationText: 'Yes',
-            cancellationText: 'No',
-        }
-        confirm(options)
-            .then(async () => {
-                const id = +id1 // to make it numeric from string
-                emit('SHOW-LOADING-INDICATOR', true)
-                await genericUpdateMaster({
-                    deletedIds: [id],
-                    tableName: 'TraceUser',
-                })
-                emit('SHOW-LOADING-INDICATOR', false)
-                emit('SHOW-MESSAGE', {})
-                emit(gridActionMessages.fetchIbukiMessage, null)
-            })
-            .catch(() => { }) // important to have otherwise eror
-    }
+    // function handleDelete(id1: any) {
+    //     const options = {
+    //         description: messages.deleteConfirm,
+    //         confirmationText: 'Yes',
+    //         cancellationText: 'No',
+    //     }
+    //     confirm(options)
+    //         .then(async () => {
+    //             const id = +id1 // to make it numeric from string
+    //             emit('SHOW-LOADING-INDICATOR', true)
+    //             await genericUpdateMaster({
+    //                 deletedIds: [id],
+    //                 tableName: 'TraceUser',
+    //             })
+    //             emit('SHOW-LOADING-INDICATOR', false)
+    //             emit('SHOW-MESSAGE', {})
+    //             emit(gridActionMessages.fetchIbukiMessage, null)
+    //         })
+    //         .catch(() => { }) // important to have otherwise eror
+    // }
 
-    function handleEdit(node:any){
+    function handleEdit(node: any) {
         resetForm(pre.formId)
         const formData = getFormData(pre.formId)
         formData.id = node.id1 // for edit purpose
         const jsonObject = JSON.parse(JSON.stringify(manageUsersJson))
-            jsonObject.items[0].value = node['userEmail']
-            jsonObject.items[1].value = node['userName']
-            jsonObject.items[2].value = node['descr']
-            jsonObject.items[3].value = node['isActive']
-            jsonObject.validations.pop()
-            jsonObject.validations.push({
-                name: 'userEmailExistsUpdate',
-                message:
-                    'This email already exists. Please try out another email',
-            })
-            pre.title = 'Edit user'
-            setDialogContentAction(JSON.stringify(jsonObject))
-            meta.current.showDialog = true
-            setRefresh({})
+        jsonObject.items[0].value = node['userEmail']
+        jsonObject.items[1].value = node['userName']
+        jsonObject.items[2].value = node['descr']
+        jsonObject.items[3].value = node['isActive']
+        jsonObject.validations.pop()
+        jsonObject.validations.push({
+            name: 'userEmailExistsUpdate',
+            message: 'This email already exists. Please try out another email',
+        })
+        pre.title = 'Edit user'
+        setDialogContentAction(JSON.stringify(jsonObject))
+        meta.current.showDialog = true
+        setRefresh({})
     }
 
     async function handleSubmit() {
@@ -195,12 +198,9 @@ function useAdminManageBusUsers() {
             formData.isActive || (formData.isActive = false)
             const sqlObjectString = getSqlObjectString({
                 data: formData,
-                tableName: 'TraceUser'
+                tableName: 'TraceUser',
             })
-            const q = queries['createUser'](
-                sqlObjectString,
-                getCurrentEntity()
-            )
+            const q = queries['createUser'](sqlObjectString, getCurrentEntity())
             if (q) {
                 emit('SHOW-LOADING-INDICATOR', true)
                 try {
@@ -218,7 +218,6 @@ function useAdminManageBusUsers() {
                             duration: null,
                         })
                     }
-
                 } catch (err: any) {
                     emit('SHOW-MESSAGE', {
                         severity: 'error',
@@ -231,13 +230,13 @@ function useAdminManageBusUsers() {
         }
     }
 
-    const gridActionMessages = {
-        fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-USERS',
-        editIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-EDIT-CLICKED',
-        deleteIbukiMessage:
-            'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-DELETE-CLICKED',
-        addIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-ADD-CLICKED',
-    }
+    // const gridActionMessages = {
+    //     fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-USERS',
+    //     editIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-EDIT-CLICKED',
+    //     deleteIbukiMessage:
+    //         'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-DELETE-CLICKED',
+    //     addIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-ADD-CLICKED',
+    // }
     const queryId = 'get_businessUsers'
     const queryArgs = { parentId: id }
     const specialColumns = {
