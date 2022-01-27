@@ -113,6 +113,7 @@ function useAdminManageBusUsers() {
             headerName: 'Active',
             description: 'Active',
             field: 'isActive',
+            type:'boolean',
             width: 90,
         },
     ]

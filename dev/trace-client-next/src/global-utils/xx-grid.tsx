@@ -32,12 +32,18 @@ import {
 import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
 
+interface CustomColumnOptions {
+    headerName: string
+    renderCell: Function
+}
+
 interface SpecialColumnOptions {
     isEdit?: boolean
     isDelete?: boolean
     isHide?: boolean
     isDrillDown?: boolean
     drillDownIbukiMessage?: any
+    customColumn1?: CustomColumnOptions
 }
 
 interface GridActionMessagesOptions {

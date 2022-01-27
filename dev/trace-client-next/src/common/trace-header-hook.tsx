@@ -663,11 +663,11 @@ const adminMenuJson: any = {
                 {
                     name: 'manageRoles',
                     label: 'Manage roles',
-                    
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageRoles',
-                    },
+                    componentName: 'adminManageRoles'
+                    // componentName: 'genericCRUD',
+                    // args: {
+                    //     loadComponent: 'manageRoles',
+                    // },
                 },
                 {
                     name: 'manageBu',

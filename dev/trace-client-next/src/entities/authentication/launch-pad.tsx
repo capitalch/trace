@@ -4,6 +4,7 @@ import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
 import { AdminManageBusUsers } from './components/admin-manage-bus-users'
 import { AdminManageBu } from './components/admin-manage-bu'
+import { AdminManageRoles } from './components/admin-manage-roles'
 
 function LaunchPad() {
     const meta: any = useRef({
@@ -16,7 +17,8 @@ function LaunchPad() {
     const { filterOn } = usingIbuki()
     const components: any = {
         adminManageBusUsers: AdminManageBusUsers,
-        adminManageBu: AdminManageBu
+        adminManageBu: AdminManageBu,
+        adminManageRoles: AdminManageRoles,
     }
     useEffect(() => {
         const curr = meta.current
