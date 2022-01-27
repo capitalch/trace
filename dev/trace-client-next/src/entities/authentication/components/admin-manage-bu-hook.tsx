@@ -20,15 +20,12 @@ function useAdminManageBu() {
     })
     const {
         clearServerError,
-        confirm,
         doValidateForm,
         emit,
         filterOn,
         isValidForm,
-        genericUpdateMaster,
         getCurrentEntity,
         getFormData,
-        getLoginData,
         getSqlObjectString,
         messages,
         mutateGraphql,
@@ -154,7 +151,7 @@ function useAdminManageBu() {
     function handleEdit(node: any) {
         resetForm(pre.formId)
         pre.isEditMode = true
-        const formData: any = getFormData(pre.formId)        
+        const formData: any = getFormData(pre.formId)
         pre.title = 'Edit business unit(Bu)'
         const jsonObject = JSON.parse(JSON.stringify(manageBuJson))
         jsonObject.validations.pop() // remove validation from the form
@@ -163,13 +160,14 @@ function useAdminManageBu() {
         jsonObject.items[0].value = node.buCode
         jsonObject.items[1].value = node.buName
         setDialogContentAction(JSON.stringify(jsonObject))
-        formData.id = node.id1
+        pre.id = node.id1
         meta.current.showDialog = true
         setRefresh({})
     }
 
     async function handleSubmit() {
         const formData = getFormData(pre.formId)
+        pre.isEditMode && (formData.id = pre.id)
         clearServerError(pre.formId)
         await doValidateForm(pre.formId)
         if (isValidForm(pre.formId)) {
@@ -217,14 +215,6 @@ function useAdminManageBu() {
         }
     }
 
-    // const gridActionMessages = {
-    //     fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-BU',
-    //     editIbukiMessage: 'ADMIN-MANAGE-BU-HOOK-XX-GRID-EDIT-CLICKED',
-    //     deleteIbukiMessage:
-    //         'ADMIN-MANAGE-BU-HOOK-XX-GRID-DELETE-CLICKED',
-    //     addIbukiMessage: 'ADMIN-MANAGE-BU-HOOK-XX-GRID-ADD-CLICKED',
-    //     onDataFetchedIbukiMessage:'ADMIN-MANAGE-BU-HOOK-XX-GRID-DATA-FETCHED'
-    // }
     const queryId = 'getJson_entities_bu'
     const queryArgs = {}
     const specialColumns = {
