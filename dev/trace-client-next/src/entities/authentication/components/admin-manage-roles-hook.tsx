@@ -25,6 +25,7 @@ function useAdminManageRoles() {
         isValidForm,
         getCurrentEntity,
         getFormData,
+        getLoginData,
         getSqlObjectString,
         messages,
         mutateGraphql,
@@ -63,18 +64,57 @@ function useAdminManageRoles() {
             }
         )
 
+        const subs5 = filterOn(
+            gridActionMessages.onDataFetchedIbukiMessage
+        ).subscribe((d: any) => {
+            console.log(d)
+        })
+
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
-            // subs5.unsubscribe()
+            subs5.unsubscribe()
         }
     }, [])
 
-    const columns: any[] = []
-    const queryId = ''
-    const queryArgs = {}
+    const columns: any[] = [
+        {
+            headerName: 'Ind',
+            description: 'Index',
+            field: 'id',
+            width: 80,
+            disableColumnMenu: true,
+        },
+        {
+            headerName: 'Id',
+            description: 'Id',
+            field: 'id1',
+            width: 90,
+        },
+        {
+            headerName: 'Database',
+            description: 'Database',
+            field: 'dbName',
+            width: 200,
+        },
+        {
+            headerName: 'Role',
+            description: 'Role',
+            field: 'role',
+            width: 190,
+        },
+        {
+            headerName: 'Role description',
+            description: 'Role description',
+            field: 'roleDescr',
+            width: 150,
+            flex: 1,
+        },
+    ]
+    const queryId = 'getJson_roles_clienEntityId_entityName'
+    const queryArgs = { userId: getLoginData().id }
     const specialColumns = {
         isEdit: true,
         isDelete: true,

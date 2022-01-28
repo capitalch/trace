@@ -1,3 +1,4 @@
+import react from 'react'
 import { useStyles } from './xx-grid-hook'
 import { _, clsx } from '../imports/regular-imports'
 import {
@@ -31,10 +32,11 @@ import {
 
 import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
+import reactSelect from 'react-select'
 
 interface CustomColumnOptions {
     headerName: string
-    renderCell: Function
+    renderCell: react.FC
 }
 
 interface SpecialColumnOptions {

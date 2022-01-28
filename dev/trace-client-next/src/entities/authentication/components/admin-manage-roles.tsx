@@ -24,7 +24,7 @@ function AdminManageRoles() {
                 gridActionMessages={gridActionMessages}
                 autoFetchData={true}
                 columns={columns}
-                jsonFieldPath="jsonResult.entitiesBu"
+                jsonFieldPath="jsonResult.roles"
                 sharedData={meta.current.sharedData} // to get entities from original fetched data
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
