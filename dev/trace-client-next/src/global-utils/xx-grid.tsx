@@ -1,4 +1,3 @@
-import react from 'react'
 import { useStyles } from './xx-grid-hook'
 import { _, clsx } from '../imports/regular-imports'
 import {
@@ -32,12 +31,11 @@ import {
 
 import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
-import reactSelect from 'react-select'
 
-interface CustomColumnOptions {
-    headerName: string
-    renderCell: react.FC
-}
+// interface CustomColumnOptions {
+//     headerName: string
+//     renderCell: react.FC
+// }
 
 interface SpecialColumnOptions {
     isEdit?: boolean
@@ -45,7 +43,7 @@ interface SpecialColumnOptions {
     isHide?: boolean
     isDrillDown?: boolean
     drillDownIbukiMessage?: any
-    customColumn1?: CustomColumnOptions
+    customColumn1?: any //CustomColumnOptions
 }
 
 interface GridActionMessagesOptions {
@@ -485,6 +483,15 @@ function XXGrid(gridOptions: XXGridOptions) {
         options: SpecialColumnOptions,
         gridActionMessages: GridActionMessagesOptions
     ) {
+
+        if(options.customColumn1 && (!_.isEmpty(options.customColumn1))){
+            const cc = options.customColumn1
+            const customColumn1 = {
+                ...cc
+            }
+            columns.push(customColumn1)
+        }
+
         if (options.isDelete) {
             const deleteColumn = {
                 headerName: 'D',

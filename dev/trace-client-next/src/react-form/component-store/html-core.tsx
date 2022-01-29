@@ -686,7 +686,7 @@ const componentStore: any = {
                 )}
                 <input
                     type="text"
-                    autocomplete='off'
+                    autoComplete='off'
                     value={xValue || ''}
                     placeholder={xPlaceholder}
                     name={xName}

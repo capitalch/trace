@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { ReactForm, useIbuki } from '../../../imports/trace-imports'
+import { IconButton } from '../../../imports/gui-imports'
+import {
+    CloseSharp,
+    DeleteForever,
+    Search,
+    SyncSharp,
+    Edit,
+    Settings,
+} from '../../../imports/icons-import'
 import { useCommonArtifacts } from './common-artifacts-hook'
 
 function useAdminManageRoles() {
@@ -45,29 +54,30 @@ function useAdminManageRoles() {
         const subs2 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {
                 //edit
-                // handleEdit(d.data?.row)
+                handleEdit(d.data?.row)
             }
         )
 
         const subs3 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe(
             (d: any) => {
                 //delete
-                // const { id1 } = d.data?.row
-                // handleDelete(id1, 'ClientEntityBu')
+                const { id1 } = d.data?.row
+                handleDelete(id1, 'ClientEntityRole')
             }
         )
 
         const subs4 = filterOn(gridActionMessages.addIbukiMessage).subscribe(
             (d: any) => {
                 //Add
-                // handleAdd()
+                handleAdd()
             }
         )
 
         const subs5 = filterOn(
             gridActionMessages.onDataFetchedIbukiMessage
         ).subscribe((d: any) => {
-            console.log(d)
+            // console.log(d)
+            pre.clientEntityId = d.data.jsonResult.clientEntityId
         })
 
         return () => {
@@ -81,7 +91,7 @@ function useAdminManageRoles() {
 
     const columns: any[] = [
         {
-            headerName: 'Ind',
+            headerName: '#',
             description: 'Index',
             field: 'id',
             width: 80,
@@ -109,21 +119,86 @@ function useAdminManageRoles() {
             headerName: 'Role description',
             description: 'Role description',
             field: 'roleDescr',
-            width: 150,
+            minWidth: 150,
             flex: 1,
         },
     ]
+
     const queryId = 'getJson_roles_clienEntityId_entityName'
     const queryArgs = { userId: getLoginData().id }
     const specialColumns = {
         isEdit: true,
         isDelete: true,
+        customColumn1: {
+            headerName: 'Permission',
+            width: 110,
+            field: '5',
+            renderCell: (params: any) => {
+                return (
+                    <IconButton
+                        size="large"
+                        color="primary"
+                        onClick={handlePermission}
+                        aria-label="close">
+                        <Settings color="secondary" fontSize="medium" />
+                    </IconButton>
+                )
+            },
+        },
     }
     const summaryColNames: string[] = []
+
+    function setDialogContentAction(jsonString: any) {
+        pre.content = () => (
+            <ReactForm
+                jsonText={jsonString}
+                name={getCurrentEntity()}
+                formId={pre.formId}
+            />
+        )
+        pre.actions = () => (
+            <TraceFullWidthSubmitButton onClick={handleSubmit} />
+        )
+    }
+
+    function handleAdd(){
+        resetForm(pre.formId)
+        pre.isEditMode = false
+        meta.current.showDialog = true
+        pre.title = 'Add new role'
+        const addJsonString = JSON.stringify(manageRole)
+        setDialogContentAction(addJsonString)
+        const formData: any = getFormData(pre.formId)
+        formData.clientEntityId = pre.clientEntityId
+        setRefresh({})
+    }
 
     function handleCloseDialog() {
         meta.current.showDialog = false
         setRefresh({})
+    }
+
+    function handleEdit(node:any){
+        resetForm(pre.formId)
+        pre.isEditMode = true
+        const formData: any = getFormData(pre.formId)
+        pre.title = 'Edit role'
+        const jsonObject = JSON.parse(JSON.stringify(manageRole))
+        jsonObject.items[0].value = node.role
+        jsonObject.items[1].value = node.roleDescr
+
+        setDialogContentAction(JSON.stringify(jsonObject))
+        pre.id = node.id1
+        meta.current.showDialog = true
+        setRefresh({})
+    }
+
+    function handlePermission() {
+        alert('test')
+    }
+
+    function handleSubmit(){
+
     }
 
     return {
@@ -138,3 +213,34 @@ function useAdminManageRoles() {
     }
 }
 export { useAdminManageRoles }
+
+const manageRole: any = {
+    class: 'generic-dialog',
+    validations: [],
+    items: [
+        {
+            type: 'Text',
+            name: 'role',
+            placeholder: 'User role',
+            label: 'User role',
+            validations: [
+                {
+                    name: 'noWhiteSpaceOrSpecialChar',
+                    message:
+                        'White space or special characters are not allowed',
+                },
+                {
+                    name: 'required',
+                    message: 'Role is required',
+                },
+            ],
+        },
+        {
+            type: 'Text',
+            name: 'roleDescr',
+            placeholder: 'User role description',
+            label: 'User role description',
+            validations: [],
+        },
+    ],
+}
