@@ -11,6 +11,7 @@ import {
     Settings,
 } from '../../../imports/icons-import'
 import { useCommonArtifacts } from './common-artifacts-hook'
+import { itemLevelValidators } from '../../../shared-artifacts/item-level-validators'
 
 function useAdminManageRoles() {
     const [, setRefresh] = useState({})
@@ -22,7 +23,7 @@ function useAdminManageRoles() {
             title: '',
             tableName: '',
             formId: 'admin-manage-roles',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
     })
@@ -34,17 +35,19 @@ function useAdminManageRoles() {
         isValidForm,
         getCurrentEntity,
         getFormData,
+        getFormObject,
         getLoginData,
         getSqlObjectString,
         messages,
         mutateGraphql,
         queries,
         resetForm,
+        
         TraceFullWidthSubmitButton,
     } = useSharedElements()
 
     const pre = meta.current.dialogConfig
-    const { handleDelete, gridActionMessages } = useCommonArtifacts()
+    const { doSubmit, handleDelete, gridActionMessages } = useCommonArtifacts()
 
     useEffect(() => {
         const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
@@ -76,8 +79,8 @@ function useAdminManageRoles() {
         const subs5 = filterOn(
             gridActionMessages.onDataFetchedIbukiMessage
         ).subscribe((d: any) => {
-            // console.log(d)
             pre.clientEntityId = d.data.jsonResult.clientEntityId
+            pre.permissionEntityName = d.data.jsonResult.entityName
         })
 
         return () => {
@@ -161,15 +164,61 @@ function useAdminManageRoles() {
         )
     }
 
-    function handleAdd(){
+    async function getPermissionsAsJson(permissionName: string) {
+        const permissionEntityName = pre.permissionEntityName || 'accounts'
+        const permissionsTemplate: any = await import(
+            `../../${permissionEntityName}/json/permission-templates.json`
+        )
+        const logic: any = {
+            base: permissionsTemplate.base,
+            operator: mergeWithBasePermissions('operator'),
+            accountant: mergeWithBasePermissions('accountant'),
+            manager: getOppositePermissions('base')
+        }
+        return (logic[permissionName])
+
+        function getOppositePermissions(name: string) {
+            const temp: any[] = permissionsTemplate[name].map((item: any) => ({
+                ...item,
+                isActive: !item.isActive
+            }))
+            return (temp)
+        }
+        function mergeWithBasePermissions(name: string) {
+            const permissions = permissionsTemplate[name]
+            const basePermissions = permissionsTemplate.base
+            const basePermissionsClone = basePermissions.map((x: any) => ({ ...x }))
+            const permissionsObject: any = arrayToObject(permissions)
+            const ret: any[] = basePermissionsClone.map((item: any) => {
+                const controlName: string = item.controlName
+                if (permissionsObject[controlName] !== undefined) {
+                    item.isActive = permissionsObject[controlName]
+                }
+                return (item)
+            })
+            return (ret)
+
+            function arrayToObject(arr: any[]) {
+                const obj: any = {}
+                for (const item of arr) {
+                    obj[item.controlName] = item.isActive
+                }
+                return (obj)
+            }
+        }
+    }
+
+    async function handleAdd() {
         resetForm(pre.formId)
         pre.isEditMode = false
         meta.current.showDialog = true
         pre.title = 'Add new role'
         const addJsonString = JSON.stringify(manageRole)
         setDialogContentAction(addJsonString)
-        const formData: any = getFormData(pre.formId)
-        formData.clientEntityId = pre.clientEntityId
+        // const formData = getFormData(pre.formId)
+        // const formObject = getFormObject(pre.formId)
+        const permissions = await getPermissionsAsJson('base') // default permission is base permision , which has no controls active. You need to modify the permissions after making a few controls active
+        
         setRefresh({})
     }
 
@@ -178,7 +227,7 @@ function useAdminManageRoles() {
         setRefresh({})
     }
 
-    function handleEdit(node:any){
+    function handleEdit(node: any) {
         resetForm(pre.formId)
         pre.isEditMode = true
         const formData: any = getFormData(pre.formId)
@@ -188,7 +237,8 @@ function useAdminManageRoles() {
         jsonObject.items[1].value = node.roleDescr
 
         setDialogContentAction(JSON.stringify(jsonObject))
-        pre.id = node.id1
+        // formData.id = node.id1
+        pre.id = node.id1 // for edit
         meta.current.showDialog = true
         setRefresh({})
     }
@@ -197,12 +247,26 @@ function useAdminManageRoles() {
         alert('test')
     }
 
-    function handleSubmit(){
-
+    async function handleSubmit() {
+        const formData: any = getFormData(pre.formId)
+        if(pre.isEditMode){
+            formData.id = pre.id
+        } else {
+            const permissions = await getPermissionsAsJson('base')
+            formData.permissions =  JSON.stringify(permissions)
+        }
+        formData.clientEntityId = pre.clientEntityId
+        await doSubmit({
+            formId: pre.formId,
+            graphQlKey: 'genericUpdateMaster',
+            tableName: 'ClientEntityRole',
+            handleCloseDialog: handleCloseDialog
+        })
     }
 
     return {
         columns,
+        getPermissionsAsJson,
         gridActionMessages,
         handleCloseDialog,
         meta,

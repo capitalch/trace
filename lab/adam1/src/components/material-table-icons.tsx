@@ -8,8 +8,8 @@ import { AddBox, ArrowDownward, Check, ChevronLeft,ChevronRight, Clear
     , SaveAlt
     , Search
     , ViewColumn
-    } from "@material-ui/icons"
-
+    } from "@mui/icons-material"
+    
     const tableIcons: any = {
         Add: AddBox
         , Check: Check

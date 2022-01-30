@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import useMediaQuery from '@material-ui/core/useMediaQuery'
-import useTheme from '@material-ui/core/styles/useTheme'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import useTheme from '@mui/material/styles/useTheme'
 const traceGlobal: any = {}
 
 function useTraceGlobal() {

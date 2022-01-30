@@ -1294,12 +1294,12 @@
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.36"
 
-"@fortawesome/react-fontawesome@^0.1.16":
-  version "0.1.16"
-  resolved "https://registry.npmjs.org/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.16.tgz"
-  integrity sha512-aLmzDwC9rEOAJv2UJdMns89VZR5Ry4IHu5dQQh24Z/lWKEm44lfQr1UNalZlkUaQN8d155tNh+CS7ntntj1VMA==
+"@fortawesome/react-fontawesome@^0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@fortawesome/react-fontawesome/-/react-fontawesome-0.1.17.tgz#06fc06cb1a721e38e5b50b4a1cb851e9b9c77d7a"
+  integrity sha512-dX43Z5IvMaW7fwzU8farosYjKNGfRb2HB/DgjVBHeJZ/NSnuuaujPPx0YOdcAq+n3mqn70tyCde2HM1mqbhiuw==
   dependencies:
-    prop-types "^15.7.2"
+    prop-types "^15.8.1"
 
 "@gar/promisify@^1.0.1":
   version "1.1.2"
@@ -1620,10 +1620,10 @@
     prop-types "^15.7.2"
     react-is "^16.8.0 || ^17.0.0"
 
-"@mui/base@5.0.0-alpha.65":
-  version "5.0.0-alpha.65"
-  resolved "https://registry.npmjs.org/@mui/base/-/base-5.0.0-alpha.65.tgz"
-  integrity sha512-6LCTWVoSnEoQuWdxA+Z1qqmlNK4aZj7LvCuLJzq3RVS2PskRuo1O3caVFxAzRu7xrY3zsyL/sUsJI+rdcjhuXw==
+"@mui/base@5.0.0-alpha.66":
+  version "5.0.0-alpha.66"
+  resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.66.tgz#5f03e641daecbc54a7b03d6368e625fef45cb7e4"
+  integrity sha512-LARfVx0HmGV5YwU2pdIqEApQwz/CtEnYtKkV856hlY0cgi5NQL2htzZ/9ujKz0j3LFUaMYiYuJ2AOwrNtGFGrw==
   dependencies:
     "@babel/runtime" "^7.16.7"
     "@emotion/is-prop-valid" "^1.1.1"
@@ -1633,20 +1633,20 @@
     prop-types "^15.7.2"
     react-is "^17.0.2"
 
-"@mui/icons-material@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.npmjs.org/@mui/icons-material/-/icons-material-5.3.0.tgz"
-  integrity sha512-1+dN2N8BgozmdMeHXQLrvSr1G/7Xc0NmAMLSvu8XA9RxhcTos/p66vrvpPASw2qvt14dkfeqyHwvbLRgAU9slw==
+"@mui/icons-material@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.3.1.tgz#e0e0aecce5a86971dbaa46441d931a9c749a1c53"
+  integrity sha512-8zBWCaE8DHjIGZhGgMod92p6Rm38EhXrS+cZtaV0+jOTMeWh7z+mvswXzb/rVKc0ZYqw6mQYBcn2uEs2yclI9w==
   dependencies:
     "@babel/runtime" "^7.16.7"
 
-"@mui/material@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.npmjs.org/@mui/material/-/material-5.3.0.tgz"
-  integrity sha512-zLdlweBHrKpOwHFoMXA6FFgKQOONuX4sQhODcj9dk5uPeScuMDE26svcsrPam5Y1PKXZX78YEGHB5Jr5PHGpTA==
+"@mui/material@^5.3.1":
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.3.1.tgz#23c1e71b9cf995837ff5fdca34ac5052496861f5"
+  integrity sha512-XWPsJ2jet2zfnKojth5d2IaHIJPpJnHq1ACCSlNf898BjYh1j50gRWsPpIHiptQ0oc0pdWmMcmrXbdANKR1ybw==
   dependencies:
     "@babel/runtime" "^7.16.7"
-    "@mui/base" "5.0.0-alpha.65"
+    "@mui/base" "5.0.0-alpha.66"
     "@mui/system" "^5.3.0"
     "@mui/types" "^7.1.0"
     "@mui/utils" "^5.3.0"
@@ -1718,7 +1718,7 @@
   resolved "https://registry.npmjs.org/@mui/types/-/types-7.1.0.tgz"
   integrity sha512-Hh7ALdq/GjfIwLvqH3XftuY3bcKhupktTm+S6qRIDGOtPtRuq2L21VWzOK4p7kblirK0XgGVH5BLwa6u8z/6QQ==
 
-"@mui/utils@^5.2.3", "@mui/utils@^5.3.0":
+"@mui/utils@^5.3.0":
   version "5.3.0"
   resolved "https://registry.npmjs.org/@mui/utils/-/utils-5.3.0.tgz"
   integrity sha512-O/E9IQKPMg0OrN7+gkn7Ga5o5WA2iXQGdyqNBFPNrYzxOvwzsEtM5K7MtTCGGYKFe8mhTRM0ZOjh5OM0dglw+Q==
@@ -1729,23 +1729,23 @@
     prop-types "^15.7.2"
     react-is "^17.0.2"
 
-"@mui/x-data-grid-pro@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.npmjs.org/@mui/x-data-grid-pro/-/x-data-grid-pro-5.3.0.tgz"
-  integrity sha512-Ped5VWX0euZS7FuqgIMINgru4NVS6eimGkpI6v2rXR5j61nghfMYafDBj+vpLsoeXy/0uchmwTgYoqNatwcNwA==
+"@mui/x-data-grid-pro@^5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-data-grid-pro/-/x-data-grid-pro-5.4.0.tgz#77efe91f51825138fd43c98d616934e3b6928c8b"
+  integrity sha512-zolakxbLJh3zTTe1uKnfx1T8w3JC844HMsoZW1O6YJ2LClQpjxR7QCdfTWFtysPjeIR9fZfmuZ0afweevwbHJA==
   dependencies:
-    "@mui/utils" "^5.2.3"
-    "@mui/x-license-pro" "5.3.0"
+    "@mui/utils" "^5.3.0"
+    "@mui/x-license-pro" "5.4.0"
     clsx "^1.0.4"
     prop-types "^15.8.1"
     reselect "^4.1.5"
 
-"@mui/x-license-pro@5.3.0":
-  version "5.3.0"
-  resolved "https://registry.npmjs.org/@mui/x-license-pro/-/x-license-pro-5.3.0.tgz"
-  integrity sha512-JZFfO9b71ZCv8nQzRE+4vhmiFRWqEpQQhNjDxc7KsK8D1HHchtqL5cCw9tqrSIZPVBXi36b0cEG1mqh+Axi/og==
+"@mui/x-license-pro@5.4.0":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-license-pro/-/x-license-pro-5.4.0.tgz#5c5cfdb53b394e1426ee550f8cf74b89655f07ae"
+  integrity sha512-Awm6/EQcu8TdGKTlTRzWwAc0ukbdGMZ1DgtF7VeI+4j+ZwyY3+VANMDz556WpF1GmC5k+jXH+8+7WUMm4wUPSw==
   dependencies:
-    "@mui/utils" "^5.2.3"
+    "@mui/utils" "^5.3.0"
     esm "^3.2.25"
     yargs "^17.3.1"
 
@@ -1803,15 +1803,15 @@
   resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.2.tgz"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
-"@react-pdf/font@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@react-pdf/font/-/font-2.1.0.tgz"
-  integrity sha512-EWAg9RMkHh4uhjxlH56THT4ktL7m16Q71i1/KDRcfrDP2md8d+4LI7KJ9NSJT/LmcXLbPTUJzI/Ck2qxbkbnXw==
+"@react-pdf/font@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@react-pdf/font/-/font-2.1.1.tgz#18bf4de35d9a72082e5fa08dfeaf0869107c5ad6"
+  integrity sha512-4XwdD4S9HoiuhUQZvCGTFz+baYqowUcq7+HknRlMEk0HQOL3Rnnqe7Sxlv8ap208bHUsdsQFMjxlW8D0BS6C0w==
   dependencies:
     "@babel/runtime" "^7.16.4"
     "@react-pdf/fontkit" "^2.1.0"
     "@react-pdf/types" "^2.0.8"
-    cross-fetch "^3.0.4"
+    cross-fetch "^3.1.5"
     is-url "^1.2.4"
 
 "@react-pdf/fontkit@^2.1.0":
@@ -1829,29 +1829,29 @@
     tiny-inflate "^1.0.2"
     unicode-trie "^0.3.0"
 
-"@react-pdf/image@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@react-pdf/image/-/image-2.1.0.tgz"
-  integrity sha512-rX9ybH/QQLCPy2V6StdHaaqnT9yN9ZrYSegCadiAaINg9d0eGqZd3x4gPe4yQ013KieinecLUveBZvzvqbPhbw==
+"@react-pdf/image@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@react-pdf/image/-/image-2.1.1.tgz#8db2adec56e8d4d4c590866dc936bed37a9a98a4"
+  integrity sha512-Uh9N1HBU5QGP1QxuIhpVES8FAQsSy2/IGrCHoCCzUUuvbUKf+Mezl3+gvaS4fkWbENPpZ9q6u2C3yL5IqRirsw==
   dependencies:
     "@babel/runtime" "^7.16.4"
     "@react-pdf/png-js" "^2.1.0"
-    cross-fetch "^3.0.4"
+    cross-fetch "^3.1.5"
 
-"@react-pdf/layout@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@react-pdf/layout/-/layout-2.1.0.tgz"
-  integrity sha512-xkuXnBQUd/nh9XLQ9sP+vddXttcLLz/+aTNwp7zg8JGlGUyOWF1rVOum/TdtoBinCkDFrCUR9rQRSWezooAHTA==
+"@react-pdf/layout@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@react-pdf/layout/-/layout-2.1.1.tgz#edaab56de6e2d9b1772e75776ee07b03cdde65dc"
+  integrity sha512-ddpXNRAU1JNHL+AUQEFO2RFolDrtqs/Z0Gb8fjicCcWinthpqkeLdNMWYA5bQuUIzuJXONAQDGd6JLomv2Wayg==
   dependencies:
     "@babel/runtime" "^7.16.4"
-    "@react-pdf/image" "^2.1.0"
+    "@react-pdf/image" "^2.1.1"
     "@react-pdf/pdfkit" "^2.1.0"
     "@react-pdf/primitives" "^2.0.2"
     "@react-pdf/stylesheet" "^2.1.0"
     "@react-pdf/textkit" "^2.1.0"
     "@react-pdf/types" "^2.0.8"
     "@react-pdf/yoga" "^2.0.4"
-    cross-fetch "^3.0.4"
+    cross-fetch "^3.1.5"
     emoji-regex "^8.0.0"
     queue "^6.0.1"
     ramda "^0.26.1"
@@ -1892,14 +1892,14 @@
     ramda "^0.26.1"
     svg-arc-to-cubic-bezier "^3.2.0"
 
-"@react-pdf/renderer@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.npmjs.org/@react-pdf/renderer/-/renderer-2.1.0.tgz"
-  integrity sha512-S1tY4QN6zg1ngpsGgfDG5qqvM880olwuFh5m53/B6uigfI9lX4npzvlNmANvPBR3/LxdbmBMvupGSCetQokV5Q==
+"@react-pdf/renderer@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@react-pdf/renderer/-/renderer-2.1.1.tgz#e0be312d1011b9bc4053a945e287f1db3c36f33c"
+  integrity sha512-W6Ma/4/zfj8KAJQkBeyHmzR3OuuMZFYZFrFtcfFXQNCZC3NDEasTNN0qYwcBAPkCyDAm+jhA/CKezhAPwnh3QQ==
   dependencies:
     "@babel/runtime" "^7.16.4"
-    "@react-pdf/font" "^2.1.0"
-    "@react-pdf/layout" "^2.1.0"
+    "@react-pdf/font" "^2.1.1"
+    "@react-pdf/layout" "^2.1.1"
     "@react-pdf/pdfkit" "^2.1.0"
     "@react-pdf/primitives" "^2.0.2"
     "@react-pdf/render" "^2.1.0"
@@ -2296,10 +2296,15 @@
   dependencies:
     moment "*"
 
-"@types/node@*", "@types/node@>=6", "@types/node@^17.0.10":
+"@types/node@*", "@types/node@>=6":
   version "17.0.10"
   resolved "https://registry.npmjs.org/@types/node/-/node-17.0.10.tgz"
   integrity sha512-S/3xB4KzyFxYGCppyDt68yzBU9ysL88lSdIah4D6cptdcltc4NCPCAMc0+PCpg/lLIyC7IPvj2Z52OJWeIUkog==
+
+"@types/node@^17.0.13":
+  version "17.0.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.13.tgz#5ed7ed7c662948335fcad6c412bb42d99ea754e3"
+  integrity sha512-Y86MAxASe25hNzlDbsviXl8jQHb0RDvKt4c40ZJQ1Don0AAL0STLZSs4N+6gLEO55pedy7r2cLwS+ZDxPm/2Bw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -2533,7 +2538,22 @@
     semver "^7.3.5"
     tsutils "^3.21.0"
 
-"@typescript-eslint/eslint-plugin@^5.10.0", "@typescript-eslint/eslint-plugin@^5.5.0":
+"@typescript-eslint/eslint-plugin@^5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.10.1.tgz#870195d0f2146b36d11fc71131b75aba52354c69"
+  integrity sha512-xN3CYqFlyE/qOcy978/L0xLR2HlcAGIyIK5sMOasxaaAPfQRj/MmMV6OC3I7NZO84oEUdWCOju34Z9W8E0pFDQ==
+  dependencies:
+    "@typescript-eslint/scope-manager" "5.10.1"
+    "@typescript-eslint/type-utils" "5.10.1"
+    "@typescript-eslint/utils" "5.10.1"
+    debug "^4.3.2"
+    functional-red-black-tree "^1.0.1"
+    ignore "^5.1.8"
+    regexpp "^3.2.0"
+    semver "^7.3.5"
+    tsutils "^3.21.0"
+
+"@typescript-eslint/eslint-plugin@^5.5.0":
   version "5.10.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/eslint-plugin/-/eslint-plugin-5.10.0.tgz"
   integrity sha512-XXVKnMsq2fuu9K2KsIxPUGqb6xAImz8MEChClbXmE3VbveFtBUU5bzM6IPVWqzyADIgdkS2Ws/6Xo7W2TeZWjQ==
@@ -2588,7 +2608,17 @@
     "@typescript-eslint/typescript-estree" "4.33.0"
     debug "^4.3.1"
 
-"@typescript-eslint/parser@^5.10.0", "@typescript-eslint/parser@^5.5.0":
+"@typescript-eslint/parser@^5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-5.10.1.tgz#4ce9633cc33fc70bc13786cb793c1a76fe5ad6bd"
+  integrity sha512-GReo3tjNBwR5RnRO0K2wDIDN31cM3MmDtgyQ85oAxAmC5K3j/g85IjP+cDfcqDsDDBf1HNKQAD0WqOYL8jXqUA==
+  dependencies:
+    "@typescript-eslint/scope-manager" "5.10.1"
+    "@typescript-eslint/types" "5.10.1"
+    "@typescript-eslint/typescript-estree" "5.10.1"
+    debug "^4.3.2"
+
+"@typescript-eslint/parser@^5.5.0":
   version "5.10.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/parser/-/parser-5.10.0.tgz"
   integrity sha512-pJB2CCeHWtwOAeIxv8CHVGJhI5FNyJAIpx5Pt72YkK3QfEzt6qAlXZuyaBmyfOdM62qU0rbxJzNToPTVeJGrQw==
@@ -2614,12 +2644,29 @@
     "@typescript-eslint/types" "5.10.0"
     "@typescript-eslint/visitor-keys" "5.10.0"
 
+"@typescript-eslint/scope-manager@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-5.10.1.tgz#f0539c73804d2423506db2475352a4dec36cd809"
+  integrity sha512-Lyvi559Gvpn94k7+ElXNMEnXu/iundV5uFmCUNnftbFrUbAJ1WBoaGgkbOBm07jVZa682oaBU37ao/NGGX4ZDg==
+  dependencies:
+    "@typescript-eslint/types" "5.10.1"
+    "@typescript-eslint/visitor-keys" "5.10.1"
+
 "@typescript-eslint/type-utils@5.10.0":
   version "5.10.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/type-utils/-/type-utils-5.10.0.tgz"
   integrity sha512-TzlyTmufJO5V886N+hTJBGIfnjQDQ32rJYxPaeiyWKdjsv2Ld5l8cbS7pxim4DeNs62fKzRSt8Q14Evs4JnZyQ==
   dependencies:
     "@typescript-eslint/utils" "5.10.0"
+    debug "^4.3.2"
+    tsutils "^3.21.0"
+
+"@typescript-eslint/type-utils@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/type-utils/-/type-utils-5.10.1.tgz#5e526c00142585e40ab1503e83f1ff608c367405"
+  integrity sha512-AfVJkV8uck/UIoDqhu+ptEdBoQATON9GXnhOpPLzkQRJcSChkvD//qsz9JVffl2goxX+ybs5klvacE9vmrQyCw==
+  dependencies:
+    "@typescript-eslint/utils" "5.10.1"
     debug "^4.3.2"
     tsutils "^3.21.0"
 
@@ -2637,6 +2684,11 @@
   version "5.10.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/types/-/types-5.10.0.tgz"
   integrity sha512-wUljCgkqHsMZbw60IbOqT/puLfyqqD5PquGiBo1u1IS3PLxdi3RDGlyf032IJyh+eQoGhz9kzhtZa+VC4eWTlQ==
+
+"@typescript-eslint/types@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-5.10.1.tgz#dca9bd4cb8c067fc85304a31f38ec4766ba2d1ea"
+  integrity sha512-ZvxQ2QMy49bIIBpTqFiOenucqUyjTQ0WNLhBM6X1fh1NNlYAC6Kxsx8bRTY3jdYsYg44a0Z/uEgQkohbR0H87Q==
 
 "@typescript-eslint/typescript-estree@3.10.1":
   version "3.10.1"
@@ -2678,6 +2730,19 @@
     semver "^7.3.5"
     tsutils "^3.21.0"
 
+"@typescript-eslint/typescript-estree@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-5.10.1.tgz#b268e67be0553f8790ba3fe87113282977adda15"
+  integrity sha512-PwIGnH7jIueXv4opcwEbVGDATjGPO1dx9RkUl5LlHDSe+FXxPwFL5W/qYd5/NHr7f6lo/vvTrAzd0KlQtRusJQ==
+  dependencies:
+    "@typescript-eslint/types" "5.10.1"
+    "@typescript-eslint/visitor-keys" "5.10.1"
+    debug "^4.3.2"
+    globby "^11.0.4"
+    is-glob "^4.0.3"
+    semver "^7.3.5"
+    tsutils "^3.21.0"
+
 "@typescript-eslint/utils@5.10.0":
   version "5.10.0"
   resolved "https://registry.npmjs.org/@typescript-eslint/utils/-/utils-5.10.0.tgz"
@@ -2687,6 +2752,18 @@
     "@typescript-eslint/scope-manager" "5.10.0"
     "@typescript-eslint/types" "5.10.0"
     "@typescript-eslint/typescript-estree" "5.10.0"
+    eslint-scope "^5.1.1"
+    eslint-utils "^3.0.0"
+
+"@typescript-eslint/utils@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/utils/-/utils-5.10.1.tgz#fa682a33af47080ba2c4368ee0ad2128213a1196"
+  integrity sha512-RRmlITiUbLuTRtn/gcPRi4202niF+q7ylFLCKu4c+O/PcpRvZ/nAUwQ2G00bZgpWkhrNLNnvhZLbDn8Ml0qsQw==
+  dependencies:
+    "@types/json-schema" "^7.0.9"
+    "@typescript-eslint/scope-manager" "5.10.1"
+    "@typescript-eslint/types" "5.10.1"
+    "@typescript-eslint/typescript-estree" "5.10.1"
     eslint-scope "^5.1.1"
     eslint-utils "^3.0.0"
 
@@ -2711,6 +2788,14 @@
   integrity sha512-GMxj0K1uyrFLPKASLmZzCuSddmjZVbVj3Ouy5QVuIGKZopxvOr24JsS7gruz6C3GExE01mublZ3mIBOaon9zuQ==
   dependencies:
     "@typescript-eslint/types" "5.10.0"
+    eslint-visitor-keys "^3.0.0"
+
+"@typescript-eslint/visitor-keys@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-5.10.1.tgz#29102de692f59d7d34ecc457ed59ab5fc558010b"
+  integrity sha512-NjQ0Xinhy9IL979tpoTRuLKxMc0zJC7QVSdeerXs2/QvOy2yRkzX5dRb10X5woNUdJgU8G3nYRDlI33sq1K4YQ==
+  dependencies:
+    "@typescript-eslint/types" "5.10.1"
     eslint-visitor-keys "^3.0.0"
 
 "@webassemblyjs/ast@1.9.0":
@@ -4594,9 +4679,9 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-cross-fetch@^3.0.4:
+cross-fetch@^3.1.5:
   version "3.1.5"
-  resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.1.5.tgz"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
   integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
   dependencies:
     node-fetch "2.6.7"
@@ -6533,10 +6618,15 @@ graphql-tag@^2.12.3, graphql-tag@^2.12.6, graphql-tag@^2.4.2:
   dependencies:
     tslib "^2.1.0"
 
-graphql@*, graphql@^16.2.0:
+graphql@*:
   version "16.2.0"
   resolved "https://registry.npmjs.org/graphql/-/graphql-16.2.0.tgz"
   integrity sha512-MuQd7XXrdOcmfwuLwC2jNvx0n3rxIuNYOxUtiee5XOmfrWo613ar2U8pE7aHAKh8VwfpifubpD9IP+EdEAEOsA==
+
+graphql@^16.3.0:
+  version "16.3.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.3.0.tgz#a91e24d10babf9e60c706919bb182b53ccdffc05"
+  integrity sha512-xm+ANmA16BzCT5pLjuXySbQVFwH3oJctUVdy81w1sV0vBU0KgDdBGtxQOUd5zqOBk/JayAFeG8Dlmeq74rjm/A==
 
 growly@^1.3.0:
   version "1.3.0"
@@ -10339,7 +10429,7 @@ prop-types@15.6.2:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.0, prop-types@^15.8.1:
+prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -10730,12 +10820,12 @@ react-select@*, react-select@^5.2.2:
     prop-types "^15.6.0"
     react-transition-group "^4.3.0"
 
-react-to-print@^2.14.3:
-  version "2.14.3"
-  resolved "https://registry.npmjs.org/react-to-print/-/react-to-print-2.14.3.tgz"
-  integrity sha512-j0EAplQGcw4ujSLfUQoIhf1PgrSLrWRh4NSAiKZdWm6YNXMioHW56cGpbKEJkCpYN1E5g3tvFVHRADn0mTKGzg==
+react-to-print@^2.14.4:
+  version "2.14.4"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.14.4.tgz#9d1390b3f192fe55e8ccadca7bda1edb409fd1bf"
+  integrity sha512-lpKKsmkZz1m4G1mBbJtK5qATfYzJRrgLgJ3m0LyF17Ojq22ifxw2AIgH3BROpFDNj0c057Q1dDP53kDIPLVtmw==
   dependencies:
-    prop-types "^15.8.0"
+    prop-types "^15.8.1"
 
 react-transition-group@^4.0.0, react-transition-group@^4.3.0, react-transition-group@^4.4.0, react-transition-group@^4.4.1, react-transition-group@^4.4.2:
   version "4.4.2"
@@ -10747,10 +10837,10 @@ react-transition-group@^4.0.0, react-transition-group@^4.3.0, react-transition-g
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-widgets@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.npmjs.org/react-widgets/-/react-widgets-5.6.0.tgz"
-  integrity sha512-lgJRaM5MMag/2ILDFkJBu4SBag9hE0xeLF8dpAOJJDz+gVDrU/21QUwlGwe/zG8hwyezlAvvfXKZb/7wOL1PZw==
+react-widgets@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/react-widgets/-/react-widgets-5.6.1.tgz#9d5acdf45986eae052f5f1f4de136e6e2cdf20ae"
+  integrity sha512-hmgQP6uh5YVVMl14RP63Pqo1b288D7mU7GvQjMYHP1rfo/qzZPq4zRWjeQih/H7VZidt9TcrDTnSjKLsG+gCsA==
   dependencies:
     "@restart/hooks" "^0.3.26"
     "@types/classnames" "^2.2.11"

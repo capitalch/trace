@@ -1,15 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
-import { ConfirmProvider } from 'material-ui-confirm'
-import { useIdleTimer } from 'react-idle-timer'
-import {
-    RecoilRoot,
-    atom,
-    selector,
-    useRecoilState,
-    useRecoilValue,
-} from 'recoil'
+import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
 import {
     purple,
     green,
@@ -26,7 +17,7 @@ import {
     yellow,
     amber,
     orange,
-} from '@material-ui/core/colors'
+} from '@mui/material/colors'
 import 'primeicons/primeicons.css'
 import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.css'
@@ -35,54 +26,39 @@ import 'fontsource-roboto'
 import _ from 'lodash'
 
 import { useIbuki } from './utils/ibuki'
-// import { Breakpoint, BreakpointProvider } from 'react-socks'
-// import _ from 'lodash'
-import { Header } from './components/header'
-import { Loader } from './components/loader'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import clsx from 'clsx'
-// import {
-//   makeStyles,
-//   useTheme,
-//   Theme,
-//   createStyles,
-// } from "@material-ui/core/styles";
-import { PersistentDrawerLeft } from './drawyer'
-import { useTraceGlobal } from './utils/trace-global'
-import { Component1 } from './components/component1'
-import { Component3 } from './components/component3'
-import { Component4 } from './components/component4'
 import { Component6 } from './components/component6'
-import { Component7 } from './components/component7'
 
-import { MobxStoreContext, mobxStoreInstance } from './components/mobx-store'
-import { Component8 } from './components/component8'
-
-declare module '@material-ui/core/styles/createPalette' {
+declare module '@mui/material/styles/' {
     interface Palette {
-        neutral: Palette['primary']
-        purple: Palette['primary']
-        deepPurple: Palette['primary']
-        teal: Palette['primary']
-        lime: Palette['primary']
-        yellow: Palette['primary']
-        amber: Palette['primary']
-        orange: Palette['primary']
-        indigo: Palette['primary']
-        blueGrey: Palette['primary']
+        blueGrey?: any
+        neutral?: any
+        purple: any
+        deepPurple: any
+        teal: any
+        lime: any
+        yellow: any
+        amber: any
+        orange: any
+        indigo: any
+        blue: any
+        cyan: any
+        lightBlue: any
     }
     interface PaletteOptions {
-        neutral: PaletteOptions['primary']
-        purple: PaletteOptions['primary']
-        deepPurple: PaletteOptions['primary']
-        teal: PaletteOptions['primary']
-        lime: PaletteOptions['primary']
-        yellow: PaletteOptions['primary']
-        amber: PaletteOptions['primary']
-        orange: PaletteOptions['primary']
-        indigo: PaletteOptions['primary']
-        blueGrey: PaletteOptions['primary']
+        blueGrey?: any
+        neutral?: any
+        purple?: any
+        deepPurple?: any
+        teal?: any
+        lime?: any
+        yellow?: any
+        amber?: any
+        orange?: any
+        indigo?: any
+        blue?: any
+        cyan?: any
+        lightBlue?: any
     }
 }
 
@@ -93,7 +69,7 @@ LicenseInfo.setLicenseKey(
 const App: React.FC = () => {
     const [, setRefresh] = useState({})
     const { emit } = useIbuki()
-    const theme = createMuiTheme({
+    const theme = createTheme({
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
@@ -132,28 +108,26 @@ const App: React.FC = () => {
                 dark: indigo[900],
                 light: indigo[400],
             },
-            // custom1: { main: pink[900] }
         },
     })
 
-    const handleOnIdle = (event: any) => {
-        console.log('user is idle', event)
-        console.log('last active', getLastActiveTime())
-    }
+    // const handleOnIdle = (event: any) => {
+    //     console.log('user is idle', event)
+    //     console.log('last active', getLastActiveTime())
+    // }
 
-    const { getRemainingTime, getLastActiveTime } = useIdleTimer({
-        // timeout: 1000 * 60 * 15,
-        timeout: 10000,
-        onIdle: handleOnIdle,
-        // onActive: handleOnActive,
-        // onAction: handleOnAction,
-        debounce: 500,
-    })
+    // const { getRemainingTime, getLastActiveTime } = useIdleTimer({
+    //     timeout: 10000,
+    //     onIdle: handleOnIdle,
+    //     debounce: 500,
+    // })
 
     return (
-        <ThemeProvider theme={theme}>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
                 <Component6 />
-        </ThemeProvider>
+            </ThemeProvider>
+        </StyledEngineProvider>
     )
 }
 export default App

@@ -11,6 +11,8 @@ import {
 } from '../imports/gui-imports'
 import {
     CloseSharp,
+    CheckBoxOutlineBlankSharp,
+    CheckBoxOutlined,
     DeleteForever,
     Search,
     SyncSharp,
@@ -31,11 +33,6 @@ import {
 
 import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
-
-// interface CustomColumnOptions {
-//     headerName: string
-//     renderCell: react.FC
-// }
 
 interface SpecialColumnOptions {
     isEdit?: boolean
@@ -142,6 +139,8 @@ function XXGrid(gridOptions: XXGridOptions) {
             components={{
                 Toolbar: CustomGridToolbar,
                 Footer: CustomGridFooter,
+                BooleanCellFalseIcon: CheckBoxOutlineBlankSharp,
+                BooleanCellTrueIcon: CheckBoxOutlined
             }}
             checkboxSelection={true}
             componentsProps={{
