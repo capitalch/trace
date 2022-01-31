@@ -4,8 +4,7 @@ import { useIbuki } from '../utils/ibuki'
 import { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro'
 import { Checkbox } from '@mui/material'
 import { SpaceBarRounded } from '@mui/icons-material'
-import {CropDinSharp, CheckBoxOutlineBlankSharp, CheckBoxSharp} from '@mui/icons-material';
-import NotificationPersonalVideo from 'material-ui/svg-icons/notification/personal-video'
+import {CropDinSharp, CheckBoxOutlineBlankSharp, CheckBoxSharp} from '@mui/icons-material'
 
 function Component6() {
     const [, setRefresh] = useState({})
@@ -57,7 +56,10 @@ function Component6() {
         //     apiRef.current.setCellMode(item.id, 'isActive', 'edit')
         // }
         // apiRef.current.forceUpdate()
-    }, )
+    },[] )
+
+    
+
     return (
         <DataGridPro
             apiRef={apiRef}
@@ -74,27 +76,43 @@ function Component6() {
                 mt: 5,
                 ml: 5
             }}
-           
-            onCellClick={(params, event) => {
-                if (params.field === 'isActive') {
-                    if(meta.current.lastId){
-                        const lastId = meta.current.lastId
-                        if(lastId !== params.row.id){
-                            apiRef.current.setCellMode(lastId, 'isActive', 'view')
-                            apiRef.current.setEditCellValue(params)
-                            // apiRef.current.commitCellChange(lastId)
-                        }
+        //    isCellEditable={(params:any)=>params.row.isEdit}
+            // onCellClick={(params, event) => {
+            //     if (params.field === 'isActive') {
+            //         if(meta.current.lastId){
+            //             const lastId = meta.current.lastId
+            //             if(lastId !== params.row.id){
+            //                 apiRef.current.setCellMode(lastId, 'isActive', 'view')
+            //                 apiRef.current.setEditCellValue(params)
+            //                 // apiRef.current.commitCellChange(lastId)
+            //             }
                         
-                    }
-                    meta.current.lastId = params.row.id
-                    apiRef.current.setCellMode(params.row.id, 'isActive', 'edit')
-                   
+            //         } else {
+            //             apiRef.current.setCellMode(params.row.id, 'isActive', 'edit')
+            //         }
+            //         meta.current.lastId = params.row.id
+            //     }
+            // }}
+            onCellClick={(params, event:any) => {
+                if (params.field === 'isActive') {
+                    // event.target.cellDoubleClick()
+                    // if(meta.current.lastId){
+                    //     const lastId = meta.current.lastId
+                    //     if(lastId !== params.row.id){
+                    //         apiRef.current.setCellMode(lastId, 'isActive', 'view')
+                    //         apiRef.current.setEditCellValue(params)
+                    //         // apiRef.current.commitCellChange(lastId)
+                    //     } else {
+                    //         apiRef.current.setCellMode(lastId, 'isActive', 'edit')
+                    //     }
+                        
+                    // } else {
+                        // apiRef.current.setCellMode(params.row.id, 'isActive', 'edit')
+                    // }
+                    // meta.current.lastId = params.row.id
                 }
             }}
-            // onCellFocusOut={(params)=>{
-            //     apiRef.current.setCellMode(params.row.id, 'isActive', 'view')
-            //     apiRef.current.forceUpdate()
-            // }}
+            
         />
     )
 

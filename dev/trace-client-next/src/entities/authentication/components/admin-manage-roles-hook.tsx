@@ -215,10 +215,7 @@ function useAdminManageRoles() {
         pre.title = 'Add new role'
         const addJsonString = JSON.stringify(manageRole)
         setDialogContentAction(addJsonString)
-        // const formData = getFormData(pre.formId)
-        // const formObject = getFormObject(pre.formId)
-        const permissions = await getPermissionsAsJson('base') // default permission is base permision , which has no controls active. You need to modify the permissions after making a few controls active
-        
+        // const permissions = await getPermissionsAsJson('base') // default permission is base permision , which has no controls active. You need to modify the permissions after making a few controls active        
         setRefresh({})
     }
 
@@ -244,7 +241,8 @@ function useAdminManageRoles() {
     }
 
     function handlePermission() {
-        alert('test')
+        meta.current.showDialog = true
+        setRefresh({})
     }
 
     async function handleSubmit() {
