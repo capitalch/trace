@@ -65,4 +65,5 @@ export { Alert,
     Tooltip,
     Typography,
     useMediaQuery,
-} from '@mui/material' // '@material-ui/core'
+} from '@mui/material' 
+export { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro'

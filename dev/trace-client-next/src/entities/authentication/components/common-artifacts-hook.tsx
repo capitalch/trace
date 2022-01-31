@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import { useSharedElements } from './shared-elements-hook'
 
 function useCommonArtifacts() {
@@ -33,16 +34,23 @@ function useCommonArtifacts() {
     }
 
     async function doSubmit(
-        { formId, graphQlKey, tableName, handleCloseDialog }: any
+        { data, formId, graphQlKey, tableName, handleCloseDialog }: any
     ) {
-        clearServerError(formId)
-        await doValidateForm(formId)
-        if (isValidForm(formId)) {
+        let formData: any
+        if(_.isEmpty(data)){
+            formData = getFormData(formId)
+            clearServerError(formId)
+            await doValidateForm(formId)
+            if (isValidForm(formId)) {
+                await saveData()
+            }
+        } else {
+            formData = data
             await saveData()
         }
+        
 
         async function saveData() {
-            const formData = getFormData(formId)
             const sqlObjectString = getSqlObjectString({
                 data: formData,
                 tableName: tableName,

@@ -50,7 +50,10 @@ function useTraceMaterialComponents() {
                 open={options.meta.current.showDialog}
                 onClose={options.onClose || handleClose}>
                 <DialogTitle id="generic-dialog-title" className="dialog-title">
-                    <div>{pre.title}</div>
+                    <Box sx={{display:'flex', flexDirection:'column'}}>
+                        <Box>{pre.title}</Box>
+                        <Box sx={{fontSize:14,}}>{pre.subTitle || ''}</Box>
+                    </Box>
                     <IconButton
                         size="small"
                         color="default"
@@ -61,7 +64,7 @@ function useTraceMaterialComponents() {
                 </DialogTitle>
                 <DialogContent
                     sx={styles.dialogContent}
-                    // className={classes.dialogContent}
+                // className={classes.dialogContent}
                 >
                     {pre.isSearchBox && (
                         <Input
@@ -191,7 +194,7 @@ function useTraceMaterialComponents() {
             <Box
                 sx={styles.searchBox}
                 className={options.className}
-                // className={clsx(classes.searchBox, options.className)}
+            // className={clsx(classes.searchBox, options.className)}
             >
                 <TextField
                     className="input-box"

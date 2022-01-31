@@ -19,6 +19,7 @@ import { manageEntitiesState } from '../../../global-utils/esm'
 import { manageFormsState } from '../../../react-form/core/fsm'
 import { utilMethods } from '../../../global-utils/misc-utils'
 import messages from '../../../messages.json'
+import authMessages from '../messages.json'
 import { useIbuki } from '../../../global-utils/ibuki'
 import { useTraceGlobal } from '../../../global-utils/trace-global'
 import queries from '../artifacts/graphql-queries-mutations'
@@ -42,12 +43,12 @@ function useSharedElements(meta: any = {}) {
     const {
         execGenericView,
         genericUpdateMaster,
+        genericUpdateMasterNoForm,
         getSqlObjectString,
     } = utilMethods()
     const { emit, filterOn } = useIbuki()
     const dateFormat = getFromBag('dateFormat')
     const isoDateFormat = 'YYYY-MM-DD'
-    const { genericUpdateMasterNoForm } = utilMethods()
     const {
         TraceDialog,
         traceGlobalSearch,
@@ -199,6 +200,7 @@ function useSharedElements(meta: any = {}) {
 
     return {
         _,
+        authMessages,
         clearServerError,
         CloseSharp,
         Column,

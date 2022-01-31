@@ -6,6 +6,7 @@ import { Checkbox } from '@mui/material'
 import { SpaceBarRounded } from '@mui/icons-material'
 import {CropDinSharp, CheckBoxOutlineBlankSharp, CheckBoxSharp} from '@mui/icons-material'
 
+
 function Component6() {
     const [, setRefresh] = useState({})
     const meta = useRef({
@@ -74,7 +75,8 @@ function Component6() {
                 width: '80vw',
                 height: '80vh',
                 mt: 5,
-                ml: 5
+                ml: 5,
+                backgroundColor: 'primary.main'
             }}
         //    isCellEditable={(params:any)=>params.row.isEdit}
             // onCellClick={(params, event) => {

@@ -1,6 +1,33 @@
 
-## python pdf libs
-borb, reportlab, fpdf2
+## Planning
+1. Authentication and user management:                    1 week, 5th Feb 2022
+    SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
+    Admin: Check manage users, Manage BU. Complete manage roles. New Associate
+2. Invoice correction:                                    2 days, 7th Feb
+3. Full reporting of Inventory and allied:                1 week, 14th Feb
+4. Opening balance of stock:                              3 days, 17th Feb
+5. Subledger billing:                                     2 days, 19th Feb
+6. Ledger subledger showing balance:                      2 days, 21st Feb
+7. purchase invoice scanned pDF save:                     2 days, 23rd feb
+8. Buffer 3 today's                                       3 days, 26th Feb
+9. Input of product price and price management            2 days, 28th Feb
+10. New account code create, immediate effect             3 days, 3rd Mar
+11. Account balances in generic-vouchers                  3 days, 6th Mar
+12. Debit credit notes printing                           3 days, 9th Mar
+13. Grid view provide title and subtitle                  2 days, 11 Mar
+14. Accounts master, when edited, data is not 
+    refreshed after saved, accounts creation
+    email optional                                        1 day, 12th Mar
+15. PDF print, BS, PL and TB                              3 days, 15th Mar
+16. Purchase entry, unable to enter GST price             2 days, 17th Mar
+17. Edit from bank recon                                  2 days, 19th Mar
+18. Fix Accounts master, new contact twice                4 days, 23rd Mar
+
+## To DO in permissions
+1. Edit and Submit functionality
+2. Search and buttons
+3. Hash to check change in data, then only allow submit
+
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
@@ -46,7 +73,7 @@ create installer from innosetup
 1. Bill fixing
 1.1 Convert Authentication, complete system to x-data-grid-prof from material-table
 1.2 Account balances in vouchers
-1.3 Uplift x-data-grid-prof to top level common, maybe global-components folder
+1.3 
 1.4 Remove material-table from authentication/generic-crud; its using old version of material-ui
 2. Debit credit notes printing
 3. In Grid view provide title, header and subtitle. Check if alteration possible while PDF printing

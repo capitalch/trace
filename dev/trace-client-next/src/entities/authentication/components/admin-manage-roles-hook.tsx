@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from '../../../imports/regular-imports'
+import { _, useEffect, useRef, useState, } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { ReactForm, useIbuki } from '../../../imports/trace-imports'
-import { IconButton } from '../../../imports/gui-imports'
+import { Box, Button, DataGridPro, IconButton, Theme, } from '../../../imports/gui-imports'
 import {
+    CheckBoxOutlined,
+    CheckBoxOutlineBlankSharp,
     CloseSharp,
     DeleteForever,
     Search,
@@ -12,6 +14,7 @@ import {
 } from '../../../imports/icons-import'
 import { useCommonArtifacts } from './common-artifacts-hook'
 import { itemLevelValidators } from '../../../shared-artifacts/item-level-validators'
+import { palette } from '@mui/system'
 
 function useAdminManageRoles() {
     const [, setRefresh] = useState({})
@@ -28,6 +31,7 @@ function useAdminManageRoles() {
         },
     })
     const {
+        authMessages,
         clearServerError,
         doValidateForm,
         emit,
@@ -38,21 +42,21 @@ function useAdminManageRoles() {
         getFormObject,
         getLoginData,
         getSqlObjectString,
-        messages,
         mutateGraphql,
         queries,
         resetForm,
-        
+
         TraceFullWidthSubmitButton,
     } = useSharedElements()
 
     const pre = meta.current.dialogConfig
+    const perm = meta.current.permissionsConfig
     const { doSubmit, handleDelete, gridActionMessages } = useCommonArtifacts()
 
     useEffect(() => {
-        const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
-            emit(gridActionMessages.fetchIbukiMessage, null)
-        })
+        // const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
+        //     emit(gridActionMessages.fetchIbukiMessage, null)
+        // })
 
         const subs2 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {
@@ -81,10 +85,11 @@ function useAdminManageRoles() {
         ).subscribe((d: any) => {
             pre.clientEntityId = d.data.jsonResult.clientEntityId
             pre.permissionEntityName = d.data.jsonResult.entityName
+            pre.roles = d.data.jsonResult.roles
         })
 
         return () => {
-            subs1.unsubscribe()
+            // subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
@@ -141,7 +146,7 @@ function useAdminManageRoles() {
                     <IconButton
                         size="large"
                         color="primary"
-                        onClick={handlePermission}
+                        onClick={() => handlePermissions(params.row)}
                         aria-label="close">
                         <Settings color="secondary" fontSize="medium" />
                     </IconButton>
@@ -184,7 +189,7 @@ function useAdminManageRoles() {
             }))
             return (temp)
         }
-        function mergeWithBasePermissions(name: string) {
+        function mergeWithBasePermissions(name: string): any[] {
             const permissions = permissionsTemplate[name]
             const basePermissions = permissionsTemplate.base
             const basePermissionsClone = basePermissions.map((x: any) => ({ ...x }))
@@ -240,18 +245,110 @@ function useAdminManageRoles() {
         setRefresh({})
     }
 
-    function handlePermission() {
+    async function handlePermissions(node: any) {
+        let count: number = 0
+        // const temp: any[] = await getPermissionsAsJson('base')
+        pre.isEditMode = true
         meta.current.showDialog = true
+        pre.title = authMessages.setPermissionsForRole
+        pre.subTitle = authMessages.doubleClickToEdit
+        pre.content = () => <PermissionsDialogContentWithActions />
         setRefresh({})
+
+        function PermissionsDialogContentWithActions() {
+            const meta = useRef({
+                permissionsConfig: {
+                    rows: []
+                }
+            })
+            const perm: any = meta.current.permissionsConfig
+            if (_.isEmpty(node.permissions)) {
+                perm.rows = []
+            } else {
+                perm.rows = (node.permissions).map((item: any) => ({
+                    id: counter(),
+                    ...item,
+                }))
+            }
+            const columns = [
+                {
+                    headerName: '#',
+                    field: 'id',
+                    width: 60,
+                },
+                {
+                    headerName: 'Control name',
+                    width: 200,
+                    field: 'controlName'
+                },
+                {
+                    headerName: 'Active',
+                    width: 80,
+                    field: 'isActive',
+                    type: 'boolean',
+                    editable: true,
+                    cellClassName: 'active-cell',
+                    headerClassName: 'active-cell'
+                },
+                {
+                    headerName: 'Description',
+                    width: 140,
+                    field: 'descr',
+                    flex: 1,
+                    description: 'Description'
+                }
+            ]
+
+            return (
+                <Box>
+                    <DataGridPro
+                        columns={columns}
+                        components={{
+                            BooleanCellFalseIcon: CheckBoxOutlineBlankSharp,
+                            BooleanCellTrueIcon: CheckBoxOutlined
+                        }}
+                        rows={perm.rows}
+                        showColumnRightBorder={true}
+                        showCellRightBorder={true}
+                        sx={{
+                            backgroundColor: 'lightyellow',
+                            height: '60vh',
+                            '& .active-cell': {
+                                backgroundColor: 'whitesmoke',
+                                color: (theme: Theme) => theme.palette.blueGrey
+                            }
+                        }}
+                    />
+                    <Button sx={{mt:2, width:'100%'}} color='secondary' variant='contained' onClick={handleSubmit}>Submit</Button>
+                </Box>
+            )
+
+            async function handleSubmit() {
+                const data = {
+                    id: node.id1,
+                    permissions: JSON.stringify(perm.rows)
+                }
+                await doSubmit({
+                    data: data,
+                    graphQlKey:'genericUpdateMaster',
+                    tableName: 'ClientEntityRole',
+                    handleCloseDialog: handleCloseDialog
+                })
+            }
+        }
+
+        function counter() {
+            return (++count)
+        }
     }
 
     async function handleSubmit() {
         const formData: any = getFormData(pre.formId)
-        if(pre.isEditMode){
+        if (pre.isEditMode) {
             formData.id = pre.id
         } else {
             const permissions = await getPermissionsAsJson('base')
-            formData.permissions =  JSON.stringify(permissions)
+            formData.permissions = JSON.stringify(permissions)
         }
         formData.clientEntityId = pre.clientEntityId
         await doSubmit({
