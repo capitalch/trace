@@ -1,7 +1,20 @@
-import { _, useEffect, useRef, useState, } from '../../../imports/regular-imports'
+import {
+    _,
+    useEffect,
+    useRef,
+    useState,
+} from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { ReactForm, useIbuki } from '../../../imports/trace-imports'
-import { Box, Button, DataGridPro, IconButton, Theme, } from '../../../imports/gui-imports'
+import {
+    Box,
+    Button,
+    Checkbox,
+    DataGridPro,
+    IconButton,
+    Theme,
+    useGridApiRef,
+} from '../../../imports/gui-imports'
 import {
     CheckBoxOutlined,
     CheckBoxOutlineBlankSharp,
@@ -26,7 +39,7 @@ function useAdminManageRoles() {
             title: '',
             tableName: '',
             formId: 'admin-manage-roles',
-            actions: () => { },
+            actions: () => {},
             content: () => <></>,
         },
     })
@@ -178,37 +191,39 @@ function useAdminManageRoles() {
             base: permissionsTemplate.base,
             operator: mergeWithBasePermissions('operator'),
             accountant: mergeWithBasePermissions('accountant'),
-            manager: getOppositePermissions('base')
+            manager: getOppositePermissions('base'),
         }
-        return (logic[permissionName])
+        return logic[permissionName]
 
         function getOppositePermissions(name: string) {
             const temp: any[] = permissionsTemplate[name].map((item: any) => ({
                 ...item,
-                isActive: !item.isActive
+                isActive: !item.isActive,
             }))
-            return (temp)
+            return temp
         }
         function mergeWithBasePermissions(name: string): any[] {
             const permissions = permissionsTemplate[name]
             const basePermissions = permissionsTemplate.base
-            const basePermissionsClone = basePermissions.map((x: any) => ({ ...x }))
+            const basePermissionsClone = basePermissions.map((x: any) => ({
+                ...x,
+            }))
             const permissionsObject: any = arrayToObject(permissions)
             const ret: any[] = basePermissionsClone.map((item: any) => {
                 const controlName: string = item.controlName
                 if (permissionsObject[controlName] !== undefined) {
                     item.isActive = permissionsObject[controlName]
                 }
-                return (item)
+                return item
             })
-            return (ret)
+            return ret
 
             function arrayToObject(arr: any[]) {
                 const obj: any = {}
                 for (const item of arr) {
                     obj[item.controlName] = item.isActive
                 }
-                return (obj)
+                return obj
             }
         }
     }
@@ -220,7 +235,7 @@ function useAdminManageRoles() {
         pre.title = 'Add new role'
         const addJsonString = JSON.stringify(manageRole)
         setDialogContentAction(addJsonString)
-        // const permissions = await getPermissionsAsJson('base') // default permission is base permision , which has no controls active. You need to modify the permissions after making a few controls active        
+        // const permissions = await getPermissionsAsJson('base') // default permission is base permision , which has no controls active. You need to modify the permissions after making a few controls active
         setRefresh({})
     }
 
@@ -258,14 +273,15 @@ function useAdminManageRoles() {
         function PermissionsDialogContentWithActions() {
             const meta = useRef({
                 permissionsConfig: {
-                    rows: []
-                }
+                    rows: [],
+                },
             })
+            const apiRef: any = useGridApiRef()
             const perm: any = meta.current.permissionsConfig
             if (_.isEmpty(node.permissions)) {
                 perm.rows = []
             } else {
-                perm.rows = (node.permissions).map((item: any) => ({
+                perm.rows = node.permissions.map((item: any) => ({
                     id: counter(),
                     ...item,
                 }))
@@ -279,7 +295,7 @@ function useAdminManageRoles() {
                 {
                     headerName: 'Control name',
                     width: 200,
-                    field: 'controlName'
+                    field: 'controlName',
                 },
                 {
                     headerName: 'Active',
@@ -288,57 +304,88 @@ function useAdminManageRoles() {
                     type: 'boolean',
                     editable: true,
                     cellClassName: 'active-cell',
-                    headerClassName: 'active-cell'
+                    headerClassName: 'active-cell',
+                    renderEditCell: (params: any) => {
+                        return (
+                            <Checkbox
+                                checked={params.value}
+                                onChange={(e: any) => {
+                                    params.row.isActive = e.target.checked
+                                    apiRef.current.setEditCellValue({
+                                        id: params.row.id,
+                                        field: 'isActive',
+                                        value: e.target.checked,
+                                    })
+                                }}
+                            />
+                        )
+                    },
                 },
                 {
                     headerName: 'Description',
                     width: 140,
                     field: 'descr',
                     flex: 1,
-                    description: 'Description'
-                }
+                    description: 'Description',
+                },
             ]
 
             return (
                 <Box>
                     <DataGridPro
+                        apiRef={apiRef}
                         columns={columns}
                         components={{
                             BooleanCellFalseIcon: CheckBoxOutlineBlankSharp,
-                            BooleanCellTrueIcon: CheckBoxOutlined
+                            BooleanCellTrueIcon: CheckBoxOutlined,
                         }}
                         rows={perm.rows}
                         showColumnRightBorder={true}
                         showCellRightBorder={true}
                         sx={{
-                            backgroundColor: 'lightyellow',
+                            // backgroundColor: 'lightyellow',
                             height: '60vh',
                             '& .active-cell': {
-                                backgroundColor: 'whitesmoke',
-                                color: (theme: Theme) => theme.palette.blueGrey
-                            }
+                                // backgroundColor: 'whitesmoke',
+                                // color: (theme: Theme) => theme.palette.blueGrey,
+                            },
                         }}
                     />
-                    <Button sx={{mt:2, width:'100%'}} color='secondary' variant='contained' onClick={handleSubmit}>Submit</Button>
+                    <Button
+                        sx={{ mt: 2, width: '100%' }}
+                        color="secondary"
+                        variant="contained"
+                        onClick={handleSubmit}>
+                        Submit
+                    </Button>
                 </Box>
             )
 
             async function handleSubmit() {
+                //remove id field from permissions
+                const temp = perm.rows.map((item: any) => ({
+                    ...item,
+                    id: undefined,
+                }))
                 const data = {
                     id: node.id1,
-                    permissions: JSON.stringify(perm.rows)
+                    permissions: JSON.stringify(temp),
                 }
                 await doSubmit({
                     data: data,
-                    graphQlKey:'genericUpdateMaster',
+                    graphQlKey: 'genericUpdateMaster',
                     tableName: 'ClientEntityRole',
-                    handleCloseDialog: handleCloseDialog
+                    handleCloseDialog: handleCloseDialog,
+                })
+                // refresh the parent grid of roles
+                emit(gridActionMessages.fetchIbukiMessage, {
+                    userId: getLoginData().id,
                 })
             }
         }
 
         function counter() {
-            return (++count)
+            return ++count
         }
     }
 
@@ -355,7 +402,7 @@ function useAdminManageRoles() {
             formId: pre.formId,
             graphQlKey: 'genericUpdateMaster',
             tableName: 'ClientEntityRole',
-            handleCloseDialog: handleCloseDialog
+            handleCloseDialog: handleCloseDialog,
         })
     }
 
