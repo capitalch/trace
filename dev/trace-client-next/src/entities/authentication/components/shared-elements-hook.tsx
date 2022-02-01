@@ -46,7 +46,7 @@ function useSharedElements(meta: any = {}) {
         genericUpdateMasterNoForm,
         getSqlObjectString,
     } = utilMethods()
-    const { emit, filterOn } = useIbuki()
+    const {debounceEmit, debounceFilterOn, emit, filterOn } = useIbuki()
     const dateFormat = getFromBag('dateFormat')
     const isoDateFormat = 'YYYY-MM-DD'
     const {
@@ -209,6 +209,8 @@ function useSharedElements(meta: any = {}) {
         closeDialog,
         dateFormat,
         deleteRow,
+        debounceEmit,
+        debounceFilterOn,
         doValidateForm,
         doFormRefresh,
         Edit,

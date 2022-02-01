@@ -8,7 +8,8 @@ export { useTheme } from '@mui/material/styles'
 // export type { Theme } from '@material-ui/core'
 // export  type { Theme } from '@mui/material/styles'
 export { type Theme } from '@mui/material'
-export { Alert,
+export {
+    Alert,
     AppBar,
     Avatar,
     Backdrop,
@@ -65,5 +66,5 @@ export { Alert,
     Tooltip,
     Typography,
     useMediaQuery,
-} from '@mui/material' 
-export { DataGridPro, useGridApiRef } from '@mui/x-data-grid-pro'
+} from '@mui/material'
+export { DataGridPro, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid-pro'

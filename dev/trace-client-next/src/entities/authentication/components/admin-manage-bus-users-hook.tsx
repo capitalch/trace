@@ -231,13 +231,6 @@ function useAdminManageBusUsers() {
         }
     }
 
-    // const gridActionMessages = {
-    //     fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-USERS',
-    //     editIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-EDIT-CLICKED',
-    //     deleteIbukiMessage:
-    //         'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-DELETE-CLICKED',
-    //     addIbukiMessage: 'ADMIN-MANAGE-BUS-USERS-HOOK-XX-GRID-ADD-CLICKED',
-    // }
     const queryId = 'get_businessUsers'
     const queryArgs = { parentId: id }
     const specialColumns = {

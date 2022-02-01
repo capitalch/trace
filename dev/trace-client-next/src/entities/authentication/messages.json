@@ -1,7 +1,7 @@
 {
     "buCodeExists": "Business unit already exists for your client and entity",
     "changePwdFail": "Change of password could not be done due to failure at server side. Please contact administrator",   
-    "doubleClickToEdit":"Double click the cell with check box, to edit",
+    "clickToEdit":"Click the cell with check box, to edit",
     "invalidUidOrPassword": "Invalid user id or password",
     "passwordsShouldBeSame":"Two passwords given by you must be same",
     "setPermissionsForRole":"Set permissions for role",

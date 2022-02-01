@@ -1,8 +1,8 @@
-import _ from 'lodash'
+// import _ from 'lodash'
 import { useSharedElements } from './shared-elements-hook'
 
 function useCommonArtifacts() {
-    const { clearServerError, confirm, doValidateForm, getCurrentEntity, getFormData, getSqlObjectString, isValidForm, messages, mutateGraphql, queries, resetForm, emit, genericUpdateMaster } = useSharedElements()
+    const { _, clearServerError, confirm, doValidateForm, getCurrentEntity, getFormData, getSqlObjectString, isValidForm, messages, mutateGraphql, queries, resetForm, emit, genericUpdateMaster } = useSharedElements()
 
     const gridActionMessages = {
         addIbukiMessage: 'ADD-IBUKI-MESSAGE',
@@ -37,7 +37,7 @@ function useCommonArtifacts() {
         { data, formId, graphQlKey, tableName, handleCloseDialog }: any
     ) {
         let formData: any
-        if(_.isEmpty(data)){
+        if (_.isEmpty(data)) {
             formData = getFormData(formId)
             clearServerError(formId)
             await doValidateForm(formId)
@@ -48,7 +48,7 @@ function useCommonArtifacts() {
             formData = data
             await saveData()
         }
-        
+
 
         async function saveData() {
             const sqlObjectString = getSqlObjectString({

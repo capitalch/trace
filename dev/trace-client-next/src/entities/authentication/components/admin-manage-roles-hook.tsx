@@ -1,5 +1,6 @@
 import {
     _,
+    useCallback,
     useEffect,
     useRef,
     useState,
@@ -11,7 +12,10 @@ import {
     Button,
     Checkbox,
     DataGridPro,
+    GridToolbarContainer,
     IconButton,
+    Input,
+    TextField,
     Theme,
     useGridApiRef,
 } from '../../../imports/gui-imports'
@@ -39,7 +43,7 @@ function useAdminManageRoles() {
             title: '',
             tableName: '',
             formId: 'admin-manage-roles',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
     })
@@ -47,6 +51,8 @@ function useAdminManageRoles() {
         authMessages,
         clearServerError,
         doValidateForm,
+        debounceEmit,
+        debounceFilterOn,
         emit,
         filterOn,
         isValidForm,
@@ -235,7 +241,6 @@ function useAdminManageRoles() {
         pre.title = 'Add new role'
         const addJsonString = JSON.stringify(manageRole)
         setDialogContentAction(addJsonString)
-        // const permissions = await getPermissionsAsJson('base') // default permission is base permision , which has no controls active. You need to modify the permissions after making a few controls active
         setRefresh({})
     }
 
@@ -254,7 +259,6 @@ function useAdminManageRoles() {
         jsonObject.items[1].value = node.roleDescr
 
         setDialogContentAction(JSON.stringify(jsonObject))
-        // formData.id = node.id1
         pre.id = node.id1 // for edit
         meta.current.showDialog = true
         setRefresh({})
@@ -262,30 +266,48 @@ function useAdminManageRoles() {
 
     async function handlePermissions(node: any) {
         let count: number = 0
-        // const temp: any[] = await getPermissionsAsJson('base')
         pre.isEditMode = true
         meta.current.showDialog = true
         pre.title = authMessages.setPermissionsForRole
-        pre.subTitle = authMessages.doubleClickToEdit
+        pre.subTitle = authMessages.clickToEdit
         pre.content = () => <PermissionsDialogContentWithActions />
         setRefresh({})
 
         function PermissionsDialogContentWithActions() {
+            const [, setRefresh] = useState({})
             const meta = useRef({
+                textSearchValue: '',
                 permissionsConfig: {
                     rows: [],
                 },
             })
             const apiRef: any = useGridApiRef()
             const perm: any = meta.current.permissionsConfig
-            if (_.isEmpty(node.permissions)) {
-                perm.rows = []
-            } else {
-                perm.rows = node.permissions.map((item: any) => ({
-                    id: counter(),
-                    ...item,
-                }))
+            useEffect(() => {
+                const subs1 = debounceFilterOn('MANAGE-ROLES-HOOK-DEBOUNCE-PERMISSIONS-GLOBAL-SEARCH').subscribe((d:any)=>{
+                    requestSearch(d.data)
+                })
+                if (_.isEmpty(node.permissions)) {
+                    perm.rows = []
+                } else {
+                    perm.rows = node.permissions.map((item: any) => ({
+                        id: counter(),
+                        ...item,
+                    }))
+                }
+                setRefresh({})
+
+                return(()=>{
+                    subs1.unsubscribe()
+                })
+            }, [])
+
+            function requestSearch(text:string){
+                if(text){
+                    
+                }
             }
+
             const columns = [
                 {
                     headerName: '#',
@@ -330,25 +352,49 @@ function useAdminManageRoles() {
                 },
             ]
 
+            const handleCellClick = useCallback((params) => {
+                apiRef.current.setCellMode(
+                    params.row.id,
+                    'isActive',
+                    'edit'
+                )
+            }, [])
+
+            const handleCellFocusOut = useCallback((params, event) => {
+                if (params.cellMode === 'edit' && event) {
+                    event.defaultMuiPrevented = true;
+                }
+            }, [])
+
+            const handleCellKeyDown = useCallback((params, event) => {
+                if (['Escape', 'Delete', 'Backspace', 'Enter'].includes(event.key)) {
+                    event.defaultMuiPrevented = true;
+                }
+            }, [])
+
+            const handleDoubleCellClick = useCallback((params, event) => {
+                event.defaultMuiPrevented = true
+            }, [])
+
             return (
                 <Box>
                     <DataGridPro
                         apiRef={apiRef}
                         columns={columns}
                         components={{
+                            Toolbar: CustomGridToolbar,
                             BooleanCellFalseIcon: CheckBoxOutlineBlankSharp,
                             BooleanCellTrueIcon: CheckBoxOutlined,
                         }}
+                        onCellClick={handleCellClick}
+                        onCellDoubleClick={handleDoubleCellClick}
+                        onCellFocusOut={handleCellFocusOut}
+                        onCellKeyDown={handleCellKeyDown}
                         rows={perm.rows}
                         showColumnRightBorder={true}
                         showCellRightBorder={true}
                         sx={{
-                            // backgroundColor: 'lightyellow',
                             height: '60vh',
-                            '& .active-cell': {
-                                // backgroundColor: 'whitesmoke',
-                                // color: (theme: Theme) => theme.palette.blueGrey,
-                            },
                         }}
                     />
                     <Button
@@ -360,6 +406,58 @@ function useAdminManageRoles() {
                     </Button>
                 </Box>
             )
+
+            function CustomGridToolbar() {
+                return (<GridToolbarContainer style={{width: '100%', display:'flex', columnGap:'0.25rem', flexWrap:'wrap'}}>
+                    {/* <Box sx={{ m: 1, display: 'flex', 'columnGap': 0.5,  width: '100%' }}> */}
+                        <Button size='small' color='warning' variant='contained' onClick={() => handleToolbarButtonClick('base')}>Base</Button>
+                        <Button size='small' color='primary' variant='contained' onClick={() => handleToolbarButtonClick('operator')}>Operator</Button>
+                        <Button size='small' color='secondary' variant='contained' onClick={() => handleToolbarButtonClick('accountant')}>Accountant</Button>
+                        <Button size='small' color='success' variant='contained' onClick={() => handleToolbarButtonClick('manager')}>Manager</Button>
+                        <Input
+                            // variant="standard"
+                            autoFocus
+                            sx={{width: '100%', minWidth:150, mt:2, ml: 1}}
+                            value={meta.current.textSearchValue}
+                            onChange={handleTextSearchValueChange}
+                            placeholder="Search …"
+                            // InputProps={{
+                            //     startAdornment: <Search fontSize="small" />,
+                            //     endAdornment: (
+                            //         <IconButton
+                            //             title="Clear"
+                            //             aria-label="Clear"
+                            //             size="small"
+                            //             // onClick={handleTextSearchClear} 
+                            //             >
+                            //             <CloseSharp fontSize="small" />
+                            //         </IconButton>
+                            //     ),
+                            // }}
+                        />
+                    {/* </Box> */}
+                </GridToolbarContainer>)
+            }
+
+            function handleTextSearchValueChange(e:any) {
+                meta.current.textSearchValue = e.target.value
+                debounceEmit('MANAGE-ROLES-HOOK-DEBOUNCE-PERMISSIONS-GLOBAL-SEARCH', meta.current.textSearchValue)
+                setRefresh({})
+            }
+
+            function handleTextSearchClear() {
+
+            }
+
+            async function handleToolbarButtonClick(btnType: string) {
+                resetCounter()
+                const temp = await getPermissionsAsJson(btnType)
+                perm.rows = temp.map((item: any) => ({
+                    ...item,
+                    id: counter(),
+                }))
+                setRefresh({})
+            }
 
             async function handleSubmit() {
                 //remove id field from permissions
@@ -386,6 +484,10 @@ function useAdminManageRoles() {
 
         function counter() {
             return ++count
+        }
+
+        function resetCounter() {
+            count = 0
         }
     }
 
