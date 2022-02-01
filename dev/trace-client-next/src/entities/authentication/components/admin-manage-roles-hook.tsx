@@ -30,8 +30,6 @@ import {
     Settings,
 } from '../../../imports/icons-import'
 import { useCommonArtifacts } from './common-artifacts-hook'
-import { itemLevelValidators } from '../../../shared-artifacts/item-level-validators'
-import { palette } from '@mui/system'
 
 function useAdminManageRoles() {
     const [, setRefresh] = useState({})
@@ -43,7 +41,7 @@ function useAdminManageRoles() {
             title: '',
             tableName: '',
             formId: 'admin-manage-roles',
-            actions: () => { },
+            actions: () => {},
             content: () => <></>,
         },
     })
@@ -278,34 +276,44 @@ function useAdminManageRoles() {
             const meta = useRef({
                 textSearchValue: '',
                 permissionsConfig: {
+                    allRows: [],
                     rows: [],
+                    isSubmitDisabled: true,
                 },
             })
             const apiRef: any = useGridApiRef()
             const perm: any = meta.current.permissionsConfig
+
             useEffect(() => {
-                const subs1 = debounceFilterOn('MANAGE-ROLES-HOOK-DEBOUNCE-PERMISSIONS-GLOBAL-SEARCH').subscribe((d:any)=>{
+                const subs1 = debounceFilterOn(
+                    'MANAGE-ROLES-HOOK-DEBOUNCE-PERMISSIONS-GLOBAL-SEARCH'
+                ).subscribe((d: any) => {
                     requestSearch(d.data)
                 })
-                if (_.isEmpty(node.permissions)) {
-                    perm.rows = []
-                } else {
-                    perm.rows = node.permissions.map((item: any) => ({
-                        id: counter(),
-                        ...item,
-                    }))
-                }
-                setRefresh({})
 
-                return(()=>{
+                handleRefresh()
+
+                return () => {
                     subs1.unsubscribe()
-                })
+                }
             }, [])
 
-            function requestSearch(text:string){
-                if(text){
-                    
+            function requestSearch(text: string) {
+                if (text) {
+                    perm.rows = perm.allRows.filter((row: any) => {
+                        return Object.keys(row).some((field) => {
+                            const temp: string = row[field]
+                                ? row[field].toString()
+                                : ''
+                            return temp
+                                .toLowerCase()
+                                .includes(text.toLowerCase())
+                        })
+                    })
+                } else {
+                    perm.rows = perm.allRows.map((item: any) => ({ ...item }))
                 }
+                setRefresh({})
             }
 
             const columns = [
@@ -332,12 +340,18 @@ function useAdminManageRoles() {
                             <Checkbox
                                 checked={params.value}
                                 onChange={(e: any) => {
+                                    perm.isSubmitDisabled = false
                                     params.row.isActive = e.target.checked
+                                    const temp = perm.allRows.find(
+                                        (x: any) => x.id === params.row.id
+                                    )
+                                    temp && (temp.isActive = e.target.checked)
                                     apiRef.current.setEditCellValue({
                                         id: params.row.id,
                                         field: 'isActive',
                                         value: e.target.checked,
                                     })
+                                    setRefresh({})
                                 }}
                             />
                         )
@@ -353,22 +367,22 @@ function useAdminManageRoles() {
             ]
 
             const handleCellClick = useCallback((params) => {
-                apiRef.current.setCellMode(
-                    params.row.id,
-                    'isActive',
-                    'edit'
-                )
+                apiRef.current.setCellMode(params.row.id, 'isActive', 'edit')
             }, [])
 
             const handleCellFocusOut = useCallback((params, event) => {
                 if (params.cellMode === 'edit' && event) {
-                    event.defaultMuiPrevented = true;
+                    event.defaultMuiPrevented = true
                 }
             }, [])
 
             const handleCellKeyDown = useCallback((params, event) => {
-                if (['Escape', 'Delete', 'Backspace', 'Enter'].includes(event.key)) {
-                    event.defaultMuiPrevented = true;
+                if (
+                    ['Escape', 'Delete', 'Backspace', 'Enter'].includes(
+                        event.key
+                    )
+                ) {
+                    event.defaultMuiPrevented = true
                 }
             }, [])
 
@@ -398,6 +412,7 @@ function useAdminManageRoles() {
                         }}
                     />
                     <Button
+                        disabled={perm.isSubmitDisabled}
                         sx={{ mt: 2, width: '100%' }}
                         color="secondary"
                         variant="contained"
@@ -408,45 +423,111 @@ function useAdminManageRoles() {
             )
 
             function CustomGridToolbar() {
-                return (<GridToolbarContainer style={{width: '100%', display:'flex', columnGap:'0.25rem', flexWrap:'wrap'}}>
-                    {/* <Box sx={{ m: 1, display: 'flex', 'columnGap': 0.5,  width: '100%' }}> */}
-                        <Button size='small' color='warning' variant='contained' onClick={() => handleToolbarButtonClick('base')}>Base</Button>
-                        <Button size='small' color='primary' variant='contained' onClick={() => handleToolbarButtonClick('operator')}>Operator</Button>
-                        <Button size='small' color='secondary' variant='contained' onClick={() => handleToolbarButtonClick('accountant')}>Accountant</Button>
-                        <Button size='small' color='success' variant='contained' onClick={() => handleToolbarButtonClick('manager')}>Manager</Button>
+                return (
+                    <GridToolbarContainer
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            columnGap: '0.25rem',
+                            flexWrap: 'wrap',
+                        }}>
+                        {/* <Box sx={{ m: 1, display: 'flex', 'columnGap': 0.5,  width: '100%' }}> */}
+                        <Button
+                            size="small"
+                            sx={{ width: 40 }}
+                            color="warning"
+                            variant="contained"
+                            onClick={() => handleToolbarButtonClick('base')}>
+                            Base
+                        </Button>
+                        <Button
+                            size="small"
+                            color="primary"
+                            variant="contained"
+                            onClick={() =>
+                                handleToolbarButtonClick('operator')
+                            }>
+                            Operator
+                        </Button>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            variant="contained"
+                            onClick={() =>
+                                handleToolbarButtonClick('accountant')
+                            }>
+                            Accountant
+                        </Button>
+                        <Button
+                            size="small"
+                            color="success"
+                            variant="contained"
+                            onClick={() => handleToolbarButtonClick('manager')}>
+                            Manager
+                        </Button>
                         <Input
-                            // variant="standard"
                             autoFocus
-                            sx={{width: '100%', minWidth:150, mt:2, ml: 1}}
+                            sx={{
+                                width: '100%',
+                                minWidth: 150,
+                                mt: 2,
+                                ml: 1,
+                                fontSize: 12,
+                            }}
                             value={meta.current.textSearchValue}
                             onChange={handleTextSearchValueChange}
                             placeholder="Search …"
-                            // InputProps={{
-                            //     startAdornment: <Search fontSize="small" />,
-                            //     endAdornment: (
-                            //         <IconButton
-                            //             title="Clear"
-                            //             aria-label="Clear"
-                            //             size="small"
-                            //             // onClick={handleTextSearchClear} 
-                            //             >
-                            //             <CloseSharp fontSize="small" />
-                            //         </IconButton>
-                            //     ),
-                            // }}
+                            startAdornment={<Search fontSize="small" />}
+                            endAdornment={
+                                <IconButton
+                                    title="Clear"
+                                    aria-label="Clear"
+                                    size="small"
+                                    onClick={handleTextSearchClear}>
+                                    <CloseSharp fontSize="small" />
+                                </IconButton>
+                            }
                         />
-                    {/* </Box> */}
-                </GridToolbarContainer>)
+                        <IconButton
+                            size="large"
+                            title="Refresh"
+                            color="secondary"
+                            onClick={handleRefresh}>
+                            <SyncSharp />
+                        </IconButton>
+                        {/* </Box> */}
+                    </GridToolbarContainer>
+                )
             }
 
-            function handleTextSearchValueChange(e:any) {
+            function handleRefresh() {
+                resetCounter()
+                if (_.isEmpty(node.permissions)) {
+                    perm.rows = []
+                } else {
+                    perm.rows = node.permissions.map((item: any) => ({
+                        id: counter(),
+                        ...item,
+                    }))
+                    perm.allRows = perm.rows.map((item: any) => ({
+                        ...item,
+                    }))
+                }
+                setRefresh({})
+            }
+
+            function handleTextSearchValueChange(e: any) {
                 meta.current.textSearchValue = e.target.value
-                debounceEmit('MANAGE-ROLES-HOOK-DEBOUNCE-PERMISSIONS-GLOBAL-SEARCH', meta.current.textSearchValue)
+                debounceEmit(
+                    'MANAGE-ROLES-HOOK-DEBOUNCE-PERMISSIONS-GLOBAL-SEARCH',
+                    meta.current.textSearchValue
+                )
                 setRefresh({})
             }
 
             function handleTextSearchClear() {
-
+                meta.current.textSearchValue = ''
+                requestSearch('')
             }
 
             async function handleToolbarButtonClick(btnType: string) {
@@ -455,6 +536,9 @@ function useAdminManageRoles() {
                 perm.rows = temp.map((item: any) => ({
                     ...item,
                     id: counter(),
+                }))
+                perm.allRows = perm.rows.map((item: any) => ({
+                    ...item,
                 }))
                 setRefresh({})
             }

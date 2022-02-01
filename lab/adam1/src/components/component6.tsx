@@ -142,7 +142,7 @@ function Component6() {
     function CustomGridToolbar() {
         return (<GridToolbarContainer>
             <Box sx={{ m: 1, display: 'flex', 'columnGap': 1, justifyContent:'flex-end', width:'100%' }}>
-                <Button color='warning' variant='contained' onClick={handleButtonClick}>Base</Button>
+                <Button size='small' sx={{width: 20}} color='warning' variant='contained' onClick={handleButtonClick}>Base</Button>
                 <Button color='primary' variant='contained'>Operator</Button>
                 <Button color='secondary' variant='contained'>Accountant</Button>
                 <Button color='success' variant='contained'>Manager</Button>
