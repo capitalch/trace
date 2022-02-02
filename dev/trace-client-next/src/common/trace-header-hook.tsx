@@ -679,12 +679,12 @@ const adminMenuJson: any = {
                     // },
                 },
                 {
-                    name: 'associateBusinessUsersWithRolesAndBu',
+                    name: 'adminAssociateUsersRolesBu',
                     label: 'Associate users with roles and Bu',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'associateBusinessUsersWithRolesAndBu',
-                    },
+                    componentName: 'adminAssociateUsersRolesBu',
+                    // args: {
+                    //     loadComponent: 'associateBusinessUsersWithRolesAndBu',
+                    // },
                 },
             ],
         },

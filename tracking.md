@@ -3,6 +3,7 @@
 1. Authentication and user management:                    1 week, 5th Feb 2022
     SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
     Admin: Check manage users, Manage BU. Complete manage roles. New Associate
+    Global error catch mecanism. At present UI freezes when error happens
 2. Invoice correction:                                    2 days, 7th Feb
 3. Full reporting of Inventory and allied:                1 week, 14th Feb
 4. Opening balance of stock:                              3 days, 17th Feb

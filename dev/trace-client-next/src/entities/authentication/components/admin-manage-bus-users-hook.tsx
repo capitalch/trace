@@ -17,22 +17,13 @@ function useAdminManageBusUsers() {
         },
     })
     const {
-        clearServerError,
-        confirm,
-        doValidateForm,
-        isValidForm,
-        genericUpdateMaster,
         getCurrentEntity,
         getFormData,
         getLoginData,
-        getSqlObjectString,
-        messages,
-        mutateGraphql,
-        queries,
         resetForm,
         TraceFullWidthSubmitButton,
     } = useSharedElements()
-    const { gridActionMessages, handleDelete } = useCommonArtifacts()
+    const { doSubmit, gridActionMessages, handleDelete } = useCommonArtifacts()
     const id = getLoginData().id
     const { emit, filterOn } = useIbuki()
     const pre = meta.current.dialogConfig
@@ -113,7 +104,7 @@ function useAdminManageBusUsers() {
             headerName: 'Active',
             description: 'Active',
             field: 'isActive',
-            type:'boolean',
+            type: 'boolean',
             width: 90,
         },
     ]
@@ -145,27 +136,6 @@ function useAdminManageBusUsers() {
         setRefresh({})
     }
 
-    // function handleDelete(id1: any) {
-    //     const options = {
-    //         description: messages.deleteConfirm,
-    //         confirmationText: 'Yes',
-    //         cancellationText: 'No',
-    //     }
-    //     confirm(options)
-    //         .then(async () => {
-    //             const id = +id1 // to make it numeric from string
-    //             emit('SHOW-LOADING-INDICATOR', true)
-    //             await genericUpdateMaster({
-    //                 deletedIds: [id],
-    //                 tableName: 'TraceUser',
-    //             })
-    //             emit('SHOW-LOADING-INDICATOR', false)
-    //             emit('SHOW-MESSAGE', {})
-    //             emit(gridActionMessages.fetchIbukiMessage, null)
-    //         })
-    //         .catch(() => { }) // important to have otherwise eror
-    // }
-
     function handleEdit(node: any) {
         resetForm(pre.formId)
         const formData = getFormData(pre.formId)
@@ -189,46 +159,12 @@ function useAdminManageBusUsers() {
     async function handleSubmit() {
         const formData = getFormData(pre.formId)
         formData.parentId = getLoginData().id
-        clearServerError(pre.formId)
-        await doValidateForm(pre.formId)
-        if (isValidForm(pre.formId)) {
-            await saveData()
-        }
-
-        async function saveData() {
-            formData.isActive || (formData.isActive = false)
-            const sqlObjectString = getSqlObjectString({
-                data: formData,
-                tableName: 'TraceUser',
-            })
-            const q = queries['createUser'](sqlObjectString, getCurrentEntity())
-            if (q) {
-                emit('SHOW-LOADING-INDICATOR', true)
-                try {
-                    let ret1 = await mutateGraphql(q)
-                    const ret = ret1?.data?.authentication?.createUser
-                    resetForm(pre.formId)
-                    if (ret) {
-                        emit('SHOW-MESSAGE', {})
-                        handleCloseDialog()
-                        emit('FETCH-DATA-MESSAGE', null)
-                    } else {
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: messages['errorInOperation'],
-                            duration: null,
-                        })
-                    }
-                } catch (err: any) {
-                    emit('SHOW-MESSAGE', {
-                        severity: 'error',
-                        message: err.message || messages['errorInOperation'],
-                        duration: null,
-                    })
-                }
-                emit('SHOW-LOADING-INDICATOR', false)
-            }
-        }
+        doSubmit({
+            data: formData,
+            graphQlKey: 'createUser',
+            tableName: 'TraceUser',
+            handleCloseDialog: handleCloseDialog,
+        })
     }
 
     const queryId = 'get_businessUsers'

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
-import { ReactForm, useIbuki } from '../../../imports/trace-imports'
+import { ReactForm, } from '../../../imports/trace-imports'
 import { useCommonArtifacts } from './common-artifacts-hook'
 
 function useAdminManageBu() {
@@ -19,23 +19,16 @@ function useAdminManageBu() {
         },
     })
     const {
-        clearServerError,
-        doValidateForm,
         emit,
         filterOn,
-        isValidForm,
         getCurrentEntity,
         getFormData,
-        getSqlObjectString,
-        messages,
-        mutateGraphql,
-        queries,
         resetForm,
         TraceFullWidthSubmitButton,
     } = useSharedElements()
 
     const pre = meta.current.dialogConfig
-    const { handleDelete, gridActionMessages } = useCommonArtifacts()
+    const {doSubmit, handleDelete, gridActionMessages } = useCommonArtifacts()
     useEffect(() => {
         const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
             emit(gridActionMessages.fetchIbukiMessage, null)
@@ -151,7 +144,6 @@ function useAdminManageBu() {
     function handleEdit(node: any) {
         resetForm(pre.formId)
         pre.isEditMode = true
-        const formData: any = getFormData(pre.formId)
         pre.title = 'Edit business unit(Bu)'
         const jsonObject = JSON.parse(JSON.stringify(manageBuJson))
         jsonObject.validations.pop() // remove validation from the form
@@ -168,51 +160,16 @@ function useAdminManageBu() {
     async function handleSubmit() {
         const formData = getFormData(pre.formId)
         pre.isEditMode && (formData.id = pre.id)
-        clearServerError(pre.formId)
-        await doValidateForm(pre.formId)
-        if (isValidForm(pre.formId)) {
-            await saveData()
-        }
-
-        async function saveData() {
-            const sqlObjectString = getSqlObjectString({
-                data: formData,
-                tableName: 'ClientEntityBu',
-            })
-            let graphQlKey
-
-            pre.isEditMode
-                ? (graphQlKey = 'genericUpdateMaster')
-                : (graphQlKey = 'createBuInEntity')
-
-            const q = queries[graphQlKey](sqlObjectString, getCurrentEntity())
-            if (q) {
-                emit('SHOW-LOADING-INDICATOR', true)
-                try {
-                    let ret1 = await mutateGraphql(q)
-                    const ret = ret1?.data?.authentication?.[graphQlKey]
-                    resetForm(pre.formId)
-                    if (ret) {
-                        emit('SHOW-MESSAGE', {})
-                        handleCloseDialog()
-                        emit('FETCH-DATA-MESSAGE', null)
-                    } else {
-                        emit('SHOW-MESSAGE', {
-                            severity: 'error',
-                            message: messages['errorInOperation'],
-                            duration: null,
-                        })
-                    }
-                } catch (err: any) {
-                    emit('SHOW-MESSAGE', {
-                        severity: 'error',
-                        message: err.message || messages['errorInOperation'],
-                        duration: null,
-                    })
-                }
-                emit('SHOW-LOADING-INDICATOR', false)
-            }
-        }
+        let graphQlKey
+        pre.isEditMode
+            ? (graphQlKey = 'genericUpdateMaster')
+            : (graphQlKey = 'createBuInEntity')
+        doSubmit({
+            data: formData,
+            graphQlKey: graphQlKey,
+            tableName: 'ClientEntityBu',
+            handleCloseDialog: handleCloseDialog
+        })
     }
 
     const queryId = 'getJson_entities_bu'

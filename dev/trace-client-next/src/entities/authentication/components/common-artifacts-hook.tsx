@@ -2,14 +2,29 @@
 import { useSharedElements } from './shared-elements-hook'
 
 function useCommonArtifacts() {
-    const { _, clearServerError, confirm, doValidateForm, getCurrentEntity, getFormData, getSqlObjectString, isValidForm, messages, mutateGraphql, queries, resetForm, emit, genericUpdateMaster } = useSharedElements()
+    const {
+        _,
+        clearServerError,
+        confirm,
+        doValidateForm,
+        getCurrentEntity,
+        getFormData,
+        getSqlObjectString,
+        isValidForm,
+        messages,
+        mutateGraphql,
+        queries,
+        resetForm,
+        emit,
+        genericUpdateMaster,
+    } = useSharedElements()
 
     const gridActionMessages = {
         addIbukiMessage: 'ADD-IBUKI-MESSAGE',
         deleteIbukiMessage: 'DELETE-IBUKI-MESSAGE',
         editIbukiMessage: 'EDIT-IBUKI-MESSAGE',
         fetchIbukiMessage: 'FETCH-IBUKI-MESSAGE',
-        onDataFetchedIbukiMessage: 'ON-DATA-FETCHED-IBUKI-MESSAGE'
+        onDataFetchedIbukiMessage: 'ON-DATA-FETCHED-IBUKI-MESSAGE',
     }
 
     function handleDelete(id1: any, tableName: string) {
@@ -30,25 +45,28 @@ function useCommonArtifacts() {
                 emit('SHOW-MESSAGE', {})
                 emit(gridActionMessages.fetchIbukiMessage, null)
             })
-            .catch(() => { }) // important to have otherwise eror
+            .catch(() => {}) // important to have otherwise eror
     }
 
-    async function doSubmit(
-        { data, formId, graphQlKey, tableName, handleCloseDialog }: any
-    ) {
+    async function doSubmit({
+        data,
+        formId,
+        graphQlKey,
+        tableName,
+        handleCloseDialog,
+    }: {data?: any; formId?: string; graphQlKey: string; tableName: string; handleCloseDialog: any}) {
         let formData: any
         if (_.isEmpty(data)) {
-            formData = getFormData(formId)
-            clearServerError(formId)
-            await doValidateForm(formId)
-            if (isValidForm(formId)) {
+            formData = getFormData(formId || '')
+            clearServerError(formId || '')
+            await doValidateForm(formId || '')
+            if (isValidForm(formId || '')) {
                 await saveData()
             }
         } else {
             formData = data
             await saveData()
         }
-
 
         async function saveData() {
             const sqlObjectString = getSqlObjectString({
@@ -61,7 +79,7 @@ function useCommonArtifacts() {
                 try {
                     let ret1 = await mutateGraphql(q)
                     const ret = ret1?.data?.authentication?.[graphQlKey]
-                    resetForm(formId)
+                    resetForm(formId || '')
                     if (ret) {
                         emit('SHOW-MESSAGE', {})
                         handleCloseDialog()
@@ -85,7 +103,7 @@ function useCommonArtifacts() {
         }
     }
 
-    return { doSubmit, gridActionMessages, handleDelete, }
+    return { doSubmit, gridActionMessages, handleDelete }
 }
 
 export { useCommonArtifacts }

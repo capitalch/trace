@@ -5,6 +5,7 @@ import { GenericCRUD } from './components/generic-crud'
 import { AdminManageBusUsers } from './components/admin-manage-bus-users'
 import { AdminManageBu } from './components/admin-manage-bu'
 import { AdminManageRoles } from './components/admin-manage-roles'
+import { AdminAssociateUsersRolesBu } from './components/admin-associate-users-roles-bu'
 
 function LaunchPad() {
     const meta: any = useRef({
@@ -19,7 +20,9 @@ function LaunchPad() {
         adminManageBusUsers: AdminManageBusUsers,
         adminManageBu: AdminManageBu,
         adminManageRoles: AdminManageRoles,
+        adminAssociateUsersRolesBu: AdminAssociateUsersRolesBu,
     }
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
