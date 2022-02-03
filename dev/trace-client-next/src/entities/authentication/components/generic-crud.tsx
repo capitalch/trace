@@ -29,7 +29,7 @@ import {
     useTraceMaterialComponents,
 } from '../../../imports/trace-imports'
 import { useSharedElements } from './shared-elements-hook'
-import { useManageUsers } from './manage-users'
+// import { useManageUsers } from './manage-users'
 import { useAssociateAdminUserWithClientAndEntity } from './associate-admin-user-with-client-and-entity'
 import { useManageClientsEntities } from './manage-clients-entities'
 import { useManageBu } from './manage-bu'
@@ -79,7 +79,7 @@ function GenericCRUD({ loadComponent }: any) {
 
     const { useStyles, closeDialog, theme } = useSharedElements(meta)
     const classes = useStyles({ meta: meta })
-    const { manageUsers } = useManageUsers(meta)
+    // const { manageUsers } = useManageUsers(meta)
     // const { associateAdminUserWithClientAndEntity } =
     //     useAssociateAdminUserWithClientAndEntity(meta)
     // const { manageClients, manageEntities } = useManageClientsEntities(meta)
@@ -107,7 +107,7 @@ function GenericCRUD({ loadComponent }: any) {
 
     function selectLogic() {
         const logic: any = {
-            manageUsers: manageUsers,
+            // manageUsers: manageUsers,
             // manageBu: manageBu,
             // manageClients: manageClients,
             // manageEntities: manageEntities,

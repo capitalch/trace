@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { GenericCRUD } from './components/generic-crud'
-import { AdminManageBusUsers } from './components/admin-manage-bus-users'
+import { ManageUsers } from './components/manage-users'
 import { AdminManageBu } from './components/admin-manage-bu'
 import { AdminManageRoles } from './components/admin-manage-roles'
 import { AdminAssociateUsersRolesBu } from './components/admin-associate-users-roles-bu'
@@ -13,11 +13,12 @@ function LaunchPad() {
         isMounted: false,
         output: () => null,
     })
+
     const [, setRefresh] = useState({})
     const { getFromBag, setInBag } = manageEntitiesState()
     const { filterOn } = usingIbuki()
     const components: any = {
-        adminManageBusUsers: AdminManageBusUsers,
+        manageUsers: ManageUsers,
         adminManageBu: AdminManageBu,
         adminManageRoles: AdminManageRoles,
         adminAssociateUsersRolesBu: AdminAssociateUsersRolesBu,

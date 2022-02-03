@@ -609,10 +609,10 @@ const superAdminMenuJson: any = {
                 {
                     name: 'manageUsers',
                     label: 'Manage admin users',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageUsers',
-                    },
+                    componentName: 'manageUsers',
+                    // args: {
+                    //     loadComponent: 'manageUsers',
+                    // },
                 },
                 {
                     name: 'manageClients',
@@ -653,8 +653,8 @@ const adminMenuJson: any = {
             children: [
                 {
                     name: 'manageUsers',
-                    label: 'Manage business users',
-                    componentName: 'adminManageBusUsers',
+                    label: 'Manage users',
+                    componentName: 'manageUsers',
                     // componentName: 'genericCRUD',
                     // args: {
                     //     loadComponent: 'manageUsers',
@@ -671,7 +671,7 @@ const adminMenuJson: any = {
                 },
                 {
                     name: 'manageBu',
-                    label: 'Manage business unit (Bu)',
+                    label: 'Manage business units (Bu)',
                     componentName: 'adminManageBu',
                     // componentName: 'genericCRUD',
                     // args: {

@@ -3,7 +3,7 @@ import { useSharedElements } from './shared-elements-hook'
 import { ReactForm, useIbuki } from '../../../imports/trace-imports'
 import { useCommonArtifacts } from './common-artifacts-hook'
 
-function useAdminManageBusUsers() {
+function useManageUsers() {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
         title: 'Admin manage business users',
@@ -12,11 +12,12 @@ function useAdminManageBusUsers() {
             isEditMode: false,
             title: '',
             tableName: 'TraceUser',
-            formId: 'admin-manage-bus-users',
+            formId: 'admin-manage-users',
             actions: () => {},
             content: () => <></>,
         },
     })
+
     const {
         getCurrentEntity,
         getFormData,
@@ -26,8 +27,10 @@ function useAdminManageBusUsers() {
     } = useSharedElements()
     const { doSubmit, gridActionMessages, handleDelete } = useCommonArtifacts()
     const id = getLoginData().id
+    const userType = getLoginData().userType
     const { emit, filterOn } = useIbuki()
     const pre = meta.current.dialogConfig
+
     useEffect(() => {
         const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
             emit(gridActionMessages.fetchIbukiMessage, null)
@@ -170,7 +173,7 @@ function useAdminManageBusUsers() {
         })
     }
 
-    const queryId = 'get_businessUsers'
+    const queryId = (userType === 'a')? 'get_businessUsers': 'get_adminUsers'
     const queryArgs = { parentId: id }
     const specialColumns = {
         isEdit: true,
@@ -190,7 +193,7 @@ function useAdminManageBusUsers() {
     }
 }
 
-export { useAdminManageBusUsers }
+export { useManageUsers }
 
 const manageUsersJson: any = {
     class: 'generic-dialog',

@@ -3,11 +3,10 @@
 
 
 "@ampproject/remapping@^2.0.0":
-  "integrity" "sha512-EldHF4Ufj3NL9yCAmYrPzY+3/Yqrzxu24F4Mu4nRjK3w70AKYRmhuLwGZdA9JeoDsbIwkgGkbqUK2INuF582Og=="
-  "resolved" "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.0.1.tgz"
-  "version" "2.0.1"
+  "integrity" "sha512-sE8Gx+qSDMLoJvb3QarJJlDQK7SSY4rK3hxp4XsiANeFOmjU46ZI7Y9adAQRJrmbz8zbtZkp3mJTT+rGxtF0XA=="
+  "resolved" "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.0.2.tgz"
+  "version" "2.0.2"
   dependencies:
-    "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/trace-mapping" "^0.2.2"
     "sourcemap-codec" "1.4.8"
 
@@ -1559,9 +1558,9 @@
   "version" "3.0.4"
 
 "@jridgewell/trace-mapping@^0.2.2":
-  "integrity" "sha512-I9AGQzMPEzQNJgib2YSqciYWazGsXSyu1rEEeaPeM1764ZtnfNTxA5bofzG/POMI3QcvpBUxwecOPZM6ZhkEpg=="
-  "resolved" "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.2.2.tgz"
-  "version" "0.2.2"
+  "integrity" "sha512-W/qPHey63KLHPC7zzvXeul8ouaugOu232lUPbyBAuoG9s+bmDSP1ANulLjGCf34Je3sGUPtw/Cg52e7ALY9+3w=="
+  "resolved" "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.2.4.tgz"
+  "version" "0.2.4"
   dependencies:
     "@jridgewell/resolve-uri" "^3.0.3"
     "sourcemap-codec" "1.4.8"
@@ -4151,9 +4150,9 @@
     "lodash.uniq" "^4.5.0"
 
 "caniuse-lite@^1.0.0", "caniuse-lite@^1.0.30000981", "caniuse-lite@^1.0.30001109", "caniuse-lite@^1.0.30001125", "caniuse-lite@^1.0.30001286":
-  "integrity" "sha512-p7d9YQMji8haf0f+5rbcv9WlQ+N5jMPfRAnUmZRlNxsNeBO3Yr7RYG6M2uTY1h9tCVdlkJg6YNNc4kiAiBLdWA=="
-  "resolved" "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001305.tgz"
-  "version" "1.0.30001305"
+  "integrity" "sha512-Wd1OuggRzg1rbnM5hv1wXs2VkxJH/AA+LuudlIqvZiCvivF+wJJe2mgBZC8gPMgI7D76PP5CTx8Luvaqc1V6OQ=="
+  "resolved" "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001306.tgz"
+  "version" "1.0.30001306"
 
 "canvg@^3.0.6":
   "integrity" "sha512-qwR2FRNO9NlzTeKIPIKpnTY6fqwuYSequ8Ru8c0YkYU7U0oW+hLUvWadLvAu1Rl72OMNiFhoLu4f8eUjQ7l/+Q=="
