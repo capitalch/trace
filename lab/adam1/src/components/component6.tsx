@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
 import { Component8 } from './component8'
 import { useIbuki } from '../utils/ibuki'
-import { DataGridPro, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid-pro'
+import {
+    DataGridPro,
+    GridToolbarContainer,
+    useGridApiRef,
+} from '@mui/x-data-grid-pro'
 import { Box, Button } from '@mui/material'
-import { Checkbox, IconButton, TextField} from '@mui/material'
+import { Checkbox, IconButton, TextField } from '@mui/material'
 import { SpaceBarRounded } from '@mui/icons-material'
 import {
     CropDinSharp,
@@ -72,7 +76,7 @@ function Component6() {
             { id: 6, controlName: 'control6', isActive: false },
         ]
         // for (let item of meta.current.rows) {
-        // apiRef.current.setCellMode(1, 'isActive', 'edit')            
+        // apiRef.current.setCellMode(1, 'isActive', 'edit')
         // }
         setRefresh({})
     }, [])
@@ -83,29 +87,24 @@ function Component6() {
 
     const handleCellFocusOut = React.useCallback((params, event) => {
         if (params.cellMode === 'edit' && event) {
-            event.defaultMuiPrevented = true;
+            event.defaultMuiPrevented = true
         }
     }, [])
 
     // Prevent from rolling back on escape
     const handleCellKeyDown = React.useCallback((params, event) => {
         if (['Escape', 'Delete', 'Backspace', 'Enter'].includes(event.key)) {
-            event.defaultMuiPrevented = true;
+            event.defaultMuiPrevented = true
         }
     }, [])
 
     const handleCellClick = React.useCallback((params) => {
-        apiRef.current.setCellMode(
-            params.row.id,
-            'isActive',
-            'edit'
-        )
+        apiRef.current.setCellMode(params.row.id, 'isActive', 'edit')
     }, [])
 
     const handleDoubleCellClick = React.useCallback((params, event) => {
-        event.defaultMuiPrevented = true;
+        event.defaultMuiPrevented = true
     }, [])
-
 
     return (
         <Box sx={{ mt: 5, ml: 5 }}>
@@ -124,13 +123,11 @@ function Component6() {
                     BooleanCellFalseIcon: CheckBoxOutlineBlankSharp,
                     BooleanCellTrueIcon: CheckBoxSharp,
                 }}
-
                 rows={meta.current.rows}
                 sx={{
                     width: '80vw',
                     height: '80vh',
                 }}
-
                 onCellFocusOut={handleCellFocusOut}
                 onCellKeyDown={handleCellKeyDown}
                 onCellClick={handleCellClick}
@@ -138,44 +135,63 @@ function Component6() {
             />
         </Box>
     )
-
     function CustomGridToolbar() {
-        return (<GridToolbarContainer>
-            <Box sx={{ m: 1, display: 'flex', 'columnGap': 1, justifyContent:'flex-end', width:'100%' }}>
-                <Button size='small' sx={{width: 20}} color='warning' variant='contained' onClick={handleButtonClick}>Base</Button>
-                <Button color='primary' variant='contained'>Operator</Button>
-                <Button color='secondary' variant='contained'>Accountant</Button>
-                <Button color='success' variant='contained'>Manager</Button>
-                <TextField
-                            variant="standard"
-                            size='small'
-                            sx={{width: 250}}
-                            value={meta.current.textSearchValue}
-                            // onChange={handleTextSearchValueChange}
-                            placeholder="Search…"
-                            InputProps={{
-                                startAdornment: <Search fontSize="small" />,
-                                endAdornment: (
-                                    <IconButton
-                                        title="Clear"
-                                        aria-label="Clear"
-                                        size="small"
-                                        // onClick={handleTextSearchClear}
-                                        >
-                                        <CloseSharp fontSize="small" />
-                                    </IconButton>
-                                ),
-                            }}
-                        />
-            </Box>
-        </GridToolbarContainer>)
+        return (
+            <GridToolbarContainer>
+                <Box
+                    sx={{
+                        m: 1,
+                        display: 'flex',
+                        columnGap: 1,
+                        justifyContent: 'flex-end',
+                        width: '100%',
+                    }}>
+                    <Button
+                        size="small"
+                        sx={{ width: 20 }}
+                        color="warning"
+                        variant="contained"
+                        onClick={handleButtonClick}>
+                        Base
+                    </Button>
+                    <Button color="primary" variant="contained">
+                        Operator
+                    </Button>
+                    <Button color="secondary" variant="contained">
+                        Accountant1
+                    </Button>
+                    <Button color="success" variant="contained">
+                        Manager
+                    </Button>
+                    <TextField
+                        variant="standard"
+                        size="small"
+                        sx={{ width: 250 }}
+                        value={meta.current.textSearchValue}
+                        // onChange={handleTextSearchValueChange}
+                        placeholder="Search…"
+                        InputProps={{
+                            startAdornment: <Search fontSize="small" />,
+                            endAdornment: (
+                                <IconButton
+                                    title="Clear"
+                                    aria-label="Clear"
+                                    size="small"
+                                    // onClick={handleTextSearchClear}
+                                >
+                                    <CloseSharp fontSize="small" />
+                                </IconButton>
+                            ),
+                        }}
+                    />
+                </Box>
+            </GridToolbarContainer>
+        )
     }
 
-    function handleButtonClick(e: any){
+    function handleButtonClick(e: any) {
         console.log(e)
     }
-
-
 
     function incr() {
         return ++count

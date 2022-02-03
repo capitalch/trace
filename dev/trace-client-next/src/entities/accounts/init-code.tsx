@@ -26,8 +26,6 @@ function initCode() {
     // const accountant = await getPermissionsAsJson('accountant')
     // const manager = await getPermissionsAsJson('manager')
 
-
-
     async function setLastBuCodeFinYearIdBranchId(brId: any = undefined) {
         // const userId = getLoginData().id
         const buCode = getLoginData().lastUsedBuCode

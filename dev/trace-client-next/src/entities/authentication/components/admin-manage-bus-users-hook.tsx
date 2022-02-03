@@ -9,6 +9,7 @@ function useAdminManageBusUsers() {
         title: 'Admin manage business users',
         showDialog: false,
         dialogConfig: {
+            isEditMode: false,
             title: '',
             tableName: 'TraceUser',
             formId: 'admin-manage-bus-users',
@@ -90,7 +91,7 @@ function useAdminManageBusUsers() {
         },
         {
             headerName: 'Email',
-            description: 'Id',
+            description: 'Email',
             field: 'userEmail',
             width: 250,
         },
@@ -124,6 +125,7 @@ function useAdminManageBusUsers() {
 
     function handleAdd() {
         resetForm(pre.formId)
+        pre.isEditMode = false
         meta.current.showDialog = true
         pre.title = 'Add new user'
         const addJsonString = JSON.stringify(manageUsersJson)
@@ -138,8 +140,8 @@ function useAdminManageBusUsers() {
 
     function handleEdit(node: any) {
         resetForm(pre.formId)
-        const formData = getFormData(pre.formId)
-        formData.id = node.id1 // for edit purpose
+        pre.isEditMode = true
+        pre.id = node.id1 // for edit purpose
         const jsonObject = JSON.parse(JSON.stringify(manageUsersJson))
         jsonObject.items[0].value = node['userEmail']
         jsonObject.items[1].value = node['userName']
@@ -159,6 +161,7 @@ function useAdminManageBusUsers() {
     async function handleSubmit() {
         const formData = getFormData(pre.formId)
         formData.parentId = getLoginData().id
+        pre.isEditMode && (formData.id = pre.id)
         doSubmit({
             data: formData,
             graphQlKey: 'createUser',

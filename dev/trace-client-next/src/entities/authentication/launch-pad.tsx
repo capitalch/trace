@@ -41,21 +41,21 @@ function LaunchPad() {
         }
     }, [])
 
-    function Comp() {
-        let ret = null
-        const currentComponent = getFromBag('currentComponent')
-        const loadComponent = currentComponent?.args?.loadComponent
-        loadComponent &&
-            (ret = (
-                <GenericCRUD
-                    loadComponent={
-                        currentComponent.args.loadComponent
-                    }></GenericCRUD>
-            ))
-        return ret
-    }
-
+    // function Comp() {
+    //     let ret = null
+    //     const currentComponent = getFromBag('currentComponent')
+    //     const loadComponent = currentComponent?.args?.loadComponent
+    //     loadComponent &&
+    //         (ret = (
+    //             <GenericCRUD
+    //                 loadComponent={
+    //                     currentComponent.args.loadComponent
+    //                 }></GenericCRUD>
+    //         ))
+    //     return ret
+    // }
     // return <Comp></Comp>
+    
     const CurrentComponent =
         components[meta.current.currentComponentName] || (() => <></>)
     return <CurrentComponent />
