@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
-import { GenericCRUD } from './components/generic-crud'
+// import { GenericCRUD } from './components/generic-crud'
 import { ManageUsers } from './components/manage-users'
 import { AdminManageBu } from './components/admin-manage-bu'
 import { AdminManageRoles } from './components/admin-manage-roles'
 import { AdminAssociateUsersRolesBu } from './components/admin-associate-users-roles-bu'
-
+import { SuperAdminManageClients } from './components/super-admin-manage-clients'
+import { SuperAdminManageEntities } from './components/super-admin-manage-entities'
+import { AssociateAdminUsersWithClientsAndEntities } from './components/associate-admin-users-with-clients-and-entities'
 function LaunchPad() {
     const meta: any = useRef({
         currentComponentName: '*',
@@ -15,13 +17,17 @@ function LaunchPad() {
     })
 
     const [, setRefresh] = useState({})
-    const { getFromBag, setInBag } = manageEntitiesState()
+    const { setInBag } = manageEntitiesState()
     const { filterOn } = usingIbuki()
     const components: any = {
         manageUsers: ManageUsers,
         adminManageBu: AdminManageBu,
         adminManageRoles: AdminManageRoles,
         adminAssociateUsersRolesBu: AdminAssociateUsersRolesBu,
+        superAdminManageClients: SuperAdminManageClients,
+        superAdminManageEntities: SuperAdminManageEntities,
+        associateAdminUsersWithClientsAndEntities:
+            AssociateAdminUsersWithClientsAndEntities,
     }
 
     useEffect(() => {
@@ -56,7 +62,7 @@ function LaunchPad() {
     //     return ret
     // }
     // return <Comp></Comp>
-    
+
     const CurrentComponent =
         components[meta.current.currentComponentName] || (() => <></>)
     return <CurrentComponent />

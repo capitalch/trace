@@ -617,26 +617,26 @@ const superAdminMenuJson: any = {
                 {
                     name: 'manageClients',
                     label: 'Manage clients',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageClients',
-                    },
+                    componentName: 'superAdminManageClients',
+                    // args: {
+                    //     loadComponent: 'manageClients',
+                    // },
                 },
                 {
                     name: 'manageEntities',
                     label: 'Manage entities',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageEntities',
-                    },
+                    componentName: 'superAdminManageEntities',
+                    // args: {
+                    //     loadComponent: 'manageEntities',
+                    // },
                 },
                 {
-                    name: 'associateAdminUserWithClientAndEntity',
-                    label: 'Associate admin user with client and entity',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'associateAdminUserWithClientAndEntity',
-                    },
+                    name: 'associateAdminUsersWithClientsAndEntities',
+                    label: 'Associate admin users with clients and entities',
+                    componentName: 'associateAdminUsersWithClientsAndEntities',
+                    // args: {
+                    //     loadComponent: 'associateAdminUserWithClientAndEntity',
+                    // },
                 },
             ],
         },
@@ -653,7 +653,7 @@ const adminMenuJson: any = {
             children: [
                 {
                     name: 'manageUsers',
-                    label: 'Manage users',
+                    label: 'Manage business users',
                     componentName: 'manageUsers',
                     // componentName: 'genericCRUD',
                     // args: {

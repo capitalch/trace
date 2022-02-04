@@ -9,7 +9,7 @@
 4. Opening balance of stock:                              3 days, 17th Feb
 5. Subledger billing:                                     2 days, 19th Feb
 6. Ledger subledger showing balance:                      2 days, 21st Feb
-7. purchase invoice scanned pDF save:                     2 days, 23rd feb
+7. purchase invoice scanned pdf save:                     2 days, 23rd feb
 8. Buffer 3 today's                                       3 days, 26th Feb
 9. Input of product price and price management            2 days, 28th Feb
 10. New account code create, immediate effect             3 days, 3rd Mar
