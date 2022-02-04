@@ -123,8 +123,11 @@ function useXXGrid(gridOptions: any) {
             })
             // gridOptions.sharedData && (gridOptions.sharedData['fetchedData'] = ret1)
             // send message with fetched data if onDataFetchedIbukiMessage is present
-            if(gridOptions?.gridActionMessages?.onDataFetchedIbukiMessage){
-                emit(gridOptions.gridActionMessages.onDataFetchedIbukiMessage, ret1)
+            if (gridOptions?.gridActionMessages?.onDataFetchedIbukiMessage) {
+                emit(
+                    gridOptions.gridActionMessages.onDataFetchedIbukiMessage,
+                    ret1
+                )
             }
             emit('SHOW-LOADING-INDICATOR', false)
             const path = gridOptions.jsonFieldPath
@@ -393,12 +396,22 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
             '& .custom-toolbar': {
                 display: 'flex',
-                marginLeft: '10px',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                columnGap: '1.5rem',
+                flexDirection: 'column',
+                marginLeft: theme.spacing(1),
                 borderBottom: '1px solid lightgrey',
-                justifyContent: 'space-between',
+                padding: 0,
+
+                '& .subtitle': {
+                    width: '100%',
+                    display: 'flex',
+                    marginTop: 0.5,
+                },
+
+                '& .main-container': {
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                },
 
                 '& .toolbar-left-items': {
                     display: 'flex',
@@ -406,9 +419,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     flexWrap: 'wrap',
                     columnGap: theme.spacing(0.5),
                     '& .toolbar-title': {
-                        color: 'dodgerblue',
-                        fontSize: '1.2rem',
+                        color: 'grey',
+                        fontSize: '1.1rem',
                         fontWeight: 'bold',
+                        marginBottom: theme.spacing(0.4),
                     },
                     '& .view-limit': {
                         display: 'flex',
@@ -422,14 +436,25 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     },
                 },
 
-                '& .global-search': {
-                    marginLeft: 'auto',
-                    marginRight: '1rem',
+                '& .toolbar-right-items': {
+                    '& .global-search': {
+                        // marginLeft: 'auto',
+                        marginRight: theme.spacing(1),
+                    },
+
+                    '& .add-button': {
+                        marginRight: theme.spacing(1),
+                    },
                 },
 
-                '& .add-button': {
-                    marginRight: theme.spacing(1),
-                },
+                // '& .global-search': {
+                //     marginLeft: 'auto',
+                //     marginRight: '1rem',
+                // },
+
+                // '& .add-button': {
+                //     marginRight: theme.spacing(1),
+                // },
             },
             '& .custom-footer': {
                 display: 'flex',

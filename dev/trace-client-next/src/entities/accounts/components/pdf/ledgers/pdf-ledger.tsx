@@ -252,7 +252,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 { width: 65, textAlign: 'right' },
                             ]}>
                             {closingBalance >= 0
-                                ? toDecimalFormat(closingBalance)
+                                ? toDecimalFormat(closingBalance) + ' Dr'
                                 : ''}
                         </Text>
                         <Text
@@ -261,7 +261,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 { width: 65, textAlign: 'right' },
                             ]}>
                             {closingBalance < 0
-                                ? toDecimalFormat(Math.abs(closingBalance))
+                                ? toDecimalFormat(Math.abs(closingBalance)) + ' Cr'
                                 : ''}
                         </Text>
                     </View>

@@ -31,7 +31,7 @@ function SaleView({ drillDownEditAttributes }: any) {
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
                 summaryColNames={summaryColNames}
-                title=""
+                title="Sales view"
                 viewLimit="100"
             />
         </Box>

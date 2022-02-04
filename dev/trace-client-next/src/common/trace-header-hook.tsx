@@ -631,9 +631,9 @@ const superAdminMenuJson: any = {
                     // },
                 },
                 {
-                    name: 'associateAdminUsersWithClientsAndEntities',
+                    name: 'associateUsersWithClientsAndEntities',
                     label: 'Associate admin users with clients and entities',
-                    componentName: 'associateAdminUsersWithClientsAndEntities',
+                    componentName: 'superAdminAssociateAdminUsersWithClientsAndEntities',
                     // args: {
                     //     loadComponent: 'associateAdminUserWithClientAndEntity',
                     // },

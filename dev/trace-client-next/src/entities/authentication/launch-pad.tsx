@@ -8,7 +8,7 @@ import { AdminManageRoles } from './components/admin-manage-roles'
 import { AdminAssociateUsersRolesBu } from './components/admin-associate-users-roles-bu'
 import { SuperAdminManageClients } from './components/super-admin-manage-clients'
 import { SuperAdminManageEntities } from './components/super-admin-manage-entities'
-import { AssociateAdminUsersWithClientsAndEntities } from './components/associate-admin-users-with-clients-and-entities'
+import { SuperAdminAssociateAdminUsersWithClientsAndEntities } from './components/super-admin-associate-admin-users-with-clients-and-entities'
 function LaunchPad() {
     const meta: any = useRef({
         currentComponentName: '*',
@@ -26,8 +26,8 @@ function LaunchPad() {
         adminAssociateUsersRolesBu: AdminAssociateUsersRolesBu,
         superAdminManageClients: SuperAdminManageClients,
         superAdminManageEntities: SuperAdminManageEntities,
-        associateAdminUsersWithClientsAndEntities:
-            AssociateAdminUsersWithClientsAndEntities,
+        superAdminAssociateAdminUsersWithClientsAndEntities:
+            SuperAdminAssociateAdminUsersWithClientsAndEntities,
     }
 
     useEffect(() => {

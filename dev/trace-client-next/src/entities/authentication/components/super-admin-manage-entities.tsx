@@ -22,24 +22,21 @@ function SuperAdminManageEntities() {
         },
     })
     const {
-        emit,
         filterOn,
         getCurrentEntity,
         getFormData,
         resetForm,
         TraceFullWidthSubmitButton,
     } = useSharedElements()
+
     const pre = meta.current.dialogConfig
     const { doSubmit, handleDelete, gridActionMessages } = useCommonArtifacts()
-    useEffect(() => {
-        // const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
-        //     emit(gridActionMessages.fetchIbukiMessage, null)
-        // })
 
+    useEffect(() => {
         const subs2 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {
                 //edit
-                // handleEdit(d.data?.row)
+                handleEdit(d.data?.row)
             }
         )
 
@@ -58,26 +55,10 @@ function SuperAdminManageEntities() {
             }
         )
 
-        const subs5 = filterOn(
-            gridActionMessages.onDataFetchedIbukiMessage
-        ).subscribe(
-            // To populate the Entities drop down
-            (d: any) => {
-                const entities = d.data?.jsonResult?.entities || []
-                pre.entities = entities.map((x: any) => ({
-                    label: x.entityName,
-                    value: x.id,
-                }))
-                // manageBuJson.items[0].options = pre.entities
-            }
-        )
-
         return () => {
-            // subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
             subs4.unsubscribe()
-            subs5.unsubscribe()
         }
     }, [])
 
@@ -104,14 +85,6 @@ function SuperAdminManageEntities() {
         },
     ]
 
-    const queryId = 'get_entities'
-    const queryArgs = {}
-    const specialColumns = {
-        isEdit: true,
-        isDelete: true,
-    }
-    const summaryColNames: string[] = []
-
     function handleAdd() {
         resetForm(pre.formId)
         meta.current.showDialog = true
@@ -124,6 +97,21 @@ function SuperAdminManageEntities() {
 
     function handleCloseDialog() {
         meta.current.showDialog = false
+        setRefresh({})
+    }
+
+    function handleEdit(node: any) {
+        resetForm(pre.formId)
+        pre.isEditMode = true
+        pre.title = 'Edit entity'
+        const jsonObject = JSON.parse(JSON.stringify(addJson))
+        jsonObject.items[0].value = node.id
+        jsonObject.items[0].htmlProps = { disabled: true }
+        jsonObject.items[1].value = node.entityName
+
+        setDialogContentAction(JSON.stringify(jsonObject))
+        pre.id = node.id1
+        meta.current.showDialog = true
         setRefresh({})
     }
 
@@ -142,14 +130,11 @@ function SuperAdminManageEntities() {
         async function handleSubmit() {
             const formData = getFormData(pre.formId)
             pre.isEditMode && (formData.id = pre.id)
-            let graphQlKey
-            pre.isEditMode
-                ? (graphQlKey = 'genericUpdateMaster')
-                : (graphQlKey = 'createBuInEntity')
+            const graphQlKey = 'genericUpdateMaster'
             doSubmit({
                 data: formData,
                 graphQlKey: graphQlKey,
-                tableName: 'ClientEntityBu',
+                tableName: pre.tableName,
                 handleCloseDialog: handleCloseDialog,
             })
         }
@@ -166,11 +151,14 @@ function SuperAdminManageEntities() {
                 columns={columns}
                 jsonFieldPath=""
                 sharedData={meta.current.sharedData} // to get entities from original fetched data
-                sqlQueryId={queryId}
-                sqlQueryArgs={queryArgs}
+                sqlQueryId="get_entities"
+                sqlQueryArgs={{}}
                 sx={{ mt: 2 }}
-                specialColumns={specialColumns}
-                summaryColNames={summaryColNames}
+                specialColumns={{
+                    isEdit: true,
+                    isDelete: true,
+                }}
+                summaryColNames={[]}
                 toShowAddButton={true}
                 viewLimit="100"
             />
@@ -181,33 +169,40 @@ function SuperAdminManageEntities() {
 export { SuperAdminManageEntities }
 
 const addJson: any = {
-    "class": "generic-dialog",
-    "items": [
+    class: 'generic-dialog',
+    items: [
         {
-            "type": "Text",
-            "name": "id",
-            "placeholder": "Id",
-            "label": "Id",
-            "validations": [{
-                "name": "required",
-                "message": "Id field is required"
-            }, {
-                "name": "numbersOnly",
-                "message": "Only numbers are allowed as Id"
-            }]
+            type: 'Text',
+            name: 'id',
+            placeholder: 'Id',
+            label: 'Id',
+            validations: [
+                {
+                    name: 'required',
+                    message: 'Id field is required',
+                },
+                {
+                    name: 'numbersOnly',
+                    message: 'Only numbers are allowed as Id',
+                },
+            ],
         },
         {
-            "type": "Text",
-            "name": "entityName",
-            "placeholder": "Entity name",
-            "label": "Entity name",
-            "validations": [{
-                "name": "required",
-                "message": "Entity name is required"
-            }, {
-                "name": "noWhiteSpaceOrSpecialChar",
-                "message": "White space or special characters are not allowed inside entity name"
-            }]
-        }
-    ]
+            type: 'Text',
+            name: 'entityName',
+            placeholder: 'Entity name',
+            label: 'Entity name',
+            validations: [
+                {
+                    name: 'required',
+                    message: 'Entity name is required',
+                },
+                {
+                    name: 'noWhiteSpaceOrSpecialChar',
+                    message:
+                        'White space or special characters are not allowed inside entity name',
+                },
+            ],
+        },
+    ],
 }

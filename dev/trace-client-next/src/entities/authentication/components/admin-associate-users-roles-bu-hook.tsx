@@ -19,7 +19,6 @@ function useAdminAssociateUsersRolesBu() {
         },
     })
     const {
-        emit,
         filterOn,
         getCurrentEntity,
         getFormData,
@@ -31,9 +30,6 @@ function useAdminAssociateUsersRolesBu() {
     const { doSubmit, handleDelete, gridActionMessages } = useCommonArtifacts()
 
     useEffect(() => {
-        // const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
-        //     emit(gridActionMessages.fetchIbukiMessage, null)
-        // })
 
         const subs2 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
             (d: any) => {

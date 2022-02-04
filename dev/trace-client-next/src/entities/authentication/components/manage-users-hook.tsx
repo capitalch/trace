@@ -25,12 +25,14 @@ function useManageUsers() {
         resetForm,
         TraceFullWidthSubmitButton,
     } = useSharedElements()
+
     const { doSubmit, gridActionMessages, handleDelete } = useCommonArtifacts()
     const id = getLoginData().id
     const userType = getLoginData().userType
+    meta.current.title = (userType=== 'a') ? 'Manage business users': 'Manage admin users'
     const { emit, filterOn } = useIbuki()
     const pre = meta.current.dialogConfig
-
+    
     useEffect(() => {
         const subs1 = filterOn('FETCH-DATA-MESSAGE').subscribe(() => {
             emit(gridActionMessages.fetchIbukiMessage, null)
@@ -97,6 +99,7 @@ function useManageUsers() {
             description: 'Email',
             field: 'userEmail',
             width: 250,
+            flex: 1,
         },
         {
             headerName: 'Description',

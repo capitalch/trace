@@ -102,7 +102,7 @@ const iconMap: any = {
     // Super admin menu
     manageClients: <AccountTree />,
     manageEntities: <Domain></Domain>,
-    associateAdminUsersWithClientsAndEntities: (
+    associateUsersWithClientsAndEntities: (
         <DeveloperBoard></DeveloperBoard>
     ),
 

@@ -4,13 +4,14 @@
     SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
     Admin: Check manage users, Manage BU. Complete manage roles. New Associate
     Global error catch mecanism. At present UI freezes when error happens
+    Provide Subtitle wherever applicable
 2. Invoice correction:                                    2 days, 7th Feb
 3. Full reporting of Inventory and allied:                1 week, 14th Feb
 4. Opening balance of stock:                              3 days, 17th Feb
 5. Subledger billing:                                     2 days, 19th Feb
 6. Ledger subledger showing balance:                      2 days, 21st Feb
 7. purchase invoice scanned pdf save:                     2 days, 23rd feb
-8. Buffer 3 today's                                       3 days, 26th Feb
+8. Buffer 3 days                                          3 days, 26th Feb
 9. Input of product price and price management            2 days, 28th Feb
 10. New account code create, immediate effect             3 days, 3rd Mar
 11. Account balances in generic-vouchers                  3 days, 6th Mar

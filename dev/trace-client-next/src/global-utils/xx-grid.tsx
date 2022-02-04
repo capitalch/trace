@@ -72,6 +72,7 @@ interface XXGridOptions {
     sqlQueryArgs?: any
     sqlQueryId?: any
     specialColumns: SpecialColumnOptions
+    subTitle?: string
     summaryColNames: string[]
     sx?: any
     title?: string
@@ -99,6 +100,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         title,
         viewLimit,
     }: any = gridOptions
+    let {subTitle} = gridOptions
     const apiRef: any = useGridApiRef()
     gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
@@ -112,15 +114,15 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleOrder,
     } = useXXGrid(gridOptions)
-
+    // subTitle = subTitle || 'abcd'
     const { debounceEmit, emit } = useIbuki()
     const { isMediumSizeDown } = useTraceGlobal()
     const { toDecimalFormat } = utilMethods()
-
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
     addSpecialColumns(specialColumns, gridActionMessages)
+
     return (
         <DataGridPro
             getRowClassName={(params: any) => {
@@ -173,149 +175,154 @@ function XXGrid(gridOptions: XXGridOptions) {
 
     function CustomGridToolbar(props: any) {
         return (
-            <GridToolbarContainer className="custom-toolbar">
-                <Box className="toolbar-left-items">
-                    <Typography className="toolbar-title">{title}</Typography>
-                    <div>
-                        <GridToolbarColumnsButton color="secondary" />
-                        <GridToolbarFilterButton color="secondary" />
-                        <GridToolbarExport color="secondary" />
-                    </div>
-                    <Button
-                        variant="text"
-                        color="secondary"
-                        onClick={() => {
-                            onFilteredClick()
-                            meta.current.isMounted && setRefresh({})
-                        }}>
-                        Filtered
-                    </Button>
-                    <IconButton
-                        className={classes.syncSharpButton}
-                        size="medium"
-                        color="secondary"
-                        onClick={(e: any) => {
-                            emit(
-                                gridOptions.gridActionMessages
-                                    ?.fetchIbukiMessage,
-                                null
-                            )
-                        }}>
-                        <SyncSharp></SyncSharp>
-                    </IconButton>
-                    {!!!gridOptions.hideViewLimit && (
-                        <div className="view-limit">
-                            <span>View</span>
-                            <select
-                                value={meta.current.viewLimit || null}
-                                style={{
-                                    fontSize: '0.8rem',
-                                    width: '4rem',
-                                    marginLeft: '0.1rem',
-                                }}
-                                onChange={(e: any) => {
-                                    meta.current.viewLimit = e.target.value
-                                    fetchRows(sqlQueryId, sqlQueryArgs)
-                                    meta.current.isMounted && setRefresh({})
-                                }}>
-                                <option value={'100'}>100</option>
-                                <option value={'1000'}>1000</option>
-                                <option value={'0'}>All</option>
-                            </select>
-                        </div>
-                    )}
-                    {!!gridOptions.toShowReverseCheckbox && (
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={meta.current.isReverseOrder}
-                                    onChange={(e: any) => {
-                                        meta.current.isReverseOrder =
-                                            e.target.checked
-                                        toggleOrder()
-                                        meta.current.isMounted && setRefresh({})
-                                    }}
-                                />
-                            }
-                            label="Reverse"
-                        />
-                    )}
-                    {!!gridOptions.toShowDailySummary && (
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={meta.current.isDailySummary}
-                                    onChange={(e: any) => {
-                                        meta.current.isDailySummary =
-                                            e.target.checked
-                                        injectDailySummary()
-                                    }}
-                                />
-                            }
-                            label="Daily summary"
-                        />
-                    )}
-                    {!!gridOptions.toShowColumnBalanceCheckBox && (
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={meta.current.isColumnBalance}
-                                    onChange={(e: any) => {
-                                        meta.current.isColumnBalance =
-                                            e.target.checked
-                                        fillColumnBalance()
-                                        meta.current.isMounted && setRefresh({})
-                                    }}
-                                />
-                            }
-                            label="Col balance"
-                        />
-                    )}
+            <GridToolbarContainer className='custom-toolbar'>
+                <Box className='subtitle'>
+                    <Typography variant='subtitle2'>{subTitle}</Typography>
                 </Box>
-                <Box>
-                    {!!gridOptions.toShowAddButton && (
+                <Box className='main-container'>
+                    <Box className="toolbar-left-items">
+                        <Typography className="toolbar-title">{title}</Typography>
+                        <div>
+                            <GridToolbarColumnsButton color="secondary" />
+                            <GridToolbarFilterButton color="secondary" />
+                            <GridToolbarExport color="secondary" />
+                        </div>
                         <Button
-                            className="add-button"
-                            variant="contained"
+                            variant="text"
                             color="secondary"
-                            size="small"
-                            onClick={() =>
+                            onClick={() => {
+                                onFilteredClick()
+                                meta.current.isMounted && setRefresh({})
+                            }}>
+                            Filtered
+                        </Button>
+                        <IconButton
+                            className={classes.syncSharpButton}
+                            size="medium"
+                            color="secondary"
+                            onClick={(e: any) => {
                                 emit(
                                     gridOptions.gridActionMessages
-                                        ?.addIbukiMessage,
+                                        ?.fetchIbukiMessage,
                                     null
                                 )
-                            }>
-                            Add
-                        </Button>
-                    )}
-
-                    {/* global filter */}
-                    <TextField
-                        variant="standard"
-                        autoFocus
-                        value={props.value}
-                        onChange={props.onChange}
-                        placeholder="Search…"
-                        className="global-search"
-                        InputProps={{
-                            startAdornment: <Search fontSize="small" />,
-                            endAdornment: (
-                                <IconButton
-                                    title="Clear"
-                                    aria-label="Clear"
-                                    size="small"
+                            }}>
+                            <SyncSharp></SyncSharp>
+                        </IconButton>
+                        {!!!gridOptions.hideViewLimit && (
+                            <div className="view-limit">
+                                <span>View</span>
+                                <select
+                                    value={meta.current.viewLimit || null}
                                     style={{
-                                        visibility: props.value
-                                            ? 'visible'
-                                            : 'hidden',
+                                        fontSize: '0.8rem',
+                                        width: '4rem',
+                                        marginLeft: '0.1rem',
                                     }}
-                                    onClick={props.clearSearch}>
-                                    <CloseSharp fontSize="small" />
-                                </IconButton>
-                            ),
-                        }}
-                    />
+                                    onChange={(e: any) => {
+                                        meta.current.viewLimit = e.target.value
+                                        fetchRows(sqlQueryId, sqlQueryArgs)
+                                        meta.current.isMounted && setRefresh({})
+                                    }}>
+                                    <option value={'100'}>100</option>
+                                    <option value={'1000'}>1000</option>
+                                    <option value={'0'}>All</option>
+                                </select>
+                            </div>
+                        )}
+                        {!!gridOptions.toShowReverseCheckbox && (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={meta.current.isReverseOrder}
+                                        onChange={(e: any) => {
+                                            meta.current.isReverseOrder =
+                                                e.target.checked
+                                            toggleOrder()
+                                            meta.current.isMounted && setRefresh({})
+                                        }}
+                                    />
+                                }
+                                label="Reverse"
+                            />
+                        )}
+                        {!!gridOptions.toShowDailySummary && (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={meta.current.isDailySummary}
+                                        onChange={(e: any) => {
+                                            meta.current.isDailySummary =
+                                                e.target.checked
+                                            injectDailySummary()
+                                        }}
+                                    />
+                                }
+                                label="Daily summary"
+                            />
+                        )}
+                        {!!gridOptions.toShowColumnBalanceCheckBox && (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={meta.current.isColumnBalance}
+                                        onChange={(e: any) => {
+                                            meta.current.isColumnBalance =
+                                                e.target.checked
+                                            fillColumnBalance()
+                                            meta.current.isMounted && setRefresh({})
+                                        }}
+                                    />
+                                }
+                                label="Col balance"
+                            />
+                        )}
+                    </Box>
+                    <Box className='toolbar-right-items'>
+                        {!!gridOptions.toShowAddButton && (
+                            <Button
+                                className="add-button"
+                                variant="contained"
+                                color="secondary"
+                                size="small"
+                                onClick={() =>
+                                    emit(
+                                        gridOptions.gridActionMessages
+                                            ?.addIbukiMessage,
+                                        null
+                                    )
+                                }>
+                                Add
+                            </Button>
+                        )}
+
+                        {/* global filter */}
+                        <TextField
+                            variant="standard"
+                            autoFocus
+                            value={props.value}
+                            onChange={props.onChange}
+                            placeholder="Search…"
+                            className="global-search"
+                            InputProps={{
+                                startAdornment: <Search fontSize="small" />,
+                                endAdornment: (
+                                    <IconButton
+                                        title="Clear"
+                                        aria-label="Clear"
+                                        size="small"
+                                        style={{
+                                            visibility: props.value
+                                                ? 'visible'
+                                                : 'hidden',
+                                        }}
+                                        onClick={props.clearSearch}>
+                                        <CloseSharp fontSize="small" />
+                                    </IconButton>
+                                ),
+                            }}
+                        />
+                    </Box>
                 </Box>
             </GridToolbarContainer>
         )
