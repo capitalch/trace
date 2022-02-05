@@ -5,7 +5,7 @@ import { useBrands, useStyles } from './brands-hook'
 function Brands() {
     const { getXXGridParams, handleCloseDialog, meta } = useBrands()
     const classes = useStyles()
-    const { TraceDialog, XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, TraceDialog, XXGrid } = useSharedElements()
 
     const {
         columns,
@@ -29,7 +29,9 @@ function Brands() {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
+                title="Brands report"
                 toShowAddButton={true}
                 viewLimit="100"
             />

@@ -5,7 +5,7 @@ import { useBranches, useStyles } from './branches-hook'
 function Branches() {
     const { getXXGridParams, handleCloseDialog, meta } = useBranches()
     const classes = useStyles()
-    const { TraceDialog, XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, TraceDialog, XXGrid } = useSharedElements()
 
     const {
         columns,
@@ -29,7 +29,9 @@ function Branches() {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
+                title="Branches view"
                 toShowAddButton={true}
                 viewLimit="100"
             />

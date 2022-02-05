@@ -5,14 +5,9 @@ import {
 } from './debit-credit-notes-view-hook'
 
 function DebitCreditNotesView({ arbitraryData, tranType }: any) {
-    const { getXXGridParams, } = useDebitCreditNotesView(
-        arbitraryData,
-        tranType
-    )
+    const { getXXGridParams } = useDebitCreditNotesView(arbitraryData, tranType)
     const classes = useStyles()
-    const {
-        XXGrid,
-    } = useSharedElements()
+    const { getGridReportSubTitle, XXGrid } = useSharedElements()
     const {
         columns,
         gridActionMessages,
@@ -21,6 +16,7 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
         specialColumns,
         summaryColNames,
     } = getXXGridParams()
+    
     return (
         <div className={classes.content}>
             <XXGrid
@@ -29,8 +25,11 @@ function DebitCreditNotesView({ arbitraryData, tranType }: any) {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
-                title=""
+                title={
+                    tranType === 'dn' ? 'Debit notes view' : 'Credit notes view'
+                }
                 viewLimit="100"
             />
         </div>

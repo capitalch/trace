@@ -176,7 +176,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     function CustomGridToolbar(props: any) {
         return (
             <GridToolbarContainer className='custom-toolbar'>
-                <Box className='subtitle'>
+                <Box className='sub-title'>
                     <Typography variant='subtitle2'>{subTitle}</Typography>
                 </Box>
                 <Box className='main-container'>
@@ -537,7 +537,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 headerName: 'E',
                 description: 'Edit',
                 disableColumnMenu: true,
-                disableExport: true,
+                disableExport: true, disablePrint: true,
                 disableReorder: true,
                 filterable: false,
                 hideSortIcons: true,

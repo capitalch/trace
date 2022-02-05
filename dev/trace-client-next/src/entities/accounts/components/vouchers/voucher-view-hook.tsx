@@ -1,4 +1,5 @@
 import {
+    _,
     moment,
     useEffect,
     useRef,
@@ -21,14 +22,15 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         emit,
         filterOn,
         genericUpdateMaster,
+        getTranType,
         isAllowedUpdate,
         isGoodToDelete,
         toDecimalFormat,
     } = useSharedElements()
-
+    
     const meta: any = useRef({
         isMounted: false,
-        title: '',
+        title: _.upperFirst(''.concat(getTranType(tranTypeId),'s view')),
     })
 
     useEffect(() => {

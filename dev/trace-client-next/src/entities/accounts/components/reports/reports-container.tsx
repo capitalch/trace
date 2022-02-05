@@ -7,7 +7,7 @@ import {
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useAllTransactions } from './all-reports/all-transactions'
-import { useEffect, } from '../../../../imports/regular-imports'
+import { useEffect } from '../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {
     const selectLogic: any = {
@@ -27,6 +27,7 @@ function GenericReports({ loadReport }: any) {
         confirm,
         emit,
         filterOn,
+        getGridReportSubTitle,
         genericUpdateMaster,
         isGoodToDelete,
     } = useSharedElements()
@@ -48,11 +49,13 @@ function GenericReports({ loadReport }: any) {
             subs2.unsubscribe()
         }
     }, [])
+    
     return (
         <Card className={classes.container}>
             <XXGrid
                 gridActionMessages={actionMessages}
                 columns={columns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
                 title={title}
                 sqlQueryId={sqlQueryId}
@@ -84,7 +87,7 @@ function GenericReports({ loadReport }: any) {
                     emit('SHOW-MESSAGE', {})
                     emit(actionMessages.fetchIbukiMessage, null)
                 })
-                .catch(() => { }) // important to have otherwise eror
+                .catch(() => {}) // important to have otherwise eror
         }
     }
 }

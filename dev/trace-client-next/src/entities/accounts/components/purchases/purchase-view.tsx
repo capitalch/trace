@@ -3,15 +3,15 @@ import { useContext } from '../../../../imports/regular-imports'
 import { usePurchaseView, useStyles } from './purchase-view-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
-function PurchaseView({ purchaseType}: any) {
+function PurchaseView({ purchaseType }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const { getXXGridParams } = usePurchaseView(
         multiData.purchases,
-        purchaseType,
+        purchaseType
     )
 
-    const { XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, XXGrid } = useSharedElements()
 
     const {
         columns,
@@ -30,8 +30,13 @@ function PurchaseView({ purchaseType}: any) {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
-                title=""
+                title={
+                    purchaseType === 'pur'
+                        ? 'Purchase view'
+                        : 'Purchase return view'
+                }
                 viewLimit="100"
             />
         </div>

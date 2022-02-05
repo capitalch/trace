@@ -19,6 +19,7 @@ function BankRecon() {
         handleOnSelectBankClick, handleOpBalanceButtonClick, meta, setRefresh, submitBankRecon } = useBankRecon()
     const {
         emit,
+        getGridReportSubTitle,
         TraceDialog,
         useTraceGlobal,
         XXGrid,
@@ -126,6 +127,7 @@ function BankRecon() {
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}
                 sharedData={meta.current.sharedData}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
                 title={'Bank reconcillation'}
                 sqlQueryId={queryId}

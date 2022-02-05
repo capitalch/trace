@@ -394,6 +394,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .delete': {
                 color: 'red',
             },
+
             '& .custom-toolbar': {
                 display: 'flex',
                 flexDirection: 'column',
@@ -401,10 +402,13 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 borderBottom: '1px solid lightgrey',
                 padding: 0,
 
-                '& .subtitle': {
+                '& .sub-title': {
                     width: '100%',
                     display: 'flex',
-                    marginTop: 0.5,
+                    marginRight: theme.spacing(2),
+                    marginLeft: theme.spacing(2),
+                    // justifyContent:'flex-end',
+                    marginTop: theme.spacing(0.5),
                 },
 
                 '& .main-container': {

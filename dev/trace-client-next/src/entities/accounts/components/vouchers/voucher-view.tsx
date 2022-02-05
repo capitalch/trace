@@ -13,13 +13,14 @@ function VoucherView({ hidden, tranTypeId }: any) {
         summaryColNames,
     } = useVoucherView(hidden, tranTypeId)
 
-    const { XXGrid } = useSharedElements()
+    const {getGridReportSubTitle, XXGrid } = useSharedElements()
     return (
         <Box className={classes.content} hidden={hidden}>
             {
                 <XXGrid
                     gridActionMessages={gridActionMessages}
                     columns={columns}
+                    subTitle={getGridReportSubTitle()}
                     summaryColNames={summaryColNames}
                     title={meta.current.title}
                     sqlQueryId={sqlQueryId}

@@ -14,8 +14,12 @@ function utils() {
     const { mutateGraphql, queryGraphql } = graphqlService()
     const { getFromBag, getCurrentEntity } = manageEntitiesState()
     const { emit } = usingIbuki()
-   
-    async function execSaleInvoiceView(options: {sqlKey?:string, isMultipleRows: boolean,args?:{}}) {
+
+    async function execSaleInvoiceView(options: {
+        sqlKey?: string
+        isMultipleRows: boolean
+        args?: {}
+    }) {
         let ret: any = undefined
         const sqlQueryObject: any = escape(
             JSON.stringify({
@@ -24,17 +28,14 @@ function utils() {
                 isMultipleRows: options.isMultipleRows,
             })
         )
-        const queries:any = await import("./artifacts/graphql-queries-mutations")
-        const q = queries.default['saleInvoiceView'](
-            sqlQueryObject,
-            'accounts'
+        const queries: any = await import(
+            './artifacts/graphql-queries-mutations'
         )
+        const q = queries.default['saleInvoiceView'](sqlQueryObject, 'accounts')
         try {
             if (q) {
                 const result: any = await queryGraphql(q)
-                ret =
-                    result.data['accounts']
-                        .saleInvoiceView
+                ret = result.data['accounts'].saleInvoiceView
             }
         } catch (error) {
             emit('SHOW-MESSAGE', {
@@ -96,6 +97,13 @@ function utils() {
             value: x.id,
             accLeaf: x.accLeaf,
         }))
+    }
+
+    function getGridReportSubTitle() {
+        const finObject = getFromBag('finYearObject')
+        const unitInfo = getFromBag('unitInfo')
+        const ret = ''.concat(unitInfo.unitName || '', ' (report from ', finObject.startDate, ' to ',finObject.endDate, ")")
+        return(ret)
     }
 
     function getTranType(tranTypeId: number) {
@@ -275,7 +283,7 @@ function utils() {
 
     function isInvalidStateCode(stateCode: any) {
         let validCode = false
-        
+
         if (_.isNumber(parseInt(stateCode))) {
             if (_.inRange(stateCode, 1, 38)) {
                 validCode = true
@@ -306,6 +314,7 @@ function utils() {
         getAccountName,
         getAccountClassWithAutoSubledger,
         getMappedAccounts,
+        getGridReportSubTitle,
         getTranType,
         getUnitHeading,
         isAllowedUpdate,

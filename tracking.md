@@ -3,8 +3,8 @@
 1. Authentication and user management:                    1 week, 5th Feb 2022
     SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
     Admin: Check manage users, Manage BU. Complete manage roles. New Associate
-    Global error catch mecanism. At present UI freezes when error happens
-    Provide Subtitle wherever applicable
+                              Global error catch mecanism. At present UI freezes when error happens
+                              Provide Subtitle wherever applicable
 2. Invoice correction:                                    2 days, 7th Feb
 3. Full reporting of Inventory and allied:                1 week, 14th Feb
 4. Opening balance of stock:                              3 days, 17th Feb
@@ -16,7 +16,7 @@
 10. New account code create, immediate effect             3 days, 3rd Mar
 11. Account balances in generic-vouchers                  3 days, 6th Mar
 12. Debit credit notes printing                           3 days, 9th Mar
-13. Grid view provide title and subtitle                  2 days, 11 Mar
+                              13. Grid view provide title and subtitle                  2 days, 11 Mar
 14. Accounts master, when edited, data is not 
     refreshed after saved, accounts creation
     email optional                                        1 day, 12th Mar
