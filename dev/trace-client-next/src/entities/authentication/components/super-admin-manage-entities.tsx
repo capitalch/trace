@@ -17,7 +17,7 @@ function SuperAdminManageEntities() {
             title: '',
             tableName: 'TraceEntity',
             formId: 'super-admin-manage-entities',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
     })
@@ -105,7 +105,7 @@ function SuperAdminManageEntities() {
         pre.isEditMode = true
         pre.title = 'Edit entity'
         const jsonObject = JSON.parse(JSON.stringify(addJson))
-        jsonObject.items[0].value = node.id
+        jsonObject.items[0].value = node.id1
         jsonObject.items[0].htmlProps = { disabled: true }
         jsonObject.items[1].value = node.entityName
 
@@ -135,6 +135,7 @@ function SuperAdminManageEntities() {
                 data: formData,
                 graphQlKey: graphQlKey,
                 tableName: pre.tableName,
+                idInsert: pre.isEditMode ? false : true,
                 handleCloseDialog: handleCloseDialog,
             })
         }

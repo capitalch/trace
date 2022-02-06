@@ -54,7 +54,8 @@ function useCommonArtifacts() {
         graphQlKey,
         tableName,
         handleCloseDialog,
-    }: {data?: any; formId?: string; graphQlKey: string; tableName: string; handleCloseDialog: any}) {
+        idInsert,
+    }: {data?: any; formId?: string; graphQlKey: string; tableName: string; handleCloseDialog: any; idInsert?: boolean}) {
         let formData: any
         if (_.isEmpty(data)) {
             formData = getFormData(formId || '')
@@ -72,6 +73,7 @@ function useCommonArtifacts() {
             const sqlObjectString = getSqlObjectString({
                 data: formData,
                 tableName: tableName,
+                idInsert: idInsert || false
             })
             const q = queries[graphQlKey](sqlObjectString, getCurrentEntity())
             if (q) {

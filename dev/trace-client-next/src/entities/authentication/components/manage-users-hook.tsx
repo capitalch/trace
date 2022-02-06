@@ -170,7 +170,7 @@ function useManageUsers() {
         pre.isEditMode && (formData.id = pre.id)
         doSubmit({
             data: formData,
-            graphQlKey: 'createUser',
+            graphQlKey: 'createOrUpdateUser',
             tableName: 'TraceUser',
             handleCloseDialog: handleCloseDialog,
         })

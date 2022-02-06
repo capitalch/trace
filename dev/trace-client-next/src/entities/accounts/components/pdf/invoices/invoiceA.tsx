@@ -1,6 +1,6 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { useInvoiceA } from './invoiceA-hook'
-import { moment } from '../../../../../imports/regular-imports'
+import { _, moment } from '../../../../../imports/regular-imports'
 
 function InvoiceA({
     unitInfo,
@@ -72,7 +72,10 @@ function InvoiceA({
             stateName: billTo.selectedStateOption?.label || billTo?.state || billTo.jAddress?.state,
             stateCode: billTo.stateCode,
         }
-        const shipTo = ti.tranH.jData?.shipTo
+        let shipTo = ti.tranH.jData?.shipTo
+        if (_.isEmpty(shipTo)) {
+            shipTo = billTo
+        }
         i.shipTo = {
             name: shipTo?.contactName || '',
             address1: shipTo?.address1 || '',
@@ -90,14 +93,14 @@ function InvoiceA({
                 x.brandName,
                 ', ',
                 x.label,
-                x.serialNumbers ? ', Sl nos:'.concat(x.serialNumbers) : '',
+                x.serialNumbers ? ', Sl nos: '.concat(x.serialNumbers) : '',
                 ', HSN ',
-                x.hsn
+                x.hsn, ', ', x.remarks ? 'Remarks: ' + x.remarks : ''
             ),
             qty: x.qty,
             price: toDecimalFormat(x.price),
             discount: toDecimalFormat(x.discount),
-            aggr: toDecimalFormat(x.price * x.qty - x.discount),
+            aggr: toDecimalFormat(x.qty * (x.price - x.discount)),
             cgst: toDecimalFormat(x.cgst),
             sgst: toDecimalFormat(x.sgst),
             igst: toDecimalFormat(x.igst),
@@ -116,24 +119,31 @@ function InvoiceA({
             qty: 0,
             discount: 0,
         }
-        const temp = ti.salePurchaseDetails.reduce((prev:any, current:any)=>{
-            const obj = {qty: prev.qty + (current.qty || 0), discount: (prev.discount + current.discount || 0)}
-            return(obj)
-        },{qty:0, discount:0})
+        const temp = ti.salePurchaseDetails.reduce((prev: any, current: any) => {
+            const obj = { 
+                qty: prev.qty + (current.qty || 0), 
+                discount: (prev.discount + current.discount || 0) ,
+                aggr: (prev.aggr + ((current.qty * (current.price - current.discount)) || 0))
+            }
+            return (obj)
+        }, { qty: 0, discount: 0, aggr: 0 })
+        
         i.summary.qty = temp.qty
         i.summary.discount = toDecimalFormat(temp.discount)
         i.summary.amountInWords = ti.amountInWords
+        i.summary.aggr = toDecimalFormat(temp.aggr)
         i.receipts = []
         for (const item of ti.tranD) {
             const accClass = getAccountClass(item.accId)
             if (accClass === 'sale') {
+
                 i.summary.amount = toDecimalFormat(item?.amount || 0)
-                i.summary.aggr = toDecimalFormat(
-                    (item?.amount || 0) -
-                        ((gstObj?.cgst || 0) +
-                            (gstObj?.sgst || 0) +
-                            (gstObj?.igst || 0))
-                )
+                // i.summary.aggr = toDecimalFormat(
+                //     (item?.amount || 0) -
+                //     ((gstObj?.cgst || 0) +
+                //         (gstObj?.sgst || 0) +
+                //         (gstObj?.igst || 0))
+                // )
             } else if (['debtor', 'creditor'].includes(accClass)) {
                 i.invoiceInfo.type = i.invoiceInfo.type.concat(' ', 'on credit')
             } else {

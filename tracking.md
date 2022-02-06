@@ -1,11 +1,27 @@
 
+## To do on Sunday
+1. Introduce isActive in user and client
+2. Documentation
+3. final checkup of roles, permission, bu and associate for admin
+3.5 cleanup client and also server
+3.6. uid editable by both the admins
+3.7 Generic error handlic at flask server
+                            3.8 Correction of forget password
+3.9 Deployment
+4. document how to remove user or client
+5. Implementation of permissions in UI and its documentation
+6. Plan of autosubledger implement
+7. Plan for socket usage in accounts update etc.
+8. Server error management and propagation to client, during failure of SQL execution
+    9. Start preparation of great resume
 ## Planning
 1. Authentication and user management:                    1 week, 5th Feb 2022
     SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
     Admin: Check manage users, Manage BU. Complete manage roles. New Associate
                               Global error catch mecanism. At present UI freezes when error happens
                               Provide Subtitle wherever applicable
-2. Invoice correction:                                    2 days, 7th Feb
+                              2. Invoice correction:                                    2 days, 7th Feb
+  Prevent inactive user from login and other works.
 3. Full reporting of Inventory and allied:                1 week, 14th Feb
 4. Opening balance of stock:                              3 days, 17th Feb
 5. Subledger billing:                                     2 days, 19th Feb

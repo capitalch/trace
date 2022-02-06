@@ -24,13 +24,11 @@ def setMailConfig(app):
     )
     mail = Mail(app)
 
-
 def extractAmount(s):
     remList = [',', '%u20B9', ' ']  # The Rs symbol
     for i in remList:
         s = s.replace(i, '')
     return s
-
 
 def getErrorMessage(key='generic', error=None):
     if error is None:
@@ -49,16 +47,15 @@ def getErrorMessage(key='generic', error=None):
 def randomStringGenerator(strSize, allowedChars):
     return ''.join(random.choice(allowedChars) for x in range(strSize))
 
-
 def getRandomUserId():
-    return randomStringGenerator(8, string.ascii_letters + string.digits)
+    rnd = randomStringGenerator(8, string.ascii_letters + string.digits)
+    return(rnd.replace(':','$')) # Remove all instances of ':' since clint sends credentials as 'uid:pwd'
 
 # password having special char, digit, Capital, small letter
 
-
 def getRandomPassword():
-    return f'@A1{randomStringGenerator(9, (string.ascii_letters + string.punctuation + string.digits))}b'
-
+    rnd = f'@A1{randomStringGenerator(9, (string.ascii_letters + string.punctuation + string.digits))}b'
+    return(rnd.replace(':','$')) # Remove all instances of ':' since clint sends credentials as 'uid:pwd'
 
 def getPasswordHash(pwd):
     interm = pwd.encode('utf-8')
@@ -66,11 +63,9 @@ def getPasswordHash(pwd):
     pwdHash = bcrypt.hashpw(interm, salt).decode('utf-8')
     return pwdHash
 
-
 def getschemaSearchPath(buCode):
     searchPathSql = '' if buCode == 'public' else f'set search_path to {buCode}'
     return searchPathSql
-
 
 def sendMail(recipients, message, htmlBody, attachment=None):
     try:

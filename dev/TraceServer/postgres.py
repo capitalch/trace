@@ -18,6 +18,7 @@ poolStore = {}
 
 def execGenericUpdateMaster(dbName, sqlObject, buCode='public'):
     connection = None
+    ret = None
     errorCode = 'generic'
     try:
         pool = getPool(dbName)

@@ -43,7 +43,7 @@ function SuperAdminAssociateAdminUsersWithClientsAndEntities() {
             (d: any) => {
                 //delete
                 const { id1 } = d.data?.row
-                handleDelete(id1, 'ClientEntityBu')
+                handleDelete(id1, pre.tableName)
             }
         )
 
@@ -209,7 +209,7 @@ function SuperAdminAssociateAdminUsersWithClientsAndEntities() {
         async function handleSubmit() {
             const formData = getFormData(pre.formId)
             pre.isEditMode && (formData.id = pre.id)
-            const graphQlKey =  'genericUpdateMaster'
+            const graphQlKey =  'allocateEntitiesToClients'
             doSubmit({
                 data: formData,
                 graphQlKey: graphQlKey,
