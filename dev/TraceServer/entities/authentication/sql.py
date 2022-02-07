@@ -365,14 +365,14 @@ allSqls = {
 				  			on b."id" = x1."clientEntityBuId"
 				  	where x1."userId" = u."id"
 				 ) as "buCodes"
-				-- , ( select "permissions"
-				--  	from "ClientEntityRole" r
-				--  		join "ClientEntityRoleBuUserX" x1
-				--  			on r."id" = x1."clientEntityRoleId"
-				--  		join "ClientEntityBu" b
-				--  			on x1."clientEntityBuId" = b."id"
-				--  	where "buCode" = u."lastUsedBuCode"				 
-				-- ) as "permissions"
+				 --, ( select "permissions"
+				 -- 	from "ClientEntityRole" r
+				 -- 		join "ClientEntityRoleBuUserX" x1
+				 -- 			on r."id" = x1."clientEntityRoleId"
+				 -- 		join "ClientEntityBu" b
+				 -- 			on x1."clientEntityBuId" = b."id"
+				 -- 	where "buCode" = u."lastUsedBuCode"				 
+				 --) as "permissions"
                      from "TraceUser" u
                          join "ClientEntityX" x
                              on x."userId" = u."parentId"

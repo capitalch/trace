@@ -99,7 +99,14 @@ function useCommonArtifacts() {
                     let ret1 = await mutateGraphql(q)
                     const ret = ret1?.data?.authentication?.[graphQlKey]
                     resetForm(formId || '')
-                    if (ret) {
+                    if(ret.message){ // error
+                        emit('SHOW-MESSAGE', {
+                            severity: 'error',
+                            message: ret.message || messages['errorInOperation'],
+                            duration: null,
+                        })
+                    }
+                    else if (ret) {
                         emit('SHOW-MESSAGE', {})
                         handleCloseDialog()
                         emit('FETCH-DATA-MESSAGE', null)

@@ -114,10 +114,12 @@ def createOrUpdateUserHelper(value):
     value = unquote(value)
     # demjson allows dirty json. You could use simplejson. But I used demjson experimentally
     valueDict = demJson.decode(value)
-    uid = util.getRandomUserId()
+    if(valueDict['data'].get('uid',None) is None):
+        valueDict['data']['uid'] = util.getRandomUserId()
+    uid = valueDict['data']['uid']
     pwd = util.getRandomPassword()
     tHash = util.getPasswordHash(pwd)
-    valueDict['data']['uid'] = uid
+    # valueDict['data']['uid'] = uid
     valueDict['data']['hash'] = tHash
     userEmail = valueDict['data']['userEmail']
     isActive = valueDict['data'].get('isActive', False)
@@ -189,6 +191,7 @@ def forgotPwdHelper(value):
         tempActUrl = settings['forgotPwdActivationUrl']
         # activationUrl = settings['forgotPwdActivationUrl'] + f'?code={emailEncoded}'
         activationUrl = f'{urljoin(url,tempActUrl)}?code={emailEncoded}'
+        print(activationUrl)
         line1 = settings['forgotPwdBody']['line1']
         line2 = settings['forgotPwdBody']['line2']
         line3 = settings['forgotPwdBody']['line3']

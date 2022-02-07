@@ -286,7 +286,7 @@ function useAccountsSubHeader() {
         emit('SHOW-LOADING-INDICATOR', false)
         if (!ret) return
         const pre = ret.jsonResult
-        const buArray = pre?.[ifElse[loginData.userType]]
+        const buArray = pre?.[ifElse[loginData.userType]] || []
         const buListItems: any[] = buArray.map((x: any) => {
             return (
                 <ListItem

@@ -134,7 +134,9 @@ function useManageUsers() {
         pre.isEditMode = false
         meta.current.showDialog = true
         pre.title = 'Add new user'
-        const addJsonString = JSON.stringify(manageUsersJson)
+        const addJson = JSON.parse(JSON.stringify(manageUsersJson))
+        addJson.items.shift() // remove UID from add user dialog
+        const addJsonString = JSON.stringify(addJson)
         setDialogContentAction(addJsonString)
         setRefresh({})
     }
@@ -149,10 +151,11 @@ function useManageUsers() {
         pre.isEditMode = true
         pre.id = node.id1 // for edit purpose
         const jsonObject = JSON.parse(JSON.stringify(manageUsersJson))
-        jsonObject.items[0].value = node['userEmail']
-        jsonObject.items[1].value = node['userName']
-        jsonObject.items[2].value = node['descr']
-        jsonObject.items[3].value = node['isActive']
+        jsonObject.items[0].value = node['uid']
+        jsonObject.items[1].value = node['userEmail']
+        jsonObject.items[2].value = node['userName']
+        jsonObject.items[3].value = node['descr']
+        jsonObject.items[4].value = node['isActive']
         jsonObject.validations.pop()
         jsonObject.validations.push({
             name: 'userEmailExistsUpdate',
@@ -207,6 +210,18 @@ const manageUsersJson: any = {
         },
     ],
     items: [
+        {
+            type: 'Text',
+            name: 'uid',
+            placeholder: 'uid',
+            label: 'Uid',
+            validations: [
+                {
+                    name: 'required',
+                    message: 'Uid field is required',
+                }
+            ],
+        },
         {
             type: 'Text',
             name: 'userEmail',

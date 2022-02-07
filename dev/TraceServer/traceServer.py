@@ -179,6 +179,7 @@ def pwd_forgot():
                 id = ret[0].get('id')
     if id is not None:
         pwd = util.getRandomPassword()
+        print(pwd)
         settings = cfg['mailSettings']
         line1 = settings['forgotPwdNewPwdBody']['line1']
         line2 = settings['forgotPwdNewPwdBody']['line2']

@@ -683,7 +683,7 @@ const adminMenuJson: any = {
                 },
                 {
                     name: 'adminAssociateUsersRolesBu',
-                    label: 'Associate users with roles and Bu',
+                    label: 'Associate business users with roles and Bu',
                     componentName: 'adminAssociateUsersRolesBu',
                     // args: {
                     //     loadComponent: 'associateBusinessUsersWithRolesAndBu',
