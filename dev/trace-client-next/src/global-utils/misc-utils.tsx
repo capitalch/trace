@@ -161,12 +161,14 @@ function utilMethods() {
                 notIsDeleteMode && resetForm(options.formId)
             }
         } catch (error: any) {
+            console.log(error)
             emit('SHOW-MESSAGE', {
-                message: error.message || messages['errorInOperation'],
+                message: messages['errorInOperation'],
                 severity: 'error',
                 duration: null,
             })
             ret = { message: error.message }
+            throw(error)
         }
         return ret
     }

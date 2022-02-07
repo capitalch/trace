@@ -33,19 +33,29 @@ function useCommonArtifacts() {
             confirmationText: 'Yes',
             cancellationText: 'No',
         }
+        
         confirm(options)
             .then(async () => {
                 const id = +id1 // to make it numeric from string
                 emit('SHOW-LOADING-INDICATOR', true)
-                await genericUpdateMaster({
-                    deletedIds: [id],
-                    tableName: tableName,
-                })
-                emit('SHOW-LOADING-INDICATOR', false)
+                try {
+                    await genericUpdateMaster({
+                        deletedIds: [id],
+                        tableName: tableName,
+                    })
+                } catch (e: any) {
+                    console.log(e)
+                    throw e
+                } finally {
+                    emit('SHOW-LOADING-INDICATOR', false)
+                }
+
                 emit('SHOW-MESSAGE', {})
                 emit(gridActionMessages.fetchIbukiMessage, null)
             })
-            .catch(() => {}) // important to have otherwise eror
+            .catch((e: any) => {
+                console.log(e)
+            }) // important to have otherwise eror
     }
 
     async function doSubmit({
@@ -55,7 +65,14 @@ function useCommonArtifacts() {
         tableName,
         handleCloseDialog,
         idInsert,
-    }: {data?: any; formId?: string; graphQlKey: string; tableName: string; handleCloseDialog: any; idInsert?: boolean}) {
+    }: {
+        data?: any
+        formId?: string
+        graphQlKey: string
+        tableName: string
+        handleCloseDialog: any
+        idInsert?: boolean
+    }) {
         let formData: any
         if (_.isEmpty(data)) {
             formData = getFormData(formId || '')
@@ -73,7 +90,7 @@ function useCommonArtifacts() {
             const sqlObjectString = getSqlObjectString({
                 data: formData,
                 tableName: tableName,
-                idInsert: idInsert || false
+                idInsert: idInsert || false,
             })
             const q = queries[graphQlKey](sqlObjectString, getCurrentEntity())
             if (q) {
@@ -92,7 +109,7 @@ function useCommonArtifacts() {
                             severity: 'error',
                             message: messages['errorInOperation'],
                             duration: null,
-                        })                        
+                        })
                     }
                 } catch (err: any) {
                     emit('SHOW-MESSAGE', {

@@ -94,10 +94,10 @@ def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
     ret = None
     try:
         tableName = sqlObject.get("tableName")
-        updateCodeBlock =  sqlObject.get('updateCodeBlock') #returns None if key not present in dict  #sqlObject["updateCodeBlock"]
-        deletedIds = None        
-        customCodeBlock = sqlObject.get('customCodeBlock')
-        idInsert = sqlObject.get('idInsert', False) #idInsert is True when id value is there and you want to do insert operation instead of update
+        # updateCodeBlock =  sqlObject.get('updateCodeBlock') #returns None if key not present in dict  #sqlObject["updateCodeBlock"]
+        # deletedIds = None        
+        # customCodeBlock = sqlObject.get('customCodeBlock')
+        # idInsert = sqlObject.get('idInsert', False) #idInsert is True when id value is there and you want to do insert operation instead of update
         if 'deletedIds' in sqlObject:
             deletedIdList = sqlObject['deletedIds']
             searchPathSql = getschemaSearchPath(buCode)
@@ -107,9 +107,9 @@ def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
             ret = ret.rstrip(',') + ')'
             sql =  f'''{searchPathSql}; delete from "{tableName}" where id in{ret}'''
             cursor.execute(sql)
-        fkeyName = None
-        if 'fkeyName' in sqlObject:
-            fkeyName = sqlObject["fkeyName"]
+        # fkeyName = None
+        # if 'fkeyName' in sqlObject:
+            # fkeyName = sqlObject["fkeyName"]
         data = sqlObject.get('data', None)
         if data:
             if type(data) is list:

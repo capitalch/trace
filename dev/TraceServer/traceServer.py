@@ -1,6 +1,6 @@
 from flask_cors import CORS
 import jwt
-import pdfkit
+import werkzeug
 from pdfkit.api import configuration
 # import asyncio
 # from flask_scss import Scss
@@ -235,13 +235,9 @@ def graphql_server():
         # debug=app.debug
     )
     
-
     status_code = 200 if success else 400  # This is python ternary operator
     res = json.dumps(result, default=str)
-
-    # return jsonify(result), status_code
     return res, status_code
-    # return result, status_code
 
 
 @app.route("/test", methods=["GET"])
@@ -259,15 +255,13 @@ def downloadFile():
 def index():
     return render_template('index.html')
     # In cloudjiffy server in wsgi.conf 'Alias /index /var/www/webroot/ROOT/build/index.html'. The alias statement does not take blank hence redirect from Flask is done.
-    return redirect('/index')
+    # return redirect('/index')
 
 
 @app.errorhandler(Exception)
 def handle_error(e):
-    code = 500
-    if isinstance(e, HTTPException):
-        code = e.code
-    return (jsonify(error=str(e)), code)
+    errMessage = e.args[0]
+    return (jsonify(error=str(errMessage)), 200)
 
 
 # Following lines are not executed in cloud. Because __name__ is not '__main__'

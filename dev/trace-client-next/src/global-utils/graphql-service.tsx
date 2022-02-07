@@ -70,7 +70,6 @@ const graphqlService = () => {
         }
         return clientStore['client']
     }
-
     const queryGraphql = async (q: string) => {
         const client = getClient()
         let ret: any
@@ -80,6 +79,12 @@ const graphqlService = () => {
             })
         } catch (e:any) {
             console.log(e)
+            let err = String(e)
+            if(err.includes(':')){
+                const arr = err.split(':')
+                e.message = arr.pop()
+            }
+            throw(e)
         }
         return ret
     }

@@ -344,7 +344,10 @@ function useTraceHeader() {
             )
             const q = queries['doLogin'](base64UidPwd)
             const result: any = await queryGraphql(q)
-            const login: any = result.data.authentication.doLogin
+            if(!result){
+                throw Error(messages.serverError)
+            }
+            const login: any = result?.data?.authentication?.doLogin
             const token: string = login && login.token ? login.token : undefined
             const uid: string = login && login.uid
             setLoginData({
