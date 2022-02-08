@@ -1,18 +1,18 @@
-from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
-import codecs
-from datetime import datetime
+from ariadne import ObjectType, load_schema_from_path
+# import codecs
+# from datetime import datetime
 import base64
 from urllib.parse import unquote
 import simplejson as json
 import demjson as demJson
 import util as util
-from loadConfig import cfg
+# from loadConfig import cfg
 from postgres import execSql, execGenericUpdateMaster, genericView, execScriptFile_with_newSchema
 from .artifactsHelper import loginHelper, createBuInEntityHelper, allocateEntitiesToClientsHelper
 from .artifactsHelper import  forgotPwdHelper, createOrUpdateUserHelper , allocateUsersToEntitiesHelper
 from .sql import allSqls
-from allMessages import errorMessages, infoMessages
-from flask import make_response
+from allMessages import errorMessages
+# from flask import make_response
 DB_NAME = 'traceEntry'
 type_defs = load_schema_from_path('entities/authentication')
 authenticationQuery = ObjectType("AuthenticationQuery")

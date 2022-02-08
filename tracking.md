@@ -1,17 +1,21 @@
 https://tempail.com/en/
 
+
+
+
 ## To do on Sunday
-                            1. Introduce isActive in user and client
-2. Documentation of user management with how to remove a user
-3.5 cleanup client and also server
+5. Implementation of permissions in UI and its documentation
 3.9 Deployment
+                            1. Introduce isActive in user and client
+                            2. Documentation of user management with how to remove a user
+                            3.5 cleanup client and also server
                             3.10 When a business user is not assigned any bu, then in UI if bu is tried to select, system crashes. There should be safe exit
                             3. final checkup of roles, permission, bu and associate for admin
                             3.8 Correction of forget password
                             3.6. uid editable by both the admins
                             3.7 Generic error handlic at flask server
 
-5. Implementation of permissions in UI and its documentation
+
 6. Plan of autosubledger implement
 7. Plan for socket usage in accounts update etc.
 8. Server error management and propagation to client, during failure of SQL execution
