@@ -1,9 +1,10 @@
 import base64
 import bcrypt
 import codecs
+from rx import throw
 import simplejson as json
 import demjson as demJson
-from urllib.parse import unquote
+from urllib.parse import unquote, urljoin
 import jwt  # pip install pyjwt
 from datetime import datetime, timedelta
 from loadConfig import cfg
@@ -109,20 +110,27 @@ def createBuInEntityHelper(value, clientId):
 
 # If user is edited / added accordingly email is sent to user
 # Even for edit a new uid and pwd is generated for security purposes
-def createUserHelper(value):
+def createOrUpdateUserHelper(value):
     value = unquote(value)
-    # demjson allows dirty json. You could use simplejson. But it used demjson experimentally
+    # demjson allows dirty json. You could use simplejson. But I used demjson experimentally
     valueDict = demJson.decode(value)
-    uid = util.getRandomUserId()
+    if(valueDict['data'].get('uid',None) is None):
+        valueDict['data']['uid'] = util.getRandomUserId()
+    uid = valueDict['data']['uid']
     pwd = util.getRandomPassword()
     tHash = util.getPasswordHash(pwd)
-    valueDict['data']['uid'] = uid
+    # valueDict['data']['uid'] = uid
     valueDict['data']['hash'] = tHash
     userEmail = valueDict['data']['userEmail']
+    isActive = valueDict['data'].get('isActive', False)
+    isEdit = False if valueDict['data'].get('id',None) is None else True
     # encrypted uid in most simple manner
     uidEncoded = codecs.encode(uid, 'rot13')
     settings = cfg['mailSettings']
-    activationUrl = settings['userActivationUrl'] + f'?code={uidEncoded}'
+    env = cfg['env']
+    url = cfg[env]['url']
+    tempActUrl = settings['userActivationUrl']
+    activationUrl = f'{urljoin(url,tempActUrl)}?code={uidEncoded}'
     line1 = settings['activateUserBody']['line1']
     line2 = settings['activateUserBody']['line2']
     line3 = settings['activateUserBody']['line3']
@@ -149,7 +157,12 @@ def createUserHelper(value):
                 sent on date and time: {datetime.now()}
             </div>
         </div>'''
-    ret = util.sendMail([userEmail], settings['activateUserMessage'], htmlBody)
+    isSendMail = True
+    if(isEdit and (not isActive)):
+        isSendMail = False
+    ret = True
+    if(isSendMail):
+        ret = util.sendMail([userEmail], settings['activateUserMessage'], htmlBody)
     if ret is True:
         execGenericUpdateMaster(DB_NAME, valueDict) # to save user details in table TraceUser after mail is successfully sent
     return ret
@@ -173,8 +186,12 @@ def forgotPwdHelper(value):
         # Send link for password reset to the userEmail
         emailEncoded = codecs.encode(userEmail, 'rot13')
         settings = cfg['mailSettings']
-        activationUrl = settings['forgotPwdActivationUrl'] + \
-            f'?code={emailEncoded}'
+        env = cfg['env']
+        url = cfg[env]['url']
+        tempActUrl = settings['forgotPwdActivationUrl']
+        # activationUrl = settings['forgotPwdActivationUrl'] + f'?code={emailEncoded}'
+        activationUrl = f'{urljoin(url,tempActUrl)}?code={emailEncoded}'
+        print(activationUrl)
         line1 = settings['forgotPwdBody']['line1']
         line2 = settings['forgotPwdBody']['line2']
         line3 = settings['forgotPwdBody']['line3']

@@ -1,18 +1,18 @@
-from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
-import codecs
-from datetime import datetime
+from ariadne import ObjectType, load_schema_from_path
+# import codecs
+# from datetime import datetime
 import base64
 from urllib.parse import unquote
 import simplejson as json
 import demjson as demJson
 import util as util
-from loadConfig import cfg
+# from loadConfig import cfg
 from postgres import execSql, execGenericUpdateMaster, genericView, execScriptFile_with_newSchema
 from .artifactsHelper import loginHelper, createBuInEntityHelper, allocateEntitiesToClientsHelper
-from .artifactsHelper import  forgotPwdHelper, createUserHelper , allocateUsersToEntitiesHelper
+from .artifactsHelper import  forgotPwdHelper, createOrUpdateUserHelper , allocateUsersToEntitiesHelper
 from .sql import allSqls
-from allMessages import errorMessages, infoMessages
-from flask import make_response
+from allMessages import errorMessages
+# from flask import make_response
 DB_NAME = 'traceEntry'
 type_defs = load_schema_from_path('entities/authentication')
 authenticationQuery = ObjectType("AuthenticationQuery")
@@ -61,10 +61,10 @@ def resolve_create_client(parent, info, value):
     ret = execGenericUpdateMaster(DB_NAME, valueDict)
     return ret
 
-@authenticationMutation.field("createUser")
+@authenticationMutation.field("createOrUpdateUser")
 def resolve_create_user(parent, info, value):
     ctx = info.context
-    return createUserHelper(value)
+    return createOrUpdateUserHelper(value)
 
 @authenticationQuery.field("doLogin")
 def resolve_do_login(parent, info, credentials):
@@ -98,7 +98,10 @@ def resolve_generic_update_master(parent, info, value):
         valueDict['customCodeBlock'] = allSqls[customCodeBlock]
     if updateCodeBlock is not None:
         valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
-    id = execGenericUpdateMaster(DB_NAME, valueDict)
+    try:
+        id = execGenericUpdateMaster(DB_NAME, valueDict)
+    except(Exception) as error:
+        raise Exception(error)
     return id
 
 @authenticationQuery.field("getUsers")

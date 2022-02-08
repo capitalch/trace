@@ -6,10 +6,12 @@
             "children": [
                 {
                     "name": "vouchersMenu",
+                    "hierarchy": "vouchers",
                     "label": "Vouchers",
                     "children": [                        
                         {
                             "name": "journalsSubMenu",
+                            "hierarchy": "vouchers-journals",
                             "label": "Journals",
                             "componentName": "vouchers",
                             "args": {
@@ -18,6 +20,7 @@
                         },
                         {
                             "name": "paymentsSubMenu",
+                            "hierarchy": "vouchers-payments",
                             "label": "Payments",
                             "componentName": "vouchers",
                             "args": {
@@ -26,6 +29,7 @@
                         },
                         {
                             "name": "receiptsSubMenu",
+                            "hierarchy": "vouchers-receipts",
                             "label": "Receipts",
                             "componentName": "vouchers",
                             "args": {
@@ -34,6 +38,7 @@
                         },
                         {
                             "name": "contraSubMenu",
+                            "hierarchy": "vouchers-contra",
                             "label": "Contra",
                             "componentName": "vouchers",
                             "args": {
@@ -44,10 +49,12 @@
                 },
                 {
                     "name": "salesPurchasesMenu",
+                    "hierarchy": "salespurchases",
                     "label": "Sales / purchases",
                     "children": [
                         {
                             "name": "salesSubMenu",
+                            "hierarchy": "salespurchases-sales",
                             "label": "Sales",
                             "componentName": "sales",
                             "args":{
@@ -56,6 +63,7 @@
                         },
                         {
                             "name": "salesReturnSubMenu",
+                            "hierarchy": "salespurchases-sales-return",
                             "label": "Sales return",
                             "componentName": "sales",
                             "args":{
@@ -64,6 +72,7 @@
                         },
                         {
                             "name": "purchasesSubMenu",
+                            "hierarchy": "salespurchases-purchases",
                             "label": "Purchases",
                             "componentName": "purchases",
                             "args": {
@@ -72,6 +81,7 @@
                         },
                         {
                             "name": "purchasesReturnSubMenu",
+                            "hierarchy": "salespurchases-purchase-return",
                             "label": "Purchase return",
                             "componentName": "purchases",
                             "args": {
@@ -80,11 +90,13 @@
                         },
                         {
                             "name": "debitNotesSubMenu",
+                            "hierarchy": "salespurchases-debit-notes",
                             "label": "Debit notes",
                             "componentName": "debitNotes"
                         },
                         {
                             "name": "creditNotesSubMenu",
+                            "hierarchy": "salespurchases-credit-notes",
                             "label": "Credit notes",
                             "componentName": "creditNotes"
                         }
@@ -92,10 +104,12 @@
                 },
                 {
                     "name": "mastersMenu",
+                    "hierarchy": "masters",
                     "label": "Masters",
                     "children": [
                         {
                             "name": "unitInfoSubMenu",
+                            "hierarchy": "masters-unit-info",
                             "label": "Unit info",
                             "componentName": "genericDialoges",
                             "args": {
@@ -104,6 +118,7 @@
                         },
                         {
                             "name": "generalSettingsSubMenu",
+                            "hierarchy": "masters-general-settings",
                             "label": "General settings",
                             "componentName": "genericDialoges",
                             "args": {
@@ -112,21 +127,25 @@
                         },
                         {
                             "name": "accountsSubMenu",
+                            "hierarchy": "masters-accounts",
                             "label": "Accounts",
                             "componentName": "accountsMaster"
                         },
                         {
                             "name": "accountsOpBalSubMenu",
+                            "hierarchy": "masters-opening-balances",
                             "label": "Opening balances",
                             "componentName": "accountsOpBal"
                         },
                         {
                             "name": "branchesSubMenu",
+                            "hierarchy": "masters-branches",
                             "label": "Branches",
                             "componentName": "branches"                            
                         },
                         {
                             "name": "financialYearsSubMenu",
+                            "hierarchy": "masters-financial-years",
                             "label": "Financial years",
                             "componentName": "financialYears"
                         }
@@ -134,25 +153,30 @@
                 },
                 {
                     "name": "finalAccountsMenu",
+                    "hierarchy": "finalaccounts",
                     "label": "Final accounts",
                     "children": [
                         {
                             "name": "trialBalanceSubMenu",
+                            "hierarchy": "finalaccounts-trial-balance",
                             "label": "Trial balance",
                             "componentName": "trialBalance"
                         },
                         {
                             "name": "balanceSheetSubMenu",
+                            "hierarchy": "finalaccounts-balance-sheet",
                             "label": "Balance sheet",
                             "componentName": "balanceSheet"
                         },
                         {
                             "name": "profitLossSubMenu",
+                            "hierarchy": "finalaccounts-pl-account",
                             "label": "PL account",
                             "componentName": "profitLoss"
                         },
                         {
                             "name": "generalLedgerSubMenu",
+                            "hierarchy": "finalaccounts-general-ledger",
                             "label":"General ledger",
                             "componentName": "generalLedger"
                         }
@@ -160,20 +184,24 @@
                 },
                 {
                     "name": "optionsMenu",
+                    "hierarchy": "options",
                     "label": "Options",
                     "children": [
                         {
                             "name": "bankReconSubMenu",
+                            "hierarchy": "options-bank-reconcillation",
                             "label": "Bank reconcillation",
                             "componentName": "bankRecon"
                         },                        
                         {
                             "name": "commonUtilitiesSubMenu",
+                            "hierarchy": "options-common-utilities",
                             "label": "Common utilities",
                             "componentName": "commonUtilities"
                         },
                         {
                             "name": "genericExportsSubMenu",
+                            "hierarchy": "options-exports",
                             "label": "Exports",
                             "componentName": "genericExports"
                         }
@@ -181,10 +209,12 @@
                 },
                 {
                     "name": "reportsMenu",
+                    "hierarchy": "reports",
                     "label": "Reports",
                     "children": [
                         {
                             "name": "allTransactionsSubMenu",
+                            "hierarchy": "reports-all-transactions",
                             "label": "All transactions",
                             "componentName": "genericReports",
                             "args": {
@@ -200,20 +230,24 @@
                 },
                 {
                     "name": "inventoryMenu",
+                    "hierarchy": "inventory",
                     "label": "Inventory",
                     "children": [
                         {
                             "name": "categoriesSubMenu",
+                            "hierarchy": "inventory-categories",
                             "label": "Categories",
                             "componentName": "categoriesMaster"
                         },
                         {
                             "name": "brandsSubMenu",
+                            "hierarchy": "inventory-brands",
                             "label": "Brands",
                             "componentName": "brands"
                         },
                         {
                             "name": "productsSubMenu",
+                            "hierarchy": "inventory-products",
                             "label": "Products",
                             "componentName": "products"
                         }

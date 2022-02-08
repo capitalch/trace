@@ -184,9 +184,10 @@ function useAdminManageRoles() {
             }))
             const permissionsObject: any = arrayToObject(permissions)
             const ret: any[] = basePermissionsClone.map((item: any) => {
-                const controlName: string = item.controlName
-                if (permissionsObject[controlName] !== undefined) {
-                    item.isActive = permissionsObject[controlName]
+                // const controlName: string = item.controlName
+                const hierarchy: string = item.hierarchy
+                if (permissionsObject[hierarchy] !== undefined) {
+                    item.isActive = permissionsObject[hierarchy]
                 }
                 return item
             })
@@ -195,7 +196,7 @@ function useAdminManageRoles() {
             function arrayToObject(arr: any[]) {
                 const obj: any = {}
                 for (const item of arr) {
-                    obj[item.controlName] = item.isActive
+                    obj[item.hierarchy] = item.isActive
                 }
                 return obj
             }

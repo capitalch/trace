@@ -241,7 +241,7 @@ function AccountsMaster() {
                                 {isAddAllowed && (
                                     <Button
                                         disabled={isControlDisabled(
-                                            'accountsMasterEdit'
+                                            'masters-accounts-add-child'
                                         )}
                                         className={classes.addButton}
                                         color="inherit"
@@ -273,7 +273,7 @@ function AccountsMaster() {
                                     <Button
                                         className={classes.editButton}
                                         disabled={isControlDisabled(
-                                            'accountsMasterEdit'
+                                            'masters-accounts-add-child'
                                         )}
                                         size="small"
                                         color="secondary"
@@ -311,7 +311,7 @@ function AccountsMaster() {
                                 {isDeleteAllowed && (
                                     <Button
                                         disabled={isControlDisabled(
-                                            'accountsMasterEdit'
+                                            'masters-accounts-add-child'
                                         )}
                                         size="small"
                                         style={{ width: theme.spacing(3) }}
@@ -344,7 +344,7 @@ function AccountsMaster() {
                     header={
                         <Button
                             color="primary"
-                            disabled={isControlDisabled('accountsMasterEdit')}
+                            disabled={isControlDisabled('masters-accounts-add-child')}
                             className={classes.addButton}
                             startIcon={<Add />}
                             onClick={() => {

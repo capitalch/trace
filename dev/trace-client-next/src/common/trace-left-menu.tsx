@@ -38,7 +38,7 @@ function TraceLeftMenu(props: any) {
                 <ListItem
                     button
                     key={index}
-                    disabled={isControlDisabled(item.name)}
+                    disabled={isControlDisabled(item.hierarchy)}
                     onClick={(e:any) => {
                         if (item.children) {
                             const currentItemIndex =

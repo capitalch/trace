@@ -91,33 +91,37 @@ def processData(sqlObject, cursor,data, fkeyValue, buCode='public'):
     return id
 
 def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
-    tableName = sqlObject.get("tableName")
-    updateCodeBlock =  sqlObject.get('updateCodeBlock') #returns None if key not present in dict  #sqlObject["updateCodeBlock"]
-    deletedIds = None
     ret = None
-    customCodeBlock = sqlObject.get('customCodeBlock')
-    idInsert = sqlObject.get('idInsert', False) #idInsert is True when id value is there and you want to do insert operation instead of update
-    if 'deletedIds' in sqlObject:
-        deletedIdList = sqlObject['deletedIds']
-        searchPathSql = getschemaSearchPath(buCode)
-        ret = '('
-        for x in deletedIdList:
-            ret = ret + str(x) + ','
-        ret = ret.rstrip(',') + ')'
-        sql =  f'''{searchPathSql}; delete from "{tableName}" where id in{ret}'''
-        cursor.execute(sql)
-    fkeyName = None
-    if 'fkeyName' in sqlObject:
-        fkeyName = sqlObject["fkeyName"]
-    data = sqlObject.get('data', None)
-    if data:
-        if type(data) is list:
-            for dt in data:                
-                ret = processData(sqlObject, cursor, dt, fkeyValue, buCode)
-        else:           
-            ret1 = processData(sqlObject, cursor, data, fkeyValue, buCode)
-            if(ret is None):
-                ret = ret1
-    if ret is None:
-        ret = True
+    try:
+        tableName = sqlObject.get("tableName")
+        # updateCodeBlock =  sqlObject.get('updateCodeBlock') #returns None if key not present in dict  #sqlObject["updateCodeBlock"]
+        # deletedIds = None        
+        # customCodeBlock = sqlObject.get('customCodeBlock')
+        # idInsert = sqlObject.get('idInsert', False) #idInsert is True when id value is there and you want to do insert operation instead of update
+        if 'deletedIds' in sqlObject:
+            deletedIdList = sqlObject['deletedIds']
+            searchPathSql = getschemaSearchPath(buCode)
+            ret = '('
+            for x in deletedIdList:
+                ret = ret + str(x) + ','
+            ret = ret.rstrip(',') + ')'
+            sql =  f'''{searchPathSql}; delete from "{tableName}" where id in{ret}'''
+            cursor.execute(sql)
+        # fkeyName = None
+        # if 'fkeyName' in sqlObject:
+            # fkeyName = sqlObject["fkeyName"]
+        data = sqlObject.get('data', None)
+        if data:
+            if type(data) is list:
+                for dt in data:                
+                    ret = processData(sqlObject, cursor, dt, fkeyValue, buCode)
+            else:           
+                ret1 = processData(sqlObject, cursor, data, fkeyValue, buCode)
+                if(ret is None):
+                    ret = ret1
+        if ret is None:
+            ret = True
+    except (Exception) as error:
+        print(error)
+        raise Exception(error)
     return ret

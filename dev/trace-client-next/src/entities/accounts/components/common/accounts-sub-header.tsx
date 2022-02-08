@@ -52,7 +52,7 @@ function AccountsSubHeader() {
                 <Box component="span">
                     <IconButton
                         style={{ paddingRight: '0.5rem' }}
-                        disabled={isControlDisabled('finYearChange')}
+                        disabled={isControlDisabled('financial-year-change')}
                         size="medium"
                         color="inherit"
                         onClick={() => {
@@ -61,7 +61,7 @@ function AccountsSubHeader() {
                         <Add></Add>
                     </IconButton>
                     <Chip
-                        disabled={isControlDisabled('finYearChange')}
+                        disabled={isControlDisabled('financial-year-change')}
                         size="medium"
                         className="chip-select"
                         style={{
@@ -75,7 +75,7 @@ function AccountsSubHeader() {
                         onClick={handleSelectFinYear}></Chip>
                     <IconButton
                         style={{ paddingLeft: '0.5rem' }}
-                        disabled={isControlDisabled('finYearChange')}
+                        disabled={isControlDisabled('financial-year-change')}
                         color="inherit"
                         onClick={() => {
                             utilFunc().changeFinYear(-1)

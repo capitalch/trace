@@ -72,9 +72,10 @@ function AdminManageRolesPermissions({
             width: 60,
         },
         {
-            headerName: 'Control name',
-            width: 200,
-            field: 'controlName',
+            headerName: 'Control hierarchy',
+            width: 400,
+            field: 'hierarchy',
+            flex:1,
         },
         {
             headerName: 'Active',
@@ -105,13 +106,6 @@ function AdminManageRolesPermissions({
                     />
                 )
             },
-        },
-        {
-            headerName: 'Description',
-            width: 140,
-            field: 'descr',
-            flex: 1,
-            description: 'Description',
         },
     ]
 

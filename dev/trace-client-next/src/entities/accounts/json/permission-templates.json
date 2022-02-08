@@ -2,402 +2,409 @@
    "base": [
       {
          "controlId": 1,
-         "controlName": "vouchersMenu",
-         "descr": "Vouchers main menu",
+         "hierarchy":"vouchers",         
          "isActive": false
       },
       {
          "controlId": 2,
-         "controlName": "paymentsSubMenu",
-         "descr": "Payments sub menu",
+         "hierarchy":"vouchers-journals",
          "isActive": false
       },
       {
          "controlId": 3,
-         "controlName": "receiptsSubMenu",
-         "descr": "Receipts sub menu",
+         "hierarchy":"vouchers-payments",
          "isActive": false
       },
       {
          "controlId": 4,
-         "controlName": "contraSubMenu",
-         "descr": "Contra sub menu",
+         "hierarchy":"vouchers-receipts",
          "isActive": false
       },
       {
          "controlId": 5,
-         "controlName": "journalsSubMenu",
-         "descr": "Journals sub menu",
-         "isActive": false
+         "hierarchy":"vouchers-contra",
+         "isActive": false         
       },
       {
          "controlId": 6,
-         "controlName": "salesSubMenu",
-         "descr": "Sales sub menu",
+         "hierarchy":"salespurchases",
          "isActive": false
       },
       {
          "controlId": 7,
-         "controlName": "purchasesSubMenu",
-         "descr": "Purchases sub menu",
+         "hierarchy":"salespurchases-sales",
          "isActive": false
       },
       {
          "controlId": 8,
-         "controlName": "mastersMenu",
-         "descr": "Masters main menu",
+         "hierarchy":"salespurchases-sales-return",
          "isActive": false
       },
       {
          "controlId": 9,
-         "controlName": "unitInfoSubMenu",
-         "descr": "Unit info sub menu",
+         "hierarchy":"salespurchases-purchases",
          "isActive": false
       },
       {
          "controlId": 10,
-         "controlName": "generalSettingsSubMenu",
-         "descr": "General settings sub menu",
+         "hierarchy":"salespurchases-purchase-return",
          "isActive": false
       },
       {
          "controlId": 11,
-         "controlName": "accountsSubMenu",
-         "descr": "Accounts sub menu",
+         "hierarchy":"salespurchases-debit-notes",
          "isActive": false
       },
       {
          "controlId": 12,
-         "controlName": "openingBalancesSubMenu",
-         "descr": "Opening balances sub menu",
+         "hierarchy":"salespurchases-credit-notes",
          "isActive": false
       },
       {
          "controlId": 13,
-         "controlName": "branchesSubMenu",
-         "descr": "Branches sub menu",
+         "hierarchy":"masters",
          "isActive": false
       },
       {
          "controlId": 14,
-         "controlName": "financialYearsSubMenu",
-         "descr": "Financial years sub menu",
+         "hierarchy":"masters-unit-info",
          "isActive": false
       },
       {
          "controlId": 15,
-         "controlName": "finalAccountsMenu",
-         "descr": "Final accounts main menu",
+         "hierarchy":"masters-general-settings",
          "isActive": false
       },
       {
          "controlId": 16,
-         "controlName": "trialBalanceSubMenu",
-         "descr": "Trial balance sub menu",
+         "hierarchy":"masters-accounts",
          "isActive": false
       },
       {
          "controlId": 17,
-         "controlName": "balanceSheetSubMenu",
-         "descr": "Balance sheet sub menu",
+         "hierarchy":"masters-opening-balances",
          "isActive": false
       },
       {
          "controlId": 18,
-         "controlName": "profitLossSubMenu",
-         "descr": "Profit and loss sub menu",
+         "hierarchy":"masters-branches",
          "isActive": false
       },
       {
          "controlId": 19,
-         "controlName": "optionsMenu",
-         "descr": "Options main menu",
+         "hierarchy":"masters-financial-years",
          "isActive": false
       },
       {
          "controlId": 20,
-         "controlName": "bankReconSubMenu",
-         "descr": "Bank reconcillation sub menu",
+         "hierarchy":"finalaccounts",
          "isActive": false
       },
       {
          "controlId": 21,
-         "controlName": "commonUtilitiesSubMenu",
-         "descr": "Common utilities sub menu",
+         "hierarchy":"finalaccounts-trial-balance",
          "isActive": false
       },
       {
          "controlId": 22,
-         "controlName": "genericExportsSubMenu",
-         "descr": "Exports sub menu",
+         "hierarchy":"finalaccounts-balance-sheet",
          "isActive": false
       },
       {
          "controlId": 23,
-         "controlName": "reportsMenu",
-         "descr": "Reports main menu",
+         "hierarchy":"finalaccounts-pl-account",
          "isActive": false
       },
       {
          "controlId": 24,
-         "controlName": "alltransactionsSubMenu",
-         "descr": "All transactions sub menu",
+         "hierarchy":"finalaccounts-general-ledger",
          "isActive": false
       },
       {
          "controlId": 25,
-         "controlName": "paymentsEntry",
-         "descr": "Entry for payments",
+         "hierarchy":"options",
          "isActive": false
       },
       {
          "controlId": 26,
-         "controlName": "receiptsEntry",
-         "descr": "Entry for receipts",
+         "hierarchy":"options-bank-reconcillation",
          "isActive": false
       },
       {
          "controlId": 27,
-         "controlName": "contraEntry",
-         "descr": "Entry for contra",
+         "hierarchy":"options-common-utilities",
          "isActive": false
       },
       {
          "controlId": 28,
-         "controlName": "journalsEntry",
-         "descr": "Entry for journals",
+         "hierarchy":"options-exports",
          "isActive": false
       },
       {
          "controlId": 29,
-         "controlName": "finYearChange",
-         "descr": "Change financial year",
+         "hierarchy":"reports",
          "isActive": false
       },
       {
          "controlId": 30,
-         "controlName": "branchChange",
-         "descr": "Change branch",
+         "hierarchy":"reports-all-transactions",
          "isActive": false
       },
       {
          "controlId": 31,
-         "controlName": "unitInfoEdit",
-         "descr": "Current business unit info edit",
+         "hierarchy":"inventory",
          "isActive": false
       },
       {
          "controlId": 32,
-         "controlName": "generalSettingsEdit",
-         "descr": "General settings edit",
+         "hierarchy":"inventory-categories",
          "isActive": false
       },
       {
          "controlId": 33,
-         "controlName": "accountsMasterEdit",
-         "descr": "Accounts master edit",
+         "hierarchy":"inventory-brands",
          "isActive": false
       },
       {
          "controlId": 34,
-         "controlName": "doBankRecon",
-         "descr": "Do bank reconcillation",
+         "hierarchy":"inventory-products",
          "isActive": false
       },
       {
          "controlId": 35,
-         "controlName": "transferAccountsBalances",
-         "descr": "Transfer accounts balances",
+         "hierarchy":"financial-year-change",
          "isActive": false
       },
       {
          "controlId": 36,
-         "controlName": "doExports",
-         "descr": "Enable export of data",
+         "hierarchy":"branch-change",
          "isActive": false
+      },
+      {
+         "controlId": 37,
+         "hierarchy":"masters-accounts-add-child",
+         "isActive": true
       }
    ],
    "operator": [
       {
-         "controlName": "vouchersMenu",
+         "hierarchy":"vouchers",         
          "isActive": true
       },
       {
-         "controlName": "paymentsSubMenu",
+         "hierarchy":"vouchers-journals",
          "isActive": true
       },
       {
-         "controlName": "receiptsSubMenu",
+         "hierarchy":"vouchers-payments",
          "isActive": true
       },
       {
-         "controlName": "contraSubMenu",
+         "hierarchy":"vouchers-receipts",
          "isActive": true
       },
       {
-         "controlName": "reportsMenu",
+         "hierarchy":"vouchers-contra",
          "isActive": true
       },
       {
-         "controlName": "alltransactionsSubMenu",
+         "hierarchy":"salespurchases",
+         "isActive": true
+      },
+      {
+         "hierarchy":"salespurchases-sales",
+         "isActive": true
+      },
+      {
+         "hierarchy":"salespurchases-sales-return",
+         "isActive": true
+      },
+      {
+         "hierarchy":"salespurchases-purchases",
+         "isActive": true
+      },
+      {
+         "hierarchy":"salespurchases-purchase-return",
+         "isActive": true
+      },
+      {
+         "hierarchy":"salespurchases-debit-notes",
+         "isActive": true
+      },
+      {
+         "hierarchy":"salespurchases-credit-notes",
+         "isActive": true
+      },
+      {
+         "hierarchy":"options",
+         "isActive": true
+      },
+      {
+         "hierarchy":"options-bank-reconcillation",
+         "isActive": true
+      },
+      {
+         "hierarchy":"options-common-utilities",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory-categories",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory-brands",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory-products",
          "isActive": true
       }
    ],
    "accountant": [
       {
-         "controlId": 1,
-         "controlName": "vouchersMenu",
-         "descr": "Vouchers main menu",
+         "hierarchy":"vouchers",         
          "isActive": true
       },
       {
-         "controlId": 2,
-         "controlName": "paymentsSubMenu",
-         "descr": "Payments sub menu",
+         "hierarchy":"vouchers-journals",
          "isActive": true
       },
       {
-         "controlId": 3,
-         "controlName": "receiptsSubMenu",
-         "descr": "Receipts sub menu",
+         "hierarchy":"vouchers-payments",
          "isActive": true
       },
       {
-         "controlId": 4,
-         "controlName": "contraSubMenu",
-         "descr": "Contra sub menu",
+         "hierarchy":"vouchers-receipts",
          "isActive": true
       },
       {
-         "controlId": 5,
-         "controlName": "journalsSubMenu",
-         "descr": "Journals sub menu",
+         "hierarchy":"vouchers-contra",
+         "isActive": true
+         
+      },
+      {
+         "hierarchy":"salespurchases",
          "isActive": true
       },
       {
-         "controlId": 6,
-         "controlName": "salesSubMenu",
-         "descr": "Sales sub menu",
+         "hierarchy":"salespurchases-sales",
          "isActive": true
       },
       {
-         "controlId": 7,
-         "controlName": "purchasesSubMenu",
-         "descr": "Purchases sub menu",
+         "hierarchy":"salespurchases-sales-return",
          "isActive": true
       },
       {
-         "controlId": 8,
-         "controlName": "mastersMenu",
-         "descr": "Masters main menu",
+         "hierarchy":"salespurchases-purchases",
          "isActive": true
       },
       {
-         "controlId": 11,
-         "controlName": "accountsSubMenu",
-         "descr": "Accounts sub menu",
+         "hierarchy":"salespurchases-purchase-return",
          "isActive": true
       },
       {
-         "controlId": 12,
-         "controlName": "openingBalancesSubMenu",
-         "descr": "Opening balances sub menu",
+         "hierarchy":"salespurchases-debit-notes",
          "isActive": true
       },
       {
-         "controlId": 19,
-         "controlName": "optionsMenu",
-         "descr": "Options main menu",
+         "hierarchy":"salespurchases-credit-notes",
          "isActive": true
       },
       {
-         "controlId": 20,
-         "controlName": "bankReconSubMenu",
-         "descr": "Bank reconcillation sub menu",
+         "hierarchy":"masters",
          "isActive": true
       },
       {
-         "controlId": 21,
-         "controlName": "commonUtilitiesSubMenu",
-         "descr": "Common utilities sub menu",
+         "hierarchy":"masters-accounts",
          "isActive": true
       },
       {
-         "controlId": 22,
-         "controlName": "genericExportsSubMenu",
-         "descr": "Exports sub menu",
+         "hierarchy":"masters-opening-balances",
          "isActive": true
       },
       {
-         "controlId": 23,
-         "controlName": "reportsMenu",
-         "descr": "Reports main menu",
+         "hierarchy":"masters-branches",
          "isActive": true
       },
       {
-         "controlId": 24,
-         "controlName": "alltransactionsSubMenu",
-         "descr": "All transactions sub menu",
+         "hierarchy":"masters-financial-years",
          "isActive": true
       },
       {
-         "controlId": 25,
-         "controlName": "paymentsEntry",
-         "descr": "Entry for payments",
+         "hierarchy":"finalaccounts",
          "isActive": true
       },
       {
-         "controlId": 26,
-         "controlName": "receiptsEntry",
-         "descr": "Entry for receipts",
+         "hierarchy":"finalaccounts-trial-balance",
          "isActive": true
       },
       {
-         "controlId": 27,
-         "controlName": "contraEntry",
-         "descr": "Entry for contra",
+         "hierarchy":"finalaccounts-balance-sheet",
          "isActive": true
       },
       {
-         "controlId": 28,
-         "controlName": "journalsEntry",
-         "descr": "Entry for journals",
+         "hierarchy":"finalaccounts-pl-account",
          "isActive": true
       },
       {
-         "controlId": 29,
-         "controlName": "finYearChange",
-         "descr": "Change financial year",
+         "hierarchy":"finalaccounts-general-ledger",
          "isActive": true
       },
       {
-         "controlId": 30,
-         "controlName": "branchChange",
-         "descr": "Change branch",
+         "hierarchy":"options",
          "isActive": true
       },
       {
-         "controlId": 33,
-         "controlName": "accountsMasterEdit",
-         "descr": "Accounts master edit",
+         "hierarchy":"options-bank-reconcillation",
          "isActive": true
       },
       {
-         "controlId": 34,
-         "controlName": "doBankRecon",
-         "descr": "Do bank reconcillation",
+         "hierarchy":"options-common-utilities",
          "isActive": true
       },
       {
-         "controlId": 35,
-         "controlName": "transferAccountsBalances",
-         "descr": "Transfer accounts balances",
+         "hierarchy":"options-exports",
          "isActive": true
       },
       {
-         "controlId": 36,
-         "controlName": "doExports",
-         "descr": "Enable export of data",
+         "hierarchy":"reports",
+         "isActive": true
+      },
+      {
+         "hierarchy":"reports-all-transactions",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory-categories",
+         "descr": "General settings edit",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory-brands",
+         "isActive": true
+      },
+      {
+         "hierarchy":"inventory-products",
+         "isActive": true
+      },
+      {
+         "hierarchy":"financial-year-change",
+         "isActive": true
+      },
+      {
+         "hierarchy":"branch-change",
+         "isActive": true
+      },
+      {
+         "hierarchy":"masters-accounts-add-child",
          "isActive": true
       }
    ],

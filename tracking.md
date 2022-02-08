@@ -1,10 +1,7 @@
 https://tempail.com/en/
 
-
-
-
 ## To do on Sunday
-5. Implementation of permissions in UI and its documentation
+                            5. Implementation of permissions in UI and its documentation
 3.9 Deployment
                             1. Introduce isActive in user and client
                             2. Documentation of user management with how to remove a user
@@ -15,10 +12,9 @@ https://tempail.com/en/
                             3.6. uid editable by both the admins
                             3.7 Generic error handlic at flask server
 
-
 6. Plan of autosubledger implement
 7. Plan for socket usage in accounts update etc.
-8. Server error management and propagation to client, during failure of SQL execution
+                            8. Server error management and propagation to client, during failure of SQL execution
     9. Start preparation of great resume
 ## Planning
 1. Authentication and user management:                    1 week, 5th Feb 2022
@@ -132,6 +128,8 @@ create installer from innosetup
 19. Backup and restore strategy
 20. Upgrade database for all instances 
 
+# 27-01-2022 - 08-02-2022
+1. Security and management redefined
 # 24-01-2022 - 26-01-2022
 1. Working on authentication, rework on code to convert to x-grid-prof from material-table and prime data-table
 # 21-01-2022 - 23-01-2022

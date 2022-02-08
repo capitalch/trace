@@ -255,11 +255,11 @@ function utilMethods() {
     }
 
     // If control is not found in permissions array then returns false, that means enabled
-    function isControlDisabled(controlName: string) {
+    function isControlDisabled(hierarchy: string) {
         const logindata = getLoginData()
         const permissions: any[] = logindata.permissions || []
         const control = permissions.find(
-            (item) => item.controlName === controlName
+            (item) => item.hierarchy === hierarchy
         )
         //For admin users all controls are visible
         let ret = logindata.userType === 'a' ? true : false
