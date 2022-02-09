@@ -287,39 +287,3 @@ def resolve_trial_balance(parent, info):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     return trialBalanceHelper(dbName, buCode, finYearId, branchId)
-
-
-# @accountsMutation.field("delete_account")
-# def resolve_delete_account(parent, info, id):
-#     sqlString = allSqls['delete_account']
-#     return execSql(DB_NAME, sqlString, (id,), False)
-
-
-# @accountsQuery.field("tranHeadersWithDetails")
-# def resolve_tranHeadersWithDetails(parent, info, tranTypeId, noOfRecords):
-#     return tranHeadersWithDetails_helper(tranTypeId, noOfRecords)
-
-
-# @accountsQuery.field("tranHeaderAndDetails")
-# def resolve_tranHeaderAndDetails(parent, info, id):
-#     return tranHeaderAndDetails_helper(id)
-
-# @accountsMutation.field("delete_header")
-# def resolve_delete_tranH(parent, info, id):
-#     sqlString = allSqls['delete_tranH']
-#     return execSql(DB_NAME, sqlString, (id,), False)
-
-
-# @accountsQuery.field("accountsViewOpBal")
-# def resolve_accountsViewOpBal(parent, info):
-#     sqlString = allSqls['accountsViewOpBal']
-#     return execSql(DB_NAME, sqlString)
-
-# customCodeBlock = valueData.get('customCodeBlock')
-    # updateCodeBlock = valueData.get('updateCodeBlock')
-    # if customCodeBlock is not None:
-    #     valueDict['customCodeBlock'] = allSqls[customCodeBlock]
-    # if updateCodeBlock is not None:
-    #     valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
-    # autoRefNo = genericUpdateMasterDetailsHelper(dbName, buCode, valueData)
-    # return autoRefNo

@@ -1,8 +1,13 @@
 https://tempail.com/en/
 
+## autosubledger implementation
+1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)
+2. If a sale transaction has isAutoSubledger then create a new accountCode with parentAccId/lastNo+1 (based on parentId in AccCounter table)/startfinYear
+3. Have debit account replaced by new accountcode
+
 ## To do on Sunday
                             5. Implementation of permissions in UI and its documentation
-3.9 Deployment
+                            3.9 Deployment
                             1. Introduce isActive in user and client
                             2. Documentation of user management with how to remove a user
                             3.5 cleanup client and also server
@@ -11,19 +16,19 @@ https://tempail.com/en/
                             3.8 Correction of forget password
                             3.6. uid editable by both the admins
                             3.7 Generic error handlic at flask server
-
+                            8. Server error management and propagation to client, during failure of SQL execution
 6. Plan of autosubledger implement
 7. Plan for socket usage in accounts update etc.
-                            8. Server error management and propagation to client, during failure of SQL execution
     9. Start preparation of great resume
+
 ## Planning
-1. Authentication and user management:                    1 week, 5th Feb 2022
-    SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
-    Admin: Check manage users, Manage BU. Complete manage roles. New Associate
+                              1. Authentication and user management:                    1 week, 5th Feb 2022
+                                  SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
+                                  Admin: Check manage users, Manage BU. Complete manage roles. New Associate
                               Global error catch mecanism. At present UI freezes when error happens
                               Provide Subtitle wherever applicable
                               2. Invoice correction:                                    2 days, 7th Feb
-  Prevent inactive user from login and other works.
+                              Prevent inactive user from login and other works.
 3. Full reporting of Inventory and allied:                1 week, 14th Feb
 4. Opening balance of stock:                              3 days, 17th Feb
 5. Subledger billing:                                     2 days, 19th Feb
@@ -42,12 +47,6 @@ https://tempail.com/en/
 16. Purchase entry, unable to enter GST price             2 days, 17th Mar
 17. Edit from bank recon                                  2 days, 19th Mar
 18. Fix Accounts master, new contact twice                4 days, 23rd Mar
-
-## To DO in permissions
-1. Edit and Submit functionality
-2. Search and buttons
-3. Hash to check change in data, then only allow submit
-
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
@@ -130,6 +129,8 @@ create installer from innosetup
 
 # 27-01-2022 - 08-02-2022
 1. Security and management redefined
+2. Complete rework of authentication and user management
+3. Lib upgradation client and server and Deployment
 # 24-01-2022 - 26-01-2022
 1. Working on authentication, rework on code to convert to x-grid-prof from material-table and prime data-table
 # 21-01-2022 - 23-01-2022
