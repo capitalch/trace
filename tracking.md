@@ -6,6 +6,10 @@ arbitraryData.saleVarietyAccId = item.id
                                 arbitraryData.saleVarietyAccName = item.accName
                                 arbitraryData.footer.items[0].accId =
                                     arbitraryData.saleVarietyAccId
+## To do
+1. Complete server side saving
+2. Verify edit. Enable the show autosubledger in the ledgerWithSubledger
+3. Check the delete
 
 
 1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)
