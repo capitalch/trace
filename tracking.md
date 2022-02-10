@@ -11,6 +11,9 @@ arbitraryData.saleVarietyAccId = item.id
 2. Verify edit. Enable the show autosubledger in the ledgerWithSubledger
                                 3. Check the delete
 4. General ledger not showing
+5. Increment autosubledger number
+6. Script for creating the table
+7 update scripts for creation of new db etc
 
 
 1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)
