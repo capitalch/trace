@@ -1,6 +1,13 @@
 https://tempail.com/en/
 
 ## autosubledger implementation
+arbitraryData.saleVariety === 'a' for autosubledger
+arbitraryData.saleVarietyAccId = item.id
+                                arbitraryData.saleVarietyAccName = item.accName
+                                arbitraryData.footer.items[0].accId =
+                                    arbitraryData.saleVarietyAccId
+
+
 1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)
 2. If a sale transaction has isAutoSubledger then create a new accountCode with parentAccId/lastNo+1 (based on parentId in AccCounter table)/startfinYear
 3. Have debit account replaced by new accountcode
