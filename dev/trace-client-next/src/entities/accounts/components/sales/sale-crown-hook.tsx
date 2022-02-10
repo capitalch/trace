@@ -249,8 +249,9 @@ function useSaleCrown(
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
+        console.log(JSON.stringify(header))
         let ret = await genericUpdateMasterDetails([header])
-        // console.log(JSON.stringify(header))
+        console.log(JSON.stringify(header))
         if (ret.error) {
             console.log(ret.error)
         } else {
@@ -286,6 +287,7 @@ function useSaleCrown(
             const branchId = getFromBag('branchObject')?.branchId || 1
             const obj: any = {
                 tableName: 'TranH',
+                isAutoSubledger: ad.saleVariety==='a'? true : false,
                 data: [],
             }
             const item = {

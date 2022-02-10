@@ -4,6 +4,7 @@ from itertools import repeat
 from util import getschemaSearchPath
 # from entities.accounts.sql import allSqls
 
+
 def getInsertSql(data, tableName, fkeyName, fkeyValue):
     fieldsList = list(data.keys())
     if fkeyName and fkeyValue:
@@ -23,14 +24,15 @@ def getInsertSql(data, tableName, fkeyName, fkeyValue):
     '''
     return(sql, valuesTuple)
 
-def getUpdateSql(data, tableName):    
+
+def getUpdateSql(data, tableName):
     def getUpdateKeyValues(dataCopy):
         idValue = dataCopy['id']
-        dataCopy.pop('id') # remove id property
+        dataCopy.pop('id')  # remove id property
         str = ''
         for it in dataCopy:
             str = str + f''' "{it}" = %s, '''
-        str = (str.strip())[:-1] # strip last comma
+        str = (str.strip())[:-1]  # strip last comma
         valuesList = list(dataCopy.values())
         valuesTuple = tuple(valuesList)
         return(str, valuesTuple)
@@ -40,6 +42,7 @@ def getUpdateSql(data, tableName):
         where id = {data['id']} returning {"id"}
     '''
     return(sql, valuesTuple)
+
 
 def getSql(sqlObject, data, fkeyValue):
     sql = None
@@ -52,14 +55,17 @@ def getSql(sqlObject, data, fkeyValue):
         if updateCodeBlock is not None:
             sql, valuesTuple = (updateCodeBlock, data)
         elif sqlObject.get('idInsert'):
-            sql, valuesTuple = getInsertSql(data.copy(), sqlObject.get('tableName'),sqlObject.get('fkeyName'), fkeyValue )
-        else: 
+            sql, valuesTuple = getInsertSql(data.copy(), sqlObject.get(
+                'tableName'), sqlObject.get('fkeyName'), fkeyValue)
+        else:
             sql, valuesTuple = getUpdateSql(data, sqlObject.get('tableName'))
     else:
-        sql, valuesTuple = getInsertSql(data.copy(), sqlObject.get('tableName'), sqlObject.get('fkeyName'), fkeyValue)
+        sql, valuesTuple = getInsertSql(data.copy(), sqlObject.get(
+            'tableName'), sqlObject.get('fkeyName'), fkeyValue)
     return(sql, valuesTuple)
 
-def processData(sqlObject, cursor,data, fkeyValue, buCode='public'):
+
+def processData(sqlObject, cursor, data, fkeyValue, buCode='public'):
     details = None
     id = None
     searchPathSql = getschemaSearchPath(buCode)
@@ -75,11 +81,11 @@ def processData(sqlObject, cursor,data, fkeyValue, buCode='public'):
                     id = record[0]
                     # return(id)
             except(Exception) as err:
-                pass # suck the exception
+                pass  # suck the exception
         except (Exception) as error:
             print(error)
             raise Exception(error)
-    
+
     if details:
         if type(details) is list:
             for det in details:
@@ -87,15 +93,16 @@ def processData(sqlObject, cursor,data, fkeyValue, buCode='public'):
         else:
             execSqlObject(details, cursor, id, buCode)
     # Following two lines are new and need testing
-    # else:                   
+    # else:
     return id
+
 
 def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
     ret = None
     try:
         tableName = sqlObject.get("tableName")
         # updateCodeBlock =  sqlObject.get('updateCodeBlock') #returns None if key not present in dict  #sqlObject["updateCodeBlock"]
-        # deletedIds = None        
+        # deletedIds = None
         # customCodeBlock = sqlObject.get('customCodeBlock')
         # idInsert = sqlObject.get('idInsert', False) #idInsert is True when id value is there and you want to do insert operation instead of update
         if 'deletedIds' in sqlObject:
@@ -105,7 +112,7 @@ def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
             for x in deletedIdList:
                 ret = ret + str(x) + ','
             ret = ret.rstrip(',') + ')'
-            sql =  f'''{searchPathSql}; delete from "{tableName}" where id in{ret}'''
+            sql = f'''{searchPathSql}; delete from "{tableName}" where id in{ret}'''
             cursor.execute(sql)
         # fkeyName = None
         # if 'fkeyName' in sqlObject:
@@ -113,9 +120,9 @@ def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
         data = sqlObject.get('data', None)
         if data:
             if type(data) is list:
-                for dt in data:                
+                for dt in data:
                     ret = processData(sqlObject, cursor, dt, fkeyValue, buCode)
-            else:           
+            else:
                 ret1 = processData(sqlObject, cursor, data, fkeyValue, buCode)
                 if(ret is None):
                     ret = ret1

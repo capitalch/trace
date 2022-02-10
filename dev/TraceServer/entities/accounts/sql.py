@@ -432,6 +432,18 @@ allSqls = {
                             "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s 
     ''',
 
+    "get_lastNo_auto_subledger": '''
+    insert into "AutoSubledgerCounter" ("finYearId", "branchId", "accId", "lastNo")
+            select %(finYearId)s, %(branchId)s, %(accId)s, 0
+                where not exists (select 1 from "AutoSubledgerCounter" where "finYearId" = %(finYearId)s and
+					"branchId" = %(branchId)s and "accId" = %(accId)s );
+        select "lastNo"
+            from "AutoSubledgerCounter"
+                where "finYearId" = %(finYearId)s and
+                            "branchId" = %(branchId)s and "accId" = %(accId)s
+    
+    ''',
+
     # This method is working. it's for academic purpose. At present client side tree populating is done. This method populates the entire tree from child values
     "get_opBal1": '''
         with recursive cte as (

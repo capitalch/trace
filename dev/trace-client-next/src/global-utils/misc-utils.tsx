@@ -5,9 +5,7 @@ import {
     manageFormsState,
     usingIbuki as getIbuki,
 } from '../imports/trace-imports'
-
 import messages from '../messages.json'
-
 const { emit } = getIbuki()
 
 function utilMethods() {
@@ -29,6 +27,7 @@ function utilMethods() {
         entityName?: string
         args?: {}
     }
+    
     async function execGenericView(options: GenericViewOptions) {
         let ret: any = undefined
         const currentEntityName = getCurrentEntity()

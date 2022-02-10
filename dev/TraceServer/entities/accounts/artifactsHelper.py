@@ -176,8 +176,34 @@ def getSetAutoRefNo(sqlObject, cursor, no, buCode):
     except (Exception) as error:
         raise Exception(getErrorMessage())
 
+# For autoSubledger, create a new account code as Subledger of main account code
+# Make use of last no for autoSubledgerCounter table while creating the account code
 
-def genericUpdateMasterDetailsHelper(dbName, buCode, valueDict):
+
+def processForAutoSubledger(dbName='', branchId = None, branchCode=None,  buCode='', finYearId=None, valueDict={}):
+    # find accId
+    accId = None
+    tranH = valueDict.get('data', None)
+    if(tranH):
+        tranDetails = tranH[0].get('details', None)
+        if(tranDetails):
+            detailsData = tranDetails.get('data', None)
+            accId = detailsData[1].get('accId', None)
+    print(accId)
+    sqlString = allSqls['get_lastNo_auto_subledger']
+    lastNo = execSql(dbName, sqlString, {'branchId': branchId, 'accId': accId,
+                                         'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)['lastNo']
+    # get accType and classId of accId
+    # Insert into AccM the new account code and get the new accId
+    # replace in valueDict the new accId                                         
+    if(lastNo == 0):
+        lastNo = 1
+    accCode = f'{accId}/{branchCode}/{lastNo}/{finYearId}'
+
+    pass
+
+
+def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict):
     connection = None
     try:
         connection = None
@@ -202,12 +228,17 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, valueDict):
                 lastNo = 1
             autoRefNo = f'{branchCode}\{tranCode}\{lastNo}\{finYearId}'
             valueDict["data"][0]["autoRefNo"] = autoRefNo
+            # for sale with autosubledger insert transaction
+            if((tranTypeId == 4) and valueDict.get('isAutoSubledger'), None):
+                processForAutoSubledger(
+                    dbName=dbName,branchId=branchId, branchCode=branchCode, buCode=buCode, finYearId=finYearId, valueDict=valueDict,)
 
         ret = execSqlObject(valueDict, cursor, buCode=buCode)
         sqlString = allSqls['update_last_no']
         if not 'id' in valueDict["data"][0]:  # for insert mode only
             execSql(dbName, sqlString, {'lastNo': lastNo + 1, 'branchId': branchId,
                                         'tranTypeId': tranTypeId, 'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
+            # also set the last no in autoSubledgerCounter table
         connection.commit()
         return ret
     except (Exception, psycopg2.Error) as error:
@@ -327,149 +358,3 @@ def trialBalanceHelper(dbName, buCode, finYearId, branchId):
         allKeys.append(item['id'])
     dt = formatTree(data)
     return {'trialBal': dt, 'allKeys': allKeys}
-
-# def searchProductHelper1(dbName, buCode, valueDict):
-#     def createSql():
-#         template = allSqls['get_searchProduct']
-#         argDict = {}
-#         temp = ''
-#         for index, item in enumerate(valueDict):  # valueDict is a list
-#             sqlX = template.replace('arg', f'arg{str(index)}')
-#             temp = f'{temp} union {sqlX}'
-#             argDict['arg'+str(index)] = item
-
-#         # remove first occurence of ' union '
-#         sqlString = temp.replace(' union ', '', 1)
-#         return sqlString, argDict
-
-#     sqlString, argDict = createSql()
-#     result = execSql(dbName, sqlString, args=argDict,
-#                      isMultipleRows=True, buCode=buCode)
-#     return result
-
-# 0 means getting a tuple with autoRefNo and corresponding lastNo in tranCounter table
-# autoRefNoTup = getSetAutoRefNo(valueDict, cursor, 0, buCode)
-# autoRefNo = autoRefNoTup[0]
-# lastNo = autoRefNoTup[1]
-# to set last no in TranCounter table
-# autoRefNoTup = getSetAutoRefNo(valueDict, cursor, lastNo, buCode)
-# autoRefNo = autoRefNoTup[0]
-
-# Don't delete dataframe implementation
-# def format_tranHeadersWithDetails_data(data):
-#     if data == []:
-#         return data
-#     df = pd.DataFrame(data)
-#     df = df.replace({None: ''})  # None values create problem while indexing
-#     pivot = pd.pivot_table(df, index=["tranHeaderId", "tranDetailsId", "autoRefNo", "tranDate", "userRefNo", "tags", "headerRemarks",
-#                                       "tranTypeId", "accName", "lineRefNo", "lineRemarks", "instrNo"], columns=["dc"],
-#                            values="amount", aggfunc=np.sum, fill_value=0)
-#     pivot.rename(
-#         columns={
-#             'D': 'debits',
-#             'C': 'credits'
-#         },
-#         inplace=True
-#     )
-#     pivot.sort_values(by=['tranHeaderId', 'tranDetailsId'],
-#                       axis=0, ascending=[False, True], inplace=True)
-
-#     j = pivot.to_json(orient='table')
-#     jsonObj = json.loads(j)
-#     dt = jsonObj["data"]
-#     return dt
-
-# def tranHeadersWithDetails_helper(tranTypeId, noOfRecords):
-#     sql = allSqls['tranHeadersWithDetails']
-#     # args should be tuple
-#     data = execSql(DB_NAME, sql, (tranTypeId, noOfRecords,))
-#     for x in data:
-#         x['tranDate'] = str(x['tranDate'])  # ISO formatted date
-#     dt = format_tranHeadersWithDetails_data(data)
-#     return dt
-
-# def tranHeaderAndDetails_helper(id):
-#     sql1 = allSqls['tranHeader']
-#     sql2 = allSqls['tranDetails']
-#     dataset = execSqls(
-#         DB_NAME, [('sql1', sql1, (id,)), ('sql2', sql2, (id,))]
-#     )
-#     data1 = dataset['sql1']
-#     data2 = dataset['sql2']
-#     return {"tranHeader": data1, "tranDetails": data2}
-
-# def format_trial_balance_data(data):
-#     if data == []:
-#         return []
-#     df = pd.DataFrame(data)
-#     pivot = pd.pivot_table(df, index=["id", "accCode", "accName", "accType", "accLeaf", "parentId"], columns=["dc"],
-#                            values="amount", aggfunc=np.sum, fill_value=0)
-#     if 'O' not in pivot:
-#         # shape[0] is no of rows in dataframe
-#         pivot['O'] = [Decimal(0.00)] * pivot.shape[0]
-
-#     if 'D' not in pivot:
-#         pivot['D'] = [Decimal(0.00)] * pivot.shape[0]
-
-#     if 'C' not in pivot:
-#         pivot['C'] = [Decimal(0.00)] * pivot.shape[0]
-
-#     pivot.rename(
-#         columns={
-#             'O': 'opening',
-#             'D': 'debits',
-#             'C': 'credits'
-#         },
-#         inplace=True
-#     )
-#     pivot['closing'] = pivot['opening'] + pivot['debits'] - pivot['credits']
-
-#     pivot.loc['total', 'closing'] = pivot['closing'].sum()
-#     pivot.loc['total', 'debits'] = pivot['debits'].sum()
-#     pivot.loc['total', 'credits'] = pivot['credits'].sum()
-#     pivot.loc['total', 'opening'] = pivot['opening'].sum()
-
-#     pivot['closing_dc'] = pivot['closing'].apply(
-#         lambda x: 'Dr' if x >= 0 else 'Cr')
-#     pivot['closing'] = pivot['closing'].apply(
-#         lambda x: x if x >= 0 else -x)  # remove minus sign
-
-#     pivot['opening_dc'] = pivot['opening'].apply(
-#         lambda x: 'Dr' if x >= 0 else 'Cr')
-#     pivot['opening'] = pivot['opening'].apply(
-#         lambda x: x if x >= 0 else -x)  # remove minus sign
-
-#     pivot = pivot.reindex(
-#         columns=['opening', 'opening_dc', 'debits', 'credits', 'closing', 'closing_dc'])
-
-#     # print(pivot)
-#     j = pivot.to_json(orient='table')
-#     jsonObj = json.loads(j)
-#     dt = jsonObj["data"]
-#     return dt
-
-
-# def trial_balance_helper():
-#     sql = allSqls['trial_balance']
-#     data = execSql(DB_NAME, sql)
-#     dt = format_trial_balance_data(data)  # trial_format
-#     return dt
-
-
-# def subledgers_helper():
-#     sql = allSqls['subledgers']
-#     data = execSql(DB_NAME, sql)
-#     dt = format_trial_balance_data(data)
-#     return dt
-
-
-# def trial_balance_subledgers_helper():
-#     sql1 = allSqls['trial_balance']
-#     sql2 = allSqls['subledgers']
-#     dataset = execSqls(
-#         DB_NAME, [('sql1', sql1, None), ('sql2', sql2, None)])
-#     data1 = dataset["sql1"]
-#     data2 = dataset["sql2"]
-#     dt1 = format_trial_balance_data(data1)
-#     dt2 = format_trial_balance_data(data2)
-#     return {'trial_balance': dt1, 'subledgers': dt2}
