@@ -437,8 +437,10 @@ allSqls = {
             select %(finYearId)s, %(branchId)s, %(accId)s, 0
                 where not exists (select 1 from "AutoSubledgerCounter" where "finYearId" = %(finYearId)s and
 					"branchId" = %(branchId)s and "accId" = %(accId)s );
-        select "lastNo"
-            from "AutoSubledgerCounter"
+        select "lastNo", "accType", "classId"
+            from "AutoSubledgerCounter" d
+                join "AccM" a
+                    on a."id" = d."accId"
                 where "finYearId" = %(finYearId)s and
                             "branchId" = %(branchId)s and "accId" = %(accId)s
     
@@ -1291,6 +1293,12 @@ allSqls = {
                 'tranHeader', (SELECT (row_to_json(a)) from cte1 a)
                 , 'tranDetails', (SELECT json_agg(row_to_json(b)) from cte2 b)
             ) as "jsonResult"
+    ''',
+
+    'insert_account': '''
+        insert into "AccM"("accCode", "accName", "accType", "parentId", "accLeaf", "isPrimary", "classId")
+            values(%(accCode)s, %(accName)s, %(accType)s, %(parentId)s, %(accLeaf)s, %(isPrimary)s, %(classId)s)
+                returning "id"
     ''',
 
     "insert_opBal": '''    

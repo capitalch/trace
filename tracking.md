@@ -9,7 +9,8 @@ arbitraryData.saleVarietyAccId = item.id
 ## To do
 1. Complete server side saving
 2. Verify edit. Enable the show autosubledger in the ledgerWithSubledger
-3. Check the delete
+                                3. Check the delete
+4. General ledger not showing
 
 
 1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)

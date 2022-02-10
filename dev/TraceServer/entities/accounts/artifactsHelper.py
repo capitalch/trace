@@ -180,27 +180,46 @@ def getSetAutoRefNo(sqlObject, cursor, no, buCode):
 # Make use of last no for autoSubledgerCounter table while creating the account code
 
 
-def processForAutoSubledger(dbName='', branchId = None, branchCode=None,  buCode='', finYearId=None, valueDict={}):
+def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='', finYearId=None, cursor=None, valueDict={}):
     # find accId
     accId = None
+    detailsData = None
     tranH = valueDict.get('data', None)
     if(tranH):
         tranDetails = tranH[0].get('details', None)
         if(tranDetails):
             detailsData = tranDetails.get('data', None)
             accId = detailsData[1].get('accId', None)
-    print(accId)
+    # print(accId)
     sqlString = allSqls['get_lastNo_auto_subledger']
-    lastNo = execSql(dbName, sqlString, {'branchId': branchId, 'accId': accId,
-                                         'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)['lastNo']
+    ret = execSql(dbName, sqlString, {'branchId': branchId, 'accId': accId,
+                                      'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
+    result = dict(ret)
+    lastNo = result.get('lastNo', None)
+    classId = result.get('classId', None)
+    accType = result.get('accType', None)
     # get accType and classId of accId
     # Insert into AccM the new account code and get the new accId
-    # replace in valueDict the new accId                                         
+    # replace in valueDict the new accId
     if(lastNo == 0):
         lastNo = 1
     accCode = f'{accId}/{branchCode}/{lastNo}/{finYearId}'
-
-    pass
+    searchPathSql = getschemaSearchPath(buCode)
+    sqlString = allSqls['insert_account']
+    args = {
+        "accCode": accCode,
+        "accName": accCode,
+        "accType": accType,
+        "parentId": accId,
+        "accLeaf": 'S',
+        "isPrimary": False,
+        "classId": classId
+    }
+    cursor.execute(f'{searchPathSql};{sqlString}', args)
+    out = cursor.fetchone()
+    childAccId = out[0]
+    detailsData[1]['accId'] = childAccId    
+    return
 
 
 def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict):
@@ -228,10 +247,12 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict):
                 lastNo = 1
             autoRefNo = f'{branchCode}\{tranCode}\{lastNo}\{finYearId}'
             valueDict["data"][0]["autoRefNo"] = autoRefNo
+            valueDict['data'][0]['remarks'] = 'Auto subledger created'
             # for sale with autosubledger insert transaction
-            if((tranTypeId == 4) and valueDict.get('isAutoSubledger'), None):
+            if((tranTypeId == 4) and valueDict.get('isAutoSubledger', None)):
                 processForAutoSubledger(
-                    dbName=dbName,branchId=branchId, branchCode=branchCode, buCode=buCode, finYearId=finYearId, valueDict=valueDict,)
+                    dbName=dbName, branchId=branchId, branchCode=branchCode, buCode=buCode, finYearId=finYearId, cursor=cursor, valueDict=valueDict,)
+                # connection.commit()                    
 
         ret = execSqlObject(valueDict, cursor, buCode=buCode)
         sqlString = allSqls['update_last_no']
