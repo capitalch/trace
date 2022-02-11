@@ -7,7 +7,7 @@ from decimal import Decimal
 from nested_lookup import nested_lookup
 from dateutil.parser import parse
 from .sql import allSqls
-from postgres import execSql, execSqls, getPool
+from postgres import execSql, execSqlWithCursor, execSqls, getPool
 from postgresHelper import execSqlObject
 from util import getErrorMessage, getschemaSearchPath
 from app.link_client import connectToLinkServer, disconnectFromLinkServer, sendToPoint
@@ -204,7 +204,7 @@ def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='
     if(lastNo == 0):
         lastNo = 1
     accCode = f'{accId}/{branchCode}/{lastNo}/{finYearId}'
-    searchPathSql = getschemaSearchPath(buCode)
+    # searchPathSql = getschemaSearchPath(buCode)
     sqlString = allSqls['insert_account']
     args = {
         "accCode": accCode,
@@ -215,11 +215,14 @@ def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='
         "isPrimary": False,
         "classId": classId
     }
-    cursor.execute(f'{searchPathSql};{sqlString}', args)
-    out = cursor.fetchone()
-    childAccId = out[0]
-    detailsData[1]['accId'] = childAccId    
-    return
+    out = execSqlWithCursor(cursor, sqlString, args=args,
+                            isMultipleRows=False, buCode=buCode)
+    # cursor.execute(f'{searchPathSql};{sqlString}', args)
+    # out = cursor.fetchone()
+    childAccId = out[0]  # extract accId
+    detailsData[1]['accId'] = childAccId
+    valueDict['data'][0]['remarks'] = 'Auto subledger created'
+    return(lastNo, accId)
 
 
 def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict):
@@ -247,19 +250,28 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict):
                 lastNo = 1
             autoRefNo = f'{branchCode}\{tranCode}\{lastNo}\{finYearId}'
             valueDict["data"][0]["autoRefNo"] = autoRefNo
-            valueDict['data'][0]['remarks'] = 'Auto subledger created'
+
             # for sale with autosubledger insert transaction
+            autoSubledgerLastNo = 0
+            accId = 0
             if((tranTypeId == 4) and valueDict.get('isAutoSubledger', None)):
-                processForAutoSubledger(
+                autoSubledgerLastNo, accId = processForAutoSubledger(
                     dbName=dbName, branchId=branchId, branchCode=branchCode, buCode=buCode, finYearId=finYearId, cursor=cursor, valueDict=valueDict,)
-                # connection.commit()                    
+                # connection.commit()
 
         ret = execSqlObject(valueDict, cursor, buCode=buCode)
         sqlString = allSqls['update_last_no']
         if not 'id' in valueDict["data"][0]:  # for insert mode only
-            execSql(dbName, sqlString, {'lastNo': lastNo + 1, 'branchId': branchId,
-                                        'tranTypeId': tranTypeId, 'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
+            execSqlWithCursor(cursor, sqlString, {'lastNo': lastNo + 1, 'branchId': branchId,
+                                                  'tranTypeId': tranTypeId, 'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
             # also set the last no in autoSubledgerCounter table
+            if((tranTypeId == 4) and valueDict.get('isAutoSubledger', None)):
+                sqlString = 'update_last_no_auto_subledger'
+                args = {'lastNo': autoSubledgerLastNo + 1,
+                        'branchId': branchId, 'accId': accId, 'finYearId': finYearId}
+                execSqlWithCursor(cursor, sqlString, args=args,
+                                  isMultipleRows=False, buCode=buCode)
+
         connection.commit()
         return ret
     except (Exception, psycopg2.Error) as error:

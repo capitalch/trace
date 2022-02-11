@@ -1542,6 +1542,14 @@ allSqls = {
                 and "tranTypeId" = %(tranTypeId)s
     ''',
 
+    "update_last_no_auto_subledger": '''
+        update "AutoSubledgerCounter"
+        set "lastNo" = %(lastNo)s
+            where "finYearId" = %(finYearId)s 
+                and "branchId" = %(branchId)s
+                and "accId" = %(accId)s
+    ''',
+
     "update_opBal": '''
         update "AccOpBal" set "amount" = %(amount)s, "dc" = %(dc)s
                 where "id" = %(id)s

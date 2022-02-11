@@ -100,6 +100,21 @@ def execSql(dbName, sqlString, args=None, isMultipleRows=True,  autoCommitMode=F
             # print("PostgreSQL connection is closed")
     return out
 
+def execSqlWithCursor(cursor, sqlString, args=None, isMultipleRows=True,buCode='public'):
+    out = None
+    searchPathSql = getschemaSearchPath(buCode)
+    try:
+        cursor.execute(f'{searchPathSql};{sqlString}', args)
+        try: # To suck the error when cursor has no output rows
+            if isMultipleRows:
+                out = cursor.fetchall()
+            else:
+                out = cursor.fetchone()
+        except(Exception) as err:
+            out=None
+    except(Exception) as error:
+        raise Exception(getErrorMessage())
+    return out
 
 def execSqls(dbName, sqlTupleListWithArgs, buCode='public'):
     out = {}
