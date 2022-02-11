@@ -31,7 +31,3 @@ const useSubmit = (props: any) => {
 }
 
 export { useSubmit }
-
-/*
-
-*/

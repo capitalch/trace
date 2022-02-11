@@ -83,7 +83,7 @@ function SaleHeader() {
                             setRefresh({})
                             arbitraryData.salesCrownRefresh()
                         }}
-                        onFocus={(e) => e.target.select()}
+                        onFocus={(e:any) => e.target.select()}
                         value={arbitraryData.tranDate || ''}
                     />
 
@@ -128,7 +128,7 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 handleSaleVariety('r')
                                 resetAddresses()
                                 handleRetailCashBankSales()
@@ -144,7 +144,7 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 handleSaleVariety('a')
                                 resetAddresses()
                                 handleAutoSubledgerSales()
@@ -160,7 +160,7 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 handleSaleVariety('i')
                                 resetAddresses()
                                 handleInstitutionSales()

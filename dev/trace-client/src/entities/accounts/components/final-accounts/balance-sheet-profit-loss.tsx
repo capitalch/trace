@@ -1,4 +1,4 @@
-import {_,Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     Typography,
     IconButton,
@@ -39,10 +39,11 @@ function BalanceSheetProfitLoss() {
         setInBag,
         toDecimalFormat,
     } = useSharedElements()
-    const theme:Theme = useTheme()
+    const theme: Theme = useTheme()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
             () => {
                 setTimeout(() => {
@@ -52,7 +53,7 @@ function BalanceSheetProfitLoss() {
         )
         getData()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])
@@ -202,7 +203,7 @@ function BalanceSheetProfitLoss() {
                                 ? getFromBag('bsLeftExpandedKeys') || {}
                                 : getFromBag('plLeftExpandedKeys') || {}
                         }
-                        onToggle={(e) => {
+                        onToggle={(e: any) => {
                             meta.current.isBs
                                 ? setInBag('bsLeftExpandedKeys', e.value)
                                 : setInBag('plLeftExpandedKeys', e.value)
@@ -223,7 +224,7 @@ function BalanceSheetProfitLoss() {
                                         float: 'right',
                                         marginRight: '0.5rem',
                                     }}
-                                    onChange={(e) => {
+                                    onChange={(e: any) => {
                                         const val = e.target.value
                                         meta.current.isBs
                                             ? setInBag('bsLeftExpandAll', val)
@@ -308,7 +309,7 @@ function BalanceSheetProfitLoss() {
                                 ? getFromBag('bsRightExpandedKeys') || {}
                                 : getFromBag('plRightExpandedKeys') || {}
                         }
-                        onToggle={(e) => {
+                        onToggle={(e: any) => {
                             meta.current.isBs
                                 ? setInBag('bsRightExpandedKeys', e.value)
                                 : setInBag('plRightExpandedKeys', e.value)
@@ -329,7 +330,7 @@ function BalanceSheetProfitLoss() {
                                         float: 'right',
                                         marginRight: '0.5rem',
                                     }}
-                                    onChange={(e) => {
+                                    onChange={(e: any) => {
                                         const val = e.target.value
                                         meta.current.isBs
                                             ? setInBag('bsRightExpandAll', val)
@@ -380,7 +381,7 @@ function BalanceSheetProfitLoss() {
                                 width: '8rem',
                                 fontSize: '0.9rem',
                             }}
-                            // className='acc-amount'
+
                             footer={
                                 <TDiv align="right">
                                     {toDecimalFormat(
@@ -417,11 +418,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 display: 'flex',
                 flexWrap: 'wrap',
             },
-            // minWidth: '24rem',
-            // maxWidth: '40rem',
-            // display: 'inline-block',
-            // marginRight: '1rem',
-            // marginBottom: '1rem',
         },
     })
 )
@@ -443,6 +439,3 @@ const Span = styled.span`
     margin-top: 0.2rem;
     font-weight: normal;
 `
-/*
-
-*/

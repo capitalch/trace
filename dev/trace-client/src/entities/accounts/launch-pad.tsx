@@ -36,7 +36,8 @@ function LaunchPad() {
     const classes = useStyles()
     meta.current.mainHeading = getUnitHeading()
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs: any = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
             (d: any) => {
                 if (!getCurrentEntity()) {
@@ -45,13 +46,13 @@ function LaunchPad() {
                 if (d.data) {
                     setCurrentComponent(d.data)
                 }
-                meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
             }
         )
 
         return () => {
             subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

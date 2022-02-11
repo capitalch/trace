@@ -1,6 +1,5 @@
 import {
     moment,
-    useConfirm,
     useState,
     useEffect,
     useRef,
@@ -77,11 +76,12 @@ function AccountsLedgerDialog() {
     meta.current.dateFormat = getFromBag('dateFormat')
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
-            meta.current.showDialog = true
-            meta.current.accId = d.data
-            meta.current.accName = getAccountName(d.data)
+            curr.showDialog = true
+            curr.accId = d.data
+            curr.accName = getAccountName(d.data)
             setRefresh({})
         })
         const subs1 = filterOn(
@@ -89,18 +89,18 @@ function AccountsLedgerDialog() {
         ).subscribe((d: any) => {
             const { tranDate, clearDate, id1, tranTypeId } = d.data?.row
             if (isAllowedUpdate({ tranDate, clearDate })) {
-                meta.current.showChildDialog = true
-                meta.current.drillDownEditAttributes.tranHeaderId = id1
-                meta.current.drillDownEditAttributes.tranTypeId = tranTypeId
+                curr.showChildDialog = true
+                curr.drillDownEditAttributes.tranHeaderId = id1
+                curr.drillDownEditAttributes.tranTypeId = tranTypeId
                 setRefresh({})
             }
         })
         const subs2 = filterOn(
             'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG'
         ).subscribe(() => {
-            meta.current.showChildDialog = false
+            curr.showChildDialog = false
             setRefresh({})
-            if (meta.current.showDialog) {
+            if (curr.showDialog) {
                 emit(getArtifacts().gridActionMessages.fetchIbukiMessage, null) // If main dialog is open then only xx-grid fetch data
             } else {
                 emit('ROOT-WINDOW-REFRESH', '') // otherwise refresh data in root window
@@ -117,9 +117,9 @@ function AccountsLedgerDialog() {
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [])
+    }, [isAllowedUpdate])
 
     return (
         <div>
@@ -130,10 +130,9 @@ function AccountsLedgerDialog() {
                 fullWidth={true}
                 onClose={closeDialog}>
                 <DialogTitle
-                    disableTypography
                     id="generic-dialog-title"
                     className="dialog-title">
-                    <h3>{'Account: '.concat(meta.current.accName)}</h3>
+                    <div>{'Account: '.concat(meta.current.accName)}</div>
                     <IconButton
                         size="small"
                         color="default"
@@ -155,10 +154,8 @@ function AccountsLedgerDialog() {
                         specialColumns={getArtifacts().specialColumns}
                         toShowOpeningBalance={true}
                         toShowClosingBalance={true}
-                        // toShowColumnBalance={true}
                         toShowDailySummary={true}
                         toShowReverseCheckbox={true}
-                        // xGridProps={{ disableSelectionOnClick: true }}
                         jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
                     />
                 </DialogContent>
@@ -171,13 +168,11 @@ function AccountsLedgerDialog() {
                 maxWidth="xl"
                 fullWidth={true}
                 onClose={closeChildDialog}
-                // fullScreen={true}
             >
                 <DialogTitle
-                    disableTypography
                     id="generic-child-dialog-title"
                     className="dialog-title">
-                    <h3>{meta.current.childDialogTiitle}</h3>
+                    <div>{meta.current.childDialogTiitle}</div>
                     <IconButton
                         size="small"
                         color="default"
@@ -226,7 +221,7 @@ function AccountsLedgerDialog() {
                     )
                     setRefresh({})
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -243,7 +238,6 @@ function AccountsLedgerDialog() {
                 />
             )
         } else if (attrs.tranTypeId === 4) {
-            // 4: Sales, 9: sales return
             ret = <Sales saleType="sal" drillDownEditAttributes={attrs} />
         } else if (attrs.tranTypeId === 9) {
             ret = <Sales saleType="ret" drillDownEditAttributes={attrs} />

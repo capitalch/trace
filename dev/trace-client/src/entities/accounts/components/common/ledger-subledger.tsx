@@ -1,8 +1,6 @@
-import { clsx,  useState, useEffect, useRef} from '../../../../imports/regular-imports'
-
+import { clsx, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import Select, { components } from 'react-select'
 import { makeStyles, createStyles, Theme } from '../../../../imports/gui-imports'
-import { useIbuki } from '../../../../imports/trace-imports'
 
 interface LedgerSubledgerOptions {
     allAccounts: any[]
@@ -21,33 +19,33 @@ function LedgerSubledger({
     showAutoSubledgerValues,
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
-    const { emit } = useIbuki()
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const value = rowData?.accId
         if (value) {
             const item = getItemFromValue(value)
             if (['Y', 'L'].includes(item?.accLeaf)) {
                 // Leaf or ledger as auto subledger
-                meta.current.ledgerItem = {
+                curr.ledgerItem = {
                     label: item?.accName,
                     value: item?.id,
                 }
-                meta.current.subledgerItem = { label: null, value: undefined }
-                meta.current.subledgerOptions = []
+                curr.subledgerItem = { label: null, value: undefined }
+                curr.subledgerOptions = []
                 setSubledgerDisabled(true)
             } else {
                 //subledger account hence get also its parent as ledger
                 const parentItem = item && getItemFromValue(item.parentId)
-                meta.current.ledgerItem = {
+                curr.ledgerItem = {
                     label: parentItem?.accName,
                     value: parentItem?.id,
                 }
-                meta.current.subledgerOptions = getSubledgerOptions(
+                curr.subledgerOptions = getSubledgerOptions(
                     parentItem?.id
                 )
                 setSubledgerDisabled(false)
-                meta.current.subledgerItem = {
+                curr.subledgerItem = {
                     label: item?.accName,
                     value: item?.id,
                 }
@@ -55,18 +53,18 @@ function LedgerSubledger({
             computeError()
             setRefresh({})
         } else if (value === undefined) {
-            meta.current.ledgerItem = {
+            curr.ledgerItem = {
                 label: null,
                 value: undefined,
             }
-            meta.current.subledgerItem = { label: null, value: undefined }
+            curr.subledgerItem = { label: null, value: undefined }
             setRefresh({})
         }
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [rowData, ledgerAccounts, allAccounts, rowData.accId])
+    }, [ rowData.accId])
 
     const meta: any = useRef({
         isMounted: false,
@@ -149,7 +147,7 @@ function LedgerSubledger({
     }
 
     function computeError() {
-        rowData.isLedgerSubledgerError = getError()        
+        rowData.isLedgerSubledgerError = getError()
     }
 
     function getItemFromValue(val: number) {
@@ -203,7 +201,6 @@ function LedgerSubledger({
             meta.current.subledgerOptions = []
             rowData.accId = item.value
             setSubledgerDisabled(true)
-            // onChange && onChange()
         }
         onChange && onChange()
         meta.current.subledgerItem = { label: null, value: undefined }
@@ -225,11 +222,11 @@ function LedgerSubledger({
 export { LedgerSubledger }
 
 
-const useStyles: any = makeStyles((theme:Theme) =>
+const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             minWidth: theme.spacing(30),
-            width:theme.spacing(35),
+            width: theme.spacing(35),
             maxWidth: theme.spacing(50),
             border: (meta: any) => {
                 const isError = meta.current.getError()

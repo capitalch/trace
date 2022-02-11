@@ -13,6 +13,8 @@ export {
     Build,
     Cached,
     Check,
+    CheckBoxOutlineBlankSharp,
+    CheckBoxOutlined,
     Clear,
     ClearAll,
     Category,
@@ -21,6 +23,7 @@ export {
     ChevronRight,
     Contacts,
     CloseSharp,
+    
     DeleteTwoTone,
     DeleteForever,
     DeleteOutline,
@@ -63,7 +66,7 @@ export {
     Remove,
     RemoveCircleOutline,
     RemoveCircle,
-    ReportSharp,    
+    ReportSharp,
     Save,
     SaveAlt,
     Search,
@@ -89,6 +92,5 @@ export {
     ZoomIn,
     ZoomOut
 } from '@mui/icons-material'
-
 export { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export { faSpinner } from '@fortawesome/free-solid-svg-icons'

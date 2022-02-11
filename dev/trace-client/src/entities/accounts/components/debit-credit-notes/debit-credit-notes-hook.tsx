@@ -11,7 +11,7 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { MultiDataContext } from '../common/multi-data-bridge'
-import {useSharedElements} from '../common/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 
 function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
     const [, setRefresh] = useState({})
@@ -22,7 +22,8 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
         setRefresh: setRefresh,
     })
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         if (drillDownEditAttributes && !_.isEmpty(drillDownEditAttributes)) {
             // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
             drillDownEditAttributes.showChildDialog &&
@@ -30,13 +31,12 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
                     'DEBIT-CREDIT-NOTES-FETCH-DATA-ON-ID-DRILL-DOWN-EDIT',
                     drillDownEditAttributes.tranHeaderId
                 )
-            // meta.current.shouldCloseParentOnSave = true
             multiData.debitCreditNotes.shouldCloseParentOnSave = true
         }
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
-    }, [])
+    }, [multiData.debitCreditNo])
 
     useEffect(() => {
         const subs1 = filterOn('DEBIT-CREDIT-NOTES-HOOK-CHANGE-TAB').subscribe(
@@ -53,12 +53,11 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
         }
     }, [])
     const debitCreditNotesData = getFromBag('debitCreditNotesData')
-    if(debitCreditNotesData){
+    if (debitCreditNotesData) {
         multiData.debitCreditNotes = debitCreditNotesData
         setInBag('debitCreditNotesData', undefined)
     }
     function handleOnTabChange(e: any, newValue: number) {
-        // meta.current.value = newValue
         multiData.debitCreditNotes.tabValue = newValue
         if (newValue === 1) {
             emit('DEBIT-CREDIT-NOTES-VIEW-HOOK-FETCH-DATA', null)
@@ -66,7 +65,7 @@ function useDebitCreditNotes(drillDownEditAttributes: any = {}) {
         meta.current.isMounted && setRefresh({})
     }
 
-    return { handleOnTabChange, meta, multiData }
+    return {handleOnTabChange, multiData }
 }
 
 export { useDebitCreditNotes }
@@ -75,15 +74,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                color: theme.palette.common.white,
-                backgroundColor: 'dodgerBlue',
+                color: theme.palette.primary.dark,
+                backgroundColor: theme.palette.grey[200],
                 marginTop: theme.spacing(0.5),
-                '& .reset':{
-                    backgroundColor: theme.palette.amber.main,
-                    color: theme.palette.amber.contrastText,
+                '& .reset': {
+                    backgroundColor: theme.palette.blue.main,
+                    color: theme.palette.getContrastText(theme.palette.blue.main),
                     height: theme.spacing(4),
-                    margin:'auto',
-                    // marginRight: '20%'
+                    margin: 'auto',
                 }
             },
         },

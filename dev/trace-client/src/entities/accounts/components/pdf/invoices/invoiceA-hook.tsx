@@ -2,16 +2,15 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 function useInvoiceA() {
     const {
         Document,
-        // Line,
         Page,
         StyleSheet,
         toDecimalFormat,
-        // Svg,
         Text,
         View,
     } = useSharedElements()
 
     function InvoicePdf({ invoiceData }: any) {
+        console.log(JSON.stringify(invoiceData))
         const gStyles = StyleSheet.create({
             page: {
                 flexDirection: 'column',
@@ -71,7 +70,6 @@ function useInvoiceA() {
         )
 
         function HeaderBlock({ invoiceData }: any) {
-            const ii = invoiceData.invoiceInfo
             const styles = StyleSheet.create({
                 headerBlock: {
                     flexDirection: 'row',
@@ -254,10 +252,10 @@ function useInvoiceA() {
                         </Text>
                     </View>
                     <View style={styles.shippingAddressCont}>
-                        <Text style={styles.bold}> Shipping Address</Text>
+                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}> Shipping Address</Text>
                         <Text style={gStyles.normal}>
                             {''.concat(
-                                is.name ? is.name : '',
+                                is.name ? is.name + ', ' : '',
                                 is.address1 ? ' ' + is.address1 : '',
                                 is.address2 ? ' ' + is.address2 : '',
                                 is.pin ? ' Pin:' + is.pin : '',
@@ -406,7 +404,7 @@ function useInvoiceA() {
                                     gStyles.normal,
                                     { width: 6, textAlign: 'right' },
                                 ]}>
-                                {''.concat(' (', x.gstRate, ')')}
+                                {''.concat('(', x.gstRate, ')')}
                             </Text>
                             <Text
                                 style={[

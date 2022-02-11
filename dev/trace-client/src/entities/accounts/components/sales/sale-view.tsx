@@ -8,12 +8,12 @@ function SaleView({ drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getXXGridParams, meta } = useSaleView(
+    const { getXXGridParams } = useSaleView(
         arbitraryData,
         drillDownEditAttributes
     )
 
-    const { XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, XXGrid } = useSharedElements()
     const {
         columns,
         gridActionMessages,
@@ -30,8 +30,13 @@ function SaleView({ drillDownEditAttributes }: any) {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
-                title=""
+                title={
+                    arbitraryData.saleType === 'sal'
+                        ? 'Sales view'
+                        : 'Sales return view'
+                }
                 viewLimit="100"
             />
         </Box>

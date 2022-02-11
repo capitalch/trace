@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { IconButton } from '@material-ui/core'
-import Add from '@material-ui/icons/AddCircle'
-import RemoveCircleOutline from '@material-ui/icons/Cancel'
+import { IconButton } from '@mui/material'
+import Add from '@mui/icons-material/AddCircle'
+import RemoveCircleOutline from '@mui/icons-material/Cancel'
 import { ErrorDisplay } from './error-display'
 import { manageFormsState } from './fsm'
 
@@ -67,7 +67,7 @@ const Set = (props: any) => {
         const button = (
             <IconButton
                 className="x-minus"
-                onClick={(e) => {
+                onClick={(e:any) => {
                     const ret = removeItem && removeItem(index)
                     // all the controls whose names start with this set controlId are made undefined
                     ret && resetControlsInSet(formId, controlId)
@@ -82,7 +82,7 @@ const Set = (props: any) => {
         const button = (
             <IconButton
                 className="x-add"
-                onClick={(e) => {
+                onClick={(e:any) => {
                     addItem && addItem(index + 1)
                 }}>
                 <Add className="x-add-icon" color="secondary"></Add>
@@ -144,6 +144,3 @@ const Set = (props: any) => {
 }
 
 export { Set }
-
-/*
- */

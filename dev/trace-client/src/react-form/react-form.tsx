@@ -34,6 +34,7 @@ function ReactForm(props: ReactFormParams) {
     const isMounted = useRef(true)
     let formJson: any;
     Object.assign(componentStore, localStore)
+
     useEffect(() => {
         isMounted.current = true
         const doValidationsExist = formJson['validations'] && Array.isArray(formJson.validations) && (formJson.validations.length > 0)
@@ -46,7 +47,7 @@ function ReactForm(props: ReactFormParams) {
         return (() => {
             isMounted.current = false
         })
-    }, [])
+    }, [formId, name])
 
     function getForm() {
         let form
@@ -63,7 +64,7 @@ function ReactForm(props: ReactFormParams) {
                 {formJson.items && formJson.items.map((item: any, index: number) => {
                     const Tag = componentStore[item.type]
 
-                    if (initialValues /* && (Object.keys(initialValues).length > 0) */) {
+                    if (initialValues) {
                         item.value = initialValues[item.name]  // || item.value
                     }
                     let Comp =
@@ -106,7 +107,4 @@ function ReactForm(props: ReactFormParams) {
     return getForm()
 }
 
-export default ReactForm;
-/*
-
-*/
+export default ReactForm

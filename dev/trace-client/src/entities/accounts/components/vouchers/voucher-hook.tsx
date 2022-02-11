@@ -25,12 +25,12 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         setInBag,
     } = useSharedElements()
     const multiData: any = useContext(MultiDataContext)
-    // const arbitraryData: any = getFromBag(loadComponent.concat('-voucher')) //In init-code, arbitraryData is set in global bag as setInBag('journal',...), setInBag('payment',...) ...
     const arbitraryData: any = multiData.vouchers
 
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.shouldViewReload = true
         arbitraryData.shouldGoBackToView = false
         setAccounts()
@@ -71,7 +71,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
@@ -263,8 +263,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                color: theme.palette.common.white,
-                backgroundColor: theme.palette.grey[600],
+                color: theme.palette.primary.dark,
+                backgroundColor: theme.palette.grey[200],
             },
         },
     })

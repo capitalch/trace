@@ -53,12 +53,8 @@ function GenericDialoges({ loadDialog }: any) {
         loginScreenSize: meta.current.dialogConfig.loginScreenSize,
     })
     const { TraceFullWidthSubmitButton }: any = useTraceMaterialComponents()
-    // const { getUnitHeading } = utils()
     const {
-        // getLoginData,
         getCurrentEntity,
-        // setInBag,
-        // getFromBag,
         setCurrentComponent,
     } = manageEntitiesState()
     const { emit } = useIbuki()
@@ -77,10 +73,11 @@ function GenericDialoges({ loadDialog }: any) {
     const { setLastBuCodeFinYearIdBranchId, execDataCache } = initCode()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         dialogSelectLogic()[loadDialog].read()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -101,10 +98,9 @@ function GenericDialoges({ loadDialog }: any) {
                     closeDialog()
                 }}>
                 <DialogTitle
-                    disableTypography
                     id="generic-dialog-title"
                     className={classes.dialogTitle}>
-                    <h2>{meta.current.dialogConfig.title}</h2>
+                    <div>{meta.current.dialogConfig.title}</div>
                     <IconButton
                         size="small"
                         color="default"
@@ -543,62 +539,3 @@ const generalSettingsJson: any = {
         },
     ],
 }
-
-// const selectBuJson: any = {
-//     class: 'generic-dialog',
-//     items: [
-//         {
-//             type: 'TypeSelect',
-//             name: 'buCode',
-//             placeholder: 'Business units',
-//             label: 'Select business unit',
-//             options: [],
-//             validations: [
-//                 {
-//                     name: 'required',
-//                     message: 'Please select a business unit',
-//                 },
-//             ],
-//         },
-//     ],
-// }
-
-// const selectFinYearJson: any = {
-//     class: 'generic-dialog',
-//     items: [
-//         {
-//             // "type": "TypeSelect",
-//             class: 'select-fin-year',
-//             type: 'Select',
-//             name: 'id',
-//             placeholder: 'Financial years',
-//             label: 'Select financial year',
-//             options: [],
-//             validations: [
-//                 {
-//                     name: 'required',
-//                     message: 'Please select a financial year',
-//                 },
-//             ],
-//         },
-//     ],
-// }
-
-// const selectBranchJson: any = {
-//     class: 'generic-dialog',
-//     items: [
-//         {
-//             type: 'TypeSelect',
-//             name: 'id',
-//             placeholder: 'Branches',
-//             label: 'Select branch',
-//             options: [],
-//             validations: [
-//                 {
-//                     name: 'required',
-//                     message: 'Please select a branch',
-//                 },
-//             ],
-//         },
-//     ],
-// }

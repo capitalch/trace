@@ -3,14 +3,14 @@ import {
     DataTable, useState
 } from '../../../../imports/regular-imports'
 import {
-    Badge, Paper,
+    Badge,
     Button,
     Checkbox, IconButton, TextField,
     Typography,
     Chip,
 } from '../../../../imports/gui-imports'
 import {
-    AddCircle, Clear, ClearAll,
+    AddCircle, ClearAll,
     Search,
     CloseSharp,
 } from '../../../../imports/icons-import'
@@ -184,7 +184,7 @@ function SaleItems() {
                                     meta.current.isMounted && setRefresh({})
                                 }
                             }}
-                            onChange={(e) => {
+                            onChange={(e:any) => {
                                 rowData.searchFilter = e.target.value
                                 meta.current.isMounted && setRefresh({})
                             }}
@@ -205,11 +205,11 @@ function SaleItems() {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
+                            sx={{mt:1}}
                             variant='standard'
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
                                 rowData.upcCode = e.target.value
-                                // meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData?.upcCode) {
                                     debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'upcCode', value: rowData })
@@ -220,26 +220,13 @@ function SaleItems() {
                             }}
                             onKeyDown={(e: any) => {
                                 if (e.keyCode === 13) {
-                                    // if (rowData?.upcCode) {
-                                    //     searchProductOnUpcCode(rowData)
-                                    // } else {
-                                    //     clearRow(rowData)
-                                    // }
-                                    // e.target.blur()
                                 } else
                                     if (e.keyCode === 27) {
                                         rowData.upcCode = undefined
                                         meta.current.isMounted && setRefresh({})
                                     }
                             }}
-                            // onBlur={(e: any) => {
-                            //     if (meta.current.isDataChanged) {
-                            //         meta.current.isDataChanged = false
-                            //         searchProductOnUpcCode(rowData)
-                            //     }
-                            // }}
-                            onFocus={(e) => {
-                                // meta.current.isDataChanged = false
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                         />
@@ -256,12 +243,12 @@ function SaleItems() {
                     <div>
                         <NumberFormat
                             placeholder="Product code"
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.productCode ? false : true}
                             onChange={(e: any) => {
                                 rowData.productCode = e.target.value
-                                // meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
                                 if (rowData.productCode) {
                                     debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
@@ -270,20 +257,7 @@ function SaleItems() {
                                 }
                                 arbitraryData.salesCrownRefresh()
                             }}
-                            // onValueChange={(values: any) => {
-                            //     const { value } = values
-                            //     rowData.productCode = value
-                            //     // meta.current.isDataChanged = true
-                            //     meta.current.isMounted && setRefresh({})
-                            //     if (rowData.productCode) {
-                            //         debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: rowData })
-                            //     } else {
-                            //         clearRow(rowData)
-                            //     }
-                            //     arbitraryData.salesCrownRefresh()
-                            // }}
-                            onFocus={(e) => {
-                                // meta.current.isDataChanged = false
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             onKeyDown={(e: any) => {
@@ -293,23 +267,18 @@ function SaleItems() {
                                     } else {
                                         clearRow(rowData)
                                     }
-                                    // e.target.blur()
                                 } else if (e.keyCode === 27) {
                                     rowData.productCode = undefined
                                     meta.current.isMounted && setRefresh({})
                                 }
                             }}
-                            // onBlur={(e: any) => {
-                            //     if (meta.current.isDataChanged) {
-                            //         meta.current.isDataChanged = false
-                            //         searchProductOnProductCode(rowData)
-                            //     }
-                            // }}
                             value={rowData.productCode || ''}
                         />
                         {/* hsn */}
                         <NumberFormat
                             placeholder="Hsn"
+                            variant='standard'
+                            sx={{mt:1}}
                             allowNegative={false}
                             customInput={TextField}
                             error={rowData.hsn ? false : true}
@@ -318,10 +287,9 @@ function SaleItems() {
                                 rowData.hsn = value
                                 meta.current.isMounted && setRefresh({})
                                 arbitraryData.salesCrownRefresh()
-                                // emit('SALES-CROWN-REFRESH', null)
                             }}
                             value={rowData.hsn || ''}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                         />
                     </div>
                 )}
@@ -348,6 +316,7 @@ function SaleItems() {
                     <div>
                         <NumberFormat
                             allowNegative={false}
+                            variant='standard'
                             className="right-aligned-numeric"
                             error={rowData?.gstRate > 30 ? true : false}
                             customInput={TextField}
@@ -362,7 +331,7 @@ function SaleItems() {
                                 arbitraryData.salesCrownRefresh()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
@@ -391,6 +360,7 @@ function SaleItems() {
                         <NumberFormat
                             allowNegative={false}
                             className="center-aligned-numeric"
+                            variant='standard'
                             customInput={TextField}
                             error={rowData.qty ? undefined : true}
                             onValueChange={(values: any) => {
@@ -401,7 +371,7 @@ function SaleItems() {
                                 computeSummary()
                                 arbitraryData.salesCrownRefresh()
                             }}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             thousandSeparator={true}
@@ -425,6 +395,7 @@ function SaleItems() {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
+                            variant='standard'
                             fixedDecimalScale={true}
                             onChange={(e: any) => {
                                 const price = extractAmount(e.target.value)
@@ -436,22 +407,7 @@ function SaleItems() {
                                 arbitraryData.salesCrownRefresh()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            // onValueChange={(values: any) => {
-                            //     const { floatValue } = values
-                            //     rowData.price = floatValue || 0.0
-                            //     meta.current.isDataChanged = true
-                            //     // meta.current.isPriceChanged = true
-                            //     // if (meta.current.isPriceGstChanged) {
-                            //     //     meta.current.isPriceGstChanged = false
-                            //     // } else {
-                            //         setPriceGst(rowData)
-                            //     // }
-                            //     computeRow(rowData)
-                            //     computeSummary()
-                            //     arbitraryData.salesCrownRefresh()
-                            //     meta.current.isMounted && setRefresh({})
-                            // }}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
@@ -485,6 +441,7 @@ function SaleItems() {
                             allowNegative={false}
                             className="right-aligned-numeric"
                             customInput={TextField}
+                            variant='standard'
                             decimalScale={2}
                             fixedDecimalScale={true}
                             onChange={(e: any) => {
@@ -497,23 +454,8 @@ function SaleItems() {
                                 arbitraryData.salesCrownRefresh()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onValueChange={(values: any) => {
-                                // const { floatValue } = values
-                                // rowData.priceGst = floatValue || 0.0
-                                // meta.current.isDataChanged = true
-                                //     // meta.current.isPriceGstChanged = true
-                                //     // if (meta.current.isPriceChanged) {
-                                //     //     meta.current.isPriceChanged = false
-                                //     // } else {
-                                //         // setPrice(rowData) // sets the price based on priceGst and gstRate
-                                //     // }
-                                // computeRow(rowData)
-                                // computeSummary()
-                                // arbitraryData.salesCrownRefresh()
-                                // meta.current.isMounted && setRefresh({})
-                            }}
 
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
@@ -547,6 +489,7 @@ function SaleItems() {
                             className="right-aligned-numeric"
                             customInput={TextField}
                             decimalScale={2}
+                            variant='standard'
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
                                 const { floatValue } = values
@@ -557,7 +500,7 @@ function SaleItems() {
                                 arbitraryData.salesCrownRefresh()
                                 meta.current.isMounted && setRefresh({})
                             }}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                                 meta.current.isDataChanged = false
                             }}
@@ -639,14 +582,16 @@ function SaleItems() {
                             </Badge>
                             <TextField
                                 placeholder="Remarks"
+                                autoComplete='off'
                                 variant='standard'
+                                sx={{mt:1}}
                                 value={rowData.remarks || ''}
                                 onChange={(e: any) => {
                                     rowData.remarks = e.target.value
                                     arbitraryData.salesCrownRefresh()
                                     meta.current.isMounted && setRefresh({})
                                 }}
-                                onFocus={(e) => {
+                                onFocus={(e:any) => {
                                     e.target.select()
                                 }}
                             />
@@ -667,10 +612,11 @@ function SaleItems() {
                                 'right-aligned-numeric',
                                 'total-amount'
                             )}
+                            variant='standard'
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             onKeyDown={(e: any) => {

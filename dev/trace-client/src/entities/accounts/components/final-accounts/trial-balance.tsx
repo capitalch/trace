@@ -1,4 +1,4 @@
-import { _, Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { Big, InputSwitch, PrimeColumn, TreeTable, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import {
     IconButton,
     Typography,
@@ -106,7 +106,8 @@ function TrialBalance() {
         }
     }
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
             () => {
                 getData(false)
@@ -114,7 +115,7 @@ function TrialBalance() {
         )
         getData()
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])
@@ -215,7 +216,7 @@ function TrialBalance() {
                     <InputSwitch
                         checked={getFromBag('trialBalExpandAll') || false}
                         style={{ float: 'right', marginRight: '0.5rem' }}
-                        onChange={(e) => {
+                        onChange={(e: any) => {
                             const val = e.target.value
                             setInBag('trialBalExpandAll', val)
                             if (val) {
@@ -246,15 +247,12 @@ function TrialBalance() {
                 })}
             </Box>
             <TreeTable
-                // selectionMode="multiple"
-                // selection={selectedItems}
-                // onSelectionChange={(e: any) => setSelectedItems(e.value)}
                 scrollable={true}
                 scrollHeight="calc(100vh - 22rem)"
                 value={meta.current.data}
                 expandedKeys={getFromBag('trialBalExpandedKeys') || {}}
                 globalFilter={meta.current.globalFilter}
-                onToggle={(e) => {
+                onToggle={(e: any) => {
                     setInBag('trialBalExpandedKeys', e.value)
                     meta.current.isMounted && setRefresh({})
                 }}>

@@ -88,11 +88,12 @@ function SaleFooter() {
                     <NumberFormat
                         allowNegative={false}
                         className="right-aligned-numeric"
+                        variant='standard'
                         customInput={TextField}
                         decimalScale={2}
                         error={rowData.amount === 0 ? true : false}
                         fixedDecimalScale={true}
-                        onFocus={(e) => {
+                        onFocus={(e:any) => {
                             e.target.select()
                         }}
                         onValueChange={(values: any) => {
@@ -116,7 +117,7 @@ function SaleFooter() {
                 body={(rowData: any) => (
                     <TextField
                         variant="standard"
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             rowData.instrNo = e.target.value
                             arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
@@ -134,7 +135,7 @@ function SaleFooter() {
                     <TextField
                         variant="standard"
                         fullWidth={true}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             rowData.remarks = e.target.value
                             meta.current.isMounted && setRefresh({})
                         }}

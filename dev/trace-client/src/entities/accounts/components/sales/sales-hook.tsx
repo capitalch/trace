@@ -1,6 +1,5 @@
 import {
     _,
-    moment,
     useContext,
     useState,
     useEffect,
@@ -16,13 +15,13 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 
 function useSales(saleType: string, drillDownEditAttributes: any) {
     const [, setRefresh] = useState({})
-    const isoDateFormat = 'YYYY-MM-DD'
     const multiData: any = useContext(MultiDataContext)
     multiData.sales.saleType = saleType
     const { emit, filterOn, getFromBag, setInBag } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         setAccounts()
         if (drillDownEditAttributes && !_.isEmpty(drillDownEditAttributes)) {
             // showChildDialog is used to prevent firing of message when child dialog is being closed. Otherwise the message is fired and unnecessary loading is done
@@ -44,7 +43,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         })
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
         }
@@ -154,15 +153,14 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
             '& .tabs': {
-                backgroundColor: 'dodgerBlue',
-                color: theme.palette.common.white,
+                backgroundColor: theme.palette.grey[200],
+                color: theme.palette.primary.dark,
                 marginTop: theme.spacing(0.5),
                 '& .reset':{
-                    backgroundColor: theme.palette.amber.main,
-                    color: theme.palette.amber.contrastText,
+                    backgroundColor: theme.palette.blue.main,
+                    color: theme.palette.getContrastText(theme.palette.blue.main),                    
                     height: theme.spacing(4),
                     margin:'auto',
-                    // marginRight: '20%'
                 }
             },
         },
@@ -171,54 +169,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
 export { useStyles }
 
-
-    // const arbitraryData: any = useRef({
-    //     accounts: {
-    //         cashBankAccountsWithLedgers: [],
-    //         cashBankAccountsWithSubledgers: [],
-    //         debtorCreditorAccountsWithLedgers: [],
-    //         debtorCreditorAccountsWithSubledgers: [],
-    //         autoSubledgerAccounts: [],
-    //     },
-
-    //     allAccounts: [],
-    //     autoRefNo: undefined,
-    //     backCalulateAmount: 0.0,
-    //     billTo: {
-    //         id: undefined,
-    //     },
-
-    //     commonRemarks: undefined,
-    //     deletedSalePurchaseIds: [],
-    //     footer: {
-    //         items: [], // for TranD table
-    //         deletedIds: [],
-    //         amount: 0,
-    //     },
-    //     id: undefined,
-    //     isIgst: false,
-    //     isAssignmentReturn: saleType === 'ret',
-    //     isSales: saleType === 'sal',
-    //     ledgerAccounts: [],
-    //     lineItems: [], // for product details of SalePurchaseDetails table
-    //     rowData: {},
-
-    //     saleErrorMethods: {
-    //         headError: () => false,
-    //         itemsError: () => false,
-    //         footerError: () => false,
-    //         errorMethods: {
-    //             getSlNoError: () => false,
-    //         },
-    //     },
-
-    //     saleErrorObject: {},
-
-    //     saleVariety: 'r',
-    //     shipTo: {},
-    //     summary: {},
-    //     totalCredits: 0.0,
-    //     totalDebits: 0.0,
-    //     tranDate: moment().format(isoDateFormat),
-    //     isViewBack: false,
-    // })

@@ -37,9 +37,7 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                         <IconButton
                             className="print-button"
                             size="small"
-                            disabled={false}
-                            // onClick={handlePrint}
-                        >
+                            disabled={false}>
                             <PrintIcon className="print-icon" />
                         </IconButton>
                     </Tooltip>
@@ -77,7 +75,7 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                             arbitraryData.body.tranDate = e.target.value
                             meta.current.isMounted && setRefresh({})
                         }}
-                        onFocus={(e) => e.target.select()}
+                        onFocus={(e: any) => e.target.select()}
                         value={arbitraryData.body.tranDate || ''}
                     />
                     <TextField
@@ -104,7 +102,7 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                             arbitraryData.body.amount = floatValue
                             meta.current.isMounted && setRefresh({})
                         }}
-                        onFocus={(e) => e.target.select()}
+                        onFocus={(e: any) => e.target.select()}
                         thousandSeparator={true}
                         value={arbitraryData.body.amount || 0.0}
                     />
@@ -132,11 +130,11 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                             ledgerAccounts={
                                 tranType === 'dn'
                                     ? getMappedAccounts(
-                                          accounts.debtorCreditorLedgerAccounts
-                                      )
+                                        accounts.debtorCreditorLedgerAccounts
+                                    )
                                     : getMappedAccounts(
-                                          accounts.saleLedgerAccounts
-                                      )
+                                        accounts.saleLedgerAccounts
+                                    )
                             }
                             onChange={() => {
                                 // for registering error
@@ -180,11 +178,11 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                             ledgerAccounts={
                                 tranType === 'dn'
                                     ? getMappedAccounts(
-                                          accounts.purchaseLedgerAccounts
-                                      )
+                                        accounts.purchaseLedgerAccounts
+                                    )
                                     : getMappedAccounts(
-                                          accounts.debtorCreditorLedgerAccounts
-                                      )
+                                        accounts.debtorCreditorLedgerAccounts
+                                    )
                             }
                             onChange={() => {
                                 // for registering error
@@ -219,9 +217,7 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                             <IconButton
                                 className="print-button"
                                 size="small"
-                                disabled={false}
-                                // onClick={handlePrint}
-                            >
+                                disabled={false}>
                                 <PrintIcon className="print-icon" />
                             </IconButton>
                         </Tooltip>

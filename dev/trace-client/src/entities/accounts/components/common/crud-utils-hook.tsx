@@ -12,7 +12,7 @@ function useCrudUtils(meta: any) {
         ReactForm,
     } = useSharedElements()
 
-    const { clearServerError, getFormData, resetAllValidators, resetForm } =
+    const { clearServerError, getFormData, resetForm } =
         manageFormsState()
 
     function getReactFormContent(jsonText: string) {
@@ -26,11 +26,11 @@ function useCrudUtils(meta: any) {
         )
     }
 
-    async function handleSubmit(e: any,formData: any = null) {
+    async function handleSubmit(e: any, formData: any = null) {
         const pre = meta.current.dialogConfig
         const formId = pre.formId
         clearServerError(formId)
-        if(!formData){
+        if (!formData) {
             formData = getFormData(formId)
         }
         // If id field is there then server considers it as edit
@@ -89,7 +89,7 @@ function useCrudUtils(meta: any) {
                 emit('SHOW-MESSAGE', {})
                 emit(pre.ibukiFetchDataMessage, null)
             })
-            .catch(() => {}) // important to have otherwise eror
+            .catch(() => { }) // important to have otherwise eror
     }
 
     return {

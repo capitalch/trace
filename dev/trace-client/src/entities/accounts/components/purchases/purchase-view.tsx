@@ -1,20 +1,17 @@
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useContext } from '../../../../imports/regular-imports'
 import { usePurchaseView, useStyles } from './purchase-view-hook'
-// import { PurchasesContext } from './purchases-provider'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
-function PurchaseView({ purchaseType, drillDownEditAttributes }: any) {
+function PurchaseView({ purchaseType }: any) {
     const classes = useStyles()
-    // const arbitraryData: any = useContext(PurchasesContext)
     const multiData: any = useContext(MultiDataContext)
-    const { meta, getXXGridParams } = usePurchaseView(
+    const { getXXGridParams } = usePurchaseView(
         multiData.purchases,
-        purchaseType,
-        drillDownEditAttributes
+        purchaseType
     )
 
-    const { XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, XXGrid } = useSharedElements()
 
     const {
         columns,
@@ -33,8 +30,13 @@ function PurchaseView({ purchaseType, drillDownEditAttributes }: any) {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}
-                title=""
+                title={
+                    purchaseType === 'pur'
+                        ? 'Purchase view'
+                        : 'Purchase return view'
+                }
                 viewLimit="100"
             />
         </div>

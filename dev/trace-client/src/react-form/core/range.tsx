@@ -29,7 +29,7 @@ const Range = (props: any) => {
         if (setsInRange.length > 1) {
             window.scrollTo(0, 9999)
         }
-    })
+    }, [item.name])
 
     function add(index: number = setsInRange.length) {
         parent[item.name].splice(index, 0, {})
@@ -93,6 +93,3 @@ const Range = (props: any) => {
     )
 }
 export { Range }
-/*
-
-*/

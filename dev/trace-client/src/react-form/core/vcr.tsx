@@ -29,10 +29,10 @@ function VCR(props: any):any {
     setStatus()
 
     return <>
-        <button style={{ display: `${status['p']}` }} onClick={(e) => prev()}>Prev</button>
-        <button style={{ display: `${status['s']}` }} onClick={(e) => save()}>Save</button>
-        <button style={{ display: `${status['n']}` }} onClick={(e) => next()}>Next</button>
-        <button style={{ display: `${status['u']}` }} onClick={(e) => submit()}>Submit</button>
+        <button style={{ display: `${status['p']}` }} onClick={(e:any) => prev()}>Prev</button>
+        <button style={{ display: `${status['s']}` }} onClick={(e:any) => save()}>Save</button>
+        <button style={{ display: `${status['n']}` }} onClick={(e:any) => next()}>Next</button>
+        <button style={{ display: `${status['u']}` }} onClick={(e:any) => submit()}>Submit</button>
     </>
 }
 

@@ -50,9 +50,10 @@ function GenericExports() {
     })
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -275,11 +276,11 @@ function GenericExports() {
                         variant='standard'
                         type="date"
                         disabled={gstReports.selectionMode !== 'date'}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             gstReports.startDate = e.target.value
                             meta.current.isMounted && setRefresh({})
                         }}
-                        onFocus={(e) => e.target.select()}
+                        onFocus={(e:any) => e.target.select()}
                         label="Start date"
                         value={gstReports.startDate || ''}
                     />
@@ -288,11 +289,11 @@ function GenericExports() {
                         disabled={gstReports.selectionMode !== 'date'}
                         style={{ marginLeft: '1rem' }}
                         type="date"
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             gstReports.endDate = e.target.value
                             meta.current.isMounted && setRefresh({})
                         }}
-                        onFocus={(e) => e.target.select()}
+                        onFocus={(e:any) => e.target.select()}
                         label="End date"
                         value={gstReports.endDate || ''}
                         placeholder="To date"

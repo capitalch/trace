@@ -1,48 +1,71 @@
 import { useState, useEffect, useRef } from 'react'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
-import { GenericCRUD } from './components/generic-crud'
-
+// import { GenericCRUD } from './components/generic-crud'
+import { ManageUsers } from './components/manage-users'
+import { AdminManageBu } from './components/admin-manage-bu'
+import { AdminManageRoles } from './components/admin-manage-roles'
+import { AdminAssociateUsersRolesBu } from './components/admin-associate-users-roles-bu'
+import { SuperAdminManageClients } from './components/super-admin-manage-clients'
+import { SuperAdminManageEntities } from './components/super-admin-manage-entities'
+import { SuperAdminAssociateAdminUsersWithClientsAndEntities } from './components/super-admin-associate-admin-users-with-clients-and-entities'
 function LaunchPad() {
     const meta: any = useRef({
+        currentComponentName: '*',
         isMounted: false,
         output: () => null,
     })
+
     const [, setRefresh] = useState({})
-    const { getCurrentComponent, getFromBag, setInBag } = manageEntitiesState()
-    const { filterOn, emit } = usingIbuki()
+    const { setInBag } = manageEntitiesState()
+    const { filterOn } = usingIbuki()
+    const components: any = {
+        manageUsers: ManageUsers,
+        adminManageBu: AdminManageBu,
+        adminManageRoles: AdminManageRoles,
+        adminAssociateUsersRolesBu: AdminAssociateUsersRolesBu,
+        superAdminManageClients: SuperAdminManageClients,
+        superAdminManageEntities: SuperAdminManageEntities,
+        superAdminAssociateAdminUsersWithClientsAndEntities:
+            SuperAdminAssociateAdminUsersWithClientsAndEntities,
+    }
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const subs = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
             (d: any) => {
                 if (d.data) {
                     setInBag('currentComponent', d.data)
                 }
-                meta.current.isMounted && setRefresh({})
+                meta.current.currentComponentName = d.data?.componentName
+                curr.isMounted && setRefresh({})
             }
         )
         return () => {
             subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
-    function Comp() {
-        let ret = null
-        const currentComponent = getFromBag('currentComponent')
-        const loadComponent = currentComponent?.args?.loadComponent
-        loadComponent &&
-            (ret = (
-                <GenericCRUD
-                    loadComponent={
-                        currentComponent.args.loadComponent
-                    }></GenericCRUD>
-            ))
-        return ret
-    }
+    // function Comp() {
+    //     let ret = null
+    //     const currentComponent = getFromBag('currentComponent')
+    //     const loadComponent = currentComponent?.args?.loadComponent
+    //     loadComponent &&
+    //         (ret = (
+    //             <GenericCRUD
+    //                 loadComponent={
+    //                     currentComponent.args.loadComponent
+    //                 }></GenericCRUD>
+    //         ))
+    //     return ret
+    // }
+    // return <Comp></Comp>
 
-    return <Comp></Comp>
+    const CurrentComponent =
+        components[meta.current.currentComponentName] || (() => <></>)
+    return <CurrentComponent />
 }
 
 export { LaunchPad }

@@ -70,7 +70,6 @@ const graphqlService = () => {
         }
         return clientStore['client']
     }
-
     const queryGraphql = async (q: string) => {
         const client = getClient()
         let ret: any
@@ -78,8 +77,14 @@ const graphqlService = () => {
             ret = await client.query({
                 query: q,
             })
-        } catch (e) {
+        } catch (e:any) {
             console.log(e)
+            let err = String(e)
+            if(err.includes(':')){
+                const arr = err.split(':')
+                e.message = arr.pop()
+            }
+            throw(e)
         }
         return ret
     }
@@ -97,6 +102,3 @@ const graphqlService = () => {
 }
 
 export { graphqlService }
-/*
-
-*/

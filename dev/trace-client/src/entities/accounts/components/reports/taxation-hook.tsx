@@ -1,5 +1,4 @@
 import {
-    _,
     moment,
     PrimeColumn,
     DataTable,
@@ -22,9 +21,10 @@ function useTaxation() {
         useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -148,20 +148,13 @@ function useTaxation() {
                     header="Input"
                     key={incr()}
                     style={{ width: '4rem' }}
-                    // field={isInput}
                     footer=""
                 />,
             ]
             function actionTemplate(node: any) {
                 return (
                     <IconButton
-                        color="secondary"
-                        onClick={(e: any) => {
-                            // emit('LOAD-MAIN-COMPONENT-EDIT', {
-                            //     headerId: node.headerId,
-                            // })
-                            // closeDialog()
-                        }}>
+                        color="secondary">
                         {node.headerId && (
                             <Search
                                 style={{
@@ -207,7 +200,6 @@ function useTaxation() {
                 igst: toDecimalFormat(item.igst),
             }
         })
-        // console.log(JSON.stringify(meta.current.data))
         meta.current.isMounted && setRefresh({})
     }
 
@@ -237,12 +229,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     fontSize: '0.8rem',
                     alignText: 'right',
                     fontWeight: 'normal',
-                    // marginRight: '-1rem'
-                    // position: 'relative',
                 },
-                // '& .right-aligned': {
-                //     textAlign: 'right'
-                // }
             },
         },
     })

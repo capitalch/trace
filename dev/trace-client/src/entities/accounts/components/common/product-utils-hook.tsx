@@ -6,11 +6,9 @@ import {
     ListItemText,
     ListItemAvatar,
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
 function useProductUtils(
     meta: any,
     afterSelectProduct: any = () => { },
-    setError = () => { },
 ) {
     const [, setRefresh] = useState({})
     const {
@@ -48,7 +46,7 @@ function useProductUtils(
                 }
                 meta.current.isMounted && setRefresh({})
             }
-        } catch (e) {
+        } catch (e: any) {
             console.log(e)
         }
         emit('SHOW-LOADING-INDICATOR', false)

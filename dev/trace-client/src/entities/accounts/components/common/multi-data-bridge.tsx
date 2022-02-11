@@ -32,7 +32,6 @@ function getSalesArbitraryData() {
         ledgerAccounts: [],
         lineItems: [], // for product details of SalePurchaseDetails table
         rowData: {},
-        // rawSaleData: null,
         saleErrorMethods: {
             headError: () => false,
             itemsError: () => false,
@@ -129,8 +128,6 @@ function getVouchersArbitraryData() {
         debits: [{ key: 0 }],
         credits: [{ key: 0 }],
     }
-    // return (JSON.parse(JSON.stringify(temp)))
-    // return(temp)
 }
 
 export {

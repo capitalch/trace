@@ -1,28 +1,33 @@
 import {
-    _,
     PrimeDialog,
     moment,
     useState,
 } from '../../../../imports/regular-imports'
-import { Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography } from '../../../../imports/gui-imports'
 import {
-    CloseSharp,
-    Preview,
-} from '../../../../imports/icons-import'
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Tooltip,
+    Typography,
+} from '../../../../imports/gui-imports'
+import { CloseSharp, Preview } from '../../../../imports/icons-import'
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
-import {PdfLedger} from '../pdf/ledgers/pdf-ledger'
+import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const { handleLedgerDialogClose, handleLedgerPreview, meta } = useGeneralLedger(getArtifacts)
+    const { handleLedgerDialogClose, handleLedgerPreview, meta } =
+        useGeneralLedger(getArtifacts)
 
     const {
         accountsMessages,
         emit,
         getAccountName,
+        getGridReportSubTitle,
         LedgerSubledger,
         PDFViewer,
         toDecimalFormat,
@@ -31,18 +36,21 @@ function GeneralLedger() {
     return (
         <div className={classes.content}>
             <div className="header">
-
                 <Typography variant="h6" className="heading" component="span">
                     {meta.current.accName}
                 </Typography>
 
                 <div className="select-ledger">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                        }}>
                         <Typography component="label" variant="subtitle2">
                             Select ledger account
                         </Typography>
-                        <Tooltip
-                            title="Print preview">
+                        <Tooltip title="Print preview">
                             <IconButton
                                 size="small"
                                 disabled={false}
@@ -68,14 +76,16 @@ function GeneralLedger() {
                             }
                             if (meta.current.accId) {
                                 emit(
-                                    getArtifacts().gridActionMessages.fetchIbukiMessage,
+                                    getArtifacts().gridActionMessages
+                                        .fetchIbukiMessage,
                                     meta.current.sqlQueryArgs
                                 )
                             } else {
                                 emit('XX-GRID-RESET', null)
                             }
                             meta.current.isMounted && setRefresh({})
-                        }} />
+                        }}
+                    />
                 </div>
             </div>
 
@@ -90,8 +100,9 @@ function GeneralLedger() {
                     summaryColNames={getArtifacts().summaryColNames}
                     sqlQueryId="get_accountsLedger"
                     sqlQueryArgs={meta.current.sqlQueryArgs}
+                    subTitle={getGridReportSubTitle()}
                     specialColumns={getArtifacts().specialColumns}
-                    title="Ledger view"
+                    title={''.concat('Ledger view: ', meta.current.accName || '')}
                     toShowOpeningBalance={true}
                     toShowColumnBalanceCheckBox={true}
                     toShowClosingBalance={true}
@@ -127,7 +138,12 @@ function GeneralLedger() {
                 </DialogTitle>
                 <DialogContent>
                     <PDFViewer showToolbar={true} width={840} height={600}>
-                        <PdfLedger ledgerData={meta.current.sharedData.filteredRows} accName={meta.current.accName} />
+                        <PdfLedger
+                            ledgerData={
+                                meta.current.sharedData.filteredRows || []
+                            }
+                            accName={meta.current.accName}
+                        />
                     </PDFViewer>
                 </DialogContent>
             </Dialog>
@@ -225,7 +241,6 @@ function GeneralLedger() {
         const specialColumns = {
             isEdit: true,
             isDelete: true,
-
         }
         const gridActionMessages = {
             fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-GENERAL-LEDGER-DATA',

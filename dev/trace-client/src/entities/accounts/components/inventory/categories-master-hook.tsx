@@ -22,7 +22,6 @@ function useCategoriesMaster() {
         },
     })
 
-
     const {
         getFromBag,
         setInBag

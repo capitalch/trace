@@ -1,17 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { manageFormsState } from './fsm'
 import clsx from 'clsx'
-import { Check } from '@material-ui/icons'
 
 import {
     Tabs,
     Tab,
-    Box,
-    Typography,
-    Paper,
     Card,
-    Icon,
-} from '@material-ui/core'
+} from '@mui/material'
 
 function TabsMaterial({
     arbitraryData,
@@ -28,14 +23,13 @@ function TabsMaterial({
     })
 
     const [, setRefresh] = useState({})
-    const { getUseIbuki, initField } = manageFormsState()
-    const usingIbuki = getUseIbuki()
-    const { filterOn } = usingIbuki()
+    const { initField } = manageFormsState()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -62,9 +56,9 @@ function TabsMaterial({
                 }}>
                 {itemCount > 0 &&
                     item.items.map((it: any, index: number) => {
-                        const isError: boolean =
-                            arbitraryData[it?.tabName || '']?.isError ||
-                            arbitraryData[it?.tabName || '']?.summary?.isError
+                        // const isError: boolean =
+                        //     arbitraryData[it?.tabName || '']?.isError ||
+                        //     arbitraryData[it?.tabName || '']?.summary?.isError
                         return (
                             <Tab
                                 label={it.tabLabel || it.label}

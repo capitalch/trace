@@ -13,7 +13,7 @@ import {
     createStyles,
     TextareaAutosize,
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
+import {} from '../../../../imports/icons-import'
 import { useProductUtils } from '../common/product-utils-hook'
 import { useSharedElements } from '../common/shared-elements-hook'
 
@@ -21,23 +21,27 @@ function useSaleItems(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const lineItems = arbitraryData.lineItems
 
-    const { confirm,  messages, debounceFilterOn } = useSharedElements()
+    const { confirm, messages, debounceFilterOn } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.saleErrorMethods.errorMethods.getSlNoError = getSlNoError
-        arbitraryData.saleItemsRefresh = () => { setRefresh({}) }
-        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE',1200).subscribe((d: any) => {
-            arbitraryData.salesCrownRefresh()
-            if (d.data.source === 'upcCode') {
-                searchProductOnUpcCode(d.data.value)
-            } else if (d.data.source === 'productCode') {
-                searchProductOnProductCode(d.data.value)
+        arbitraryData.saleItemsRefresh = () => {
+            setRefresh({})
+        }
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(
+            (d: any) => {
+                arbitraryData.salesCrownRefresh()
+                if (d.data.source === 'upcCode') {
+                    searchProductOnUpcCode(d.data.value)
+                } else if (d.data.source === 'productCode') {
+                    searchProductOnProductCode(d.data.value)
+                }
             }
-
-        })
+        )
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])
@@ -52,7 +56,7 @@ function useSaleItems(arbitraryData: any) {
         dialogConfig: {
             title: '',
             content: () => <></>,
-            actions: () => { },
+            actions: () => {},
         },
     })
 
@@ -95,14 +99,6 @@ function useSaleItems(arbitraryData: any) {
         const discount = rowData.discount
         const qty = rowData.qty
         let amount, gst, sgst, cgst
-        // if(meta.current.isPriceChanged){
-        //     priceGst = price * (1 + gstRate / 100)
-        //     rowData.priceGst = priceGst
-        // }
-        // if(meta.current.isPriceGstChanged){
-        //     price = priceGst / (1 + gstRate / 100)
-        //     rowData.price = price
-        // }
         if (priceGst) {
             price = priceGst / (1 + gstRate / 100)
             rowData.price = price
@@ -136,7 +132,6 @@ function useSaleItems(arbitraryData: any) {
             const summ = arbitraryData.summary
             summ.amount = 0.0
             summ.count = 0.0
-            // summ.discount = 0.0
             summ.qty = 0.0
             summ.cgst = 0
             summ.sgst = 0
@@ -150,9 +145,6 @@ function useSaleItems(arbitraryData: any) {
                     prev.cgst = +Big(curr.cgst || 0).plus(Big(prev.cgst || 0))
                     prev.sgst = +Big(curr.sgst || 0).plus(Big(prev.sgst || 0))
                     prev.igst = +Big(curr.igst || 0).plus(Big(prev.igst || 0))
-                    // prev.discount = +Big(curr.discount || 0).plus(
-                    //     Big(prev.discount || 0)
-                    // )
                     prev.qty = +Big(curr.qty).plus(Big(prev.qty))
                     return prev
                 },
@@ -168,7 +160,6 @@ function useSaleItems(arbitraryData: any) {
         }
         meta.current.isMounted && setRefresh({})
         arbitraryData.salesCrownRefresh()
-        // emit('SALES-CROWN-REFRESH', null)
     }
 
     function getEmptyRowData() {
@@ -282,7 +273,7 @@ function useSaleItems(arbitraryData: any) {
                     <TextareaAutosize
                         autoFocus={true}
                         className="serial-number"
-                        rowsMin={5}
+                        minRows={5}
                         onChange={(e: any) => {
                             met.current.slNo = e.target.value
                             processCount()

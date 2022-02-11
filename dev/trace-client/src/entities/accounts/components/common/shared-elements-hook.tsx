@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
-import { Document,BlobProvider, Line, Page,pdf,PDFViewer, StyleSheet, Svg, Text,usePDF, View, } from '@react-pdf/renderer'
+import { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
 import {
     globalMessages,
     graphqlService,
@@ -11,7 +11,6 @@ import {
     queries,
     ReactForm,
     useIbuki,
-    usingIbuki,
     useTraceGlobal,
     useTraceMaterialComponents,
     XXGrid,
@@ -48,18 +47,17 @@ function useSharedElements() {
     } = manageFormsState()
     const { doValidateForm, isValidForm } = getValidationFabric()
     const {
-        execGenericView,  
+        execGenericView,
         extractAmount,
         getDateMaskMap,
-        
         genericUpdateMaster,
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
         numberToWordsInRs,
-        saveForm,        
+        saveForm,
         sendEmail,
-        sendSms,      
+        sendSms,
         toDecimalFormat,
     } = utilMethods()
     const { hotEmit, hotFilterOn, emit, filterOn, debounceEmit, debounceFilterOn } = useIbuki()
@@ -77,6 +75,7 @@ function useSharedElements() {
         getAccountClass,
         getAccountName,
         getAccountClassWithAutoSubledger,
+        getGridReportSubTitle,
         getMappedAccounts,
         getTranType,
         getUnitHeading,
@@ -124,7 +123,7 @@ function useSharedElements() {
         getFromBag,
         getFormData,
         getFormObject,
-        // getGeneralLedger,
+        getGridReportSubTitle,
         getLoginData,
         getMappedAccounts,
         getTranType,

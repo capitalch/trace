@@ -1,5 +1,6 @@
 import { clsx, useConfirm, useState } from '../imports/regular-imports'
 import {
+    Box,
     Button,
     IconButton,
     Input,
@@ -7,10 +8,12 @@ import {
     DialogActions,
     DialogTitle,
     DialogContent,
+    InputAdornment,
     makeStyles,
+    Theme,
     createStyles,
     TextField,
-    InputAdornment,
+    useTheme,
 } from '../imports/gui-imports'
 
 import {
@@ -22,7 +25,7 @@ import {
 import messages from '../messages.json'
 
 function useTraceMaterialComponents() {
-    const classes = useStyles()
+    // const classes = useStyles()
     const [, setRefresh] = useState({})
     const confirm = useConfirm()
 
@@ -41,15 +44,16 @@ function useTraceMaterialComponents() {
         return (
             <Dialog
                 fullWidth={true}
-                className={classes.dialog}
-                {...options.materialDialogProps}                
+                sx={styles.dialog}
+                // className={classes.dialog}
+                {...options.materialDialogProps}
                 open={options.meta.current.showDialog}
                 onClose={options.onClose || handleClose}>
-                <DialogTitle
-                    disableTypography
-                    id="generic-dialog-title"
-                    className="dialog-title">
-                    <h3>{pre.title}</h3>
+                <DialogTitle id="generic-dialog-title" className="dialog-title">
+                    <Box sx={{display:'flex', flexDirection:'column'}}>
+                        <Box>{pre.title}</Box>
+                        <Box sx={{fontSize:14,}}>{pre.subTitle || ''}</Box>
+                    </Box>
                     <IconButton
                         size="small"
                         color="default"
@@ -58,7 +62,10 @@ function useTraceMaterialComponents() {
                         <CloseSharp />
                     </IconButton>
                 </DialogTitle>
-                <DialogContent className={classes.dialogContent}>
+                <DialogContent
+                    sx={styles.dialogContent}
+                // className={classes.dialogContent}
+                >
                     {pre.isSearchBox && (
                         <Input
                             autoFocus={true}
@@ -68,7 +75,7 @@ function useTraceMaterialComponents() {
                                 options.meta.current?.dialogConfig
                                     ?.searchBoxFilter || ''
                             }
-                            onChange={(e) => {
+                            onChange={(e: any) => {
                                 pre.searchBoxFilter = e.target.value
                                 options.onSearchBoxFilter &&
                                     options.onSearchBoxFilter()
@@ -82,7 +89,7 @@ function useTraceMaterialComponents() {
                             endAdornment={
                                 <IconButton
                                     size="small"
-                                    onClick={(e) => {
+                                    onClick={(e: any) => {
                                         pre.searchBoxFilter = ''
                                         options.onSearchBoxFilter &&
                                             options.onSearchBoxFilter()
@@ -97,7 +104,9 @@ function useTraceMaterialComponents() {
                     <br />
                     <options.meta.current.dialogConfig.content />
                 </DialogContent>
-                <DialogActions className={classes.dialogActions}>
+                <DialogActions
+                // className={classes.dialogActions}
+                >
                     {options.meta.current.dialogConfig.actions()}
                 </DialogActions>
             </Dialog>
@@ -113,7 +122,11 @@ function useTraceMaterialComponents() {
         onClick,
         disabled,
         style = {},
-    }: any) {
+    }: {
+        onClick: any
+        disabled?: boolean
+        style?: any
+    }) {
         const btn = (
             <Button
                 style={{ ...style }}
@@ -121,7 +134,8 @@ function useTraceMaterialComponents() {
                 fullWidth
                 variant="contained"
                 startIcon={<Save></Save>}
-                className={classes.submitButtonStyle}
+                sx={styles.submitButtonStyle}
+                // className={classes.submitButtonStyle}
                 color="secondary"
                 onClick={onClick}>
                 Submit
@@ -134,7 +148,7 @@ function useTraceMaterialComponents() {
         return (
             <TextField
                 id="global-search-field"
-                variant='standard'
+                variant="standard"
                 value={meta.current.globalFilter}
                 placeholder="Global search"
                 InputProps={{
@@ -147,7 +161,7 @@ function useTraceMaterialComponents() {
                         <InputAdornment position="end">
                             <IconButton
                                 size="small"
-                                onClick={(e) => {
+                                onClick={(e: any) => {
                                     meta.current.globalFilter = ''
                                     meta.current.isMounted && setRefresh({})
                                 }}>
@@ -157,7 +171,7 @@ function useTraceMaterialComponents() {
                         </InputAdornment>
                     ),
                 }}
-                onChange={(e) => {
+                onChange={(e: any) => {
                     meta.current.globalFilter = e.target.value
                     meta.current.isMounted && setRefresh({})
                 }}></TextField>
@@ -177,7 +191,11 @@ function useTraceMaterialComponents() {
     function TraceSearchBox(options: SearchBoxOptions) {
         const [, setRefresh] = useState({})
         return (
-            <div className={clsx(classes.searchBox, options.className)}>
+            <Box
+                sx={styles.searchBox}
+                className={options.className}
+            // className={clsx(classes.searchBox, options.className)}
+            >
                 <TextField
                     className="input-box"
                     autoFocus={true}
@@ -189,7 +207,7 @@ function useTraceMaterialComponents() {
                             handleSearchButtonClick()
                         }
                     }}
-                    onChange={(e) => {
+                    onChange={(e: any) => {
                         options.meta.current.searchFilter = e.target.value
                         options.meta.current.searchResult = ''
                         options.meta.current.isMounted && setRefresh({})
@@ -205,7 +223,7 @@ function useTraceMaterialComponents() {
                             <InputAdornment position="start">
                                 <IconButton
                                     size="small"
-                                    onClick={(e) => {
+                                    onClick={(e: any) => {
                                         options.meta.current.searchFilter = ''
                                         options.meta.current.isMounted &&
                                             setRefresh({})
@@ -228,7 +246,7 @@ function useTraceMaterialComponents() {
                     endIcon={<PageviewTwoTone />}>
                     Search
                 </Button>
-            </div>
+            </Box>
         )
 
         function handleSearchButtonClick() {
@@ -254,47 +272,86 @@ function useTraceMaterialComponents() {
 }
 export { useTraceMaterialComponents }
 
-const useStyles: any = makeStyles((theme:any) =>
-    createStyles({
-        content: {},
-
-        dialog: {
-            '& .dialog-title': {
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingBottom: '0px',
-                paddingRight: theme.spacing(2.0),
-            },
-
-            '& .MuiInputBase-root': {
-                width: theme.spacing(50),
-                marginBottom: theme.spacing(2),
-            },
+const styles = {
+    dialog: {
+        '& .dialog-title': {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingBottom: '0px',
+            paddingRight: 2.0, // useTheme().spacing(2.0),
         },
 
-        dialogContent: {
-            '& .serial-number': {
-                width: '100%',
-            },
+        '& .MuiInputBase-root': {
+            width: 50, //useTheme().spacing(50),
+            marginBottom: 2, // useTheme().spacing(2),
         },
+    },
 
-        submitButtonStyle: {
-            marginLeft: theme.spacing(2),
-            marginTop: -theme.spacing(1),
-            marginRight: theme.spacing(2),
+    dialogContent: {
+        '& .serial-number': {
+            width: '100%',
         },
+    },
 
-        searchBox: {
-            '& .search-button': {
-                marginLeft: theme.spacing(2),
-            },
-        },
+    submitButtonStyle: {
+        marginLeft: 2, //useTheme().spacing(2),
+        marginTop: -4, //-useTheme().spacing(1),
+        marginRight: 2, //useTheme().spacing(2),
+    },
 
-        traceNumeric: {
-            '& input': {
-                textAlign: 'end',
-            },
+    searchBox: {
+        '& .search-button': {
+            marginLeft: 2, //useTheme().spacing(2),
         },
-    })
-)
+    },
+
+    traceNumeric: {
+        '& input': {
+            textAlign: 'end',
+        },
+    },
+}
+
+// const useStyles: any = makeStyles((theme: Theme) =>
+//     createStyles({
+//         dialog: {
+//             '& .dialog-title': {
+//                 display: 'flex',
+//                 justifyContent: 'space-between',
+//                 alignItems: 'center',
+//                 paddingBottom: '0px',
+//                 paddingRight: useTheme().spacing(2.0),
+//             },
+
+//             '& .MuiInputBase-root': {
+//                 width: useTheme().spacing(50),
+//                 marginBottom: useTheme().spacing(2),
+//             },
+//         },
+
+//         dialogContent: {
+//             '& .serial-number': {
+//                 width: '100%',
+//             },
+//         },
+
+//         submitButtonStyle: {
+//             marginLeft: useTheme().spacing(2),
+//             marginTop: -useTheme().spacing(1),
+//             marginRight: useTheme().spacing(2),
+//         },
+
+//         searchBox: {
+//             '& .search-button': {
+//                 marginLeft: useTheme().spacing(2),
+//             },
+//         },
+
+//         traceNumeric: {
+//             '& input': {
+//                 textAlign: 'end',
+//             },
+//         },
+//     })
+// )

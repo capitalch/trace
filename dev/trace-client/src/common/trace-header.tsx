@@ -1,5 +1,6 @@
-import { clsx, useState, useEffect } from '../imports/regular-imports'
+import { clsx, useEffect } from '../imports/regular-imports'
 import {
+    Alert,
     makeStyles,
     createStyles,
     Snackbar,
@@ -11,39 +12,40 @@ import {
     Chip,
     Dialog,
     Theme,
-    useTheme,
 } from '../imports/gui-imports'
 
 import { ArrowDropDownSharp, Menu } from '../imports/icons-import'
-import {manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
+import { manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import menu from '../data/data-menu.json'
 import '../entities/authentication/initialize-react-form'
 import { useTraceHeader } from './trace-header-hook'
 
 function TraceHeader({ open, handleDrawerOpen }: any) {
     const { filterOn, emit } = useIbuki()
-    const { getLoginData, setLoginData, setCurrentEntity, resetBag }: any =
+    const { getLoginData, setCurrentEntity, resetBag }: any =
         manageEntitiesState() //login data is independent of any entity
-    const [, setRefresh] = useState({})
-    const { getFromBag } = manageEntitiesState()
+    const { isMediumSizeUp } = useTraceGlobal()
+    
     const {
-        Alert,
         closeDialog,
         doLogin,
         handleClose,
         handleEntityClicked,
         isUserLoggedIn,
         meta,
+        setRefresh,
         shortCircuit,
         showDialogMenu,
         snackbar,
         submitDialog,
-    } = useTraceHeader({ setRefresh })
-    const theme = useTheme()
+    } = useTraceHeader()
 
+    const classes = useStyles({
+        loginScreenSize: meta.current.dialogConfig.loginScreenSize,
+    })
     //Inactivity timeout auto log out
-    const generalSettings = getFromBag('generalSettings')
-    const autoLogoutTime = generalSettings?.['autoLogoutTimeInMins']
+    // const generalSettings = getFromBag('generalSettings')
+    // const autoLogoutTime = generalSettings?.['autoLogoutTimeInMins']
 
     // useIdleTimer({
     //     timeout: 1000 * 60 * autoLogoutTime || 1000 * 50 * 20,
@@ -53,28 +55,27 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     //     debounce: 500
     // })
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
-    const { isMediumSizeUp } = useTraceGlobal()
+
+    
     if (isMediumSizeUp) {
         meta.current.dialogConfig.loginScreenSize = '360px'
     } else {
         meta.current.dialogConfig.loginScreenSize = '290px'
     }
-    const classes = useStyles({
-        loginScreenSize: meta.current.dialogConfig.loginScreenSize,
-    }) //{width: '620px'}
 
     useEffect(() => {
-        meta.current.isMounted = true
-        meta.current.menuHead = menu
+        const curr = meta.current
+        curr.isMounted = true
+        curr.menuHead = menu
         const subs: any = filterOn('TRACE-HEADER-LOAD-MENU').subscribe(() => {
-            meta.current.menuHead = menu
+            curr.menuHead = menu
             shortCircuit() // This line is for doing autologin for demo mode
-            meta.current.isMounted && setRefresh({})
+            curr.isMounted && setRefresh({})
         })
 
         const subs1: any = filterOn('LOGIN-SUCCESSFUL').subscribe((d: any) => {
-            meta.current.uid = d.data
-            meta.current.isMounted && setRefresh({})
+            curr.uid = d.data
+            curr.isMounted && setRefresh({})
         })
         const subs2: any = filterOn('SHOW-MESSAGE').subscribe((d: any) => {
             snackbar.current.open = true
@@ -83,18 +84,18 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 d.data.message || 'Operation was successful'
             snackbar.current.duration =
                 d.data.duration !== undefined ? d.data.duration : 4000
-            meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
         })
 
         const subs3: any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(
-            (d:any) => {
+            () => {
                 // Only doing refresh, because by now the datacache is already loaded. This code is for autoLogout execution. The autoLogoutTimeInMins is tal=ken from generalSettings of global bag which is populated in initcode datacache
-                setRefresh({})
+                curr.isMounted && setRefresh({})
             }
         )
 
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs.unsubscribe()
             subs1.unsubscribe()
             subs2.unsubscribe()
@@ -138,7 +139,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                                 size="large"
                                 className={classes.appBarButton}
                                 key={index}
-                                onClick={(e) => {
+                                onClick={(e: any) => {
                                     handleEntityClicked(item)
                                 }}>
                                 {item.label}
@@ -161,7 +162,9 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     classes={{ endIcon: classes.loginButtonEndIcon }} //this is over riding. endIcon name is taken from material api documentation of Button
                     endIcon={<ArrowDropDownSharp></ArrowDropDownSharp>}
                     onClick={handleLoginClick}>
-                    {meta.current.uid ? (
+                    {
+                    meta.current.uid ? 
+                    (
                         <Chip
                             className={classes.loginButtonChip}
                             size="small"
@@ -179,7 +182,8 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                             }></Chip>
                     ) : (
                         'Login'
-                    )}
+                    )
+                    }
                 </Button>
             )
         }
@@ -187,7 +191,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     }
 
     return (
-        <Toolbar>
+         <Toolbar>
             <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -202,7 +206,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     // for adjustment of dialog size as per viewport
                     paper: classes.dialogPaper,
                 }}
-                onKeyDown={(e) => {
+                onKeyDown={(e: any) => {
                     if (e.key === 'Escape') {
                         closeDialog()
                     } else if (e.key === 'Enter') {
@@ -219,7 +223,6 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 {meta.current.dialogConfig.dialogContent}
                 {meta.current.dialogConfig.dialogActions}
             </Dialog>
-
             <Snackbar
                 style={{ bottom: '0.6rem', right: '0.5rem' }}
                 anchorOrigin={{
@@ -229,13 +232,13 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 open={snackbar.current.open}
                 autoHideDuration={snackbar.current.duration}
                 onClose={handleClose}>
-                <Alert
+                <Alert variant='filled'
                     onClose={handleClose}
                     severity={snackbar.current.severity}>
                     {snackbar.current.message}
                 </Alert>
             </Snackbar>
-        </Toolbar>
+         </Toolbar>
     )
 }
 export { TraceHeader }
@@ -274,6 +277,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
     })
 )
 
-/*
-
-*/

@@ -68,7 +68,6 @@ function TraceLeft({ open, matches, handleDrawerClose }: any) {
             meta.current.data = meta.current.data1
             setRefresh({})
         })
-        // subs.add(subs1).add(subs2)
         return () => {
             subs.unsubscribe()
             subs1.unsubscribe()

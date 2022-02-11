@@ -96,12 +96,13 @@ const iconMap: any = {
     manageUsers: <Contacts></Contacts>,
     manageBu: <AcUnit></AcUnit>,
     manageRoles: <People></People>,
-    associateBusinessUsersWithRolesAndBu: <Toc></Toc>,
+    // associateBusinessUsersWithRolesAndBu: <Toc></Toc>,
+    adminAssociateUsersRolesBu: <Toc></Toc>,
 
     // Super admin menu
     manageClients: <AccountTree />,
     manageEntities: <Domain></Domain>,
-    associateAdminUserWithClientAndEntity: (
+    associateUsersWithClientsAndEntities: (
         <DeveloperBoard></DeveloperBoard>
     ),
 

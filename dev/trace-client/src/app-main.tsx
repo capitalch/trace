@@ -1,8 +1,7 @@
 import { clsx, useEffect, useState } from './imports/regular-imports'
 import 'fontsource-roboto'
-import { createStyles, makeStyles } from './imports/gui-imports'
-import { Theme } from '@material-ui/core/styles'
-import {Box,  CssBaseline, AppBar } from './imports/gui-imports'
+import { createStyles, makeStyles, Theme } from './imports/gui-imports'
+import { Box, AppBar } from './imports/gui-imports'
 import {
     TraceLoadingIndicator,
     useIbuki,
@@ -28,8 +27,8 @@ function AppMain() {
     useEffect(() => {
         try {
             emit('TRACE-HEADER-LOAD-MENU', null)
-        } catch (exception) {}
-        return () => {}
+        } catch (exception) { }
+        return () => { }
     }, [])
 
     function handleDrawerOpen() {
@@ -37,7 +36,6 @@ function AppMain() {
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(true)
     }
-
 
     function handleDrawerClose() {
         setInGlobalBag('isDrawyerOpen', false)
@@ -47,7 +45,6 @@ function AppMain() {
 
     return (
         <Box className={classes.root}>
-            <CssBaseline />
             {/* header */}
             <AppBar
                 position="fixed"

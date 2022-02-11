@@ -26,7 +26,7 @@ function LedgerSubledgerCascade({
                 optionGroupChildren={['subledgers']}
                 style={{ minWidth: '14rem' }}
                 placeholder={'All parties'}
-                onChange={(e) => {
+                onChange={(e: any) => {
                     if (!e.value?.id) {
                         rowData.selectedAccount = undefined
                     } else {
@@ -37,10 +37,9 @@ function LedgerSubledgerCascade({
                 }}
                 onGroupChange={async (e: any) => {
                     if (e.value?.accLeaf === 'Y') {
-                        rowData.selectedAccount = e.value                        
+                        rowData.selectedAccount = e.value
                         e.value.subledgers = getSubledgers(e.value.id)
                         onSelectionChange && onSelectionChange()
-                        // setRefresh({})
                     } else {
                         e.value.subledgers = getSubledgers(e.value.id)
                     }

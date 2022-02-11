@@ -6,16 +6,11 @@ import { SaleHeader } from './sale-header'
 import { SaleItems } from './sale-items'
 import { SaleFooter } from './sale-footer'
 import { SaleView } from './sale-view'
-import { InvoiceA } from '../pdf/invoices/invoiceA'
-// import { useReactToPrint } from 'react-to-print'
-// import pspdfkit from 'pspdfkit'
-import { useRef } from 'react'
-// import axios from 'axios'
 
 function Sales({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
-    const { pdf, PDFViewer, emit, setInBag } = useSharedElements()
-    const { multiData, handleChangeTab, meta } = useSales(
+    const { emit, setInBag } = useSharedElements()
+    const { multiData, handleChangeTab, } = useSales(
         saleType,
         drillDownEditAttributes
     )
@@ -43,12 +38,6 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
                     }}>
                     Reset
                 </Button>
-                {/* <Button
-                    variant="contained"
-                    onClick={handlePdfPrint}
-                    color="primary">
-                    Print
-                </Button> */}
             </Tabs>
             <div hidden={multiData.sales.tabValue !== 0}>
                 <SaleHeader />
@@ -63,42 +52,8 @@ function Sales({ saleType, drillDownEditAttributes }: any) {
             <div hidden={multiData.sales.tabValue !== 3}>
                 <SaleView drillDownEditAttributes={drillDownEditAttributes} />
             </div>
-
-            {/* <PDFViewer>
-                <InvoiceA />
-            </PDFViewer> */}
         </div>
     )
-
-    async function handlePdfPrint() {        
-        // const blob = await pdf(<InvoiceA />).toBlob()
-        // const fileURL: any = URL.createObjectURL(blob)
-        // const w: any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")
-        // // w.print()
-    }
 }
 
 export { Sales }
-
-// const response = await axios.get('http://localhost:5002', {
-//     responseType: 'blob',
-//     headers: {
-//         'Accept': 'application/pdf'
-//     }
-// })
-// const blob:any = new Blob([response.data], { type: 'application/pdf' })
-//     const fileURL = URL.createObjectURL(blob)
-//     const w:any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")            
-//     w.print()
-
-// axios.get('http://localhost:5002', {
-//     responseType: 'blob',
-//     headers: {
-//         'Accept': 'application/pdf'
-//     }
-// }).then((response) => {
-//     const blob:any = new Blob([response.data], { type: 'application/pdf' })
-//     const fileURL = URL.createObjectURL(blob)
-//     const w:any = window.open(fileURL, "_blank", "height=400,width=600,top=200, left=200")            
-//     w.print()
-// })

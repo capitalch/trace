@@ -7,9 +7,10 @@ function useShipTo(arbitraryData: any) {
     const shipTo = arbitraryData.shipTo
     const classes = useStyles()
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

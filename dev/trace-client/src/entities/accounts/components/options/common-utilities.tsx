@@ -1,4 +1,3 @@
-import { useRef, } from '../../../../imports/regular-imports'
 import {
     Button, createStyles, makeStyles, Grid, Table,
     TableBody,
@@ -10,9 +9,6 @@ import { Send } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function CommonUtilities() {
-    const meta: any = useRef({
-        isBusy: false,
-    })
     const classes = useStyles()
     const { accountsMessages, emit, isControlDisabled, transferClosingBalances } = useSharedElements()
 
@@ -35,7 +31,7 @@ function CommonUtilities() {
                                     variant="contained"
                                     color="secondary"
                                     size='small'
-                                    onClick={async (e) => {
+                                    onClick={async (e:any) => {
                                         emit('SHOW-LOADING-INDICATOR', true)
                                         const ret = await transferClosingBalances()
                                         emit('SHOW-LOADING-INDICATOR', false)

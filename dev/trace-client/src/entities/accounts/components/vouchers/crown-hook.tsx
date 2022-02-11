@@ -1,10 +1,8 @@
-import { _, useState, useContext, useRef } from '../../../../imports/regular-imports'
+import { _, useState } from '../../../../imports/regular-imports'
 import { Button, Typography } from '../../../../imports/gui-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { MultiDataContext } from '../common/multi-data-bridge'
-// import {useReactToPrint} from 'react-to-print'
-function useCrown(meta: any, componentRef:any) {
+function useCrown(meta: any, componentRef: any) {
     const [, setRefresh] = useState({})
     meta.current.dialogConfig = {}
     meta.current.dialogConfig.title = 'Voucher'
@@ -12,19 +10,14 @@ function useCrown(meta: any, componentRef:any) {
         accountsMessages,
         emit,
         genericUpdateMasterDetails,
-        // getAccountName,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         toDecimalFormat,
     } = useSharedElements()
 
-    const ctx: any = useContext(MultiDataContext)
-    const ad = ctx?.vouchers
+    // const ctx: any = useContext(MultiDataContext)
 
-    // const handlePrintPdf = useReactToPrint({
-    //     content : () => componentRef.current
-    // })
     function checkError(ad: any) {
         function headerError() {
             function dateError() {
@@ -272,7 +265,7 @@ function useCrown(meta: any, componentRef:any) {
         setRefresh({})
     }
 
-    function handleOpen(){
+    function handleOpen() {
         meta.current.showDialog = true
         setRefresh({})
     }

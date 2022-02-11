@@ -2,17 +2,15 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 import { moment } from '../../../../../imports/regular-imports'
 function PdfLedger({ ledgerData, accName }: any) {
     const {
-        accountsMessages,
         Document,
-        numberToWordsInRs,
         Page,
         StyleSheet,
         Text,
         View,
-        getAccountName,
         getFromBag,
         toDecimalFormat,
     } = useSharedElements()
+
     const ld = ledgerData
     const unitInfo = getFromBag('unitInfo')
     const finObject = getFromBag('finYearObject')
@@ -82,7 +80,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                     <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
                         {unitInfo.unitName}
                     </Text>
-                    <Text style={[gStyles.normal,{lineHeight:1.6}]}>
+                    <Text style={[gStyles.normal, { lineHeight: 1.6 }]}>
                         {''.concat(
                             'GSTIN:',
                             unitInfo.gstin,
@@ -218,7 +216,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 {x.ledgerBal >= 0
                                     ? toDecimalFormat(x.ledgerBal) + ' Dr'
                                     : toDecimalFormat(Math.abs(x.ledgerBal)) +
-                                      ' Cr'}
+                                    ' Cr'}
                             </Text>
                             <Text
                                 style={[
@@ -242,7 +240,6 @@ function PdfLedger({ ledgerData, accName }: any) {
                 })
                 .concat(
                     <View style={{ flexDirection: 'row' }} key={-1}>
-                        {/* <Text style={{width:147}}></Text> */}
                         <Text style={[gStyles.normal, { width: 20 }]}> </Text>
                         <Text style={[gStyles.normal, { width: 47 }]}> </Text>
                         <Text style={[gStyles.normal, { width: 80 }]}> </Text>
@@ -255,7 +252,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 { width: 65, textAlign: 'right' },
                             ]}>
                             {closingBalance >= 0
-                                ? toDecimalFormat(closingBalance)
+                                ? toDecimalFormat(closingBalance) + ' Dr'
                                 : ''}
                         </Text>
                         <Text
@@ -264,7 +261,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 { width: 65, textAlign: 'right' },
                             ]}>
                             {closingBalance < 0
-                                ? toDecimalFormat(Math.abs(closingBalance))
+                                ? toDecimalFormat(Math.abs(closingBalance)) + ' Cr'
                                 : ''}
                         </Text>
                     </View>
@@ -303,7 +300,7 @@ function PdfLedger({ ledgerData, accName }: any) {
             },
             { ledgerBal: 0 }
         )
-        closingBalance = ld[ld.length - 1].ledgerBal
+        closingBalance = ld[ld.length - 1]?.ledgerBal
     }
 }
 

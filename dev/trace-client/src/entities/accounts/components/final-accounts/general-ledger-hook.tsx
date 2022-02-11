@@ -9,7 +9,6 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { useFlexLayout } from 'react-table'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
@@ -21,15 +20,16 @@ function useGeneralLedger(getArtifacts: any) {
     } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
-        meta.current.allAccounts = (getFromBag('allAccounts') || []).map(
+        const curr = meta.current
+        curr.isMounted = true
+        curr.allAccounts = (getFromBag('allAccounts') || []).map(
             (item: any) => ({
                 label: item.accName,
                 value: item.id,
                 ...item,
             })
         )
-        meta.current.ledgerAccounts = meta.current.allAccounts
+        curr.ledgerAccounts = curr.allAccounts
             .filter((el: any) => el.accLeaf === 'Y' || el.accLeaf === 'L')
             .map((el: any) => {
                 return {
@@ -42,12 +42,12 @@ function useGeneralLedger(getArtifacts: any) {
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
             emit(
                 getArtifacts().gridActionMessages.fetchIbukiMessage,
-                meta.current.sqlQueryArgs
+                curr.sqlQueryArgs
             )
         })
         setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])

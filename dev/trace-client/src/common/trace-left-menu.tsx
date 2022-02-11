@@ -2,7 +2,7 @@ import { useState, useRef } from '../imports/regular-imports'
 import { ClickAwayListener,Collapse,Divider, List, ListItem,ListItemText,Theme, useTheme } from '../imports/gui-imports'
 import {manageEntitiesState, useIbuki} from '../imports/trace-imports'
 import {ExpandLess, ExpandMore} from '../imports/icons-import'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemIcon from '@mui/material/ListItemIcon'
 import { utilMethods } from '../global-utils/misc-utils'
 import { iconMap } from './trace-left-menu-icon-map'
 
@@ -38,8 +38,8 @@ function TraceLeftMenu(props: any) {
                 <ListItem
                     button
                     key={index}
-                    disabled={isControlDisabled(item.name)}
-                    onClick={(e) => {
+                    disabled={isControlDisabled(item.hierarchy)}
+                    onClick={(e:any) => {
                         if (item.children) {
                             const currentItemIndex =
                                 meta.current.openArray[index]

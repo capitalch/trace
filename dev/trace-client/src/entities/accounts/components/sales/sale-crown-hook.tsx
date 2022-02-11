@@ -1,5 +1,4 @@
 import {
-    // axios,
     useState,
     useEffect,
     useRef,
@@ -9,7 +8,6 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-// import { PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
 
@@ -21,32 +19,30 @@ function useSaleCrown(
     const [, setRefresh] = useState({})
     const {
         accountsMessages,
-        // BlobProvider,
         confirm,
         emit,
-        // execGenericView,
         getCurrentComponent,
         genericUpdateMasterDetails,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
         pdf,
-        // PDFViewer,
         execSaleInvoiceView,
         sendEmail,
         sendSms,
         setInBag,
     } = useSharedElements()
+
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         arbitraryData.salesCrownRefresh = () => setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
     const unitInfo = getFromBag('unitInfo')
-    const rawSaleData = getFromBag('rawSaleData') || {}
 
     const meta: any = useRef({
         isMounted: false,
@@ -229,8 +225,6 @@ function useSaleCrown(
                 escape(
                     JSON.stringify({
                         data: base64Data,
-                        // subject: accountsMessages.emailBillSubject.replace('$sender', unitInfo.unitName),
-                        // body: accountsMessages.emailBillBody.replace('$sender', unitInfo.unitName),
                         id: id,
                         sqlKey:'update_pdf_invoice',
                         mobileNumber: mobileNumber,
@@ -250,11 +244,11 @@ function useSaleCrown(
 
     async function handleSubmit() {
         const ad = arbitraryData
-        // ad.rawSaleData = null
         setInBag('rawSaleData', null)
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
+        console.log(JSON.stringify(header))
         let ret = await genericUpdateMasterDetails([header])
         console.log(JSON.stringify(header))
         if (ret.error) {
@@ -292,6 +286,7 @@ function useSaleCrown(
             const branchId = getFromBag('branchObject')?.branchId || 1
             const obj: any = {
                 tableName: 'TranH',
+                isAutoSubledger: ad.saleVariety==='a'? true : false,
                 data: [],
             }
             const item = {
@@ -456,13 +451,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
-
-// const ret = await axios({
-//     url: 'http://localhost:5000/trace/pdf',
-//     method:'post',
-//     headers:{
-//         "content-type":"application/pdf"
-//     },
-//     data:blob
-// })
-// console.log(ret)

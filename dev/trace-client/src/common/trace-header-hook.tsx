@@ -1,4 +1,4 @@
-import { useRef } from '../imports/regular-imports'
+import { useRef, useState } from '../imports/regular-imports'
 import {
     Button,
     IconButton,
@@ -13,7 +13,6 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    MuiAlert,
     Theme,
 } from '../imports/gui-imports'
 import {
@@ -39,7 +38,8 @@ import {
 import '../entities/authentication/initialize-react-form'
 import messages from '../entities/authentication/messages.json'
 
-function useTraceHeader({ setRefresh }: any) {
+function useTraceHeader() {
+    const [, setRefresh] = useState({})
     const meta: any = useRef({
         isMounted: true,
         menuHead: [],
@@ -82,17 +82,12 @@ function useTraceHeader({ setRefresh }: any) {
     const { doValidateForm, isValidForm } = getValidationFabric()
     const { TraceFullWidthSubmitButton }: any = useTraceMaterialComponents()
     const classes = useStyles()
-    const snackbar = useRef({
+    const snackbar:any = useRef({
         severity: 'success',
         open: false,
         message: globalMessages['operationSuccessful'],
         duration: 5000,
     })
-
-    // for material snackbar
-    function Alert(props: any) {
-        return <MuiAlert elevation={6} variant="filled" {...props} />
-    }
 
     // for closing snackbar
     function handleClose() {
@@ -154,10 +149,9 @@ function useTraceHeader({ setRefresh }: any) {
     function getDialogTitle() {
         return (
             <DialogTitle
-                disableTypography
                 id="simple-dialog-title"
                 className={classes.dialogTitle}>
-                <h2>{meta.current.dialogConfig.title}</h2>
+                <div>{meta.current.dialogConfig.title}</div>
                 <IconButton
                     size="small"
                     color="default"
@@ -183,7 +177,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={0}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', superAdminMenuJson)
                         emit('LOAD-MAIN-COMPONENT', '')
@@ -201,7 +195,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={1}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', adminMenuJson)
                         emit('LOAD-MAIN-COMPONENT', '')
@@ -219,7 +213,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={2}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.dialogConfig.title = 'Uid change'
                         meta.current.dialogConfig.formId = 'changeUid'
                         changeUidJson.items[0].value = meta.current.uid
@@ -244,7 +238,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={3}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         meta.current.dialogConfig.title = 'Change password'
                         meta.current.dialogConfig.formId = 'changePwd'
                         changePwdJson.items[0].value = meta.current.uid
@@ -270,7 +264,7 @@ function useTraceHeader({ setRefresh }: any) {
                 <ListItem
                     button
                     key={4}
-                    onClick={(e) => {
+                    onClick={(e:any) => {
                         logout()
                         meta.current.showDialog = false
                         meta.current.isMounted && setRefresh({})
@@ -316,7 +310,7 @@ function useTraceHeader({ setRefresh }: any) {
                         size="small"
                         variant="text"
                         className={classes.forgotPwdButton}
-                        onClick={(e) => {
+                        onClick={(e:any) => {
                             meta.current.dialogConfig.title = 'Forgot password'
                             meta.current.dialogConfig.formId = 'forgotPwd'
                             meta.current.dialogConfig.formJson = forgotPwdJson
@@ -350,7 +344,10 @@ function useTraceHeader({ setRefresh }: any) {
             )
             const q = queries['doLogin'](base64UidPwd)
             const result: any = await queryGraphql(q)
-            const login: any = result.data.authentication.doLogin
+            if(!result){
+                throw Error(messages.serverError)
+            }
+            const login: any = result?.data?.authentication?.doLogin
             const token: string = login && login.token ? login.token : undefined
             const uid: string = login && login.uid
             setLoginData({
@@ -467,7 +464,7 @@ function useTraceHeader({ setRefresh }: any) {
             const data = JSON.parse(JSON.stringify(dt))
             try {
                 if (formId === 'login') {
-                    const res = await processLogin(data)
+                    await processLogin(data)
                 } else if (formId === 'changeUid') {
                     await processChangeUid(data)
                 } else if (formId === 'changePwd') {
@@ -531,7 +528,6 @@ function useTraceHeader({ setRefresh }: any) {
     }
 
     return {
-        Alert,
         closeDialog,
         doLogin,
         handleClose,
@@ -539,6 +535,7 @@ function useTraceHeader({ setRefresh }: any) {
         isUserLoggedIn,
         logout,
         meta,
+        setRefresh,
         shortCircuit,
         showDialogMenu,
         snackbar,
@@ -615,34 +612,34 @@ const superAdminMenuJson: any = {
                 {
                     name: 'manageUsers',
                     label: 'Manage admin users',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageUsers',
-                    },
+                    componentName: 'manageUsers',
+                    // args: {
+                    //     loadComponent: 'manageUsers',
+                    // },
                 },
                 {
                     name: 'manageClients',
                     label: 'Manage clients',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageClients',
-                    },
+                    componentName: 'superAdminManageClients',
+                    // args: {
+                    //     loadComponent: 'manageClients',
+                    // },
                 },
                 {
                     name: 'manageEntities',
                     label: 'Manage entities',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageEntities',
-                    },
+                    componentName: 'superAdminManageEntities',
+                    // args: {
+                    //     loadComponent: 'manageEntities',
+                    // },
                 },
                 {
-                    name: 'associateAdminUserWithClientAndEntity',
-                    label: 'Associate admin user with client and entity',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'associateAdminUserWithClientAndEntity',
-                    },
+                    name: 'associateUsersWithClientsAndEntities',
+                    label: 'Associate admin users with clients and entities',
+                    componentName: 'superAdminAssociateAdminUsersWithClientsAndEntities',
+                    // args: {
+                    //     loadComponent: 'associateAdminUserWithClientAndEntity',
+                    // },
                 },
             ],
         },
@@ -660,34 +657,37 @@ const adminMenuJson: any = {
                 {
                     name: 'manageUsers',
                     label: 'Manage business users',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageUsers',
-                    },
+                    componentName: 'manageUsers',
+                    // componentName: 'genericCRUD',
+                    // args: {
+                    //     loadComponent: 'manageUsers',
+                    // },
                 },
                 {
                     name: 'manageRoles',
                     label: 'Manage roles',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageRoles',
-                    },
+                    componentName: 'adminManageRoles'
+                    // componentName: 'genericCRUD',
+                    // args: {
+                    //     loadComponent: 'manageRoles',
+                    // },
                 },
                 {
                     name: 'manageBu',
-                    label: 'Manage business unit (Bu)',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'manageBu',
-                    },
+                    label: 'Manage business units (Bu)',
+                    componentName: 'adminManageBu',
+                    // componentName: 'genericCRUD',
+                    // args: {
+                    //     loadComponent: 'manageBu',
+                    // },
                 },
                 {
-                    name: 'associateBusinessUsersWithRolesAndBu',
-                    label: 'Associate users with roles and Bu',
-                    componentName: 'genericCRUD',
-                    args: {
-                        loadComponent: 'associateBusinessUsersWithRolesAndBu',
-                    },
+                    name: 'adminAssociateUsersRolesBu',
+                    label: 'Associate business users with roles and Bu',
+                    componentName: 'adminAssociateUsersRolesBu',
+                    // args: {
+                    //     loadComponent: 'associateBusinessUsersWithRolesAndBu',
+                    // },
                 },
             ],
         },

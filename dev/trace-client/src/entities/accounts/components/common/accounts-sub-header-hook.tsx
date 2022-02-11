@@ -5,7 +5,6 @@ import {
     ListItemAvatar,
     ListItemText, Avatar, makeStyles, createStyles
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
 import { useSharedElements } from './shared-elements-hook'
 import { initCode } from '../../init-code'
 
@@ -25,9 +24,10 @@ function useAccountsSubHeader() {
     } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -286,7 +286,7 @@ function useAccountsSubHeader() {
         emit('SHOW-LOADING-INDICATOR', false)
         if (!ret) return
         const pre = ret.jsonResult
-        const buArray = pre?.[ifElse[loginData.userType]]
+        const buArray = pre?.[ifElse[loginData.userType]] || []
         const buListItems: any[] = buArray.map((x: any) => {
             return (
                 <ListItem
@@ -328,7 +328,6 @@ function useAccountsSubHeader() {
                 //when buCode is changed then set the default branch id which is 1
                 setLastBuCodeFinYearIdBranchId(1) // to restart init-code to load bu, finYear and branch in trace-subheader. The finYear and branch depend on bu.
                 // now set permissions for the selected bu and user
-
                 const buObject = buArray.find(
                     (x: any) => x.buCode === item.buCode
                 )
@@ -338,7 +337,6 @@ function useAccountsSubHeader() {
                 getLoginData().permissions = permissions
                 meta.current.showDialog = false
                 meta.current.isMounted && setRefresh({})
-                // changeRoom()
             }
         }
     }

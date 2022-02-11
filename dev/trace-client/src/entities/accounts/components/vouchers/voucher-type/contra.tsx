@@ -2,7 +2,6 @@ import { useEffect, useRef } from '../../../../../imports/regular-imports'
 import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
-// import { useSharedElements } from '../../common/shared-elements-hook'
 
 function Contra({ hidden }: any) {
 
@@ -12,9 +11,10 @@ function Contra({ hidden }: any) {
     })
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 

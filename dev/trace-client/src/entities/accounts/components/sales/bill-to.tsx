@@ -25,7 +25,6 @@ function BillTo({ arbitraryData }: any) {
     } = useBillTo(arbitraryData)
 
     const { TraceDialog } = useSharedElements()
-    // console.log('saleType:', arbitraryData.saleType)
     const { billToError, gstinError } = allErrors()
     return (
         <Paper elevation={2} className={classes.content}>
@@ -52,7 +51,7 @@ function BillTo({ arbitraryData }: any) {
                                 <InputAdornment position="end">
                                     <IconButton
                                         size="small"
-                                        onClick={(e) => {
+                                        onClick={(e:any) => {
                                             meta.current.searchFilter = ''
                                             meta.current.isMounted &&
                                                 setRefresh({})
@@ -62,7 +61,7 @@ function BillTo({ arbitraryData }: any) {
                                 </InputAdornment>
                             ),
                         }}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             meta.current.searchFilter = e.target.value
                             arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
@@ -106,11 +105,10 @@ function BillTo({ arbitraryData }: any) {
                         placeholder="Gstin"
                         error={gstinError()}
                         value={arbitraryData.billTo.gstin || ''}
-                        onChange={(e) => {
+                        onChange={(e:any) => {
                             arbitraryData.billTo.gstin = e.target.value
                             meta.current.isMounted && setRefresh({})
                             arbitraryData.salesCrownRefresh()
-                            // emit('SALES-CROWN-REFRESH', null)
                         }}
                     />
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
-import { ThemeProvider, createTheme } from '@material-ui/core/styles' // '@mui/material/styles'
+import { ThemeProvider, createTheme,StyledEngineProvider } from '@mui/material/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
     purple,
@@ -16,76 +16,43 @@ import {
     orange,
     blue,
     lightBlue,
-} from '@material-ui/core/colors' //'@mui/material/colors'
-// import { StyledEngineProvider } from './imports/gui-imports'
+} from  '@mui/material/colors'
 import './App.scss'
 import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
 
-// declare module '@mui/material/styles/createPalette' {
-//     interface Palette {
-//         neutral?: Palette['primary']
-//         purple: Palette['primary']
-//         deepPurple: Palette['primary']
-//         teal: Palette['primary']
-//         lime: Palette['primary']
-//         yellow: Palette['primary']
-//         amber: Palette['primary']
-//         orange: Palette['primary']
-//         indigo: Palette['primary']
-//         blueGrey: Palette['primary']
-//         blue: Palette['primary']
-//         cyan: Palette['primary']
-//         lightBlue: Palette['primary']
-//     }
-//     interface PaletteOptions {
-//         neutral?: PaletteOptions['primary']
-//         purple: PaletteOptions['primary']
-//         deepPurple: PaletteOptions['primary']
-//         teal: PaletteOptions['primary']
-//         lime: PaletteOptions['primary']
-//         yellow: PaletteOptions['primary']
-//         amber: PaletteOptions['primary']
-//         orange: PaletteOptions['primary']
-//         indigo: PaletteOptions['primary']
-//         blueGrey: PaletteOptions['primary']
-//         blue: PaletteOptions['primary']
-//         cyan: PaletteOptions['primary']
-//         lightBlue: PaletteOptions['primary']
-//     }
-// }
-declare module '@material-ui/core/styles/createPalette' {
+declare module '@mui/material/styles/' {
     interface Palette {
-        neutral?: Palette['primary']
-        purple: Palette['primary']
-        deepPurple: Palette['primary']
-        teal: Palette['primary']
-        lime: Palette['primary']
-        yellow: Palette['primary']
-        amber: Palette['primary']
-        orange: Palette['primary']
-        indigo: Palette['primary']
-        blueGrey: Palette['primary']
-        blue: Palette['primary']
-        cyan: Palette['primary']
-        lightBlue: Palette['primary']
+        blueGrey?: any
+        neutral?: any
+        purple: any
+        deepPurple: any
+        teal: any
+        lime: any
+        yellow: any
+        amber: any
+        orange: any
+        indigo: any
+        blue: any
+        cyan: any
+        lightBlue: any
     }
     interface PaletteOptions {
-        neutral?: PaletteOptions['primary']
-        purple: PaletteOptions['primary']
-        deepPurple: PaletteOptions['primary']
-        teal: PaletteOptions['primary']
-        lime: PaletteOptions['primary']
-        yellow: PaletteOptions['primary']
-        amber: PaletteOptions['primary']
-        orange: PaletteOptions['primary']
-        indigo: PaletteOptions['primary']
-        blueGrey: PaletteOptions['primary']
-        blue: PaletteOptions['primary']
-        cyan: PaletteOptions['primary']
-        lightBlue: PaletteOptions['primary']
+        blueGrey?: any
+        neutral?: any
+        purple?: any
+        deepPurple?: any
+        teal?: any
+        lime?: any
+        yellow?: any
+        amber?: any
+        orange?: any
+        indigo?: any
+        blue?: any
+        cyan?: any
+        lightBlue?: any
     }
 }
 
@@ -146,9 +113,9 @@ const App: React.FC = () => {
     window.onpopstate = function () {
         window.history.go(1)
     }
-
+    
     return (
-        // <StyledEngineProvider injectFirst>
+        <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <ConfirmProvider>
                     {' '}
@@ -156,8 +123,76 @@ const App: React.FC = () => {
                     <AppMain></AppMain>
                 </ConfirmProvider>
             </ThemeProvider>
-        // </StyledEngineProvider>
+        </StyledEngineProvider>
     )
 }
 
 export default App
+
+
+// declare module '@mui/material/styles/createPalette' {
+//     interface Palette {
+//         blueGrey?: Palette['primary']
+//         neutral?: Palette['primary']
+//         purple: Palette['primary']
+//         deepPurple: Palette['primary']
+//         teal: Palette['primary']
+//         lime: Palette['primary']
+//         yellow: Palette['primary']
+//         amber: Palette['primary']
+//         orange: Palette['primary']
+//         indigo: Palette['primary']
+        
+//         blue: Palette['primary']
+//         cyan: Palette['primary']
+//         lightBlue: Palette['primary']
+//     }
+//     interface PaletteOptions {
+//         blueGrey: PaletteOptions['primary']
+//         neutral?: PaletteOptions['primary']
+//         purple: PaletteOptions['primary']
+//         deepPurple: PaletteOptions['primary']
+//         teal: PaletteOptions['primary']
+//         lime: PaletteOptions['primary']
+//         yellow: PaletteOptions['primary']
+//         amber: PaletteOptions['primary']
+//         orange: PaletteOptions['primary']
+//         indigo: PaletteOptions['primary']
+        
+//         blue: PaletteOptions['primary']
+//         cyan: PaletteOptions['primary']
+//         lightBlue: PaletteOptions['primary']
+//     }
+// }
+// declare module '@material-ui/core/styles/createPalette' {
+//     interface Palette {
+//         neutral?: Palette['primary']
+//         purple: Palette['primary']
+//         deepPurple: Palette['primary']
+//         teal: Palette['primary']
+//         lime: Palette['primary']
+//         yellow: Palette['primary']
+//         amber: Palette['primary']
+//         orange: Palette['primary']
+//         indigo: Palette['primary']
+//         blueGrey: Palette['primary']
+//         blue: Palette['primary']
+//         cyan: Palette['primary']
+//         lightBlue: Palette['primary']
+//     }
+//     interface PaletteOptions {
+//         neutral?: PaletteOptions['primary']
+//         purple: PaletteOptions['primary']
+//         deepPurple: PaletteOptions['primary']
+//         teal: PaletteOptions['primary']
+//         lime: PaletteOptions['primary']
+//         yellow: PaletteOptions['primary']
+//         amber: PaletteOptions['primary']
+//         orange: PaletteOptions['primary']
+//         indigo: PaletteOptions['primary']
+//         blueGrey: PaletteOptions['primary']
+//         blue: PaletteOptions['primary']
+//         cyan: PaletteOptions['primary']
+//         lightBlue: PaletteOptions['primary']
+//     }
+// }

@@ -32,10 +32,10 @@ const graphqlQueries: any = {
             createClient(value:"${value}")
     }}`,
 
-    createUser: (value: string) => gql`
-    mutation createUser {
+    createOrUpdateUser: (value: string) => gql`
+    mutation createOrUpdateUser {
         authentication {
-            createUser(value:"${value}")
+            createOrUpdateUser(value:"${value}")
     }}`,
 
     doLogin: (credentials: any) => gql`

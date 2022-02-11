@@ -6,7 +6,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 
 function DebitNotes({ drillDownEditAttributes }: any = {}) {
     const classes = useStyles()
-    const { handleOnTabChange, meta, multiData } = useDebitCreditNotes(
+    const { handleOnTabChange, multiData } = useDebitCreditNotes(
         drillDownEditAttributes
     )
     const { emit } = useSharedElements()

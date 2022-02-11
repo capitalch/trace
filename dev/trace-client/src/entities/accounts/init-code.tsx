@@ -3,15 +3,14 @@ import { usingIbuki } from '../../global-utils/ibuki'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { utilMethods } from '../../global-utils/misc-utils'
 import accountsMessages from './json/accounts-messages.json'
-// import datacache from '../../data/datacache.json'
 import queries from './artifacts/graphql-queries-mutations'
 import { graphqlService } from '../../global-utils/graphql-service'
-// import { test } from '../accounts/test/functions'
 import { usingLinkClient } from '../../global-utils/link-client'
+// import { useAdminManageRoles } from '../authentication/components/admin-manage-roles-hook' // to be removed
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {
-    const { getFromBag, getLoginData,setCurrentComponent, setInBag } = manageEntitiesState()
+    const { getFromBag, getLoginData, setInBag } = manageEntitiesState()
     const { execGenericView } = utilMethods()
     const { connectToLinkServer, joinRoom, onReceiveData } = usingLinkClient()
     const { queryGraphql } = graphqlService()
@@ -20,11 +19,17 @@ function initCode() {
     // these following two lines is for testing functions in application. Must remove from production build
     // const { testIsInvalidDate, testIsInvalidDate1 } = test()
     // testIsInvalidStateCode()
+    // const { getPermissionsAsJson } = useAdminManageRoles()
+
+    // const base = await getPermissionsAsJson('base')
+    // const operator = await getPermissionsAsJson('operator')
+    // const accountant = await getPermissionsAsJson('accountant')
+    // const manager = await getPermissionsAsJson('manager')
 
     async function setLastBuCodeFinYearIdBranchId(brId: any = undefined) {
-        const userId = getLoginData().id
+        // const userId = getLoginData().id
         const buCode = getLoginData().lastUsedBuCode
-        
+
         //Uncomment following lines
         emit('SHOW-LOADING-INDICATOR', true)
         if (buCode) {
@@ -45,7 +50,7 @@ function initCode() {
         // await dummy()
     }
 
-   async  function dummy() {
+    async function dummy() {
         const dateFormat = 'DD/MM/YYYY'
         setInBag('buCode', 'demounit1')
         const finYearObject: any = {
@@ -62,16 +67,12 @@ function initCode() {
             branchName: 'main',
             branchCode: 'main',
         })
-        
+
         emit('LOAD-LEFT-MENU', '')
-         // Remove following line. This loads the journals by default
-         emit('TRACE-SUBHEADER:JUST-REFRESH', '')
-         emit('TRACE-MAIN:JUST-REFRESH', '')
+        // Remove following line. This loads the journals by default
+        emit('TRACE-SUBHEADER:JUST-REFRESH', '')
+        emit('TRACE-MAIN:JUST-REFRESH', '')
         await execDataCache()
-        //  emit('LAUNCH-PAD:LOAD-COMPONENT', {
-        //     componentName: 'journals', args: undefined, name: 'accounts'
-        // })
-        //
     }
 
     async function setNowFinYearIdDatesFinYearsBranches(branchId: number) {
@@ -190,7 +191,7 @@ function initCode() {
         const info = allSettings.find((item) => item.key === 'unitInfo')
         const unitInfo = info?.jData
         setInBag('unitInfo', unitInfo)
-        console.log(JSON.stringify(unitInfo))
+        // console.log(JSON.stringify(unitInfo))
         setInBag('generalSettings', generalSettings)
         setInBag('auditLockDate', generalSettings?.auditLockDate || '')
         setInBag('allAccounts', allAccounts)

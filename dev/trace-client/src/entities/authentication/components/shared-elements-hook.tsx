@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, } from 'react'
 import hash from 'object-hash'
 import {
     Checkbox,
@@ -6,12 +6,12 @@ import {
     Theme,
     useTheme,
     createStyles,
-    makeStyles,
-} from '@material-ui/core'
-
-import Edit from '@material-ui/icons/Edit'
-import CloseSharp from '@material-ui/icons/Close'
-import Settings from '@material-ui/icons/Settings'
+} from '@mui/material'
+import { makeStyles } from '@mui/styles'
+import {useConfirm} from '../../../imports/regular-imports'
+import Edit from '@mui/icons-material/Edit'
+import CloseSharp from '@mui/icons-material/Close'
+import Settings from '@mui/icons-material/Settings'
 import _ from 'lodash'
 import { useTraceMaterialComponents } from '../../../common/trace-material-components'
 import { Column } from 'primereact/column'
@@ -19,12 +19,14 @@ import { manageEntitiesState } from '../../../global-utils/esm'
 import { manageFormsState } from '../../../react-form/core/fsm'
 import { utilMethods } from '../../../global-utils/misc-utils'
 import messages from '../../../messages.json'
-import { usingIbuki } from '../../../global-utils/ibuki'
+import authMessages from '../messages.json'
+import { useIbuki } from '../../../global-utils/ibuki'
 import { useTraceGlobal } from '../../../global-utils/trace-global'
 import queries from '../artifacts/graphql-queries-mutations'
 import { graphqlService } from '../../../global-utils/graphql-service'
 
 function useSharedElements(meta: any = {}) {
+    const confirm = useConfirm()
     const { getCurrentEntity, getFromBag, getLoginData } = manageEntitiesState()
     const {
         showServerError,
@@ -41,13 +43,14 @@ function useSharedElements(meta: any = {}) {
     const {
         execGenericView,
         genericUpdateMaster,
+        genericUpdateMasterNoForm,
         getSqlObjectString,
     } = utilMethods()
-    const { emit } = usingIbuki()
+    const {debounceEmit, debounceFilterOn, emit, filterOn } = useIbuki()
     const dateFormat = getFromBag('dateFormat')
     const isoDateFormat = 'YYYY-MM-DD'
-    const { genericUpdateMasterNoForm } = utilMethods()
     const {
+        TraceDialog,
         traceGlobalSearch,
         TraceFullWidthSubmitButton,
     } = useTraceMaterialComponents()
@@ -85,7 +88,7 @@ function useSharedElements(meta: any = {}) {
                     tableName: meta.current.dialogConfig.tableName,
                     deletedIds: [id],
                 })
-                if ((ret === true) || (ret?.length <=9)) {
+                if ((ret === true) || (ret?.length <= 9)) {
                     emit('SHOW-MESSAGE', {})
                     afterMethod && afterMethod()
                 } else if (ret && ret.message) {
@@ -101,7 +104,7 @@ function useSharedElements(meta: any = {}) {
                         duration: null,
                     })
                 }
-            } catch (error:any) {
+            } catch (error: any) {
                 emit('SHOW-MESSAGE', {
                     severity: 'error',
                     message: error.message || messages['errorInOperation'],
@@ -152,7 +155,7 @@ function useSharedElements(meta: any = {}) {
                             duration: null,
                         })
                     }
-                } catch (err:any) {
+                } catch (err: any) {
                     emit('SHOW-MESSAGE', {
                         severity: 'error',
                         message: err.message || messages['errorInOperation'],
@@ -190,25 +193,30 @@ function useSharedElements(meta: any = {}) {
             } else {
                 doFormRefresh(formId) // this shows validation messages
             }
-        } catch (e:any) {
+        } catch (e: any) {
             showServerError(meta.current.dialogConfig.formId, e.message)
         }
     }
 
     return {
         _,
+        authMessages,
         clearServerError,
         CloseSharp,
         Column,
+        confirm,
         Checkbox,
         closeDialog,
         dateFormat,
         deleteRow,
+        debounceEmit,
+        debounceFilterOn,
         doValidateForm,
         doFormRefresh,
         Edit,
         emit,
         execGenericView,
+        filterOn,
         genericUpdateMaster,
         genericUpdateMasterNoForm,
         getCurrentEntity,
@@ -235,8 +243,10 @@ function useSharedElements(meta: any = {}) {
         showServerError,
         submitDialog,
         theme,
+        TraceDialog,
         TraceFullWidthSubmitButton,
         traceGlobalSearch,
+        
         useStyles,
     }
 }

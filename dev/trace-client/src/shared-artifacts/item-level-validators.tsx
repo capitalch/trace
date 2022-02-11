@@ -1,4 +1,4 @@
-const itemLevelValidators:any = {
+const itemLevelValidators: any = {
     shouldHaveOneSpecialChar: (a: any, value: string, putErrors: any) => {
         let ret: any = a.message || 'Should have one special char';
         const format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
@@ -18,7 +18,6 @@ const itemLevelValidators:any = {
         const promise = new Promise((resolve) => {
             setTimeout(() => {
                 putErrors(a.name, a.message);
-                // console.log('asyncValidation2');
                 resolve('success');
             }, 7000)
         })
@@ -28,4 +27,4 @@ const itemLevelValidators:any = {
 
 }
 
-export {itemLevelValidators}
+export { itemLevelValidators }

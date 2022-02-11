@@ -20,8 +20,8 @@ function useBrands() {
             title: '',
             tableName: 'BrandM',
             formId: 'trace-brand-master',
-            ibukiFetchDataMessage:FETCH_DATA_MESSAGE,
-            actions: () => {},
+            ibukiFetchDataMessage: FETCH_DATA_MESSAGE,
+            actions: () => { },
             content: () => <></>,
         },
         setRefresh: setRefresh,
@@ -41,7 +41,7 @@ function useBrands() {
     } = useSharedElements()
     const { resetAllValidators, } =
         manageFormsState()
-    
+
     useEffect(() => {
         const subs1 = filterOn(FETCH_DATA_MESSAGE).subscribe(() => {
             emit(getXXGridParams().gridActionMessages.fetchIbukiMessage, null)
@@ -52,7 +52,7 @@ function useBrands() {
         ).subscribe((d: any) => {
             //edit
             const pre = meta.current.dialogConfig
-            const { id, id1, brandName, remarks } = d.data?.row
+            const { id1, brandName, remarks } = d.data?.row
             meta.current.showDialog = true
             pre.isEditMode = true
             pre.title = 'Edit brand'

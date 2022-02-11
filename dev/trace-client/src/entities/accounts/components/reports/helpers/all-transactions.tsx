@@ -19,7 +19,6 @@ function useAllTransactions() {
             type: 'date',
             field: 'tranDate',
             width: 120,
-            // valueGetter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
             valueFormatter: (params: any) => moment(params.value).format('DD/MM/YYYY'),
         },
         { headerName: 'Ref', field: 'autoRefNo', width: 200 },
@@ -81,7 +80,6 @@ function useAllTransactions() {
 
     const summaryColNames = ['debit', 'credit']
     const specialColumns = {
-        // toShowClosingBalance: true,
         isHide: true,
         isEdit: true,
         isDelete: true,        
@@ -89,7 +87,6 @@ function useAllTransactions() {
     const actionMessages = {
         fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ALL-TRANSACTIONS',
         editIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-EDIT-CLICKED',
-        // deleteIbukiMessage: 'ACCOUNTS-LEDGER-DIALOG-XX-GRID-DELETE-CLICKED'
         deleteIbukiMessage: 'GENERIC-REPORTS-XX-GRID-DELETE-CLICKED'
     }
     return {actionMessages, args, columns, specialColumns, sqlQueryId, title, summaryColNames }

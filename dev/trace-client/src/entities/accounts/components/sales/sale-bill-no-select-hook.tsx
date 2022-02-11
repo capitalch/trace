@@ -19,9 +19,9 @@ function useSaleBillNoSelect() {
     })
     const {  emit, execGenericView, getFromBag, toDecimalFormat, TraceSearchBox } = useSharedElements()
     useEffect(() => {
-        meta.current.isMounted = true
-
-        return (() => { meta.current.isMounted = false })
+        const curr = meta.current
+        curr.isMounted = true
+        return (() => { curr.isMounted = false })
     }, [])
     const classes = useStyles()
 
@@ -84,7 +84,6 @@ function useSaleBillNoSelect() {
                                 <Avatar>{index + 1}</Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                // primary={`${moment(item.tranDate).format('DD/MM/YYYY')}, ${item.autoRefNo}, ${toDecimalFormat(item.amount)}`}
                                 primary={
                                     <div className='primary'>
                                         <Typography component='li' variant='body1'>{moment(item.tranDate).format(dateFormat)}</Typography>
@@ -95,7 +94,6 @@ function useSaleBillNoSelect() {
 
                                 secondary={
                                     <>
-                                        {/* <Typography component='li' variant = 'body1' className='amount'>{toDecimalFormat(item.amount)}</Typography> */}
                                         <Typography component='li' variant='body2'>{item.products}</Typography>
                                         <Typography component='li' variant='body2'>{item.remarks}</Typography>
                                         <Typography component='li' variant='body2'>{Object.values(item.contacts || '').join(',')}</Typography>
@@ -119,9 +117,7 @@ export { useSaleBillNoSelect }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-
         content: {
-            // width: '100%',
             marginTop: theme.spacing(2),
             '& .button': {
                 marginLeft: theme.spacing(5),

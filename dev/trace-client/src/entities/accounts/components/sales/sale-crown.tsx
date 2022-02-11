@@ -1,5 +1,5 @@
 import { useSharedElements } from '../common/shared-elements-hook'
-import { _, useEffect } from '../../../../imports/regular-imports'
+import { _ } from '../../../../imports/regular-imports'
 import { useSaleCrown, useStyles } from './sale-crown-hook'
 import {
     Button,
@@ -22,16 +22,15 @@ import {
 import { MultiDataContext } from '../common/multi-data-bridge'
 import { useContext } from '../../../../imports/regular-imports'
 import { InvoiceA } from '../pdf/invoices/invoiceA'
-import { BlobProvider, pdf } from '@react-pdf/renderer'
 
 function SaleCrown({ saleType, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
-    const { getFromBag, PDFViewer, toDecimalFormat, TraceDialog, usePDF } =
+    const { getFromBag, PDFViewer, toDecimalFormat, } =
         useSharedElements()
     const unitInfo = getFromBag('unitInfo')
-    // const rawSaleData = getFromBag('rawSaleData') || {}
+
     const {
         getError,
         handleBillPreview,
@@ -64,7 +63,7 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                             color:
                                 Math.abs(
                                     arbitraryData.footer.amount -
-                                        arbitraryData.summary.amount
+                                    arbitraryData.summary.amount
                                 ) === 0
                                     ? 'dodgerBlue'
                                     : 'red',
@@ -73,18 +72,17 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         {toDecimalFormat(
                             Math.abs(
                                 arbitraryData.footer.amount -
-                                    arbitraryData.summary.amount
+                                arbitraryData.summary.amount
                             )
                         )}
                     </Typography>
                     <Tooltip
                         title="Preview"
                         style={{
-                            display: `${
-                                _.isEmpty(getFromBag('rawSaleData'))
-                                    ? 'none'
-                                    : 'block'
-                            }`,
+                            display: `${_.isEmpty(getFromBag('rawSaleData'))
+                                ? 'none'
+                                : 'block'
+                                }`,
                         }}>
                         <IconButton
                             size="small"

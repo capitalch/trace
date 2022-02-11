@@ -25,7 +25,8 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
     } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         setAccounts()
         setPurchaseErrorObject()
         handlePurchaseCashCredit('credit')
@@ -36,7 +37,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             handlePurchaseCashCredit(d.data)
         })
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
             subs1.unsubscribe()
         }
     }, [])
@@ -80,7 +81,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         const debtorCreditorLedgerAccounts = allAccounts.filter(
             (el: any) =>
                 drCrArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf == 'L') &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                 !el.isAutoSubledger
         )
         ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
@@ -365,7 +366,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 emit('PURCHASES-HOOK-CHANGE-TAB', 1)
                 emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
-                // emit('PURCHASE-HOOK-RESET-DATA', null)
             } else {
                 emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             }
@@ -542,13 +542,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
 
                 '& .right': {
-                    // marginLeft: 'auto',
                     display: 'flex',
                     rowGap: theme.spacing(2),
                     columnGap: theme.spacing(4),
                     backgroundColor: theme.palette.grey[100],
-                    // border: '1px solid grey',
-                    // padding: theme.spacing(4),
                     marginLeft: 'auto',
                     marginRight: 'auto',
                     '& .invoice': {

@@ -5,16 +5,15 @@ import {
     ListItemAvatar, Typography,
     ListItemText,
 } from '../../../../imports/gui-imports'
-import { } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function usePurchaseInvoiceNoSelect(arbitraryData: any) {
     const [, setRefresh] = useState({})
     useEffect(() => {
-        meta.current.isMounted = true
-
+        const curr = meta.current
+        curr.isMounted = true
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
     const classes = useStyles()

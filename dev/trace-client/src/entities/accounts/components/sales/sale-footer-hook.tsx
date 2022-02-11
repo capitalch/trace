@@ -4,15 +4,16 @@ import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleFooter(arbitraryData: any) {
     const [, setRefresh] = useState({})
-    const { emit, getFromBag, getMappedAccounts } = useSharedElements()
+    const { getFromBag, getMappedAccounts } = useSharedElements()
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         if (arbitraryData.footer?.items?.length === 0) {
             handleAddItem()
         }
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     })
 

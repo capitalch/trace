@@ -5,7 +5,7 @@ import { useProducts, useStyles } from './products-hook'
 function Products() {
     const { getXXGridParams, handleCloseDialog, meta } = useProducts()
     const classes = useStyles()
-    const { TraceDialog, XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, TraceDialog, XXGrid } = useSharedElements()
 
     const {
         columns,
@@ -29,6 +29,8 @@ function Products() {
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
+                subTitle={getGridReportSubTitle()}
+                title="All products view"
                 summaryColNames={summaryColNames}
                 toShowAddButton={true}
                 viewLimit="100"

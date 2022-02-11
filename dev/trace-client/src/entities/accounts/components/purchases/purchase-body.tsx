@@ -20,13 +20,11 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseBody, useStyles } from './purchase-body-hook'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { PurchaseInvoiceNoSelect } from './purchase-invoice-no-select'
-// import { ClearAll } from '../../../../imports/icons-import'
-// import { PurchasesContext } from './purchases-provider'
 import { MultiDataContext } from '../common/multi-data-bridge'
 
 function PurchaseBody({ purchaseType }: any) {
     //purchaseType is 'pur' for purchase and 'ret' for purchase return
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const ad = multiData.purchases
@@ -40,7 +38,7 @@ function PurchaseBody({ purchaseType }: any) {
         queryGstin,
     } = usePurchaseBody(ad, purchaseType)
 
-    const { accountsMessages, emit, getMappedAccounts, filterOn, TraceDialog } =
+    const { emit, getMappedAccounts, filterOn, TraceDialog } =
         useSharedElements()
 
     return (
@@ -73,7 +71,7 @@ function PurchaseBody({ purchaseType }: any) {
         }, [])
         const isError: boolean = errorObject?.isError
             ? ad.errorObject.isError()
-            : true //getError()
+            : true
         return (
             <Button
                 className="submit"
@@ -131,7 +129,7 @@ function PurchaseBody({ purchaseType }: any) {
                         ad.tranDate = e.target.value
                         setRefresh({})
                     }}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     value={ad.tranDate || ''}
                 />
                 {/* invoice no  */}
@@ -199,15 +197,12 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Purchase a/c</Typography>
                         {/* purchase */}
                         <LedgerSubledger
-                            // allAccounts={meta.current.allAccounts}
                             allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            // ledgerAccounts={meta.current.purchaseLedgerAccounts}
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts.purchaseLedgerAccounts
                             )}
                             onChange={() => {
-                                // getPurchaseAccountError()
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
@@ -218,14 +213,12 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Credit a/c</Typography>
                         {/* credit account */}
                         <LedgerSubledger
-                            // allAccounts={meta.current.allAccounts}
                             allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts.ledgerAccounts
                             )}
                             onChange={async () => {
-                                // getOtherAccountError()
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId
                                 )
@@ -241,7 +234,6 @@ function PurchaseBody({ purchaseType }: any) {
                         className="gstin"
                         variant="standard"
                         label="Gstin no"
-                        // error={getGstinError()}
                         error={
                             errorObject.isGstinError
                                 ? errorObject.isGstinError()
@@ -259,19 +251,19 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="invoice">
                         {/* Invoice amount */}
                         <NumberFormat
+                            variant='standard'
                             className="total-amount"
                             label="Invoice amount"
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getInvoiceAmountError()}
                             error={
                                 errorObject.isInvoiceAmountError
                                     ? errorObject.isInvoiceAmountError()
                                     : true
                             }
                             fixedDecimalScale={true}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             onValueChange={(values: any) => {
@@ -285,17 +277,17 @@ function PurchaseBody({ purchaseType }: any) {
                             value={ad.invoiceAmount || 0.0}
                         />
                         <NumberFormat
+                            variant='standard'
                             label="Total qty"
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getQtyError()}
                             error={
                                 errorObject.isTotalQtyError
                                     ? errorObject.isTotalQtyError()
                                     : true
                             }
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             onValueChange={(values: any) => {
@@ -312,10 +304,10 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="gst">
                         {/* cgst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -341,16 +333,16 @@ function PurchaseBody({ purchaseType }: any) {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                             thousandSeparator={true}
                             value={ad.cgst || 0.0}
                         />
                         {/* sgst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -376,16 +368,16 @@ function PurchaseBody({ purchaseType }: any) {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                             thousandSeparator={true}
                             value={ad.sgst || 0.0}
                         />
                         {/* igst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -411,7 +403,7 @@ function PurchaseBody({ purchaseType }: any) {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                             thousandSeparator={true}
                             value={ad.igst || 0.0}
                         />
@@ -437,7 +429,6 @@ function PurchaseBody({ purchaseType }: any) {
                 <TextField
                     label={ad.tranDate ? 'Date' : undefined}
                     variant="standard"
-                    // error={getDateError()}
                     error={
                         errorObject?.isDateError
                             ? errorObject.isDateError()
@@ -459,7 +450,7 @@ function PurchaseBody({ purchaseType }: any) {
                         ad.tranDate = e.target.value
                         setRefresh({})
                     }}
-                    onFocus={(e) => e.target.select()}
+                    onFocus={(e:any) => e.target.select()}
                     value={ad.tranDate || ''}
                 />
                 <PurchaseInvoiceNoSelect arbitraryData={ad} />
@@ -516,7 +507,6 @@ function PurchaseBody({ purchaseType }: any) {
                                 ad.accounts.purchaseLedgerAccounts
                             )}
                             onChange={() => {
-                                // getPurchaseAccountError()
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
@@ -533,7 +523,6 @@ function PurchaseBody({ purchaseType }: any) {
                                 ad.accounts.ledgerAccounts
                             )}
                             onChange={async () => {
-                                // getOtherAccountError()
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId
                                 )
@@ -566,19 +555,19 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="invoice">
                         {/* Invoice amount */}
                         <NumberFormat
+                            variant='standard'
                             className="total-amount"
                             label="Invoice amount"
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getInvoiceAmountError()}
                             error={
                                 errorObject.isInvoiceAmountError
                                     ? errorObject.isInvoiceAmountError()
                                     : true
                             }
                             fixedDecimalScale={true}
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             onValueChange={(values: any) => {
@@ -592,17 +581,17 @@ function PurchaseBody({ purchaseType }: any) {
                             value={ad.invoiceAmount || 0.0}
                         />
                         <NumberFormat
+                            variant='standard'
                             label="Total qty"
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getQtyError()}
                             error={
                                 errorObject.isTotalQtyError
                                     ? errorObject.isTotalQtyError()
                                     : true
                             }
-                            onFocus={(e) => {
+                            onFocus={(e:any) => {
                                 e.target.select()
                             }}
                             onValueChange={(values: any) => {
@@ -619,10 +608,10 @@ function PurchaseBody({ purchaseType }: any) {
                     <div className="gst">
                         {/* cgst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
-                            // error={getGstError()}
                             error={
                                 errorObject.isGstError
                                     ? errorObject.isGstError()
@@ -648,12 +637,13 @@ function PurchaseBody({ purchaseType }: any) {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                             thousandSeparator={true}
                             value={ad.cgst || 0.0}
                         />
                         {/* sgst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
@@ -682,12 +672,13 @@ function PurchaseBody({ purchaseType }: any) {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                             thousandSeparator={true}
                             value={ad.sgst || 0.0}
                         />
                         {/* igst */}
                         <NumberFormat
+                            variant='standard'
                             allowNegative={false}
                             customInput={TextField}
                             decimalScale={2}
@@ -716,7 +707,7 @@ function PurchaseBody({ purchaseType }: any) {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
                             }}
-                            onFocus={(e) => e.target.select()}
+                            onFocus={(e:any) => e.target.select()}
                             thousandSeparator={true}
                             value={ad.igst || 0.0}
                         />
@@ -732,7 +723,7 @@ function PurchaseBody({ purchaseType }: any) {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 preHandlePurchaseCashCredit('credit')
                             }}
                             size="small"
@@ -746,7 +737,7 @@ function PurchaseBody({ purchaseType }: any) {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e) => {
+                            onClick={(e:any) => {
                                 preHandlePurchaseCashCredit('cash')
                             }}
                             size="small"

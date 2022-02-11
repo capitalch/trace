@@ -20,22 +20,15 @@ import cities from '../../../../data/cities.json'
 function useNewEditContact(arbitraryData: any) {
     const [, setRefresh] = useState({})
     const billTo = arbitraryData.billTo
-
-    // billTo.countryOptions = [] //getCountries()
-    // billTo.selectedCountryOption = {}
-    // billTo.stateOptions = []
-    // billTo.selectedStateOption = {}
-    // billTo.cityOptions = []
-    // billTo.selectedCityOption = {}
-
     const classes = useStyles(arbitraryData.billTo)
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         setOptions()
         setRefresh({})
         return () => {
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -74,9 +67,6 @@ function useNewEditContact(arbitraryData: any) {
         billTo.selectedStateOption = { label: null, value: null, stateCode: 0 }
         billTo.selectedCityOption = { label: null, value: null, stateCode: 0 }
         setStateOptions()
-        // billTo.country = { value: e.value, label: e.label }
-        // billTo.state = { value: null, label: null }
-        // billTo.city = { value: null, label: null }
         meta.current.isMounted && setRefresh({})
     }
 
@@ -88,15 +78,12 @@ function useNewEditContact(arbitraryData: any) {
         }
         setCityOptions()
         billTo.selectedCityOption = { label: null, value: null, stateCode: 0 }
-        // billTo.state = { value: e.value, label: e.label }
-        // billTo.city = { value: null, label: null }
         billTo.stateCode = e.stateCode
         meta.current.isMounted && setRefresh({})
     }
 
     function handleCityChange(e: any) {
         billTo.selectedCityOption = { value: e.value, label: e.label }
-        // billTo.city = { value: e.value, label: e.label }
         meta.current.isMounted && setRefresh({})
     }
 
@@ -220,7 +207,7 @@ function useNewEditContact(arbitraryData: any) {
                 <InputMask
                     mask="(999) 999-9999"
                     alwaysShowMask={true}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         const num = e.target.value.replace(/[^0-9]/g, '')
                         arbitraryData.billTo.mobileNumber = parseInt(num, 10)
                         setRefresh({})
@@ -246,7 +233,7 @@ function useNewEditContact(arbitraryData: any) {
                     className="text-field"
                     error={!arbitraryData.billTo.contactName}
                     value={arbitraryData.billTo.contactName || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.contactName = e.target.value
                         setRefresh({})
                     }}
@@ -258,7 +245,7 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.otherMobileNumber || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.otherMobileNumber = e.target.value
                         setRefresh({})
                     }}
@@ -270,7 +257,7 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.landPhone || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.landPhone = e.target.value
                         setRefresh({})
                     }}
@@ -282,8 +269,8 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     error={isInvalidEmail(arbitraryData.billTo.email)}
-                    value={arbitraryData.billTo.email || null}
-                    onChange={(e) => {
+                    value={arbitraryData.billTo.email || ''}
+                    onChange={(e:any) => {
                         arbitraryData.billTo.email = e.target.value
                         setRefresh({})
                     }}
@@ -296,7 +283,7 @@ function useNewEditContact(arbitraryData: any) {
                     className="text-field"
                     error={!arbitraryData.billTo.address1}
                     value={arbitraryData.billTo.address1 || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.address1 = e.target.value
                         setRefresh({})
                     }}
@@ -308,7 +295,7 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.address2 || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.address2 = e.target.value
                         setRefresh({})
                     }}
@@ -320,11 +307,9 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleCountryChange}
                     placeholder="Select country"
-                    // options={getCountries()}
                     options={billTo.countryOptions}
                     styles={styles}
                     className="react-select-country"
-                    // value={arbitraryData.billTo.country || {}}
                     value={billTo.selectedCountryOption}></ReactSelect>
 
                 {/* States */}
@@ -333,11 +318,9 @@ function useNewEditContact(arbitraryData: any) {
                     menuShouldScrollIntoView={true}
                     onChange={handleStateChange}
                     placeholder="Select State"
-                    // options={getStates()}
                     options={billTo.stateOptions}
                     styles={styles}
                     className="react-select-state"
-                    // value={arbitraryData.billTo.state || {}}
                     value={billTo.selectedStateOption}></ReactSelect>
 
                 {/* Cities */}
@@ -349,14 +332,13 @@ function useNewEditContact(arbitraryData: any) {
                     options={billTo.cityOptions}
                     styles={styles}
                     className="react-select-city"
-                    // value={arbitraryData.billTo.city || {}}
                     value={billTo.selectedCityOption}></ReactSelect>
 
                 {/* Pin */}
                 <InputMask
                     mask="999999"
                     alwaysShowMask={false}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.pin = parseInt(e.target.value)
                         setRefresh({})
                     }}
@@ -374,7 +356,7 @@ function useNewEditContact(arbitraryData: any) {
                 <InputMask
                     mask="99"
                     alwaysShowMask={true}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         billTo.stateCode = parseInt(e.target.value)
                         setRefresh({})
                     }}
@@ -396,7 +378,7 @@ function useNewEditContact(arbitraryData: any) {
                     className="text-field"
                     error={isInvalidGstin(arbitraryData.billTo.gstin)}
                     value={arbitraryData.billTo.gstin || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.gstin = e.target.value
                         setRefresh({})
                     }}
@@ -410,7 +392,7 @@ function useNewEditContact(arbitraryData: any) {
                     error={isImproperDate(arbitraryData.billTo.dateOfBirth)}
                     className="text-field"
                     value={arbitraryData.billTo.dateOfBirth || '1900-01-01'}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.dateOfBirth = e.target.value
                         setRefresh({})
                     }}
@@ -424,7 +406,7 @@ function useNewEditContact(arbitraryData: any) {
                     error={isImproperDate(billTo.anniversaryDate)}
                     className="text-field"
                     value={billTo.anniversaryDate || '1900-01-01'}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         billTo.anniversaryDate = e.target.value
                         setRefresh({})
                     }}
@@ -436,12 +418,11 @@ function useNewEditContact(arbitraryData: any) {
                     variant="standard"
                     className="text-field"
                     value={arbitraryData.billTo.descr || ''}
-                    onChange={(e) => {
+                    onChange={(e:any) => {
                         arbitraryData.billTo.descr = e.target.value
                         setRefresh({})
                     }}
                 />
-
                 {/* Submit */}
                 <Button
                     color="secondary"

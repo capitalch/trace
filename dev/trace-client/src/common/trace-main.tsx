@@ -1,10 +1,10 @@
-import {clsx, useState, useEffect, useRef } from '../imports/regular-imports'
+import { clsx, useState, useEffect, useRef } from '../imports/regular-imports'
 import {
     Container,
     makeStyles,
     createStyles,
 } from '../imports/gui-imports'
-import {manageEntitiesState, useIbuki, useTraceGlobal} from '../imports/trace-imports'
+import { manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 
@@ -13,7 +13,7 @@ function TraceMain({ open }: any) {
         setCurrentComponent,
         getCurrentEntity,
     } = manageEntitiesState()
-    const { filterOn} = useIbuki()
+    const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
     const meta = useRef({
         isMounted: false,
@@ -35,7 +35,8 @@ function TraceMain({ open }: any) {
     const classes = useStyles({ meta: meta })
 
     useEffect(() => {
-        meta.current.isMounted = true
+        const curr = meta.current
+        curr.isMounted = true
         const launchMap: any = {
             accounts: <LaunchPadAccounts></LaunchPadAccounts>,
             authentication: <LaunchPadAuthentication></LaunchPadAuthentication>,
@@ -45,15 +46,15 @@ function TraceMain({ open }: any) {
             if (d.data === 'reset') {
                 setCurrentComponent({})
             }
-            meta.current.launchPad = currentEntity
+            curr.launchPad = currentEntity
                 ? launchMap[currentEntity]
                 : null
-            meta.current.isMounted && setRefresh({})
+                curr.isMounted && setRefresh({})
         })
-       
+
         return () => {
             subs.unsubscribe()
-            meta.current.isMounted = false
+            curr.isMounted = false
         }
     }, [])
 
@@ -75,7 +76,7 @@ function TraceMain({ open }: any) {
 export { TraceMain }
 
 const drawerWidth = 260
-const useStyles: any = makeStyles((theme:any) =>
+const useStyles: any = makeStyles((theme: any) =>
     createStyles({
         content: {
             transition: theme.transitions.create('margin', {
