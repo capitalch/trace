@@ -1,9 +1,11 @@
 import {
+    useEffect,
     useState,
     NumberFormat,
     PrimeColumn,
     DataTable, useContext
 } from '../../../../imports/regular-imports'
+import { useIbuki } from '../../../../imports/trace-imports'
 import { IconButton, TextField, Paper } from '../../../../imports/gui-imports'
 import { AddCircle, CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
@@ -13,6 +15,7 @@ import { MultiDataContext } from '../common/multi-data-bridge'
 function SaleFooter() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
+    const { emit } = useIbuki()
     const multiData: any = useContext(MultiDataContext)
     const arbitraryData: any = multiData.sales
     const {
@@ -23,6 +26,10 @@ function SaleFooter() {
         onChangeLedgerSubledger,
     } = useSaleFooter(arbitraryData)
 
+    useEffect(() => {
+        
+    }, [])
+    emit('LEDGER-SUBLEDGER-DISABLE-AUTO-SUBLEDGER', true)
     const { LedgerSubledger, toDecimalFormat } = useSharedElements()
 
     return (
@@ -76,6 +83,7 @@ function SaleFooter() {
                         ledgerAccounts={rowData.ledgerAccounts}
                         onChange={() => onChangeLedgerSubledger(rowData)}
                         rowData={rowData}
+                        showAutoSubledgerValues={false}
                     />
                 )}
                 header="Debit account"
@@ -93,7 +101,7 @@ function SaleFooter() {
                         decimalScale={2}
                         error={rowData.amount === 0 ? true : false}
                         fixedDecimalScale={true}
-                        onFocus={(e:any) => {
+                        onFocus={(e: any) => {
                             e.target.select()
                         }}
                         onValueChange={(values: any) => {
@@ -117,7 +125,7 @@ function SaleFooter() {
                 body={(rowData: any) => (
                     <TextField
                         variant="standard"
-                        onChange={(e:any) => {
+                        onChange={(e: any) => {
                             rowData.instrNo = e.target.value
                             arbitraryData.salesCrownRefresh()
                             meta.current.isMounted && setRefresh({})
@@ -135,7 +143,7 @@ function SaleFooter() {
                     <TextField
                         variant="standard"
                         fullWidth={true}
-                        onChange={(e:any) => {
+                        onChange={(e: any) => {
                             rowData.remarks = e.target.value
                             meta.current.isMounted && setRefresh({})
                         }}

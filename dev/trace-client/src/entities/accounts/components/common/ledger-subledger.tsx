@@ -1,5 +1,6 @@
-import { clsx, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { clsx, useState, useEffect, useRef, } from '../../../../imports/regular-imports'
 import Select, { components } from 'react-select'
+import { useIbuki } from '../../../../imports/trace-imports'
 import { makeStyles, createStyles, Theme } from '../../../../imports/gui-imports'
 
 interface LedgerSubledgerOptions {
@@ -19,6 +20,7 @@ function LedgerSubledger({
     showAutoSubledgerValues,
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
+    const { filterOn } = useIbuki()
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -64,7 +66,17 @@ function LedgerSubledger({
         return () => {
             curr.isMounted = false
         }
-    }, [ rowData.accId])
+    }, [rowData.accId])
+
+    useEffect(() => {
+        const subs1 = filterOn('LEDGER-SUBLEDGER-DISABLE-AUTO-SUBLEDGER')
+            .subscribe((d: any) => {
+                setSubledgerDisabled(d.data || true)
+            })
+        return (() => {
+            subs1.unsubscribe()
+        })
+    }, [])
 
     const meta: any = useRef({
         isMounted: false,

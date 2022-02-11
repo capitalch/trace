@@ -83,12 +83,18 @@ function utils() {
         let ret = undefined
         const allAccounts: any[] = getFromBag('allAccounts')
         const account = allAccounts.find((x) => x.id === accId)
-        account &&
-            (ret = {
+        if (!_.isEmpty(account)) {
+            ret = {
                 accClass: account.accClass,
-                isSubledger: account.isAutoSubledger,
-            })
+                isAutoSubledger: isParentAutoSubledger(account.parentId)
+            }
+        }
         return ret
+
+        function isParentAutoSubledger(accId: number) {
+            const acc = allAccounts.find((x: any) => x.id === accId)
+            return (acc?.isAutoSubledger || false)
+        }
     }
 
     function getMappedAccounts(accounts: any[]) {
@@ -102,8 +108,8 @@ function utils() {
     function getGridReportSubTitle() {
         const finObject = getFromBag('finYearObject')
         const unitInfo = getFromBag('unitInfo')
-        const ret = ''.concat(unitInfo.unitName || '', ' (report from ', finObject.startDate, ' to ',finObject.endDate, ")")
-        return(ret)
+        const ret = ''.concat(unitInfo.unitName || '', ' (report from ', finObject.startDate, ' to ', finObject.endDate, ")")
+        return (ret)
     }
 
     function getTranType(tranTypeId: number) {

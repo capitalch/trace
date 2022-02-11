@@ -221,7 +221,7 @@ def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='
     # out = cursor.fetchone()
     childAccId = out[0]  # extract accId
     detailsData[1]['accId'] = childAccId
-    valueDict['data'][0]['remarks'] = 'Auto subledger created'
+    valueDict['data'][0]['remarks'] = f'Auto subledger {accCode}'
     return(lastNo, accId)
 
 
@@ -266,7 +266,7 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict):
                                                   'tranTypeId': tranTypeId, 'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
             # also set the last no in autoSubledgerCounter table
             if((tranTypeId == 4) and valueDict.get('isAutoSubledger', None)):
-                sqlString = 'update_last_no_auto_subledger'
+                sqlString = allSqls['update_last_no_auto_subledger']
                 args = {'lastNo': autoSubledgerLastNo + 1,
                         'branchId': branchId, 'accId': accId, 'finYearId': finYearId}
                 execSqlWithCursor(cursor, sqlString, args=args,

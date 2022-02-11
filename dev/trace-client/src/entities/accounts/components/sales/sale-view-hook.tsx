@@ -272,7 +272,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                     const accObj: any = getAccountClassWithAutoSubledger(
                         item.accId
                     )
-                    if (accObj.accClass === 'sale') {
+                    if (accObj?.accClass === 'sale') {
                         ad.rowData.accId = item.accId
                         ad.summary.amount = item.amount
                         ad.footer.amount = item.amount

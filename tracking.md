@@ -7,11 +7,11 @@ arbitraryData.saleVarietyAccId = item.id
                                 arbitraryData.footer.items[0].accId =
                                     arbitraryData.saleVarietyAccId
 ## To do
-1. Complete server side saving
-2. Verify edit. Enable the show autosubledger in the ledgerWithSubledger
+                                1. Complete server side saving
+                                2. Verify edit. Enable the show autosubledger in the ledgerWithSubledger
                                 3. Check the delete
-4. General ledger not showing
-5. Increment autosubledger number
+                                4. General ledger not showing
+                                5. Increment autosubledger number
 6. Script for creating the table
 7 update scripts for creation of new db etc
 
@@ -141,6 +141,10 @@ create installer from innosetup
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances 
+
+# 09-02-2022 - 11-02-2022
+1. Fixation of billing errors: 1+ days
+2. Implementation of auto subledger: 2 days
 
 # 27-01-2022 - 08-02-2022
 1. Security and management redefined
