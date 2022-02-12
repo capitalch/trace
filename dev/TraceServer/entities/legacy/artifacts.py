@@ -1,7 +1,7 @@
 # from os import stat, path
 import datetime
 from flask import Blueprint, request, render_template, jsonify
-from flask_weasyprint import HTML, render_pdf
+# from flask_weasyprint import HTML, render_pdf
 import simplejson as json
 from urllib.parse import unquote, urljoin
 from copy import deepcopy
