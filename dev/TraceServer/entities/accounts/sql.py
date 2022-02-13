@@ -437,10 +437,12 @@ allSqls = {
             select %(finYearId)s, %(branchId)s, %(accId)s, 0
                 where not exists (select 1 from "AutoSubledgerCounter" where "finYearId" = %(finYearId)s and
 					"branchId" = %(branchId)s and "accId" = %(accId)s );
-        select "lastNo", "accType", "classId"
+        select "lastNo", "accType", a."classId", c."accClass"
             from "AutoSubledgerCounter" d
                 join "AccM" a
                     on a."id" = d."accId"
+                join "AccClassM" c
+                    on c."id" = a."classId"
                 where "finYearId" = %(finYearId)s and
                             "branchId" = %(branchId)s and "accId" = %(accId)s
     

@@ -5,14 +5,14 @@ import { utilMethods } from '../../global-utils/misc-utils'
 import accountsMessages from './json/accounts-messages.json'
 import queries from './artifacts/graphql-queries-mutations'
 import { graphqlService } from '../../global-utils/graphql-service'
-import { usingLinkClient } from '../../global-utils/link-client'
+// import { usingLinkClient } from '../../global-utils/link-client'
 // import { useAdminManageRoles } from '../authentication/components/admin-manage-roles-hook' // to be removed
 const { emit, hotEmit } = usingIbuki()
 
 function initCode() {
     const { getFromBag, getLoginData, setInBag } = manageEntitiesState()
     const { execGenericView } = utilMethods()
-    const { connectToLinkServer, joinRoom, onReceiveData } = usingLinkClient()
+    // const { connectToLinkServer, joinRoom, onReceiveData } = usingLinkClient()
     const { queryGraphql } = graphqlService()
     const isoDateFormat = 'YYYY-MM-DD'
 
@@ -170,22 +170,6 @@ function initCode() {
         const configuration = getFromBag('configuration')
         const { linkServerUrl, linkServerKey } = configuration
         console.log('linkServerUrl:', linkServerUrl)
-        connectToLinkServer(linkServerUrl, undefined, linkServerKey).subscribe(
-            (d: any) => {
-                if (d.connected) {
-                    const room = getRoom()
-                    joinRoom(room)
-                    onReceiveData().subscribe((d: any) => {
-                        if (
-                            d.message ===
-                            'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE'
-                        ) {
-                            emit('VOUCHER-UPDATED-REFRESH-REPORTS', null)
-                        }
-                    })
-                }
-            }
-        )
 
         setInBag('allSettings', allSettings)
         const info = allSettings.find((item) => item.key === 'unitInfo')

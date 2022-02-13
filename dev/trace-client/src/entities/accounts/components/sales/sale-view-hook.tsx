@@ -272,6 +272,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                     const accObj: any = getAccountClassWithAutoSubledger(
                         item.accId
                     )
+                    if(!accObj){
+                        emit('SHOW-MESSAGE', {
+                            message: accountsMessages.warningToDoRefresh,
+                            severity: 'warning',
+                            duration: null,
+                        })
+                        return
+                    }
                     if (accObj?.accClass === 'sale') {
                         ad.rowData.accId = item.accId
                         ad.summary.amount = item.amount
@@ -286,13 +294,13 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             id: isModify ? item.id : undefined,
                             allAccounts: arbitraryData.allAccounts,
                         }
-                        if (accObj.isAutoSubledger) {
+                        if (accObj?.isAutoSubledger) {
                             ad.saleVariety = 'a'
                             obj.ledgerAccounts = getMappedAccounts(
                                 arbitraryData.accounts['autoSubledgerAccounts']
                             )
                         } else if (
-                            ['debtor', 'creditor'].includes(accObj.accClass)
+                            ['debtor', 'creditor'].includes(accObj?.accClass)
                         ) {
                             ad.saleVariety = 'i'
                             obj.ledgerAccounts = getMappedAccounts(

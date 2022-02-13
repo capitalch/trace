@@ -220,7 +220,7 @@ def resolve_generic_update_master_details(parent, info, value):
         if updateCodeBlock is not None:
             item['updateCodeBlock'] = allSqls[updateCodeBlock]
         # inject finYearId and branchId
-        ret = genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, item)
+        ret = genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, item, context = info.context)
         return(ret)
         # print(autoRefNo)
 

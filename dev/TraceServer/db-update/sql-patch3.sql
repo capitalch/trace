@@ -37,3 +37,9 @@ CREATE TABLE IF NOT EXISTS "AutoSubledgerCounter"  (
 			ON UPDATE NO ACTION
 			ON DELETE CASCADE
 )
+-- create unique constraint on 'accCode' in table 'AccM'. At present same account code can exist twice in the table
+-- Create unique constraints in ProductM
+ALTER TABLE "AccM"
+	DROP CONSTRAINT IF EXISTS "AccM_accCode_key";
+ALTER TABLE "AccM"
+    ADD CONSTRAINT "AccM_accCode_key" UNIQUE ("accCode");

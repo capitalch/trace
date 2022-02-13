@@ -2,7 +2,7 @@ import io from 'socket.io-client'
 import { BehaviorSubject, Subject } from 'rxjs'
 
 let zLink: any
-function usingLinkClient() {
+function useLinkClient() {
     const errNotConnected = 'Link server is not connected'
     function connectToLinkServer(
         url: string,
@@ -140,4 +140,4 @@ function usingLinkClient() {
     }
 }
 
-export { usingLinkClient }
+export { useLinkClient }

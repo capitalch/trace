@@ -1,67 +1,42 @@
 https://tempail.com/en/
 
-## autosubledger implementation
-arbitraryData.saleVariety === 'a' for autosubledger
-arbitraryData.saleVarietyAccId = item.id
-                                arbitraryData.saleVarietyAccName = item.accName
-                                arbitraryData.footer.items[0].accId =
-                                    arbitraryData.saleVarietyAccId
-## To do
-                                1. Complete server side saving
-                                2. Verify edit. Enable the show autosubledger in the ledgerWithSubledger
-                                3. Check the delete
-                                4. General ledger not showing
-                                5. Increment autosubledger number
-6. Script for creating the table
-7 update scripts for creation of new db etc
-
 
 1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)
 2. If a sale transaction has isAutoSubledger then create a new accountCode with parentAccId/lastNo+1 (based on parentId in AccCounter table)/startfinYear
 3. Have debit account replaced by new accountcode
 
-## To do on Sunday
-                            5. Implementation of permissions in UI and its documentation
-                            3.9 Deployment
-                            1. Introduce isActive in user and client
-                            2. Documentation of user management with how to remove a user
-                            3.5 cleanup client and also server
-                            3.10 When a business user is not assigned any bu, then in UI if bu is tried to select, system crashes. There should be safe exit
-                            3. final checkup of roles, permission, bu and associate for admin
-                            3.8 Correction of forget password
-                            3.6. uid editable by both the admins
-                            3.7 Generic error handlic at flask server
-                            8. Server error management and propagation to client, during failure of SQL execution
-6. Plan of autosubledger implement
-7. Plan for socket usage in accounts update etc.
-    9. Start preparation of great resume
-
 ## Planning
-                              1. Authentication and user management:                    1 week, 5th Feb 2022
-                                  SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
-                                  Admin: Check manage users, Manage BU. Complete manage roles. New Associate
-                              Global error catch mecanism. At present UI freezes when error happens
-                              Provide Subtitle wherever applicable
-                              2. Invoice correction:                                    2 days, 7th Feb
-                              Prevent inactive user from login and other works.
-3. Full reporting of Inventory and allied:                1 week, 14th Feb
-4. Opening balance of stock:                              3 days, 17th Feb
-5. Subledger billing:                                     2 days, 19th Feb
-6. Ledger subledger showing balance:                      2 days, 21st Feb
-7. purchase invoice scanned pdf save:                     2 days, 23rd feb
-8. Buffer 3 days                                          3 days, 26th Feb
-9. Input of product price and price management            2 days, 28th Feb
-10. New account code create, immediate effect             3 days, 3rd Mar
-11. Account balances in generic-vouchers                  3 days, 6th Mar
-12. Debit credit notes printing                           3 days, 9th Mar
-                              13. Grid view provide title and subtitle                  2 days, 11 Mar
+                                                                                        1. Authentication and user management:                    1 week, 5th Feb 2022
+                                                                                            SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
+                                                                                            Admin: Check manage users, Manage BU. Complete manage roles. New Associate
+                                                                                        Global error catch mecanism. At present UI freezes when error happens
+                                                                                        Provide Subtitle wherever applicable
+                                                                                        2. Invoice correction:                                    2 days, 7th Feb
+                                                                                        Prevent inactive user from login and other works.
+                                                                                        5. Subledger billing:                                     2 days, 9th Feb
+                                                                                        13. Grid view provide title and subtitle                  2 days, 11 Mar
+
+4. Opening balance of stock:                              3 days, 14th Feb
+19. Stock Journals                                        3 days, 17th Feb
+3. Full reporting of Inventory and allied:                1 week, 24th Feb
+
+                                                                                        
+6. Ledger subledger showing balance:                      2 days, 26th Feb
+7. purchase invoice scanned pdf save:                     2 days, 28th feb
+8. Buffer 3 days                                          3 days, 3rd Mar
+9. Input of product price and price management            2 days, 5th Mar
+10. New account code create, immediate effect             3 days, 8th Mar
+11. Account balances in generic-vouchers                  3 days, 11th Mar
+12. Debit credit notes printing                           3 days, 14th Mar
+                                                                                        
 14. Accounts master, when edited, data is not 
     refreshed after saved, accounts creation
-    email optional                                        1 day, 12th Mar
-15. PDF print, BS, PL and TB                              3 days, 15th Mar
-16. Purchase entry, unable to enter GST price             2 days, 17th Mar
-17. Edit from bank recon                                  2 days, 19th Mar
-18. Fix Accounts master, new contact twice                4 days, 23rd Mar
+    email optional                                        1 day, 15th Mar
+15. PDF print, BS, PL and TB                              3 days, 18th Mar
+16. Purchase entry, unable to enter GST price             2 days, 20th Mar
+17. Edit from bank recon                                  2 days, 22th Mar
+18. Fix Accounts master, new contact twice                4 days, 26th Mar
+
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
@@ -78,14 +53,6 @@ arbitraryData.saleVarietyAccId = item.id
 4. gitignore several templates: https://github.com/github/gitignore
 5. Frontend checklist: Everything you need to check your website like seo etc.: https://github.com/thedaviddias/Front-End-Checklist
 
-# logic for auto subledger sales
-1. Created ExtMiscAccM. column isAutoSubLedger
-2. Sale bills are having a global sequential number based on branch and finYearId
-3. The subledger accounts for isAutoSubledger true are the sale bill numbers generated in global manner. It will always be unique. It will be generated at run time.
-4. Sale types are 1) Retail sales 2) Institution sales and 3) Auto subledger sales
-5. Institution sales, dialog box, select debtor / creditor with accLeaf = 'Y'
-7. Auto subledger sales, dialog box, select from class='debtor' accLeaf = 'L' and isAutoSubledger = true
-
 ## pyinstaller command for tkenter
 # acivate env where pyinstaller is installed
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
@@ -95,17 +62,16 @@ create installer from innosetup
 1. Delete all orphan entries in TranH table
 
 # Priority 1
-1.0 Auto subledger create bill
+                                                                                                1.0 Auto subledger create bill
 2.0 Category-> Product hierarchy with stock qty and value, search on product
 3.0 Purchase invoice scanned pdf save
 4.0 Opening stock entry mechanism
-5.0 Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
+                                                                                                5.0 Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
 6.0 Provision to input product price. At present cannot input product price
 7.0 When new account code is created that should immediately be visible at payment options
 
 # Fixing short pending
-1. Bill fixing
-1.1 Convert Authentication, complete system to x-data-grid-prof from material-table
+
 1.2 Account balances in vouchers
 1.3 
 1.4 Remove material-table from authentication/generic-crud; its using old version of material-ui
@@ -123,6 +89,7 @@ create installer from innosetup
 # Long term
 1. Convert sales and purchases to div and remove table, to make them more responsive
 2. Easy sales implementation
+2.1 Voucher copy and paste
 3. Provide a way to come out of app in mobile. Presently there is no way
 4. Footer Trace version copyright
 5. Universally make it responsive

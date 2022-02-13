@@ -5,7 +5,7 @@ import {
     Typography,
     createStyles,
 } from '../../imports/gui-imports'
-import { usingIbuki, manageEntitiesState } from '../../imports/trace-imports'
+import { useIbuki, manageEntitiesState, } from '../../imports/trace-imports'
 import { getArtifacts } from '../../react-form/common/react-form-hook'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 import { utils } from './utils'
@@ -16,16 +16,19 @@ import {
     getDebitCreditNotesArbitraryData,
     getVouchersArbitraryData,
 } from './components/common/multi-data-bridge'
-
+import { useLinkClient } from '../../global-utils/link-client'
+import { useServerSocketMessageHandler } from './components/common/server-socket-message-handler-hook'
 function LaunchPad() {
     const { getUnitHeading } = utils()
     const {
+        getFromBag,
+        getLoginData,
         setCurrentComponent,
         getCurrentEntity,
         getCurrentComponent,
         setCurrentFormId,
     } = manageEntitiesState()
-    const { filterOn } = usingIbuki()
+    const { filterOn } = useIbuki()
     const currentEntityName = getCurrentEntity()
     const artifacts = getArtifacts(currentEntityName)
     const [, setRefresh] = useState({})
@@ -33,6 +36,7 @@ function LaunchPad() {
         isMounted: false,
         mainHeading: '',
     })
+    const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
     const classes = useStyles()
     meta.current.mainHeading = getUnitHeading()
     useEffect(() => {
@@ -54,6 +58,28 @@ function LaunchPad() {
             subs.unsubscribe()
             curr.isMounted = false
         }
+    }, [])
+    const { socketMessageHandler } = useServerSocketMessageHandler()
+    useEffect(() => {
+        const configuration = getFromBag('configuration')
+        const { linkServerUrl, linkServerKey } = configuration
+        let subs2: any = undefined
+        const subs1 = connectToLinkServer(linkServerUrl, undefined, linkServerKey).subscribe(
+            (d: any) => {
+                if (d.connected) {
+                    const room = getRoom()
+                    joinRoom(room)
+                    subs2 = onReceiveData().subscribe(socketMessageHandler
+                    )
+                }
+            }
+        )
+        return (() => {
+            subs1.unsubscribe()
+            if (subs2) {
+                subs2.unsubscribe()
+            }
+        })
     }, [])
 
     const salesData = getSalesArbitraryData()
@@ -108,6 +134,17 @@ function LaunchPad() {
             }
         }
         return ret
+    }
+
+    function getRoom() {
+        const clientId = getLoginData()?.clientId
+        const buCode = getFromBag('buCode')
+        const { finYearId } = getFromBag('finYearObject') || ''
+        const { branchId } = getFromBag('branchObject') || ''
+        const room = `${String(
+            clientId
+        )}:${buCode}:${finYearId}:${branchId}`
+        return room
     }
 }
 

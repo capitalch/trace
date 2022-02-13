@@ -58,6 +58,6 @@
     "selectBusinessUnit": "Please select a business unit from available business units",
     "totalTransactions":"Total transaction amounts to $rs.",
     "transactionDelete": "Do you want to delete this transaction",
-    "transactionNotDeleted": "Transaction was not deleted"
-    
+    "transactionNotDeleted": "Transaction was not deleted",
+    "warningToDoRefresh":"A new subledger account is created. You need to do refresh and then edit this sales transaction"
 }
