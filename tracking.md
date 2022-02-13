@@ -1,5 +1,27 @@
 https://tempail.com/en/
+## SQL
+set search_path to demounit1;
+with
+    cte1 as (select "accId", CASE WHEN "dc" = 'D' then SUM("amount") ELSE SUM(-"amount") END as "amount"
+        from "TranD"  d
+            join "TranH" h
+                on h."id" = d."tranHeaderId"
+            where "branchId" = 1 and "finYearId" = 2021
+                GROUP BY "accId", "dc"
+                union 
+            select "accId", CASE WHEN "dc" ='D' then "amount" ELSE (-"amount") END as "amount"
+            from "AccOpBal" 
+                where "branchId" = 1 and "finYearId" = 2021),
+    cte2 as (
+        select "accId", SUM("amount") as "amount"
+            from cte1 group BY "accId"
+    )
 
+    select "accCode", "accName", "accId", "amount"
+        from "AccM" a
+            join cte2 b
+                on a."id" = b."accId"
+        order by "accCode"
 
 1. Create a table AccCounter(id, finYearId, branchId, accId, lastNo)
 2. If a sale transaction has isAutoSubledger then create a new accountCode with parentAccId/lastNo+1 (based on parentId in AccCounter table)/startfinYear
