@@ -43,17 +43,17 @@ with
 3. Full reporting of Inventory and allied:                1 week, 24th Feb
 
                                                                                         
-6. Ledger subledger showing balance:                      2 days, 26th Feb
+    6. Ledger subledger showing balance:                      2 days, 26th Feb
 7. purchase invoice scanned pdf save:                     2 days, 28th feb
 8. Buffer 3 days                                          3 days, 3rd Mar
 9. Input of product price and price management            2 days, 5th Mar
-10. New account code create, immediate effect             3 days, 8th Mar
-11. Account balances in generic-vouchers                  3 days, 11th Mar
+    10. New account code create, immediate effect             3 days, 8th Mar
+    11. Account balances in generic-vouchers                  3 days, 11th Mar
 12. Debit credit notes printing                           3 days, 14th Mar
                                                                                         
-14. Accounts master, when edited, data is not 
-    refreshed after saved, accounts creation
-    email optional                                        1 day, 15th Mar
+    14. Accounts master, when edited, data is not 
+        refreshed after saved, accounts creation
+        email optional                                        1 day, 15th Mar
 15. PDF print, BS, PL and TB                              3 days, 18th Mar
 16. Purchase entry, unable to enter GST price             2 days, 20th Mar
 17. Edit from bank recon                                  2 days, 22th Mar
@@ -130,6 +130,10 @@ create installer from innosetup
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances 
+
+# 10-02-2022 - 14-02-2022
+1. Fixed emails sent from server
+2. Auto subledger concept implemented
 
 # 09-02-2022 - 11-02-2022
 1. Fixation of billing errors: 1+ days

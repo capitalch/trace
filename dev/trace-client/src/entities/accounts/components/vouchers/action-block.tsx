@@ -124,7 +124,9 @@ function ActionBlock({
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts[ledgerAccounts] || []
                             )}
-                            onChange={() => emit('CROWN-REFRESH', '')}
+                            onChange={() => {
+                                emit('CROWN-REFRESH', '')
+                            }}
                             rowData={item}
                         />
                     </div>

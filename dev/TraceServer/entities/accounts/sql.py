@@ -1070,12 +1070,31 @@ allSqls = {
 
     "getJson_datacache": '''
         with cte1 as (
-            SELECT a.*, c."accClass", m."isAutoSubledger"
-				FROM "AccM" a 
-					join "AccClassM" c 
-						on a."classId" = c."id"
-					left outer join "ExtMiscAccM" m
-						on a."id" = m."accId"
+            with cte01 as 
+	        (select "accId", CASE WHEN "dc" = 'D' then SUM("amount") ELSE SUM(-"amount") END as "amount"
+                from "TranD"  d
+                    join "TranH" h
+                        on h."id" = d."tranHeaderId"
+                    where "branchId" = 1 and "finYearId" = 2021
+                        GROUP BY "accId", "dc"
+                        union 
+                    select "accId", CASE WHEN "dc" ='D' then "amount" ELSE (-"amount") END as "amount"
+                    from "AccOpBal" 
+                        where "branchId" = 1 and "finYearId" = 2021),
+            cte02 as (
+                select "accId", SUM("amount") as "amount"
+                    from cte01 group BY "accId"
+            )
+            select a.*, c."accClass", m."isAutoSubledger", b."amount" as "balance",
+                    CASE WHEN b."amount" >=0 THEN (b."amount" || ' Dr') ELSE (ABS(b."amount") || ' Cr') END as "balanceDrCr"
+                from "AccM" a
+                    join "AccClassM" c
+                        on c."id" = a."classId"
+                    left outer join "ExtMiscAccM" m
+                                on a."id" = m."accId"
+                    left outer join cte02 b
+                        on a."id" = b."accId"
+                order by "accCode"
         ),
         cte2 as (
             select "id", "key", "textValue", "jData", "intValue" 
@@ -1091,6 +1110,30 @@ allSqls = {
                 , 'allClasses',(SELECT json_agg(row_to_json(c)) FROM cte3 c)
             ) as "jsonResult"
         ''',
+
+    # "getJson_datacache1": '''
+    #     with cte1 as (
+    #         SELECT a.*, c."accClass", m."isAutoSubledger"
+	# 			FROM "AccM" a 
+	# 				join "AccClassM" c 
+	# 					on a."classId" = c."id"
+	# 				left outer join "ExtMiscAccM" m
+	# 					on a."id" = m."accId"
+    #     ),
+    #     cte2 as (
+    #         select "id", "key", "textValue", "jData", "intValue" 
+    #             from "Settings"
+    #     ),
+    #     cte3 as (
+    #         select * from "AccClassM" order by "accClass" 
+    #     )
+    #     SELECT
+    #         json_build_object(
+    #             'allAccounts', (SELECT json_agg(row_to_json(a)) from cte1 a)
+    #             , 'allSettings', (SELECT json_agg(row_to_json(b)) from cte2 b)
+    #             , 'allClasses',(SELECT json_agg(row_to_json(c)) FROM cte3 c)
+    #         ) as "jsonResult"
+    #     ''',
 
     "getJson_debit_credit_note": '''
         select h."id", "tranDate", "remarks", h."jData", "posId", "autoRefNo", "userRefNo",

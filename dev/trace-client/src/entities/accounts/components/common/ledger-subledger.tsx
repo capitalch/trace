@@ -30,7 +30,8 @@ function LedgerSubledger({
             if (['Y', 'L'].includes(item?.accLeaf)) {
                 // Leaf or ledger as auto subledger
                 curr.ledgerItem = {
-                    label: item?.accName,
+                    // label: ''.concat(item?.accName, ` ${item.balanceDrCr || ''}`),
+                    label: item?.name,
                     value: item?.id,
                 }
                 curr.subledgerItem = { label: null, value: undefined }
