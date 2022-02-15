@@ -17,7 +17,7 @@ function useServerSocketMessageHandler() {
     }
 
     function handleMasterDetailsUpdateDone(data: any) {
-        emit('VOUCHER-UPDATED-REFRESH-REPORTS', null)
+        emit('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', null)
     }
 
     function newAccountCreated(data: any) {

@@ -1,11 +1,12 @@
 import { NumberFormat, useState, useEffect, useContext } from '../../../../imports/regular-imports'
 import {
-    Checkbox, IconButton, makeStyles, Paper, TextField, Theme, Typography, createStyles, FormControlLabel
+    Box, Checkbox, IconButton, makeStyles, Paper, TextField, Theme, Typography, createStyles, FormControlLabel
 } from '../../../../imports/gui-imports'
 import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
+import { TypographySmart } from './typography-smart'
 
 function ActionBlock({
     actionType,
@@ -28,7 +29,6 @@ function ActionBlock({
         accountsMessages,
         emit,
         filterOn,
-        getAccountBalanceFormatted,
         getMappedAccounts,
         toDecimalFormat,
     } = useSharedElements()
@@ -101,7 +101,6 @@ function ActionBlock({
                     setRefresh({})
                 }
             )
-
             return () => {
                 subs1.unsubscribe()
             }
@@ -116,23 +115,25 @@ function ActionBlock({
             return (
                 <div key={incr()} className="action-row">
                     {/* Account */}
-                    <div>
-                        <Typography variant="caption">
-                            {actionLabel} account
-                        </Typography>
+                    <Box>
+                        <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                            <Typography variant="caption">
+                                {actionLabel} account
+                            </Typography>
+                            <TypographySmart item={item}/>
+                        </Box>
                         <LedgerSubledger
                             allAccounts={ad.accounts.all}
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts[ledgerAccounts] || []
                             )}
-                            onChange={() => emit('CROWN-REFRESH', '')}
-                            // if(item.accId){
-                            //     alert(getAccountBalanceFormatted(item.accId))
-                            // }
-
+                            onChange={() => {
+                                emit('CROWN-REFRESH', '')
+                                emit('TYPOGRAPHY-SMART-REFRESH','')
+                            }}
                             rowData={item}
                         />
-                    </div>
+                    </Box>
 
                     {/* Instrument */}
                     {allowInstrNo && (

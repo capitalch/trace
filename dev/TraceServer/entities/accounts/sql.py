@@ -14,6 +14,22 @@ allSqls = {
                         order by a."id"
     ''',
 
+    "get_accountsBalances": '''
+        with cte1 as 
+            (select "accId", CASE WHEN "dc" = 'D' then SUM("amount") ELSE SUM(-"amount") END as "amount"
+                from "TranD"  d
+                    join "TranH" h
+                        on h."id" = d."tranHeaderId"
+                    where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s and "accId" in %(accIds)s
+                        GROUP BY "accId", "dc"
+                        union 
+                    select "accId", CASE WHEN "dc" ='D' then "amount" ELSE (-"amount") END as "amount"
+                    from "AccOpBal" 
+                        where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s and "accId" in %(accIds)s) 
+            select "accId", SUM("amount") as "amount"
+                from cte1 group BY "accId"
+    ''',
+
     "get_accountsLedger": '''
             with cte as(
             select "accName" from "AccM"
@@ -1075,18 +1091,17 @@ allSqls = {
                 from "TranD"  d
                     join "TranH" h
                         on h."id" = d."tranHeaderId"
-                    where "branchId" = 1 and "finYearId" = 2021
+                    where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
                         GROUP BY "accId", "dc"
                         union 
                     select "accId", CASE WHEN "dc" ='D' then "amount" ELSE (-"amount") END as "amount"
                     from "AccOpBal" 
-                        where "branchId" = 1 and "finYearId" = 2021),
+                        where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s),
             cte02 as (
                 select "accId", SUM("amount") as "amount"
                     from cte01 group BY "accId"
             )
-            select a.*, c."accClass", m."isAutoSubledger", b."amount" as "balance",
-                    CASE WHEN b."amount" >=0 THEN (b."amount" || ' Dr') ELSE (ABS(b."amount") || ' Cr') END as "balanceDrCr"
+            select a.*, c."accClass", m."isAutoSubledger", b."amount" as "balance"
                 from "AccM" a
                     join "AccClassM" c
                         on c."id" = a."classId"

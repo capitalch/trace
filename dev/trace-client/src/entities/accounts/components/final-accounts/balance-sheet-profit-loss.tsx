@@ -44,7 +44,7 @@ function BalanceSheetProfitLoss() {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        const subs1 = filterOn('VOUCHER-UPDATED-REFRESH-REPORTS').subscribe(
+        const subs1 = filterOn('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE').subscribe(
             () => {
                 setTimeout(() => {
                     getData(false)

@@ -261,12 +261,9 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
 
             # for sale with autosubledger insert transaction
             autoSubledgerLastNo = 0
-            # accId = 0
-            
             if((tranTypeId == 4) and valueDict.get('isAutoSubledger', None)):
                 autoSubledgerLastNo, childAccObj = processForAutoSubledger(
                     dbName=dbName, branchId=branchId, branchCode=branchCode, buCode=buCode, finYearId=finYearId, cursor=cursor, valueDict=valueDict,)
-                # connection.commit()
 
         ret = execSqlObject(valueDict, cursor, buCode=buCode)
         sqlString = allSqls['update_last_no']
@@ -280,14 +277,17 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
                         'branchId': branchId, 'accId': childAccObj['parentId'], 'finYearId': finYearId}
                 execSqlWithCursor(cursor, sqlString, args=args,
                                   isMultipleRows=False, buCode=buCode)
-
+        #####
+        res = execSqlWithCursor(cursor=cursor,sqlString=allSqls['get_accountsBalances'], args = {'branchId':1, 'finYearId':2021, 'accIds': (4,179,225)}, buCode = buCode)
+        out = dict(res)
+        print(out)
         connection.commit()
+        #####
         # in case of autoSubledger a new account code is created. That is being sent to all connected clients through socket connection
         if(context and childAccObj):
             room = getRoomFromCtx(context)
             if isLinkConnected():
                 sendToRoom('TRACE-SERVER-NEW-ACCOUNT-CREATED', childAccObj, room)
-        # print(childAccObj)
         return ret
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)

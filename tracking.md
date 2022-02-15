@@ -43,12 +43,12 @@ with
 3. Full reporting of Inventory and allied:                1 week, 24th Feb
 
                                                                                         
-    6. Ledger subledger showing balance:                      2 days, 26th Feb
+                                                                                        6. Ledger subledger showing balance:                      2 days, 26th Feb
 7. purchase invoice scanned pdf save:                     2 days, 28th feb
 8. Buffer 3 days                                          3 days, 3rd Mar
 9. Input of product price and price management            2 days, 5th Mar
     10. New account code create, immediate effect             3 days, 8th Mar
-    11. Account balances in generic-vouchers                  3 days, 11th Mar
+                                                                                        11. Account balances in generic-vouchers                  3 days, 11th Mar
 12. Debit credit notes printing                           3 days, 14th Mar
                                                                                         
     14. Accounts master, when edited, data is not 

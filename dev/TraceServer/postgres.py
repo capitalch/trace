@@ -104,7 +104,9 @@ def execSqlWithCursor(cursor, sqlString, args=None, isMultipleRows=True,buCode='
     out = None
     searchPathSql = getschemaSearchPath(buCode)
     try:
-        cursor.execute(f'{searchPathSql};{sqlString}', args)
+        query = cursor.mogrify(f'{searchPathSql};{sqlString}', args)
+        cursor.execute(query)
+        # cursor.execute(f'{searchPathSql};{sqlString}', args)
         try: # To suck the error when cursor has no output rows
             if isMultipleRows:
                 out = cursor.fetchall()
