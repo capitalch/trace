@@ -31,7 +31,7 @@ function LedgerSubledger({
                 // Leaf or ledger as auto subledger
                 curr.ledgerItem = {
                     // label: ''.concat(item?.accName, ` ${item.balanceDrCr || ''}`),
-                    label: item?.name,
+                    label: item?.accName,
                     value: item?.id,
                 }
                 curr.subledgerItem = { label: null, value: undefined }
