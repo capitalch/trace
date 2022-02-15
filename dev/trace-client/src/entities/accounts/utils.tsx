@@ -7,6 +7,7 @@ import { usingIbuki } from '../../global-utils/ibuki'
 import moment from 'moment'
 import accountsMessages from '../accounts/json/accounts-messages.json'
 import messages from '../../messages.json'
+// import { itemLevelValidators } from '../../shared-artifacts/item-level-validators'
 const accStore: any = {}
 
 function utils() {
@@ -95,6 +96,17 @@ function utils() {
             const acc = allAccounts.find((x: any) => x.id === accId)
             return (acc?.isAutoSubledger || false)
         }
+    }
+
+    function getAccountBalanceFormatted(accId: number){
+        const {toDecimalFormat} = utilMethods()
+        const allAccounts=getFromBag('allAccounts')
+        const account = allAccounts.find((item:any)=> item.id === accId)
+        const balance = account?.balance || 0
+        const fBalance = toDecimalFormat(Math.abs(balance))
+        const suffix = (balance >=0 ) ? ' Dr': ' Cr'
+        const ret = ''.concat(fBalance, suffix)
+        return(ret)
     }
 
     function getMappedAccounts(accounts: any[]) {
@@ -318,6 +330,7 @@ function utils() {
         extractGst,
         getAccountClass,
         getAccountName,
+        getAccountBalanceFormatted,
         getAccountClassWithAutoSubledger,
         getMappedAccounts,
         getGridReportSubTitle,

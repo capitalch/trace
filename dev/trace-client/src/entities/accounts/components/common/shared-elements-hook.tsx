@@ -72,6 +72,7 @@ function useSharedElements() {
     const confirm = useConfirm()
     const {
         execSaleInvoiceView,
+        getAccountBalanceFormatted,
         getAccountClass,
         getAccountName,
         getAccountClassWithAutoSubledger,
@@ -108,6 +109,7 @@ function useSharedElements() {
         execSaleInvoiceView,
         extractAmount,
         filterOn,
+        getAccountBalanceFormatted,
         genericUpdateMaster,
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,

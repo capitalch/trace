@@ -28,6 +28,7 @@ function ActionBlock({
         accountsMessages,
         emit,
         filterOn,
+        getAccountBalanceFormatted,
         getMappedAccounts,
         toDecimalFormat,
     } = useSharedElements()
@@ -124,9 +125,11 @@ function ActionBlock({
                             ledgerAccounts={getMappedAccounts(
                                 ad.accounts[ledgerAccounts] || []
                             )}
-                            onChange={() => {
-                                emit('CROWN-REFRESH', '')
-                            }}
+                            onChange={() => emit('CROWN-REFRESH', '')}
+                            // if(item.accId){
+                            //     alert(getAccountBalanceFormatted(item.accId))
+                            // }
+
                             rowData={item}
                         />
                     </div>
