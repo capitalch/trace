@@ -188,6 +188,7 @@ function utilMethods() {
     async function genericUpdateMasterDetails(options: DataDetailsOption[]) {
         emit('SHOW-LOADING-INDICATOR', true)
         const json: any = escape(JSON.stringify(options))
+        // console.log(JSON.stringify(options))
         const currentEntityName = getCurrentEntity()
         let ret: any = {}
         try {

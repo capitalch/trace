@@ -231,21 +231,44 @@ def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='
     childAccObj['accClass'] = accClass
     return(lastNo, childAccObj)
 
+def getAccIdsAsTuple(valueDict):
+        out = []
+        def process1(item):
+            accId = item.get('accId', None)
+            details = item.get('details', None)
+            if(accId):
+                out.append(accId)
+            elif(details):
+                for itt in details:
+                    process(itt)
+
+        def process(item):
+            data = item.get('data', None)
+            if(data):
+                if(isinstance(data, list)):
+                    for it in data:
+                        process1(it)
+                else:
+                    process1(data)
+
+        # for item in valueDict:
+        process(valueDict)
+        return(tuple(out))
 
 def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, context = None):
     connection = None
     try:
-        connection = None
+        accIdsTuple = getAccIdsAsTuple(valueDict)
         pool = getPool(dbName)
         connection = pool.getconn()
         cursor = connection.cursor()
         autoRefNo = ''
         childAccObj = None
+        branchId = valueDict["data"][0]["branchId"]
+        tranTypeId = valueDict["data"][0]["tranTypeId"]
+        finYearId = valueDict["data"][0]["finYearId"]
         # calculate autoRefNo only if id field is not there, insert operation
-        if not 'id' in valueDict["data"][0]:
-            branchId = valueDict["data"][0]["branchId"]
-            tranTypeId = valueDict["data"][0]["tranTypeId"]
-            finYearId = valueDict["data"][0]["finYearId"]
+        if not 'id' in valueDict["data"][0]:            
             sqlString = allSqls['getJson_branchCode_tranCode']
             res = execSql(dbName, sqlString, {'branchId': branchId, 'tranTypeId': tranTypeId},
                           isMultipleRows=False, buCode=buCode)
@@ -278,9 +301,13 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
                 execSqlWithCursor(cursor, sqlString, args=args,
                                   isMultipleRows=False, buCode=buCode)
         #####
-        res = execSqlWithCursor(cursor=cursor,sqlString=allSqls['get_accountsBalances'], args = {'branchId':1, 'finYearId':2021, 'accIds': (4,179,225)}, buCode = buCode)
-        out = dict(res)
-        print(out)
+        
+        res = execSqlWithCursor(cursor=cursor,sqlString=allSqls['get_accountsBalances'], args = {'branchId':branchId, 'finYearId':finYearId, 'accIds': accIdsTuple}, buCode = buCode)
+        res = dict(res)
+        for k,v in res.items():
+            res[k] = str(v)
+        # out = dict(res)
+        # print(out)
         connection.commit()
         #####
         # in case of autoSubledger a new account code is created. That is being sent to all connected clients through socket connection
@@ -288,7 +315,7 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
             room = getRoomFromCtx(context)
             if isLinkConnected():
                 sendToRoom('TRACE-SERVER-NEW-ACCOUNT-CREATED', childAccObj, room)
-        return ret
+        return ret, res
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)
         if connection:

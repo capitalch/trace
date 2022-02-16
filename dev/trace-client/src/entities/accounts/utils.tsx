@@ -120,7 +120,7 @@ function utils() {
     function getGridReportSubTitle() {
         const finObject = getFromBag('finYearObject')
         const unitInfo = getFromBag('unitInfo')
-        const ret = ''.concat(unitInfo.unitName || '', ' (report from ', finObject.startDate, ' to ', finObject.endDate, ")")
+        const ret = ''.concat(unitInfo?.unitName || '', ' (report from ', finObject.startDate, ' to ', finObject.endDate, ")")
         return (ret)
     }
 

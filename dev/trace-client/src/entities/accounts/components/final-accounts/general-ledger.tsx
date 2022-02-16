@@ -4,6 +4,7 @@ import {
     useState,
 } from '../../../../imports/regular-imports'
 import {
+    Box,
     Dialog,
     DialogContent,
     DialogTitle,
@@ -16,7 +17,7 @@ import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
 import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
-
+import { TypographySmart } from '../common/typography-smart'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
@@ -41,15 +42,18 @@ function GeneralLedger() {
                 </Typography>
 
                 <div className="select-ledger">
-                    <div
+                    <Box
                         style={{
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                         }}>
                         <Typography component="label" variant="subtitle2">
-                            Select ledger account
+                            Ledger account
                         </Typography>
+
+                        <TypographySmart item={meta.current.ledgerSubledger} />
+
                         <Tooltip title="Print preview">
                             <IconButton
                                 size="small"
@@ -58,7 +62,7 @@ function GeneralLedger() {
                                 <Preview className="preview-icon" />
                             </IconButton>
                         </Tooltip>
-                    </div>
+                    </Box>
 
                     <LedgerSubledger
                         className="ledger-subledger"
@@ -84,6 +88,7 @@ function GeneralLedger() {
                                 emit('XX-GRID-RESET', null)
                             }
                             meta.current.isMounted && setRefresh({})
+                            emit('TYPOGRAPHY-SMART-REFRESH','')
                         }}
                     />
                 </div>

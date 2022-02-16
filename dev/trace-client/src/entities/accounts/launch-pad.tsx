@@ -71,6 +71,8 @@ function LaunchPad() {
                     joinRoom(room)
                     subs2 = onReceiveData().subscribe(socketMessageHandler
                     )
+                } else {
+                    subs2 &&(subs2.unsubscribe())
                 }
             }
         )

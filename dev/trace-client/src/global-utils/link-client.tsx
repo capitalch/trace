@@ -37,6 +37,7 @@ function useLinkClient() {
         })
         zLink.on('disconnect', () => {
             console.log('disconnected')
+            subject.next({ connected: false })
         })
         return subject
     }

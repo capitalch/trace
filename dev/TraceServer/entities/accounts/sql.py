@@ -123,7 +123,7 @@ allSqls = {
     ''',
 
     'get_allTransactions': '''
-        select ROW_NUMBER() over (order by "tranDate" DESC , h."id", d."id") as "index"
+        select ROW_NUMBER() over (order by "tranDate" DESC , h."id" DESC, d."id" DESC) as "index"
             , h."id", h."tranDate" as "tranDate"
             , "tranTypeId"
             , h."autoRefNo", h."userRefNo", h."remarks"
@@ -138,7 +138,7 @@ allSqls = {
                 join "AccM" a
                     on a."id" = d."accId"
             where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-            order by "tranDate" DESC, h."id", d."id" limit (%(no)s)
+            order by "tranDate" DESC, h."id" DESC, d."id" DESC limit (%(no)s)
     ''',
 
     'get_allTransactions1': '''

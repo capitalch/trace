@@ -6,7 +6,7 @@ import { AddCircle, RemoveCircle } from '../../../../imports/icons-import'
 import { LedgerSubledger } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
-import { TypographySmart } from './typography-smart'
+import { TypographySmart } from '../common/typography-smart'
 
 function ActionBlock({
     actionType,

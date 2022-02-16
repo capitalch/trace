@@ -150,28 +150,6 @@ def resolve_configuration(parent, info):
     return(configuration)
 
 
-@accountsMutation.field("genericUpdateMaster")
-def resolve_generic_update_master(parent, info, value):
-    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
-        info.context)
-    value = unquote(value)
-    valueDict = json.loads(value)
-    customCodeBlock = valueDict.get('customCodeBlock')
-    updateCodeBlock = valueDict.get('updateCodeBlock')
-    if customCodeBlock is not None:
-        valueDict['customCodeBlock'] = allSqls[customCodeBlock]
-    if updateCodeBlock is not None:
-        valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
-
-    # To update the client through sockets
-    room = getRoomFromCtx(info.context)
-    if isLinkConnected():
-        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
-
-    id = execGenericUpdateMaster(dbName, valueDict, buCode)
-    return id
-
-
 @accountsMutation.field("sendEmail")
 def do_email(parent, info, value):
     value = unquote(value)
@@ -207,6 +185,28 @@ def do_sms(parent, info, value):
     return(response, 200)
 
 
+@accountsMutation.field("genericUpdateMaster")
+def resolve_generic_update_master(parent, info, value):
+    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+        info.context)
+    value = unquote(value)
+    valueDict = json.loads(value)
+    customCodeBlock = valueDict.get('customCodeBlock')
+    updateCodeBlock = valueDict.get('updateCodeBlock')
+    if customCodeBlock is not None:
+        valueDict['customCodeBlock'] = allSqls[customCodeBlock]
+    if updateCodeBlock is not None:
+        valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
+
+    # To update the client through sockets
+    room = getRoomFromCtx(info.context)
+    if isLinkConnected():
+        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+
+    id = execGenericUpdateMaster(dbName, valueDict, buCode)
+    return id
+
+
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
@@ -220,21 +220,23 @@ def resolve_generic_update_master_details(parent, info, value):
         if updateCodeBlock is not None:
             item['updateCodeBlock'] = allSqls[updateCodeBlock]
         # inject finYearId and branchId
-        ret = genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, item, context = info.context)
-        return(ret)
+        ret, res = genericUpdateMasterDetailsHelper(
+            dbName, buCode, finYearId, item, context=info.context)
+        return(ret, res)
         # print(autoRefNo)
 
     value = unquote(value)
     valueData = json.loads(value)
     ret = None
+    res = None
     if type(valueData) is list:
         for item in valueData:
-            ret = processData(item)
+            ret, res = processData(item)
     else:
-        ret = processData(valueData)
+        ret, res = processData(valueData)
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
-        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
     return ret  # returns the id of first item, if there are multiple items
 
 

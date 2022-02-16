@@ -38,26 +38,31 @@ with
                                                                                         5. Subledger billing:                                     2 days, 9th Feb
                                                                                         13. Grid view provide title and subtitle                  2 days, 11 Mar
 
-4. Opening balance of stock:                              3 days, 14th Feb
-19. Stock Journals                                        3 days, 17th Feb
-3. Full reporting of Inventory and allied:                1 week, 24th Feb
+                                                                                        6. Ledger subledger showing balance:                      2 days, 13th Feb
+                                                                                        11. Account balances in generic-vouchers                  3 days, 16th Mar
+14. Accounts master, when edited, data is not 
+        refreshed after saved, accounts creation
+        email optional                                    1 day, 17th Feb
+10. New account code create, immediate effect             3 days, 20th Feb
+
+4. Opening balance of stock:                              3 days, 23rd Feb
+19. Stock Journals                                        3 days, 26th Feb
+3. Full reporting of Inventory and allied:                1 week, 2nd Mar
 
                                                                                         
-                                                                                        6. Ledger subledger showing balance:                      2 days, 26th Feb
-7. purchase invoice scanned pdf save:                     2 days, 28th feb
-8. Buffer 3 days                                          3 days, 3rd Mar
-9. Input of product price and price management            2 days, 5th Mar
-    10. New account code create, immediate effect             3 days, 8th Mar
-                                                                                        11. Account balances in generic-vouchers                  3 days, 11th Mar
-12. Debit credit notes printing                           3 days, 14th Mar
                                                                                         
-    14. Accounts master, when edited, data is not 
-        refreshed after saved, accounts creation
-        email optional                                        1 day, 15th Mar
-15. PDF print, BS, PL and TB                              3 days, 18th Mar
-16. Purchase entry, unable to enter GST price             2 days, 20th Mar
-17. Edit from bank recon                                  2 days, 22th Mar
-18. Fix Accounts master, new contact twice                4 days, 26th Mar
+7. purchase invoice scanned pdf save:                     2 days, 4th Mar
+8. Buffer 3 days                                          3 days, 7th Mar
+9. Input of product price and price management            2 days, 9th Mar
+    
+                                                                                        
+12. Debit credit notes printing                           3 days, 12th Mar
+                                                                                        
+    
+15. PDF print, BS, PL and TB                              3 days, 15th Mar
+16. Purchase entry, unable to enter GST price             2 days, 17th Mar
+17. Edit from bank recon                                  2 days, 19th Mar
+18. Fix Accounts master, new contact twice                4 days, 23th Mar
 
 
 ## Service SMS
