@@ -645,8 +645,6 @@ function AccountsMaster() {
         utilFunc().saveScrollPos()
         const formId = getFormId()
         clearServerError(formId)
-        let data1: any = getFormData(formId)
-        // data1.accLeaf = data1.accLeaf || undefined
         await doValidateForm(formId)
         if (isValidForm(formId)) {
             let data: any = getFormData(formId)
@@ -871,7 +869,7 @@ function AccountsMaster() {
             },
             newChild: () => {
                 resetForm(getFormId())
-                let formData = getFormData(getFormId())
+                // let formData = getFormData(getFormId())
                 const accEntryTemp: any = JSON.parse(
                     JSON.stringify(accountsEntry)
                 )
@@ -909,10 +907,10 @@ function AccountsMaster() {
                     )
                 }
                 accEntryTemp.items.push(accLeafTemp)
-                // formData = getFormData(getFormId())
                 return accEntryTemp
             },
             editSelf: () => {
+                resetForm(getFormId())
                 const accEntryTemp: any = JSON.parse(
                     JSON.stringify(accountsEntry)
                 )
