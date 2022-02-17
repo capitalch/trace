@@ -19,7 +19,7 @@ import { useTheme } from '../../../../imports/gui-imports'
 
 function AccountsMaster() {
     const [, setRefresh] = useState({})
-    const formIdRef: any = useRef('accounts-master') // I am fixing formId for this form
+    const formIdRef: any = useRef('accounts-master')
 
     const {
         clearServerError,
@@ -153,7 +153,7 @@ function AccountsMaster() {
     currentMediaSize && mediaLogic[currentMediaSize]()
 
     return (
-        <div
+        <Box
             className={classes.content}>
             <Box className={classes.header}>
                 <Typography
@@ -249,6 +249,8 @@ function AccountsMaster() {
                                         startIcon={<Add></Add>}
                                         onClick={() => {
                                             utilFunc().saveScrollPos()
+                                            resetForm(getFormId())
+                                            dialogConfig.id = undefined // otherwise if edit is done then this contains old value
                                             const accName = node.data.accName
                                             dialogConfig.entryType = 'newChild'
                                             dialogConfig.title = 'New child of '.concat(
@@ -540,7 +542,7 @@ function AccountsMaster() {
                         }></TraceFullWidthSubmitButton>
                 </DialogActions>
             </Dialog>
-        </div>
+        </Box>
     )
 
     async function autoSubledgerChange(e: any, node: any) {
@@ -643,6 +645,8 @@ function AccountsMaster() {
         utilFunc().saveScrollPos()
         const formId = getFormId()
         clearServerError(formId)
+        let data1: any = getFormData(formId)
+        // data1.accLeaf = data1.accLeaf || undefined
         await doValidateForm(formId)
         if (isValidForm(formId)) {
             let data: any = getFormData(formId)
