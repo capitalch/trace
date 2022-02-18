@@ -16,19 +16,34 @@ with open('config.json') as f:
 poolStore = {}
 
 
-def execGenericUpdateMaster(dbName, sqlObject, buCode='public'):
+def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, finYearId = None):
     connection = None
     ret = None
+    res = None
     errorCode = 'generic'
     try:
+        deletedIds = sqlObject.get('deletedIds', None)
+        tableName = sqlObject.get('tableName', None)
         pool = getPool(dbName)
         connection = pool.getconn()
         cursor = connection.cursor()
         errorCode = 'cannotDelete' if sqlObject.get(
             'deletedIds', None) is not None else 'generic'
         ret = execSqlObject(sqlObject, cursor, buCode=buCode)
+        if(tableName == 'AccM'):
+            if(deletedIds): # account deleted
+                pass
+            else: # update or new account
+                acc = sqlObject.get('data', None)
+                if(acc):
+                    if(acc.get('id', None)):
+                        res = acc
+                    else: 
+                        # res = execSqlWithCursor(cursor=cursor, sqlString=allSqls['get_accountsBalances'], args={
+                        #             'branchId': branchId, 'finYearId': finYearId, 'accIds': tuple([ret])}, buCode=buCode)       
+                        pass
         connection.commit()
-        # ret = True
+        
     except (Exception, psycopg2.Error) as error:
         ret = False
         if connection:
@@ -39,7 +54,7 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public'):
             cursor.close()
             connection.close()
             # print("PostgreSQL connection is closed")
-    return ret
+    return ret, res
 
 
 def execScriptFile_with_newSchema(dbName, scriptFile, newSchemaName):
@@ -76,7 +91,7 @@ def execSql(dbName, sqlString, args=None, isMultipleRows=True,  autoCommitMode=F
     searchPathSql = getschemaSearchPath(buCode)
     try:
         connection, cursor, pool = getConnectionCursor(
-            dbName, autoCommitMode )
+            dbName, autoCommitMode)
         cursor.execute(f'{searchPathSql};{sqlString}', args)
         try:
             if isMultipleRows:
@@ -100,23 +115,25 @@ def execSql(dbName, sqlString, args=None, isMultipleRows=True,  autoCommitMode=F
             # print("PostgreSQL connection is closed")
     return out
 
-def execSqlWithCursor(cursor, sqlString, args=None, isMultipleRows=True,buCode='public'):
+
+def execSqlWithCursor(cursor, sqlString, args=None, isMultipleRows=True, buCode='public'):
     out = None
     searchPathSql = getschemaSearchPath(buCode)
     try:
         query = cursor.mogrify(f'{searchPathSql};{sqlString}', args)
         cursor.execute(query)
         # cursor.execute(f'{searchPathSql};{sqlString}', args)
-        try: # To suck the error when cursor has no output rows
+        try:  # To suck the error when cursor has no output rows
             if isMultipleRows:
                 out = cursor.fetchall()
             else:
                 out = cursor.fetchone()
         except(Exception) as err:
-            out=None
+            out = None
     except(Exception) as error:
         raise Exception(getErrorMessage())
     return out
+
 
 def execSqls(dbName, sqlTupleListWithArgs, buCode='public'):
     out = {}
@@ -169,5 +186,5 @@ def getPool(dbName):
         ref = cfg[env]['baseConnection']
         # ref = cfg['baseConnection']
         poolStore[dbName] = psycopg2.pool.ThreadedConnectionPool(
-            1, 500, user=ref['user'], password=ref['password'], host=ref['host'], port=ref['port'], database=dbName)        
+            1, 500, user=ref['user'], password=ref['password'], host=ref['host'], port=ref['port'], database=dbName)
     return poolStore[dbName]

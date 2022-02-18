@@ -201,23 +201,24 @@ def resolve_generic_update_master(parent, info, value):
     if updateCodeBlock is not None:
         valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
 
-    id = execGenericUpdateMaster(dbName, valueDict, buCode)
+    ret, res = execGenericUpdateMaster(dbName, valueDict, buCode, branchId, finYearId)
     # To update the client through sockets
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
         if(valueDict.get('message', None)):
-            sendToRoom(valueDict.get('message'),res, room )
+            sendToRoom(valueDict.get('message'), res, room)
         elif((tableName == 'TranH') and deletedIds):
             # Only master update, but message is MASTER-DETAILS-UPDATE-DONE, This is to take care of delete operation, which is done by calling this method, but at server when header is deleted, cascaded delete of details rows also happen
-            sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+            sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
         elif(tableName == 'AccM'):
             if(deletedIds):
-                #send deletedIds[0], isDeleted: True, so that client removes the id
+                # send deletedIds[0], isDeleted: True, so that client removes the id
                 pass
             else:
                 # Account edited or updated. Query the new account based on Id
+                sendToRoom('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED', res, room)
                 pass
-    return id
+    return ret
 
 
 @accountsMutation.field("genericUpdateMasterDetails")
@@ -225,6 +226,7 @@ def resolve_generic_update_master_details(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     room = getRoomFromCtx(info.context)
+
     def processData(item):
         customCodeBlock = item.get('customCodeBlock')
         updateCodeBlock = item.get('updateCodeBlock')
@@ -239,7 +241,8 @@ def resolve_generic_update_master_details(parent, info, value):
             if(item.get('message', None)):
                 sendToRoom(item.get('message'), res, room)
             else:
-                sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
+                sendToRoom(
+                    'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
         return(ret, res)
 
     value = unquote(value)
