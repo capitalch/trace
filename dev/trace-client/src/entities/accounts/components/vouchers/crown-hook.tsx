@@ -308,8 +308,10 @@ function useCrown(meta: any, componentRef: any) {
             }
 
             async function transformAndSubmit() {
+                // Message is sent to all connected clients from server as ibuki message, for online update purpose
                 const voucher: any = {
                     tableName: 'TranH',
+                    // message: 'SERVER-LOOPBACK-MASTER-DETAILS-ACCOUNTS-UPDATED',
                     data: [],
                 }
 

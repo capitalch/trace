@@ -1,8 +1,8 @@
-import _ from 'lodash'
-import { manageEntitiesState, useIbuki, } from '../../../../imports/trace-imports'
+import { _ } from '../../../../imports/regular-imports'
+import { useSharedElements } from './shared-elements-hook'
+
 function useServerSocketMessageHandler() {
-    const { emit, } = useIbuki()
-    const { getFromBag } = manageEntitiesState()
+    const { emit, getFromBag, } = useSharedElements()
     const socketObject: any = {
         'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE': handleMasterDetailsUpdateDone,
         'TRACE-SERVER-NEW-ACCOUNT-CREATED': newAccountCreated,
@@ -28,7 +28,7 @@ function useServerSocketMessageHandler() {
         }
         emit('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', data)
     }
-    
+
     function newAccountCreated(data: any) {
         // change accId to id and append data to global accounts
         data.id = data.accId

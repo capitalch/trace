@@ -672,6 +672,7 @@ function AccountsMaster() {
                 queryId: 'genericUpdateMaster',
                 afterMethod: closeDialog,
             })
+            getData()
         } else {
             doFormRefresh(getFormId())
         }

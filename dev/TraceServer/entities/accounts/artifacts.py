@@ -190,7 +190,10 @@ def resolve_generic_update_master(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     value = unquote(value)
+    res = None
     valueDict = json.loads(value)
+    tableName = valueDict.get('tableName', None)
+    deletedIds = valueDict.get('deletedIds', None)
     customCodeBlock = valueDict.get('customCodeBlock')
     updateCodeBlock = valueDict.get('updateCodeBlock')
     if customCodeBlock is not None:
@@ -198,12 +201,22 @@ def resolve_generic_update_master(parent, info, value):
     if updateCodeBlock is not None:
         valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
 
+    id = execGenericUpdateMaster(dbName, valueDict, buCode)
     # To update the client through sockets
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
-        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
-
-    id = execGenericUpdateMaster(dbName, valueDict, buCode)
+        if(valueDict.get('message', None)):
+            sendToRoom(valueDict.get('message'),res, room )
+        elif((tableName == 'TranH') and deletedIds):
+            # Only master update, but message is MASTER-DETAILS-UPDATE-DONE, This is to take care of delete operation, which is done by calling this method, but at server when header is deleted, cascaded delete of details rows also happen
+            sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+        elif(tableName == 'AccM'):
+            if(deletedIds):
+                #send deletedIds[0], isDeleted: True, so that client removes the id
+                pass
+            else:
+                # Account edited or updated. Query the new account based on Id
+                pass
     return id
 
 
@@ -211,7 +224,7 @@ def resolve_generic_update_master(parent, info, value):
 def resolve_generic_update_master_details(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
-
+    room = getRoomFromCtx(info.context)
     def processData(item):
         customCodeBlock = item.get('customCodeBlock')
         updateCodeBlock = item.get('updateCodeBlock')
@@ -222,8 +235,12 @@ def resolve_generic_update_master_details(parent, info, value):
         # inject finYearId and branchId
         ret, res = genericUpdateMasterDetailsHelper(
             dbName, buCode, finYearId, item, context=info.context)
+        if isLinkConnected():
+            if(item.get('message', None)):
+                sendToRoom(item.get('message'), res, room)
+            else:
+                sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
         return(ret, res)
-        # print(autoRefNo)
 
     value = unquote(value)
     valueData = json.loads(value)
@@ -234,9 +251,6 @@ def resolve_generic_update_master_details(parent, info, value):
             ret, res = processData(item)
     else:
         ret, res = processData(valueData)
-    room = getRoomFromCtx(info.context)
-    if isLinkConnected():
-        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
     return ret  # returns the id of first item, if there are multiple items
 
 
