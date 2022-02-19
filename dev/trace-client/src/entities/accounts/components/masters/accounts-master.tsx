@@ -263,6 +263,10 @@ function AccountsMaster() {
                                                 node.data.accType
                                             dialogConfig.accLeaf =
                                                 node.data.accLeaf
+                                            dialogConfig.accClass = 
+                                                node.data.accClass
+                                            dialogConfig.isAutoSubledger = 
+                                                node.data.isAutoSubledger
                                             meta.current.showDialog = true
                                             meta.current.isMounted &&
                                                 setRefresh({})
@@ -649,12 +653,14 @@ function AccountsMaster() {
         if (isValidForm(formId)) {
             let data: any = getFormData(formId)
             data.parentId ||
-                (data.parentId = meta.current.dialogConfig.parentId)
+                (data.parentId = dialogConfig.parentId)
             data.isPrimary = false
-            data.accLeaf || (data.accLeaf = meta.current.dialogConfig.accLeaf)
-            data.classId || (data.classId = meta.current.dialogConfig.classId)
-            data.accType || (data.accType = meta.current.dialogConfig.accType)
-            data.id || (data.id = meta.current.dialogConfig.id)
+            data.accLeaf = data.accLeaf || dialogConfig.accLeaf
+            data.classId = data.classId || dialogConfig.classId            
+            data.accType = data.accType || dialogConfig.accType
+            // data.accClass = data.accClass || dialogConfig.accClass
+            // data.isAutoSubledger = data.isAutoSubledger || dialogConfig.isAutoSubledger
+            data.id || (data.id = dialogConfig.id)
             if (data.id) {
                 // edit is done, remove unwanted columns
                 data.accLeaf = undefined
@@ -666,13 +672,15 @@ function AccountsMaster() {
             finalData.tableName = 'AccM'
             finalData.updateCodeBlock = 'updateBlock_editAccount'
             finalData.data = { ...data }
+            finalData.accClass = dialogConfig.accClass // will be used later when new data inserted, this information is added to allAccounts from getFromBag('allAccounts')
+            finalData.isAutoSubledger = dialogConfig.isAutoSubledger // will be used later ...
             saveForm({
                 data: finalData,
                 formId: formId,
                 queryId: 'genericUpdateMaster',
                 afterMethod: closeDialog,
             })
-            getData()
+            await getData()
         } else {
             doFormRefresh(getFormId())
         }

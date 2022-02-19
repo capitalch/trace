@@ -29,6 +29,7 @@ function ActionBlock({
         accountsMessages,
         emit,
         filterOn,
+        getFromBag,
         getMappedAccounts,
         toDecimalFormat,
     } = useSharedElements()
@@ -44,6 +45,7 @@ function ActionBlock({
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
+            // subs3.unsubscribe()
         }
     }, [])
     return (

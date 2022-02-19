@@ -23,7 +23,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         isInvalidDate,
         isInvalidGstin,
     } = useSharedElements()
-
+    const ad = arbitraryData
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -36,9 +36,16 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         ).subscribe((d: any) => {
             handlePurchaseCashCredit(d.data)
         })
+        const subs2 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
+            setAccounts()
+            const cashOrCredit = (ad.purchaseCashCredit === 'credit') ? 'credit': 'cash'
+            handlePurchaseCashCredit(cashOrCredit)
+            setRefresh({})
+        })
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
+            subs2.unsubscribe()
         }
     }, [])
 
@@ -53,7 +60,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             actions: () => {},
         },
     })
-    const ad = arbitraryData
+    
     function setAccounts() {
         // allAccounts
         const allAccounts = getFromBag('allAccounts') || []

@@ -26,9 +26,6 @@ function SaleFooter() {
         onChangeLedgerSubledger,
     } = useSaleFooter(arbitraryData)
 
-    useEffect(() => {
-        
-    }, [])
     emit('LEDGER-SUBLEDGER-DISABLE-AUTO-SUBLEDGER', true)
     const { LedgerSubledger, toDecimalFormat } = useSharedElements()
 

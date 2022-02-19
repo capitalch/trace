@@ -42,10 +42,16 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setInBag('salesData', multiData.sales)
         })
 
+        const subs3 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
+            setAccounts()
+            setRefresh({})
+        })
+
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
         }
     }, [])
 

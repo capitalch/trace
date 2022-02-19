@@ -70,6 +70,11 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             setInBag('vouchersData', multiData.vouchers)
         })
 
+        const subs6 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
+            setAccounts()
+            setRefresh({})
+        })
+
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
@@ -77,6 +82,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             subs3.unsubscribe()
             subs4.unsubscribe()
             subs5.unsubscribe()
+            subs6.unsubscribe()
         }
     }, [])
 

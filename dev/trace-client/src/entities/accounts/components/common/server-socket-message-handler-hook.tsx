@@ -25,8 +25,9 @@ function useServerSocketMessageHandler() {
             acc.accCode = data.accCode
             acc.accName = data.accName
         } else {
-            
+            allAccounts.push(data)
         }
+        emit('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED', '')
     }
 
     function handleMasterDetailsUpdateDone(data: any) {

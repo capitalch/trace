@@ -36,12 +36,13 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, fi
             else: # update or new account
                 acc = sqlObject.get('data', None)
                 if(acc):
-                    if(acc.get('id', None)):
+                    if(acc.get('id', None)): # it is edit account
                         res = acc
-                    else: 
-                        # res = execSqlWithCursor(cursor=cursor, sqlString=allSqls['get_accountsBalances'], args={
-                        #             'branchId': branchId, 'finYearId': finYearId, 'accIds': tuple([ret])}, buCode=buCode)       
-                        pass
+                    else: # it is new account
+                        acc['accClass'] = sqlObject.get('accClass', None)
+                        acc['isAutoSubledger'] = sqlObject.get('isAutoSubledger', None)
+                        acc['id'] = ret
+                res = acc                       
         connection.commit()
         
     except (Exception, psycopg2.Error) as error:

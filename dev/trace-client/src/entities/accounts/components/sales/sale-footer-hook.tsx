@@ -1,10 +1,10 @@
-import {Big, useState, useEffect, useRef } from '../../../../imports/regular-imports'
+import { Big, useState, useEffect, useRef } from '../../../../imports/regular-imports'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleFooter(arbitraryData: any) {
     const [, setRefresh] = useState({})
-    const { getFromBag, getMappedAccounts } = useSharedElements()
+    const {filterOn, getFromBag, getMappedAccounts } = useSharedElements()
 
     useEffect(() => {
         const curr = meta.current
@@ -12,20 +12,28 @@ function useSaleFooter(arbitraryData: any) {
         if (arbitraryData.footer?.items?.length === 0) {
             handleAddItem()
         }
+        const subs1 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
+            updateLedgerAccounts()
+            setRefresh({})
+        })
         return () => {
             curr.isMounted = false
+            subs1.unsubscribe()
         }
-    })
+    },[])
 
     const meta: any = useRef({
         isMounted: false,
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
     })
+
+    const allAccounts = getFromBag('allAccounts') || []
+    const cashBankArray = ['cash', 'bank', 'card', 'ecash']
 
     function computeSummary() {
         arbitraryData.footer.amount = arbitraryData.footer.items.reduce(
@@ -47,8 +55,8 @@ function useSaleFooter(arbitraryData: any) {
             isLedgerSubledgerError: true,
             remarks: '',
         })
-        const allAccounts = getFromBag('allAccounts') || []
-        const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+        // const allAccounts = getFromBag('allAccounts') || []
+        // const cashBankArray = ['cash', 'bank', 'card', 'ecash']
         const cashBankAccountsLedger = allAccounts.filter(
             (el: any) =>
                 cashBankArray.includes(el.accClass) &&
@@ -82,6 +90,17 @@ function useSaleFooter(arbitraryData: any) {
             ?.accName
         arbitraryData.saleVarietyAccName = accName
         arbitraryData.salesCrownRefresh()
+    }
+
+    function updateLedgerAccounts() {
+        const cashBankAccountsLedger = allAccounts.filter(
+            (el: any) =>
+                cashBankArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        )
+        for (const item of arbitraryData.footer.items) {
+            item.ledgerAccounts = getMappedAccounts(cashBankAccountsLedger)
+        }        
     }
 
     return {
