@@ -239,8 +239,11 @@ def getAccIdsAsTuple(valueDict):
             if(accId):
                 out.append(accId)
             elif(details):
-                for itt in details:
-                    process(itt)
+                if(isinstance(details,list)):
+                    for itt in details:
+                        process(itt)
+                else:
+                    process(details)
 
         def process(item):
             data = item.get('data', None)

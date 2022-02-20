@@ -1,6 +1,6 @@
 https://tempail.com/en/
 
-
+sample GSTIN: 37AADCS0472N1Z1
 ## Planning
                                                                                         1. Authentication and user management:                    1 week, 5th Feb 2022
                                                                                             SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate

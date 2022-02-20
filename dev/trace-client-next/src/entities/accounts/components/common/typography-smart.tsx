@@ -12,11 +12,7 @@ function TypographySmart({ item }: any) {
     useEffect(() => {
         const subs1 = filterOn('TYPOGRAPHY-SMART-REFRESH').subscribe(doUpdate)
         const subs2 = filterOn('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE').subscribe(() => doUpdate())
-        const subs3 = filterOn('TYPOGRAPHY-SMART-RESET').subscribe(()=>{
-            meta.current.label = ''
-            setRefresh({})
-        })
-        
+
         function doUpdate() {
             const accId = item.accId
             meta.current.label = getAccountBalanceFormatted(accId)
@@ -26,7 +22,6 @@ function TypographySmart({ item }: any) {
         return (() => {
             subs1.unsubscribe()
             subs2.unsubscribe()
-            subs3.unsubscribe()
         })
     }, [])
 
