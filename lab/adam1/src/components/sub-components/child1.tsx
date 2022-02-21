@@ -1,38 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { Child11 } from "./child11";
-// import { myAtom, myAtomObj,myCheckCounter } from "../component10";
-function Child1() {
-  // const [counter, setCounter] = useRecoilState(myAtom)
-  // const [counterObj, setCounterObj] = useRecoilState(myAtomObj)
+import { useEffect, useState, } from 'react'
+import { Child11 } from './child11'
 
-  // const checkCount = useRecoilValue(myCheckCounter)
+function Child1({prop1}:any) {
+  useEffect(() => {
+    console.log('Child1 useEffect first time')
+  }, [prop1])
+
+  useEffect(() => {
+    console.log('Child1 useEffect all time')
+  })
+
   return (
     <div>
-      <label>This is child1</label>
-      <div>
-        {/* Counter1: {counter} */}
-        {/* CounterObj: {counterObj.count} */}
-        <button
-          onClick={(e) => {
-            // const cnt = counter  + 1;
-            // setCounter(cnt);
-          }}
-        >
-          
-          Incr1
-        </button>
-        <button
-            onClick={()=>{
-                // let obj = JSON.parse(JSON.stringify(counterObj)) 
-                // obj.count = obj.count+1
-                // setCounterObj(obj)
-            }}
-        >Incr obj1</button>
-      </div>
+      Child1
       <Child11 />
     </div>
-  );
+  )
 }
-
-export { Child1 };
+export { Child1 }

@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
-import { Component8 } from './component8'
-import { useIbuki } from '../utils/ibuki'
 import {
     DataGridPro,
     GridToolbarContainer,
@@ -8,7 +6,6 @@ import {
 } from '@mui/x-data-grid-pro'
 import { Box, Button } from '@mui/material'
 import { Checkbox, IconButton, TextField } from '@mui/material'
-import { SpaceBarRounded } from '@mui/icons-material'
 import {
     CropDinSharp,
     CheckBoxOutlineBlankSharp,

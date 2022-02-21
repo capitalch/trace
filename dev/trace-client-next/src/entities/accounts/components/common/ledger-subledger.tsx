@@ -17,17 +17,17 @@ interface LedgerSubledgerOptions {
 function LedgerSubledger({
     // allAccounts,
     className,
-    controlId,
+    // controlId,
     ledgerAccounts,
     ledgerFilterMethodName,
     onChange,
     rowData,
-    showAutoSubledgerValues,
+    showAutoSubledgerValues = true,
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
     const { emit, filterOn, getFromBag, getMappedAccounts, } = useSharedElements()
     const allAccounts = getFromBag('allAccounts') || []
-    
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -85,16 +85,15 @@ function LedgerSubledger({
         const subs2 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
             loadLedgerAccounts()
         })
-        const subs3 = filterOn(''.concat((controlId || ''),':', 'LEDGER-SUBLEDGER-RELOAD')).subscribe((d: any)=>{
-            ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[d.data]())
+        const subs3 = filterOn('LEDGER-SUBLEDGER-JUST-REFRESH').subscribe(() => {
             setRefresh({})
         })
 
         function loadLedgerAccounts() {
-                        // meta.current.ledgerItem = { label: null, value: undefined }
-                        // meta.current.subLedgerItem = { label: null, value: undefined }
-                        // meta.current.subledgerOptions = []
-                        // emit('TYPOGRAPHY-SMART-RESET', '')
+            // meta.current.ledgerItem = { label: null, value: undefined }
+            // meta.current.subLedgerItem = { label: null, value: undefined }
+            // meta.current.subledgerOptions = []
+            // emit('TYPOGRAPHY-SMART-RESET', '')
             ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[ledgerFilterMethodName]())
             setRefresh({})
         }
@@ -104,6 +103,11 @@ function LedgerSubledger({
             subs3.unsubscribe()
         })
     }, [])
+
+    useEffect(() => {
+        ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[ledgerFilterMethodName]())
+        setRefresh({})
+    }, [ledgerFilterMethodName])
 
     const meta: any = useRef({
         isMounted: false,
@@ -160,7 +164,7 @@ function LedgerSubledger({
                 value={meta.current.ledgerItem}
             />
             <Select
-                isDisabled={meta.current.isSubledgerDisabled}
+                isDisabled={meta.current.isSubledgerDisabled  }
                 maxMenuHeight={110}
                 onChange={handleSubledgerChange}
                 options={meta.current.subledgerOptions}
@@ -257,27 +261,37 @@ function LedgerSubledger({
             return (getMappedAccounts(ro) || [])
         }
 
-        function saleAccounts(){
-            const so =  allAccounts.filter(
+        function saleAccounts() {
+            const so = allAccounts.filter(
                 (el: any) =>
                     ['sale'].includes(el.accClass) &&
                     (el.accLeaf === 'Y' || el.accLeaf === 'L')
             )
-            return(getMappedAccounts(so) || [])
+            return (getMappedAccounts(so) || [])
         }
 
-        function debtorsCreditors(){
+        function debtorsCreditors() {
             const dc = allAccounts
-            .filter(
-                (el: any) =>
-                    ['debtor', 'creditor'].includes(el.accClass) &&
-                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                    !el.isAutoSubledger
-            )
-            return(getMappedAccounts(dc) || [])
+                .filter(
+                    (el: any) =>
+                        ['debtor', 'creditor'].includes(el.accClass) &&
+                        (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                        !el.isAutoSubledger
+                )
+            return (getMappedAccounts(dc) || [])
         }
 
-        return ({ cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors})
+        function autoSubledgers() {
+            const as = allAccounts.filter(
+                (el: any) =>
+                    ['debtor'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                    el.isAutoSubledger
+            )
+            return (getMappedAccounts(as) || [])
+        }
+
+        return ({ cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers })
     }
 
     function getItemFromValue(val: number) {

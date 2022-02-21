@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from "react";
-// import { myAtom, myAtomObj } from "../component10";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState, } from 'react'
 
 function Child11() {
-    // const counter= useRecoilValue(myAtom);
-    // const [counterObj,] = useRecoilState(myAtomObj)
-    
+  useEffect(() => {
+    console.log('Child11 useEffect first time')
+  }, [])
+
+  useEffect(() => {
+    console.log('Child11 useEffect all time')
+  })
   return (
     <div>
-    
+      Child11
     </div>
   );
 }

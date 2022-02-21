@@ -4,7 +4,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleFooter(ad: any) {
     const [, setRefresh] = useState({})
-    const { filterOn, getFromBag, getMappedAccounts } = useSharedElements()
+    const { filterOn, getFromBag } = useSharedElements()
 
     useEffect(() => {
         const curr = meta.current
@@ -16,10 +16,6 @@ function useSaleFooter(ad: any) {
             updatefirstLedgerAccounts()
             setRefresh({})
         })
-        // const subs1 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
-        //     updateLedgerAccounts()
-        //     setRefresh({})
-        // })
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
@@ -35,9 +31,6 @@ function useSaleFooter(ad: any) {
             actions: () => { },
         },
     })
-
-    // const allAccounts = getFromBag('allAccounts') || []
-    // const cashBankArray = ['cash', 'bank', 'card', 'ecash']
 
     function computeSummary() {
         ad.footer.amount = ad.footer.items.reduce(
@@ -59,30 +52,11 @@ function useSaleFooter(ad: any) {
             isAmountError: true,
             isLedgerSubledgerError: true,
             remarks: '',
-            ledgerFilterMethodName:  'cashBank'
+            ledgerFilterMethodName: 'cashBank'
         })
-        if (length === 1) {
-            if (ad.saleVariety === 'r') { // retail sales
-                footer.items[0].ledgerFilterMethodName = 'cashBank'
-            } else if (ad.saleVariety === 'a') { // auto subledger
-
-            } else { // institution sale
-                footer.items[0].ledgerFilterMethodName = 'debtorsCreditors'
-            }
-        }
         if (length > 1) {
             footer.items[length - 1].ledgerFilterMethodName = 'cashBank'
         }
-        // const allAccounts = getFromBag('allAccounts') || []
-        // const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-        // const cashBankAccountsLedger = allAccounts.filter(
-        //     (el: any) =>
-        //         cashBankArray.includes(el.accClass) &&
-        //         (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        // )
-        // arbitraryData.footer.items[
-        //     length - 1
-        // ].ledgerAccounts = getMappedAccounts(cashBankAccountsLedger) //default
         computeSummary()
         meta.current.isMounted && setRefresh({})
     }
@@ -113,17 +87,6 @@ function useSaleFooter(ad: any) {
     function updatefirstLedgerAccounts() {
         ad.footer.items[0].ledgerFilterMethodName = 'debtorsCreditors'
     }
-
-    // function updateLedgerAccounts() {
-    //     const cashBankAccountsLedger = allAccounts.filter(
-    //         (el: any) =>
-    //             cashBankArray.includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    //     for (const item of arbitraryData.footer.items) {
-    //         item.ledgerAccounts = getMappedAccounts(cashBankAccountsLedger)
-    //     }        
-    // }
 
     return {
         computeSummary,
@@ -178,3 +141,35 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
+
+
+// if (length === 1) {
+//     if (ad.saleVariety === 'r') { // retail sales
+//         footer.items[0].ledgerFilterMethodName = 'cashBank'
+//     } else if (ad.saleVariety === 'a') { // auto subledger
+//         footer.items[0].ledgerFilterMethodName = 'autoSubledgers'
+//     } else { // institution sale
+//         footer.items[0].ledgerFilterMethodName = 'debtorsCreditors'
+//     }
+// }
+
+// function updateLedgerAccounts() {
+//     const cashBankAccountsLedger = allAccounts.filter(
+//         (el: any) =>
+//             cashBankArray.includes(el.accClass) &&
+//             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+//     )
+//     for (const item of arbitraryData.footer.items) {
+//         item.ledgerAccounts = getMappedAccounts(cashBankAccountsLedger)
+//     }        
+// }
+// const allAccounts = getFromBag('allAccounts') || []
+// const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+// const cashBankAccountsLedger = allAccounts.filter(
+//     (el: any) =>
+//         cashBankArray.includes(el.accClass) &&
+//         (el.accLeaf === 'Y' || el.accLeaf === 'L')
+// )
+// arbitraryData.footer.items[
+//     length - 1
+// ].ledgerAccounts = getMappedAccounts(cashBankAccountsLedger) //default
