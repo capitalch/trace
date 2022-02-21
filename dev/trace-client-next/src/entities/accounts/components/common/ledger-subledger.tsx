@@ -7,6 +7,7 @@ import { useSharedElements } from './shared-elements-hook'
 interface LedgerSubledgerOptions {
     // allAccounts: any[]
     className?: string
+    controlId?: string
     ledgerAccounts?: any[]
     ledgerFilterMethodName?: string
     onChange?: any
@@ -16,6 +17,7 @@ interface LedgerSubledgerOptions {
 function LedgerSubledger({
     // allAccounts,
     className,
+    controlId,
     ledgerAccounts,
     ledgerFilterMethodName,
     onChange,
@@ -25,7 +27,7 @@ function LedgerSubledger({
     const [, setRefresh] = useState({})
     const { emit, filterOn, getFromBag, getMappedAccounts, } = useSharedElements()
     const allAccounts = getFromBag('allAccounts') || []
-
+    
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -83,18 +85,23 @@ function LedgerSubledger({
         const subs2 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
             loadLedgerAccounts()
         })
+        const subs3 = filterOn(''.concat((controlId || ''),':', 'LEDGER-SUBLEDGER-RELOAD')).subscribe((d: any)=>{
+            ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[d.data]())
+            setRefresh({})
+        })
 
         function loadLedgerAccounts() {
-            // meta.current.ledgerItem = { label: null, value: undefined }
-            // meta.current.subLedgerItem = { label: null, value: undefined }
-            // meta.current.subledgerOptions = []
-            // emit('TYPOGRAPHY-SMART-RESET', '')
+                        // meta.current.ledgerItem = { label: null, value: undefined }
+                        // meta.current.subLedgerItem = { label: null, value: undefined }
+                        // meta.current.subledgerOptions = []
+                        // emit('TYPOGRAPHY-SMART-RESET', '')
             ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[ledgerFilterMethodName]())
             setRefresh({})
         }
         return (() => {
             subs1.unsubscribe()
             subs2.unsubscribe()
+            subs3.unsubscribe()
         })
     }, [])
 
@@ -141,7 +148,7 @@ function LedgerSubledger({
                 menuShouldScrollIntoView={false}
                 onChange={handleLedgerChange}
                 options={
-                    meta.current.ledgerAccounts.sort((a: any, b: any) => {
+                    meta.current.ledgerAccounts?.sort((a: any, b: any) => {
                         if (a.label > b.label) return 1
                         if (a.label < b.label) return -1
                         return 0
@@ -267,6 +274,7 @@ function LedgerSubledger({
                     (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
                     !el.isAutoSubledger
             )
+            return(getMappedAccounts(dc) || [])
         }
 
         return ({ cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors})

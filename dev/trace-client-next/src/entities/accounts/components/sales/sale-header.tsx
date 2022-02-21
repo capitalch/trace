@@ -110,6 +110,7 @@ function SaleHeader() {
                             // ledgerAccounts={getMappedAccounts(
                             //     arbitraryData.ledgerAccounts
                             // )}
+                            controlId='sales'
                             ledgerFilterMethodName='saleAccounts'
                             onChange={onChangeLedgerSubledger}
                             rowData={arbitraryData.rowData}

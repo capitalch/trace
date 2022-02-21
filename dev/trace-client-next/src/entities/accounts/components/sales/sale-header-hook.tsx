@@ -120,7 +120,7 @@ function useSaleHeader(arbitraryData: any) {
         meta.current.dialogConfig.actions = () => { }
         // setFooterRow(arbitraryData.accounts.debtorCreditorAccountsWithLedgers)
         setFirstFooterRow('debtorsCreditors')
-        emit('SALE-FOOTER-JUST-REFRESH', '')
+        // emit('SALE-FOOTER-JUST-REFRESH', '')
         meta.current.isMounted && setRefresh({})
 
         async function mapBillTo(it: any) {
@@ -174,7 +174,7 @@ function useSaleHeader(arbitraryData: any) {
     function setFirstFooterRow(methodName: string) {
         if (arbitraryData?.footer?.items?.length > 0) {
             arbitraryData.footer.items[0].ledgerFilterMethodName = methodName
-            emit('SALE-FOOTER-JUST-REFRESH', '')
+            emit('footer:LEDGER-SUBLEDGER-RELOAD', 'debtorsCreditors')
             // setRefresh({})
         }
     }

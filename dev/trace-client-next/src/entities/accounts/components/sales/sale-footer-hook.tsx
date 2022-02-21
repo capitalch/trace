@@ -59,7 +59,7 @@ function useSaleFooter(ad: any) {
             isAmountError: true,
             isLedgerSubledgerError: true,
             remarks: '',
-            ledgerFilterMethodName: 'cashBank'
+            ledgerFilterMethodName:  'cashBank'
         })
         if (length === 1) {
             if (ad.saleVariety === 'r') { // retail sales
