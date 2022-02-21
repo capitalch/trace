@@ -408,11 +408,11 @@ const componentStore: any = {
             onBlurEvent,
             xClassName,
             xStyle,
-            materialProps,
         } = useGeneric(props)
-
+        let { materialProps, } = useGeneric(props)
         const rightAligned = { textAlign: 'right', marginTop: '0.2rem' }
-
+        materialProps = materialProps || {}
+        materialProps.variant = 'standard'
         return (
             <>
                 <NumberFormat

@@ -85,7 +85,10 @@ function LedgerSubledger({
         const subs2 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
             loadLedgerAccounts()
         })
-        const subs3 = filterOn('LEDGER-SUBLEDGER-JUST-REFRESH').subscribe(() => {
+        const subs3 = filterOn('LEDGER-SUBLEDGER-JUST-REFRESH').subscribe((d: any) => {
+            if (d.data) {
+                ledgerFilterMethodName = d.data
+            }
             setRefresh({})
         })
 
@@ -164,7 +167,7 @@ function LedgerSubledger({
                 value={meta.current.ledgerItem}
             />
             <Select
-                isDisabled={meta.current.isSubledgerDisabled  }
+                isDisabled={meta.current.isSubledgerDisabled}
                 maxMenuHeight={110}
                 onChange={handleSubledgerChange}
                 options={meta.current.subledgerOptions}
@@ -291,7 +294,16 @@ function LedgerSubledger({
             return (getMappedAccounts(as) || [])
         }
 
-        return ({ cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers })
+        function purchaseAccounts() {
+            const pa = allAccounts.filter(
+                (el: any) =>
+                    ['purchase'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L')
+            )
+            return (getMappedAccounts(pa) || [])
+        }
+
+        return ({ cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers, purchaseAccounts, })
     }
 
     function getItemFromValue(val: number) {

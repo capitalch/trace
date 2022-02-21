@@ -28,6 +28,7 @@ function PurchaseBody({ purchaseType }: any) {
     const classes = useStyles()
     const multiData: any = useContext(MultiDataContext)
     const ad = multiData.purchases
+    
     const errorObject = ad.errorObject
     const {
         handleIsGstInvoice,
@@ -199,9 +200,10 @@ function PurchaseBody({ purchaseType }: any) {
                         <LedgerSubledger
                             // allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            ledgerAccounts={getMappedAccounts(
-                                ad.accounts.purchaseLedgerAccounts
-                            )}
+                            // ledgerAccounts={getMappedAccounts(
+                            //     ad.accounts.purchaseLedgerAccounts
+                            // )}
+                            ledgerFilterMethodName='purchaseAccounts'
                             onChange={() => {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
@@ -215,9 +217,10 @@ function PurchaseBody({ purchaseType }: any) {
                         <LedgerSubledger
                             // allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            ledgerAccounts={getMappedAccounts(
-                                ad.accounts.ledgerAccounts
-                            )}
+                            // ledgerAccounts={getMappedAccounts(
+                            //     ad.accounts.ledgerAccounts
+                            // )}
+                            ledgerFilterMethodName={ad.ledgerFilterMethodName}
                             onChange={async () => {
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId
@@ -503,9 +506,10 @@ function PurchaseBody({ purchaseType }: any) {
                         <LedgerSubledger
                             // allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            ledgerAccounts={getMappedAccounts(
-                                ad.accounts.purchaseLedgerAccounts
-                            )}
+                            // ledgerAccounts={getMappedAccounts(
+                            //     ad.accounts.purchaseLedgerAccounts
+                            // )}
+                            ledgerFilterMethodName='purchaseAccounts'
                             onChange={() => {
                                 setRefresh({})
                                 emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
@@ -519,9 +523,10 @@ function PurchaseBody({ purchaseType }: any) {
                         <LedgerSubledger
                             // allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            ledgerAccounts={getMappedAccounts(
-                                ad.accounts.ledgerAccounts
-                            )}
+                            // ledgerAccounts={getMappedAccounts(
+                            //     ad.accounts.ledgerAccounts
+                            // )}
+                            ledgerFilterMethodName={ad.ledgerFilterMethodName}
                             onChange={async () => {
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId

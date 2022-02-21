@@ -263,9 +263,9 @@ function AccountsMaster() {
                                                 node.data.accType
                                             dialogConfig.accLeaf =
                                                 node.data.accLeaf
-                                            dialogConfig.accClass = 
+                                            dialogConfig.accClass =
                                                 node.data.accClass
-                                            dialogConfig.isAutoSubledger = 
+                                            dialogConfig.isAutoSubledger =
                                                 node.data.isAutoSubledger
                                             meta.current.showDialog = true
                                             meta.current.isMounted &&
@@ -323,24 +323,7 @@ function AccountsMaster() {
                                         style={{ width: theme.spacing(3) }}
                                         className={classes.deleteButton}
                                         startIcon={<CloseSharp />}
-                                        onClick={async () => {
-                                            const id = node.data.id
-                                            const toDelete = window.confirm(
-                                                globalMessages['deleteConfirm']
-                                            )
-                                            if (toDelete) {
-                                                const ret = await genericUpdateMaster(
-                                                    {
-                                                        deletedIds: [id],
-                                                        tableName: 'AccM',
-                                                    }
-                                                )
-                                                if (ret?.length <= 10) { // it cannot be an error message
-                                                    emit('SHOW-MESSAGE', {})
-                                                    getData()
-                                                }
-                                            }
-                                        }}>
+                                        onClick={() => handleDeleteAccount(node)}>
                                         Del
                                     </Button>
                                 )}
@@ -609,6 +592,29 @@ function AccountsMaster() {
         utilFunc().applyScrollPos()
     }
 
+    async function handleDeleteAccount(node: any) {
+        const id = node.data.id
+        const toDelete = window.confirm(
+            globalMessages['deleteConfirm']
+        )
+        if (toDelete) {
+            try {
+                const ret = await genericUpdateMaster(
+                    {
+                        deletedIds: [id],
+                        tableName: 'AccM',
+                    }
+                )
+                if (ret?.length <= 10) { // it cannot be an error message
+                    emit('SHOW-MESSAGE', {})
+                    getData()
+                }
+            } catch (e: any) {
+                console.log(e)
+            }
+        }
+    }
+
     async function handleSubmitAddress() {
         const formId = meta.current.addressDialogConfig.formId
         resetAllFormErrors(formId)
@@ -656,7 +662,7 @@ function AccountsMaster() {
                 (data.parentId = dialogConfig.parentId)
             data.isPrimary = false
             data.accLeaf = data.accLeaf || dialogConfig.accLeaf
-            data.classId = data.classId || dialogConfig.classId            
+            data.classId = data.classId || dialogConfig.classId
             data.accType = data.accType || dialogConfig.accType
             // data.accClass = data.accClass || dialogConfig.accClass
             // data.isAutoSubledger = data.isAutoSubledger || dialogConfig.isAutoSubledger
