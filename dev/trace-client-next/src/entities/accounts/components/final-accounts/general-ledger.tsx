@@ -67,7 +67,8 @@ function GeneralLedger() {
                     <LedgerSubledger
                         className="ledger-subledger"
                         // allAccounts={meta.current.allAccounts}
-                        ledgerAccounts={meta.current.ledgerAccounts}
+                        // ledgerAccounts={meta.current.ledgerAccounts}
+                        ledgerFilterMethodName='all'
                         rowData={meta.current.ledgerSubledger}
                         onChange={() => {
                             meta.current.accId =
@@ -88,7 +89,7 @@ function GeneralLedger() {
                                 emit('XX-GRID-RESET', null)
                             }
                             meta.current.isMounted && setRefresh({})
-                            emit('TYPOGRAPHY-SMART-REFRESH','')
+                            emit('TYPOGRAPHY-SMART-REFRESH', '')
                         }}
                     />
                 </div>

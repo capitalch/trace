@@ -198,6 +198,13 @@ function LedgerSubledger({
     }
 
     function ledgerFilterMethods(): any {
+
+        function all() {
+            const a = allAccounts
+                .filter((el: any) => el.accLeaf === 'Y' || el.accLeaf === 'L')
+            return(getMappedAccounts(a) || [])
+        }
+
         function cashBank() {
             const cb = allAccounts.filter(
                 (el: any) =>
@@ -303,7 +310,7 @@ function LedgerSubledger({
             return (getMappedAccounts(pa) || [])
         }
 
-        return ({ cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers, purchaseAccounts, })
+        return ({all, cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers, purchaseAccounts, })
     }
 
     function getItemFromValue(val: number) {

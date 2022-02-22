@@ -526,7 +526,7 @@ function PurchaseBody({ purchaseType }: any) {
                             // ledgerAccounts={getMappedAccounts(
                             //     ad.accounts.ledgerAccounts
                             // )}
-                            ledgerFilterMethodName={ad.ledgerFilterMethodName}
+                            ledgerFilterMethodName={'debtorsCreditors'}
                             onChange={async () => {
                                 const gstin: string = await queryGstin(
                                     ad.ledgerSubledgerOther?.accId
@@ -728,6 +728,7 @@ function PurchaseBody({ purchaseType }: any) {
                 <FormControlLabel
                     control={
                         <Radio
+                            disabled={ad.id}
                             onClick={(e:any) => {
                                 preHandlePurchaseCashCredit('credit')
                             }}
@@ -742,6 +743,7 @@ function PurchaseBody({ purchaseType }: any) {
                 <FormControlLabel
                     control={
                         <Radio
+                        disabled={ad.id}
                             onClick={(e:any) => {
                                 preHandlePurchaseCashCredit('cash')
                             }}

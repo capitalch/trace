@@ -852,6 +852,7 @@ nothing
 
 
 // find out vouchers where SUM of debits not equal to credits
+set search_path to demounit1;
 with cte1 as (
 select "autoRefNo", SUM(CASE WHEN "dc" = 'D' then "amount" else -"amount" end) as "amount"
     from "TranD" d join "TranH" h on h."id" = d."tranHeaderId"
