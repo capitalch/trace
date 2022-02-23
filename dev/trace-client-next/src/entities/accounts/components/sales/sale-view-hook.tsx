@@ -349,7 +349,7 @@ export { useSaleView }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: 'calc(100vh - 245px)',
+            height: 'calc(100vh - 250px)',
             width: '100%',
             marginTop: '5px',
             '& .select-last': {

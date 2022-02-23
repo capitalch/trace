@@ -14,10 +14,9 @@ sample GSTIN: 37AADCS0472N1Z1
 
                                                                                         6. Ledger subledger showing balance:                      2 days, 13th Feb
                                                                                         11. Account balances in generic-vouchers                  3 days, 16th Mar
-14. Accounts master, when edited, data is not 
-        refreshed after saved, accounts creation
-        email optional                                    1 day, 17th Feb
-10. New account code create, immediate effect             3 days, 20th Feb
+                                                                                        14. Accounts master, when edited, data is not 
+                                                                                                refreshed after saved, accounts creation          1 day, 17th Feb
+                                                                                        10. New account code create, immediate effect             3 days, 20th Feb
 
 4. Opening balance of stock:                              3 days, 23rd Feb
 19. Stock Journals                                        3 days, 26th Feb
@@ -109,6 +108,10 @@ create installer from innosetup
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances 
+
+# 15-02-2022 - 22-02-2022
+1. Full implementation of socket based refresh data in vouchers, sales, purchase, dr/cr notes, Accounts masters and associated bug fixes
+2. Account balances in vouchers and final reports
 
 # 10-02-2022 - 14-02-2022
 1. Fixed emails sent from server

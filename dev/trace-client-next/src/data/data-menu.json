@@ -250,6 +250,12 @@
                             "hierarchy": "inventory-products",
                             "label": "Products",
                             "componentName": "products"
+                        },
+                        {
+                            "name": "productsOpBalSubMenu",
+                            "hierarchy":"inventory-products-op-bal",
+                            "label": "Opening balances",
+                            "componentName": "productsOpBal"
                         }
                     ]
                 }

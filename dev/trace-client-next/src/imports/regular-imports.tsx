@@ -2,7 +2,6 @@ import ReactSelect from 'react-select'
 import hash from 'object-hash'
 import clsx from 'clsx'
 import _ from 'lodash'
-// import MaterialTable from 'material-table'
 import Big from 'big.js'
 import InputMask from 'react-input-mask'
 import NumberFormat from 'react-number-format'
@@ -17,12 +16,6 @@ export { createContext, useCallback, useMemo, useContext, useEffect, useState, u
 export { TreeTable } from 'primereact/treetable'
 export { DataTable } from 'primereact/datatable'
 export { InputMask as PrimeInputMask } from 'primereact/inputmask'
-// export {
-//     MTableToolbar,
-//     MTableBody,
-//     MTableBodyRow,
-//     MTableHeader,
-// } from 'material-table'
 export { useConfirm } from 'material-ui-confirm'
 export { Tree } from 'primereact/tree'
 export { Column as PrimeColumn } from 'primereact/column'
@@ -39,7 +32,6 @@ export {
     clsx,
     hash,
     InputMask,
-    // MaterialTable,
     moment,
     NumberFormat,
     ReactSelect,

@@ -16,7 +16,7 @@ CREATE INDEX if not exists "branchId_tranTypeId_finYearId"
     ("branchId" ASC NULLS LAST, "tranTypeId" ASC NULLS LAST, "finYearId" ASC NULLS LAST)
     TABLESPACE pg_default;
 
--- 11-02-2022. Auto subledger implementation
+-- 11-02-2022. Auto subledger implementation and others
 CREATE TABLE IF NOT EXISTS "AutoSubledgerCounter"  (
 	id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"finYearId" smallint not null,
@@ -38,8 +38,34 @@ CREATE TABLE IF NOT EXISTS "AutoSubledgerCounter"  (
 			ON DELETE CASCADE
 )
 -- create unique constraint on 'accCode' in table 'AccM'. At present same account code can exist twice in the table
--- Create unique constraints in ProductM
 ALTER TABLE "AccM"
 	DROP CONSTRAINT IF EXISTS "AccM_accCode_key";
 ALTER TABLE "AccM"
     ADD CONSTRAINT "AccM_accCode_key" UNIQUE ("accCode");
+
+-- create ProductOpBal table
+CREATE TABLE IF NOT EXISTS "ProductOpBal"
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"productId" integer NOT NULL,
+	"branchId" smallint NOT NULL,
+	"finYearId" smallint NOT NULL,
+	"qty" numeric(10,2) NOT NULL DEFAULT 0,
+	"OpeningPrice" numeric(12,2) NOT NULL DEFAULT 0,
+	"LastPurDate" date NOT NULL,
+	"jData" jsonb,
+	"timestamp" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "branchId" FOREIGN KEY ("branchId")
+        REFERENCES demounit1."BranchM" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE RESTRICT,
+	CONSTRAINT "finYearId" FOREIGN KEY ("finYearId")
+        REFERENCES demounit1."FinYearM" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE RESTRICT,
+	CONSTRAINT "productId" FOREIGN KEY ("productId")
+        REFERENCES demounit1."ProductM" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE RESTRICT,
+	CONSTRAINT "productId_branchId_finYearId_key" UNIQUE ("productId", "branchId", "finYearId")
+);
