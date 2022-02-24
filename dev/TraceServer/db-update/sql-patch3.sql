@@ -51,8 +51,8 @@ CREATE TABLE IF NOT EXISTS "ProductOpBal"
 	"branchId" smallint NOT NULL,
 	"finYearId" smallint NOT NULL,
 	"qty" numeric(10,2) NOT NULL DEFAULT 0,
-	"OpeningPrice" numeric(12,2) NOT NULL DEFAULT 0,
-	"LastPurDate" date NOT NULL,
+	"openingPrice" numeric(12,2) NOT NULL DEFAULT 0,
+	"lastPurDate" date NOT NULL,
 	"jData" jsonb,
 	"timestamp" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "branchId" FOREIGN KEY ("branchId")

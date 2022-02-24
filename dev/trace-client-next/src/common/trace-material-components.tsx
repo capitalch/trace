@@ -62,7 +62,6 @@ function useTraceMaterialComponents() {
                         <Input
                             autoFocus={true}
                             placeholder="Search"
-                            style={{ maxWidth: '30ch', color: 'grey', minWidth: '10ch' }}
                             value={
                                 options.meta.current?.dialogConfig
                                     ?.searchBoxFilter || ''
@@ -279,6 +278,9 @@ const styles = {
         '& .serial-number': {
             width: '100%',
         },
+        '& .MuiInputBase-root':{
+            width: '80%'
+        }
     },
 
     submitButtonStyle: {

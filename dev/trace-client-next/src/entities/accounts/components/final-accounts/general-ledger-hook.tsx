@@ -98,7 +98,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: theme.spacing(4),
+                marginBottom: theme.spacing(1),
                 '& .heading': {
                     fontWeight: 'bold',
                 },
@@ -107,7 +107,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     top: '.2rem',
                 },
                 '& .select-ledger': {
-                    marginTop: theme.spacing(2),
+                    // marginTop: theme.spacing(1),
                     display: 'flex',
                     flexDirection: 'column',
                     '& .ledger-subledger': {
@@ -116,8 +116,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
             },
             '& .data-grid': {
-                height: 'calc(100vh - 900px)',
-                // height: '200px',
+                height: 'calc(100vh - 253px)',
             },
         },
         previewTitle: {
