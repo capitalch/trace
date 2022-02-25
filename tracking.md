@@ -1,5 +1,14 @@
 https://tempail.com/en/
 
+## Logic for opening stock
+1. SQL for jsonObject: categories, brands, allProducts, try our react-query, download at page load
+2. Product search local, top right, shows dialogbox if more than one, else populate workbench
+3. Submit, reset button
+4. Edit click populates workbench
+5. On submit if already exists then update else insert
+6. Columns: category, brand, label, spec, qty, openingPrice, lastPurDate
+7. New product button
+
 sample GSTIN: 37AADCS0472N1Z1
 ## Planning
                                                                                         1. Authentication and user management:                    1 week, 5th Feb 2022

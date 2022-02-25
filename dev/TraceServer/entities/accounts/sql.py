@@ -641,6 +641,19 @@ allSqls = {
 			or "info" ILIKE ANY(array[someArgs])
     ''',
 
+    "get_stock_op_bal": '''
+        select "catName", "brandName", "label", "info", "qty", "openingPrice", "lastPurDate"
+            from "ProductOpBal" a
+                join "ProductM" p
+                    on p."id" = a."productId"
+                join "CategoryM" c
+                    on c."id" = p."catId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
+        where "finYearId" = %(finYearId)s 
+            and "branchId" = %(branchId)s
+    ''',
+
     "get_tranHeaders_details": '''
         select h."id" as "tranHeaderId", "tranDate", "autoRefNo", "tags", d."id" as "tranDetailsId",
              h."remarks" as "headerRemarks" , "userRefNo", "accName", "dc", d."remarks" as "lineRemarks",

@@ -7,11 +7,11 @@ import {
 import { useSharedElements } from '../common/shared-elements-hook'
 import { DataGridPro, useGridApiRef, } from '../../../../imports/gui-imports'
 
-function useProductsOpBal() {
+function useOpeningStock() {
     const meta = useRef({
-
+        title: 'Opening stock'
     })
-    const { } = useSharedElements()
+    const {getFromBag } = useSharedElements()
     useEffect(() => {
 
         return (() => {
@@ -19,9 +19,10 @@ function useProductsOpBal() {
         })
 
     }, [])
+    const finYearObject = getFromBag('finYearObject')
 
-    function getXXGridAttributes() {
-        const sqlQueryId = ''
+    function getXXGriArtifacts() {
+        const sqlQueryId = 'get_stock_op_bal'
         const sqlQueryArgs = {}
         const columns: any[] = []
         const actionMessages = {
@@ -34,12 +35,12 @@ function useProductsOpBal() {
             isEdit: true,
             isDelete: true,
         }
-        const title = 'Stock opening balance'
+        const title = ''.concat('Opening stock view ', '(Year ',finYearObject.startDate, '-', finYearObject.endDate, ')')
         return ({actionMessages, columns, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, title })
     }
 
-    return ({ getXXGridAttributes })
+    return ({ getXXGriArtifacts, meta })
 
 }
 
-export { useProductsOpBal }
+export { useOpeningStock }

@@ -252,10 +252,10 @@
                             "componentName": "products"
                         },
                         {
-                            "name": "productsOpBalSubMenu",
-                            "hierarchy":"inventory-products-op-bal",
-                            "label": "Opening balance",
-                            "componentName": "productsOpBal"
+                            "name": "openingStockSubMenu",
+                            "hierarchy":"inventory-opening-stock",
+                            "label": "Opening stock",
+                            "componentName": "openingStock"
                         }
                     ]
                 }

@@ -3,15 +3,23 @@ import {
     Box,
     Card,
     Theme,
+    Typography,
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
-import { useProductsOpBal } from "./products-op-bal-hook"
-function ProductsOpBal() {
+import { useOpeningStock } from "./opening-stock-hook"
+
+function OpeningStock() {
     const { XXGrid } = useSharedElements()
-    const { getXXGridAttributes } = useProductsOpBal()
-    const { actionMessages, columns, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, title } = getXXGridAttributes()
+    const { getXXGriArtifacts, meta } = useOpeningStock()
+    const { actionMessages, columns, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, title } = getXXGriArtifacts()
     return (<Box>
+        <Typography
+            color="primary"
+            variant='subtitle1'
+            component="span">
+            {meta.current.title}
+        </Typography>
         <XXGrid
             columns={columns}
             gridActionMessages={actionMessages}
@@ -20,6 +28,7 @@ function ProductsOpBal() {
             // hideFilteredButton={true}
             hideExportButton={true}
             hideViewLimit={true}
+            // subTitle='Year'
             specialColumns={specialColumns}
             sqlQueryArgs={sqlQueryArgs}
             sqlQueryId={sqlQueryId}
@@ -29,4 +38,4 @@ function ProductsOpBal() {
     </Box>)
 }
 
-export { ProductsOpBal }
+export { OpeningStock }

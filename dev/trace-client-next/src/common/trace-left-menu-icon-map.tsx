@@ -90,7 +90,7 @@ const iconMap: any = {
     brandsSubMenu: <AccountTree />,
     categoriesSubMenu: <Category />,
     productsSubMenu: <LibraryBooks />,
-    productsOpBalSubMenu: <AccountBalanceWallet />,
+    openingStockSubMenu: <AccountBalanceWallet />,
 
     //Admin menu
     artifacts: <CheckCircle></CheckCircle>,
