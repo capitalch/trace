@@ -997,61 +997,29 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    # "getJson_bankRecon1": '''
-    #     with cte1 as (select d."id"
-    #         , h."id" as "headerId"
-    #         , "tranDate"
-    #         , "userRefNo"
-    #         , h."remarks"
-    #         , "autoRefNo"
-    #         , "lineRefNo"
-    #         , "instrNo"
-    #         , d."remarks" as "lineRemarks"
-    #         , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
-    #         , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
-    #         , x."clearDate", "clearRemarks", x."id" as "bankReconId"
-    #             from "TranD" d
-    #                 left outer join "ExtBankReconTranD" x
-    #                     on d."id" = x."tranDetailsId"
-    #                 join "TranH" h
-    #                     on h."id" = d."tranHeaderId"
-    #         where "accId" = %(accId)s
-    #             and (("finYearId" = %(finYearId)s) or 
-    #             (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
-    #             )
-    #         order by h."id" DESC
-    #     ), 
-    #     cte2 as (
-    #         select "id", "amount", "dc"
-    #             from "BankOpBal"
-    #                 where "accId" = %(accId)s
-    #                     and "finYearId" = %(finYearId)s
-    #     ), 
-    #     cte3 as (
-    #         select "id", "amount", "dc"
-    #             from "BankOpBal"
-    #                 where "accId" = %(accId)s
-    #                     and "finYearId" = %(nextFinYearId)s
-    #     ),
-	# 	cte4 as (
-	# 		select c1.* 
-	# 		, (
-	# 			select string_agg("accName", ' ,')
-	# 				from "TranD" d1
-	# 					join "AccM" a
-	# 						on a."id" = d1."accId"
-	# 				where d1."tranHeaderId" = c1."headerId"
-	# 					and "accId" <> %(accId)s
-	# 			) as "accNames"
-	# 		from cte1 c1
-	# 			--order by c1."headerId" DESC
-	# 	)
-    #     select json_build_object(
-    #         'bankRecon', (SELECT json_agg(row_to_json(a)) from cte4 a)
-    #         , 'opBal', (SELECT row_to_json(b) from cte2 b)
-    #         , 'closBal', (SELECT row_to_json(c) from cte3 c)
-    #     ) as "jsonResult"
-    # ''',
+    "getJson_brands_categories_products": '''
+        with cte1 as (
+            select id as "value", "catName" as "label"
+                from "CategoryM"
+                    where "isLeaf" = true
+                order by "catName"
+        ), cte2 as (
+            select id as "value", "brandName" as "label"
+                from "BrandM" order by "brandName"
+        ), cte3 as (
+            select p.id, "catId", "hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
+                from "ProductM" p
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+            order by "catName", "brandName", "label"
+        )
+        select json_build_object(
+            'categories', (select json_agg(row_to_json(a)) from cte1 a)
+            , 'brands', (select json_agg(row_to_json(b)) from cte2 b)
+            , 'products', (select json_agg(row_to_json(c)) from cte3 c)) as "jsonResult"
+    ''',
 
     "getJson_brands_categories_units": '''
         with cte1 as (
@@ -1138,30 +1106,6 @@ allSqls = {
                 , 'allClasses',(SELECT json_agg(row_to_json(c)) FROM cte3 c)
             ) as "jsonResult"
         ''',
-
-    # "getJson_datacache1": '''
-    #     with cte1 as (
-    #         SELECT a.*, c."accClass", m."isAutoSubledger"
-	# 			FROM "AccM" a 
-	# 				join "AccClassM" c 
-	# 					on a."classId" = c."id"
-	# 				left outer join "ExtMiscAccM" m
-	# 					on a."id" = m."accId"
-    #     ),
-    #     cte2 as (
-    #         select "id", "key", "textValue", "jData", "intValue" 
-    #             from "Settings"
-    #     ),
-    #     cte3 as (
-    #         select * from "AccClassM" order by "accClass" 
-    #     )
-    #     SELECT
-    #         json_build_object(
-    #             'allAccounts', (SELECT json_agg(row_to_json(a)) from cte1 a)
-    #             , 'allSettings', (SELECT json_agg(row_to_json(b)) from cte2 b)
-    #             , 'allClasses',(SELECT json_agg(row_to_json(c)) FROM cte3 c)
-    #         ) as "jsonResult"
-    #     ''',
 
     "getJson_debit_credit_note": '''
         select h."id", "tranDate", "remarks", h."jData", "posId", "autoRefNo", "userRefNo",

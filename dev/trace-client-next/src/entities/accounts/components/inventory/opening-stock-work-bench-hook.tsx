@@ -1,0 +1,5 @@
+function useOpeningStockWorkBench() {
+
+}
+
+export { useOpeningStockWorkBench }

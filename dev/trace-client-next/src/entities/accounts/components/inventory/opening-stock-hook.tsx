@@ -1,4 +1,5 @@
 import {
+    _,
     moment,
     useState,
     useEffect,
@@ -8,18 +9,33 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { DataGridPro, useGridApiRef, } from '../../../../imports/gui-imports'
 
 function useOpeningStock() {
+    const [,setRefresh] = useState({})
     const meta = useRef({
         title: 'Opening stock'
     })
-    const {getFromBag } = useSharedElements()
+    const { emit, execGenericView, getFromBag, setInBag } = useSharedElements()
+    const stock = getFromBag('stock')
     useEffect(() => {
-
+        if (_.isEmpty(stock)) {
+            loadStock()
+        }
         return (() => {
 
         })
 
     }, [])
     const finYearObject = getFromBag('finYearObject')
+
+    async function loadStock() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        const ret: any = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'getJson_brands_categories_products'
+        })
+        setInBag('stock', ret.jsonResult || undefined)
+        emit('SHOW-LOADING-INDICATOR', false)
+        setRefresh({})
+    }
 
     function getXXGriArtifacts() {
         const sqlQueryId = 'get_stock_op_bal'
@@ -35,8 +51,8 @@ function useOpeningStock() {
             isEdit: true,
             isDelete: true,
         }
-        const title = ''.concat('Opening stock view ', '(Year ',finYearObject.startDate, '-', finYearObject.endDate, ')')
-        return ({actionMessages, columns, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, title })
+        const title = ''.concat('Opening stock view ', '(Year ', finYearObject.startDate, '-', finYearObject.endDate, ')')
+        return ({ actionMessages, columns, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, title })
     }
 
     return ({ getXXGriArtifacts, meta })

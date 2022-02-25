@@ -8,6 +8,7 @@ import {
     makeStyles,
 } from '../../../../imports/gui-imports'
 import { useOpeningStock } from "./opening-stock-hook"
+import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
 function OpeningStock() {
     const { XXGrid } = useSharedElements()
@@ -20,6 +21,7 @@ function OpeningStock() {
             component="span">
             {meta.current.title}
         </Typography>
+        <OpeningStockWorkBench />
         <XXGrid
             columns={columns}
             gridActionMessages={actionMessages}
