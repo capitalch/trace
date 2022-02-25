@@ -63,6 +63,12 @@ interface XXGridOptions {
     editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
+
+    hideColumnsButton?: boolean
+    hideFiltersButton?: boolean
+    hideExportButton?: boolean
+    hideFilteredButton?: boolean
+
     isReverseOrderByDefault?: boolean // does reverse of data at fetching
     isReverseOrderChecked?: boolean // does not do reversing of data. Only makes the reverse checkbox as checked
     isShowColBalanceByDefault?: boolean
@@ -100,7 +106,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         title,
         viewLimit,
     }: any = gridOptions
-    let {subTitle} = gridOptions
+    let { subTitle } = gridOptions
     const apiRef: any = useGridApiRef()
     gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
@@ -183,11 +189,12 @@ function XXGrid(gridOptions: XXGridOptions) {
                     <Box className="toolbar-left-items">
                         <Typography className="toolbar-title">{title}</Typography>
                         <div>
-                            <GridToolbarColumnsButton color="secondary" />
-                            <GridToolbarFilterButton color="secondary" />
-                            <GridToolbarExport color="secondary" />
+                            {gridOptions.hideColumnsButton ? undefined : <GridToolbarColumnsButton color="secondary" />}
+                            {gridOptions.hideFiltersButton ? undefined : <GridToolbarFilterButton color="secondary" />}
+                            {gridOptions.hideExportButton ? undefined : <GridToolbarExport color="secondary" />}
                         </div>
-                        <Button
+
+                        {gridOptions.hideFilteredButton ? undefined : <Button
                             variant="text"
                             color="secondary"
                             onClick={() => {
@@ -195,7 +202,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 meta.current.isMounted && setRefresh({})
                             }}>
                             Filtered
-                        </Button>
+                        </Button>}
                         <IconButton
                             className={classes.syncSharpButton}
                             size="medium"
@@ -490,7 +497,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         gridActionMessages: GridActionMessagesOptions
     ) {
 
-        if(options.customColumn1 && (!_.isEmpty(options.customColumn1))){
+        if (options.customColumn1 && (!_.isEmpty(options.customColumn1))) {
             const cc = options.customColumn1
             const customColumn1 = {
                 ...cc

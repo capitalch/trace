@@ -89,7 +89,7 @@
     "eslint-plugin-react": "^7.28.0",
     "gzip": "^0.1.0",
     "react-error-overlay": "6.0.9",
-    "sass": "^1.49.8",
+    "sass": "^1.49.9",
     "style-loader": "^3.3.1"
   }
 }

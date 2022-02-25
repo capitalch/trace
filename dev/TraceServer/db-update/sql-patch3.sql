@@ -69,3 +69,9 @@ CREATE TABLE IF NOT EXISTS "ProductOpBal"
         ON DELETE RESTRICT,
 	CONSTRAINT "productId_branchId_finYearId_key" UNIQUE ("productId", "branchId", "finYearId")
 );
+
+-- add unique index for "ProductM" as catId, brandId, label
+ALTER TABLE IF EXISTS "ProductM"
+   DROP CONSTRAINT IF EXISTS "catId_brandId_label_unique_key",
+   ADD  CONSTRAINT "catId_brandId_label_unique_key"
+   UNIQUE ("catId", "brandId", "label");
