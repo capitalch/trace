@@ -11,7 +11,7 @@ import { DataGridPro, useGridApiRef, } from '../../../../imports/gui-imports'
 function useOpeningStock() {
     const [,setRefresh] = useState({})
     const meta = useRef({
-        title: 'Opening stock'
+        title: 'Opening stock (New / Edit)'
     })
     const { emit, execGenericView, getFromBag, setInBag } = useSharedElements()
     const stock = getFromBag('stock')
