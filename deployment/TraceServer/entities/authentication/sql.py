@@ -365,7 +365,7 @@ allSqls = {
                             on b."id" = x1."clientEntityBuId"
                     where x1."userId" = u."id"
                 ) as "buCodes"
-                , ( select "permissions"
+                , ( select array_agg("permissions")
                     from "ClientEntityRole" r
                         join "ClientEntityRoleBuUserX" x1
                             on r."id" = x1."clientEntityRoleId"

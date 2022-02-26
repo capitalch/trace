@@ -14,6 +14,22 @@ allSqls = {
                         order by a."id"
     ''',
 
+    "get_accountsBalances": '''
+        with cte1 as 
+            (select "accId", CASE WHEN "dc" = 'D' then SUM("amount") ELSE SUM(-"amount") END as "amount"
+                from "TranD"  d
+                    join "TranH" h
+                        on h."id" = d."tranHeaderId"
+                    where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s and "accId" in %(accIds)s
+                        GROUP BY "accId", "dc"
+                        union 
+                    select "accId", CASE WHEN "dc" ='D' then "amount" ELSE (-"amount") END as "amount"
+                    from "AccOpBal" 
+                        where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s and "accId" in %(accIds)s) 
+            select "accId", SUM("amount") as "amount"
+                from cte1 group BY "accId"
+    ''',
+
     "get_accountsLedger": '''
             with cte as(
             select "accName" from "AccM"
@@ -107,7 +123,7 @@ allSqls = {
     ''',
 
     'get_allTransactions': '''
-        select ROW_NUMBER() over (order by "tranDate" DESC , h."id", d."id") as "index"
+        select ROW_NUMBER() over (order by "tranDate" DESC , h."id" DESC, d."id" DESC) as "index"
             , h."id", h."tranDate" as "tranDate"
             , "tranTypeId"
             , h."autoRefNo", h."userRefNo", h."remarks"
@@ -122,7 +138,7 @@ allSqls = {
                 join "AccM" a
                     on a."id" = d."accId"
             where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-            order by "tranDate" DESC, h."id", d."id" limit (%(no)s)
+            order by "tranDate" DESC, h."id" DESC, d."id" DESC limit (%(no)s)
     ''',
 
     'get_allTransactions1': '''
@@ -432,6 +448,22 @@ allSqls = {
                             "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s 
     ''',
 
+    "get_lastNo_auto_subledger": '''
+    insert into "AutoSubledgerCounter" ("finYearId", "branchId", "accId", "lastNo")
+            select %(finYearId)s, %(branchId)s, %(accId)s, 0
+                where not exists (select 1 from "AutoSubledgerCounter" where "finYearId" = %(finYearId)s and
+					"branchId" = %(branchId)s and "accId" = %(accId)s );
+        select "lastNo", "accType", a."classId", c."accClass"
+            from "AutoSubledgerCounter" d
+                join "AccM" a
+                    on a."id" = d."accId"
+                join "AccClassM" c
+                    on c."id" = a."classId"
+                where "finYearId" = %(finYearId)s and
+                            "branchId" = %(branchId)s and "accId" = %(accId)s
+    
+    ''',
+
     # This method is working. it's for academic purpose. At present client side tree populating is done. This method populates the entire tree from child values
     "get_opBal1": '''
         with recursive cte as (
@@ -609,6 +641,19 @@ allSqls = {
 			or "info" ILIKE ANY(array[someArgs])
     ''',
 
+    "get_stock_op_bal": '''
+        select "catName", "brandName", "label", "info", "qty", "openingPrice", "lastPurDate"
+            from "ProductOpBal" a
+                join "ProductM" p
+                    on p."id" = a."productId"
+                join "CategoryM" c
+                    on c."id" = p."catId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
+        where "finYearId" = %(finYearId)s 
+            and "branchId" = %(branchId)s
+    ''',
+
     "get_tranHeaders_details": '''
         select h."id" as "tranHeaderId", "tranDate", "autoRefNo", "tags", d."id" as "tranDetailsId",
              h."remarks" as "headerRemarks" , "userRefNo", "accName", "dc", d."remarks" as "lineRemarks",
@@ -711,7 +756,7 @@ allSqls = {
 		where "tranTypeId" = %(tranTypeId)s 
             and "finYearId" = %(finYearId)s 
             and "branchId" = %(branchId)s
-            order by "tranDate" DESC, h."id", d."id" 
+            order by "tranDate" DESC, h."id" DESC, d."id" DESC 
             limit %(no)s
     ''',
 
@@ -952,61 +997,29 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    # "getJson_bankRecon1": '''
-    #     with cte1 as (select d."id"
-    #         , h."id" as "headerId"
-    #         , "tranDate"
-    #         , "userRefNo"
-    #         , h."remarks"
-    #         , "autoRefNo"
-    #         , "lineRefNo"
-    #         , "instrNo"
-    #         , d."remarks" as "lineRemarks"
-    #         , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
-    #         , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
-    #         , x."clearDate", "clearRemarks", x."id" as "bankReconId"
-    #             from "TranD" d
-    #                 left outer join "ExtBankReconTranD" x
-    #                     on d."id" = x."tranDetailsId"
-    #                 join "TranH" h
-    #                     on h."id" = d."tranHeaderId"
-    #         where "accId" = %(accId)s
-    #             and (("finYearId" = %(finYearId)s) or 
-    #             (x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
-    #             )
-    #         order by h."id" DESC
-    #     ), 
-    #     cte2 as (
-    #         select "id", "amount", "dc"
-    #             from "BankOpBal"
-    #                 where "accId" = %(accId)s
-    #                     and "finYearId" = %(finYearId)s
-    #     ), 
-    #     cte3 as (
-    #         select "id", "amount", "dc"
-    #             from "BankOpBal"
-    #                 where "accId" = %(accId)s
-    #                     and "finYearId" = %(nextFinYearId)s
-    #     ),
-	# 	cte4 as (
-	# 		select c1.* 
-	# 		, (
-	# 			select string_agg("accName", ' ,')
-	# 				from "TranD" d1
-	# 					join "AccM" a
-	# 						on a."id" = d1."accId"
-	# 				where d1."tranHeaderId" = c1."headerId"
-	# 					and "accId" <> %(accId)s
-	# 			) as "accNames"
-	# 		from cte1 c1
-	# 			--order by c1."headerId" DESC
-	# 	)
-    #     select json_build_object(
-    #         'bankRecon', (SELECT json_agg(row_to_json(a)) from cte4 a)
-    #         , 'opBal', (SELECT row_to_json(b) from cte2 b)
-    #         , 'closBal', (SELECT row_to_json(c) from cte3 c)
-    #     ) as "jsonResult"
-    # ''',
+    "getJson_brands_categories_products": '''
+        with cte1 as (
+            select id as "value", "catName" as "label"
+                from "CategoryM"
+                    where "isLeaf" = true
+                order by "catName"
+        ), cte2 as (
+            select id as "value", "brandName" as "label"
+                from "BrandM" order by "brandName"
+        ), cte3 as (
+            select p.id, "catId", "hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
+                from "ProductM" p
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+            order by "catName", "brandName", "label"
+        )
+        select json_build_object(
+            'categories', (select json_agg(row_to_json(a)) from cte1 a)
+            , 'brands', (select json_agg(row_to_json(b)) from cte2 b)
+            , 'products', (select json_agg(row_to_json(c)) from cte3 c)) as "jsonResult"
+    ''',
 
     "getJson_brands_categories_units": '''
         with cte1 as (
@@ -1054,12 +1067,30 @@ allSqls = {
 
     "getJson_datacache": '''
         with cte1 as (
-            SELECT a.*, c."accClass", m."isAutoSubledger"
-				FROM "AccM" a 
-					join "AccClassM" c 
-						on a."classId" = c."id"
-					left outer join "ExtMiscAccM" m
-						on a."id" = m."accId"
+            with cte01 as 
+	        (select "accId", CASE WHEN "dc" = 'D' then SUM("amount") ELSE SUM(-"amount") END as "amount"
+                from "TranD"  d
+                    join "TranH" h
+                        on h."id" = d."tranHeaderId"
+                    where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+                        GROUP BY "accId", "dc"
+                        union 
+                    select "accId", CASE WHEN "dc" ='D' then "amount" ELSE (-"amount") END as "amount"
+                    from "AccOpBal" 
+                        where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s),
+            cte02 as (
+                select "accId", SUM("amount") as "amount"
+                    from cte01 group BY "accId"
+            )
+            select a.*, c."accClass", m."isAutoSubledger", b."amount" as "balance"
+                from "AccM" a
+                    join "AccClassM" c
+                        on c."id" = a."classId"
+                    left outer join "ExtMiscAccM" m
+                                on a."id" = m."accId"
+                    left outer join cte02 b
+                        on a."id" = b."accId"
+                order by "accCode"
         ),
         cte2 as (
             select "id", "key", "textValue", "jData", "intValue" 
@@ -1279,6 +1310,12 @@ allSqls = {
                 'tranHeader', (SELECT (row_to_json(a)) from cte1 a)
                 , 'tranDetails', (SELECT json_agg(row_to_json(b)) from cte2 b)
             ) as "jsonResult"
+    ''',
+
+    'insert_account': '''
+        insert into "AccM"("accCode", "accName", "accType", "parentId", "accLeaf", "isPrimary", "classId")
+            values(%(accCode)s, %(accName)s, %(accType)s, %(parentId)s, %(accLeaf)s, %(isPrimary)s, %(classId)s)
+                returning "id"
     ''',
 
     "insert_opBal": '''    
@@ -1520,6 +1557,14 @@ allSqls = {
             where "finYearId" = %(finYearId)s 
                 and "branchId" = %(branchId)s
                 and "tranTypeId" = %(tranTypeId)s
+    ''',
+
+    "update_last_no_auto_subledger": '''
+        update "AutoSubledgerCounter"
+        set "lastNo" = %(lastNo)s
+            where "finYearId" = %(finYearId)s 
+                and "branchId" = %(branchId)s
+                and "accId" = %(accId)s
     ''',
 
     "update_opBal": '''

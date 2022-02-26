@@ -15,3 +15,63 @@ CREATE INDEX if not exists "branchId_tranTypeId_finYearId"
     ON demounit1."TranH" USING btree
     ("branchId" ASC NULLS LAST, "tranTypeId" ASC NULLS LAST, "finYearId" ASC NULLS LAST)
     TABLESPACE pg_default;
+
+-- 11-02-2022. Auto subledger implementation and others
+CREATE TABLE IF NOT EXISTS "AutoSubledgerCounter"  (
+	id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"finYearId" smallint not null,
+	"branchId" smallint NOT NULL,
+	"accId" integer NOT NULL,
+	"lastNo" integer NOT null,
+	CONSTRAINT "AutoSubledger_pkey" PRIMARY KEY (id),
+	CONSTRAINT "FinYearM_AutoSubledgerCounter_fkey" FOREIGN KEY("finYearId")
+		REFERENCES "FinYearM" (id) MATCH SIMPLE
+			ON UPDATE NO ACTION
+			ON DELETE CASCADE,
+	CONSTRAINT "BranchM_AutoSubledgerCounter_fkey" FOREIGN KEY("branchId")
+		REFERENCES "BranchM" (id) MATCH SIMPLE
+			ON UPDATE NO ACTION
+			ON DELETE CASCADE,
+	CONSTRAINT "AccM_AutoSubledgerCounter_fkey" FOREIGN KEY("accId")
+		REFERENCES "AccM" (id) MATCH SIMPLE
+			ON UPDATE NO ACTION
+			ON DELETE CASCADE
+)
+-- create unique constraint on 'accCode' in table 'AccM'. At present same account code can exist twice in the table
+ALTER TABLE "AccM"
+	DROP CONSTRAINT IF EXISTS "AccM_accCode_key";
+ALTER TABLE "AccM"
+    ADD CONSTRAINT "AccM_accCode_key" UNIQUE ("accCode");
+
+-- create ProductOpBal table
+CREATE TABLE IF NOT EXISTS "ProductOpBal"
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"productId" integer NOT NULL,
+	"branchId" smallint NOT NULL,
+	"finYearId" smallint NOT NULL,
+	"qty" numeric(10,2) NOT NULL DEFAULT 0,
+	"openingPrice" numeric(12,2) NOT NULL DEFAULT 0,
+	"lastPurDate" date NOT NULL,
+	"jData" jsonb,
+	"timestamp" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	CONSTRAINT "branchId" FOREIGN KEY ("branchId")
+        REFERENCES demounit1."BranchM" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE RESTRICT,
+	CONSTRAINT "finYearId" FOREIGN KEY ("finYearId")
+        REFERENCES demounit1."FinYearM" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE RESTRICT,
+	CONSTRAINT "productId" FOREIGN KEY ("productId")
+        REFERENCES demounit1."ProductM" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE RESTRICT,
+	CONSTRAINT "productId_branchId_finYearId_key" UNIQUE ("productId", "branchId", "finYearId")
+);
+
+-- add unique index for "ProductM" as catId, brandId, label
+ALTER TABLE IF EXISTS "ProductM"
+   DROP CONSTRAINT IF EXISTS "catId_brandId_label_unique_key",
+   ADD  CONSTRAINT "catId_brandId_label_unique_key"
+   UNIQUE ("catId", "brandId", "label");

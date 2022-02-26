@@ -150,28 +150,6 @@ def resolve_configuration(parent, info):
     return(configuration)
 
 
-@accountsMutation.field("genericUpdateMaster")
-def resolve_generic_update_master(parent, info, value):
-    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
-        info.context)
-    value = unquote(value)
-    valueDict = json.loads(value)
-    customCodeBlock = valueDict.get('customCodeBlock')
-    updateCodeBlock = valueDict.get('updateCodeBlock')
-    if customCodeBlock is not None:
-        valueDict['customCodeBlock'] = allSqls[customCodeBlock]
-    if updateCodeBlock is not None:
-        valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
-
-    # To update the client through sockets
-    room = getRoomFromCtx(info.context)
-    if isLinkConnected():
-        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
-
-    id = execGenericUpdateMaster(dbName, valueDict, buCode)
-    return id
-
-
 @accountsMutation.field("sendEmail")
 def do_email(parent, info, value):
     value = unquote(value)
@@ -207,10 +185,47 @@ def do_sms(parent, info, value):
     return(response, 200)
 
 
+@accountsMutation.field("genericUpdateMaster")
+def resolve_generic_update_master(parent, info, value):
+    dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
+        info.context)
+    value = unquote(value)
+    res = None
+    valueDict = json.loads(value)
+    tableName = valueDict.get('tableName', None)
+    deletedIds = valueDict.get('deletedIds', None)
+    customCodeBlock = valueDict.get('customCodeBlock')
+    updateCodeBlock = valueDict.get('updateCodeBlock')
+    if customCodeBlock is not None:
+        valueDict['customCodeBlock'] = allSqls[customCodeBlock]
+    if updateCodeBlock is not None:
+        valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
+
+    ret, res = execGenericUpdateMaster(dbName, valueDict, buCode, branchId, finYearId)
+    # To update the client through sockets
+    room = getRoomFromCtx(info.context)
+    if isLinkConnected():
+        if(valueDict.get('message', None)):
+            sendToRoom(valueDict.get('message'), res, room)
+        elif((tableName == 'TranH') and deletedIds):
+            # Only master update, but message is MASTER-DETAILS-UPDATE-DONE, This is to take care of delete operation, which is done by calling this method, but at server when header is deleted, cascaded delete of details rows also happen
+            sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
+        elif(tableName == 'AccM'):
+            if(deletedIds):
+                # send deletedIds[0], isDeleted: True, so that client removes the id
+                pass
+            else:
+                # Account edited or updated. Query the new account based on Id
+                sendToRoom('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED', res, room)
+                pass
+    return ret
+
+
 @accountsMutation.field("genericUpdateMasterDetails")
 def resolve_generic_update_master_details(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
+    room = getRoomFromCtx(info.context)
 
     def processData(item):
         customCodeBlock = item.get('customCodeBlock')
@@ -220,21 +235,25 @@ def resolve_generic_update_master_details(parent, info, value):
         if updateCodeBlock is not None:
             item['updateCodeBlock'] = allSqls[updateCodeBlock]
         # inject finYearId and branchId
-        ret = genericUpdateMasterDetailsHelper(dbName, buCode, item)
-        return(ret)
-        # print(autoRefNo)
+        ret, res = genericUpdateMasterDetailsHelper(
+            dbName, buCode, finYearId, item, context=info.context)
+        if isLinkConnected():
+            if(item.get('message', None)):
+                sendToRoom(item.get('message'), res, room)
+            else:
+                sendToRoom(
+                    'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', res, room)
+        return(ret, res)
 
     value = unquote(value)
     valueData = json.loads(value)
     ret = None
+    res = None
     if type(valueData) is list:
         for item in valueData:
-            ret = processData(item)
+            ret, res = processData(item)
     else:
-        ret = processData(valueData)
-    room = getRoomFromCtx(info.context)
-    if isLinkConnected():
-        sendToRoom('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', None, room)
+        ret, res = processData(valueData)
     return ret  # returns the id of first item, if there are multiple items
 
 
@@ -287,39 +306,3 @@ def resolve_trial_balance(parent, info):
     dbName, buCode, clientId, finYearId, branchId = getDbNameBuCodeClientIdFinYearIdBranchId(
         info.context)
     return trialBalanceHelper(dbName, buCode, finYearId, branchId)
-
-
-# @accountsMutation.field("delete_account")
-# def resolve_delete_account(parent, info, id):
-#     sqlString = allSqls['delete_account']
-#     return execSql(DB_NAME, sqlString, (id,), False)
-
-
-# @accountsQuery.field("tranHeadersWithDetails")
-# def resolve_tranHeadersWithDetails(parent, info, tranTypeId, noOfRecords):
-#     return tranHeadersWithDetails_helper(tranTypeId, noOfRecords)
-
-
-# @accountsQuery.field("tranHeaderAndDetails")
-# def resolve_tranHeaderAndDetails(parent, info, id):
-#     return tranHeaderAndDetails_helper(id)
-
-# @accountsMutation.field("delete_header")
-# def resolve_delete_tranH(parent, info, id):
-#     sqlString = allSqls['delete_tranH']
-#     return execSql(DB_NAME, sqlString, (id,), False)
-
-
-# @accountsQuery.field("accountsViewOpBal")
-# def resolve_accountsViewOpBal(parent, info):
-#     sqlString = allSqls['accountsViewOpBal']
-#     return execSql(DB_NAME, sqlString)
-
-# customCodeBlock = valueData.get('customCodeBlock')
-    # updateCodeBlock = valueData.get('updateCodeBlock')
-    # if customCodeBlock is not None:
-    #     valueDict['customCodeBlock'] = allSqls[customCodeBlock]
-    # if updateCodeBlock is not None:
-    #     valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
-    # autoRefNo = genericUpdateMasterDetailsHelper(dbName, buCode, valueData)
-    # return autoRefNo

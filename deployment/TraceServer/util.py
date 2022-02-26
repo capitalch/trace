@@ -8,27 +8,31 @@ from flask_mail import Mail, Message
 from loadConfig import cfg
 
 mail = None
+# In gmail MAIL_USE_SSL is True. Now I am using domain specific email because Gmail gives error due to security policy changes quite often. Now I am using milesweb, admin@kushinfotech.in, which I have created
+
 
 def setMailConfig(app):
     global mail
     mailSettings = cfg['mailSettings']
     app.config.update(
-        # DEBUG=True,
         # EMAIL SETTINGS
         MAIL_SERVER=mailSettings['mailServer'],  # 'smtp.gmail.com'
         MAIL_PORT=mailSettings['port'],
-        MAIL_USE_SSL=True,
+        MAIL_USE_SSL=False,
+        MAIL_USE_TLS=True,
         MAIL_DEFAULT_SENDER=mailSettings['mailDefaultSender'],
         MAIL_USERNAME=mailSettings['userName'],
         MAIL_PASSWORD=mailSettings['password']
     )
     mail = Mail(app)
 
+
 def extractAmount(s):
     remList = [',', '%u20B9', ' ']  # The Rs symbol
     for i in remList:
         s = s.replace(i, '')
     return s
+
 
 def getErrorMessage(key='generic', error=None):
     if error is None:
@@ -47,15 +51,20 @@ def getErrorMessage(key='generic', error=None):
 def randomStringGenerator(strSize, allowedChars):
     return ''.join(random.choice(allowedChars) for x in range(strSize))
 
+
 def getRandomUserId():
     rnd = randomStringGenerator(8, string.ascii_letters + string.digits)
-    return(rnd.replace(':','$')) # Remove all instances of ':' since clint sends credentials as 'uid:pwd'
+    # Remove all instances of ':' since clint sends credentials as 'uid:pwd'
+    return(rnd.replace(':', '$'))
 
 # password having special char, digit, Capital, small letter
 
+
 def getRandomPassword():
     rnd = f'@A1{randomStringGenerator(9, (string.ascii_letters + string.punctuation + string.digits))}b'
-    return(rnd.replace(':','$')) # Remove all instances of ':' since clint sends credentials as 'uid:pwd'
+    # Remove all instances of ':' since clint sends credentials as 'uid:pwd'
+    return(rnd.replace(':', '$'))
+
 
 def getPasswordHash(pwd):
     interm = pwd.encode('utf-8')
@@ -63,9 +72,11 @@ def getPasswordHash(pwd):
     pwdHash = bcrypt.hashpw(interm, salt).decode('utf-8')
     return pwdHash
 
+
 def getschemaSearchPath(buCode):
     searchPathSql = '' if buCode == 'public' else f'set search_path to {buCode}'
     return searchPathSql
+
 
 def sendMail(recipients, message, htmlBody, attachment=None):
     try:
@@ -75,14 +86,15 @@ def sendMail(recipients, message, htmlBody, attachment=None):
         # msg.body = body
         msg.html = htmlBody
         if(attachment != None):
-            msg.attach('document.pdf','applicayion/pdf', attachment)
+            msg.attach('document.pdf', 'applicayion/pdf', attachment)
         mail.send(msg)
         return True
     except (Exception) as e:
         return False
 
+
 def convertToWord(n):
-    
+
     def num2words(num):
         under_20 = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
                     'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']

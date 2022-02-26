@@ -16,19 +16,35 @@ with open('config.json') as f:
 poolStore = {}
 
 
-def execGenericUpdateMaster(dbName, sqlObject, buCode='public'):
+def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, finYearId = None):
     connection = None
     ret = None
+    res = None
     errorCode = 'generic'
     try:
+        deletedIds = sqlObject.get('deletedIds', None)
+        tableName = sqlObject.get('tableName', None)
         pool = getPool(dbName)
         connection = pool.getconn()
         cursor = connection.cursor()
         errorCode = 'cannotDelete' if sqlObject.get(
             'deletedIds', None) is not None else 'generic'
         ret = execSqlObject(sqlObject, cursor, buCode=buCode)
+        if(tableName == 'AccM'):
+            if(deletedIds): # account deleted
+                pass
+            else: # update or new account
+                acc = sqlObject.get('data', None)
+                if(acc):
+                    if(acc.get('id', None)): # it is edit account
+                        res = acc
+                    else: # it is new account
+                        acc['accClass'] = sqlObject.get('accClass', None)
+                        acc['isAutoSubledger'] = sqlObject.get('isAutoSubledger', None)
+                        acc['id'] = ret
+                res = acc                       
         connection.commit()
-        # ret = True
+        
     except (Exception, psycopg2.Error) as error:
         ret = False
         if connection:
@@ -39,7 +55,7 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public'):
             cursor.close()
             connection.close()
             # print("PostgreSQL connection is closed")
-    return ret
+    return ret, res
 
 
 def execScriptFile_with_newSchema(dbName, scriptFile, newSchemaName):
@@ -76,7 +92,7 @@ def execSql(dbName, sqlString, args=None, isMultipleRows=True,  autoCommitMode=F
     searchPathSql = getschemaSearchPath(buCode)
     try:
         connection, cursor, pool = getConnectionCursor(
-            dbName, autoCommitMode )
+            dbName, autoCommitMode)
         cursor.execute(f'{searchPathSql};{sqlString}', args)
         try:
             if isMultipleRows:
@@ -98,6 +114,25 @@ def execSql(dbName, sqlString, args=None, isMultipleRows=True,  autoCommitMode=F
             connection.close()
             pool.putconn(connection)
             # print("PostgreSQL connection is closed")
+    return out
+
+
+def execSqlWithCursor(cursor, sqlString, args=None, isMultipleRows=True, buCode='public'):
+    out = None
+    searchPathSql = getschemaSearchPath(buCode)
+    try:
+        query = cursor.mogrify(f'{searchPathSql};{sqlString}', args)
+        cursor.execute(query)
+        # cursor.execute(f'{searchPathSql};{sqlString}', args)
+        try:  # To suck the error when cursor has no output rows
+            if isMultipleRows:
+                out = cursor.fetchall()
+            else:
+                out = cursor.fetchone()
+        except(Exception) as err:
+            out = None
+    except(Exception) as error:
+        raise Exception(getErrorMessage())
     return out
 
 
@@ -152,68 +187,5 @@ def getPool(dbName):
         ref = cfg[env]['baseConnection']
         # ref = cfg['baseConnection']
         poolStore[dbName] = psycopg2.pool.ThreadedConnectionPool(
-            1, 500, user=ref['user'], password=ref['password'], host=ref['host'], port=ref['port'], database=dbName)        
+            1, 500, user=ref['user'], password=ref['password'], host=ref['host'], port=ref['port'], database=dbName)
     return poolStore[dbName]
-
-# def doDebitsEqualCredits(sqlObject):
-#     ret = False
-#     # get all instances of data in the nested object
-#     dat = nested_lookup('data', sqlObject)
-
-#     def checkList(tranList):
-#         allDebits = 0.00
-#         allCredits = 0.00
-#         for row in tranList:
-#             if row['dc'] == 'C':
-#                 allCredits = allCredits + float(row['amount'])
-#             else:
-#                 allDebits = allDebits + float(row['amount'])
-#         return(allDebits == allCredits)
-
-#     # dat[1] contains list of all transactions, with dc = 'D' or dc = 'C'
-#     if type(dat) is list:
-#         if len(dat) > 0:
-#             tranList = dat[1]
-#             ret = checkList(tranList)
-
-#     return(ret)
-
-# # Following method can be used only in accounts because of presence of checking of debit equals credits and autorefno.
-# # Later on it is recommended to use this method for all entities. This is a generic insert, udate, delete in multiple tables connected with foreign keys.
-# def execGenericUpdateMasterDetails(dbName, sqlObject):
-#     connection = None
-#     try:
-#         # for debits = credit otherwise error
-#         areEqualDebitsCredits = doDebitsEqualCredits(sqlObject)
-#         if not areEqualDebitsCredits:
-#             raise Exception(getErrorMessage('debitCreditNotSame'))
-#         connection = None
-#         pool = getPool(dbName)
-#         connection = pool.getconn()
-#         cursor = connection.cursor()
-#         autoRefNo = sqlObject[0]["data"][0]["autoRefNo"]
-#         # calculate autoRefNo only if id field is not there, insert operation
-#         if not 'id' in sqlObject[0]["data"][0]:
-#             # 0 means getting a tuple with autoRefNo and corresponding lastNo in tranCounter table
-#             autoRefNoTup = getSetAutoRefNo(sqlObject[0], cursor, 0)
-#             autoRefNo = autoRefNoTup[0]
-#             lastNo = autoRefNoTup[1]
-#             sqlObject[0]["data"][0]["autoRefNo"] = autoRefNo
-#             # to set last no in TranCounter table
-#             autoRefNoTup = getSetAutoRefNo(sqlObject[0], cursor, lastNo)
-#             autoRefNo = autoRefNoTup[0]
-
-#         execSqlObject(sqlObject[0], cursor)
-#         connection.commit()
-#         return autoRefNo
-
-#     except (Exception, psycopg2.Error) as error:
-#         print("Error with PostgreSQL", error)
-#         if connection:
-#             connection.rollback()
-#         raise Exception(getErrorMessage('generic', error))
-#     finally:
-#         if connection:
-#             cursor.close()
-#             connection.close()
-#             print("PostgreSQL connection is closed")
