@@ -1,12 +1,5 @@
-// import { makeStyles } from '@mui/styles'
-// export { createStyles, makeStyles, useTheme } from '@material-ui/core/styles'
-// export { Alert as MuiAlert } from '@mui/material'
 export { createStyles, makeStyles } from '@mui/styles'
 export { useTheme } from '@mui/material/styles'
-// export { Alert as MuiAlert } from '@material-ui/lab'
-// export { Alert as MuiAlert } from '@mui/material'
-// export type { Theme } from '@material-ui/core'
-// export  type { Theme } from '@mui/material/styles'
 export { type Theme } from '@mui/material'
 export {
     Alert,

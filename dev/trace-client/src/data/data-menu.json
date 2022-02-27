@@ -250,6 +250,12 @@
                             "hierarchy": "inventory-products",
                             "label": "Products",
                             "componentName": "products"
+                        },
+                        {
+                            "name": "openingStockSubMenu",
+                            "hierarchy":"inventory-opening-stock",
+                            "label": "Opening stock",
+                            "componentName": "openingStock"
                         }
                     ]
                 }

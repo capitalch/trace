@@ -19,6 +19,7 @@ import { Branches } from '../masters/branches'
 import { FinancialYears } from '../masters/financial-years'
 import { Brands } from '../inventory/brands'
 import { Products } from '../inventory/products'
+import { OpeningStock } from '../inventory/opening-stock'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -43,5 +44,6 @@ const customComponents = {
     taxation: Taxation,
     trialBalance: TrialBalance,
     vouchers: Voucher,
+    openingStock: OpeningStock
 }
 export { customComponents }

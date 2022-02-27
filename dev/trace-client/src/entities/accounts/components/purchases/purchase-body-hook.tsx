@@ -24,10 +24,12 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         isInvalidGstin,
     } = useSharedElements()
     const ad = arbitraryData
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        setAccounts()
+        ad.ledgerFilterMethodName = 'debtorsCreditors'
+        // setAccounts()
         setPurchaseErrorObject()
         handlePurchaseCashCredit('credit')
         setRefresh({})
@@ -37,7 +39,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             handlePurchaseCashCredit(d.data)
         })
         const subs2 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
-            setAccounts()
+            // setAccounts()
             const cashOrCredit = (ad.purchaseCashCredit === 'credit') ? 'credit': 'cash'
             handlePurchaseCashCredit(cashOrCredit)
             setRefresh({})
@@ -61,38 +63,38 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
         },
     })
     
-    function setAccounts() {
-        // allAccounts
-        const allAccounts = getFromBag('allAccounts') || []
-        ad.accounts.allAccounts = allAccounts
+    // function setAccounts() {
+    //     // allAccounts
+    //     const allAccounts = getFromBag('allAccounts') || []
+    //     ad.accounts.allAccounts = allAccounts
 
-        //purchaseLedgerAccounts
-        const purchaseLedgerAccounts = allAccounts.filter(
-            (el: any) =>
-                ['purchase'].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        ad.accounts.purchaseLedgerAccounts = purchaseLedgerAccounts
+    //     purchaseLedgerAccounts
+    //     const purchaseLedgerAccounts = allAccounts.filter(
+    //         (el: any) =>
+    //             ['purchase'].includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+    //     )
+    //     ad.accounts.purchaseLedgerAccounts = purchaseLedgerAccounts
 
-        // cashBankLedgerAccounts
-        const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-        const cashBankLedgerAccounts = allAccounts.filter(
-            (el: any) =>
-                cashBankArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        ad.accounts.cashBankLedgerAccounts = cashBankLedgerAccounts
+    //     cashBankLedgerAccounts
+    //     const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+    //     const cashBankLedgerAccounts = allAccounts.filter(
+    //         (el: any) =>
+    //             cashBankArray.includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+    //     )
+    //     ad.accounts.cashBankLedgerAccounts = cashBankLedgerAccounts
 
-        // debtorCreditorLedgerAccounts
-        const drCrArray = ['debtor', 'creditor']
-        const debtorCreditorLedgerAccounts = allAccounts.filter(
-            (el: any) =>
-                drCrArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                !el.isAutoSubledger
-        )
-        ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
-    }
+    //     debtorCreditorLedgerAccounts
+    //     const drCrArray = ['debtor', 'creditor']
+    //     const debtorCreditorLedgerAccounts = allAccounts.filter(
+    //         (el: any) =>
+    //             drCrArray.includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+    //             !el.isAutoSubledger
+    //     )
+    //     ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
+    // }
 
     function checkIfValidInvoice() {
         const errorAllowed = 0.99
@@ -288,7 +290,18 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             accId: undefined,
             isLedgerSubledgerError: true,
         }
-        handlePurchaseCashCredit(purchaseCashCredit)
+        if(purchaseCashCredit === 'cash'){
+            ad.ledgerFilterMethodName = 'cashBank'
+            ad.purchaseCashCredit = 'cash'
+        } else {
+            ad.ledgerFilterMethodName = 'debtorsCreditors'
+            ad.purchaseCashCredit = 'credit'
+        }
+
+        setRefresh({})
+        // handlePurchaseCashCredit(purchaseCashCredit)
+        // emit('LEDGER-SUBLEDGER-JUST-REFRESH', (purchaseCashCredit==='cash') ? 'cashBank' : 'debtorsCreditors')
+        // meta.current.isMounted && setRefresh({})
     }
 
     function handlePurchaseCashCredit(purchaseCashCredit: string) {

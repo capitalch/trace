@@ -98,15 +98,15 @@ function utils() {
         }
     }
 
-    function getAccountBalanceFormatted(accId: number){
-        const {toDecimalFormat} = utilMethods()
-        const allAccounts=getFromBag('allAccounts')
-        const account = allAccounts.find((item:any)=> item.id === accId)
+    function getAccountBalanceFormatted(accId: number) {
+        const { toDecimalFormat } = utilMethods()
+        const allAccounts = getFromBag('allAccounts')
+        const account = allAccounts.find((item: any) => item.id === accId)
         const balance = account?.balance || 0
         const fBalance = toDecimalFormat(Math.abs(balance))
-        const suffix = (balance >=0 ) ? ' Dr': ' Cr'
+        const suffix = (balance >= 0) ? ' Dr' : ' Cr'
         const ret = ''.concat(fBalance, suffix)
-        return(ret)
+        return (ret)
     }
 
     function getMappedAccounts(accounts: any[]) {
@@ -114,7 +114,11 @@ function utils() {
             label: x.accName,
             value: x.id,
             accLeaf: x.accLeaf,
-        }))
+        })).sort((a: any, b: any) => {
+            if (a.label > b.label) return 1
+            if (a.label < b.label) return -1
+            return 0
+        })
     }
 
     function getGridReportSubTitle() {

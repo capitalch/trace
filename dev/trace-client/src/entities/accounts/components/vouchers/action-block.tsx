@@ -29,8 +29,8 @@ function ActionBlock({
         accountsMessages,
         emit,
         filterOn,
-        getFromBag,
-        getMappedAccounts,
+        // getFromBag,
+        // getMappedAccounts,
         toDecimalFormat,
     } = useSharedElements()
 
@@ -41,11 +41,9 @@ function ActionBlock({
         const subs2 = filterOn('ACTION-BLOCK-RESET-GST').subscribe(() => {
             resetGst()
         })
-
         return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
-            // subs3.unsubscribe()
         }
     }, [])
     return (
@@ -64,7 +62,7 @@ function ActionBlock({
                 allowInstrNo={allowInstrNo}
                 allowAddRemove={allowAddRemove}
                 allowRowGst={allowRowGst}
-                ledgerAccounts={ledgerAccounts}
+                // ledgerAccounts={ledgerAccounts}
                 notifyOnChange={notifyOnChange}
                 allowFreeze={allowFreeze}
             />
@@ -78,7 +76,7 @@ function ActionBlock({
         allowAddRemove,
         allowInstrNo,
         allowRowGst,
-        ledgerAccounts,
+        // ledgerAccounts,
         notifyOnChange,
         allowFreeze,
     }: any) {
@@ -118,20 +116,21 @@ function ActionBlock({
                 <div key={incr()} className="action-row">
                     {/* Account */}
                     <Box>
-                        <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <Typography variant="caption">
                                 {actionLabel} account
                             </Typography>
-                            <TypographySmart item={item}/>
+                            <TypographySmart item={item} />
                         </Box>
                         <LedgerSubledger
-                            allAccounts={ad.accounts.all}
-                            ledgerAccounts={getMappedAccounts(
-                                ad.accounts[ledgerAccounts] || []
-                            )}
+                            // allAccounts={ad.accounts.all}
+                            // ledgerAccounts={getMappedAccounts(
+                            //     ad.accounts[ledgerAccounts] || []
+                            // )}
+                            ledgerFilterMethodName={ledgerAccounts} // method is available in ledgerSubledger control itself
                             onChange={() => {
                                 emit('CROWN-REFRESH', '')
-                                emit('TYPOGRAPHY-SMART-REFRESH','')
+                                emit('TYPOGRAPHY-SMART-REFRESH', '')
                             }}
                             rowData={item}
                         />

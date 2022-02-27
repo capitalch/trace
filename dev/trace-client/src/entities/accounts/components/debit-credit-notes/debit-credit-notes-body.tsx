@@ -125,17 +125,18 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                                 : 'Debit (Sale)'}
                         </Typography>
                         <LedgerSubledger
-                            allAccounts={accounts.allAccounts}
+                            // allAccounts={accounts.allAccounts}
                             className="ledger-subledger"
-                            ledgerAccounts={
-                                tranType === 'dn'
-                                    ? getMappedAccounts(
-                                        accounts.debtorCreditorLedgerAccounts
-                                    )
-                                    : getMappedAccounts(
-                                        accounts.saleLedgerAccounts
-                                    )
-                            }
+                            // ledgerAccounts={
+                            //     tranType === 'dn'
+                            //         ? getMappedAccounts(
+                            //             accounts.debtorCreditorLedgerAccounts
+                            //         )
+                            //         : getMappedAccounts(
+                            //             accounts.saleLedgerAccounts
+                            //         )
+                            // }
+                            ledgerFilterMethodName={(tranType === 'dn') ? 'debtorsCreditors': 'saleAccounts'}
                             onChange={() => {
                                 // for registering error
                                 meta.current.isMounted && setRefresh({})
@@ -173,17 +174,18 @@ function DebitCreditNotesBody({ arbitraryData, tranType }: any) {
                         </Typography>
                         {/* Purchase */}
                         <LedgerSubledger
-                            allAccounts={accounts.allAccounts}
+                            // allAccounts={accounts.allAccounts}
                             className="ledger-subledger"
-                            ledgerAccounts={
-                                tranType === 'dn'
-                                    ? getMappedAccounts(
-                                        accounts.purchaseLedgerAccounts
-                                    )
-                                    : getMappedAccounts(
-                                        accounts.debtorCreditorLedgerAccounts
-                                    )
-                            }
+                            // ledgerAccounts={
+                            //     tranType === 'dn'
+                            //         ? getMappedAccounts(
+                            //             accounts.purchaseLedgerAccounts
+                            //         )
+                            //         : getMappedAccounts(
+                            //             accounts.debtorCreditorLedgerAccounts
+                            //         )
+                            // }
+                            ledgerFilterMethodName={(tranType === 'dn') ? 'purchaseAccounts': 'debtorsCreditors'}
                             onChange={() => {
                                 // for registering error
                                 meta.current.isMounted && setRefresh({})

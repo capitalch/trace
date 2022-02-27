@@ -33,7 +33,7 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             multiData.sales.shouldCloseParentOnSave = true
         }
 
-        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {            
+        const subs1 = filterOn('SALES-HOOK-CHANGE-TAB').subscribe((d: any) => {
             multiData.sales.tabValue = d.data
             setRefresh({})
         })
@@ -42,9 +42,9 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
             setInBag('salesData', multiData.sales)
         })
 
-        const subs3 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
+        const subs3 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
             setAccounts()
-            setRefresh({})
+            // setRefresh({})
         })
 
         return () => {
@@ -61,8 +61,8 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
     })
 
@@ -86,23 +86,23 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     function setAccounts() {
         //saleAccounts
         const allAccounts = getFromBag('allAccounts') || []
-        multiData.sales.allAccounts = allAccounts
-        const saleAccounts = allAccounts.filter(
-            (el: any) =>
-                ['sale'].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        multiData.sales.ledgerAccounts = saleAccounts
+        // multiData.sales.allAccounts = allAccounts
+        // const saleAccounts = allAccounts.filter(
+        //     (el: any) =>
+        //         ['sale'].includes(el.accClass) &&
+        //         (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        // )
+        // multiData.sales.ledgerAccounts = saleAccounts
 
         // Cash bank accounts
         const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-        const cashBankAccountsWithLedgers = allAccounts.filter(
-            (el: any) =>
-                cashBankArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        multiData.sales.accounts.cashBankAccountsWithLedgers =
-            cashBankAccountsWithLedgers
+        // const cashBankAccountsWithLedgers = allAccounts.filter(
+        //     (el: any) =>
+        //         cashBankArray.includes(el.accClass) &&
+        //         (el.accLeaf === 'Y' || el.accLeaf === 'L')
+        // )
+        // multiData.sales.accounts.cashBankAccountsWithLedgers =
+        //     cashBankAccountsWithLedgers
 
         const cashBankAccountsWithSubledgers = allAccounts.filter(
             (el: any) =>
@@ -112,26 +112,27 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         multiData.sales.accounts.cashBankAccountsWithSubledgers =
             cashBankAccountsWithSubledgers
         // Debtors creditors accounts
-        const debtorCreditorAccountsWithLedgers = allAccounts
-            .filter(
-                (el: any) =>
-                    ['debtor', 'creditor'].includes(el.accClass) &&
-                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-                    !el.isAutoSubledger
-            )
-            .sort((a: any, b: any) => {
-                if (a.accName > b.accName) return 1
-                if (a.accName < b.accName) return -1
-                return 0
-            })
-        multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
-            debtorCreditorAccountsWithLedgers
+        // const debtorCreditorAccountsWithLedgers = allAccounts
+        //     .filter(
+        //         (el: any) =>
+        //             ['debtor', 'creditor'].includes(el.accClass) &&
+        //             (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+        //             !el.isAutoSubledger
+        //     )
+        //     .sort((a: any, b: any) => {
+        //         if (a.accName > b.accName) return 1
+        //         if (a.accName < b.accName) return -1
+        //         return 0
+        //     })
+        // multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
+        //     debtorCreditorAccountsWithLedgers
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
                 (el: any) =>
                     ['debtor', 'creditor'].includes(el.accClass) &&
                     (el.accLeaf === 'Y' || el.accLeaf === 'S') &&
-                    !el.isAutoSubledger
+                    !(isParentAutoSubledger(el))
+                    // !el.isAutoSubledger
             )
             .sort((a: any, b: any) => {
                 if (a.accName > b.accName) return 1
@@ -148,6 +149,14 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
                 el.isAutoSubledger
         )
         multiData.sales.accounts.autoSubledgerAccounts = autoSubledgerAccounts
+        
+        function isParentAutoSubledger(acc: any) {
+            let ret = false
+            const parentId = acc.parentId
+            const account = allAccounts.find((x: any) => x.id === parentId)
+            ret = account.isAutoSubledger || false
+            return (ret)
+        }
     }
 
     return { multiData, handleChangeTab, meta }
@@ -162,11 +171,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 backgroundColor: theme.palette.grey[200],
                 color: theme.palette.primary.dark,
                 marginTop: theme.spacing(0.5),
-                '& .reset':{
+                '& .reset': {
                     backgroundColor: theme.palette.blue.main,
-                    color: theme.palette.getContrastText(theme.palette.blue.main),                    
+                    color: theme.palette.getContrastText(theme.palette.blue.main),
                     height: theme.spacing(4),
-                    margin:'auto',
+                    margin: 'auto',
                 }
             },
         },

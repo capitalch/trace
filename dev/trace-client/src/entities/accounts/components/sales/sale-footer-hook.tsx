@@ -2,25 +2,25 @@ import { Big, useState, useEffect, useRef } from '../../../../imports/regular-im
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 
-function useSaleFooter(arbitraryData: any) {
+function useSaleFooter(ad: any) {
     const [, setRefresh] = useState({})
-    const {filterOn, getFromBag, getMappedAccounts } = useSharedElements()
+    const { filterOn, getFromBag } = useSharedElements()
 
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        if (arbitraryData.footer?.items?.length === 0) {
+        if (ad.footer?.items?.length === 0) {
             handleAddItem()
         }
-        const subs1 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(()=>{
-            updateLedgerAccounts()
+        const subs1 = filterOn('SALE-FOOTER-JUST-REFRESH').subscribe(() => {
+            updatefirstLedgerAccounts()
             setRefresh({})
         })
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
         }
-    },[])
+    }, [])
 
     const meta: any = useRef({
         isMounted: false,
@@ -32,49 +32,41 @@ function useSaleFooter(arbitraryData: any) {
         },
     })
 
-    const allAccounts = getFromBag('allAccounts') || []
-    const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-
     function computeSummary() {
-        arbitraryData.footer.amount = arbitraryData.footer.items.reduce(
+        ad.footer.amount = ad.footer.items.reduce(
             (prev: any, curr: any) => {
                 prev.amount = +Big(curr.amount || 0).plus(Big(prev.amount || 0))
                 return prev
             },
             { amount: 0 }
         ).amount
-        arbitraryData.salesCrownRefresh()
+        ad.salesCrownRefresh()
     }
 
     function handleAddItem() {
-        const length = arbitraryData.footer.items.push({
-            index: arbitraryData.footer.items.length + 1,
+        const footer = ad.footer
+        const length = ad.footer.items.push({
+            index: ad.footer.items.length + 1,
             accId: '',
             amount: 0.0,
             isAmountError: true,
             isLedgerSubledgerError: true,
             remarks: '',
+            ledgerFilterMethodName: 'cashBank'
         })
-        // const allAccounts = getFromBag('allAccounts') || []
-        // const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-        const cashBankAccountsLedger = allAccounts.filter(
-            (el: any) =>
-                cashBankArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        arbitraryData.footer.items[
-            length - 1
-        ].ledgerAccounts = getMappedAccounts(cashBankAccountsLedger) //default
+        if (length > 1) {
+            footer.items[length - 1].ledgerFilterMethodName = 'cashBank'
+        }
         computeSummary()
         meta.current.isMounted && setRefresh({})
     }
 
     function handleDeleteItem(e: any, rowData: any) {
         const rowIndex = rowData.index - 1
-        const items = arbitraryData.footer.items
+        const items = ad.footer.items
         items.splice(rowIndex, 1)
         if (rowData.id) {
-            arbitraryData.footer.deletedIds.push(rowData.id) // deletion is actually done in table salePurchaseDetails
+            ad.footer.deletedIds.push(rowData.id) // deletion is actually done in table salePurchaseDetails
         }
         for (let i = 0; i < items.length; i++) {
             items[i].index = i + 1
@@ -84,23 +76,16 @@ function useSaleFooter(arbitraryData: any) {
     }
 
     function onChangeLedgerSubledger(rowData: any) {
-        arbitraryData.saleVarietyAccId = rowData.accId
+        ad.saleVarietyAccId = rowData.accId
         const allAccounts: any[] = getFromBag('allAccounts')
         const accName = allAccounts.find((x: any) => x.id === rowData.accId)
             ?.accName
-        arbitraryData.saleVarietyAccName = accName
-        arbitraryData.salesCrownRefresh()
+        ad.saleVarietyAccName = accName
+        ad.salesCrownRefresh()
     }
 
-    function updateLedgerAccounts() {
-        const cashBankAccountsLedger = allAccounts.filter(
-            (el: any) =>
-                cashBankArray.includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        for (const item of arbitraryData.footer.items) {
-            item.ledgerAccounts = getMappedAccounts(cashBankAccountsLedger)
-        }        
+    function updatefirstLedgerAccounts() {
+        ad.footer.items[0].ledgerFilterMethodName = 'debtorsCreditors'
     }
 
     return {
@@ -156,3 +141,35 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
+
+
+// if (length === 1) {
+//     if (ad.saleVariety === 'r') { // retail sales
+//         footer.items[0].ledgerFilterMethodName = 'cashBank'
+//     } else if (ad.saleVariety === 'a') { // auto subledger
+//         footer.items[0].ledgerFilterMethodName = 'autoSubledgers'
+//     } else { // institution sale
+//         footer.items[0].ledgerFilterMethodName = 'debtorsCreditors'
+//     }
+// }
+
+// function updateLedgerAccounts() {
+//     const cashBankAccountsLedger = allAccounts.filter(
+//         (el: any) =>
+//             cashBankArray.includes(el.accClass) &&
+//             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+//     )
+//     for (const item of arbitraryData.footer.items) {
+//         item.ledgerAccounts = getMappedAccounts(cashBankAccountsLedger)
+//     }        
+// }
+// const allAccounts = getFromBag('allAccounts') || []
+// const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+// const cashBankAccountsLedger = allAccounts.filter(
+//     (el: any) =>
+//         cashBankArray.includes(el.accClass) &&
+//         (el.accLeaf === 'Y' || el.accLeaf === 'L')
+// )
+// arbitraryData.footer.items[
+//     length - 1
+// ].ledgerAccounts = getMappedAccounts(cashBankAccountsLedger) //default

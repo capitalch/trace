@@ -76,8 +76,10 @@ function SaleFooter() {
                 style={{ minWidth: '25rem' }}
                 body={(rowData: any) => (
                     <LedgerSubledger
-                        allAccounts={arbitraryData.allAccounts}
-                        ledgerAccounts={rowData.ledgerAccounts}
+                        // allAccounts={arbitraryData.allAccounts}
+                        // ledgerAccounts={rowData.ledgerAccounts}
+                        controlId={''.concat('footer')}
+                        ledgerFilterMethodName={rowData.ledgerFilterMethodName}
                         onChange={() => onChangeLedgerSubledger(rowData)}
                         rowData={rowData}
                         showAutoSubledgerValues={false}

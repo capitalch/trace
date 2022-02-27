@@ -16,8 +16,6 @@ function useCrown(meta: any, componentRef: any) {
         toDecimalFormat,
     } = useSharedElements()
 
-    // const ctx: any = useContext(MultiDataContext)
-
     function checkError(ad: any) {
         function headerError() {
             function dateError() {
@@ -143,11 +141,10 @@ function useCrown(meta: any, componentRef: any) {
                     const account = ad.accounts.all.find(
                         (x: any) => x.id === accId
                     )
-                    return account.accClass
+                    return (account?.accClass || '')
                 }
 
-                m =
-                    accountError() ||
+                m = accountError() ||
                     amountError() ||
                     gstRateError() ||
                     hsnNotPresentError() ||

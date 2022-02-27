@@ -1,6 +1,9 @@
 import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
 import { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
+import {components as reactSelectComponents} from 'react-select'
+import ReactSelect from 'react-select'
+
 import {
     globalMessages,
     graphqlService,
@@ -165,6 +168,8 @@ function useSharedElements() {
         queries,
         queryGraphql,
         ReactForm,
+        reactSelectComponents,
+        ReactSelect,
         registerAccounts,
         releaseForm,
         resetForm,

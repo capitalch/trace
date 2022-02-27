@@ -66,8 +66,7 @@ function GeneralLedger() {
 
                     <LedgerSubledger
                         className="ledger-subledger"
-                        allAccounts={meta.current.allAccounts}
-                        ledgerAccounts={meta.current.ledgerAccounts}
+                        ledgerFilterMethodName='all'
                         rowData={meta.current.ledgerSubledger}
                         onChange={() => {
                             meta.current.accId =
@@ -88,14 +87,14 @@ function GeneralLedger() {
                                 emit('XX-GRID-RESET', null)
                             }
                             meta.current.isMounted && setRefresh({})
-                            emit('TYPOGRAPHY-SMART-REFRESH','')
+                            emit('TYPOGRAPHY-SMART-REFRESH', '')
                         }}
                     />
                 </div>
             </div>
 
-            <div className="data-grid">
-                <XXGrid
+            <Box className='data-grid'>
+                <XXGrid 
                     autoFetchData={false}
                     columns={getArtifacts().columns}
                     gridActionMessages={getArtifacts().gridActionMessages}
@@ -114,7 +113,7 @@ function GeneralLedger() {
                     toShowDailySummary={true}
                     toShowReverseCheckbox={true}
                 />
-            </div>
+            </Box>
             <PrimeDialog
                 header={accountsMessages.selectAccountHeader}
                 visible={meta.current.showDialog}

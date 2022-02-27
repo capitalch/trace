@@ -17,7 +17,6 @@ import { useSharedElements } from '../common/shared-elements-hook'
 
 function useSaleHeader(arbitraryData: any) {
     const [, setRefresh] = useState({})
-
     const { emit, execGenericView, getMappedAccounts } = useSharedElements()
 
     useEffect(() => {
@@ -105,7 +104,8 @@ function useSaleHeader(arbitraryData: any) {
             arbitraryData.accounts.autoSubledgerAccounts
         meta.current.dialogConfig.content = () => <AccountsList />
         meta.current.dialogConfig.actions = () => { }
-        setFooterRow(arbitraryData.accounts.autoSubledgerAccounts)
+        // setFooterRow(arbitraryData.accounts.autoSubledgerAccounts)
+        setFirstFooterRow('autoSubledgers')
         meta.current.isMounted && setRefresh({})
     }
 
@@ -118,7 +118,9 @@ function useSaleHeader(arbitraryData: any) {
             <AccountsList mapFunction={mapBillTo} />
         )
         meta.current.dialogConfig.actions = () => { }
-        setFooterRow(arbitraryData.accounts.debtorCreditorAccountsWithLedgers)
+        // setFooterRow(arbitraryData.accounts.debtorCreditorAccountsWithLedgers)
+        setFirstFooterRow('debtorsCreditors')
+        // emit('SALE-FOOTER-JUST-REFRESH', '')
         meta.current.isMounted && setRefresh({})
 
         async function mapBillTo(it: any) {
@@ -158,14 +160,21 @@ function useSaleHeader(arbitraryData: any) {
         meta.current.dialogConfig.content = () => (
             <AccountsList mapFunction={() => { }} />
         )
-        setFooterRow(arbitraryData.accounts.cashBankAccountsWithLedgers)
+        setFirstFooterRow('cashBank')
         meta.current.isMounted && setRefresh({})
     }
 
-    function setFooterRow(ledgerAccounts: any[]) {
+    // function setFooterRow(ledgerAccounts: any[]) {
+    //     if (arbitraryData?.footer?.items?.length > 0) {
+    //         arbitraryData.footer.items[0].ledgerAccounts =
+    //             getMappedAccounts(ledgerAccounts)
+    //     }
+    // }
+
+    function setFirstFooterRow(methodName: string) {
         if (arbitraryData?.footer?.items?.length > 0) {
-            arbitraryData.footer.items[0].ledgerAccounts =
-                getMappedAccounts(ledgerAccounts)
+            arbitraryData.footer.items[0].ledgerFilterMethodName = methodName
+            emit('LEDGER-SUBLEDGER-JUST-REFRESH','')
         }
     }
 

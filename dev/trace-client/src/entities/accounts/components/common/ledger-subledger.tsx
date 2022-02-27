@@ -1,26 +1,33 @@
 import { clsx, useState, useEffect, useRef, } from '../../../../imports/regular-imports'
 import Select, { components } from 'react-select'
-import { useIbuki } from '../../../../imports/trace-imports'
+// import { useIbuki } from '../../../../imports/trace-imports'
 import { makeStyles, createStyles, Theme } from '../../../../imports/gui-imports'
+import { useSharedElements } from './shared-elements-hook'
 
 interface LedgerSubledgerOptions {
-    allAccounts: any[]
+    // allAccounts: any[]
     className?: string
-    ledgerAccounts: any[]
+    controlId?: string
+    ledgerAccounts?: any[]
+    ledgerFilterMethodName?: string
     onChange?: any
     rowData: any // Object which has the final selected value as 'accId' and boolen error in 'isLedgerSubledgerError'
     showAutoSubledgerValues?: boolean
 }
 function LedgerSubledger({
-    allAccounts,
+    // allAccounts,
     className,
+    // controlId,
     ledgerAccounts,
+    ledgerFilterMethodName,
     onChange,
     rowData,
-    showAutoSubledgerValues,
+    showAutoSubledgerValues = true,
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
-    const { filterOn } = useIbuki()
+    const { emit, filterOn, getFromBag, getMappedAccounts, } = useSharedElements()
+    const allAccounts = getFromBag('allAccounts') || []
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -70,26 +77,46 @@ function LedgerSubledger({
     }, [rowData.accId])
 
     useEffect(() => {
+        loadLedgerAccounts()
         const subs1 = filterOn('LEDGER-SUBLEDGER-DISABLE-AUTO-SUBLEDGER')
             .subscribe((d: any) => {
                 setSubledgerDisabled(d.data || true)
             })
+        const subs2 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
+            loadLedgerAccounts()
+        })
+        const subs3 = filterOn('LEDGER-SUBLEDGER-JUST-REFRESH').subscribe((d: any) => {
+            if (d.data) {
+                ledgerFilterMethodName = d.data
+            }
+            setRefresh({})
+        })
+
+        function loadLedgerAccounts() {
+            // meta.current.ledgerItem = { label: null, value: undefined }
+            // meta.current.subLedgerItem = { label: null, value: undefined }
+            // meta.current.subledgerOptions = []
+            // emit('TYPOGRAPHY-SMART-RESET', '')
+            ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[ledgerFilterMethodName]())
+            setRefresh({})
+        }
         return (() => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
         })
     }, [])
 
-    // useEffect(() => {
-    //     const subs1 = filterOn('LEDGER-SUBLEDGER-JUST-REFRESH').subscribe(() => {
-    //         setRefresh({})
-    //     })
-    //     return (() => { subs1.unsubscribe() })
-    // })
+    useEffect(() => {
+        ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[ledgerFilterMethodName]())
+        setRefresh({})
+    }, [ledgerFilterMethodName])
 
     const meta: any = useRef({
         isMounted: false,
         isSubledgerDisabled: true,
         ledgerItem: { label: null, value: undefined },
+        ledgerAccounts: [],
         rowData: rowData,
         subledgerItem: { label: null, value: undefined },
         subledgerOptions: [],
@@ -128,7 +155,7 @@ function LedgerSubledger({
                 menuShouldScrollIntoView={false}
                 onChange={handleLedgerChange}
                 options={
-                    ledgerAccounts?.sort((a: any, b: any) => {
+                    meta.current.ledgerAccounts?.sort((a: any, b: any) => {
                         if (a.label > b.label) return 1
                         if (a.label < b.label) return -1
                         return 0
@@ -170,10 +197,126 @@ function LedgerSubledger({
         rowData.isLedgerSubledgerError = getError()
     }
 
+    function ledgerFilterMethods(): any {
+
+        function all() {
+            const a = allAccounts
+                .filter((el: any) => el.accLeaf === 'Y' || el.accLeaf === 'L')
+            return(getMappedAccounts(a) || [])
+        }
+
+        function cashBank() {
+            const cb = allAccounts.filter(
+                (el: any) =>
+                    ['ecash', 'bank', 'card', 'cash'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L')
+            )
+            return (getMappedAccounts(cb) || [])
+        }
+
+        function journal() {
+            const jou = allAccounts.filter(
+                (el: any) =>
+                    [
+                        'branch',
+                        'capital',
+                        'other',
+                        'loan',
+                        'iexp',
+                        'dexp',
+                        'dincome',
+                        'iincome',
+                        'creditor',
+                        'debtor',
+                    ].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L'))
+            return (getMappedAccounts(jou) || [])
+        }
+
+        function paymentOther() {
+            const po = allAccounts.filter(
+                (el: any) =>
+                    [
+                        'debtor',
+                        'creditor',
+                        'dexp',
+                        'iexp',
+                        'purchase',
+                        'loan',
+                        'capital',
+                        'other',
+                    ].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L')
+            )
+            return (getMappedAccounts(po) || [])
+        }
+
+        function receiptOther() {
+            const ro = allAccounts.filter(
+                (el: any) =>
+                    [
+                        'debtor',
+                        'creditor',
+                        'dexp',
+                        'iexp',
+                        'loan',
+                        'other',
+                        'capital',
+                        'iincome',
+                        'dincome',
+                        'sale',
+                    ].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L')
+            )
+            return (getMappedAccounts(ro) || [])
+        }
+
+        function saleAccounts() {
+            const so = allAccounts.filter(
+                (el: any) =>
+                    ['sale'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L')
+            )
+            return (getMappedAccounts(so) || [])
+        }
+
+        function debtorsCreditors() {
+            const dc = allAccounts
+                .filter(
+                    (el: any) =>
+                        ['debtor', 'creditor'].includes(el.accClass) &&
+                        (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                        !el.isAutoSubledger
+                )
+            return (getMappedAccounts(dc) || [])
+        }
+
+        function autoSubledgers() {
+            const as = allAccounts.filter(
+                (el: any) =>
+                    ['debtor'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                    el.isAutoSubledger
+            )
+            return (getMappedAccounts(as) || [])
+        }
+
+        function purchaseAccounts() {
+            const pa = allAccounts.filter(
+                (el: any) =>
+                    ['purchase'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'L')
+            )
+            return (getMappedAccounts(pa) || [])
+        }
+
+        return ({all, cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers, purchaseAccounts, })
+    }
+
     function getItemFromValue(val: number) {
         let item
         if (allAccounts && allAccounts.length > 0) {
-            item = allAccounts.find((x) => x.id === +val)
+            item = allAccounts.find((x: any) => x.id === +val)
         }
         return item
     }

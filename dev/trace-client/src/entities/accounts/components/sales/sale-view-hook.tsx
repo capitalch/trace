@@ -199,7 +199,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
-            console.log(JSON.stringify(ret))
+            // console.log(JSON.stringify(ret))
             setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
             prepareArbitraryData(ret)
             arbitraryData.saleItemsRefresh()
@@ -296,25 +296,28 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                         }
                         if (accObj?.isAutoSubledger) {
                             ad.saleVariety = 'a'
-                            obj.ledgerAccounts = getMappedAccounts(
-                                arbitraryData.accounts['autoSubledgerAccounts']
-                            )
+                            obj.ledgerFilterMethodName='autoSubledgers'
+                            // obj.ledgerAccounts = getMappedAccounts(
+                            //     arbitraryData.accounts['autoSubledgerAccounts']
+                            // )
                         } else if (
                             ['debtor', 'creditor'].includes(accObj?.accClass)
                         ) {
                             ad.saleVariety = 'i'
-                            obj.ledgerAccounts = getMappedAccounts(
-                                arbitraryData.accounts[
-                                    'debtorCreditorAccountsWithLedgers'
-                                ]
-                            )
+                            obj.ledgerFilterMethodName = 'debtorsCreditors'
+                            // obj.ledgerAccounts = getMappedAccounts(
+                            //     arbitraryData.accounts[
+                            //         'debtorCreditorAccountsWithLedgers'
+                            //     ]
+                            // )
                         } else {
                             ad.saleVariety = 'r'
-                            obj.ledgerAccounts = getMappedAccounts(
-                                arbitraryData.accounts[
-                                    'cashBankAccountsWithSubledgers'
-                                ]
-                            )
+                            obj.ledgerFilterMethodName = 'cashBank'
+                            // obj.ledgerAccounts = getMappedAccounts(
+                            //     arbitraryData.accounts[
+                            //         'cashBankAccountsWithSubledgers'
+                            //     ]
+                            // )
                         }
                         ad.footer.items.push(obj)
                     }
@@ -346,7 +349,7 @@ export { useSaleView }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: 'calc(100vh - 245px)',
+            height: 'calc(100vh - 250px)',
             width: '100%',
             marginTop: '5px',
             '& .select-last': {

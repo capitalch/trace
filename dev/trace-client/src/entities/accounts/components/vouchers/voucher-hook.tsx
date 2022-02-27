@@ -33,7 +33,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         curr.isMounted = true
         arbitraryData.shouldViewReload = true
         arbitraryData.shouldGoBackToView = false
-        setAccounts()
+        // setAccounts()
         setRefresh({})
         const subs1 = filterOn('VOUCHER-CHANGE-TAB-TO-EDIT').subscribe(
             (d: any) => {
@@ -70,11 +70,6 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             setInBag('vouchersData', multiData.vouchers)
         })
 
-        const subs6 = filterOn('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED').subscribe(() => {
-            setAccounts()
-            setRefresh({})
-        })
-
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
@@ -82,7 +77,6 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             subs3.unsubscribe()
             subs4.unsubscribe()
             subs5.unsubscribe()
-            subs6.unsubscribe()
         }
     }, [])
 
@@ -202,63 +196,63 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         meta.current.isMounted && setRefresh({})
     }
 
-    function setAccounts() {
-        const allAccounts = getFromBag('allAccounts') || []
-        arbitraryData.accounts.all = allAccounts
-        const jouAccounts = allAccounts.filter(
-            (el: any) =>
-                [
-                    'branch',
-                    'capital',
-                    'other',
-                    'loan',
-                    'iexp',
-                    'dexp',
-                    'dincome',
-                    'iincome',
-                    'creditor',
-                    'debtor',
-                ].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        arbitraryData.accounts.journal = jouAccounts
+    // function setAccounts() {
+    //     const allAccounts = getFromBag('allAccounts') || []
+    //     arbitraryData.accounts.all = allAccounts
+    //     const jouAccounts = allAccounts.filter(
+    //         (el: any) =>
+    //             [
+    //                 'branch',
+    //                 'capital',
+    //                 'other',
+    //                 'loan',
+    //                 'iexp',
+    //                 'dexp',
+    //                 'dincome',
+    //                 'iincome',
+    //                 'creditor',
+    //                 'debtor',
+    //             ].includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+    //     )
+    //     arbitraryData.accounts.journal = jouAccounts
 
-        arbitraryData.accounts.cashBank = allAccounts.filter(
-            (el: any) =>
-                ['ecash', 'bank', 'card', 'cash'].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        arbitraryData.accounts.paymentOther = allAccounts.filter(
-            (el: any) =>
-                [
-                    'debtor',
-                    'creditor',
-                    'dexp',
-                    'iexp',
-                    'purchase',
-                    'loan',
-                    'capital',
-                    'other',
-                ].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-        arbitraryData.accounts.receiptOther = allAccounts.filter(
-            (el: any) =>
-                [
-                    'debtor',
-                    'creditor',
-                    'dexp',
-                    'iexp',
-                    'loan',
-                    'other',
-                    'capital',
-                    'iincome',
-                    'dincome',
-                    'sale',
-                ].includes(el.accClass) &&
-                (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        )
-    }
+    //     arbitraryData.accounts.cashBank = allAccounts.filter(
+    //         (el: any) =>
+    //             ['ecash', 'bank', 'card', 'cash'].includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+    //     )
+    //     arbitraryData.accounts.paymentOther = allAccounts.filter(
+    //         (el: any) =>
+    //             [
+    //                 'debtor',
+    //                 'creditor',
+    //                 'dexp',
+    //                 'iexp',
+    //                 'purchase',
+    //                 'loan',
+    //                 'capital',
+    //                 'other',
+    //             ].includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+    //     )
+    //     arbitraryData.accounts.receiptOther = allAccounts.filter(
+    //         (el: any) =>
+    //             [
+    //                 'debtor',
+    //                 'creditor',
+    //                 'dexp',
+    //                 'iexp',
+    //                 'loan',
+    //                 'other',
+    //                 'capital',
+    //                 'iincome',
+    //                 'dincome',
+    //                 'sale',
+    //             ].includes(el.accClass) &&
+    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
+    //     )
+    // }
 
     return { arbitraryData, getTranTypeId, handleOnTabChange, meta }
 }

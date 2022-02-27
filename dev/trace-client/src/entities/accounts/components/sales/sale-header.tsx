@@ -70,7 +70,7 @@ function SaleHeader() {
                     <TextField
                         label="Date"
                         variant="standard"
-                        error={isInvalidDate(arbitraryData.tranDate) || (! arbitraryData.tranDate)}
+                        error={isInvalidDate(arbitraryData.tranDate) || (!arbitraryData.tranDate)}
                         helperText={
                             isInvalidDate(arbitraryData.tranDate)
                                 ? accountsMessages.dateRangeAuditLockMessage
@@ -83,7 +83,7 @@ function SaleHeader() {
                             setRefresh({})
                             arbitraryData.salesCrownRefresh()
                         }}
-                        onFocus={(e:any) => e.target.select()}
+                        onFocus={(e: any) => e.target.select()}
                         value={arbitraryData.tranDate || ''}
                     />
 
@@ -106,10 +106,12 @@ function SaleHeader() {
                     <div>
                         <Typography>Sale account</Typography>
                         <LedgerSubledger
-                            allAccounts={arbitraryData.allAccounts}                            
-                            ledgerAccounts={getMappedAccounts(
-                                arbitraryData.ledgerAccounts
-                            )}
+                            // allAccounts={arbitraryData.allAccounts}                            
+                            // ledgerAccounts={getMappedAccounts(
+                            //     arbitraryData.ledgerAccounts
+                            // )}
+                            controlId='sales'
+                            ledgerFilterMethodName='saleAccounts'
                             onChange={onChangeLedgerSubledger}
                             rowData={arbitraryData.rowData}
                         />
@@ -128,7 +130,8 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e:any) => {
+                            disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            onClick={(e: any) => {
                                 handleSaleVariety('r')
                                 resetAddresses()
                                 handleRetailCashBankSales()
@@ -144,7 +147,8 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e:any) => {
+                            disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            onClick={(e: any) => {
                                 handleSaleVariety('a')
                                 resetAddresses()
                                 handleAutoSubledgerSales()
@@ -160,7 +164,8 @@ function SaleHeader() {
                 <FormControlLabel
                     control={
                         <Radio
-                            onClick={(e:any) => {
+                            disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            onClick={(e: any) => {
                                 handleSaleVariety('i')
                                 resetAddresses()
                                 handleInstitutionSales()

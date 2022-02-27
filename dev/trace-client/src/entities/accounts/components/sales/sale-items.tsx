@@ -154,7 +154,7 @@ function SaleItems() {
                 footer={arbitraryData?.summary?.count || 1}
             />,
 
-            //     Search
+            // Search
             <PrimeColumn
                 key={incr()}
                 style={{ width: '12rem' }}

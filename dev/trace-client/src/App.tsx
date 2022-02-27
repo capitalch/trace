@@ -1,6 +1,6 @@
 import React from 'react'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
-import { ThemeProvider, createTheme,StyledEngineProvider } from '@mui/material/styles'
+import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
     purple,
@@ -16,7 +16,7 @@ import {
     orange,
     blue,
     lightBlue,
-} from  '@mui/material/colors'
+} from '@mui/material/colors'
 import './App.scss'
 import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
@@ -113,7 +113,7 @@ const App: React.FC = () => {
     window.onpopstate = function () {
         window.history.go(1)
     }
-    
+
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
