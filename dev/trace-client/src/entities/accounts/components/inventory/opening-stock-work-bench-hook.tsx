@@ -14,16 +14,15 @@ function useOpeningStockWorkBench() {
         lastPurchaseDate: today,
         openingPrice: 0,
         qty: 0,
-        selectedBrand: undefined, // { label: '', value: undefined }
-        selectedCategory: undefined, //{ label: '', value: undefined }
-        selectedProduct: undefined, // { label: '', value: undefined }
+        selectedBrand: undefined, 
+        selectedCategory: undefined, 
+        selectedProduct: undefined, 
         id: undefined,
     })
     const pre = meta.current
     useEffect(() => {
         loadProducts()
         const subs1 = filterOn('OPENING-STOCK-XX-GRID-EDIT-CLICKED').subscribe(handleEdit)
-        // const subs1 = filterOn('OPENING-STOCH-WORK-BENCH-HOOK-EDIT-OPENING-STOCK').subscribe(handleEdit)
         return (() => {
             subs1.unsubscribe()
         })
@@ -46,20 +45,14 @@ function useOpeningStockWorkBench() {
         pre.selectedBrand = {}
         pre.selectedProduct = {}
 
-        // const selectedCategory = {label:row.catName, value:row.catId}
-        // onCategoryChanged(selectedCategory)
-        pre.selectedCategory.label = row.catName
-        pre.selectedCategory.value = row.catId
+        const selectedCategory = {label:row.catName, value:row.catId}
+        onCategoryChanged(selectedCategory)
 
-        // const selectedBrand = {label: row.brandName, value: row.brandId}
-        // onBrandChanged(selectedBrand)
-        pre.selectedBrand.label = row.brandName
-        pre.selectedBrand.value = row.brandId
+        const selectedBrand = {label: row.brandName, value: row.brandId}
+        onBrandChanged(selectedBrand)
 
-        // const selectedProduct = {label: row.label, value: row.productId}
-        // onProductChanged(selectedProduct)
-        pre.selectedProduct.label = row.label
-        pre.selectedProduct.value = row.productId
+        const selectedProduct = {label: row.label, value: row.productId}
+        onProductChanged(selectedProduct)
 
         pre.qty = row. qty
         pre.openingPrice = row.openingPrice
@@ -86,8 +79,7 @@ function useOpeningStockWorkBench() {
             emit('SHOW-LOADING-INDICATOR', true)
             const ret = await genericUpdateMasterNoForm({
                 tableName: 'ProductOpBal',
-                // updateCodeBlock: 'upsert_opening_stock',
-                customCodeBlock: 'upsert_opening_stock',
+                customCodeBlock: pre.id ? undefined: 'upsert_opening_stock', // If id is there then just do edit. Otherwise check if this product already entered. If entered then increase its qty otherwise do insert
                 data: {
                     id: pre.id,
                     productId: pre.selectedProduct?.value,
@@ -101,6 +93,7 @@ function useOpeningStockWorkBench() {
             })
             partialResetMeta()
             setRefresh({})
+            emit('XX-GRID-HOOK-FETCH-OPENING-STOCK', '') // to refresh the grid of op balances
             emit('SHOW-LOADING-INDICATOR', false)
         } catch (e: any) {
             emit('SHOW-LOADING-INDICATOR', false)
@@ -136,7 +129,7 @@ function useOpeningStockWorkBench() {
     function onBrandChanged(selectedItem: any) {
         pre.selectedBrand = selectedItem
         pre.selectedProduct = { label: '', value: undefined }
-        pre.filteredProducts = products.filter((x: any) => ((x.brandId === selectedItem.value) && (x.catId === pre?.selectedCategory?.value))).map((x: any) => ({ label: x.label, value: x.id }))
+        pre.filteredProducts = pre?.products.filter((x: any) => ((x.brandId === selectedItem.value) && (x.catId === pre?.selectedCategory?.value))).map((x: any) => ({ label: x.label, value: x.id }))
         setRefresh({})
     }
 
@@ -144,12 +137,12 @@ function useOpeningStockWorkBench() {
         pre.selectedCategory = selectedItem
         pre.selectedBrand = { label: '', value: undefined }
         pre.selectedProduct = { label: '', value: undefined }
-        pre.filteredProducts = products.filter((x: any) => ((x.catId === selectedItem.value) && (x.brandId === pre?.selectedBrand?.value))).map((x: any) => ({ label: x.label, value: x.id }))
+        pre.filteredProducts = pre?.products.filter((x: any) => ((x.catId === selectedItem.value) && (x.brandId === pre?.selectedBrand?.value))).map((x: any) => ({ label: x.label, value: x.id }))
         fillFilteredBrands()
         setRefresh({})
 
         function fillFilteredBrands() {
-            const filteredBrands = products.filter((x: any) => (x.catId === selectedItem.value)).map((x: any) =>
+            const filteredBrands = pre?.products.filter((x: any) => (x.catId === selectedItem.value)).map((x: any) =>
             ({
                 label: x.brandName,
                 value: x.brandId

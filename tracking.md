@@ -1,13 +1,13 @@
 https://tempail.com/en/
 
-## Logic for opening stock
-1. SQL for jsonObject: categories, brands, allProducts, try our react-query, download at page load
-2. Product search local, top right, shows dialogbox if more than one, else populate workbench
-3. Submit, reset button
-4. Edit click populates workbench
-5. On submit if already exists then update else insert
-6. Columns: category, brand, label, spec, qty, openingPrice, lastPurDate
-7. New product button
+## Oopening stock pending
+1. XXGrid search button as separate component without autofocus
+2. Download categories and brands also with products
+3. Dialog box
+4. New product component
+5. Socket implementation for new Product, Category and Brand
+6. Total opening stock valuation at footer
+7. 
 
 sample GSTIN: 37AADCS0472N1Z1
 ## Planning
@@ -118,6 +118,9 @@ create installer from innosetup
 19. Backup and restore strategy
 20. Upgrade database for all instances 
 
+# 23-02-2022 - 28-02-2022
+1. Opening stock all items in continuation
+2. Bug fixing etc.
 # 15-02-2022 - 22-02-2022
 1. Full implementation of socket based refresh data in vouchers, sales, purchase, dr/cr notes, Accounts masters and associated bug fixes
 2. Account balances in vouchers and final reports

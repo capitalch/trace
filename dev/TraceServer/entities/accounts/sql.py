@@ -652,6 +652,7 @@ allSqls = {
                     on b."id" = p."brandId"
         where "finYearId" = %(finYearId)s 
             and "branchId" = %(branchId)s
+        order by a."id" DESC
     ''',
 
     "get_tranHeaders_details": '''

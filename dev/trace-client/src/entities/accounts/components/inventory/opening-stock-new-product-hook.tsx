@@ -1,0 +1,5 @@
+function useOpeninfStockNewProduct(){
+
+}
+
+export {useOpeninfStockNewProduct}

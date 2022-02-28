@@ -11,10 +11,10 @@ function useOpeningStock() {
 
     useEffect(() => {
         const subs1 = filterOn(actionMessages.deleteIbukiMessage).subscribe(handleDelete)
-        const subs2 = filterOn(actionMessages.editIbukiMessage).subscribe((d: any) => emit('OPENING-STOCH-WORK-BENCH-HOOK-EDIT-OPENING-STOCK', d.data))
+        // const subs2 = filterOn(actionMessages.editIbukiMessage).subscribe((d: any) => emit('OPENING-STOCH-WORK-BENCH-HOOK-EDIT-OPENING-STOCK', d.data))
         return (() => {
             subs1.unsubscribe()
-            subs2.unsubscribe()
+            // subs2.unsubscribe()
         })
     }, [])
 
@@ -89,10 +89,8 @@ function useOpeningStock() {
                 field: 'info',
                 width: 250,
             },
-
         ]
 
-        // const title = ''.concat('Opening stock view ', '(Year ', finYearObject.startDate, '-', finYearObject.endDate, ')')
         return ({ actionMessages, columns, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, })
     }
 
