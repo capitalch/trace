@@ -3,6 +3,7 @@
     , "dbServerConnectionError":"Connection error"
     , "dbServerConnected":"Connected"
     , "deleteConfirm":"Are you sure to delete?"
+    , "deleteError": "There was some client side error in deleting this record"
     , "deleteMessage": "This record will be deleted!"
     , "emptySearchCriteria": "Empty search criteria is not allowed"
     , "errorInOperation":"There was server side error in operation"

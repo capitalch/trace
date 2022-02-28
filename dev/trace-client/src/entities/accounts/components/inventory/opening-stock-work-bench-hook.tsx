@@ -1,9 +1,8 @@
-import moment from 'moment'
-import { _, useEffect, useRef, useSharedElements, useState } from './redirect'
+import { _, moment, useEffect, useRef, useSharedElements, useState } from './redirect'
 
 function useOpeningStockWorkBench() {
     const [, setRefresh] = useState({})
-    const { emit, execGenericView, genericUpdateMasterNoForm, getFromBag, setInBag } = useSharedElements()
+    const { emit, execGenericView, filterOn, genericUpdateMasterNoForm, getFromBag, setInBag } = useSharedElements()
     const products = getFromBag('products')
     const finYearId = getFromBag('finYearObject')?.finYearId
     const branchId = getFromBag('branchObject')?.branchId || 1
@@ -23,7 +22,11 @@ function useOpeningStockWorkBench() {
     const pre = meta.current
     useEffect(() => {
         loadProducts()
-        return (() => { })
+        const subs1 = filterOn('OPENING-STOCK-XX-GRID-EDIT-CLICKED').subscribe(handleEdit)
+        // const subs1 = filterOn('OPENING-STOCH-WORK-BENCH-HOOK-EDIT-OPENING-STOCK').subscribe(handleEdit)
+        return (() => {
+            subs1.unsubscribe()
+        })
     }, [])
 
     function checkError() {
@@ -33,6 +36,75 @@ function useOpeningStockWorkBench() {
         const qtyError = pre?.qty === 0
         const error = categoryError || brandError || productError || qtyError
         return (error)
+    }
+
+    function handleEdit(d: any) {
+        const row = d.data?.row
+        pre.id = row.id1
+
+        pre.selectedCategory = {}
+        pre.selectedBrand = {}
+        pre.selectedProduct = {}
+
+        // const selectedCategory = {label:row.catName, value:row.catId}
+        // onCategoryChanged(selectedCategory)
+        pre.selectedCategory.label = row.catName
+        pre.selectedCategory.value = row.catId
+
+        // const selectedBrand = {label: row.brandName, value: row.brandId}
+        // onBrandChanged(selectedBrand)
+        pre.selectedBrand.label = row.brandName
+        pre.selectedBrand.value = row.brandId
+
+        // const selectedProduct = {label: row.label, value: row.productId}
+        // onProductChanged(selectedProduct)
+        pre.selectedProduct.label = row.label
+        pre.selectedProduct.value = row.productId
+
+        pre.qty = row. qty
+        pre.openingPrice = row.openingPrice
+        pre.lastPurchaseDate = row.lastPurchaseDate
+
+        setRefresh({})
+    }
+
+    function handleReset() {
+        pre.filteredBrands = []
+        pre.filteredProducts = []
+        pre.lastPurchaseDate = today
+        pre.openingPrice = 0
+        pre.qty = 0
+        pre.selectedCategory = { label: '', value: undefined }
+        pre.selectedBrand = { label: '', value: undefined }
+        pre.selectedProduct = { label: '', value: undefined }
+        pre.id = undefined
+        setRefresh({})
+    }
+
+    async function handleSubmit() {
+        try {
+            emit('SHOW-LOADING-INDICATOR', true)
+            const ret = await genericUpdateMasterNoForm({
+                tableName: 'ProductOpBal',
+                // updateCodeBlock: 'upsert_opening_stock',
+                customCodeBlock: 'upsert_opening_stock',
+                data: {
+                    id: pre.id,
+                    productId: pre.selectedProduct?.value,
+                    qty: pre?.qty,
+                    openingPrice: pre?.openingPrice,
+                    lastPurchaseDate: pre?.lastPurchaseDate,
+                    jData: null,
+                    finYearId: finYearId,
+                    branchId: branchId
+                }
+            })
+            partialResetMeta()
+            setRefresh({})
+            emit('SHOW-LOADING-INDICATOR', false)
+        } catch (e: any) {
+            emit('SHOW-LOADING-INDICATOR', false)
+        }
     }
 
     async function loadProducts() {
@@ -98,62 +170,11 @@ function useOpeningStockWorkBench() {
 
     // Used to retain the last value saved
     function partialResetMeta() {
-
-        // filteredBrands: [],
-        // filteredProducts: [], // for labels
-        // lastPurchaseDate: today,
-        // openingPrice: 0,
-        // qty: 0,
-        // selectedBrand: undefined, 
-        // selectedCategory: undefined, 
-        // selectedProduct: undefined, 
-        // id: undefined,
-
-
         pre.lastPurchaseDate = today
         pre.openingPrice = 0
         pre.qty = 0
         pre.selectedProduct = { label: '', value: undefined }
         pre.id = undefined
-    }
-
-    function handleReset() {
-        pre.filteredBrands = []
-        pre.filteredProducts = []
-        pre.lastPurchaseDate = today
-        pre.openingPrice = 0
-        pre.qty = 0
-        pre.selectedCategory = { label: '', value: undefined }
-        pre.selectedBrand = { label: '', value: undefined }
-        pre.selectedProduct = { label: '', value: undefined }
-        pre.id = undefined
-        setRefresh({})
-    }
-
-    async function handleSubmit() {
-        try {
-            emit('SHOW-LOADING-INDICATOR', true)
-            const ret = await genericUpdateMasterNoForm({
-                tableName: 'ProductOpBal',
-                // updateCodeBlock: 'upsert_opening_stock',
-                customCodeBlock: 'upsert_opening_stock',
-                data: {
-                    id: pre.id,
-                    productId: pre.selectedProduct?.value,
-                    qty: pre?.qty,
-                    openingPrice: pre?.openingPrice,
-                    lastPurchaseDate: pre?.lastPurchaseDate,
-                    jData: null,
-                    finYearId: finYearId,
-                    branchId: branchId
-                }
-            })
-            partialResetMeta()
-            setRefresh({})
-            emit('SHOW-LOADING-INDICATOR', false)
-        } catch (e: any) {
-            emit('SHOW-LOADING-INDICATOR', false)
-        }
     }
 
     return ({ checkError, handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh })

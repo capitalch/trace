@@ -1,13 +1,4 @@
-import { useSharedElements } from "../common/shared-elements-hook"
-import {
-    Box,
-    Card,
-    Theme,
-    Typography,
-    createStyles,
-    makeStyles,
-    useTheme
-} from '../../../../imports/gui-imports'
+import {Box, Typography, useSharedElements, useTheme} from './redirect'
 import { useOpeningStock } from "./opening-stock-hook"
 import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
@@ -39,6 +30,7 @@ function OpeningStock() {
             </Typography>
             <XXGrid
                 sx={{ border: '4px solid orange', p: 2, width: '100%' }}
+                autoFetchData={true}
                 columns={columns}
                 gridActionMessages={actionMessages}
                 hideFiltersButton={true}

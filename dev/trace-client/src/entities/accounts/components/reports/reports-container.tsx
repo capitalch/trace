@@ -6,7 +6,7 @@ import {
 } from '../../../../imports/gui-imports'
 import { XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { useAllTransactions } from './all-reports/all-transactions'
+import { useAllTransactions } from './all-reports/all-transactions-hook'
 import { useEffect } from '../../../../imports/regular-imports'
 
 function GenericReports({ loadReport }: any) {

@@ -642,7 +642,7 @@ allSqls = {
     ''',
 
     "get_stock_op_bal": '''
-        select "catName", "brandName", "label", "info", "qty", "openingPrice", "lastPurchaseDate"
+        select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
             from "ProductOpBal" a
                 join "ProductM" p
                     on p."id" = a."productId"
