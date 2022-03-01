@@ -3,8 +3,8 @@ import { useOpeninfStockNewProduct } from './opening-stock-new-product-hook'
 import { Box, Button, Input, NumberFormat, useTheme, useSharedElements, utilMethods } from './redirect'
 function OpeningStockNewProduct() {
     const { getFromBag, ReactSelect } = useSharedElements()
-    const { getCategories, getUnitOptions, meta, setRefresh } = useOpeninfStockNewProduct()
-    const pre = meta.current
+    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useOpeninfStockNewProduct()
+    const pre: any = meta.current
     const theme = useTheme()
     const { Mandatory } = utilMethods()
 
@@ -22,28 +22,30 @@ function OpeningStockNewProduct() {
     }
     const vertStyle = { display: 'flex', flexDirection: 'column', }
 
-    // const errorStyle = (selected: string) => {
-    //     return {
-    //         control: (provided: any) => ({
-    //             ...provided,
-    //             border: pre[selected]?.value ? '1px solid lightGrey' : '3px solid red'
-    //         })
-    //     }
-    // }
-    // , rowGap: theme.spacing(2) display: 'flex', flexDirection: 'column',}
+    const errorStyle = (selected: string) => {
+        return {
+            control: (provided: any) => ({
+                ...provided,
+                border: pre[selected]?.value ? '1px solid lightGrey' : '3px solid red'
+            })
+        }
+    }
+
     return (
         <Box sx={{ ...vertStyle, rowGap: theme.spacing(3) }}>
 
             {/* Categories */}
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Category <Mandatory /> </Typography>
-                <ReactSelect styles={styles} options={getFromBag('categories')} />
+                <ReactSelect menuPlacement='auto' styles={{ ...styles, ...errorStyle('selectedCategory') }} placeholder='Select category'
+                    options={getFromBag('categories')} value={pre.selectedCategory} onChange={onCategoryChanged} />
             </Box>
 
             {/* Brands */}
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Brand <Mandatory /></Typography>
-                <ReactSelect styles={styles} options={getFromBag('brands')} />
+                <ReactSelect menuPlacement='auto' styles={{ ...styles, ...errorStyle('selectedBrand') }} placeholder='Select brand'
+                    options={getFromBag('brands')} value={pre.selectedBrand} onChange={onBrandChanged} />
             </Box>
 
             {/* Label */}
@@ -55,7 +57,7 @@ function OpeningStockNewProduct() {
                         pre.label = e.target.value
                         setRefresh({})
                     }}
-                    // variant='standard'
+                    error={!Boolean(pre.label)}
                     value={pre.label || ''}
                     autoComplete='off'
                 />
@@ -136,18 +138,16 @@ function OpeningStockNewProduct() {
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Product details</Typography>
                 <TextField
-                    sx={{}}
                     onChange={(e: any) => {
                         pre.info = e.target.value
                         setRefresh({})
                     }}
-                    // variant='standard'
                     autoComplete='off'
                     value={pre.info || ''}
                 />
             </Box>
 
-            <Button variant='contained' color='success'>Submit</Button>
+            <Button variant='contained' color='success' disabled={checkError()} onClick={handleSubmit}>Submit</Button>
         </Box>)
 
 }

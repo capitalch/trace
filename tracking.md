@@ -2,9 +2,9 @@ https://tempail.com/en/
 
 ## Oopening stock pending
 1. XXGrid search button as separate component without autofocus
-2. Download categories and brands also with products
-3. Dialog box
-4. New product component
+                                                                2. Download categories and brands also with products
+                                                                3. Dialog box
+                                                                4. New product component
 5. Socket implementation for new Product, Category and Brand
 6. Total opening stock valuation at footer
 7. 
@@ -27,6 +27,7 @@ sample GSTIN: 37AADCS0472N1Z1
                                                                                                 refreshed after saved, accounts creation          1 day, 17th Feb
                                                                                         10. New account code create, immediate effect             3 days, 20th Feb
 
+3. Bug while login, when press enter key
 4. Opening balance of stock:                              3 days, 23rd Feb
 19. Stock Journals                                        3 days, 26th Feb
 3. Full reporting of Inventory and allied:                1 week, 2nd Mar

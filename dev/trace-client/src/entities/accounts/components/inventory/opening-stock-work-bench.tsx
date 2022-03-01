@@ -119,7 +119,7 @@ function OpeningStockWorkBench() {
             <Dialog
                 open={pre.showDialog}
                 onClose={(e, reason) => {
-                    if (reason !== 'backdropClick') {
+                    if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
                         handleCloseDialog()
                     }
                 }}
