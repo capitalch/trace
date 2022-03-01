@@ -1,11 +1,12 @@
 import { TextField, Typography } from '@mui/material'
 import { useOpeninfStockNewProduct } from './opening-stock-new-product-hook'
-import { Box, Button, NumberFormat, useTheme, useSharedElements } from './redirect'
+import { Box, Button, Input, NumberFormat, useTheme, useSharedElements, utilMethods } from './redirect'
 function OpeningStockNewProduct() {
     const { ReactSelect } = useSharedElements()
     const { meta, setRefresh } = useOpeninfStockNewProduct()
     const pre = meta.current
     const theme = useTheme()
+    const { Mandatory } = utilMethods()
     // To reduce space between two items of drop down
     const styles = {
         option: (base: any) => ({
@@ -33,20 +34,20 @@ function OpeningStockNewProduct() {
         <Box sx={{ ...vertStyle, rowGap: theme.spacing(3) }}>
 
             {/* Categories */}
-            <Box sx={vertStyle}>                
-                <Typography variant='subtitle2'>Category</Typography>
+            <Box sx={vertStyle}>
+                <Typography variant='subtitle2'>Category <Mandatory /> </Typography>
                 <ReactSelect />
             </Box>
 
             {/* Brands */}
-            <Box sx={vertStyle}>                
-                <Typography variant='subtitle2'>Brand</Typography>
+            <Box sx={vertStyle}>
+                <Typography variant='subtitle2'>Brand <Mandatory /></Typography>
                 <ReactSelect />
             </Box>
 
             {/* Label */}
             <Box sx={vertStyle}>
-                <Typography variant='subtitle2'>Product label</Typography>
+                <Typography variant='subtitle2'>Product label <Mandatory /></Typography>
                 <TextField
                     // sx={{ maxWidth: '70%' }}
                     onChange={(e: any) => {
@@ -54,7 +55,7 @@ function OpeningStockNewProduct() {
                         setRefresh({})
                     }}
                     // variant='standard'
-                    value={pre.label  || ''}
+                    value={pre.label || ''}
                     helperText=''
                     autoComplete='off'
                 />
@@ -75,24 +76,72 @@ function OpeningStockNewProduct() {
                 />
             </Box>
 
-            <Box sx={{display:'flex', justifyContent:'space-between'}}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', rowGap:theme.spacing(1) }}>
+                {/* hsn */}
                 <Box sx={vertStyle}>
                     <Typography variant='subtitle2'>Hsn</Typography>
-                    <NumberFormat />
+                    <NumberFormat
+                        sx={{ width: theme.spacing(10) }}
+                        allowNegative={false}
+                        customInput={Input}
+                        onFocus={(e: any) => {
+                            e.target.select()
+                        }}
+                        value={pre.hsn || ''}
+                        onChange={(e: any) => {
+                            pre.hsn = e.target.value
+                            setRefresh({})
+                        }}
+                    />
                 </Box>
+                {/* gst rate */}
                 <Box sx={vertStyle}>
                     <Typography variant='subtitle2'>Gst rate (%)</Typography>
-                    <NumberFormat />
+                    <NumberFormat
+                        sx={{ width: theme.spacing(7), '& input': { textAlign: 'end' }, }}
+                        allowNegative={false}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
+                        customInput={Input}
+                        onFocus={(e: any) => {
+                            e.target.select()
+                        }}
+                        value={pre.gstRate || 0}
+                        onChange={(e: any) => {
+                            pre.gstRate = e.target.value
+                            setRefresh({})
+                        }}
+                    />
                 </Box>
+                {/* UPC code */}
+                <Box sx={vertStyle}>
+                    <Typography variant='subtitle2'>UPC code</Typography>
+                    <NumberFormat
+                        sx={{ width: theme.spacing(16) }}
+                        allowNegative={false}
+                        customInput={Input}
+                        onFocus={(e: any) => {
+                            e.target.select()
+                        }}
+                        value={pre.upcCode || ''}
+                        onChange={(e: any) => {
+                            pre.upcCode = e.target.value
+                            setRefresh({})
+                        }}
+                    />
+                </Box>
+                {/* unit of measurement */}
                 <Box sx={vertStyle}>
                     <Typography variant='subtitle2'>Unit of measurement</Typography>
+                    <TextField 
+                        select
+                        variant='standard'
+                    />
                     {/* < /> */}
                 </Box>
+
             </Box>
-            <Box sx={vertStyle}>
-                <Typography variant='subtitle2'>UPC code</Typography>
-                <NumberFormat />
-            </Box>
+
             <Button variant='contained' color='success'>Submit</Button>
         </Box>)
 

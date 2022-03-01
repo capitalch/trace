@@ -5,6 +5,7 @@ import {
     manageFormsState,
     usingIbuki as getIbuki,
 } from '../imports/trace-imports'
+import { Typography } from '@mui/material'
 import messages from '../messages.json'
 const { emit } = getIbuki()
 
@@ -271,6 +272,10 @@ function utilMethods() {
         return !ret
     }
 
+    function Mandatory(){
+        return <Typography variant='subtitle2' sx={{color:'red'}} component='span'> *</Typography>
+    }
+
     function numberToWordsInRs(value: any) {
         var fraction = Math.round(frac(value) * 100)
         var f_text = ''
@@ -514,6 +519,7 @@ function utilMethods() {
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
+        Mandatory,
         numberToWordsInRs,
         objectPropsToDecimalFormat,
         removeProp,
