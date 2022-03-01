@@ -998,29 +998,29 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    # "getJson_brands_categories_products": '''
-    #     with cte1 as (
-    #         select id as "value", "catName" as "label"
-    #             from "CategoryM"
-    #                 where "isLeaf" = true
-    #             order by "catName"
-    #     ), cte2 as (
-    #         select id as "value", "brandName" as "label"
-    #             from "BrandM" order by "brandName"
-    #     ), cte3 as (
-    #         select p.id, "catId", "hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
-    #             from "ProductM" p
-    #                 join "CategoryM" c
-    #                     on c."id" = p."catId"
-    #                 join "BrandM" b
-    #                     on b."id" = p."brandId"
-    #         order by "catName", "brandName", "label"
-    #     )
-    #     select json_build_object(
-    #         'categories', (select json_agg(row_to_json(a)) from cte1 a)
-    #         , 'brands', (select json_agg(row_to_json(b)) from cte2 b)
-    #         , 'products', (select json_agg(row_to_json(c)) from cte3 c)) as "jsonResult"
-    # ''',
+    "getJson_brands_categories_products": '''
+        with cte1 as (
+            select id as "value", "catName" as "label"
+                from "CategoryM"
+                    where "isLeaf" = true
+                order by "catName"
+        ), cte2 as (
+            select id as "value", "brandName" as "label"
+                from "BrandM" order by "brandName"
+        ), cte3 as (
+            select p.id, "catId", "hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
+                from "ProductM" p
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+            order by "catName", "brandName", "label"
+        )
+        select json_build_object(
+            'categories', (select json_agg(row_to_json(a)) from cte1 a)
+            , 'brands', (select json_agg(row_to_json(b)) from cte2 b)
+            , 'products', (select json_agg(row_to_json(c)) from cte3 c)) as "jsonResult"
+    ''',
 
     "getJson_brands_categories_units": '''
         with cte1 as (

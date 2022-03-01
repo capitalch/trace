@@ -3,7 +3,7 @@ import { _, moment, useEffect, useRef, useSharedElements, useState } from './red
 function useOpeningStockWorkBench() {
     const [, setRefresh] = useState({})
     const { emit, execGenericView, filterOn, genericUpdateMasterNoForm, getFromBag, setInBag } = useSharedElements()
-    const products = getFromBag('products')
+    // const products = getFromBag('products')
     const finYearId = getFromBag('finYearObject')?.finYearId
     const branchId = getFromBag('branchObject')?.branchId || 1
     const today = moment().format('YYYY-MM-DD')
@@ -11,13 +11,17 @@ function useOpeningStockWorkBench() {
         filteredBrands: [],
         filteredCategories: [],
         filteredProducts: [], // for labels
+        id: undefined,
         lastPurchaseDate: today,
         openingPrice: 0,
         qty: 0,
-        selectedBrand: undefined, 
-        selectedCategory: undefined, 
-        selectedProduct: undefined, 
-        id: undefined,
+        selectedBrand: undefined,
+        selectedCategory: undefined,
+        selectedProduct: undefined,
+        showDialog: false,
+        dialogConfig: {
+            title: 'Add new product',
+        }
     })
     const pre = meta.current
     useEffect(() => {
@@ -37,6 +41,11 @@ function useOpeningStockWorkBench() {
         return (error)
     }
 
+    function handleCloseDialog() {
+        pre.showDialog = false
+        setRefresh({})
+    }
+
     function handleEdit(d: any) {
         const row = d.data?.row
         pre.id = row.id1
@@ -45,16 +54,16 @@ function useOpeningStockWorkBench() {
         pre.selectedBrand = {}
         pre.selectedProduct = {}
 
-        const selectedCategory = {label:row.catName, value:row.catId}
+        const selectedCategory = { label: row.catName, value: row.catId }
         onCategoryChanged(selectedCategory)
 
-        const selectedBrand = {label: row.brandName, value: row.brandId}
+        const selectedBrand = { label: row.brandName, value: row.brandId }
         onBrandChanged(selectedBrand)
 
-        const selectedProduct = {label: row.label, value: row.productId}
+        const selectedProduct = { label: row.label, value: row.productId }
         onProductChanged(selectedProduct)
 
-        pre.qty = row. qty
+        pre.qty = row.qty
         pre.openingPrice = row.openingPrice
         pre.lastPurchaseDate = row.lastPurchaseDate
 
@@ -74,12 +83,17 @@ function useOpeningStockWorkBench() {
         setRefresh({})
     }
 
+    function handleNewProduct() {
+        pre.showDialog = true
+        setRefresh({})
+    }
+
     async function handleSubmit() {
         try {
             emit('SHOW-LOADING-INDICATOR', true)
             const ret = await genericUpdateMasterNoForm({
                 tableName: 'ProductOpBal',
-                customCodeBlock: pre.id ? undefined: 'upsert_opening_stock', // If id is there then just do edit. Otherwise check if this product already entered. If entered then increase its qty otherwise do insert
+                customCodeBlock: pre.id ? undefined : 'upsert_opening_stock', // If id is there then just do edit. Otherwise check if this product already entered. If entered then increase its qty otherwise do insert
                 data: {
                     id: pre.id,
                     productId: pre.selectedProduct?.value,
@@ -101,17 +115,24 @@ function useOpeningStockWorkBench() {
     }
 
     async function loadProducts() {
+        let products = getFromBag('products')
         if (_.isEmpty(products)) {
             emit('SHOW-LOADING-INDICATOR', true)
             const ret: any = await execGenericView({
-                isMultipleRows: true,
-                // sqlKey: 'getJson_brands_categories_products'
-                sqlKey: 'get_products',
+                isMultipleRows: false,
+                sqlKey: 'getJson_brands_categories_products',
+                // sqlKey: 'get_products',
                 args: { no: null },
             })
-            setInBag('products', ret || [])
+            products = ret?.jsonResult?.products || []
+            const categories = ret?.jsonResult?.categories || []
+            const brands = ret?.jsonResult?.brands || []
+            setInBag('products', products)
+            setInBag('categories', categories)
+            setInBag('brands', brands)
             emit('SHOW-LOADING-INDICATOR', false)
         }
+
         pre.products = getFromBag('products')
         fillFilteredCategories()
         setRefresh({})
@@ -170,7 +191,7 @@ function useOpeningStockWorkBench() {
         pre.id = undefined
     }
 
-    return ({ checkError, handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh })
+    return ({ checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh })
 
 }
 

@@ -1,4 +1,4 @@
-import { Box, Typography, useSharedElements, useTheme } from './redirect'
+import { Box, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, useTheme } from './redirect'
 import { useOpeningStock } from "./opening-stock-hook"
 import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
@@ -7,7 +7,7 @@ function OpeningStock() {
     const { getXXGriArtifacts, meta } = useOpeningStock()
     const { actionMessages, columns, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
     const theme = useTheme()
-
+    const pre = meta.current
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: theme.spacing(1), columnGap: theme.spacing(3), justifyContent: 'space-evenly' }}>
             {/* New / Edit entry */}
@@ -45,6 +45,7 @@ function OpeningStock() {
                 // title={title}
                 />
             </Box>
+
         </Box>)
 }
 

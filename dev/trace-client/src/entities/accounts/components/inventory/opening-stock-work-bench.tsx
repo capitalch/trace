@@ -1,9 +1,10 @@
 import { useOpeningStockWorkBench } from "./opening-stock-work-bench-hook"
-import { Box, Button, Input, NumberFormat, TextField, Typography, useSharedElements, useTheme } from './redirect'
+import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Input, NumberFormat, TextField, Tooltip, Typography, useSharedElements, useTheme } from './redirect'
+import { OpeningStockNewProduct } from './opening-stock-new-product'
 
 function OpeningStockWorkBench() {
     const { ReactSelect } = useSharedElements()
-    const { checkError,handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh } = useOpeningStockWorkBench()
+    const { checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh } = useOpeningStockWorkBench()
     const pre = meta.current
     const theme = useTheme()
 
@@ -29,7 +30,7 @@ function OpeningStockWorkBench() {
         }
     }
 
-    return (<Box >
+    return (
         <Box sx={{ display: 'flex', border: '4px solid orange', rowGap: 3, flexDirection: 'column', p: 3, w: 30 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="caption" color='GrayText'>Category</Typography>
@@ -95,7 +96,6 @@ function OpeningStockWorkBench() {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant='caption' color='GrayText'>Last purchase date</Typography>
                 <TextField
-                    // error={isInvalidDate(arbitraryData.header.tranDate)}
                     sx={{ maxWidth: '60%' }}
                     variant='standard'
                     type="date"
@@ -113,11 +113,35 @@ function OpeningStockWorkBench() {
             <Button variant="contained" color="warning" size='medium' onClick={handleReset}>
                 Reset
             </Button>
-            <Button variant="contained" color="info" size='medium' >
+            <Button variant="contained" color="info" size='medium' onClick={handleNewProduct}>
                 New product
             </Button>
+            <Dialog
+                open={pre.showDialog}
+                onClose={handleCloseDialog}
+                fullWidth={true}
+                // maxWidth="md"
+                >
+                <DialogTitle>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant='h6'>{pre.dialogConfig.title}</Typography>
+                        <Tooltip title="Close">
+                            <IconButton
+                                size="small"
+                                disabled={false}
+                                onClick={handleCloseDialog}>
+                                <CloseSharp />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </DialogTitle>
+                <DialogContent>
+                    <OpeningStockNewProduct />
+
+                </DialogContent>
+            </Dialog>
         </Box>
-    </Box >)
+    )
 }
 
 export { OpeningStockWorkBench }

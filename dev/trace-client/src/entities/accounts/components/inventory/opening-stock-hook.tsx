@@ -4,11 +4,11 @@ function useOpeningStock() {
     const [, setRefresh] = useState({})
     const { globalMessages, confirm, emit, filterOn, genericUpdateMaster, getFromBag, toDecimalFormat } = useSharedElements()
     const meta = useRef({
-        title: 'Opening stock (New / Edit)'
+        title: 'Opening stock (New / Edit)',
     })
     const actionMessages = getXXGriArtifacts().actionMessages
     const dateFormat = getFromBag('dateFormat')
-
+    const pre = meta.current
     useEffect(() => {
         const subs1 = filterOn(actionMessages.deleteIbukiMessage).subscribe(handleDelete)
         // const subs2 = filterOn(actionMessages.editIbukiMessage).subscribe((d: any) => emit('OPENING-STOCH-WORK-BENCH-HOOK-EDIT-OPENING-STOCK', d.data))
