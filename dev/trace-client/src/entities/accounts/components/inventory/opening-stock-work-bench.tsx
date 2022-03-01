@@ -118,10 +118,14 @@ function OpeningStockWorkBench() {
             </Button>
             <Dialog
                 open={pre.showDialog}
-                onClose={handleCloseDialog}
+                onClose={(e, reason) => {
+                    if (reason !== 'backdropClick') {
+                        handleCloseDialog()
+                    }
+                }}
                 fullWidth={true}
                 // maxWidth="md"
-                >
+            >
                 <DialogTitle>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography variant='h6'>{pre.dialogConfig.title}</Typography>
@@ -137,7 +141,6 @@ function OpeningStockWorkBench() {
                 </DialogTitle>
                 <DialogContent>
                     <OpeningStockNewProduct />
-
                 </DialogContent>
             </Dialog>
         </Box>

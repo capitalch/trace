@@ -395,7 +395,7 @@ allSqls = {
             from "FinYearM"
                 where "id" = %(finYearId)s
     ''',
-    
+
     "get_generalSettings": '''
         select "jData"
             from "Settings"
@@ -506,7 +506,7 @@ allSqls = {
 		 		group by c3."accMId", c3.id, c3."opId", c3."accType", c3."accLeaf", c3."accName", c3."parentId", c3."children"
 		 			order by id
     ''',
-    
+
     "get_opBal": '''
         with cte1 as (
                 select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
@@ -792,7 +792,7 @@ allSqls = {
             ) as "jsonResult"
 
         ''',
-    
+
     "getJson_all_gst_reports": '''
             -- gst-input-consolidated (ExtGstTranD only) based on "isInput"
             with cte1 as (
@@ -998,7 +998,7 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    "getJson_brands_categories_products": '''
+    "getJson_brands_categories_products_units": '''
         with cte1 as (
             select id as "value", "catName" as "label"
                 from "CategoryM"
@@ -1015,11 +1015,15 @@ allSqls = {
                     join "BrandM" b
                         on b."id" = p."brandId"
             order by "catName", "brandName", "label"
+        ), cte4 as (
+            select "id", "unitName" from "UnitM" order by "unitName"
         )
         select json_build_object(
             'categories', (select json_agg(row_to_json(a)) from cte1 a)
             , 'brands', (select json_agg(row_to_json(b)) from cte2 b)
-            , 'products', (select json_agg(row_to_json(c)) from cte3 c)) as "jsonResult"
+            , 'products', (select json_agg(row_to_json(c)) from cte3 c)
+            , 'units', (select json_agg(row_to_json(d)) from cte4 d )
+            ) as "jsonResult"
     ''',
 
     "getJson_brands_categories_units": '''
@@ -1573,7 +1577,7 @@ allSqls = {
                 where "id" = %(id)s
     ''',
 
-    "update_pdf_invoice":'''
+    "update_pdf_invoice": '''
         update "TranH"
             set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfSaleBill}', %(data)s, true)
                 where "id" = %(id)s
@@ -1672,7 +1676,7 @@ allSqls = {
         end $$;
     ''',
 
-    "upsert_opening_stock":'''
+    "upsert_opening_stock": '''
         do $$
         begin
             if exists( 

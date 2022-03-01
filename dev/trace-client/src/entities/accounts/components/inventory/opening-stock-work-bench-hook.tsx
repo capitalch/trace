@@ -120,16 +120,18 @@ function useOpeningStockWorkBench() {
             emit('SHOW-LOADING-INDICATOR', true)
             const ret: any = await execGenericView({
                 isMultipleRows: false,
-                sqlKey: 'getJson_brands_categories_products',
+                sqlKey: 'getJson_brands_categories_products_units',
                 // sqlKey: 'get_products',
                 args: { no: null },
             })
             products = ret?.jsonResult?.products || []
             const categories = ret?.jsonResult?.categories || []
             const brands = ret?.jsonResult?.brands || []
+            const units = ret?.jsonResult?.units || []
             setInBag('products', products)
             setInBag('categories', categories)
             setInBag('brands', brands)
+            setInBag('units', units)
             emit('SHOW-LOADING-INDICATOR', false)
         }
 

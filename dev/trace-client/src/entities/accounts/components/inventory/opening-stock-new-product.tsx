@@ -2,16 +2,17 @@ import { TextField, Typography } from '@mui/material'
 import { useOpeninfStockNewProduct } from './opening-stock-new-product-hook'
 import { Box, Button, Input, NumberFormat, useTheme, useSharedElements, utilMethods } from './redirect'
 function OpeningStockNewProduct() {
-    const { ReactSelect } = useSharedElements()
-    const { meta, setRefresh } = useOpeninfStockNewProduct()
+    const { getFromBag, ReactSelect } = useSharedElements()
+    const { getCategories, getUnitOptions, meta, setRefresh } = useOpeninfStockNewProduct()
     const pre = meta.current
     const theme = useTheme()
     const { Mandatory } = utilMethods()
+
     // To reduce space between two items of drop down
     const styles = {
         option: (base: any) => ({
             ...base,
-            padding: '.1rem',
+            padding: '.05rem',
             paddingLeft: '0.5rem',
         }),
         control: (provided: any) => ({
@@ -36,13 +37,13 @@ function OpeningStockNewProduct() {
             {/* Categories */}
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Category <Mandatory /> </Typography>
-                <ReactSelect />
+                <ReactSelect styles={styles} options={getFromBag('categories')} />
             </Box>
 
             {/* Brands */}
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Brand <Mandatory /></Typography>
-                <ReactSelect />
+                <ReactSelect styles={styles} options={getFromBag('brands')} />
             </Box>
 
             {/* Label */}
@@ -56,27 +57,11 @@ function OpeningStockNewProduct() {
                     }}
                     // variant='standard'
                     value={pre.label || ''}
-                    helperText=''
                     autoComplete='off'
                 />
             </Box>
 
-            {/* Info */}
-            <Box sx={vertStyle}>
-                <Typography variant='subtitle2'>Product details</Typography>
-                <TextField
-                    sx={{}}
-                    onChange={(e: any) => {
-                        pre.info = e.target.value
-                        setRefresh({})
-                    }}
-                    // variant='standard'
-                    autoComplete='off'
-                    value={pre.info || ''}
-                />
-            </Box>
-
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', rowGap:theme.spacing(1) }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', rowGap: theme.spacing(1) }}>
                 {/* hsn */}
                 <Box sx={vertStyle}>
                     <Typography variant='subtitle2'>Hsn</Typography>
@@ -133,13 +118,33 @@ function OpeningStockNewProduct() {
                 {/* unit of measurement */}
                 <Box sx={vertStyle}>
                     <Typography variant='subtitle2'>Unit of measurement</Typography>
-                    <TextField 
+                    <TextField
                         select
-                        variant='standard'
-                    />
-                    {/* < /> */}
+                        SelectProps={{
+                            native: true,
+                        }}
+                        value={pre.unitOfMeasurement}
+                        variant='standard'>
+                        {getUnitOptions()}
+                    </TextField>
+
                 </Box>
 
+            </Box>
+
+            {/* Info */}
+            <Box sx={vertStyle}>
+                <Typography variant='subtitle2'>Product details</Typography>
+                <TextField
+                    sx={{}}
+                    onChange={(e: any) => {
+                        pre.info = e.target.value
+                        setRefresh({})
+                    }}
+                    // variant='standard'
+                    autoComplete='off'
+                    value={pre.info || ''}
+                />
             </Box>
 
             <Button variant='contained' color='success'>Submit</Button>
