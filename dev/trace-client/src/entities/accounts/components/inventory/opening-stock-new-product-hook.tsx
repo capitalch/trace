@@ -1,12 +1,11 @@
 import { _, moment, useEffect, useRef, useSharedElements, useState } from './redirect'
 
-function useOpeninfStockNewProduct() {
+function useOpeninfStockNewProduct(onClose: any) {
     const [, setRefresh] = useState({})
     const { emit, genericUpdateMasterNoForm, getFromBag } = useSharedElements()
     const finYearId = getFromBag('finYearObject')?.finYearId
     const branchId = getFromBag('branchObject')?.branchId || 1
     const meta = useRef({
-        id: undefined,
         info: undefined,
         gstRate: 0.00,
         hsn: undefined,
@@ -42,13 +41,16 @@ function useOpeninfStockNewProduct() {
             const ret = await genericUpdateMasterNoForm({
                 tableName: 'ProductM',
                 // customCodeBlock: pre.id ? undefined : 'upsert_opening_stock', // If id is there then just do edit. Otherwise check if this product already entered. If entered then increase its qty otherwise do insert
+                customCodeBlock: 'insert_product_block',
                 data: {
-                    id: pre.id,
+                    id: undefined,
                     catId: pre?.selectedCategory?.value || undefined,
                     hsn: pre.hsn,
-                    brandId: pre.brandId,
+                    brandId: pre?.selectedBrand.value || undefined,
+                    jData: null,
                     info: pre.info,
-                    unitId: '',
+                    isActive: true,
+                    unitId: pre.unitOfMeasurement,
                     label: pre.label,
                     upcCode: pre.upcCode,
                     gstRate: pre.gstRate,
@@ -56,9 +58,7 @@ function useOpeninfStockNewProduct() {
                     branchId: branchId
                 }
             })
-            // partialResetMeta()
-            setRefresh({})
-            emit('XX-GRID-HOOK-FETCH-OPENING-STOCK', '') // to refresh the grid of op balances
+            onClose()
             emit('SHOW-LOADING-INDICATOR', false)
         } catch (e: any) {
             emit('SHOW-LOADING-INDICATOR', false)

@@ -140,7 +140,7 @@ function OpeningStockWorkBench() {
                     </Box>
                 </DialogTitle>
                 <DialogContent>
-                    <OpeningStockNewProduct />
+                    <OpeningStockNewProduct onClose={handleCloseDialog} />
                 </DialogContent>
             </Dialog>
         </Box>

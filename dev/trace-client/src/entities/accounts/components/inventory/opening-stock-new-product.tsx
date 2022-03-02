@@ -1,9 +1,9 @@
 import { TextField, Typography } from '@mui/material'
 import { useOpeninfStockNewProduct } from './opening-stock-new-product-hook'
 import { Box, Button, Input, NumberFormat, useTheme, useSharedElements, utilMethods } from './redirect'
-function OpeningStockNewProduct() {
+function OpeningStockNewProduct({ onClose }: any) {
     const { getFromBag, ReactSelect } = useSharedElements()
-    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useOpeninfStockNewProduct()
+    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useOpeninfStockNewProduct(onClose)
     const pre: any = meta.current
     const theme = useTheme()
     const { Mandatory } = utilMethods()
