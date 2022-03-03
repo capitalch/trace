@@ -27,21 +27,19 @@ sample GSTIN: 37AADCS0472N1Z1
                                                                                                 refreshed after saved, accounts creation          1 day, 17th Feb
                                                                                         10. New account code create, immediate effect             3 days, 20th Feb
 
-3. Bug while login, when press enter key
-4. Opening balance of stock:                              3 days, 23rd Feb
-19. Stock Journals                                        3 days, 26th Feb
-3. Full reporting of Inventory and allied:                1 week, 2nd Mar
-
-                                                                                        
-                                                                                        
-7. purchase invoice scanned pdf save:                     2 days, 4th Mar
-8. Buffer 3 days                                          3 days, 7th Mar
-9. Input of product price and price management            2 days, 9th Mar
+2. Remaining of Opening stock and products                1 day, 4th Mar
+3. Bug while login, when press enter key                  .5 day, 5the Mar
+4. Bug fix: Opening account balances                      .5 day, 5th Mar
+4. Full reporting of Inventory and allied:                1 week, 12rd Mar
+5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
+19. Stock Journals                                        3 days, 17th Mar
+3. Sale bill print correction                             1 day, 18th Mar
+5. 
     
                                                                                         
-12. Debit credit notes printing                           3 days, 12th Mar
+12. 
                                                                                         
-    
+13. Debit credit notes printing                           3 days, 12th Mar
 15. PDF print, BS, PL and TB                              3 days, 15th Mar
 16. Purchase entry, unable to enter GST price             2 days, 17th Mar
 17. Edit from bank recon                                  2 days, 19th Mar

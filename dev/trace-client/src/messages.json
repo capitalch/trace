@@ -10,6 +10,7 @@
     , "giveSearchCriteria": "Please give a search criteria"
     , "formError": "There are some errors in this form"
     , "initError":"Initialization error"
-    , "operationSuccessful": "Operation was completed successfully"    
+    , "operationSuccessful": "Operation was completed successfully"
+    , "productInsertError": "Error occured inserting the product"   
     , "validationError":"There was validation error in the form"
 }

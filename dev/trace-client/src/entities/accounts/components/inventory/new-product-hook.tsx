@@ -1,6 +1,6 @@
 import { _, moment, useEffect, useRef, useSharedElements, useState } from './redirect'
 
-function useOpeninfStockNewProduct(onClose: any) {
+function useNewProduct(onClose: any) {
     const [, setRefresh] = useState({})
     const { emit, genericUpdateMasterNoForm, getFromBag } = useSharedElements()
     const finYearId = getFromBag('finYearObject')?.finYearId
@@ -22,9 +22,6 @@ function useOpeninfStockNewProduct(onClose: any) {
         purPrice: 0,
     })
     const pre: any = meta.current
-    useEffect(() => {
-
-    })
 
     function checkError() {
         const isCatError = !Boolean(pre?.selectedCategory?.value)
@@ -70,10 +67,7 @@ function useOpeninfStockNewProduct(onClose: any) {
                     purPrice: pre.purPrice,
                 }
             })
-            if(!ret){
-                
-            }
-            onClose()
+           ret && onClose()          
             emit('SHOW-LOADING-INDICATOR', false)
         } catch (e: any) {
             emit('SHOW-LOADING-INDICATOR', false)
@@ -93,4 +87,4 @@ function useOpeninfStockNewProduct(onClose: any) {
     return ({ checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh })
 }
 
-export { useOpeninfStockNewProduct }
+export { useNewProduct }

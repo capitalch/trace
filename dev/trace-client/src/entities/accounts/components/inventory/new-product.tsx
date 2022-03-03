@@ -1,9 +1,9 @@
 import { TextField, Typography } from '@mui/material'
-import { useOpeninfStockNewProduct } from './opening-stock-new-product-hook'
+import { useNewProduct } from './new-product-hook'
 import { Box, Button, Input, NumberFormat, useTheme, useSharedElements, utilMethods } from './redirect'
-function OpeningStockNewProduct({ onClose }: any) {
+function NewProduct({ onClose }: any) {
     const { getFromBag, ReactSelect } = useSharedElements()
-    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useOpeninfStockNewProduct(onClose)
+    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useNewProduct(onClose)
     const pre: any = meta.current
     const theme = useTheme()
     const { Mandatory } = utilMethods()
@@ -21,7 +21,7 @@ function OpeningStockNewProduct({ onClose }: any) {
         })
     }
     const vertStyle = { display: 'flex', flexDirection: 'column', }
-
+    const rightAlignedNumeric = { '& input': { textAlign: 'end' } }
     const errorStyle = (selected: string) => {
         return {
             control: (provided: any) => ({
@@ -52,7 +52,7 @@ function OpeningStockNewProduct({ onClose }: any) {
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Product label <Mandatory /></Typography>
                 <TextField
-                    sx={{borderWidth:'4px'}}
+                    sx={{ borderWidth: '4px' }}
                     onChange={(e: any) => {
                         pre.label = e.target.value
                         setRefresh({})
@@ -85,7 +85,7 @@ function OpeningStockNewProduct({ onClose }: any) {
                 <Box sx={vertStyle}>
                     <Typography variant='subtitle2'>Gst rate (%)</Typography>
                     <NumberFormat
-                        sx={{ width: theme.spacing(7), '& input': { textAlign: 'end' }, }}
+                        sx={{ width: theme.spacing(7), ...rightAlignedNumeric, }}
                         allowNegative={false}
                         decimalScale={2}
                         fixedDecimalScale={true}
@@ -129,9 +129,7 @@ function OpeningStockNewProduct({ onClose }: any) {
                         variant='standard'>
                         {getUnitOptions()}
                     </TextField>
-
                 </Box>
-
             </Box>
 
             {/* Info */}
@@ -154,12 +152,13 @@ function OpeningStockNewProduct({ onClose }: any) {
                     <Box sx={{ display: 'flex', columnGap: 1, rowGap: 1, flexWrap: 'wrap', justifyContent: 'space-between', margin: 2 }}>
                         {/* Max retail price */}
                         <NumberFormat
-                            sx={{ width: theme.spacing(16) }}
+                            sx={{ width: theme.spacing(16), ...rightAlignedNumeric, }}
                             allowNegative={false}
                             autoComplete='off'
                             decimalScale={2}
                             fixedDecimalScale={true}
                             customInput={TextField}
+                            thousandSeparator={true}
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
@@ -172,11 +171,12 @@ function OpeningStockNewProduct({ onClose }: any) {
                             label='Max retail price'
                         />
                         {/* sale price */}
-                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                        <NumberFormat sx={{ width: theme.spacing(16), ...rightAlignedNumeric, }}
                             allowNegative={false}
                             autoComplete='off'
                             decimalScale={2}
                             fixedDecimalScale={true}
+                            thousandSeparator={true}
                             customInput={TextField}
                             onFocus={(e: any) => {
                                 e.target.select()
@@ -190,9 +190,10 @@ function OpeningStockNewProduct({ onClose }: any) {
                             label='Sale price'
                         />
                         {/* Sale price gst */}
-                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                        <NumberFormat sx={{ width: theme.spacing(16), ...rightAlignedNumeric, }}
                             allowNegative={false}
                             autoComplete='off'
+                            thousandSeparator={true}
                             decimalScale={2}
                             fixedDecimalScale={true}
                             customInput={TextField}
@@ -210,9 +211,10 @@ function OpeningStockNewProduct({ onClose }: any) {
                     </Box>
                     {/* Purchase prices */}
                     <Box sx={{ display: 'flex', columnGap: 1, rowGap: 1, flexWrap: 'wrap', justifyContent: 'space-between', margin: 2 }}>
-                    {/* Dealer price */}
-                    <NumberFormat sx={{ width: theme.spacing(16) }}
+                        {/* Dealer price */}
+                        <NumberFormat sx={{ width: theme.spacing(16), ...rightAlignedNumeric, }}
                             allowNegative={false}
+                            thousandSeparator={true}
                             autoComplete='off'
                             decimalScale={2}
                             fixedDecimalScale={true}
@@ -229,8 +231,9 @@ function OpeningStockNewProduct({ onClose }: any) {
                             label='Dealer price'
                         />
                         {/* Purch price */}
-                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                        <NumberFormat sx={{ width: theme.spacing(16), ...rightAlignedNumeric, }}
                             allowNegative={false}
+                            thousandSeparator={true}
                             autoComplete='off'
                             decimalScale={2}
                             fixedDecimalScale={true}
@@ -247,8 +250,9 @@ function OpeningStockNewProduct({ onClose }: any) {
                             label='Purch price'
                         />
                         {/* Pur price gst */}
-                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                        <NumberFormat sx={{ width: theme.spacing(16), ...rightAlignedNumeric, }}
                             allowNegative={false}
+                            thousandSeparator={true}
                             autoComplete='off'
                             decimalScale={2}
                             fixedDecimalScale={true}
@@ -265,7 +269,6 @@ function OpeningStockNewProduct({ onClose }: any) {
                             label='Purch price(gst)'
                         />
                     </Box>
-
                 </Box>
             </Box>
 
@@ -273,4 +276,4 @@ function OpeningStockNewProduct({ onClose }: any) {
         </Box>)
 
 }
-export { OpeningStockNewProduct }
+export { NewProduct }

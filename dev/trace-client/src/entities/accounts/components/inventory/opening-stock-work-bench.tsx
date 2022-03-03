@@ -1,6 +1,6 @@
 import { useOpeningStockWorkBench } from "./opening-stock-work-bench-hook"
 import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Input, NumberFormat, TextField, Tooltip, Typography, useSharedElements, useTheme } from './redirect'
-import { OpeningStockNewProduct } from './opening-stock-new-product'
+import { NewProduct } from './new-product'
 
 function OpeningStockWorkBench() {
     const { ReactSelect } = useSharedElements()
@@ -89,8 +89,7 @@ function OpeningStockWorkBench() {
                             setRefresh({})
                         }}
                         thousandSeparator={true}
-                        value={pre.openingPrice || 0.0}
-                    />
+                        value={pre.openingPrice || 0.0} />
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -123,9 +122,7 @@ function OpeningStockWorkBench() {
                         handleCloseDialog()
                     }
                 }}
-                fullWidth={true}
-                // maxWidth="md"
-            >
+                fullWidth={true}>
                 <DialogTitle>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Typography variant='h6'>{pre.dialogConfig.title}</Typography>
@@ -140,7 +137,7 @@ function OpeningStockWorkBench() {
                     </Box>
                 </DialogTitle>
                 <DialogContent>
-                    <OpeningStockNewProduct onClose={handleCloseDialog} />
+                    <NewProduct onClose={handleCloseDialog} />
                 </DialogContent>
             </Dialog>
         </Box>

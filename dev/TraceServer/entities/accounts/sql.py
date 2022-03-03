@@ -1341,7 +1341,7 @@ allSqls = {
             begin
                 select "intValue" +1 into lastNo from "Settings" where "key" = 'lastProductCode';
                 insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
-                        "productCode", "upcCode", "gstRate", "maxRetailprice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
+                        "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
                     values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s, %(gstRate)s,
                         %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s
                     );
