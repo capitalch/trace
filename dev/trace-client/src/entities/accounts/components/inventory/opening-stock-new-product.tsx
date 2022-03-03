@@ -52,7 +52,7 @@ function OpeningStockNewProduct({ onClose }: any) {
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Product label <Mandatory /></Typography>
                 <TextField
-                    // sx={{ maxWidth: '70%' }}
+                    sx={{borderWidth:'4px'}}
                     onChange={(e: any) => {
                         pre.label = e.target.value
                         setRefresh({})
@@ -145,6 +145,128 @@ function OpeningStockNewProduct({ onClose }: any) {
                     autoComplete='off'
                     value={pre.info || ''}
                 />
+            </Box>
+
+            {/* prices */}
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant='subtitle2'>Product prices</Typography>
+                <Box sx={{ border: '1px solid lightGrey' }}>
+                    <Box sx={{ display: 'flex', columnGap: 1, rowGap: 1, flexWrap: 'wrap', justifyContent: 'space-between', margin: 2 }}>
+                        {/* Max retail price */}
+                        <NumberFormat
+                            sx={{ width: theme.spacing(16) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            customInput={TextField}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            value={pre.maxRetailPrice || 0}
+                            onChange={(e: any) => {
+                                pre.maxRetailPrice = e.target.value
+                                setRefresh({})
+                            }}
+                            variant='standard'
+                            label='Max retail price'
+                        />
+                        {/* sale price */}
+                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            customInput={TextField}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            value={pre.salePrice || 0}
+                            onChange={(e: any) => {
+                                pre.salePrice = e.target.value
+                                setRefresh({})
+                            }}
+                            variant='standard'
+                            label='Sale price'
+                        />
+                        {/* Sale price gst */}
+                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            customInput={TextField}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            value={pre.salePriceGst || 0}
+                            onChange={(e: any) => {
+                                pre.salePriceGst = e.target.value
+                                setRefresh({})
+                            }}
+                            variant='standard'
+                            label='Sale price (gst)'
+                        />
+                    </Box>
+                    {/* Purchase prices */}
+                    <Box sx={{ display: 'flex', columnGap: 1, rowGap: 1, flexWrap: 'wrap', justifyContent: 'space-between', margin: 2 }}>
+                    {/* Dealer price */}
+                    <NumberFormat sx={{ width: theme.spacing(16) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            customInput={TextField}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            value={pre.dealerPrice || 0}
+                            onChange={(e: any) => {
+                                pre.dealerPrice = e.target.value
+                                setRefresh({})
+                            }}
+                            variant='standard'
+                            label='Dealer price'
+                        />
+                        {/* Purch price */}
+                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            customInput={TextField}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            value={pre.upcCode || 0}
+                            onChange={(e: any) => {
+                                pre.upcCode = e.target.value
+                                setRefresh({})
+                            }}
+                            variant='standard'
+                            label='Purch price'
+                        />
+                        {/* Pur price gst */}
+                        <NumberFormat sx={{ width: theme.spacing(16) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            customInput={TextField}
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            value={pre.purPriceGst || 0}
+                            onChange={(e: any) => {
+                                pre.purPriceGst = e.target.value
+                                setRefresh({})
+                            }}
+                            variant='standard'
+                            label='Purch price(gst)'
+                        />
+                    </Box>
+
+                </Box>
             </Box>
 
             <Button variant='contained' color='success' disabled={checkError()} onClick={handleSubmit}>Submit</Button>

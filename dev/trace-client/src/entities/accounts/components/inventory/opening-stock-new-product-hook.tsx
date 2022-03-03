@@ -14,6 +14,12 @@ function useOpeninfStockNewProduct(onClose: any) {
         unitOfMeasurement: 1,
         selectedBrand: undefined,
         selectedCategory: undefined,
+        salePrice: 0,
+        salePriceGst: 0,
+        maxRetailPrice: 0,
+        dealerPrice: 0,
+        purPriceGst: 0,
+        purPrice: 0,
     })
     const pre: any = meta.current
     useEffect(() => {
@@ -55,7 +61,13 @@ function useOpeninfStockNewProduct(onClose: any) {
                     upcCode: pre.upcCode,
                     gstRate: pre.gstRate,
                     finYearId: finYearId,
-                    branchId: branchId
+                    branchId: branchId,
+                    salePrice: pre.salePrice,
+                    salePriceGst: pre.salePriceGst,
+                    maxRetailPrice: pre.maxRetailPrice,
+                    dealerPrice: pre.dealerPrice,
+                    purPriceGst: pre.purPriceGst,
+                    purPrice: pre.purPrice,
                 }
             })
             onClose()
