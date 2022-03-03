@@ -74,7 +74,7 @@ function OpeningStockNewProduct({ onClose }: any) {
                         onFocus={(e: any) => {
                             e.target.select()
                         }}
-                        value={pre.hsn || ''}
+                        value={pre.hsn || 0}
                         onChange={(e: any) => {
                             pre.hsn = e.target.value
                             setRefresh({})
@@ -238,9 +238,9 @@ function OpeningStockNewProduct({ onClose }: any) {
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
-                            value={pre.upcCode || 0}
+                            value={pre.purPrice || 0}
                             onChange={(e: any) => {
-                                pre.upcCode = e.target.value
+                                pre.purPrice = e.target.value
                                 setRefresh({})
                             }}
                             variant='standard'

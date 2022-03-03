@@ -6,11 +6,11 @@ function useOpeninfStockNewProduct(onClose: any) {
     const finYearId = getFromBag('finYearObject')?.finYearId
     const branchId = getFromBag('branchObject')?.branchId || 1
     const meta = useRef({
-        info: undefined,
+        info: null,
         gstRate: 0.00,
-        hsn: undefined,
+        hsn: null,
         label: undefined,
-        upcCode: '',
+        upcCode: null,
         unitOfMeasurement: 1,
         selectedBrand: undefined,
         selectedCategory: undefined,
@@ -70,6 +70,9 @@ function useOpeninfStockNewProduct(onClose: any) {
                     purPrice: pre.purPrice,
                 }
             })
+            if(!ret){
+                
+            }
             onClose()
             emit('SHOW-LOADING-INDICATOR', false)
         } catch (e: any) {
