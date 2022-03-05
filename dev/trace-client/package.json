@@ -12,7 +12,7 @@
     "@mui/icons-material": "^5.4.4",
     "@mui/material": "^5.4.4",
     "@mui/styles": "^5.4.4",
-    "@mui/x-data-grid-pro": "^5.5.1",
+    "@mui/x-data-grid-pro": "^5.6.0",
     "@react-pdf/renderer": "^2.1.1",
     "@types/axios": "^0.14.0",
     "@types/big.js": "^6.1.3",
