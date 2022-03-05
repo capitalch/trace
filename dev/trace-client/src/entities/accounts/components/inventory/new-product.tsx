@@ -1,9 +1,9 @@
 import { TextField, Typography } from '@mui/material'
 import { useNewProduct } from './new-product-hook'
 import { Box, Button, Input, NumberFormat, useTheme, useSharedElements, utilMethods } from './redirect'
-function NewProduct({ onClose }: any) {
+function NewProduct({ onClose, product = undefined }: any) {
     const { getFromBag, ReactSelect } = useSharedElements()
-    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useNewProduct(onClose)
+    const { checkError, getUnitOptions, handleSubmit, meta, onBrandChanged, onCategoryChanged, setRefresh } = useNewProduct(onClose, product)
     const pre: any = meta.current
     const theme = useTheme()
     const { Mandatory } = utilMethods()
@@ -38,14 +38,14 @@ function NewProduct({ onClose }: any) {
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Category <Mandatory /> </Typography>
                 <ReactSelect menuPlacement='auto' styles={{ ...styles, ...errorStyle('selectedCategory') }} placeholder='Select category'
-                    options={getFromBag('categories')} value={pre.selectedCategory} onChange={onCategoryChanged} />
+                    options={getFromBag('categories') || []} value={pre.selectedCategory} onChange={onCategoryChanged} />
             </Box>
 
             {/* Brands */}
             <Box sx={vertStyle}>
                 <Typography variant='subtitle2'>Brand <Mandatory /></Typography>
                 <ReactSelect menuPlacement='auto' styles={{ ...styles, ...errorStyle('selectedBrand') }} placeholder='Select brand'
-                    options={getFromBag('brands')} value={pre.selectedBrand} onChange={onBrandChanged} />
+                    options={getFromBag('brands') || []} value={pre.selectedBrand} onChange={onBrandChanged} />
             </Box>
 
             {/* Label */}
@@ -125,7 +125,7 @@ function NewProduct({ onClose }: any) {
                         SelectProps={{
                             native: true,
                         }}
-                        value={pre.unitOfMeasurement}
+                        value={pre.unitId}
                         variant='standard'>
                         {getUnitOptions()}
                     </TextField>

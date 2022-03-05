@@ -3,7 +3,6 @@ import { _, moment, useEffect, useRef, useSharedElements, useState } from './red
 function useOpeningStockWorkBench() {
     const [, setRefresh] = useState({})
     const { emit, execGenericView, filterOn, genericUpdateMasterNoForm, getFromBag, setInBag } = useSharedElements()
-    // const products = getFromBag('products')
     const finYearId = getFromBag('finYearObject')?.finYearId
     const branchId = getFromBag('branchObject')?.branchId || 1
     const today = moment().format('YYYY-MM-DD')

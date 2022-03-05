@@ -61,7 +61,7 @@ function useOpeningStock() {
 
             {
                 headerName: 'Qty',
-                description: 'CQtyategory',
+                description: 'Qty',
                 field: 'qty',
                 type: 'number',
                 width: 70,
@@ -121,11 +121,11 @@ function useOpeningStock() {
         }
     }
 
-    function handleEdit(d: any) {
+    // function handleEdit(d: any) {
 
-    }
+    // }
 
-    return ({ getXXGriArtifacts, meta })
+    return ({ getXXGriArtifacts, })
 
 }
 

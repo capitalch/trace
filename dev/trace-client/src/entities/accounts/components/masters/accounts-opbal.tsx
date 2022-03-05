@@ -95,7 +95,6 @@ function AccountsOpBal() {
         },
         xl: () => mediaLogic['lg'](),
     }
-
     const currentMediaSize = getCurrentMediaSize()
     currentMediaSize && mediaLogic[currentMediaSize]()
 
@@ -190,7 +189,7 @@ function AccountsOpBal() {
                             }
                             meta.current.isMounted && setRefresh({})
                         }}></InputSwitch>
-
+                    {/* Save */}
                     <IconButton
                         disabled={utilFunc().getNotAllowSubmit()}
                         className={classes.iconButton}
@@ -223,7 +222,7 @@ function AccountsOpBal() {
                         }}>
                         <Save></Save>
                     </IconButton>
-
+                    {/* Sync */}
                     <IconButton
                         className={classes.iconButton}
                         size="medium"

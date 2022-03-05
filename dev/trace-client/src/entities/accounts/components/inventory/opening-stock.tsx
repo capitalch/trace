@@ -4,10 +4,10 @@ import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
 function OpeningStock() {
     const { XXGrid } = useSharedElements()
-    const { getXXGriArtifacts, meta } = useOpeningStock()
+    const { getXXGriArtifacts, } = useOpeningStock()
     const { actionMessages, columns, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
     const theme = useTheme()
-    const pre = meta.current
+    // const pre = meta.current
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: theme.spacing(1), columnGap: theme.spacing(3), justifyContent: 'space-evenly' }}>
             {/* New / Edit entry */}
@@ -37,7 +37,7 @@ function OpeningStock() {
                     hideFiltersButton={true}
                     hideColumnsButton={true}
                     hideExportButton={true}
-                    hideViewLimit={true}
+                    hideViewLimit={false}
                     specialColumns={specialColumns}
                     sqlQueryArgs={sqlQueryArgs}
                     sqlQueryId={sqlQueryId}

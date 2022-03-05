@@ -566,7 +566,8 @@ allSqls = {
 
     "get_products": '''
         select ROW_NUMBER() over(order by "catName", "brandName", "label") as "index", p."id"  as "id" , c."id" as "catId", u."id" as "unitId", b."id" as "brandId",
-        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode"
+        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode",
+        "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice", "purPrice", "purPriceGst"
         from "ProductM" p
             join "CategoryM" c
                 on c."id" = p."catId"
@@ -1339,15 +1340,35 @@ allSqls = {
         do $$
             DECLARE lastNo INT;
             begin
-                select "intValue" +1 into lastNo from "Settings" where "key" = 'lastProductCode';
-                insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
-                        "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
-                    values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s, %(gstRate)s,
-                        %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s
-                    );
-                update "Settings" 
-                    set "intValue" = lastNo
-                        where "key" = 'lastProductCode';
+                if %(id)s is NOT NULL then
+                    update "ProductM" set
+                        "catId" = %(catId)s,
+                        "hsn" = %(hsn)s,
+                        "brandId" = %(brandId)s,
+                        "info" = %(info)s,
+                        "unitId" = %(unitId)s,
+                        "label" = %(label)s,
+                        "jData" = %(jData)s,
+                        "upcCode" = %(upcCode)s,
+                        "gstRate" = %(gstRate)s,
+                        "maxRetailPrice"= %(maxRetailPrice)s,
+                        "salePrice" = %(salePrice)s,
+                        "salePriceGst" = %(salePriceGst)s,
+                        "dealerPrice" = %(dealerPrice)s,
+                        "purPrice" = %(purPrice)s,
+                        "purPriceGst" = %(purPriceGst)s
+                    where id = %(id)s;
+                else
+                    select "intValue" +1 into lastNo from "Settings" where "key" = 'lastProductCode';
+                    insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
+                            "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
+                        values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s, %(gstRate)s,
+                            %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s
+                        );
+                    update "Settings" 
+                        set "intValue" = lastNo
+                            where "key" = 'lastProductCode';
+                end if;
         end $$;
     ''',
 

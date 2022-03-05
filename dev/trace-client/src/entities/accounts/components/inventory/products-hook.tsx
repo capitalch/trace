@@ -1,14 +1,10 @@
-import {
-    useRef,
-    useState,
-    useEffect,
-} from '../../../../imports/regular-imports'
+import { useEffect, useRef, useState, useSharedElements, } from './redirect'
 import {
     makeStyles,
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+
 import { useCrudUtils } from '../common/crud-utils-hook'
 
 function useProducts() {
@@ -16,33 +12,20 @@ function useProducts() {
     const FETCH_DATA_MESSAGE = 'PRODUCTS-HOOK-FETCH-DATA'
     const meta: any = useRef({
         showDialog: false,
-        dialogConfig: {
-            title: '',
-            tableName: 'ProductM',
-            formId: 'trace-product-master',
-            ibukiFetchDataMessage: FETCH_DATA_MESSAGE,
-            actions: () => { },
-            content: () => <></>,
-        },
-        setRefresh: setRefresh,
+        product: {},
+        title: '',
     })
-    const {
-        getReactFormContent,
-        handleCloseDialog,
-        handleDelete,
-        handleSubmit,
-    } = useCrudUtils(meta)
+    const pre = meta.current
+    const { handleDelete, } = useCrudUtils(meta)
 
     const {
         emit,
         execGenericView,
         filterOn,
-        manageFormsState,
-        TraceFullWidthSubmitButton,
+        getFromBag,
+        setInBag,
+        toDecimalFormat,
     } = useSharedElements()
-
-    const { getFormData, resetAllValidators, resetForm } =
-        manageFormsState()
 
     useEffect(() => {
         const subs1 = filterOn(FETCH_DATA_MESSAGE).subscribe(() => {
@@ -51,10 +34,7 @@ function useProducts() {
 
         const subs2 = filterOn(
             getXXGridParams().gridActionMessages.editIbukiMessage
-        ).subscribe((d: any) => {
-            //edit
-            handleEdit(d.data)
-        })
+        ).subscribe(handleEdit)
 
         const subs3 = filterOn(
             getXXGridParams().gridActionMessages.deleteIbukiMessage
@@ -139,11 +119,59 @@ function useProducts() {
                 field: 'upcCode',
                 width: '120'
             },
+            {
+                headerName: 'MRP',
+                description: 'Maximum retail price',
+                field: 'MaxRetailPrice',
+                type: 'number',
+                width: 130,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Sale pr',
+                description: 'Sale price',
+                field: 'salePrice',
+                type: 'number',
+                width: 130,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Sale pr (Gst)',
+                description: 'Sale price with Gst',
+                field: 'salePriceGst',
+                type: 'number',
+                width: 130,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Dealer pr',
+                description: 'Dealer price',
+                field: 'dealerPrice',
+                type: 'number',
+                width: 130,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Purch pr',
+                description: 'Purchase price',
+                field: 'purPrice',
+                type: 'number',
+                width: 130,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Pur price (Gst)',
+                description: 'Purchase price with Gst',
+                field: 'purPriceGst',
+                type: 'number',
+                width: 130,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
         ]
 
         const queryId = 'get_products'
         const queryArgs = {
-            no: 100
+            no: 1000
         }
         const summaryColNames: string[] = []
         const specialColumns = {
@@ -167,147 +195,63 @@ function useProducts() {
         }
     }
 
+    async function ensureBrandsCategoriesUnits() {
+        const categories = getFromBag('categories')
+        const brands = getFromBag('brands')
+        const units = getFromBag('units')
+        if (!(categories && brands && units)) {
+            await getBrandsCategoriesUnits()
+        }
+
+        async function getBrandsCategoriesUnits() {
+            emit('SHOW-LOADING-INDICATOR', true)
+            const result: any = await execGenericView({
+                isMultipleRows: false,
+                sqlKey: 'getJson_brands_categories_units',
+                args: {
+                },
+            })
+
+            const brands = (result?.jsonResult?.brands || []).map((x: any) => {
+                return {
+                    label: x.brandName,
+                    value: x.id,
+                }
+            })
+            setInBag('brands', brands)
+            const categories = (result?.jsonResult?.categories || []).map((x: any) => {
+                return {
+                    label: x.catName,
+                    value: x.id,
+                }
+            })
+            setInBag('categories', categories)
+            const units = result?.jsonResult.units
+            setInBag('units', units)
+            emit('SHOW-LOADING-INDICATOR', false)
+
+        }
+    }
+
     async function handleAdd() {
-        const pre = meta.current.dialogConfig
-        meta.current.showDialog = true
-        pre.isEditMode = false
-        pre.title = 'New product'
-        pre.id = undefined
-        pre.codeBlock = 'insert_product_block' // For auto productCode generation this code block is required
-        pre.jData = null
-        resetForm(pre.formId)
-        resetAllValidators(pre.formId)
-        await getBrandsCategoriesUnits() // puts in brands, categories and units in pre
-
-        pre.content = getContent()
-        pre.actions = () => (
-            <TraceFullWidthSubmitButton onClick={handlePreSubmit} />
-        )
+        await ensureBrandsCategoriesUnits()
+        pre.title = 'Add new product'
+        pre.showDialog = true
         setRefresh({})
-
-        function getContent() {
-            const json = JSON.parse(JSON.stringify(productMasterJson))
-            json.items[0].options = [
-                { label: '---select---', value: '' },
-                ...pre.categories,
-            ]
-            json.items[1].options = [
-                { label: '---select---', value: '' },
-                ...pre.brands,
-            ]
-            json.items[5].options = [
-                { label: '---select---', value: '' },
-                ...pre.units,
-            ]
-            const ret = getReactFormContent(JSON.stringify(json))
-            return (ret)
-        }
-
-        // to set jData as null, otherwise database error happens
-        function handlePreSubmit() {
-            const formData = getFormData(pre.formId)
-            formData['jData'] = null
-            handleSubmit(null, formData)
-        }
     }
 
-    async function handleEdit(data: any) {
-        const pre = meta.current.dialogConfig
-        const { id1 } = data?.row
-        meta.current.showDialog = true
-        pre.isEditMode = true
+    async function handleEdit(d: any) {
+        await ensureBrandsCategoriesUnits()
         pre.title = 'Edit product'
-        pre.id = id1
-        pre.idInsert = undefined
-        pre.codeBlock = undefined
-        pre.jData = null
-        resetForm(pre.formId)
-        resetAllValidators(pre.formId)
-
-        await getBrandsCategoriesUnits()
-        pre.content = getContent()
-        pre.actions = () => (
-            <TraceFullWidthSubmitButton onClick={handleSubmit} />
-        )
-        await getBrandsCategoriesUnits()
+        pre.product = d.data?.row
+        pre.showDialog = true
         setRefresh({})
-
-        function getContent() {
-            const { catId, brandId, label, hsn, unitId, info, upcCode, gstRate } = data?.row
-            const json = JSON.parse(JSON.stringify(productMasterJson))
-            json.items[0].value = catId
-            json.items[1].value = brandId
-            json.items[5].value = unitId
-
-            const itemLabel = json.items.find((x: any) => x.name === 'label')
-            itemLabel.value = label
-
-            const itemHsn = json.items.find((x: any) => x.name === 'hsn')
-            itemHsn.value = hsn
-
-            const itemInfo = json.items.find((x: any) => x.name === 'info')
-            itemInfo.value = info
-
-            const itemUpc = json.items.find((x: any) => x.name === 'upcCode')
-            itemUpc.value = upcCode
-
-            const itemGstRate = json.items.find((x: any) => x.name === 'gstRate')
-            itemGstRate.value = gstRate
-
-            json.items[0].options = [
-                { label: '---select---', value: '' },
-                ...pre.categories,
-            ]
-            json.items[1].options = [
-                { label: '---select---', value: '' },
-                ...pre.brands,
-            ]
-            json.items[5].options = [
-                { label: '---select---', value: '' },
-                ...pre.units,
-            ]
-
-            const ret = getReactFormContent(JSON.stringify(json))
-            return (ret)
-        }
     }
 
-    async function getBrandsCategoriesUnits() {
-        const pre = meta.current.dialogConfig
-        if (pre.brands && pre.categories && pre.units) {
-            return
-        }
-        emit('SHOW-LOADING-INDICATOR', true)
-
-        const result: any = await execGenericView({
-            isMultipleRows: false,
-            sqlKey: 'getJson_brands_categories_units',
-            args: {
-            },
-        })
-
-        pre.brands = (result?.jsonResult?.brands || []).map((x: any) => {
-            return {
-                label: x.brandName,
-                value: x.id,
-            }
-        })
-
-        pre.categories = (result?.jsonResult?.categories || []).map((x: any) => {
-            return {
-                label: x.catName,
-                value: x.id,
-            }
-        })
-
-        pre.units = result?.jsonResult.units.map((x: any) => {
-            return {
-                label: x.unitName,
-                value: x.id,
-            }
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-
+    function handleCloseDialog() {
+        pre.showDialog = false
+        pre.product = {}
+        setRefresh({})
     }
 
     return { getXXGridParams, handleCloseDialog, meta }
@@ -328,83 +272,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
     })
 )
 export { useStyles }
-
-const productMasterJson: any = {
-    class: 'generic-dialog',
-    style: { width: '100%' },
-    items: [
-        {
-            type: 'Select',
-            name: 'catId',
-            label: 'Category',
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Category is required',
-                },
-            ],
-            options: [],
-        },
-        {
-            type: 'Select',
-            name: 'brandId',
-            label: 'Brand',
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Brand is required',
-                },
-            ],
-            options: [],
-        },
-        {
-            type: 'Text',
-            name: 'label',
-            label: 'Product label',
-            validations: [
-                {
-                    name: 'required',
-                    message: 'Product label is required',
-                },
-            ],
-        },
-        {
-            type: 'Text',
-            name: 'hsn',
-            label: 'HSN code',
-            htmlProps: {
-                type: 'number',
-            },
-            validations: [],
-        },
-        {
-            type: 'Text',
-            name: 'gstRate',
-            label: 'Gst rate (%)',
-            htmlProps: {
-                type: 'number',
-            },
-            validations: [],
-        },
-        {
-            type: 'Select',
-            name: 'unitId',
-            label: 'Unit of measurement',
-            value: 1,
-            validations: [],
-            options: [],
-        },
-        {
-            type: 'Text',
-            name: 'info',
-            label: 'Product details',
-            validations: [],
-        },
-        {
-            type: 'Text',
-            name: 'upcCode',
-            label: 'UPC code',
-            validations: [],
-        },
-    ],
-}
