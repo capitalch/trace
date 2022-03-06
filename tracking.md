@@ -27,6 +27,7 @@ sample GSTIN: 37AADCS0472N1Z1
                                                                                                 refreshed after saved, accounts creation          1 day, 17th Feb
                                                                                         10. New account code create, immediate effect             3 days, 20th Feb
 
+1. Bug: Product category self edit, and also not refreshing
 2. Remaining of Opening stock and products                1 day, 4th Mar
 3. Bug while login, when press enter key                  .5 day, 5the Mar
 4. Bug fix: Opening account balances                      .5 day, 5th Mar
