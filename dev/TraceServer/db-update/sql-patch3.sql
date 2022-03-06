@@ -75,3 +75,9 @@ ALTER TABLE IF EXISTS "ProductM"
    DROP CONSTRAINT IF EXISTS "catId_brandId_label_unique_key",
    ADD  CONSTRAINT "catId_brandId_label_unique_key"
    UNIQUE ("catId", "brandId", "label");
+
+--modify fkey or add if not exists in table AccOpBal
+ALTER TABLE "AccOpBal"
+   DROP CONSTRAINT IF EXISTS "accId",
+   ADD  CONSTRAINT "AccOpBal_accId_fkey"
+   FOREIGN KEY ("accId") REFERENCES "AccM" ("id") ON DELETE NO ACTION;

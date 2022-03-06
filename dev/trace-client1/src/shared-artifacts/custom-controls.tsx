@@ -1,3 +1,0 @@
-const customControls = {}
-
-export { customControls }

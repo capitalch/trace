@@ -118,6 +118,11 @@ create installer from innosetup
 19. Backup and restore strategy
 20. Upgrade database for all instances 
 
+# 29-02-2022 - 06-03-2022
+1. Completed Opening stock with new product
+2. Worked on XXGrid searchbox focus issue
+3. AccOpBal issue resolved
+
 # 23-02-2022 - 28-02-2022
 1. Opening stock all items in continuation
 2. Bug fixing etc.
@@ -876,6 +881,16 @@ select "autoRefNo", SUM(CASE WHEN "dc" = 'D' then "amount" else -"amount" end) a
 select "autoRefNo", sum("amount") as "amount" from cte1 
     where "amount" <> 0
         group by "autoRefNo"
+
+* Find out duplicates in AccOpBal table
+    set search_path to demounit1;
+    select * from (
+      SELECT id,
+      ROW_NUMBER() OVER(PARTITION BY "accId", "finYearId", "branchId" ORDER BY id asc) AS "noOfTimes"
+      FROM "AccOpBal"
+    ) dups
+    where 
+    dups."noOfTimes" > 1
 
 set search_path to demounit1;
 select h."id" as "tranHeaderId", "autoRefNo", "userRefNo", h."remarks" as "commonRemarks",

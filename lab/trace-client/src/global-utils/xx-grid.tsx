@@ -193,7 +193,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                             {gridOptions.hideFiltersButton ? undefined : <GridToolbarFilterButton color="secondary" />}
                             {gridOptions.hideExportButton ? undefined : <GridToolbarExport color="secondary" />}
                         </div>
-
                         {gridOptions.hideFilteredButton ? undefined : <Button
                             variant="text"
                             color="secondary"
@@ -400,7 +399,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                     (props.allSummary['credit'] || 0.0)
                 const absClos = toDecimalFormat(Math.abs(clos))
                 const suffix = clos < 0 ? 'Cr' : 'Dr'
-
                 return (
                     <div>
                         <span>{absClos}</span>&nbsp;
@@ -427,7 +425,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                         &nbsp;&nbsp;{' '}
                     </div>
                     {FilteredCols()}
-                    {/* <FilteredCols /> */}
                 </div>
             )
             function FilteredCols() {
@@ -457,7 +454,6 @@ function XXGrid(gridOptions: XXGridOptions) {
                         count <b>{props.allSummary['count']}</b> &nbsp;&nbsp;{' '}
                     </div>
                     {AllCols()}
-                    {/* <AllCols /> */}
                 </div>
             )
 

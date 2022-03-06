@@ -1,5 +1,5 @@
 import { useStyles } from './xx-grid-hook'
-import { _, clsx, useRef, useState } from '../imports/regular-imports'
+import { _, clsx, useRef } from '../imports/regular-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -108,6 +108,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     }: any = gridOptions
     let { subTitle } = gridOptions
     const apiRef: any = useGridApiRef()
+
     gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
         fetchRows,
@@ -120,7 +121,8 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleOrder,
     } = useXXGrid(gridOptions)
-    // subTitle = subTitle || 'abcd'
+    meta.current.searchTextRef = useRef() // To set focus to search box after refresh
+    meta.current.dummyRefFirstTime = useRef()
     const { debounceEmit, emit } = useIbuki()
     const { isMediumSizeDown } = useTraceGlobal()
     const { toDecimalFormat } = utilMethods()
@@ -185,7 +187,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 <Box className='sub-title'>
                     <Typography variant='subtitle2'>{subTitle}</Typography>
                 </Box>
-                <Box className='main-container'>
+                <Box ref={meta.current.dummyRefFirstTime} className='main-container'>
                     <Box className="toolbar-left-items">
                         <Typography className="toolbar-title">{title}</Typography>
                         <div>
@@ -304,14 +306,12 @@ function XXGrid(gridOptions: XXGridOptions) {
                         )}
 
                         {/* global filter */}
-                        <SearchBox />
-                        {/* <TextField
+                        <TextField
+                            inputRef={meta.current.searchTextRef}
                             variant="standard"
-                            // autoFocus
-                            // value={props.value}
-                            value={meta.current.searchText}
-                            // onChange={props.onChange}
-                            onChange={onSeachTextChange}
+                            // autoFocus={!meta.current.isFirstTime}
+                            value={props.value}
+                            onChange={props.onChange}
                             placeholder="Search…"
                             className="global-search"
                             InputProps={{
@@ -321,21 +321,17 @@ function XXGrid(gridOptions: XXGridOptions) {
                                         title="Clear"
                                         aria-label="Clear"
                                         size="small"
-                                        sx={{
-                                            visibility: meta.current.searchText ? 'visible' : 'hidden'
+                                        style={{
+                                            visibility: props.value
+                                                ? 'visible'
+                                                : 'hidden',
                                         }}
-                                        // style={{
-                                        //     visibility: props.value
-                                        //         ? 'visible'
-                                        //         : 'hidden',
-                                        // }}
-                                        // onClick={props.clearSearch}
-                                        onClick={clearSearch}>
+                                        onClick={props.clearSearch}>
                                         <CloseSharp fontSize="small" />
                                     </IconButton>
                                 ),
                             }}
-                        /> */}
+                        />
                     </Box>
                 </Box>
             </GridToolbarContainer>
@@ -642,60 +638,6 @@ function XXGrid(gridOptions: XXGridOptions) {
             meta.current.filteredRows = temp
             setFilteredSummary()
             meta.current.isMounted && setRefresh({})
-        }
-    }
-
-    function SearchBox() {
-        const [, setRefresh] = useState({})
-        const meta: any = useRef({
-            searchText: ''
-        })
-        return (
-            <TextField
-                variant="standard"
-                // autoFocus
-                // value={props.value}
-                value={meta.current.searchText}
-                // onChange={props.onChange}
-                onChange={onSeachTextChange}
-                placeholder="Search…"
-                className="global-search"
-                InputProps={{
-                    startAdornment: <Search fontSize="small" />,
-                    endAdornment: (
-                        <IconButton
-                            title="Clear"
-                            aria-label="Clear"
-                            size="small"
-                            sx={{
-                                visibility: meta.current.searchText ? 'visible' : 'hidden'
-                            }}
-                            // style={{
-                            //     visibility: props.value
-                            //         ? 'visible'
-                            //         : 'hidden',
-                            // }}
-                            // onClick={props.clearSearch}
-                            onClick={clearSearch}>
-                            <CloseSharp fontSize="small" />
-                        </IconButton>
-                    ),
-                }}
-            />
-        )
-
-        function clearSearch() {
-            meta.current.searchText = ''
-            // requestSearch('')
-        }
-
-        function onSeachTextChange(event: any) {
-            meta.current.searchText = event.target.value
-            setRefresh({})
-            // debounceEmit(
-            //     'XX-GRID-SEARCH-DEBOUNCE',
-            //     event.target.value
-            // )
         }
     }
 }

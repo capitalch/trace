@@ -155,8 +155,9 @@ export { LaunchPad }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         title: {
-            color: theme.palette.primary.dark,
-            marginTop: theme.spacing(1),
+            color: theme.palette.common.black,
+            fontWeight:'bold',
+            // marginTop: theme.spacing(0.1),
             marginBottom: theme.spacing(0.2),
         },
     })

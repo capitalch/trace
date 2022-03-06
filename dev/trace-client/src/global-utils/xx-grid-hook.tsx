@@ -21,17 +21,24 @@ function useXXGrid(gridOptions: any) {
         selectedSummary: {},
         searchText: '',
         viewLimit: 0,
+        // isFirstTime: false
     })
 
-    const { emit, debounceEmit, debounceFilterOn, filterOn } = useIbuki()
+    const { emit, debounceFilterOn, filterOn } = useIbuki()
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const pre: any = meta.current
+
+    useEffect(()=>{
+        meta.current.searchTextRef.current && meta.current.searchTextRef.current.focus()
+        // meta.current.isFirstTime = false
+    })
 
     useEffect(() => {
         let { sqlQueryArgs, sqlQueryId } = gridOptions
         pre.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
+        // meta.current.isFirstTime = true
         const fetchIbukiMessage =
             gridOptions?.gridActionMessages?.fetchIbukiMessage ||
             'XX-GRID-FETCH-DATA'
@@ -65,7 +72,8 @@ function useXXGrid(gridOptions: any) {
             fillColumnBalance()
             setRefresh({})
         })
-
+        meta.current.dummyRefFirstTime.current && meta.current.dummyRefFirstTime.current.focus()
+        // setRefresh({})
         return () => {
             pre.isMounted = false
             subs1.unsubscribe()
@@ -77,8 +85,6 @@ function useXXGrid(gridOptions: any) {
     }, [])
 
     const entityName = getCurrentEntity()
-
-    
 
     async function fetchRows(queryId: string, queryArgs: any) {
         if (!queryId || !queryArgs) {
@@ -271,20 +277,18 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                    (value >= 0 ? ' Dr' : ' Cr')
+                        (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
     }
-
-    
 
     function onSelectModelChange(rowIds: any) {
         const rows = pre.allRows
@@ -333,6 +337,7 @@ function useXXGrid(gridOptions: any) {
 
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
+        meta.current.searchTextRef.current.focus()
     }
 
     function setAllSummary() {
