@@ -81,7 +81,7 @@ create installer from innosetup
 
 # Fixing short pending
 
-1.2 Account balances in vouchers
+1.2 Headings and labels uniform font and naming
 1.3 
 1.4 Remove material-table from authentication/generic-crud; its using old version of material-ui
 2. Debit credit notes printing

@@ -37,6 +37,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
         shortCircuit,
         showDialogMenu,
         snackbar,
+        // submitButtonRef,
         submitDialog,
     } = useTraceHeader()
 
@@ -210,7 +211,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     if (e.key === 'Escape') {
                         closeDialog()
                     } else if (e.key === 'Enter') {
-                        submitDialog()
+                        // submitDialog() // Its not working, giving error
                     }
                 }}
                 open={meta.current.showDialog}

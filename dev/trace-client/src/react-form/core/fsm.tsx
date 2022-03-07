@@ -106,10 +106,10 @@ function manageFormsState() {
         }
 
         function init(formId: string, controlId: string) {
-            const allControlsRef = store[formId].allControls || (store[formId].allControls = {})
+            const allControlsRef = store[formId]?.allControls || (store[formId].allControls = {})
             const controlRef = allControlsRef[controlId] || (allControlsRef[controlId] = {}) // returns value if exists or {}
             const validatorsRef: any[] = controlRef.validators || (controlRef.validators = [])// returns value if exists or []
-            const errorsRef = controlRef.errors || (controlRef.errors = {})
+            const errorsRef = controlRef?.errors || (controlRef.errors = {})
             return { controlRef, validatorsRef, errorsRef, allControlsRef }
         }
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from '../imports/regular-imports'
+import { useRef, useEffect, useState } from '../imports/regular-imports'
 import {
     Button,
     IconButton,
@@ -40,6 +40,7 @@ import messages from '../entities/authentication/messages.json'
 
 function useTraceHeader() {
     const [, setRefresh] = useState({})
+
     const meta: any = useRef({
         isMounted: true,
         menuHead: [],
@@ -60,6 +61,7 @@ function useTraceHeader() {
             dialogActions: <></>,
         },
     })
+    meta.current.submitButtonRef = useRef()
     const { emit } = useIbuki()
     const { getSqlObjectString } = utilMethods()
     const {
@@ -82,13 +84,15 @@ function useTraceHeader() {
     const { doValidateForm, isValidForm } = getValidationFabric()
     const { TraceFullWidthSubmitButton }: any = useTraceMaterialComponents()
     const classes = useStyles()
-    const snackbar:any = useRef({
+    const snackbar: any = useRef({
         severity: 'success',
         open: false,
         message: globalMessages['operationSuccessful'],
         duration: 5000,
     })
-
+    // useEffect(()=>{
+    //     const x = meta.current.submitButtonRef
+    // })
     // for closing snackbar
     function handleClose() {
         snackbar.current.open = false
@@ -139,6 +143,7 @@ function useTraceHeader() {
         return (
             <DialogActions>
                 <TraceFullWidthSubmitButton
+                    // ref={meta.current.submitButtonRef}
                     onClick={() => {
                         submitDialog()
                     }}></TraceFullWidthSubmitButton>
@@ -177,7 +182,7 @@ function useTraceHeader() {
                 <ListItem
                     button
                     key={0}
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', superAdminMenuJson)
                         emit('LOAD-MAIN-COMPONENT', '')
@@ -195,7 +200,7 @@ function useTraceHeader() {
                 <ListItem
                     button
                     key={1}
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', adminMenuJson)
                         emit('LOAD-MAIN-COMPONENT', '')
@@ -213,7 +218,7 @@ function useTraceHeader() {
                 <ListItem
                     button
                     key={2}
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                         meta.current.dialogConfig.title = 'Uid change'
                         meta.current.dialogConfig.formId = 'changeUid'
                         changeUidJson.items[0].value = meta.current.uid
@@ -238,7 +243,7 @@ function useTraceHeader() {
                 <ListItem
                     button
                     key={3}
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                         meta.current.dialogConfig.title = 'Change password'
                         meta.current.dialogConfig.formId = 'changePwd'
                         changePwdJson.items[0].value = meta.current.uid
@@ -264,7 +269,7 @@ function useTraceHeader() {
                 <ListItem
                     button
                     key={4}
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                         logout()
                         meta.current.showDialog = false
                         meta.current.isMounted && setRefresh({})
@@ -310,7 +315,7 @@ function useTraceHeader() {
                         size="small"
                         variant="text"
                         className={classes.forgotPwdButton}
-                        onClick={(e:any) => {
+                        onClick={(e: any) => {
                             meta.current.dialogConfig.title = 'Forgot password'
                             meta.current.dialogConfig.formId = 'forgotPwd'
                             meta.current.dialogConfig.formJson = forgotPwdJson
@@ -344,7 +349,7 @@ function useTraceHeader() {
             )
             const q = queries['doLogin'](base64UidPwd)
             const result: any = await queryGraphql(q)
-            if(!result){
+            if (!result) {
                 throw Error(messages.serverError)
             }
             const login: any = result?.data?.authentication?.doLogin
@@ -539,13 +544,14 @@ function useTraceHeader() {
         shortCircuit,
         showDialogMenu,
         snackbar,
+        // submitButtonRef,
         submitDialog,
     }
 }
 
 export { useTraceHeader }
 
-const useStyles: any = makeStyles((theme:Theme) =>
+const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         dialogContent: {
             paddingTop: '0px',

@@ -122,7 +122,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         toggleOrder,
     } = useXXGrid(gridOptions)
     meta.current.searchTextRef = useRef() // To set focus to search box after refresh
-    meta.current.dummyRefFirstTime = useRef()
+    // meta.current.dummyRefFirstTime = useRef()
     const { debounceEmit, emit } = useIbuki()
     const { isMediumSizeDown } = useTraceGlobal()
     const { toDecimalFormat } = utilMethods()
@@ -158,6 +158,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     value: meta.current.searchText,
                     onChange: (event: any) => {
                         meta.current.searchText = event.target.value
+                        meta.current.isSearchTextEdited = true // For not to setfocus search box first time. Otherwise mobit edit pad occurs which takes lot of screen space. Only on click of search box the focus happens
                         meta.current.isMounted && setRefresh({})
                         debounceEmit(
                             'XX-GRID-SEARCH-DEBOUNCE',
@@ -187,7 +188,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 <Box className='sub-title'>
                     <Typography variant='subtitle2'>{subTitle}</Typography>
                 </Box>
-                <Box ref={meta.current.dummyRefFirstTime} className='main-container'>
+                <Box className='main-container'>
                     <Box className="toolbar-left-items">
                         <Typography className="toolbar-title">{title}</Typography>
                         <div>
@@ -309,6 +310,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                         <TextField
                             inputRef={meta.current.searchTextRef}
                             variant="standard"
+                            autoComplete='off'
                             // autoFocus={!meta.current.isFirstTime}
                             value={props.value}
                             onChange={props.onChange}

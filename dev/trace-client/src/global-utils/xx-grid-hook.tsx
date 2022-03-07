@@ -21,7 +21,7 @@ function useXXGrid(gridOptions: any) {
         selectedSummary: {},
         searchText: '',
         viewLimit: 0,
-        // isFirstTime: false
+        isSearchTextEdited: false
     })
 
     const { emit, debounceFilterOn, filterOn } = useIbuki()
@@ -29,9 +29,10 @@ function useXXGrid(gridOptions: any) {
     const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const pre: any = meta.current
 
-    useEffect(()=>{
-        meta.current.searchTextRef.current && meta.current.searchTextRef.current.focus()
-        // meta.current.isFirstTime = false
+    useEffect(() => {
+        if (meta.current.isSearchTextEdited && meta.current.searchTextRef.current) {
+            meta.current.searchTextRef.current.focus()
+        }
     })
 
     useEffect(() => {
@@ -72,7 +73,7 @@ function useXXGrid(gridOptions: any) {
             fillColumnBalance()
             setRefresh({})
         })
-        meta.current.dummyRefFirstTime.current && meta.current.dummyRefFirstTime.current.focus()
+        // meta.current.dummyRefFirstTime.current && meta.current.dummyRefFirstTime.current.focus()
         // setRefresh({})
         return () => {
             pre.isMounted = false
@@ -277,14 +278,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }
@@ -337,7 +338,8 @@ function useXXGrid(gridOptions: any) {
 
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
-        meta.current.searchTextRef.current.focus()
+
+        // meta.current.searchTextRef.current.focus()
     }
 
     function setAllSummary() {
