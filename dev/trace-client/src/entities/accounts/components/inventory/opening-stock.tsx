@@ -1,13 +1,13 @@
-import { Box, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, useTheme } from './redirect'
+import { Box, Typography, useSharedElements, useTheme } from './redirect'
 import { useOpeningStock } from "./opening-stock-hook"
 import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
 function OpeningStock() {
     const { XXGrid } = useSharedElements()
     const { getXXGriArtifacts, } = useOpeningStock()
-    const { actionMessages, columns, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
+    const { actionMessages, columns, jsonFieldPath, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
     const theme = useTheme()
-    // const pre = meta.current
+
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: theme.spacing(1), columnGap: theme.spacing(3), justifyContent: 'space-evenly' }}>
             {/* New / Edit entry */}
@@ -33,11 +33,13 @@ function OpeningStock() {
                     sx={{ border: '4px solid orange', p: 2, width: '100%' }}
                     autoFetchData={true}
                     columns={columns}
+                    customFooterField1={{ label: 'Total', value: 233.44, path: 'jsonResult.value' }}
                     gridActionMessages={actionMessages}
                     hideFiltersButton={true}
                     hideColumnsButton={true}
                     hideExportButton={true}
                     hideViewLimit={false}
+                    jsonFieldPath={jsonFieldPath}
                     specialColumns={specialColumns}
                     sqlQueryArgs={sqlQueryArgs}
                     sqlQueryId={sqlQueryId}
@@ -45,7 +47,6 @@ function OpeningStock() {
                 // title={title}
                 />
             </Box>
-
         </Box>)
 }
 

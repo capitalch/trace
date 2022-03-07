@@ -25,7 +25,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     const { getLoginData, setCurrentEntity, resetBag }: any =
         manageEntitiesState() //login data is independent of any entity
     const { isMediumSizeUp } = useTraceGlobal()
-    
+
     const {
         closeDialog,
         doLogin,
@@ -57,7 +57,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
     // })
     //For increasing width of dialog window when medium size i.e 960 px and up is achieved
 
-    
+
     if (isMediumSizeUp) {
         meta.current.dialogConfig.loginScreenSize = '360px'
     } else {
@@ -85,7 +85,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                 d.data.message || 'Operation was successful'
             snackbar.current.duration =
                 d.data.duration !== undefined ? d.data.duration : 4000
-                curr.isMounted && setRefresh({})
+            curr.isMounted && setRefresh({})
         })
 
         const subs3: any = filterOn('DATACACHE-SUCCESSFULLY-LOADED').subscribe(
@@ -164,35 +164,38 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     endIcon={<ArrowDropDownSharp></ArrowDropDownSharp>}
                     onClick={handleLoginClick}>
                     {
-                    meta.current.uid ? 
-                    (
-                        <Chip
-                            className={classes.loginButtonChip}
-                            size="small"
-                            color="secondary"
-                            clickable={true}
-                            label={
-                                <Typography variant="body2">
-                                    {'Hello '}
-                                </Typography>
-                            }
-                            avatar={
-                                <Avatar>
-                                    {meta.current.uid.substring(0, 2)}
-                                </Avatar>
-                            }></Chip>
-                    ) : (
-                        'Login'
-                    )
+                        meta.current.uid ?
+                            (
+                                <Chip
+                                    className={classes.loginButtonChip}
+                                    size="small"
+                                    color="secondary"
+                                    clickable={true}
+                                    label={
+                                        <Typography variant="body2">
+                                            {'Hello '}
+                                        </Typography>
+                                    }
+                                    avatar={
+                                        <Avatar>
+                                            {meta.current.uid.substring(0, 2)}
+                                        </Avatar>
+                                    }></Chip>
+                            ) : (
+                                'Login'
+                            )
                     }
                 </Button>
             )
         }
         return labels
     }
-
+    
+    const DialogTitle = () => meta.current.dialogConfig.dialogTitle
+    const DialogContent = () => meta.current.dialogConfig.dialogContent
+    const DialogActions = () => meta.current.dialogConfig.dialogActions
     return (
-         <Toolbar>
+        <Toolbar>
             <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -211,7 +214,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     if (e.key === 'Escape') {
                         closeDialog()
                     } else if (e.key === 'Enter') {
-                        // submitDialog() // Its not working, giving error
+                        submitDialog() // Its not working, giving error                      
                     }
                 }}
                 open={meta.current.showDialog}
@@ -220,9 +223,12 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                         closeDialog()
                     }
                 }}>
-                {meta.current.dialogConfig.dialogTitle}
-                {meta.current.dialogConfig.dialogContent}
-                {meta.current.dialogConfig.dialogActions}
+                <DialogTitle />
+                <DialogContent />
+                <DialogActions />
+                {/* {meta.current.dialogConfig.dialogTitle} */}
+                {/* {meta.current.dialogConfig.dialogContent} */}
+                {/* {meta.current.dialogConfig.dialogActions} */}
             </Dialog>
             <Snackbar
                 style={{ bottom: '0.6rem', right: '0.5rem' }}
@@ -239,7 +245,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     {snackbar.current.message}
                 </Alert>
             </Snackbar>
-         </Toolbar>
+        </Toolbar>
     )
 }
 export { TraceHeader }

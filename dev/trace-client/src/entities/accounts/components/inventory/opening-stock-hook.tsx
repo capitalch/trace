@@ -1,4 +1,4 @@
-import { _, Box, moment, Typography, useEffect, useRef, useSharedElements, useState, useTheme } from './redirect'
+import { moment, useEffect, useRef, useSharedElements, useState, } from './redirect'
 
 function useOpeningStock() {
     const [, setRefresh] = useState({})
@@ -11,15 +11,14 @@ function useOpeningStock() {
     const pre = meta.current
     useEffect(() => {
         const subs1 = filterOn(actionMessages.deleteIbukiMessage).subscribe(handleDelete)
-        // const subs2 = filterOn(actionMessages.editIbukiMessage).subscribe((d: any) => emit('OPENING-STOCH-WORK-BENCH-HOOK-EDIT-OPENING-STOCK', d.data))
         return (() => {
             subs1.unsubscribe()
-            // subs2.unsubscribe()
         })
     }, [])
 
     function getXXGriArtifacts() {
-        const sqlQueryId = 'get_stock_op_bal'
+        const sqlQueryId = 'getJson_opening_stock'
+        const jsonFieldPath = 'jsonResult.openingStock'
         const sqlQueryArgs = {}
         const actionMessages = {
             fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-OPENING-STOCK',
@@ -91,7 +90,7 @@ function useOpeningStock() {
             },
         ]
 
-        return ({ actionMessages, columns, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, })
+        return ({ actionMessages, columns, jsonFieldPath, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, })
     }
 
     function handleDelete(d: any) {
@@ -120,10 +119,6 @@ function useOpeningStock() {
             })
         }
     }
-
-    // function handleEdit(d: any) {
-
-    // }
 
     return ({ getXXGriArtifacts, })
 

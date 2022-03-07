@@ -642,19 +642,19 @@ allSqls = {
 			or "info" ILIKE ANY(array[someArgs])
     ''',
 
-    "get_stock_op_bal": '''
-        select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
-            from "ProductOpBal" a
-                join "ProductM" p
-                    on p."id" = a."productId"
-                join "CategoryM" c
-                    on c."id" = p."catId"
-                join "BrandM" b
-                    on b."id" = p."brandId"
-        where "finYearId" = %(finYearId)s 
-            and "branchId" = %(branchId)s
-        order by a."id" DESC
-    ''',
+    # "get_stock_op_bal": '''
+    #     select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
+    #         from "ProductOpBal" a
+    #             join "ProductM" p
+    #                 on p."id" = a."productId"
+    #             join "CategoryM" c
+    #                 on c."id" = p."catId"
+    #             join "BrandM" b
+    #                 on b."id" = p."brandId"
+    #     where "finYearId" = %(finYearId)s 
+    #         and "branchId" = %(branchId)s
+    #     order by a."id" DESC
+    # ''',
 
     "get_tranHeaders_details": '''
         select h."id" as "tranHeaderId", "tranDate", "autoRefNo", "tags", d."id" as "tranDetailsId",
@@ -1170,6 +1170,30 @@ allSqls = {
 		) as "jsonResult"
     ''',
 
+    "getJson_opening_stock":'''
+        with cte1 as (
+            select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
+                        from "ProductOpBal" a
+                            join "ProductM" p
+                                on p."id" = a."productId"
+                            join "CategoryM" c
+                                on c."id" = p."catId"
+                            join "BrandM" b
+                                on b."id" = p."brandId"
+                    where "finYearId" = %(finYearId)s 
+                        and "branchId" = %(branchId)s
+                    order by a."id" DESC),
+        cte2 as (
+            select SUM("qty" * "openingPrice") as value
+                from "ProductOpBal"
+            where "finYearId" = %(finYearId)s 
+                    and "branchId" = %(branchId)s)
+            select json_build_object(
+                'openingStock',(SELECT json_agg(row_to_json(a)) from cte1 a)
+                , 'value', (SELECT value from cte2)
+            ) as "jsonResult"
+    ''',
+    
     'getJson_sale_purchase_on_id': '''
         with cte1 as (
             select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData", "tranTypeId"

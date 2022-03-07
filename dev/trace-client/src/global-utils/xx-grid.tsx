@@ -33,6 +33,7 @@ import {
 
 import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
+import { prependListener } from 'process'
 
 interface SpecialColumnOptions {
     isEdit?: boolean
@@ -59,6 +60,7 @@ interface XXGridOptions {
     autoFetchData?: boolean
     className?: string
     columns: any[]
+    customFooterField1?: { label: string, path?: string, value?: number }
     disableSelectionOnClick?: boolean
     editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
@@ -174,6 +176,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     selectedSummary: meta.current.selectedSummary,
                     filteredSummary: meta.current.filteredSummary,
                     allSummary: meta.current.allSummary,
+                    customFooterField1: gridOptions.customFooterField1
                 },
             }}
             onSelectionModelChange={onSelectModelChange}
@@ -347,6 +350,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 <FilteredMarkup />
                 <AllMarkup />
                 {gridOptions.toShowClosingBalance && <ClosingBalanceMarkup />}
+                {gridOptions.customFooterField1 && <CustomFooterField1Markup />}
             </GridFooterContainer>
         )
 
@@ -412,6 +416,14 @@ function XXGrid(gridOptions: XXGridOptions) {
                     </div>
                 )
             }
+        }
+
+        function CustomFooterField1Markup() {
+            const { customFooterField1 }: any = props
+            return (<Box component='div'>
+                <span>{customFooterField1?.label}{' '}</span>
+                {/* <span>{meta.current.fetchData[customFooterField1.]}</span> */}
+            </Box>)
         }
 
         function FilteredMarkup() {

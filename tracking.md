@@ -1,5 +1,3 @@
-https://tempail.com/en/
-
 ## Oopening stock pending
 1. XXGrid search button as separate component without autofocus
                                                                 2. Download categories and brands also with products
@@ -9,7 +7,6 @@ https://tempail.com/en/
 6. Total opening stock valuation at footer
 7. 
 
-sample GSTIN: 37AADCS0472N1Z1
 ## Planning
                                                                                         1. Authentication and user management:                    1 week, 5th Feb 2022
                                                                                             SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
@@ -29,16 +26,13 @@ sample GSTIN: 37AADCS0472N1Z1
 
 1. Bug: Product category self edit, and also not refreshing
 2. Remaining of Opening stock and products                1 day, 4th Mar
-3. Bug while login, when press enter key                  .5 day, 5the Mar
-4. Bug fix: Opening account balances                      .5 day, 5th Mar
+                                                                                        3. Bug while login, when press enter key                  .5 day, 5the Mar
+                                                                                        4. Bug fix: Opening account balances                      .5 day, 5th Mar
 4. Full reporting of Inventory and allied:                1 week, 12rd Mar
 5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
 19. Stock Journals                                        3 days, 17th Mar
 3. Sale bill print correction                             1 day, 18th Mar
-5. 
-    
-                                                                                        
-12. 
+4. Simple sale bill
                                                                                         
 13. Debit credit notes printing                           3 days, 12th Mar
 15. PDF print, BS, PL and TB                              3 days, 15th Mar
@@ -47,28 +41,7 @@ sample GSTIN: 37AADCS0472N1Z1
 18. Fix Accounts master, new contact twice                4 days, 23th Mar
 
 
-## Service SMS
-#custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
-{#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV
-## Awe some react components libraries
-1. https://github.com/brillout/awesome-react-components
-2. Followed https://medium.com/@devesu/how-to-build-a-react-based-electron-app-d0f27413f17f
-	for Electron React Typescript native app
 
-# Awesome GitHub repositories
-1. Awesome: https://github.com/sindresorhus/awesome
-2. Free programming books: https://github.com/EbookFoundation/free-programming-books
-3. Essential Javascript links: https://gist.github.com/ericelliott/d576f72441fc1b27dace/0cee592f8f8b7eae39c4b3851ae92b00463b67b9
-4. gitignore several templates: https://github.com/github/gitignore
-5. Frontend checklist: Everything you need to check your website like seo etc.: https://github.com/thedaviddias/Front-End-Checklist
-
-## pyinstaller command for tkenter
-# acivate env where pyinstaller is installed
-pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
-create installer from innosetup
-
-## Testing strategy
-1. Delete all orphan entries in TranH table
 
 # Priority 1
                                                                                                 1.0 Auto subledger create bill
@@ -82,7 +55,7 @@ create installer from innosetup
 # Fixing short pending
 
 1.2 Headings and labels uniform font and naming
-1.3 
+1.3 Left menu to make consige and more accomodating
 1.4 Remove material-table from authentication/generic-crud; its using old version of material-ui
 2. Debit credit notes printing
 3. In Grid view provide title, header and subtitle. Check if alteration possible while PDF printing
@@ -117,6 +90,11 @@ create installer from innosetup
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances 
+
+# 07-03-2022
+1. Login error when key pressed, rectified
+2. Category errors rectified
+3. Vouchers: Instr no required when bank tran
 
 # 29-02-2022 - 06-03-2022
 1. Completed Opening stock with new product
@@ -868,53 +846,3 @@ nothing
 1. Edit / new is not retaining values bug fix
 2. When balance sheet is selected then click payroll, then click accounts. Error occurs.
 3. Client side change entity 'super-admin' to 'authentication'
-
-
-
-// find out vouchers where SUM of debits not equal to credits
-set search_path to demounit1;
-with cte1 as (
-select "autoRefNo", SUM(CASE WHEN "dc" = 'D' then "amount" else -"amount" end) as "amount"
-    from "TranD" d join "TranH" h on h."id" = d."tranHeaderId"
-        group by "autoRefNo"
-)
-select "autoRefNo", sum("amount") as "amount" from cte1 
-    where "amount" <> 0
-        group by "autoRefNo"
-
-* Find out duplicates in AccOpBal table
-    set search_path to demounit1;
-    select * from (
-      SELECT id,
-      ROW_NUMBER() OVER(PARTITION BY "accId", "finYearId", "branchId" ORDER BY id asc) AS "noOfTimes"
-      FROM "AccOpBal"
-    ) dups
-    where 
-    dups."noOfTimes" > 1
-
-set search_path to demounit1;
-select h."id" as "tranHeaderId", "autoRefNo", "userRefNo", h."remarks" as "commonRemarks",
-	(
-		with cte1 as (
-			select d."id" as "tranDetailsId", d."accId", d."remarks", d."amount", d."lineRefNo"
-				from "TranD"
-					where "tranHeaderId" = h."id"
-						and "dc" = 'D'
-		)
-		select row_to_json(a) from cte1 a
-	) as "debit"
-	
-	from "TranH" h
- 		join "TranD" d
- 			on h."id" = d."tranHeaderId"
-	where "tranTypeId" = 7
-
-GST
-Capital Chowr. Pvt Ltd  : 19AACCC5685L1Z3
-Capital Electronics old : 19ADMPA9760G1Z9
-Capital Electronics   : AA190917007566R
-CCPL          : 19AACCC5685L1Z3
-Nav technology      : 19AEVPA1583K1Z0
-NTPL          : 19AABCN7935M1ZU
-SSPL          : 19AAJCS0651F1ZD
-Netwoven        : 19AACCN3894N1ZP

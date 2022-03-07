@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from '../imports/regular-imports'
+import { useRef, useState } from '../imports/regular-imports'
 import {
     Button,
     IconButton,

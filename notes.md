@@ -1,4 +1,31 @@
+* Temp email
+https://tempail.com/en/
+
+## Service SMS
+#custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
+{#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV
+## Awe some react components libraries
+1. https://github.com/brillout/awesome-react-components
+2. Followed https://medium.com/@devesu/how-to-build-a-react-based-electron-app-d0f27413f17f
+    for Electron React Typescript native app
+
+# Awesome GitHub repositories
+1. Awesome: https://github.com/sindresorhus/awesome
+2. Free programming books: https://github.com/EbookFoundation/free-programming-books
+3. Essential Javascript links: https://gist.github.com/ericelliott/d576f72441fc1b27dace/0cee592f8f8b7eae39c4b3851ae92b00463b67b9
+4. gitignore several templates: https://github.com/github/gitignore
+5. Frontend checklist: Everything you need to check your website like seo etc.: https://github.com/thedaviddias/Front-End-Checklist
+
+## pyinstaller command for tkenter
+# acivate env where pyinstaller is installed
+pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
+create installer from innosetup
+
+## Testing strategy
+1. Delete all orphan entries in TranH table
+
 // find out vouchers where SUM of debits not equal to credits
+set search_path to demounit1;
 with cte1 as (
 select "autoRefNo", SUM(CASE WHEN "dc" = 'D' then "amount" else -"amount" end) as "amount"
     from "TranD" d join "TranH" h on h."id" = d."tranHeaderId"
@@ -8,6 +35,16 @@ select "autoRefNo", sum("amount") as "amount" from cte1
     where "amount" <> 0
         group by "autoRefNo"
 
+* Find out duplicates in AccOpBal table
+    set search_path to demounit1;
+    select * from (
+      SELECT id,
+      ROW_NUMBER() OVER(PARTITION BY "accId", "finYearId", "branchId" ORDER BY id asc) AS "noOfTimes"
+      FROM "AccOpBal"
+    ) dups
+    where 
+    dups."noOfTimes" > 1
+    
 // React responsive through hooks and context api
 https://blog.logrocket.com/developing-responsive-layouts-with-react-hooks/
 
@@ -21,8 +58,6 @@ Valid GSTIN numbers for testing:
 24AADCB2230M1Z2
 06AADCB2230M1ZX
 37AADCB2230M2ZR
-
-//logic for intra component messages
 
 // To replace a double quote between two double quotes
 1. convert json string from regex split to list of words

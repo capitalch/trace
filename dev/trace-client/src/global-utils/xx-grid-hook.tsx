@@ -9,6 +9,7 @@ function useXXGrid(gridOptions: any) {
     const meta: any = useRef({
         allRows: [],
         allSummary: {},
+        fetchedData: {},
         filteredRows: [],
         filteredSummary: {},
         hashCurrentData: null,
@@ -39,7 +40,6 @@ function useXXGrid(gridOptions: any) {
         let { sqlQueryArgs, sqlQueryId } = gridOptions
         pre.isMounted = true
         gridOptions.autoFetchData && fetchRows(sqlQueryId, sqlQueryArgs)
-        // meta.current.isFirstTime = true
         const fetchIbukiMessage =
             gridOptions?.gridActionMessages?.fetchIbukiMessage ||
             'XX-GRID-FETCH-DATA'
@@ -138,6 +138,7 @@ function useXXGrid(gridOptions: any) {
                     ret1
                 )
             }
+            meta.current.fetcheddata = ret1
             emit('SHOW-LOADING-INDICATOR', false)
             const path = gridOptions.jsonFieldPath
             let rows = ret1
