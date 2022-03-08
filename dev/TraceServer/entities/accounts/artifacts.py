@@ -204,7 +204,8 @@ def resolve_generic_update_master(parent, info, value):
     if(insertCodeBlock):
         valueDict['insertCodeBlock'] = allSqls[insertCodeBlock]
 
-    ret, res = execGenericUpdateMaster(dbName, valueDict, buCode, branchId, finYearId)
+    ret, res = execGenericUpdateMaster(
+        dbName, valueDict, buCode, branchId, finYearId)
     # To update the client through sockets
     room = getRoomFromCtx(info.context)
     if isLinkConnected():
@@ -220,7 +221,11 @@ def resolve_generic_update_master(parent, info, value):
             else:
                 # Account edited or updated. Query the new account based on Id
                 sendToRoom('TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED', res, room)
+        elif(tableName == 'ProductM'):
+            if(deletedIds):
                 pass
+            else:
+                sendToRoom('TRACE-SERVER-PRODUCT-ADDED-OR-UPDATED', res, room)
     return ret
 
 

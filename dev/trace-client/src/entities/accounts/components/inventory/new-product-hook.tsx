@@ -3,8 +3,8 @@ import { _, useEffect, useRef, useSharedElements, useState, utilMethods } from '
 function useNewProduct(onClose: any, product: any = {}) {
     const [, setRefresh] = useState({})
     const { emit, genericUpdateMasterNoForm, getFromBag } = useSharedElements()
-    const finYearId = getFromBag('finYearObject')?.finYearId
-    const branchId = getFromBag('branchObject')?.branchId || 1
+    // const finYearId = getFromBag('finYearObject')?.finYearId
+    // const branchId = getFromBag('branchObject')?.branchId || 1
     const {extractAmount} = utilMethods()
     const meta = useRef({
         id: undefined,
@@ -80,8 +80,8 @@ function useNewProduct(onClose: any, product: any = {}) {
                     label: pre.label,
                     upcCode: pre.upcCode,
                     gstRate: pre.gstRate,
-                    finYearId: finYearId,
-                    branchId: branchId,
+                    // finYearId: finYearId,
+                    // branchId: branchId,
                     salePrice: extractAmount(pre.salePrice),
                     salePriceGst: extractAmount(pre.salePriceGst),
                     maxRetailPrice: extractAmount(pre.maxRetailPrice),
@@ -92,6 +92,7 @@ function useNewProduct(onClose: any, product: any = {}) {
             })
             ret && onClose()
             emit('SHOW-LOADING-INDICATOR', false)
+            emit('XX-GRID-HOOK-FETCH-PRODUCTS','') // refreshes the grid to show new / edited products
         } catch (e: any) {
             emit('SHOW-LOADING-INDICATOR', false)
         }

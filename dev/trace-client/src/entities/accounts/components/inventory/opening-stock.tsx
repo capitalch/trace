@@ -5,9 +5,9 @@ import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 function OpeningStock() {
     const { XXGrid } = useSharedElements()
     const { getXXGriArtifacts, } = useOpeningStock()
-    const { actionMessages, columns, jsonFieldPath, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
+    const { actionMessages, columns, jsonFieldPath,meta, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
     const theme = useTheme()
-
+    const pre = meta.current
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: theme.spacing(1), columnGap: theme.spacing(3), justifyContent: 'space-evenly' }}>
             {/* New / Edit entry */}
@@ -16,7 +16,7 @@ function OpeningStock() {
                     color="primary"
                     variant='subtitle1'
                     component="span">
-                    Opening stock (New / Edit)
+                    {pre.title}
                 </Typography>
                 <OpeningStockWorkBench />
             </Box>
@@ -35,10 +35,10 @@ function OpeningStock() {
                     columns={columns}
                     customFooterField1={{ label: 'Value', value: 233.44, path: 'jsonResult.value' }}
                     gridActionMessages={actionMessages}
-                    hideFiltersButton={true}
+                    // hideFilteredButton={true}
                     hideColumnsButton={true}
                     hideExportButton={true}
-                    hideViewLimit={false}
+                    hideViewLimit={true}
                     jsonFieldPath={jsonFieldPath}
                     specialColumns={specialColumns}
                     sqlQueryArgs={sqlQueryArgs}

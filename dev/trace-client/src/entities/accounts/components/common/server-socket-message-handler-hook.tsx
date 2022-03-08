@@ -3,11 +3,12 @@ import { useSharedElements } from './shared-elements-hook'
 
 function useServerSocketMessageHandler() {
     const { emit, getFromBag, } = useSharedElements()
-    const allAccounts: any[] = getFromBag('allAccounts')
+    const allAccounts: any[] = getFromBag('allAccounts')    
     const socketObject: any = {
         'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE': handleMasterDetailsUpdateDone,
-        'TRACE-SERVER-NEW-ACCOUNT-CREATED': newAccountCreated,
+        'TRACE-SERVER-NEW-SUBLEDGER-ACCOUNT-CREATED': newSubledgerAccountCreated,
         'TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED': accountAddedOrUpdated,
+        'TRACE-SERVER-PRODUCT-ADDED-OR-UPDATED': productAddedOrUpdated
     }
     function socketMessageHandler(d: any) {
         const { message, data } = d
@@ -19,9 +20,9 @@ function useServerSocketMessageHandler() {
         }
     }
 
-    function accountAddedOrUpdated(data: any){
-        const acc = allAccounts.find((x:any)=>x.id === data.id)
-        if(acc){
+    function accountAddedOrUpdated(data: any) {
+        const acc = allAccounts.find((x: any) => x.id === data.id)
+        if (acc) {
             acc.accCode = data.accCode
             acc.accName = data.accName
         } else {
@@ -32,7 +33,6 @@ function useServerSocketMessageHandler() {
 
     function handleMasterDetailsUpdateDone(data: any) {
         // set accounts balances in data-cache
-        
         if (!_.isEmpty(data)) {
             for (const key of Object.keys(data)) {
                 const acc = allAccounts.find((x: any) => x.id === (+key))
@@ -42,12 +42,25 @@ function useServerSocketMessageHandler() {
         emit('TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE', data)
     }
 
-    function newAccountCreated(data: any) {
+    function newSubledgerAccountCreated(data: any) {
         // change accId to id and append data to global accounts
         data.id = data.accId
         data.accId = undefined
         const allAccounts: any[] = getFromBag('allAccounts')
         allAccounts.push(data)
+    }
+
+    function productAddedOrUpdated(data: any) {
+        const products: any[] = getFromBag('products')
+        if(_.isEmpty(products)){
+            return
+        }
+        let product = products.find((x: any) => x.id === data.id)
+        if(product){
+            product = data
+        } else{
+            products.unshift(data)
+        }
     }
 
     return ({ socketMessageHandler })

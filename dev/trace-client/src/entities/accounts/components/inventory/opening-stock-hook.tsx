@@ -1,14 +1,14 @@
-import { moment, useEffect, useRef, useSharedElements, useState, } from './redirect'
+import { moment, useEffect, useRef, useSharedElements, } from './redirect'
 
 function useOpeningStock() {
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const { globalMessages, confirm, emit, filterOn, genericUpdateMaster, getFromBag, toDecimalFormat } = useSharedElements()
     const meta = useRef({
         title: 'Opening stock (New / Edit)',
     })
     const actionMessages = getXXGriArtifacts().actionMessages
     const dateFormat = getFromBag('dateFormat')
-    const pre = meta.current
+    // const pre = meta.current
     useEffect(() => {
         const subs1 = filterOn(actionMessages.deleteIbukiMessage).subscribe(handleDelete)
         return (() => {
@@ -90,7 +90,7 @@ function useOpeningStock() {
             },
         ]
 
-        return ({ actionMessages, columns, jsonFieldPath, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, })
+        return ({ actionMessages, columns, jsonFieldPath, meta, sqlQueryArgs, sqlQueryId, summaryColNames, specialColumns, })
     }
 
     function handleDelete(d: any) {

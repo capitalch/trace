@@ -1368,7 +1368,7 @@ allSqls = {
             insert into "ProductM"("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
                             "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
             select %(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, "productCode", %(upcCode)s, %(gstRate)s,
-                            %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s from cte1                    
+                            %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s from cte1  returning "id"                  
         ), 
         cte3 as(
             update "Settings"

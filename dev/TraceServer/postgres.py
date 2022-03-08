@@ -15,7 +15,6 @@ with open('config.json') as f:
 
 poolStore = {}
 
-
 def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, finYearId = None):
     connection = None
     ret = None

@@ -1,4 +1,4 @@
-import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Input, NumberFormat, TextField, Tooltip, Typography, useSharedElements, useTheme } from './redirect'
+import { Box, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, } from './redirect'
 import { NewProduct } from './new-product'
 
 
@@ -9,7 +9,7 @@ import { useProducts, useStyles } from './products-hook'
 function Products() {
     const { getXXGridParams, handleCloseDialog, meta } = useProducts()
     const classes = useStyles()
-    const { getGridReportSubTitle, TraceDialog, XXGrid } = useSharedElements()
+    const { getGridReportSubTitle,  XXGrid } = useSharedElements()
     const pre = meta.current
     const {
         columns,
@@ -30,6 +30,7 @@ function Products() {
                 autoFetchData={true}
                 columns={columns}
                 className="xx-grid"
+                sharedData={pre.sharedData}
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}

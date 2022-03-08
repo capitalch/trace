@@ -14,6 +14,7 @@ function useProducts() {
         showDialog: false,
         product: {},
         title: '',
+        sharedData: {},
     })
     const pre = meta.current
     const { handleDelete, } = useCrudUtils(meta)
@@ -58,6 +59,13 @@ function useProducts() {
             subs4.unsubscribe()
         }
     }, [])
+
+    useEffect(() => {
+        const products: any[] = pre.sharedData?.allRows || []
+        if(products.length > 0){
+            setInBag('products', products)
+        }
+    })
 
     function getXXGridParams() {
         const columns = [
@@ -122,7 +130,7 @@ function useProducts() {
             {
                 headerName: 'MRP',
                 description: 'Maximum retail price',
-                field: 'MaxRetailPrice',
+                field: 'maxRetailPrice',
                 type: 'number',
                 width: 130,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),

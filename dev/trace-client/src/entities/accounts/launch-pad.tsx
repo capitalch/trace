@@ -69,10 +69,9 @@ function LaunchPad() {
                 if (d.connected) {
                     const room = getRoom()
                     joinRoom(room)
-                    subs2 = onReceiveData().subscribe(socketMessageHandler
-                    )
+                    subs2 = onReceiveData().subscribe(socketMessageHandler)
                 } else {
-                    subs2 &&(subs2.unsubscribe())
+                    subs2 && (subs2.unsubscribe())
                 }
             }
         )
@@ -156,7 +155,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         title: {
             color: theme.palette.common.black,
-            fontWeight:'bold',
+            fontWeight: 'bold',
             // marginTop: theme.spacing(0.1),
             marginBottom: theme.spacing(2),
         },

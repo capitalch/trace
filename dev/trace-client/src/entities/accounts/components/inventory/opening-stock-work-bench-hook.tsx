@@ -65,7 +65,6 @@ function useOpeningStockWorkBench() {
         pre.qty = row.qty
         pre.openingPrice = row.openingPrice
         pre.lastPurchaseDate = row.lastPurchaseDate
-
         setRefresh({})
     }
 
@@ -120,7 +119,6 @@ function useOpeningStockWorkBench() {
             const ret: any = await execGenericView({
                 isMultipleRows: false,
                 sqlKey: 'getJson_brands_categories_products_units',
-                // sqlKey: 'get_products',
                 args: { no: null },
             })
             products = ret?.jsonResult?.products || []

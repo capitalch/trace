@@ -317,7 +317,7 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
         if(context and childAccObj):
             room = getRoomFromCtx(context)
             if isLinkConnected():
-                sendToRoom('TRACE-SERVER-NEW-ACCOUNT-CREATED', childAccObj, room)
+                sendToRoom('TRACE-SERVER-NEW-SUBLEDGER-ACCOUNT-CREATED', childAccObj, room)
         return ret, res
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)
