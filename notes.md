@@ -1,6 +1,8 @@
 * Temp email
 https://tempail.com/en/
 
+## Python D tale
+
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
 {#var#} Sir, Warranty of your Your Sony set serial No: {#var#} expires soon. To avail extended warranty click {#var#}{#var#}{#var#} - NAV

@@ -196,10 +196,13 @@ def resolve_generic_update_master(parent, info, value):
     deletedIds = valueDict.get('deletedIds', None)
     customCodeBlock = valueDict.get('customCodeBlock')
     updateCodeBlock = valueDict.get('updateCodeBlock')
+    insertCodeBlock = valueDict.get('insertCodeBlock')
     if customCodeBlock is not None:
         valueDict['customCodeBlock'] = allSqls[customCodeBlock]
     if updateCodeBlock is not None:
         valueDict['updateCodeBlock'] = allSqls[updateCodeBlock]
+    if(insertCodeBlock):
+        valueDict['insertCodeBlock'] = allSqls[insertCodeBlock]
 
     ret, res = execGenericUpdateMaster(dbName, valueDict, buCode, branchId, finYearId)
     # To update the client through sockets

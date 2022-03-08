@@ -49,6 +49,7 @@ def getSql(sqlObject, data, fkeyValue):
     valuesTuple = None
     updateCodeBlock = sqlObject.get('updateCodeBlock', None)
     customCodeBlock = sqlObject.get('customCodeBlock', None)
+    insertCodeBlock = sqlObject.get('insertCodeBlock', None)
     if customCodeBlock is not None:
         sql, valuesTuple = (customCodeBlock, data)
     elif 'id' in data and data['id'] is not None and data['id'] != '':
@@ -60,8 +61,11 @@ def getSql(sqlObject, data, fkeyValue):
         else:
             sql, valuesTuple = getUpdateSql(data, sqlObject.get('tableName'))
     else:
-        sql, valuesTuple = getInsertSql(data.copy(), sqlObject.get(
-            'tableName'), sqlObject.get('fkeyName'), fkeyValue)
+        if(insertCodeBlock):
+            sql, valuesTuple = (insertCodeBlock, data)
+        else:
+            sql, valuesTuple = getInsertSql(data.copy(), sqlObject.get(
+                'tableName'), sqlObject.get('fkeyName'), fkeyValue)
     return(sql, valuesTuple)
 
 

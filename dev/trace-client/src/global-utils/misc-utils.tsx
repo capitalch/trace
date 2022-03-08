@@ -107,6 +107,8 @@ function utilMethods() {
             (sqlObject.updateCodeBlock = options.updateCodeBlock)
         options.customCodeBlock &&
             (sqlObject.customCodeBlock = options.customCodeBlock)
+        options.insertCodeBlock &&
+            (sqlObject.insertCodeBlock = options.insertCodeBlock)
 
         sqlObject.tableName = options.tableName
         options.deletedIds && (sqlObject.deletedIds = options.deletedIds)
@@ -119,6 +121,7 @@ function utilMethods() {
         formId?: any
         data?: {}
         customCodeBlock?: string
+        insertCodeBlock?: string
         updateCodeBlock?: string
         entityName?: string
         tableName?: string
@@ -145,6 +148,7 @@ function utilMethods() {
                 const sqlObjectString = getSqlObjectString({
                     data: options.data,
                     customCodeBlock: options.customCodeBlock,
+                    insertCodeBlock: options.insertCodeBlock,
                     updateCodeBlock: options.updateCodeBlock,
                     tableName: options.tableName,
                     deletedIds: options.deletedIds,
@@ -227,6 +231,7 @@ function utilMethods() {
             const sqlObjectString = getSqlObjectString({
                 data: options.data,
                 customCodeBlock: options.customCodeBlock,
+                insertCodeBlock: options.insertCodeBlock,
                 updateCodeBlock: options.updateCodeBlock,
                 tableName: options.tableName,
                 deletedIds: options.deletedIds,
@@ -392,6 +397,7 @@ function utilMethods() {
         tableName?: string
         updateCodeBlock?: string
         customCodeBlock?: string
+        insertCodeBlock?: string
         deletedIds?: any[]
         idInsert?: boolean
         data?: any[]

@@ -138,7 +138,7 @@ function useXXGrid(gridOptions: any) {
                     ret1
                 )
             }
-            meta.current.fetcheddata = ret1
+            meta.current.fetchedData = ret1
             emit('SHOW-LOADING-INDICATOR', false)
             const path = gridOptions.jsonFieldPath
             let rows = ret1

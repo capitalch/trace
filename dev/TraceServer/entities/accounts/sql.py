@@ -1360,7 +1360,24 @@ allSqls = {
                         and "tranTypeId" = %(tranTypeId)s and "finYearId" = %(finYearId)s);
     ''',
 
-    "insert_product_block": '''
+    "insert_product_block":'''
+        with cte1 as(
+	        select "intValue" + 1 as "productCode" from "Settings" where "key" = 'lastProductCode'
+        ),
+        cte2 as (
+            insert into "ProductM"("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
+                            "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
+            select %(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, "productCode", %(upcCode)s, %(gstRate)s,
+                            %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s from cte1                    
+        ), 
+        cte3 as(
+            update "Settings"
+                set "intValue" = (select cte1."productCode" from cte1)
+                    where "key" = 'lastProductCode')
+        select "id" from cte2
+    ''',
+
+    "insert_product_block1": '''
         do $$
             DECLARE lastNo INT;
             begin

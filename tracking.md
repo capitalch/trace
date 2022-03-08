@@ -95,6 +95,7 @@
 1. Login error when key pressed, rectified
 2. Category errors rectified
 3. Vouchers: Instr no required when bank tran
+4. Valuation for opening stock
 
 # 29-02-2022 - 06-03-2022
 1. Completed Opening stock with new product

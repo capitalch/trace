@@ -226,7 +226,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             <div className="view-limit">
                                 <span>View</span>
                                 <select
-                                    value={meta.current.viewLimit || null}
+                                    value={meta.current.viewLimit || ''}
                                     style={{
                                         fontSize: '0.8rem',
                                         width: '4rem',
@@ -420,9 +420,10 @@ function XXGrid(gridOptions: XXGridOptions) {
 
         function CustomFooterField1Markup() {
             const { customFooterField1 }: any = props
+            const value = _.get(meta.current.fetchedData,'jsonResult.value',0)
             return (<Box component='div'>
-                <span>{customFooterField1?.label}{' '}</span>
-                {/* <span>{meta.current.fetchData[customFooterField1.]}</span> */}
+                <b>{customFooterField1?.label}{' '}</b>                
+                <b>{toDecimalFormat(value || 0)}</b>
             </Box>)
         }
 

@@ -33,7 +33,7 @@ function OpeningStock() {
                     sx={{ border: '4px solid orange', p: 2, width: '100%' }}
                     autoFetchData={true}
                     columns={columns}
-                    customFooterField1={{ label: 'Total', value: 233.44, path: 'jsonResult.value' }}
+                    customFooterField1={{ label: 'Value', value: 233.44, path: 'jsonResult.value' }}
                     gridActionMessages={actionMessages}
                     hideFiltersButton={true}
                     hideColumnsButton={true}

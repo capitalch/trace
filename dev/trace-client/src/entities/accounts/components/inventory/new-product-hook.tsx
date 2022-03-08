@@ -67,7 +67,7 @@ function useNewProduct(onClose: any, product: any = {}) {
             emit('SHOW-LOADING-INDICATOR', true)
             const ret = await genericUpdateMasterNoForm({
                 tableName: 'ProductM',
-                customCodeBlock: 'insert_product_block',
+                insertCodeBlock: 'insert_product_block',
                 data: {
                     id: pre.id || null,
                     catId: pre?.selectedCategory?.value || undefined,
