@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS "ProductOpBal"
 	"finYearId" smallint NOT NULL,
 	"qty" numeric(10,2) NOT NULL DEFAULT 0,
 	"openingPrice" numeric(12,2) NOT NULL DEFAULT 0,
-	"lastPurDate" date NOT NULL,
+	"lastPurchaseDate" date NOT NULL,
 	"jData" jsonb,
 	"timestamp" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "branchId" FOREIGN KEY ("branchId")
@@ -70,8 +70,20 @@ CREATE TABLE IF NOT EXISTS "ProductOpBal"
 	CONSTRAINT "productId_branchId_finYearId_key" UNIQUE ("productId", "branchId", "finYearId")
 );
 
--- add unique index for "ProductM" as catId, brandId, label
+-- add unique index for "ProductM" as brandId, catId, label
 ALTER TABLE IF EXISTS "ProductM"
    DROP CONSTRAINT IF EXISTS "catId_brandId_label_unique_key",
    ADD  CONSTRAINT "catId_brandId_label_unique_key"
-   UNIQUE ("catId", "brandId", "label");
+   UNIQUE ("brandId", "catId", "label");
+
+-- modify fkey or add if not exists in table AccOpBal
+ALTER TABLE "AccOpBal"
+   DROP CONSTRAINT IF EXISTS "accId",
+   ADD  CONSTRAINT "AccOpBal_accId_fkey"
+   FOREIGN KEY ("accId") REFERENCES "AccM" ("id") ON DELETE NO ACTION;
+
+-- Add unique in "AccOpBal" for accId, branchId, finYearId
+ALTER TABLE IF EXISTS "AccOpBal"
+   DROP CONSTRAINT IF EXISTS "accOpBal_accId_branchId_finYearId_unique_key",
+   ADD  CONSTRAINT "accOpBal_accId_branchId_finYearId_unique_key"
+   UNIQUE ("accId", "branchId", "finYearId");

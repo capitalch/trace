@@ -15,7 +15,6 @@ with open('config.json') as f:
 
 poolStore = {}
 
-
 def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, finYearId = None):
     connection = None
     ret = None
@@ -42,7 +41,18 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, fi
                         acc['accClass'] = sqlObject.get('accClass', None)
                         acc['isAutoSubledger'] = sqlObject.get('isAutoSubledger', None)
                         acc['id'] = ret
-                res = acc                       
+                res = acc
+        elif(tableName == 'ProductM'):
+            if(deletedIds): # account deleted
+                pass
+            else: # update or new account
+                product = sqlObject.get('data', None)
+                if(product):
+                    if(product.get('id', None)): # edit
+                        res = product
+                    else: # insert
+                        product['id'] = ret
+                res = product
         connection.commit()
         
     except (Exception, psycopg2.Error) as error:

@@ -395,7 +395,7 @@ allSqls = {
             from "FinYearM"
                 where "id" = %(finYearId)s
     ''',
-    
+
     "get_generalSettings": '''
         select "jData"
             from "Settings"
@@ -506,7 +506,7 @@ allSqls = {
 		 		group by c3."accMId", c3.id, c3."opId", c3."accType", c3."accLeaf", c3."accName", c3."parentId", c3."children"
 		 			order by id
     ''',
-    
+
     "get_opBal": '''
         with cte1 as (
                 select a."id", "accCode", "accName", "parentId", "accType", "isPrimary", "accLeaf","classId"
@@ -566,7 +566,8 @@ allSqls = {
 
     "get_products": '''
         select ROW_NUMBER() over(order by "catName", "brandName", "label") as "index", p."id"  as "id" , c."id" as "catId", u."id" as "unitId", b."id" as "brandId",
-        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode"
+        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode",
+        "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice", "purPrice", "purPriceGst"
         from "ProductM" p
             join "CategoryM" c
                 on c."id" = p."catId"
@@ -641,18 +642,19 @@ allSqls = {
 			or "info" ILIKE ANY(array[someArgs])
     ''',
 
-    "get_stock_op_bal": '''
-        select "catName", "brandName", "label", "info", "qty", "openingPrice", "lastPurDate"
-            from "ProductOpBal" a
-                join "ProductM" p
-                    on p."id" = a."productId"
-                join "CategoryM" c
-                    on c."id" = p."catId"
-                join "BrandM" b
-                    on b."id" = p."brandId"
-        where "finYearId" = %(finYearId)s 
-            and "branchId" = %(branchId)s
-    ''',
+    # "get_stock_op_bal": '''
+    #     select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
+    #         from "ProductOpBal" a
+    #             join "ProductM" p
+    #                 on p."id" = a."productId"
+    #             join "CategoryM" c
+    #                 on c."id" = p."catId"
+    #             join "BrandM" b
+    #                 on b."id" = p."brandId"
+    #     where "finYearId" = %(finYearId)s 
+    #         and "branchId" = %(branchId)s
+    #     order by a."id" DESC
+    # ''',
 
     "get_tranHeaders_details": '''
         select h."id" as "tranHeaderId", "tranDate", "autoRefNo", "tags", d."id" as "tranDetailsId",
@@ -791,7 +793,7 @@ allSqls = {
             ) as "jsonResult"
 
         ''',
-    
+
     "getJson_all_gst_reports": '''
             -- gst-input-consolidated (ExtGstTranD only) based on "isInput"
             with cte1 as (
@@ -997,7 +999,7 @@ allSqls = {
         ) as "jsonResult"
     ''',
 
-    "getJson_brands_categories_products": '''
+    "getJson_brands_categories_products_units": '''
         with cte1 as (
             select id as "value", "catName" as "label"
                 from "CategoryM"
@@ -1014,11 +1016,15 @@ allSqls = {
                     join "BrandM" b
                         on b."id" = p."brandId"
             order by "catName", "brandName", "label"
+        ), cte4 as (
+            select "id", "unitName" from "UnitM" order by "unitName"
         )
         select json_build_object(
             'categories', (select json_agg(row_to_json(a)) from cte1 a)
             , 'brands', (select json_agg(row_to_json(b)) from cte2 b)
-            , 'products', (select json_agg(row_to_json(c)) from cte3 c)) as "jsonResult"
+            , 'products', (select json_agg(row_to_json(c)) from cte3 c)
+            , 'units', (select json_agg(row_to_json(d)) from cte4 d )
+            ) as "jsonResult"
     ''',
 
     "getJson_brands_categories_units": '''
@@ -1164,6 +1170,30 @@ allSqls = {
 		) as "jsonResult"
     ''',
 
+    "getJson_opening_stock":'''
+        with cte1 as (
+            select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
+                        from "ProductOpBal" a
+                            join "ProductM" p
+                                on p."id" = a."productId"
+                            join "CategoryM" c
+                                on c."id" = p."catId"
+                            join "BrandM" b
+                                on b."id" = p."brandId"
+                    where "finYearId" = %(finYearId)s 
+                        and "branchId" = %(branchId)s
+                    order by a."id" DESC),
+        cte2 as (
+            select SUM("qty" * "openingPrice") as value
+                from "ProductOpBal"
+            where "finYearId" = %(finYearId)s 
+                    and "branchId" = %(branchId)s)
+            select json_build_object(
+                'openingStock',(SELECT json_agg(row_to_json(a)) from cte1 a)
+                , 'value', (SELECT value from cte2)
+            ) as "jsonResult"
+    ''',
+    
     'getJson_sale_purchase_on_id': '''
         with cte1 as (
             select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData", "tranTypeId"
@@ -1330,16 +1360,56 @@ allSqls = {
                         and "tranTypeId" = %(tranTypeId)s and "finYearId" = %(finYearId)s);
     ''',
 
-    "insert_product_block": '''
+    "insert_product_block":'''
+        with cte1 as(
+	        select "intValue" + 1 as "productCode" from "Settings" where "key" = 'lastProductCode'
+        ),
+        cte2 as (
+            insert into "ProductM"("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
+                            "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
+            select %(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, "productCode", %(upcCode)s, %(gstRate)s,
+                            %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s from cte1  returning "id"                  
+        ), 
+        cte3 as(
+            update "Settings"
+                set "intValue" = (select cte1."productCode" from cte1)
+                    where "key" = 'lastProductCode')
+        select "id" from cte2
+    ''',
+
+    "insert_product_block1": '''
         do $$
             DECLARE lastNo INT;
             begin
-                select "intValue" +1 into lastNo from "Settings" where "key" = 'lastProductCode';
-                insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", "productCode", "upcCode", "gstRate")
-                    values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s, %(gstRate)s);
-                update "Settings" 
-                    set "intValue" = lastNo
-                        where "key" = 'lastProductCode';
+                if %(id)s is NOT NULL then
+                    update "ProductM" set
+                        "catId" = %(catId)s,
+                        "hsn" = %(hsn)s,
+                        "brandId" = %(brandId)s,
+                        "info" = %(info)s,
+                        "unitId" = %(unitId)s,
+                        "label" = %(label)s,
+                        "jData" = %(jData)s,
+                        "upcCode" = %(upcCode)s,
+                        "gstRate" = %(gstRate)s,
+                        "maxRetailPrice"= %(maxRetailPrice)s,
+                        "salePrice" = %(salePrice)s,
+                        "salePriceGst" = %(salePriceGst)s,
+                        "dealerPrice" = %(dealerPrice)s,
+                        "purPrice" = %(purPrice)s,
+                        "purPriceGst" = %(purPriceGst)s
+                    where id = %(id)s;
+                else
+                    select "intValue" +1 into lastNo from "Settings" where "key" = 'lastProductCode';
+                    insert into "ProductM" ("catId", "hsn", "brandId", "info", "unitId", "label", "jData", 
+                            "productCode", "upcCode", "gstRate", "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice" ,"purPrice", "purPriceGst")
+                        values (%(catId)s, %(hsn)s, %(brandId)s, %(info)s, %(unitId)s, %(label)s, %(jData)s, lastNo, %(upcCode)s, %(gstRate)s,
+                            %(maxRetailPrice)s, %(salePrice)s, %(salePriceGst)s, %(dealerPrice)s, %(purPrice)s, %(purPriceGst)s
+                        );
+                    update "Settings" 
+                        set "intValue" = lastNo
+                            where "key" = 'lastProductCode';
+                end if;
         end $$;
     ''',
 
@@ -1572,7 +1642,7 @@ allSqls = {
                 where "id" = %(id)s
     ''',
 
-    "update_pdf_invoice":'''
+    "update_pdf_invoice": '''
         update "TranH"
             set "jData" = jsonb_set(coalesce("jData",'{}'), '{pdfSaleBill}', %(data)s, true)
                 where "id" = %(id)s
@@ -1656,35 +1726,55 @@ allSqls = {
     ''',
 
     "upsert_generalSettings": '''
-    do $$
-    begin
-        if exists( 
-            select 1 from "Settings"	
-                where "key" = 'generalSettings') then
-                    update "Settings"
-                        set "jData" = %(jData)s
-                            where "key" = 'generalSettings';
-        else
-           insert into "Settings" ("id", "key", "jData", "intValue")
-                values (3, 'generalSettings', %(jData)s, 0);
-        end if;
-    end $$;
+        do $$
+        begin
+            if exists( 
+                select 1 from "Settings"	
+                    where "key" = 'generalSettings') then
+                        update "Settings"
+                            set "jData" = %(jData)s
+                                where "key" = 'generalSettings';
+            else
+            insert into "Settings" ("id", "key", "jData", "intValue")
+                    values (3, 'generalSettings', %(jData)s, 0);
+            end if;
+        end $$;
+    ''',
+
+    "upsert_opening_stock": '''
+        do $$
+        begin
+            if exists( 
+                select 1 from "ProductOpBal"	
+                    where ("productId" = %(productId)s ) and
+                    ("branchId" = %(branchId)s ) and
+                    ("finYearId" = %(finYearId)s ) ) then
+                        update "ProductOpBal"
+                            set "qty" = "qty" + %(qty)s
+                                where ("productId" = %(productId)s ) and
+                                    ("branchId" = %(branchId)s ) and
+                                    ("finYearId" = %(finYearId)s );
+            else
+                insert into "ProductOpBal" ("productId", "branchId", "finYearId", "qty", "openingPrice", "lastPurchaseDate", "jData")
+                        values (%(productId)s, %(branchId)s, %(finYearId)s, %(qty)s, %(openingPrice)s, %(lastPurchaseDate)s, %(jData)s);
+                end if;
+        end $$;
     ''',
 
     "upsert_unitInfo": '''
-    do $$
-    begin
-        if exists( 
-            select 1 from "Settings"	
-                where "key" = 'unitInfo') then
-                    update "Settings"
-                        set "jData" = %(jData)s
-                            where "key" = 'unitInfo';
-        else
-           insert into "Settings" ("id", "key", "jData", "intValue")
-                values (2, 'unitInfo', %(jData)s, 0);
-        end if;
-    end $$;
+        do $$
+        begin
+            if exists( 
+                select 1 from "Settings"	
+                    where "key" = 'unitInfo') then
+                        update "Settings"
+                            set "jData" = %(jData)s
+                                where "key" = 'unitInfo';
+            else
+            insert into "Settings" ("id", "key", "jData", "intValue")
+                    values (2, 'unitInfo', %(jData)s, 0);
+            end if;
+        end $$;
     '''
 }
 
