@@ -24,7 +24,7 @@
                                                                                                 refreshed after saved, accounts creation          1 day, 17th Feb
                                                                                         10. New account code create, immediate effect             3 days, 20th Feb
 
-1. Bug: Product category self edit, and also not refreshing
+                                                                                        1. Bug: Product category self edit, and also not refreshing
 2. Remaining of Opening stock and products                1 day, 4th Mar
                                                                                         3. Bug while login, when press enter key                  .5 day, 5the Mar
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
@@ -91,6 +91,10 @@
 19. Backup and restore strategy
 20. Upgrade database for all instances 
 
+# 08-03-2022 - 09-03-2022
+1. Database table modifications done for all schemas
+2. Send New / Edit product info to clients through sockets
+3. 
 # 07-03-2022
 1. Login error when key pressed, rectified
 2. Category errors rectified

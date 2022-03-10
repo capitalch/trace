@@ -1,7 +1,7 @@
 * Temp email
 https://tempail.com/en/
 
-## Python D tale
+## Python Dtale
 
 ## Service SMS
 #custName Sir, Warranty of your Your Sony set serial No: #serial expires soon. To avail extended warranty click #extended.
@@ -22,6 +22,20 @@ https://tempail.com/en/
 # acivate env where pyinstaller is installed
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
 create installer from innosetup
+
+## all schemas
+demounit1
+
+capitalelectronics
+kamalikaroy
+kushenclave
+kushinfotech
+navtechnologypvtltd
+sanjeevanisystech
+sushantagrawal
+sushantagrawalhuf
+
+netwoven
 
 ## Testing strategy
 1. Delete all orphan entries in TranH table
