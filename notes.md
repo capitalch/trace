@@ -1,3 +1,57 @@
+## Stock query
+set search_path to demounit1;
+with cte1 as (
+    select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
+        from "ProductOpBal" p where "branchId" =1 and "finYearId" = 2021
+), cte2 as (
+    select "productId","tranTypeId", 
+        SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
+        , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
+        , SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
+        , SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
+        , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
+        , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
+        --, (SELECT "price" from "SalePurchaseDetails" where id = s."id") as "lastPurchasePrice"
+        from "TranH" h
+            join "TranD" d
+                on h."id" = d."tranHeaderId"
+            join "SalePurchaseDetails" s
+                on d."id" = s."tranDetailsId"
+            
+        where "branchId" =1 and "finYearId" = 2021
+    group by "productId", "tranTypeId" order by "productId", "tranTypeId"
+), cte3 as (
+    select "productId"
+    , SUM("sale") as "sale"
+    , SUM("purchase") as "purchase"
+    , SUM("saleRet") as "saleRet"
+    , SUM("purchaseRet") as "purchaseRet"
+    , MAX("lastSaleDate") as "lastSaleDate"
+    , MAX("lastPurchaseDate") as "lastPurchaseDate"
+    from cte2
+        group by "productId"
+), cte4 as (
+    select p."id" as "productId", "catName","brandName",  "label",  
+            c1."qty" as "op"
+            , coalesce("purchase",0) as "purchase"
+            , coalesce("sale",0) as "sale"
+            , coalesce("purchaseRet",0) as "purchaseRet"
+            , coalesce("saleRet",0) as "saleRet"
+            , (c1."qty" + coalesce("purchase",0) - coalesce("purchaseRet",0) - coalesce("sale",0) + coalesce("saleRet", 0)) as "clos"
+            , coalesce(c1."lastPurchaseDate", c3."lastPurchaseDate") as "lastPurchaseDate", "lastSaleDate"
+            from cte1 c1
+            left outer join cte3 c3
+                on c1."productId" = c3."productId"
+            JOIN "ProductM" p
+                on p."id" = c1."productId"
+            JOIN "CategoryM" c
+                on c."id" = p."catId"
+            JOIN "BrandM" b
+                on b."id" = p."brandId"
+)
+select * from cte4
+    order by "catName", "brandName", "label"
+
 * Temp email
 https://tempail.com/en/
 
