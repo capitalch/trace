@@ -37,6 +37,7 @@ function useOpeningStock() {
                 field: 'id',
                 width: 60,
                 disableColumnMenu: true,
+                footerName: 'aaa'
             },
             { headerName: 'Id', field: 'id1', width: 70 },
             {
