@@ -32,25 +32,113 @@ with cte1 as (
         group by "productId"
 ), cte4 as (
     select p."id" as "productId", "catName","brandName",  "label",  
-            c1."qty" as "op"
+             c1."qty" as "op"
             , coalesce("purchase",0) as "purchase"
             , coalesce("sale",0) as "sale"
             , coalesce("purchaseRet",0) as "purchaseRet"
             , coalesce("saleRet",0) as "saleRet"
             , (c1."qty" + coalesce("purchase",0) - coalesce("purchaseRet",0) - coalesce("sale",0) + coalesce("saleRet", 0)) as "clos"
             , coalesce(c1."lastPurchaseDate", c3."lastPurchaseDate") as "lastPurchaseDate", "lastSaleDate"
-            from cte1 c1
-            left outer join cte3 c3
-                on c1."productId" = c3."productId"
-            JOIN "ProductM" p
+             from cte1 c1
+             left outer join cte3 c3
+                 on c1."productId" = c3."productId"
+            join "ProductM" p
                 on p."id" = c1."productId"
             JOIN "CategoryM" c
                 on c."id" = p."catId"
             JOIN "BrandM" b
                 on b."id" = p."brandId"
-)
-select * from cte4
+), cte5 as (
+    select  "productId",  (
+        select  "price" 
+        from "TranH" h
+            join "TranD" d
+                on h."id" = d."tranHeaderId"
+            join "SalePurchaseDetails" s1
+                on d."id" = s1."tranDetailsId"
+        where s1."productId" = s."productId" and "tranTypeId" = 5
+            order by "tranDate" DESC LIMIT 1 
+    ) as "lastPurchasePrice"
+        from "TranH" h
+            join "TranD" d
+                on h."id" = d."tranHeaderId"
+            join "SalePurchaseDetails" s
+                on d."id" = s."tranDetailsId"
+        group by "productId"
+            order by "productId"
+    )
+select  c4.* from cte4 c4
+--  left outer join cte5 c5
+--      on c4."productId" = c5."productId"
     order by "catName", "brandName", "label"
+
+
+set search_path to demounit1;
+select  "productId",  (
+    select  "price" 
+    from "TranH" h
+        join "TranD" d
+            on h."id" = d."tranHeaderId"
+        join "SalePurchaseDetails" s1
+            on d."id" = s1."tranDetailsId"
+    where s1."productId" = s."productId" and "tranTypeId" = 5
+        order by "tranDate" DESC LIMIT 1 
+) as "lastPrice"
+    from "TranH" h
+        join "TranD" d
+            on h."id" = d."tranHeaderId"
+        join "SalePurchaseDetails" s
+            on d."id" = s."tranDetailsId"
+    group by "productId"
+        order by "productId"
+
+
+set search_path to demounit1;
+select "tranDate",  "productId", "price" , "qty"
+    from "TranH" h
+        join "TranD" d
+            on h."id" = d."tranHeaderId"
+        join "SalePurchaseDetails" s
+            on d."id" = s."tranDetailsId"
+    where "productId" = 33 and "tranTypeId" = 5
+        order by "tranDate" DESC LIMIT 1
+
+
+set search_path to demounit1;
+with cte2 as (
+    select "productId","tranTypeId", 
+        SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
+        , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
+        , SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
+        , SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
+        , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
+        , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
+        --, (SELECT "price" from "SalePurchaseDetails" where id = s."id") as "lastPurchasePrice"
+        from "TranH" h
+            join "TranD" d
+                on h."id" = d."tranHeaderId"
+            join "SalePurchaseDetails" s
+                on d."id" = s."tranDetailsId"
+            
+        where "branchId" =1 and "finYearId" = 2021
+    group by "productId", "tranTypeId" order by "productId", "tranTypeId"
+), cte3 as (
+    select "productId"
+    , SUM("sale") as "sale"
+    , SUM("purchase") as "purchase"
+    , SUM("saleRet") as "saleRet"
+    , SUM("purchaseRet") as "purchaseRet"
+    , MAX("lastSaleDate") as "lastSaleDate"
+    , MAX("lastPurchaseDate") as "lastPurchaseDate"
+    from cte2
+        group by "productId"
+) select * from cte3
+
+
+
+
+
+
 
 * Temp email
 https://tempail.com/en/
