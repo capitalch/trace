@@ -1,13 +1,32 @@
-import { useRef, } from '../redirect'
+import { useEffect, useRef, useState } from '../redirect'
 function useInventoryReports() {
+    const [, setRefresh] = useState({})
     const meta: any = useRef({
-        title: 'Inventory reports'
+        dialogConfig: {
+            title: 'Select a report from below'
+        },
+        Report: () => <div>A report component</div>,
+        showDialog: false,
+        subTitle: '',
+        title: 'Inventory reports',
     })
+    const pre = meta.current
+    useEffect(() => {
+        pre.showDialog = true
+        setRefresh({})
+    }, [])
 
-    function handleSelectReportClicked() {
-
+    function handleCloseDialog() {
+        pre.showDialog = false
+        setRefresh({})
     }
 
-    return ({ handleSelectReportClicked, meta })
+    function handleSelectReportClicked() {
+        pre.showDialog = true
+        pre.subTitle = ''
+        setRefresh({})
+    }
+
+    return ({ handleCloseDialog, handleSelectReportClicked, meta, setRefresh })
 }
 export { useInventoryReports }

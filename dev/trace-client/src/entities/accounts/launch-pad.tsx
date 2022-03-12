@@ -157,7 +157,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             color: theme.palette.common.black,
             fontWeight: 'bold',
             // marginTop: theme.spacing(0.1),
-            marginBottom: theme.spacing(2),
+            // marginBottom: theme.spacing(2),
         },
     })
 )
