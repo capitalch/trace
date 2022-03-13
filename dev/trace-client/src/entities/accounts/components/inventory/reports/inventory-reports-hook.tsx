@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from '../redirect'
+import { StockSummaryReport } from './stock-summary-report'
 function useInventoryReports() {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
-        dialogConfig: {
-            title: 'Select a report from below'
-        },
-        Report: () => <div>A report component</div>,
-        showDialog: false,
-        subTitle: '',
+        currentReportComponent: () => <></>,
+        // dialogConfig: {
+        //     title: 'Select a report from below'
+        // },
+        // Report: () => <div>A report component</div>,
+        // showDialog: false,
+        breadcumb: '',
         title: 'Inventory reports',
     })
     const pre = meta.current
     useEffect(() => {
-        pre.showDialog = true
-        setRefresh({})
+
     }, [])
 
     function handleCloseDialog() {
@@ -21,12 +22,27 @@ function useInventoryReports() {
         setRefresh({})
     }
 
-    function handleSelectReportClicked() {
-        pre.showDialog = true
-        pre.subTitle = ''
+
+    function onReportSelected(selected: any) {
+        const reportName = selected.value
+        pre.breadcumb = selected.breadcumb
+        const reportsMap: any = getReportsMap() // make use of javascript hoisting
+        pre.currentReportComponent = reportsMap[reportName]
         setRefresh({})
+
+        function getReportsMap() {
+            return {
+                stockSummaryReport: StockSummaryReport
+            }
+        }
     }
 
-    return ({ handleCloseDialog, handleSelectReportClicked, meta, setRefresh })
+    return ({ handleCloseDialog, meta, onReportSelected, setRefresh })
 }
 export { useInventoryReports }
+
+// function handleSelectReportClicked() {
+    //     pre.showDialog = true
+    //     pre.subTitle = ''
+    //     setRefresh({})
+    // }

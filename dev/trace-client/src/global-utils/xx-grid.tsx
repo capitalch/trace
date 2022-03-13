@@ -33,7 +33,6 @@ import {
 
 import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
-import { prependListener } from 'process'
 
 interface SpecialColumnOptions {
     isEdit?: boolean
@@ -79,7 +78,7 @@ interface XXGridOptions {
     sharedData?: any // data shared with parent
     sqlQueryArgs?: any
     sqlQueryId?: any
-    specialColumns: SpecialColumnOptions
+    specialColumns?: SpecialColumnOptions
     subTitle?: string
     summaryColNames: string[]
     sx?: any
@@ -131,7 +130,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
-    addSpecialColumns(specialColumns, gridActionMessages)
+    specialColumns && addSpecialColumns(specialColumns, gridActionMessages)
 
     return (
         <DataGridPro
@@ -514,7 +513,6 @@ function XXGrid(gridOptions: XXGridOptions) {
         options: SpecialColumnOptions,
         gridActionMessages: GridActionMessagesOptions
     ) {
-
         if (options.customColumn1 && (!_.isEmpty(options.customColumn1))) {
             const cc = options.customColumn1
             const customColumn1 = {

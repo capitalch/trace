@@ -38,3 +38,4 @@ export {
     ReactSelect,
     urlJoin,
 }
+export {XXGrid} from '../global-utils/xx-grid'
