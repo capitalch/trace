@@ -26,6 +26,7 @@ function useOpeningStockWorkBench() {
     useEffect(() => {
         loadProducts()
         const subs1 = filterOn('OPENING-STOCK-XX-GRID-EDIT-CLICKED').subscribe(handleEdit)
+        const subs2 = filterOn('OPENING-STOCK-WORK-BENCH-HOOK_PRODUCT-UPSERTED-AT-SERVER').subscribe(onProductUpsertedAtServer)
         return (() => {
             subs1.unsubscribe()
         })
@@ -179,6 +180,12 @@ function useOpeningStockWorkBench() {
     function onProductChanged(selectedItem: any) {
         pre.selectedProduct = selectedItem
         setRefresh({})
+    }
+
+    function onProductUpsertedAtServer(){
+        pre.products = getFromBag('products')
+        // onCategoryChanged(pre.selectedCategory)
+        onBrandChanged(pre.selectedBrand)
     }
 
     // Used to retain the last value saved

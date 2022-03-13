@@ -61,6 +61,7 @@ function useServerSocketMessageHandler() {
         } else{
             products.unshift(data)
         }
+        emit('OPENING-STOCK-WORK-BENCH-HOOK_PRODUCT-UPSERTED-AT-SERVER','')
     }
 
     return ({ socketMessageHandler })

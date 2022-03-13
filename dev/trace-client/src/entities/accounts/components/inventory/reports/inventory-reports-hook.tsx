@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from '../redirect'
 import { StockSummaryReport } from './stock-summary-report'
+import { StockAgeingReport } from './stock-ageing-report'
 function useInventoryReports() {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
@@ -32,7 +33,8 @@ function useInventoryReports() {
 
         function getReportsMap() {
             return {
-                stockSummaryReport: StockSummaryReport
+                stockSummaryReport: StockSummaryReport,
+                stockAgeing: StockAgeingReport
             }
         }
     }

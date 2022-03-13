@@ -106,12 +106,15 @@ function OpeningStockWorkBench() {
                     value={pre.lastPurchaseDate}
                 />
             </Box>
+            {/* Submit */}
             <Button variant="contained" color="success" size='medium' disabled={checkError()} onClick={handleSubmit} >
                 Submit
             </Button>
+            {/* Reset */}
             <Button variant="contained" color="warning" size='medium' onClick={handleReset}>
                 Reset
             </Button>
+            {/* New product */}
             <Button variant="contained" color="info" size='medium' onClick={handleNewProduct}>
                 New product
             </Button>

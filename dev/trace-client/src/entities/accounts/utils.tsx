@@ -318,6 +318,12 @@ function utils() {
         accStore.allAccounts = allAccounts
     }
 
+    function toCurrentDateFormat(date: string){
+        const dateFormat = getFromBag('dateFormat')
+        const ret = moment(date).format(dateFormat)
+        return(ret)
+    }
+
     async function transferClosingBalances() {
         const q = graphqlQueries['genericQueryBuilder']({
             // in shared artifacts
@@ -353,6 +359,7 @@ function utils() {
         isInvalidStateCode,
         registerAccounts,
         execSaleInvoiceView,
+        toCurrentDateFormat,
         transferClosingBalances,
     }
 }

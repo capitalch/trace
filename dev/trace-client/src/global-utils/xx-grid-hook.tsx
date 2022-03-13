@@ -6,6 +6,7 @@ import { manageEntitiesState } from './esm'
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
     let { summaryColNames } = gridOptions
+    summaryColNames = summaryColNames || []
     const meta: any = useRef({
         allRows: [],
         allSummary: {},

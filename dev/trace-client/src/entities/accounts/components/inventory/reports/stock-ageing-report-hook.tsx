@@ -1,0 +1,4 @@
+function useStockAgeingReport(){
+
+}
+export {useStockAgeingReport}

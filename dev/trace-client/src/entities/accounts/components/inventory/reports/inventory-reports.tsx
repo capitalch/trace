@@ -13,7 +13,7 @@ function InventoryReports() {
     const styles = {
         option: (base: any) => ({
             ...base,
-            padding: '.05rem',
+            padding: '.1rem',
             paddingLeft: '0.8rem',
             // color: theme.palette.blue,
             // backgroundColor: 'white'
@@ -21,17 +21,18 @@ function InventoryReports() {
         }),
         control: (provided: any) => ({
             ...provided,
+            // border: '2px solid orange'
             // width: '80%',
         })
     }
     return (<Box>       
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.breadcumb)}</Typography>
-            <Typography variant='subtitle2' sx={{marginTop:theme.spacing(1)}}>Select report</Typography>
+            {/* <Typography variant='subtitle2' sx={{marginTop:theme.spacing(1)}}>All reports</Typography> */}
             <ReactSelect  menuPlacement='auto' placeholder='Select report' styles={styles}
                 options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
         </Box>
-        <Box sx = {{marginTop:theme.spacing(1), border:'1px solid lightGrey', }}>
+        <Box sx = {{marginTop:theme.spacing(1) }}>
             <pre.currentReportComponent />
         </Box>
     </Box>)
@@ -45,8 +46,8 @@ const reportsJson = [
         breadcumb:'Stock summary report'
     },
     {
-        label:'Old stock (Jakar)'   ,
-        value:'jakarReport'
+        label:'Stock ageing (Jakar)'   ,
+        value:'stockAgeing'
     }
 ]
 

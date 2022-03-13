@@ -1324,10 +1324,10 @@ allSqls = {
                     on h."id" = d."tranHeaderId"
                 join "SalePurchaseDetails" s
                     on d."id" = s."tranDetailsId"
-            where "branchId" =1 and "finYearId" = 2021 
+            where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
         ), cte1 as ( -- opening balance
             select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
-                from "ProductOpBal" p where "branchId" =1 and "finYearId" = 2021
+                from "ProductOpBal" p where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
         ), cte2 as ( -- create columns for sale, saleRet, purch...
             select "productId","tranTypeId", 
                 SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
@@ -1373,7 +1373,9 @@ allSqls = {
                     full join cte5 c5
                         on c4."productId" = c5."productId"
         ), cte7 as ( -- combine latest result set with ProductM, CategoryM and BrandM tables to attach catName, brandName, label
-            select c6."productId", "productCode", "catName", "brandName", "label","openingPrice", "op"::numeric(10,2),"opValue", "sale"::numeric(10,2), "purchase"::numeric(10,2), "saleRet"::numeric(10,2), "purchaseRet"::numeric(10,2), "clos"::numeric(10,2), "lastPurchasePrice", ("clos" * "lastPurchasePrice")::numeric(12,2) as "closValue"
+            select c6."productId", "productCode", "catName", "brandName", "label","openingPrice", "op"::numeric(10,2),"opValue"
+            , ("purchase" + "saleRet")::numeric(10,2) as "dr", ("sale" + "purchaseRet"):: numeric(10,2) as "cr",
+            "sale"::numeric(10,2), "purchase"::numeric(10,2), "saleRet"::numeric(10,2), "purchaseRet"::numeric(10,2), "clos"::numeric(10,2), "lastPurchasePrice", ("clos" * "lastPurchasePrice")::numeric(12,2) as "closValue"
                     , "lastPurchaseDate", "lastSaleDate"
                 from cte6 c6
                     join "ProductM" p
@@ -1382,8 +1384,9 @@ allSqls = {
                         on c."id" = p."catId"
                     join "BrandM" b
                         on b."id" = p."brandId"
+            order by "catName", "brandName", "label"
         ), cte8 as( -- get summary
-            select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
+            select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("dr") debits, SUM("cr") credits, SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
                 from cte7
         ) 
         select json_build_object(

@@ -25,9 +25,10 @@
                                                                                         10. New account code create, immediate effect             3 days, 20th Feb
 
                                                                                         1. Bug: Product category self edit, and also not refreshing
-2. Remaining of Opening stock and products                1 day, 4th Mar
+                                                                                        2. Remaining of Opening stock and products                1 day, 4th Mar
                                                                                         3. Bug while login, when press enter key                  .5 day, 5the Mar
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
+3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
 4. Full reporting of Inventory and allied:                1 week, 12rd Mar
 5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
 19. Stock Journals                                        3 days, 17th Mar
