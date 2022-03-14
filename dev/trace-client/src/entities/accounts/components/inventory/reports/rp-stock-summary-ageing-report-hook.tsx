@@ -1,41 +1,56 @@
 // import { useRef } from 'react'
-import { useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
+import { _, useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
 
 function useStockSummaryAgeingReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
-    const { toCurrentDateFormat } = utils()
+    const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { emit, } = useIbuki()
     const meta: any = useRef({
-        rows: []
+        dataPath: 'jsonResult.stock',
+        filteredRows: [],
+        origJsonData: {},
+        origRows: [],
+        parentRefresh: setRefresh,
+        searchText: '',
+        sqlKey: 'getJson_stock_summary',
+        sqlArgs: {},
+        subTitle: '',
+        title: 'Stock summary with ageing',
+        // summaryPath: 'jsonResult.summary',
+        totals: {}
     })
     const pre = meta.current
     useEffect(() => {
+        pre.subTitle = getGridReportSubTitle()
         fetchData()
     }, [])
 
     async function fetchData() {
         let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
-        const ret = await execGenericView({
+        pre.origJsonData = await execGenericView({
             isMultipleRows: false,
-            sqlKey: 'getJson_stock_summary',
-            args: {},
-            // entityName: entityName,
-        })
-        pre.rows = ret?.jsonResult?.stock
+            sqlKey: pre.sqlKey,
+            args: pre.sqlArgs,
+        }) || {}
+
+        const rows: any[] = _.get(pre.origJsonData, pre.dataPath, [])
+        setId(rows)
+        pre.origRows = rows
+        pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
+        pre.totals = getTotals() || {}
+        pre.filteredRows.push(pre.totals)
         emit('SHOW-LOADING-INDICATOR', false)
-        setId()
         setRefresh({})
 
-        function incr() {
-            return (count++)
-        }
-
-        function setId() {
-            for (const row of pre.rows) {
+        function setId(rows: any[]) {
+            for (const row of rows) {
                 row.id1 = row.id
                 row.id = incr()
+            }
+            function incr() {
+                return (count++)
             }
         }
     }
@@ -44,33 +59,44 @@ function useStockSummaryAgeingReport() {
         return ([
             {
                 headerName: '#',
+                headerClassName: 'header-class',
+                description: 'Index',
                 field: 'id',
                 width: 60,
             },
             {
                 headerName: 'Pr id',
+                description: 'Product id',
+                headerClassName: 'header-class',
                 field: 'productId',
                 width: 70,
             },
             {
                 headerName: 'Pr code',
+                headerClassName: 'header-class',
+                description: 'Product code',
                 field: 'productCode',
                 width: 80,
             },
             {
                 headerName: 'Category',
+                headerClassName: 'header-class',
                 field: 'catName'
             },
             {
                 headerName: 'Brand',
+                headerClassName: 'header-class',
                 field: 'brandName'
             },
             {
                 headerName: 'Label',
+                headerClassName: 'header-class',
                 field: 'label'
             },
             {
                 headerName: 'Op Price',
+                headerClassName: 'header-class',
+                description: 'Opening price',
                 field: 'openingPrice',
                 type: 'number',
                 width: 100,
@@ -78,6 +104,7 @@ function useStockSummaryAgeingReport() {
             },
             {
                 headerName: 'Op value',
+                headerClassName: 'header-class',
                 field: 'opValue',
                 type: 'number',
                 width: 120,
@@ -85,21 +112,25 @@ function useStockSummaryAgeingReport() {
             },
             {
                 headerName: 'Op',
+                headerClassName: 'header-class',
+                description: 'Opening',
                 field: 'op',
                 type: 'number',
                 width: 60,
             },
             {
                 headerName: 'Debits',
+                headerClassName: 'header-class',
                 field: 'dr',
                 type: 'number',
-                width: 60,
+                width: 70,
             },
             {
                 headerName: 'Credits',
+                headerClassName: 'header-class',
                 field: 'cr',
                 type: 'number',
-                width: 60,
+                width: 70,
             },
             // {
             //     headerName: 'Pur Ret',
@@ -115,40 +146,78 @@ function useStockSummaryAgeingReport() {
             // },
             {
                 headerName: 'Clos',
+                headerClassName: 'header-class',
+                description: 'Closing',
                 field: 'clos',
                 type: 'number',
                 width: 60,
             },
             {
                 headerName: 'Clos val',
+                headerClassName: 'header-class',
+                description: 'Closing value',
                 field: 'closValue',
                 type: 'number',
                 width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Last pur price',
+                headerName: 'Lst pur price',
+                headerClassName: 'header-class',
+                description: 'Last purchase price',
                 field: 'lastPurchasePrice',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Last pur dt',
+                headerName: 'Lst pur dt',
+                headerClassName: 'header-class',
+                description: 'Last purchase date',
                 field: 'lastPurchaseDate',
+                type: 'date',
                 width: 90,
-                valueFormatter: (params: string) => toCurrentDateFormat(params)
+                valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                headerName: 'Last sal dt',
+                headerName: 'Lst sal dt',
+                headerClassName: 'header-class',
+                description: 'Last sale date',
                 field: 'lastSaleDate',
+                type: 'date',
                 width: 90,
-                valueFormatter: (params: string) => toCurrentDateFormat(params)
+                valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             }
         ])
     }
 
-    return ({ fetchData, getColumns, meta })
+    function getRowClassName(e: any) {
+        const row = e?.row || {}
+        let ret = ''
+        if (row.id === 'Total')
+            ret = 'footer-row-class'
+        return (ret)
+    }
+
+    function getTotals() {
+        const rows: any[] = pre.filteredRows
+        const totals = rows.reduce((prev: any, curr: any, index: number) => {
+            prev.op = prev.op + curr.op
+            prev.opValue = prev.opValue + curr.opValue
+            prev.dr = prev.dr + curr.dr
+            prev.cr = prev.cr + curr.cr
+            prev.clos = prev.clos + curr.clos
+            prev.closValue = prev.closValue + curr.closValue
+            prev.count++
+            return (prev)
+        }, {
+            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0
+        })
+        totals.id = 'Total'
+        return (totals)
+    }
+
+    return ({ fetchData, getColumns, getRowClassName, meta })
 }
 
 export { useStockSummaryAgeingReport }

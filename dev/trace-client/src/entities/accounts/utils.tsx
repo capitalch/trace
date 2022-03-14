@@ -318,10 +318,10 @@ function utils() {
         accStore.allAccounts = allAccounts
     }
 
-    function toCurrentDateFormat(date: string){
+    function toCurrentDateFormat(date: string) {
         const dateFormat = getFromBag('dateFormat')
-        const ret = moment(date).format(dateFormat)
-        return(ret)
+        const ret = date ? moment(date).format(dateFormat) : ''
+        return (ret)
     }
 
     async function transferClosingBalances() {

@@ -26,9 +26,10 @@ function useOpeningStockWorkBench() {
     useEffect(() => {
         loadProducts()
         const subs1 = filterOn('OPENING-STOCK-XX-GRID-EDIT-CLICKED').subscribe(handleEdit)
-        const subs2 = filterOn('OPENING-STOCK-WORK-BENCH-HOOK_PRODUCT-UPSERTED-AT-SERVER').subscribe(onProductUpsertedAtServer)
+        const subs2 = filterOn('OPENING-STOCK-WORK-BENCH-HOOK-PRODUCT-UPSERTED-AT-SERVER').subscribe(onProductUpsertedAtServer)
         return (() => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
         })
     }, [])
 
