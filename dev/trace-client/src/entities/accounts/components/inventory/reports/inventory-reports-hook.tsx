@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from '../redirect'
+import { StockSummaryAgeingReport, useEffect, useRef, useState, } from '../redirect'
 import { StockSummaryReport } from './stock-summary-report'
 import { StockAgeingReport } from './stock-ageing-report'
 function useInventoryReports() {
@@ -33,8 +33,8 @@ function useInventoryReports() {
 
         function getReportsMap() {
             return {
-                stockSummaryReport: StockSummaryReport,
-                stockAgeing: StockAgeingReport
+                stockSummaryAgeingReport: StockSummaryAgeingReport,
+                stockSummaryReport: StockSummaryReport
             }
         }
     }

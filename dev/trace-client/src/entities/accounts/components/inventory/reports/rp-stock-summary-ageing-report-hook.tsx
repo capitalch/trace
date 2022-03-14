@@ -1,37 +1,46 @@
-import { Box, useSharedElements, useTheme, utilMethods, utils, XXGrid, } from '../redirect'
-import { useStockSummaryReport } from './stock-summary-report-hook'
-function StockSummaryReport() {
-    const { meta, setRefresh } = useStockSummaryReport()
-    const theme = useTheme()
-    const { toDecimalFormat } = utilMethods()
-    const { getGridReportSubTitle, toCurrentDateFormat } = utils()
-    return (
-        <Box sx={{ height: "calc(100vh - 240px)" }}>
-            <XXGrid
-                alternateFooter={{ path: 'jsonResult.summary', displayMap: { count: 'Count', op: "Opening", opValue:"Opening stock value", debits: "Debits", credits: "Credits", clos:"Closing", closValue:"Closing stock value" } }}
-                sx={{ border: '4px solid orange', p: 1, width: '100%', fontSize: theme.spacing(1.5), }}
-                autoFetchData={true}
-                columns={getColumns()}
-                // customFooterField1={{ label: 'Value', value: 233.44, path: 'jsonResult.value' }}
-                gridActionMessages={getActionMessages()}
-                // hideFilteredButton={true}
-                // hideColumnsButton={true}
-                // hideExportButton={true}
-                hideViewLimit={true}
-                jsonFieldPath='jsonResult.stock'
-                // specialColumns={specialColumns}
-                rowHeight={25}
-                sqlQueryArgs={{}}
-                sqlQueryId='getJson_stock_summary'
-                subTitle={getGridReportSubTitle()}
-                // summaryColNames={['']}
-                title='Stock summary'
-            // title={title}
-            />
-        </Box>
-    )
+// import { useRef } from 'react'
+import { useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
 
-    function getColumns() {
+function useStockSummaryAgeingReport() {
+    const [, setRefresh] = useState({})
+    const { execGenericView, toDecimalFormat } = utilMethods()
+    const { toCurrentDateFormat } = utils()
+    const { emit, } = useIbuki()
+    const meta: any = useRef({
+        rows: []
+    })
+    const pre = meta.current
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+    async function fetchData() {
+        let count = 1
+        emit('SHOW-LOADING-INDICATOR', true)
+        const ret = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'getJson_stock_summary',
+            args: {},
+            // entityName: entityName,
+        })
+        pre.rows = ret?.jsonResult?.stock
+        emit('SHOW-LOADING-INDICATOR', false)
+        setId()
+        setRefresh({})
+
+        function incr() {
+            return (count++)
+        }
+
+        function setId() {
+            for (const row of pre.rows) {
+                row.id1 = row.id
+                row.id = incr()
+            }
+        }
+    }
+
+    function getColumns(): any[] {
         return ([
             {
                 headerName: '#',
@@ -139,13 +148,7 @@ function StockSummaryReport() {
         ])
     }
 
-    function getActionMessages() {
-        const actionMessages = {
-            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-STOCK-SUMMARY-REPORT',
-            editIbukiMessage: 'STOCK-SUMMARY-REPORT-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage: 'STOCK-SUMMARY-REPORT-XX-GRID-DELETE-CLICKED'
-        }
-        return (actionMessages)
-    }
+    return ({ fetchData, getColumns, meta })
 }
-export { StockSummaryReport }
+
+export { useStockSummaryAgeingReport }

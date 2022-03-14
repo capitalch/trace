@@ -992,7 +992,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 color: 'dodgerBlue',
             },
             '& .gst-details': {
-                fontSize: '0.7rem',
+                fontSize: '0.8rem',
                 color: theme.palette.grey[900],
             },
             '& .is-igst': {
@@ -1000,7 +1000,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 flexDirection: 'column',
                 alignItems: 'center',
                 marginTop: '0.8rem',
-                '& div': { fontSize: '0.7rem', marginTop: '-0.5rem' },
+                '& div': { fontSize: '0.8rem', marginTop: '-0.5rem' },
             },
 
             '& .gst-footer': {
