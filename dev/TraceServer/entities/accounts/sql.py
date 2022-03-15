@@ -1325,6 +1325,7 @@ allSqls = {
                 join "SalePurchaseDetails" s
                     on d."id" = s."tranDetailsId"
             where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+                and "tranDate" <= coalesce(%(date)s, CURRENT_DATE)
         ), cte1 as ( -- opening balance
             select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
                 from "ProductOpBal" p where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
@@ -1388,7 +1389,10 @@ allSqls = {
         ), cte8 as( -- get summary
             select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("dr") debits, SUM("cr") credits, SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
                 from cte7
-        ) 
+        ) , cte9 as (
+			select * from cte7
+				where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= 100
+		)
         select json_build_object(
             'stock', (SELECT json_agg(row_to_json(a)) from cte7 a),
             'summary', (SELECT row_to_json(b) from cte8 b)

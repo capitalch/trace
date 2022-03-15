@@ -1,3 +1,10 @@
+## To do in reports
+1. hide
+2. Stock on date
+3. Jakar range
+4. Trim button: removes clos = 0
+5. selected clos value
+
 ## Oopening stock pending
 1. XXGrid search button as separate component without autofocus
                                                                 2. Download categories and brands also with products

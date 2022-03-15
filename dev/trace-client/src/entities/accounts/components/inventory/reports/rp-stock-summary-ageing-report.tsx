@@ -1,15 +1,13 @@
-import { } from '@mui/material'
-
 import {
-    Box, CloseSharp, DataGridPro,
+    Box, CloseSharp, DataGridPro, FormControl, FormControlLabel,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridCellParams,
     GridFooterContainer, GridRowId,
-    IconButton, Search, SyncSharp, TextField,
-    Typography, useIbuki, useRef, useState, useTheme,
+    IconButton, Radio, RadioGroup, ReactSelect, Search, SyncSharp, TextField,
+    Typography, useEffect, useIbuki, useRef, useState, useTheme,
     useStockSummaryAgeingReport, utilMethods, utils
 } from '../redirect'
 
@@ -18,7 +16,8 @@ function StockSummaryAgeingReport() {
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
-    const { emit } = useIbuki()
+    pre.searchTextRef = useRef({})
+
     return (
         <DataGridPro
             checkboxSelection={true}
@@ -32,7 +31,6 @@ function StockSummaryAgeingReport() {
             getRowClassName={getRowClassName}
             rowHeight={25}
             rows={pre.filteredRows}
-            // rowSpacingType='margin'
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}
@@ -42,24 +40,43 @@ function StockSummaryAgeingReport() {
     function CustomToolbar() {
         return (
             <GridToolbarContainer className='grid-toolbar'>
-                {/* <Box sx={{ display: 'flex', flexDirection:'column' }}> */}
                 <Box>
                     <Typography variant='subtitle2'>{pre.subTitle}</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
-                    <GridToolbarColumnsButton color='secondary' />
-                    <GridToolbarFilterButton color='primary' />
-                    <GridToolbarExport color='info' />
-                    <IconButton
-                        size="small"
-                        color="secondary"
-                        onClick={fetchData}>
-                        <SyncSharp fontSize='small'></SyncSharp>
-                    </IconButton>
-                    <GridSearchBox parentMetaCurrent={pre} />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+                        <Typography variant='subtitle1' sx={{ fontWeight: 'bold', mt:.5 }}>{pre.title}</Typography>
+                        <GridToolbarColumnsButton color='secondary' />
+                        <GridToolbarFilterButton color='primary' />
+                        <GridToolbarExport color='info' />
+                        {/* Sync */}
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            onClick={fetchData}>
+                            <SyncSharp fontSize='small'></SyncSharp>
+                        </IconButton>
+                        <ReactSelect menuPlacement='auto' placeholder='Stock ageing' 
+                        // styles={styles}
+                            // options={reportsJson} value={pre.selectedReport} onChange={onReportSelected}
+                             />
+                        {/* <FormControl> */}
+                        {/* <Box sx={{display:'flex', flexDirection:'row', flexWrap:'wrap'}} > */}
+                        {/* <RadioGroup row sx={{ display: 'flex', fontSize:theme.spacing(1) }}> */}
+                        {/* <div radioGroup='grp-name'>
+                            <FormControlLabel sx={{ fontSize: theme.spacing(0.5) }} value='allDates' label='All' control={<Radio size='small' name='grp-name' />} />
+                            <FormControlLabel value='lessThan90' label='< 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
+                            <FormControlLabel value='greaterThan90' label='> 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
+                            <FormControlLabel value='greaterThan180' label='> 180 D' control={<Radio size='small' radioGroup='grp-name' />} />
+                            <FormControlLabel value='greaterThan270' label='> 270 D' control={<Radio size='small' radioGroup='grp-name' />} />
+                            <FormControlLabel value='greaterThan360' label='> 360 D' control={<Radio size='small' radioGroup='grp-name' />} />
+                        </div> */}
+                        {/* </RadioGroup> */}
+                        {/* </Box> */}
+                        {/* </FormControl> */}
+                    </Box>
+                    <GridSearchBox parentMeta={meta} />
                 </Box>
-                {/* </Box> */}
             </GridToolbarContainer>
         )
     }
@@ -81,7 +98,7 @@ function StockSummaryAgeingReport() {
                 border: '4px solid orange',
                 p: 1, width: '100%',
                 fontSize: theme.spacing(1.5),
-                minHeight: theme.spacing(60),
+                minHeight: theme.spacing(80),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',
                 '& .footer-row-class': {
@@ -108,23 +125,19 @@ function StockSummaryAgeingReport() {
 
 export { StockSummaryAgeingReport }
 // { filteredRows, origRows, parentRefresh }: any
-function GridSearchBox({parentMetaCurrent}:any) {
-    const [, setRefresh] = useState({})
-    const meta: any = useRef({
-        // searchText: ''
-    })
-    const pre = meta.current
+
+function GridSearchBox({ parentMeta }: any) {
+    // const [, setRefresh] = useState({})
+    const pre = parentMeta.current
+    const { debounceEmit, } = useIbuki()
 
     return (<TextField
-        inputRef={meta.current.searchTextRef}
+        inputRef={pre.searchTextRef}
         variant="standard"
         autoComplete='off'
-        // autoFocus={!meta.current.isFirstTime}
         value={pre.searchText || ''}
         onChange={handleOnChange}
-        // onChange={props.onChange}
         placeholder="Search…"
-        // className="global-search"
         InputProps={{
             startAdornment: <Search fontSize="small" />,
             endAdornment: (
@@ -135,11 +148,6 @@ function GridSearchBox({parentMetaCurrent}:any) {
                     sx={{
                         visibility: pre.searchText ? 'visible' : 'hidden'
                     }}
-                    // style={{
-                    //     visibility: props.value
-                    //         ? 'visible'
-                    //         : 'hidden',
-                    // }}
                     onClick={handleClear}>
                     <CloseSharp fontSize="small" />
                 </IconButton>
@@ -148,13 +156,39 @@ function GridSearchBox({parentMetaCurrent}:any) {
     />)
 
     function handleOnChange(e: any) {
-        parentMetaCurrent.searchText = e.target.value
-        // setRefresh({})
-        parentMetaCurrent.parentRefresh({})
+        pre.searchText = e.target.value
+        pre.isSearchTextEdited = true
+
+        pre.parentRefresh({})
+        debounceEmit('XXX', [requestSearch, e.target.value])
     }
 
     function handleClear(e: any) {
-        parentMetaCurrent.searchText = ''
-        setRefresh({})
+        pre.searchText = ''
+        requestSearch('')
+    }
+
+    function requestSearch(searchValue: string) {
+        if (searchValue) {
+            pre.filteredRows = pre.allRows.filter(
+                (row: any) => {
+                    return Object.keys(row).some((field) => {
+                        const temp: string = row[field]
+                            ? row[field].toString()
+                            : ''
+                        return temp
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                    })
+                }
+            )
+        } else {
+            pre.filteredRows = pre.allRows.map((x: any) => ({
+                ...x,
+            }))
+        }
+        pre.totals = pre.getTotals()
+        pre.filteredRows.push(pre.totals)
+        pre.parentRefresh({})
     }
 }

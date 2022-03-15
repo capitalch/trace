@@ -1,29 +1,46 @@
-// import { useRef } from 'react'
 import { _, useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
 
 function useStockSummaryAgeingReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
-    const { emit, } = useIbuki()
+    const { debounceFilterOn, emit, } = useIbuki()
     const meta: any = useRef({
+        allRows: [],
         dataPath: 'jsonResult.stock',
         filteredRows: [],
+        getTotals: getTotals,
+        isSearchTextEdited: false,
         origJsonData: {},
-        origRows: [],
         parentRefresh: setRefresh,
         searchText: '',
+        searchTextRef: null,
         sqlKey: 'getJson_stock_summary',
-        sqlArgs: {},
+        sqlArgs: { date: '2021-12-30' },
         subTitle: '',
         title: 'Stock summary with ageing',
         // summaryPath: 'jsonResult.summary',
         totals: {}
     })
     const pre = meta.current
+
+    useEffect(() => {
+        if (pre.isSearchTextEdited && pre.searchTextRef.current) {
+            pre.searchTextRef.current.focus()
+        }
+    })
+
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
         fetchData()
+        const subs1 = debounceFilterOn('XXX').subscribe((d: any) => {
+            const requestSearch = d.data[0]
+            const searchText = d.data[1]
+            requestSearch(searchText)
+        })
+        return (() => {
+            subs1.unsubscribe()
+        })
     }, [])
 
     async function fetchData() {
@@ -37,7 +54,7 @@ function useStockSummaryAgeingReport() {
 
         const rows: any[] = _.get(pre.origJsonData, pre.dataPath, [])
         setId(rows)
-        pre.origRows = rows
+        pre.allRows = rows
         pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
         pre.totals = getTotals() || {}
         pre.filteredRows.push(pre.totals)

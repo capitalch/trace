@@ -1,5 +1,5 @@
 ## install
-npm install @emotion/react @mui/x-data-grid-pro @testing-library/react @types/react axios rxjs
+npm install @mui/icons-material @mui/material @mui/styles @types/lodash
 
 ## Temp email
 https://tempail.com/en/

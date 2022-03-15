@@ -340,8 +340,6 @@ function useXXGrid(gridOptions: any) {
 
         setFilteredSummary()
         meta.current.isMounted && setRefresh({})
-
-        // meta.current.searchTextRef.current.focus()
     }
 
     function setAllSummary() {

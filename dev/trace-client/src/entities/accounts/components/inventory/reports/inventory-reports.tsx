@@ -1,12 +1,12 @@
 import {
     Box, Button, CheckCircle, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton
-    , ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography, useSharedElements, useTheme
+    , ListItem, ListItemButton, ListItemIcon, ListItemText, ReactSelect, Tooltip, Typography, useSharedElements, useTheme
 } from '../redirect'
 import { useInventoryReports } from './inventory-reports-hook'
 
 function InventoryReports() {
     const { handleCloseDialog, meta, onReportSelected, setRefresh } = useInventoryReports()
-    const { ReactSelect,  } = useSharedElements()
+    // const { ReactSelect,  } = useSharedElements()
     const pre = meta.current
     const theme = useTheme()
     // To reduce space between two items of drop down
