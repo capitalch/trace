@@ -1325,7 +1325,7 @@ allSqls = {
                 join "SalePurchaseDetails" s
                     on d."id" = s."tranDetailsId"
             where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
-                and "tranDate" <= coalesce(%(date)s, CURRENT_DATE)
+                and "tranDate" <= coalesce(%(onDate)s, CURRENT_DATE)
         ), cte1 as ( -- opening balance
             select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
                 from "ProductOpBal" p where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
@@ -1366,13 +1366,14 @@ allSqls = {
                 from cte0
                     where "tranTypeId" = 5
                         order by "productId", "tranDate" DESC
-        ), cte6 as ( -- combine last purchase price with latest result set and add clos column
+        ), cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
             select coalesce(c4."productId", c5."productId") as "productId"
                 , coalesce("openingPrice",0) as "openingPrice", "op", coalesce("op"* "openingPrice",0)::numeric(12,2) "opValue", "sale", "purchase", "saleRet","purchaseRet",coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice","lastPurchaseDate","lastSaleDate"
                 , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos"
                 from cte4 c4
                     full join cte5 c5
                         on c4."productId" = c5."productId"
+                where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= coalesce(%(days)s,0)
         ), cte7 as ( -- combine latest result set with ProductM, CategoryM and BrandM tables to attach catName, brandName, label
             select c6."productId", "productCode", "catName", "brandName", "label","openingPrice", "op"::numeric(10,2),"opValue"
             , ("purchase" + "saleRet")::numeric(10,2) as "dr", ("sale" + "purchaseRet"):: numeric(10,2) as "cr",

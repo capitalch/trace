@@ -1,25 +1,29 @@
-import { _, useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
+import { _, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryAgeingReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, } = useIbuki()
+    const theme = useTheme()
+    const multiData:any = useContext(MultiDataContext)
+    
     const meta: any = useRef({
         allRows: [],
         dataPath: 'jsonResult.stock',
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
+        // stockOnDate: moment().format('YYYY-MM-DD'),
         origJsonData: {},
         parentRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
+        selectedAgeingOption: { label: 'All stock', value: 0 },
         sqlKey: 'getJson_stock_summary',
-        sqlArgs: { date: '2021-12-30' },
+        // sqlArgs: { date: '2021-12-30', ageing: 0 },
         subTitle: '',
         title: 'Stock summary with ageing',
-        // summaryPath: 'jsonResult.summary',
         totals: {}
     })
     const pre = meta.current
@@ -31,6 +35,7 @@ function useStockSummaryAgeingReport() {
     })
 
     useEffect(() => {
+        multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
         const subs1 = debounceFilterOn('XXX').subscribe((d: any) => {
@@ -49,10 +54,13 @@ function useStockSummaryAgeingReport() {
         pre.origJsonData = await execGenericView({
             isMultipleRows: false,
             sqlKey: pre.sqlKey,
-            args: pre.sqlArgs,
+            args: { onDate: 
+                // pre.stockOnDate 
+                multiData?.generic?.stockOnDate
+                || null, days: pre.selectedAgeingOption.value || 0 },
         }) || {}
 
-        const rows: any[] = _.get(pre.origJsonData, pre.dataPath, [])
+        const rows: any[] = _.get(pre.origJsonData, pre.dataPath, []) || []
         setId(rows)
         pre.allRows = rows
         pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
@@ -72,6 +80,31 @@ function useStockSummaryAgeingReport() {
         }
     }
 
+    function getAgeingOptions() {
+        const ageing = [{
+            label: 'All stock',
+            value: 0
+        },
+        {
+            label: 'Stock >= 90 days',
+            value: 90
+        },
+        {
+            label: 'Stock >= 180 days',
+            value: 180
+        },
+        {
+            label: 'Stock >= 270 days',
+            value: 270
+        },
+        {
+            label: 'Stock >= 360 days',
+            value: 360
+        }
+        ]
+        return (ageing)
+    }
+
     function getColumns(): any[] {
         return ([
             {
@@ -80,13 +113,6 @@ function useStockSummaryAgeingReport() {
                 description: 'Index',
                 field: 'id',
                 width: 60,
-            },
-            {
-                headerName: 'Pr id',
-                description: 'Product id',
-                headerClassName: 'header-class',
-                field: 'productId',
-                width: 70,
             },
             {
                 headerName: 'Pr code',
@@ -179,7 +205,7 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Lst pur price',
+                headerName: 'Pur price(Lst)',
                 headerClassName: 'header-class',
                 description: 'Last purchase price',
                 field: 'lastPurchasePrice',
@@ -188,7 +214,7 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Lst pur dt',
+                headerName: 'Pur dt(Lst)',
                 headerClassName: 'header-class',
                 description: 'Last purchase date',
                 field: 'lastPurchaseDate',
@@ -197,15 +223,50 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                headerName: 'Lst sal dt',
+                headerName: 'Sal dt(Lst)',
                 headerClassName: 'header-class',
                 description: 'Last sale date',
                 field: 'lastSaleDate',
                 type: 'date',
                 width: 90,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
-            }
+            },
+            {
+                headerName: 'Pr id',
+                description: 'Product id',
+                headerClassName: 'header-class',
+                field: 'productId',
+                width: 70,
+            },
         ])
+    }
+
+    function getGridSx() {
+        return (
+            {
+                border: '4px solid orange',
+                p: 1, width: '100%',
+                fontSize: theme.spacing(1.5),
+                minHeight: theme.spacing(80),
+                height: 'calc(100vh - 230px)',
+                fontFamily: 'sans-serif',
+                '& .footer-row-class': {
+                    backgroundColor: theme.palette.grey[300]
+                },
+                '& .header-class': {
+                    fontWeight: 'bold',
+                    color: 'green',
+                    fontSize: theme.spacing(1.8),
+                },
+                '& .grid-toolbar': {
+                    width: '100%',
+                    borderBottom: '1px solid lightgrey',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start'
+                }
+            }
+        )
     }
 
     function getRowClassName(e: any) {
@@ -234,7 +295,19 @@ function useStockSummaryAgeingReport() {
         return (totals)
     }
 
-    return ({ fetchData, getColumns, getRowClassName, meta })
+    function handleAgeingOptionSelected(selectedOption: { label: string; value: string }) {
+        pre.selectedAgeingOption = selectedOption
+        fetchData()
+    }
+
+    function handleStockOnDateChanged(e: any) {
+        pre.stockOnDate = e.target.value
+        // multiData.generic.stockOnDate = e.target.value
+        setRefresh({})
+        // fetchData()
+    }
+
+    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, handleStockOnDateChanged, meta, multiData })
 }
 
 export { useStockSummaryAgeingReport }

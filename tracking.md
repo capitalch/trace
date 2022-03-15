@@ -1,7 +1,7 @@
 ## To do in reports
 1. hide
-2. Stock on date
-3. Jakar range
+                                2. Stock on date
+                                3. Jakar range
 4. Trim button: removes clos = 0
 5. selected clos value
 

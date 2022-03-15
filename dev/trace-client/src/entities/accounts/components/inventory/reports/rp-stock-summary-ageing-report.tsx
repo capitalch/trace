@@ -6,17 +6,35 @@ import {
     GridToolbarColumnsButton,
     GridCellParams,
     GridFooterContainer, GridRowId,
-    IconButton, Radio, RadioGroup, ReactSelect, Search, SyncSharp, TextField,
+    IconButton, moment, Radio, RadioGroup, ReactSelect, Search, SyncSharp, TextField,
     Typography, useEffect, useIbuki, useRef, useState, useTheme,
     useStockSummaryAgeingReport, utilMethods, utils
 } from '../redirect'
 
 function StockSummaryAgeingReport() {
-    const { meta, fetchData, getColumns, getRowClassName } = useStockSummaryAgeingReport()
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, handleStockOnDateChanged, meta, multiData } = useStockSummaryAgeingReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
     pre.searchTextRef = useRef({})
+
+    const reactSelectStyles = {
+        option: (base: any) => ({
+            ...base,
+            padding: '.1rem',
+            paddingLeft: '0.8rem',
+            // color: theme.palette.blue,
+            // backgroundColor: 'white'
+            width: theme.spacing(22),
+        }),
+        control: (provided: any) => ({
+            ...provided,
+            width: theme.spacing(22),
+            // height: theme.spacing(1),
+            // border: '2px solid orange'
+            // width: '80%',
+        })
+    }
 
     return (
         <DataGridPro
@@ -38,14 +56,18 @@ function StockSummaryAgeingReport() {
     )
 
     function CustomToolbar() {
+        const [, setRefresh] = useState({})
+        const temp = useRef({
+            stockOnDate: moment().format('YYYY-MM-DD')
+        })
         return (
             <GridToolbarContainer className='grid-toolbar'>
                 <Box>
                     <Typography variant='subtitle2'>{pre.subTitle}</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-                        <Typography variant='subtitle1' sx={{ fontWeight: 'bold', mt:.5 }}>{pre.title}</Typography>
+                <Box sx={{ display: 'flex', flexWrap:'wrap', rowGap:1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap:1 }}>
+                        <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
                         <GridToolbarColumnsButton color='secondary' />
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
@@ -56,24 +78,48 @@ function StockSummaryAgeingReport() {
                             onClick={fetchData}>
                             <SyncSharp fontSize='small'></SyncSharp>
                         </IconButton>
-                        <ReactSelect menuPlacement='auto' placeholder='Stock ageing' 
-                        // styles={styles}
-                            // options={reportsJson} value={pre.selectedReport} onChange={onReportSelected}
-                             />
-                        {/* <FormControl> */}
-                        {/* <Box sx={{display:'flex', flexDirection:'row', flexWrap:'wrap'}} > */}
-                        {/* <RadioGroup row sx={{ display: 'flex', fontSize:theme.spacing(1) }}> */}
-                        {/* <div radioGroup='grp-name'>
-                            <FormControlLabel sx={{ fontSize: theme.spacing(0.5) }} value='allDates' label='All' control={<Radio size='small' name='grp-name' />} />
-                            <FormControlLabel value='lessThan90' label='< 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
-                            <FormControlLabel value='greaterThan90' label='> 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
-                            <FormControlLabel value='greaterThan180' label='> 180 D' control={<Radio size='small' radioGroup='grp-name' />} />
-                            <FormControlLabel value='greaterThan270' label='> 270 D' control={<Radio size='small' radioGroup='grp-name' />} />
-                            <FormControlLabel value='greaterThan360' label='> 360 D' control={<Radio size='small' radioGroup='grp-name' />} />
-                        </div> */}
-                        {/* </RadioGroup> */}
-                        {/* </Box> */}
-                        {/* </FormControl> */}
+                        <ReactSelect menuPlacement='auto' placeholder='Select ageing'
+                            styles={reactSelectStyles}
+                            options={getAgeingOptions()}
+                            value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
+                        />
+                        <Box sx={{display:'flex',ml:1, flexWrap:'wrap', alignItems: 'center', border:'1px solid lightGrey'}}>
+                            <Typography sx={{ ml: 1,}} variant='subtitle2'>Stock on date:</Typography>
+                            <IconButton
+                                title="Clear"
+                                aria-label="Clear"
+                                size="small"
+                                onClick={() => {
+                                    multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
+                                    // setRefresh({})
+                                    fetchData()
+                                }}>
+                                <CloseSharp fontSize="small" />
+                            </IconButton>
+                            <TextField
+                                color='primary'
+                                variant="standard"
+                                type="date"
+                                InputLabelProps={{ shrink: true }}
+                                onChange={(e: any) => {
+                                    multiData.generic.stockOnDate = e.target.value
+                                    // pre.stockOnDate = e.target.value
+                                    setRefresh({})
+                                }}
+                                onFocus={(e: any) => e.target.select()}
+                                value={multiData.generic.stockOnDate || ''}
+                            // value={multiData.generic.stockOnDate || ''}
+                            />
+                            {/* Sync */}
+                            <IconButton
+                                size="small"
+                                color="secondary"
+                                onClick={() => {
+                                    fetchData()
+                                }}>
+                                <SyncSharp fontSize='small'></SyncSharp>
+                            </IconButton>
+                        </Box>
                     </Box>
                     <GridSearchBox parentMeta={meta} />
                 </Box>
@@ -91,40 +137,9 @@ function StockSummaryAgeingReport() {
             </Box>
         </GridFooterContainer>)
     }
-
-    function getGridSx() {
-        return (
-            {
-                border: '4px solid orange',
-                p: 1, width: '100%',
-                fontSize: theme.spacing(1.5),
-                minHeight: theme.spacing(80),
-                height: 'calc(100vh - 230px)',
-                fontFamily: 'sans-serif',
-                '& .footer-row-class': {
-                    backgroundColor: theme.palette.grey[300]
-                },
-                '& .header-class': {
-                    fontWeight: 'bold',
-                    color: 'green',
-                    fontSize: theme.spacing(1.8),
-                    // backgroundColor: theme.palette.grey[300]
-                },
-                '& .grid-toolbar': {
-                    width: '100%',
-                    borderBottom: '1px solid lightgrey',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    // justifyContent:'start',
-                    alignItems: 'start'
-                }
-            }
-        )
-    }
 }
 
 export { StockSummaryAgeingReport }
-// { filteredRows, origRows, parentRefresh }: any
 
 function GridSearchBox({ parentMeta }: any) {
     // const [, setRefresh] = useState({})
@@ -192,3 +207,18 @@ function GridSearchBox({ parentMeta }: any) {
         pre.parentRefresh({})
     }
 }
+
+// {/* <FormControl> */}
+//                         {/* <Box sx={{display:'flex', flexDirection:'row', flexWrap:'wrap'}} > */}
+//                         {/* <RadioGroup row sx={{ display: 'flex', fontSize:theme.spacing(1) }}> */}
+//                         {/* <div radioGroup='grp-name'>
+//                             <FormControlLabel sx={{ fontSize: theme.spacing(0.5) }} value='allDates' label='All' control={<Radio size='small' name='grp-name' />} />
+//                             <FormControlLabel value='lessThan90' label='< 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
+//                             <FormControlLabel value='greaterThan90' label='> 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
+//                             <FormControlLabel value='greaterThan180' label='> 180 D' control={<Radio size='small' radioGroup='grp-name' />} />
+//                             <FormControlLabel value='greaterThan270' label='> 270 D' control={<Radio size='small' radioGroup='grp-name' />} />
+//                             <FormControlLabel value='greaterThan360' label='> 360 D' control={<Radio size='small' radioGroup='grp-name' />} />
+//                         </div> */}
+//                         {/* </RadioGroup> */}
+//                         {/* </Box> */}
+//                         {/* </FormControl> */}

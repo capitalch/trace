@@ -98,6 +98,7 @@ function LaunchPad() {
                     purchases: purchasesData,
                     debitCreditNotes: debitCreditNotesData,
                     vouchers: vouchersArbitraryData,
+                    generic: {}
                 }}>
                 <Comp></Comp>
             </MultiDataContext.Provider>
