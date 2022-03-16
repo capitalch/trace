@@ -12,7 +12,7 @@ ALTER TABLE IF EXISTS "ExtBusinessContactsAccM"
 
 -- 02-06-2021. Create index for faster search
 CREATE INDEX if not exists "branchId_tranTypeId_finYearId"
-    ON demounit1."TranH" USING btree
+    ON "TranH" USING btree
     ("branchId" ASC NULLS LAST, "tranTypeId" ASC NULLS LAST, "finYearId" ASC NULLS LAST)
     TABLESPACE pg_default;
 
@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS "AutoSubledgerCounter"  (
 		REFERENCES "AccM" (id) MATCH SIMPLE
 			ON UPDATE NO ACTION
 			ON DELETE CASCADE
-)
--- create unique constraint on 'accCode' in table 'AccM'. At present same account code can exist twice in the table
+);
+-- create unique constraint on 'accCode' and parentId in table 'AccM'. At present same account code can exist twice in the table
 ALTER TABLE "AccM"
-	DROP CONSTRAINT IF EXISTS "AccM_accCode_key";
-ALTER TABLE "AccM"
-    ADD CONSTRAINT "AccM_accCode_key" UNIQUE ("accCode");
+	DROP CONSTRAINT IF EXISTS "AccM_accCode_key",
+	DROP CONSTRAINT IF EXISTS "AccM_accCode_parentId_unique_key",
+    ADD CONSTRAINT "AccM_accCode_parentId_unique_key" UNIQUE ("accCode", "parentId");
 
 -- create ProductOpBal table
 CREATE TABLE IF NOT EXISTS "ProductOpBal"
@@ -56,15 +56,15 @@ CREATE TABLE IF NOT EXISTS "ProductOpBal"
 	"jData" jsonb,
 	"timestamp" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT "branchId" FOREIGN KEY ("branchId")
-        REFERENCES demounit1."BranchM" (id) MATCH SIMPLE
+        REFERENCES "BranchM" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE RESTRICT,
 	CONSTRAINT "finYearId" FOREIGN KEY ("finYearId")
-        REFERENCES demounit1."FinYearM" (id) MATCH SIMPLE
+        REFERENCES "FinYearM" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE RESTRICT,
 	CONSTRAINT "productId" FOREIGN KEY ("productId")
-        REFERENCES demounit1."ProductM" (id) MATCH SIMPLE
+        REFERENCES "ProductM" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE RESTRICT,
 	CONSTRAINT "productId_branchId_finYearId_key" UNIQUE ("productId", "branchId", "finYearId")
@@ -79,6 +79,7 @@ ALTER TABLE IF EXISTS "ProductM"
 -- modify fkey or add if not exists in table AccOpBal
 ALTER TABLE "AccOpBal"
    DROP CONSTRAINT IF EXISTS "accId",
+   DROP CONSTRAINT IF EXISTS "AccOpBal_accId_fkey",
    ADD  CONSTRAINT "AccOpBal_accId_fkey"
    FOREIGN KEY ("accId") REFERENCES "AccM" ("id") ON DELETE NO ACTION;
 

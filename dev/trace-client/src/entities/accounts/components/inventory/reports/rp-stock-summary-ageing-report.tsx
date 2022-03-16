@@ -1,18 +1,17 @@
 import {
-    Box, CloseSharp, DataGridPro, FormControl, FormControlLabel,
+    Box, CloseSharp, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
-    GridCellParams,
-    GridFooterContainer, GridRowId,
-    IconButton, moment, Radio, RadioGroup, ReactSelect, Search, SyncSharp, TextField,
-    Typography, useEffect, useIbuki, useRef, useState, useTheme,
-    useStockSummaryAgeingReport, utilMethods, utils
+    GridFooterContainer,
+    IconButton, moment, ReactSelect, Search, SyncSharp, TextField,
+    Typography, useIbuki, useRef, useState, useTheme,
+    useStockSummaryAgeingReport, utilMethods,
 } from '../redirect'
 
 function StockSummaryAgeingReport() {
-    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, handleStockOnDateChanged, meta, multiData } = useStockSummaryAgeingReport()
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, multiData } = useStockSummaryAgeingReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -23,16 +22,11 @@ function StockSummaryAgeingReport() {
             ...base,
             padding: '.1rem',
             paddingLeft: '0.8rem',
-            // color: theme.palette.blue,
-            // backgroundColor: 'white'
             width: theme.spacing(22),
         }),
         control: (provided: any) => ({
             ...provided,
             width: theme.spacing(22),
-            // height: theme.spacing(1),
-            // border: '2px solid orange'
-            // width: '80%',
         })
     }
 
@@ -47,6 +41,7 @@ function StockSummaryAgeingReport() {
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
+            onSelectionModelChange={onSelectModelChange}
             rowHeight={25}
             rows={pre.filteredRows}
             showCellRightBorder={true}
@@ -57,16 +52,13 @@ function StockSummaryAgeingReport() {
 
     function CustomToolbar() {
         const [, setRefresh] = useState({})
-        const temp = useRef({
-            stockOnDate: moment().format('YYYY-MM-DD')
-        })
         return (
             <GridToolbarContainer className='grid-toolbar'>
                 <Box>
                     <Typography variant='subtitle2'>{pre.subTitle}</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', flexWrap:'wrap', rowGap:1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap:1 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
                         <GridToolbarColumnsButton color='secondary' />
                         <GridToolbarFilterButton color='primary' />
@@ -83,15 +75,14 @@ function StockSummaryAgeingReport() {
                             options={getAgeingOptions()}
                             value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
                         />
-                        <Box sx={{display:'flex',ml:1, flexWrap:'wrap', alignItems: 'center', border:'1px solid lightGrey'}}>
-                            <Typography sx={{ ml: 1,}} variant='subtitle2'>Stock on date:</Typography>
+                        <Box sx={{ display: 'flex', ml: 1, flexWrap: 'wrap', alignItems: 'center', border: '1px solid lightGrey' }}>
+                            <Typography sx={{ ml: 1, }} variant='subtitle2'>Stock on date:</Typography>
                             <IconButton
                                 title="Clear"
                                 aria-label="Clear"
                                 size="small"
                                 onClick={() => {
                                     multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
-                                    // setRefresh({})
                                     fetchData()
                                 }}>
                                 <CloseSharp fontSize="small" />
@@ -103,12 +94,10 @@ function StockSummaryAgeingReport() {
                                 InputLabelProps={{ shrink: true }}
                                 onChange={(e: any) => {
                                     multiData.generic.stockOnDate = e.target.value
-                                    // pre.stockOnDate = e.target.value
                                     setRefresh({})
                                 }}
                                 onFocus={(e: any) => e.target.select()}
                                 value={multiData.generic.stockOnDate || ''}
-                            // value={multiData.generic.stockOnDate || ''}
                             />
                             {/* Sync */}
                             <IconButton
@@ -129,8 +118,10 @@ function StockSummaryAgeingReport() {
 
     function CustomFooter() {
         return (<GridFooterContainer >
-            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontWeight: 'bold', fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
                 <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
+                <Box>{''.concat('Sel count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
+                <Box>{''.concat('Sel close value', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
                 <Box>{''.concat('Op stock value', ' : ', toDecimalFormat(pre?.totals?.opValue || 0))}</Box>
                 <Box>{''.concat('Clos stock value', ' : ', toDecimalFormat(pre?.totals?.closValue || 0))}</Box>
                 <Box>{''.concat('Incr in stock value', ' : ', toDecimalFormat((pre?.totals?.closValue || 0) - (pre?.totals?.opValue || 0)))}</Box>
@@ -142,7 +133,6 @@ function StockSummaryAgeingReport() {
 export { StockSummaryAgeingReport }
 
 function GridSearchBox({ parentMeta }: any) {
-    // const [, setRefresh] = useState({})
     const pre = parentMeta.current
     const { debounceEmit, } = useIbuki()
 
@@ -175,7 +165,7 @@ function GridSearchBox({ parentMeta }: any) {
         pre.isSearchTextEdited = true
 
         pre.parentRefresh({})
-        debounceEmit('XXX', [requestSearch, e.target.value])
+        debounceEmit('STOCK-SUMMARY-AGEING-DEBOUNCE', [requestSearch, e.target.value])
     }
 
     function handleClear(e: any) {
@@ -207,18 +197,3 @@ function GridSearchBox({ parentMeta }: any) {
         pre.parentRefresh({})
     }
 }
-
-// {/* <FormControl> */}
-//                         {/* <Box sx={{display:'flex', flexDirection:'row', flexWrap:'wrap'}} > */}
-//                         {/* <RadioGroup row sx={{ display: 'flex', fontSize:theme.spacing(1) }}> */}
-//                         {/* <div radioGroup='grp-name'>
-//                             <FormControlLabel sx={{ fontSize: theme.spacing(0.5) }} value='allDates' label='All' control={<Radio size='small' name='grp-name' />} />
-//                             <FormControlLabel value='lessThan90' label='< 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
-//                             <FormControlLabel value='greaterThan90' label='> 90 D' control={<Radio size='small' radioGroup='grp-name' />} />
-//                             <FormControlLabel value='greaterThan180' label='> 180 D' control={<Radio size='small' radioGroup='grp-name' />} />
-//                             <FormControlLabel value='greaterThan270' label='> 270 D' control={<Radio size='small' radioGroup='grp-name' />} />
-//                             <FormControlLabel value='greaterThan360' label='> 360 D' control={<Radio size='small' radioGroup='grp-name' />} />
-//                         </div> */}
-//                         {/* </RadioGroup> */}
-//                         {/* </Box> */}
-//                         {/* </FormControl> */}

@@ -1,12 +1,8 @@
-import {
-    Box, Button, CheckCircle, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton
-    , ListItem, ListItemButton, ListItemIcon, ListItemText, ReactSelect, Tooltip, Typography, useSharedElements, useTheme
-} from '../redirect'
+import { Box, ReactSelect, Typography, useTheme} from '../redirect'
 import { useInventoryReports } from './inventory-reports-hook'
 
 function InventoryReports() {
-    const { handleCloseDialog, meta, onReportSelected, setRefresh } = useInventoryReports()
-    // const { ReactSelect,  } = useSharedElements()
+    const {meta, onReportSelected } = useInventoryReports()
     const pre = meta.current
     const theme = useTheme()
     // To reduce space between two items of drop down
@@ -28,7 +24,6 @@ function InventoryReports() {
     return (<Box>       
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.breadcumb)}</Typography>
-            {/* <Typography variant='subtitle2' sx={{marginTop:theme.spacing(1)}}>All reports</Typography> */}
             <ReactSelect  menuPlacement='auto' placeholder='Select report' styles={styles}
                 options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
         </Box>
@@ -45,51 +40,8 @@ const reportsJson = [
         value:'stockSummaryAgeingReport',
         breadcumb:'Stock summary with ageing report'
     },
-    {
-        label:'Stock summary',
-        value:'stockSummaryReport'
-    }
+    // {
+    //     label:'Stock summary',
+    //     value:'stockSummaryReport'
+    // }
 ]
-
-//  {/* <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
-            
-//             <Button variant='contained' size='large' color='success' onClick={handleSelectReportClicked}>
-//                 Select report
-//             </Button>
-//         </Box> */}
-
-// {/* <Dialog
-// open={pre.showDialog}
-// onClose={(e, reason) => {
-//     if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
-//         handleCloseDialog()
-//     }
-// }}
-// fullWidth={true}>
-// <DialogTitle>
-//     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-//         <Typography variant='h6'>{pre.dialogConfig.title}</Typography>
-//         <Tooltip title="Close">
-//             <IconButton
-//                 sx={{ width: '18px', height: '18px', marginTop: '-10px', marginRight: '-20px' }}
-//                 onClick={handleCloseDialog}>
-//                 <CloseSharp sx={{ fontSize: '16px' }} />
-//             </IconButton>
-//         </Tooltip>
-//     </Box>
-// </DialogTitle>
-// <DialogContent>
-//     {getReportsList()}
-// </DialogContent>
-// </Dialog> */}
-
-// reports.map((item: any, index: number) =>
-// (<ListItem disablePadding key={index}>
-//     <ListItemButton onClick={() => handleReportSelected(item)}>
-//         <ListItemIcon>
-//             <CheckCircle fontSize='large' color='secondary' />
-//         </ListItemIcon>
-//         <ListItemText primary={item.label} secondary={item.descr} />
-//     </ListItemButton>
-// </ListItem>)
-// )

@@ -1,4 +1,0 @@
-function useStockAgeingReport(){
-
-}
-export {useStockAgeingReport}

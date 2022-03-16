@@ -1,15 +1,9 @@
 import { StockSummaryAgeingReport, useEffect, useRef, useState, } from '../redirect'
-import { StockSummaryReport } from './stock-summary-report'
-import { StockAgeingReport } from './stock-ageing-report'
+
 function useInventoryReports() {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
         currentReportComponent: () => <></>,
-        // dialogConfig: {
-        //     title: 'Select a report from below'
-        // },
-        // Report: () => <div>A report component</div>,
-        // showDialog: false,
         breadcumb: '',
         title: 'Inventory reports',
     })
@@ -23,7 +17,6 @@ function useInventoryReports() {
         setRefresh({})
     }
 
-
     function onReportSelected(selected: any) {
         const reportName = selected.value
         pre.breadcumb = selected.breadcumb
@@ -34,7 +27,6 @@ function useInventoryReports() {
         function getReportsMap() {
             return {
                 stockSummaryAgeingReport: StockSummaryAgeingReport,
-                stockSummaryReport: StockSummaryReport
             }
         }
     }
@@ -42,9 +34,3 @@ function useInventoryReports() {
     return ({ handleCloseDialog, meta, onReportSelected, setRefresh })
 }
 export { useInventoryReports }
-
-// function handleSelectReportClicked() {
-    //     pre.showDialog = true
-    //     pre.subTitle = ''
-    //     setRefresh({})
-    // }
