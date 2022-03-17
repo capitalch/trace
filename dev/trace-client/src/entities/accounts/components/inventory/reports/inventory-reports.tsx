@@ -36,9 +36,14 @@ export { InventoryReports }
 
 const reportsJson = [
     {
-        label:'Stock summary with ageing report (Stock opening, debits, credits and closing balances with valuation and ageing )',
+        label:'Stock summary with ageing',
         value:'stockSummaryAgeingReport',
-        breadcumb:'Stock summary with ageing report'
+        breadcumb:'Stock summary with ageing'
+    },
+    {
+        label:'Sales',
+        value:'salesReport',
+        breadcumb:'Sales'
     },
     // {
     //     label:'Stock summary',

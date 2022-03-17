@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3
--- Dumped by pg_dump version 13.2
+-- Dumped by pg_dump version 12.10
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -141,6 +141,35 @@ ALTER TABLE public."AccOpBal_id_seq" OWNER TO webadmin;
 --
 
 ALTER SEQUENCE public."AccOpBal_id_seq" OWNED BY public."AccOpBal".id;
+
+
+--
+-- Name: AutoSubledgerCounter; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."AutoSubledgerCounter" (
+    id integer NOT NULL,
+    "finYearId" smallint NOT NULL,
+    "branchId" smallint NOT NULL,
+    "accId" integer NOT NULL,
+    "lastNo" integer NOT NULL
+);
+
+
+ALTER TABLE public."AutoSubledgerCounter" OWNER TO webadmin;
+
+--
+-- Name: AutoSubledgerCounter_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE public."AutoSubledgerCounter" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."AutoSubledgerCounter_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
 
 
 --
@@ -400,7 +429,8 @@ CREATE TABLE public."ExtBusinessContactsAccM" (
     "accId" integer,
     "jData" jsonb,
     gstin character varying(15),
-    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    "stateCode" smallint DEFAULT 19
 );
 
 
@@ -691,6 +721,39 @@ ALTER SEQUENCE public."ProductM_id_seq" OWNED BY public."ProductM".id;
 
 
 --
+-- Name: ProductOpBal; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."ProductOpBal" (
+    id integer NOT NULL,
+    "productId" integer NOT NULL,
+    "branchId" smallint NOT NULL,
+    "finYearId" smallint NOT NULL,
+    qty numeric(10,2) DEFAULT 0 NOT NULL,
+    "openingPrice" numeric(12,2) DEFAULT 0 NOT NULL,
+    "lastPurchaseDate" date NOT NULL,
+    "jData" jsonb,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public."ProductOpBal" OWNER TO webadmin;
+
+--
+-- Name: ProductOpBal_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE public."ProductOpBal" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."ProductOpBal_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: SalePurchaseDetails; Type: TABLE; Schema: public; Owner: webadmin
 --
 
@@ -744,6 +807,43 @@ CREATE TABLE public."Settings" (
 
 
 ALTER TABLE public."Settings" OWNER TO webadmin;
+
+--
+-- Name: Test; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."Test" (
+    id integer NOT NULL,
+    "accName" text NOT NULL,
+    amount numeric DEFAULT 0 NOT NULL,
+    "parentId" integer,
+    "jData" jsonb
+);
+
+
+ALTER TABLE public."Test" OWNER TO webadmin;
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+CREATE SEQUENCE public."Test_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Test_id_seq" OWNER TO webadmin;
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
+--
+
+ALTER SEQUENCE public."Test_id_seq" OWNED BY public."Test".id;
+
 
 --
 -- Name: TranD; Type: TABLE; Schema: public; Owner: webadmin
@@ -860,6 +960,17 @@ CREATE TABLE public."UnitM" (
 ALTER TABLE public."UnitM" OWNER TO webadmin;
 
 --
+-- Name: profitorloss; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public.profitorloss (
+    "coalesce" numeric
+);
+
+
+ALTER TABLE public.profitorloss OWNER TO webadmin;
+
+--
 -- Name: AccM id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
@@ -951,6 +1062,13 @@ ALTER TABLE ONLY public."ProductM" ALTER COLUMN id SET DEFAULT nextval('public."
 
 
 --
+-- Name: Test id; Type: DEFAULT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Test" ALTER COLUMN id SET DEFAULT nextval('public."Test_id_seq"'::regclass);
+
+
+--
 -- Name: TranCounter id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
@@ -997,80 +1115,46 @@ INSERT INTO public."AccClassM" VALUES (16, 'ecash');
 -- Data for Name: AccM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-INSERT INTO public."AccM" VALUES (1, 'BranchDivision', 'Branch / Divisions', 'L', NULL, 'N', true, 1);
-INSERT INTO public."AccM" VALUES (2, 'Capitalaccount', 'Capital Account', 'L', NULL, 'N', true, 2);
-INSERT INTO public."AccM" VALUES (6, 'CurrentLiabilities', 'Current Liabilities', 'L', NULL, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (10, 'LoansLiability', 'Loans Liability', 'L', NULL, 'N', true, 4);
-INSERT INTO public."AccM" VALUES (14, 'Suspense', 'Suspense A/c', 'L', NULL, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (15, 'CurrentAssets', 'Current Assets', 'A', NULL, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (23, 'MiscExpences', 'Misc Expences (Asset)', 'A', NULL, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (24, 'Investments', 'Investments', 'A', NULL, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (25, 'IndirectExpences', 'Indirect Expences', 'E', NULL, 'N', true, 5);
-INSERT INTO public."AccM" VALUES (26, 'Purchase', 'Purchase Accounts', 'E', NULL, 'N', true, 6);
-INSERT INTO public."AccM" VALUES (27, 'DirectExpences', 'Direct Expences', 'E', NULL, 'N', true, 7);
-INSERT INTO public."AccM" VALUES (28, 'DirectIncome', 'Direct Incomes', 'I', NULL, 'N', true, 8);
-INSERT INTO public."AccM" VALUES (29, 'Indirectincome', 'Indirect Incomes', 'I', NULL, 'N', true, 9);
-INSERT INTO public."AccM" VALUES (30, 'Sales', 'Sales Account', 'I', NULL, 'N', true, 10);
-INSERT INTO public."AccM" VALUES (4, 'Capital', 'Capital', 'L', 3, 'Y', true, 2);
-INSERT INTO public."AccM" VALUES (5, 'ReservesAndSurplus', 'Reserves & Surplus', 'L', 2, 'N', true, 2);
-INSERT INTO public."AccM" VALUES (7, 'DutiesAndTaxes', 'Duties & Taxes', 'L', 6, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (8, 'Provisions', 'Provisions', 'L', 6, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (9, 'SundryCreditors', 'Sundry Creditors', 'L', 6, 'N', true, 11);
-INSERT INTO public."AccM" VALUES (11, 'BankOd', 'Bank OD Account', 'L', 10, 'N', true, 13);
-INSERT INTO public."AccM" VALUES (12, 'SecuredLoans', 'Secured Loans', 'L', 10, 'N', true, 4);
-INSERT INTO public."AccM" VALUES (13, 'UnsecuredLoans', 'Unsecured Loans', 'L', 10, 'N', true, 4);
-INSERT INTO public."AccM" VALUES (16, 'BankAccounts', 'Bank Accounts', 'A', 15, 'N', true, 13);
-INSERT INTO public."AccM" VALUES (17, 'CashInHand', 'Cash-in-Hand', 'A', 15, 'N', true, 14);
-INSERT INTO public."AccM" VALUES (18, 'BankOCC', 'Bank Cash Credit', 'L', 10, 'N', true, 13);
-INSERT INTO public."AccM" VALUES (19, 'DepositsAsset', 'Deposits (Asset)', 'A', 15, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (20, 'StockInHand', 'Stock in Hand', 'A', 15, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (21, 'LoansAndAdvances', 'Loans & Advances (Asset)', 'A', 15, 'N', true, 3);
-INSERT INTO public."AccM" VALUES (22, 'SundryDebtors', 'Sundry Debtors', 'A', 15, 'N', true, 12);
-INSERT INTO public."AccM" VALUES (3, 'CapitalSubgroup', 'Capital Account Subgroup', 'L', 2, 'N', true, 2);
-
-
---
--- Data for Name: AccOpBal; Type: TABLE DATA; Schema: public; Owner: webadmin
---
+INSERT INTO public."AccM" VALUES (1, 'BranchDivision', 'Branch / Divisions', 'L', NULL, 'N', true, 1, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (2, 'Capitalaccount', 'Capital Account', 'L', NULL, 'N', true, 2, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (6, 'CurrentLiabilities', 'Current Liabilities', 'L', NULL, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (10, 'LoansLiability', 'Loans Liability', 'L', NULL, 'N', true, 4, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (14, 'Suspense', 'Suspense A/c', 'L', NULL, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (15, 'CurrentAssets', 'Current Assets', 'A', NULL, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (23, 'MiscExpences', 'Misc Expences (Asset)', 'A', NULL, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (24, 'Investments', 'Investments', 'A', NULL, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (25, 'IndirectExpences', 'Indirect Expences', 'E', NULL, 'N', true, 5, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (26, 'Purchase', 'Purchase Accounts', 'E', NULL, 'N', true, 6, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (27, 'DirectExpences', 'Direct Expences', 'E', NULL, 'N', true, 7, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (28, 'DirectIncome', 'Direct Incomes', 'I', NULL, 'N', true, 8, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (29, 'Indirectincome', 'Indirect Incomes', 'I', NULL, 'N', true, 9, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (30, 'Sales', 'Sales Account', 'I', NULL, 'N', true, 10, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (4, 'Capital', 'Capital', 'L', 3, 'Y', true, 2, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (5, 'ReservesAndSurplus', 'Reserves & Surplus', 'L', 2, 'N', true, 2, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (7, 'DutiesAndTaxes', 'Duties & Taxes', 'L', 6, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (8, 'Provisions', 'Provisions', 'L', 6, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (9, 'SundryCreditors', 'Sundry Creditors', 'L', 6, 'N', true, 11, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (11, 'BankOd', 'Bank OD Account', 'L', 10, 'N', true, 13, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (12, 'SecuredLoans', 'Secured Loans', 'L', 10, 'N', true, 4, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (13, 'UnsecuredLoans', 'Unsecured Loans', 'L', 10, 'N', true, 4, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (16, 'BankAccounts', 'Bank Accounts', 'A', 15, 'N', true, 13, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (17, 'CashInHand', 'Cash-in-Hand', 'A', 15, 'N', true, 14, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (18, 'BankOCC', 'Bank Cash Credit', 'L', 10, 'N', true, 13, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (19, 'DepositsAsset', 'Deposits (Asset)', 'A', 15, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (20, 'StockInHand', 'Stock in Hand', 'A', 15, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (21, 'LoansAndAdvances', 'Loans & Advances (Asset)', 'A', 15, 'N', true, 3, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (22, 'SundryDebtors', 'Sundry Debtors', 'A', 15, 'N', true, 12, '2021-03-25 09:52:36.002381+00');
+INSERT INTO public."AccM" VALUES (3, 'CapitalSubgroup', 'Capital Account Subgroup', 'L', 2, 'N', true, 2, '2021-03-25 09:52:36.002381+00');
 
 --
--- Data for Name: BankOpBal; Type: TABLE DATA; Schema: public; Owner: webadmin
+-- Data for Name: AutoSubledgerCounter; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
 
 --
 -- Data for Name: BranchM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
 INSERT INTO public."BranchM" VALUES (1, 'head office', NULL, NULL, 'head', '2021-03-25 09:55:23.321624+00');
 
---
--- Data for Name: BrandM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
---
--- Data for Name: CategoryM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
---
--- Data for Name: Contacts; Type: TABLE DATA; Schema: public; Owner: webadmin
---
---
--- Data for Name: ExtBankReconTranD; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
---
--- Data for Name: ExtBusinessContactsAccM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
---
--- Data for Name: ExtGstTranD; Type: TABLE DATA; Schema: public; Owner: webadmin
---
---
--- Data for Name: ExtMiscAccM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
---
--- Data for Name: FinYearM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
 
 INSERT INTO public."FinYearM" VALUES ('2003-04-01', '2004-03-31', 2003);
 INSERT INTO public."FinYearM" VALUES ('2004-04-01', '2005-03-31', 2004);
@@ -1094,9 +1178,9 @@ INSERT INTO public."FinYearM" VALUES ('2002-04-01', '2003-03-31', 2002);
 INSERT INTO public."FinYearM" VALUES ('2022-04-02', '2023-03-30', 2022);
 INSERT INTO public."FinYearM" VALUES ('2023-04-01', '2024-03-30', 2023);
 INSERT INTO public."FinYearM" VALUES ('2024-04-01', '2025-03-31', 2024);
+INSERT INTO public."FinYearM" VALUES ('2020-04-01', '2021-03-31', 2020);
 INSERT INTO public."FinYearM" VALUES ('2025-04-01', '2026-03-31', 2025);
 INSERT INTO public."FinYearM" VALUES ('2026-04-01', '2027-03-31', 2026);
-INSERT INTO public."FinYearM" VALUES ('2020-04-01', '2021-03-31', 2020);
 
 
 --
@@ -1119,29 +1203,7 @@ INSERT INTO public."GodownM" VALUES (1, 'main', NULL, NULL, '2021-03-25 09:58:55
 INSERT INTO public."PosM" VALUES (1, 'sample1', NULL, NULL, 1);
 
 
---
--- Data for Name: ProductM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
---
--- Data for Name: SalePurchaseDetails; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
---
--- Data for Name: Settings; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
-INSERT INTO public."Settings" VALUES (1, 'menu', NULL, '{"menu": [{"name": "financialAccounting", "label": "Accounts", "children": [{"name": "finalAccounts", "label": "Final Accounts", "children": [{"name": "trialBalance", "label": "Trial Balance", "component": "TraceTrialBalance"}, {"name": "balanceSheet", "label": "Balance Sheet", "component": "balanceSheet"}, {"name": "pl", "label": "PL Account", "component": "plAccount"}]}, {"name": "sales", "label": "Sales", "children": [{"name": "creditSales", "label": "Credit Sales"}, {"name": "cashSales", "label": "Cash Sales"}, {"name": "mixedSales", "label": "Mixed Sales"}, {"name": "cardSales", "label": "Card Sales"}]}, {"name": "purchase", "label": "Purchase", "children": [{"name": "creditPurchase", "label": "Credit Purchase"}, {"name": "cashPurchase", "label": "Cash Purchase"}]}, {"name": "misc", "label": "Misc", "children": [{"name": "contra", "label": "Contra"}, {"name": "journal", "label": "Journals"}, {"name": "stockJournal", "label": "Stock Journal"}]}, {"name": "payments", "label": "Payments", "children": [{"name": "cashPayment", "label": "Cash Payment"}, {"name": "chequePayment", "label": "Cheque Payment"}]}, {"name": "receipts", "label": "Receipts", "children": [{"name": "cashReceipt", "label": "Cash Receipt"}, {"name": "cashReceipt", "label": "Cash receipt"}]}]}, {"name": "payroll", "label": "Payroll", "children": [{"name": "transactions", "label": "Transactions", "children": [{"name": "timeSheet", "label": "Time Sheet", "children": []}, {"name": "leaves", "label": "Leaves", "children": []}]}, {"name": "processing", "label": "Processing", "children": [{"name": "processPayroll", "label": "Process Payroll", "children": []}, {"name": "undoProcessing", "label": "Undo Processing", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "payslips", "label": "Payslips", "children": []}, {"name": "loanAccount", "label": "Loan Account", "children": []}]}, {"name": "reports", "label": "Reports", "children": [{"name": "providentFund", "label": "ProvidentFund", "children": []}, {"name": "esi", "label": "ESI", "children": []}]}]}, {"name": "marketing", "label": "Marketing", "children": [{"name": "mission", "label": "Mission", "children": [{"name": "missionStatement", "label": "Mission Statement", "children": []}, {"name": "objectives", "label": "Objectives", "children": []}]}, {"name": "analysis", "label": "Analysis", "children": [{"name": "opportunities", "label": "Opportunities", "children": []}, {"name": "5canalysis", "label": "5C Analysis", "children": []}, {"name": "swotAnalysis", "label": "SWOT Analysis", "children": []}, {"name": "pestAnalysis", "label": "PEST Analysis", "children": []}]}, {"name": "strategy", "label": "Strategy", "children": [{"name": "targetAudience", "label": "Target Audience", "children": []}, {"name": "measurableGoals", "label": "Measurable Goals", "children": []}, {"name": "budget", "label": "Budget", "children": []}]}, {"name": "marketingMix", "label": "Marketing Mix", "children": [{"name": "productDevelopment", "label": "Product Dev", "children": []}, {"name": "pricing", "label": "Pricing", "children": []}, {"name": "promotion", "label": "Promotion", "children": []}, {"name": "placeAndDistribution", "label": "Place and Distribution", "children": []}]}, {"name": "implementation", "label": "Implementation", "children": [{"name": "planToAction", "label": "Plan to Action", "children": []}, {"name": "monitorResults", "label": "Monitor Results", "children": []}]}]}, {"name": "recruitment", "label": "Recruitment", "children": [{"name": "planning", "label": "Planning", "children": [{"name": "vacancy", "label": "Vacancy", "children": []}, {"name": "resumesScreening", "label": "Resume Screening", "children": []}, {"name": "jobAnalysis", "label": "Job Analysis", "children": []}, {"name": "jobDescription", "label": "Job Description", "children": []}, {"name": "jobSpecification", "label": "Job Specification", "children": []}, {"name": "jobEvaluation", "label": "Job Evaluation", "children": []}]}, {"name": "execution", "label": "Execution", "children": [{"name": "directRecruitment", "label": "Direct Recruitment", "children": []}, {"name": "employmentExchange", "label": "Employment Exch.", "children": []}, {"name": "employmentAgencies", "label": "Employment Ag.", "children": []}, {"name": "advertisement", "label": "Advertisement", "children": []}, {"name": "professionalAssociation", "label": "Proff Associations", "children": []}, {"name": "campusRecruitment", "label": "Campus Recruit", "children": []}, {"name": "wordOfMouth", "label": "Word Of Mouth", "children": []}]}, {"name": "screening", "label": "Screening", "children": [{"name": "processing", "label": "Processing", "children": []}, {"name": "finalization", "label": "Finalization", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "coverLetter", "label": "Cover Letter", "children": []}, {"name": "appointmentLetter", "label": "Appointment Letter", "children": []}]}]}, {"name": "sampleForms", "label": "Sample Forms", "children": [{"name": "registrations", "label": "Registrations", "children": [{"name": "gym", "label": "Gym", "children": []}, {"name": "studentAdmission", "label": "Student Admission", "children": []}, {"name": "clubMembership", "label": "Club Membership", "children": []}, {"name": "employeeInfo", "label": "Employee Information", "children": []}]}, {"name": "applications", "label": "Applications", "children": [{"name": "loanApplication", "label": "Loan Application", "children": []}, {"name": "electronicsRental", "label": "Electronics Rental", "children": []}]}, {"name": "feedbacks", "label": "Feedbacks", "children": [{"name": "employeePerformance", "label": "Employee Performance", "children": []}, {"name": "softwareEvaluation", "label": "Software Evaluation", "children": []}, {"name": "eventFeedback", "label": "Event Feedback", "children": []}]}, {"name": "others", "label": "Others", "children": [{"name": "deeplyNested", "label": "Deeply Nested", "children": []}]}]}]}', 0);
-
---
--- Data for Name: TranCounter; Type: TABLE DATA; Schema: public; Owner: webadmin
---
---
--- Data for Name: TranD; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
---
--- Data for Name: TranH; Type: TABLE DATA; Schema: public; Owner: webadmin
---
+INSERT INTO public."Settings" VALUES (1, 'menu', NULL, '{"menu": [{"name": "financialAccounting", "label": "Accounts", "children": [{"name": "finalAccounts", "label": "Final Accounts", "children": [{"name": "trialBalance", "label": "Trial Balance", "component": "TraceTrialBalance"}, {"name": "balanceSheet", "label": "Balance Sheet", "component": "balanceSheet"}, {"name": "pl", "label": "PL Account", "component": "plAccount"}]}, {"name": "sales", "label": "Sales", "children": [{"name": "creditSales", "label": "Credit Sales"}, {"name": "cashSales", "label": "Cash Sales"}, {"name": "mixedSales", "label": "Mixed Sales"}, {"name": "cardSales", "label": "Card Sales"}]}, {"name": "purchase", "label": "Purchase", "children": [{"name": "creditPurchase", "label": "Credit Purchase"}, {"name": "cashPurchase", "label": "Cash Purchase"}]}, {"name": "misc", "label": "Misc", "children": [{"name": "contra", "label": "Contra"}, {"name": "journal", "label": "Journals"}, {"name": "stockJournal", "label": "Stock Journal"}]}, {"name": "payments", "label": "Payments", "children": [{"name": "cashPayment", "label": "Cash Payment"}, {"name": "chequePayment", "label": "Cheque Payment"}]}, {"name": "receipts", "label": "Receipts", "children": [{"name": "cashReceipt", "label": "Cash Receipt"}, {"name": "cashReceipt", "label": "Cash receipt"}]}]}, {"name": "payroll", "label": "Payroll", "children": [{"name": "transactions", "label": "Transactions", "children": [{"name": "timeSheet", "label": "Time Sheet", "children": []}, {"name": "leaves", "label": "Leaves", "children": []}]}, {"name": "processing", "label": "Processing", "children": [{"name": "processPayroll", "label": "Process Payroll", "children": []}, {"name": "undoProcessing", "label": "Undo Processing", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "payslips", "label": "Payslips", "children": []}, {"name": "loanAccount", "label": "Loan Account", "children": []}]}, {"name": "reports", "label": "Reports", "children": [{"name": "providentFund", "label": "ProvidentFund", "children": []}, {"name": "esi", "label": "ESI", "children": []}]}]}, {"name": "marketing", "label": "Marketing", "children": [{"name": "mission", "label": "Mission", "children": [{"name": "missionStatement", "label": "Mission Statement", "children": []}, {"name": "objectives", "label": "Objectives", "children": []}]}, {"name": "analysis", "label": "Analysis", "children": [{"name": "opportunities", "label": "Opportunities", "children": []}, {"name": "5canalysis", "label": "5C Analysis", "children": []}, {"name": "swotAnalysis", "label": "SWOT Analysis", "children": []}, {"name": "pestAnalysis", "label": "PEST Analysis", "children": []}]}, {"name": "strategy", "label": "Strategy", "children": [{"name": "targetAudience", "label": "Target Audience", "children": []}, {"name": "measurableGoals", "label": "Measurable Goals", "children": []}, {"name": "budget", "label": "Budget", "children": []}]}, {"name": "marketingMix", "label": "Marketing Mix", "children": [{"name": "productDevelopment", "label": "Product Dev", "children": []}, {"name": "pricing", "label": "Pricing", "children": []}, {"name": "promotion", "label": "Promotion", "children": []}, {"name": "placeAndDistribution", "label": "Place and Distribution", "children": []}]}, {"name": "implementation", "label": "Implementation", "children": [{"name": "planToAction", "label": "Plan to Action", "children": []}, {"name": "monitorResults", "label": "Monitor Results", "children": []}]}]}, {"name": "recruitment", "label": "Recruitment", "children": [{"name": "planning", "label": "Planning", "children": [{"name": "vacancy", "label": "Vacancy", "children": []}, {"name": "resumesScreening", "label": "Resume Screening", "children": []}, {"name": "jobAnalysis", "label": "Job Analysis", "children": []}, {"name": "jobDescription", "label": "Job Description", "children": []}, {"name": "jobSpecification", "label": "Job Specification", "children": []}, {"name": "jobEvaluation", "label": "Job Evaluation", "children": []}]}, {"name": "execution", "label": "Execution", "children": [{"name": "directRecruitment", "label": "Direct Recruitment", "children": []}, {"name": "employmentExchange", "label": "Employment Exch.", "children": []}, {"name": "employmentAgencies", "label": "Employment Ag.", "children": []}, {"name": "advertisement", "label": "Advertisement", "children": []}, {"name": "professionalAssociation", "label": "Proff Associations", "children": []}, {"name": "campusRecruitment", "label": "Campus Recruit", "children": []}, {"name": "wordOfMouth", "label": "Word Of Mouth", "children": []}]}, {"name": "screening", "label": "Screening", "children": [{"name": "processing", "label": "Processing", "children": []}, {"name": "finalization", "label": "Finalization", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "coverLetter", "label": "Cover Letter", "children": []}, {"name": "appointmentLetter", "label": "Appointment Letter", "children": []}]}]}, {"name": "sampleForms", "label": "Sample Forms", "children": [{"name": "registrations", "label": "Registrations", "children": [{"name": "gym", "label": "Gym", "children": []}, {"name": "studentAdmission", "label": "Student Admission", "children": []}, {"name": "clubMembership", "label": "Club Membership", "children": []}, {"name": "employeeInfo", "label": "Employee Information", "children": []}]}, {"name": "applications", "label": "Applications", "children": [{"name": "loanApplication", "label": "Loan Application", "children": []}, {"name": "electronicsRental", "label": "Electronics Rental", "children": []}]}, {"name": "feedbacks", "label": "Feedbacks", "children": [{"name": "employeePerformance", "label": "Employee Performance", "children": []}, {"name": "softwareEvaluation", "label": "Software Evaluation", "children": []}, {"name": "eventFeedback", "label": "Event Feedback", "children": []}]}, {"name": "others", "label": "Others", "children": [{"name": "deeplyNested", "label": "Deeply Nested", "children": []}]}]}]}', 0, '2021-03-25 10:00:14.291414+00');
 
 --
 -- Data for Name: TranTypeM; Type: TABLE DATA; Schema: public; Owner: webadmin
@@ -1171,14 +1233,21 @@ INSERT INTO public."UnitM" VALUES (2, 'kilogram', NULL, 'Kg');
 -- Name: AccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccM_id_seq"', 168, true);
+SELECT pg_catalog.setval('public."AccM_id_seq"', 307, true);
 
 
 --
 -- Name: AccOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 120, true);
+SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 724, true);
+
+
+--
+-- Name: AutoSubledgerCounter_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 2, true);
 
 
 --
@@ -1192,49 +1261,49 @@ SELECT pg_catalog.setval('public."BranchM_id_seq"', 4, true);
 -- Name: BrandM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BrandM_id_seq"', 11, true);
+SELECT pg_catalog.setval('public."BrandM_id_seq"', 15, true);
 
 
 --
 -- Name: Category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Category_id_seq"', 41, true);
+SELECT pg_catalog.setval('public."Category_id_seq"', 61, true);
 
 
 --
 -- Name: Contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Contacts_id_seq"', 243, true);
+SELECT pg_catalog.setval('public."Contacts_id_seq"', 258, true);
 
 
 --
 -- Name: ExtBankOpBalAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 1, true);
+SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 3, true);
 
 
 --
 -- Name: ExtBankReconTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 66, true);
+SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 137, true);
 
 
 --
 -- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 10, true);
+SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 15, true);
 
 
 --
 -- Name: ExtGstTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 246, true);
+SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 9801, true);
 
 
 --
@@ -1255,7 +1324,7 @@ SELECT pg_catalog.setval('public."GodownM_id_seq"', 1, false);
 -- Name: LastTranNumber_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 11, true);
+SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 22, true);
 
 
 --
@@ -1269,28 +1338,42 @@ SELECT pg_catalog.setval('public."PosM_id_seq"', 1, true);
 -- Name: ProductM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ProductM_id_seq"', 24, true);
+SELECT pg_catalog.setval('public."ProductM_id_seq"', 68, true);
+
+
+--
+-- Name: ProductOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 19, true);
 
 
 --
 -- Name: SalePurchaseDetails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 179, true);
+SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 9720, true);
+
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+SELECT pg_catalog.setval('public."Test_id_seq"', 36, true);
 
 
 --
 -- Name: TranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranD_id_seq"', 695, true);
+SELECT pg_catalog.setval('public."TranD_id_seq"', 20278, true);
 
 
 --
 -- Name: TranH_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranH_id_seq"', 369, true);
+SELECT pg_catalog.setval('public."TranH_id_seq"', 10188, true);
 
 
 --
@@ -1299,6 +1382,14 @@ SELECT pg_catalog.setval('public."TranH_id_seq"', 369, true);
 
 ALTER TABLE ONLY public."AccClassM"
     ADD CONSTRAINT "AccClassM_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AccM AccM_accCode_parentId_unique_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AccM"
+    ADD CONSTRAINT "AccM_accCode_parentId_unique_key" UNIQUE ("accCode", "parentId");
 
 
 --
@@ -1315,6 +1406,14 @@ ALTER TABLE ONLY public."AccM"
 
 ALTER TABLE ONLY public."AccOpBal"
     ADD CONSTRAINT "AccOpBal_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: AutoSubledgerCounter AutoSubledger_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AutoSubledgerCounter"
+    ADD CONSTRAINT "AutoSubledger_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1518,6 +1617,14 @@ ALTER TABLE ONLY public."Settings"
 
 
 --
+-- Name: Test Test_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Test"
+    ADD CONSTRAINT "Test_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: TranD TranD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -1550,11 +1657,27 @@ ALTER TABLE ONLY public."TranTypeM"
 
 
 --
+-- Name: AccOpBal accOpBal_accId_branchId_finYearId_unique_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AccOpBal"
+    ADD CONSTRAINT "accOpBal_accId_branchId_finYearId_unique_key" UNIQUE ("accId", "branchId", "finYearId");
+
+
+--
 -- Name: BrandM brandName; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
 ALTER TABLE ONLY public."BrandM"
     ADD CONSTRAINT "brandName" UNIQUE ("brandName");
+
+
+--
+-- Name: ProductM catId_brandId_label_unique_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductM"
+    ADD CONSTRAINT "catId_brandId_label_unique_key" UNIQUE ("brandId", "catId", label);
 
 
 --
@@ -1606,6 +1729,14 @@ ALTER TABLE ONLY public."Settings"
 
 
 --
+-- Name: ProductOpBal productId_branchId_finYearId_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductOpBal"
+    ADD CONSTRAINT "productId_branchId_finYearId_key" UNIQUE ("productId", "branchId", "finYearId");
+
+
+--
 -- Name: FinYearM startDate; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -1619,6 +1750,13 @@ ALTER TABLE ONLY public."FinYearM"
 
 ALTER TABLE ONLY public."UnitM"
     ADD CONSTRAINT "unitName" UNIQUE ("unitName");
+
+
+--
+-- Name: branchId_tranTypeId_finYearId; Type: INDEX; Schema: public; Owner: webadmin
+--
+
+CREATE INDEX "branchId_tranTypeId_finYearId" ON public."TranH" USING btree ("branchId", "tranTypeId", "finYearId");
 
 
 --
@@ -1665,11 +1803,27 @@ ALTER TABLE ONLY public."AccM"
 
 
 --
+-- Name: AutoSubledgerCounter AccM_AutoSubledgerCounter_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AutoSubledgerCounter"
+    ADD CONSTRAINT "AccM_AutoSubledgerCounter_fkey" FOREIGN KEY ("accId") REFERENCES public."AccM"(id) ON DELETE CASCADE;
+
+
+--
+-- Name: AccOpBal AccOpBal_accId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AccOpBal"
+    ADD CONSTRAINT "AccOpBal_accId_fkey" FOREIGN KEY ("accId") REFERENCES public."AccM"(id);
+
+
+--
 -- Name: AccOpBal AccOpBal_branchId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
 --
 
 ALTER TABLE ONLY public."AccOpBal"
-    ADD CONSTRAINT "AccOpBal_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES public."BranchM"(id) NOT VALID;
+    ADD CONSTRAINT "AccOpBal_branchId_fkey" FOREIGN KEY ("branchId") REFERENCES public."BranchM"(id);
 
 
 --
@@ -1686,6 +1840,14 @@ ALTER TABLE ONLY public."BankOpBal"
 
 ALTER TABLE ONLY public."BankOpBal"
     ADD CONSTRAINT "BankOpBal_finYearId_fkey" FOREIGN KEY ("finYearId") REFERENCES public."FinYearM"(id) NOT VALID;
+
+
+--
+-- Name: AutoSubledgerCounter BranchM_AutoSubledgerCounter_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AutoSubledgerCounter"
+    ADD CONSTRAINT "BranchM_AutoSubledgerCounter_fkey" FOREIGN KEY ("branchId") REFERENCES public."BranchM"(id) ON DELETE CASCADE;
 
 
 --
@@ -1713,6 +1875,14 @@ ALTER TABLE ONLY public."ExtMiscAccM"
 
 
 --
+-- Name: AutoSubledgerCounter FinYearM_AutoSubledgerCounter_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."AutoSubledgerCounter"
+    ADD CONSTRAINT "FinYearM_AutoSubledgerCounter_fkey" FOREIGN KEY ("finYearId") REFERENCES public."FinYearM"(id) ON DELETE CASCADE;
+
+
+--
 -- Name: SalePurchaseDetails SalePurchaseDetails_productId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -1726,14 +1896,6 @@ ALTER TABLE ONLY public."SalePurchaseDetails"
 
 ALTER TABLE ONLY public."SalePurchaseDetails"
     ADD CONSTRAINT "SalePurchaseDetails_tranDetailsId_fkey" FOREIGN KEY ("tranDetailsId") REFERENCES public."TranD"(id) ON DELETE CASCADE;
-
-
---
--- Name: AccOpBal accId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."AccOpBal"
-    ADD CONSTRAINT "accId" FOREIGN KEY ("accId") REFERENCES public."AccM"(id);
 
 
 --
@@ -1769,6 +1931,14 @@ ALTER TABLE ONLY public."PosM"
 
 
 --
+-- Name: ProductOpBal branchId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductOpBal"
+    ADD CONSTRAINT "branchId" FOREIGN KEY ("branchId") REFERENCES public."BranchM"(id) ON DELETE RESTRICT;
+
+
+--
 -- Name: ProductM brandId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -1797,7 +1967,7 @@ ALTER TABLE ONLY public."TranH"
 --
 
 ALTER TABLE ONLY public."AccOpBal"
-    ADD CONSTRAINT "finYearId" FOREIGN KEY ("finYearId") REFERENCES public."FinYearM"(id) NOT VALID;
+    ADD CONSTRAINT "finYearId" FOREIGN KEY ("finYearId") REFERENCES public."FinYearM"(id);
 
 
 --
@@ -1806,6 +1976,14 @@ ALTER TABLE ONLY public."AccOpBal"
 
 ALTER TABLE ONLY public."TranH"
     ADD CONSTRAINT "finYearId" FOREIGN KEY ("finYearId") REFERENCES public."FinYearM"(id);
+
+
+--
+-- Name: ProductOpBal finYearId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductOpBal"
+    ADD CONSTRAINT "finYearId" FOREIGN KEY ("finYearId") REFERENCES public."FinYearM"(id) ON DELETE RESTRICT;
 
 
 --
@@ -1822,6 +2000,14 @@ ALTER TABLE ONLY public."CategoryM"
 
 ALTER TABLE ONLY public."TranH"
     ADD CONSTRAINT "posId" FOREIGN KEY ("posId") REFERENCES public."PosM"(id);
+
+
+--
+-- Name: ProductOpBal productId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductOpBal"
+    ADD CONSTRAINT "productId" FOREIGN KEY ("productId") REFERENCES public."ProductM"(id) ON DELETE RESTRICT;
 
 
 --

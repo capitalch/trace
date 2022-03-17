@@ -1,6 +1,6 @@
 import { _, CloseSharp, GridCellParams, IconButton, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
-function useStockSummaryAgeingReport() {
+function useSalesReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
@@ -15,14 +15,14 @@ function useStockSummaryAgeingReport() {
         getTotals: getTotals,
         isSearchTextEdited: false,
         origJsonData: {},
-        parentRefresh: setRefresh,
+        setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
-        selectedAgeingOption: { label: 'All stock', value: 0 },
+        selectedMonthOtion: { label: 'April', value: 4 },
         selectedRowsObject: {},
         sqlKey: 'getJson_stock_summary',
         subTitle: '',
-        title: 'Stock summary with ageing',
+        title: 'Sales',
         totals: {}
     })
     const pre = meta.current
@@ -80,29 +80,11 @@ function useStockSummaryAgeingReport() {
         }
     }
 
-    function getAgeingOptions() {
-        const ageing = [{
-            label: 'All stock',
-            value: 0
-        },
-        {
-            label: 'Stock >= 90 days',
-            value: 90
-        },
-        {
-            label: 'Stock >= 180 days',
-            value: 180
-        },
-        {
-            label: 'Stock >= 270 days',
-            value: 270
-        },
-        {
-            label: 'Stock >= 360 days',
-            value: 360
-        }
-        ]
-        return (ageing)
+    function getMonths() {
+        const months = [{ label: 'April', value: 4 }, { label: 'May', value: 5 }, { label: 'June', value: 6 }, { label: 'July', value: 7 }, { label: 'August', value: 8 },
+        { label: 'September', value: 9 }, { label: 'October', value: 11 }, { label: 'November', value: 11 }, { label: 'December', value: 12, },
+        { label: 'January', value: 1 }, { label: 'February', value: 2 }, { label: 'March', value: 3 },]
+        return (months)
     }
 
     function getColumns(): any[] {
@@ -309,8 +291,8 @@ function useStockSummaryAgeingReport() {
         return (totals)
     }
 
-    function handleAgeingOptionSelected(selectedOption: { label: string; value: string }) {
-        pre.selectedAgeingOption = selectedOption
+    function handleMonthSelected(selectedMonthOption: { label: string; value: string }) {
+        pre.selectedMonthOtion = selectedMonthOption
         fetchData()
     }
 
@@ -334,7 +316,6 @@ function useStockSummaryAgeingReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, multiData, onSelectModelChange })
+    return ({ fetchData, getColumns, getGridSx, getMonths, getRowClassName, handleMonthSelected, meta, multiData, onSelectModelChange })
 }
-
-export { useStockSummaryAgeingReport }
+export { useSalesReport }

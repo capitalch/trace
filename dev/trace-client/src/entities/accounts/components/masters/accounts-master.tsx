@@ -587,7 +587,10 @@ function AccountsMaster() {
             })
             meta.current.groupsLedgersRef = dt2
             emit('SHOW-LOADING-INDICATOR', false)
-            meta.current.isMounted && setData(dt1)
+            // meta.current.isMounted && (
+            setData(dt1)
+            setRefresh({})
+            // )
         }
         utilFunc().applyScrollPos()
     }
@@ -664,8 +667,6 @@ function AccountsMaster() {
             data.accLeaf = data.accLeaf || dialogConfig.accLeaf
             data.classId = data.classId || dialogConfig.classId
             data.accType = data.accType || dialogConfig.accType
-            // data.accClass = data.accClass || dialogConfig.accClass
-            // data.isAutoSubledger = data.isAutoSubledger || dialogConfig.isAutoSubledger
             data.id || (data.id = dialogConfig.id)
             if (data.id) {
                 // edit is done, remove unwanted columns

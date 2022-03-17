@@ -28,4 +28,5 @@ export {
 } from '@mui/x-data-grid-pro'
 export { useIbuki, } from '../../../../global-utils/ibuki'
 export { MultiDataContext } from '../common/multi-data-bridge'
+export { SalesReport } from './reports/rp-sales-report'
 // export ReactSelect from 'react-select'

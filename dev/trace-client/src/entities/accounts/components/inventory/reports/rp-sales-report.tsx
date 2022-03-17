@@ -5,14 +5,15 @@ import {
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect,  SyncSharp, TextField,
+    IconButton, moment, ReactSelect, SyncSharp, TextField,
     Typography, useRef, useState, useTheme,
     useStockSummaryAgeingReport, utilMethods,
 } from '../redirect'
 import { GridSearchBox } from './grid-search-box'
+import { useSalesReport } from './rp-sales-report-hook'
 
-function StockSummaryAgeingReport() {
-    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, multiData } = useStockSummaryAgeingReport()
+function SalesReport() {
+    const { fetchData, getColumns, getGridSx, getMonths, getRowClassName,handleMonthSelected, meta, multiData } = useSalesReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -42,7 +43,7 @@ function StockSummaryAgeingReport() {
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
-            onSelectionModelChange={onSelectModelChange}
+            // onSelectionModelChange={onSelectModelChange}
             rowHeight={25}
             rows={pre.filteredRows}
             showCellRightBorder={true}
@@ -73,8 +74,8 @@ function StockSummaryAgeingReport() {
                         </IconButton>
                         <ReactSelect menuPlacement='auto' placeholder='Select ageing'
                             styles={reactSelectStyles}
-                            options={getAgeingOptions()}
-                            value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
+                            options={getMonths()}
+                            value={pre.selectedAgeingOption} onChange={handleMonthSelected}
                         />
                         <Box sx={{ display: 'flex', ml: 1, flexWrap: 'wrap', alignItems: 'center', border: '1px solid lightGrey' }}>
                             <Typography sx={{ ml: 1, }} variant='subtitle2'>Stock on date:</Typography>
@@ -129,6 +130,7 @@ function StockSummaryAgeingReport() {
             </Box>
         </GridFooterContainer>)
     }
+
 }
 
-export { StockSummaryAgeingReport }
+export { SalesReport }

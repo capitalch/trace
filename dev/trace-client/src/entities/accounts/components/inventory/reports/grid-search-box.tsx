@@ -34,7 +34,7 @@ function GridSearchBox({ parentMeta }: any) {
         pre.searchText = e.target.value
         pre.isSearchTextEdited = true
 
-        pre.parentRefresh({})
+        pre.setRefresh({})
         debounceEmit('STOCK-SUMMARY-AGEING-DEBOUNCE', [requestSearch, e.target.value])
     }
 
@@ -64,7 +64,7 @@ function GridSearchBox({ parentMeta }: any) {
         }
         pre.totals = pre.getTotals()
         pre.filteredRows.push(pre.totals)
-        pre.parentRefresh({})
+        pre.setRefresh({})
     }
 }
 export { GridSearchBox }
