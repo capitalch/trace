@@ -4,7 +4,7 @@ import { NewProduct } from './new-product'
 
 function OpeningStockWorkBench() {
     const { ReactSelect } = useSharedElements()
-    const { checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh } = useOpeningStockWorkBench()
+    const { checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit,isLastPurchaseDateError, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh } = useOpeningStockWorkBench()
     const pre = meta.current
     const theme = useTheme()
 
@@ -32,22 +32,26 @@ function OpeningStockWorkBench() {
 
     return (
         <Box sx={{ display: 'flex', border: '4px solid orange', rowGap: 3, flexDirection: 'column', p: 3, w: 30 }}>
+            {/* category */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="caption" color='GrayText'>Category</Typography>
                 <ReactSelect options={pre.filteredCategories || []} maxMenuHeight={250} placeholder='Select category'
                     menuPlacement="auto" styles={{ ...styles, ...errorStyle('selectedCategory') }} onChange={onCategoryChanged} value={pre.selectedCategory} />
             </Box>
+            {/* brand */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="caption" color='GrayText'>Brand</Typography>
                 <ReactSelect options={pre.filteredBrands || []} maxMenuHeight={250} placeholder='Select brand'
                     menuPlacement="auto" styles={{ ...styles, ...errorStyle('selectedBrand') }} onChange={onBrandChanged} value={pre.selectedBrand} />
             </Box>
+            {/* label */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="caption" color='GrayText'>Label</Typography>
                 <ReactSelect options={pre.filteredProducts || []} maxMenuHeight={200} placeholder='Select label'
                     menuPlacement="auto" styles={{ ...styles, ...errorStyle('selectedProduct') }} onChange={onProductChanged} value={pre.selectedProduct} />
-            </Box>
+            </Box>            
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                {/* qty */}
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <Typography variant="caption" color='GrayText'>Qty</Typography>
                     <NumberFormat
@@ -72,6 +76,7 @@ function OpeningStockWorkBench() {
                         value={pre.qty || 0.0}
                     />
                 </Box>
+                {/* opening price */}
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <Typography variant="caption" color='GrayText'>Opening price</Typography>
                     <NumberFormat
@@ -93,6 +98,7 @@ function OpeningStockWorkBench() {
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                {/* Last purchase date */}
                 <Typography variant='caption' color='GrayText'>Last purchase date</Typography>
                 <TextField
                     sx={{ maxWidth: '60%' }}
@@ -102,6 +108,7 @@ function OpeningStockWorkBench() {
                         pre.lastPurchaseDate = e.target.value
                         setRefresh({})
                     }}
+                    error={isLastPurchaseDateError()}
                     onFocus={(e: any) => e.target.select()}
                     value={pre.lastPurchaseDate}
                 />

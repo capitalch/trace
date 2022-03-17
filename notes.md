@@ -1,3 +1,48 @@
+set search_path to demounit1;
+with cte0 as( --base cte used many times in next
+        select "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
+            , s."amount", "gstRate", s."id" as "salePurchaseDetailsId"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+                --where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+                where "branchId" = 1 and "finYearId" = 2021
+                and "tranDate" <= CURRENT_DATE -- coalesce(%(onDate)s, CURRENT_DATE)
+        ), cte1 as ( -- opening balance
+            select "productId", "openingPrice"
+                from "ProductOpBal" p 
+                --where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+                where "branchId" = 1 and "finYearId" = 2021
+        ), cte2 as( -- compute last purchase price till sale date
+        select "tranDate", "productId","qty","price", (
+            select ("price" - "discount") 
+                from cte0
+                    where "tranTypeId" = 5
+                        and "productId" = c0."productId"
+                        and "tranDate" <= c0."tranDate"
+                order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
+        ) as "lastPurchasePrice", "discount", "cgst", "sgst","igst", "amount", "gstRate"
+            from cte0 c0
+                where "tranTypeId" = 4 --and "productId" in(66,67)
+        ), cte3 as ( -- take last purchase price from ProductOpBal if no purchase is made in current year
+            select "tranDate", c2."productId", c2."qty", "price", coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice",
+                    "discount", "cgst", "sgst", "igst", "amount", "gstRate"
+                from cte2 c2
+                    left join cte1 c1
+                        on c2."productId" = c1."productId"
+        ), cte4 as ( -- compute gross profit
+            select cte3.*, "qty" * ("price" - "discount" - "lastPurchasePrice") as "grossProfit"
+                from cte3
+        )
+        
+        select * from cte4 order by "tranDate"
+
+## Required reports
+1. Profitibality
+2. daily sales with profitability
+3. Selectable outstanding summary as op , Debits, credits, closing, remarks (storable) for accounts
 ## install
 npm install @mui/icons-material @mui/material @mui/styles @types/lodash
 

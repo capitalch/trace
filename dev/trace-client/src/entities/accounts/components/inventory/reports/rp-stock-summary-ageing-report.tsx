@@ -5,10 +5,11 @@ import {
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect, Search, SyncSharp, TextField,
-    Typography, useIbuki, useRef, useState, useTheme,
+    IconButton, moment, ReactSelect,  SyncSharp, TextField,
+    Typography, useRef, useState, useTheme,
     useStockSummaryAgeingReport, utilMethods,
 } from '../redirect'
+import { GridSearchBox } from './grid-search-box'
 
 function StockSummaryAgeingReport() {
     const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, multiData } = useStockSummaryAgeingReport()
@@ -132,68 +133,68 @@ function StockSummaryAgeingReport() {
 
 export { StockSummaryAgeingReport }
 
-function GridSearchBox({ parentMeta }: any) {
-    const pre = parentMeta.current
-    const { debounceEmit, } = useIbuki()
+// function GridSearchBox({ parentMeta }: any) {
+//     const pre = parentMeta.current
+//     const { debounceEmit, } = useIbuki()
 
-    return (<TextField
-        inputRef={pre.searchTextRef}
-        variant="standard"
-        autoComplete='off'
-        value={pre.searchText || ''}
-        onChange={handleOnChange}
-        placeholder="Search…"
-        InputProps={{
-            startAdornment: <Search fontSize="small" />,
-            endAdornment: (
-                <IconButton
-                    title="Clear"
-                    aria-label="Clear"
-                    size="small"
-                    sx={{
-                        visibility: pre.searchText ? 'visible' : 'hidden'
-                    }}
-                    onClick={handleClear}>
-                    <CloseSharp fontSize="small" />
-                </IconButton>
-            ),
-        }}
-    />)
+//     return (<TextField
+//         inputRef={pre.searchTextRef}
+//         variant="standard"
+//         autoComplete='off'
+//         value={pre.searchText || ''}
+//         onChange={handleOnChange}
+//         placeholder="Search…"
+//         InputProps={{
+//             startAdornment: <Search fontSize="small" />,
+//             endAdornment: (
+//                 <IconButton
+//                     title="Clear"
+//                     aria-label="Clear"
+//                     size="small"
+//                     sx={{
+//                         visibility: pre.searchText ? 'visible' : 'hidden'
+//                     }}
+//                     onClick={handleClear}>
+//                     <CloseSharp fontSize="small" />
+//                 </IconButton>
+//             ),
+//         }}
+//     />)
 
-    function handleOnChange(e: any) {
-        pre.searchText = e.target.value
-        pre.isSearchTextEdited = true
+//     function handleOnChange(e: any) {
+//         pre.searchText = e.target.value
+//         pre.isSearchTextEdited = true
 
-        pre.parentRefresh({})
-        debounceEmit('STOCK-SUMMARY-AGEING-DEBOUNCE', [requestSearch, e.target.value])
-    }
+//         pre.parentRefresh({})
+//         debounceEmit('STOCK-SUMMARY-AGEING-DEBOUNCE', [requestSearch, e.target.value])
+//     }
 
-    function handleClear(e: any) {
-        pre.searchText = ''
-        requestSearch('')
-    }
+//     function handleClear(e: any) {
+//         pre.searchText = ''
+//         requestSearch('')
+//     }
 
-    function requestSearch(searchValue: string) {
-        if (searchValue) {
-            pre.filteredRows = pre.allRows.filter(
-                (row: any) => {
-                    return Object.keys(row).some((field) => {
-                        const temp: string = row[field]
-                            ? row[field].toString()
-                            : ''
-                        return temp
-                            .toLowerCase()
-                            .includes(searchValue.toLowerCase())
-                    })
-                }
-            )
-        } else {
-            pre.filteredRows = pre.allRows.map((x: any) => ({
-                ...x,
-            }))
-        }
-        pre.totals = pre.getTotals()
-        pre.filteredRows.push(pre.totals)
-        pre.parentRefresh({})
-    }
-}
+//     function requestSearch(searchValue: string) {
+//         if (searchValue) {
+//             pre.filteredRows = pre.allRows.filter(
+//                 (row: any) => {
+//                     return Object.keys(row).some((field) => {
+//                         const temp: string = row[field]
+//                             ? row[field].toString()
+//                             : ''
+//                         return temp
+//                             .toLowerCase()
+//                             .includes(searchValue.toLowerCase())
+//                     })
+//                 }
+//             )
+//         } else {
+//             pre.filteredRows = pre.allRows.map((x: any) => ({
+//                 ...x,
+//             }))
+//         }
+//         pre.totals = pre.getTotals()
+//         pre.filteredRows.push(pre.totals)
+//         pre.parentRefresh({})
+//     }
+// }

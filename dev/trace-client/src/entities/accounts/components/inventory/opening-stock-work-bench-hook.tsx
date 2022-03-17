@@ -38,7 +38,7 @@ function useOpeningStockWorkBench() {
         const brandError = !!!pre?.selectedBrand?.value
         const productError = !!!pre?.selectedProduct?.value
         const qtyError = pre?.qty === 0
-        const error = categoryError || brandError || productError || qtyError
+        const error = categoryError || brandError || productError || qtyError || isLastPurchaseDateError()
         return (error)
     }
 
@@ -114,6 +114,13 @@ function useOpeningStockWorkBench() {
         }
     }
 
+    function isLastPurchaseDateError() {
+        const finYearObject = getFromBag('finYearObject')
+        const isoStartDate = finYearObject.isoStartDate
+        const isBefore = moment(pre.lastPurchaseDate).isBefore(isoStartDate) || false
+        return (!isBefore)
+    }
+
     async function loadProducts() {
         let products = getFromBag('products')
         if (_.isEmpty(products)) {
@@ -183,7 +190,7 @@ function useOpeningStockWorkBench() {
         setRefresh({})
     }
 
-    function onProductUpsertedAtServer(){
+    function onProductUpsertedAtServer() {
         pre.products = getFromBag('products')
         // onCategoryChanged(pre.selectedCategory)
         onBrandChanged(pre.selectedBrand)
@@ -198,7 +205,7 @@ function useOpeningStockWorkBench() {
         pre.id = undefined
     }
 
-    return ({ checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh })
+    return ({ checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, isLastPurchaseDateError, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh })
 
 }
 

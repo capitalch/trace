@@ -1,19 +1,3 @@
-## To do in reports
-1. hide
-                                2. Stock on date
-                                3. Jakar range
-4. Trim button: removes clos = 0
-5. selected clos value
-
-## Oopening stock pending
-1. XXGrid search button as separate component without autofocus
-                                                                2. Download categories and brands also with products
-                                                                3. Dialog box
-                                                                4. New product component
-5. Socket implementation for new Product, Category and Brand
-6. Total opening stock valuation at footer
-7. 
-
 ## Planning
                                                                                         1. Authentication and user management:                    1 week, 5th Feb 2022
                                                                                             SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
@@ -35,6 +19,9 @@
                                                                                         2. Remaining of Opening stock and products                1 day, 4th Mar
                                                                                         3. Bug while login, when press enter key                  .5 day, 5the Mar
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
+1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
+2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
+
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
 4. Full reporting of Inventory and allied:                1 week, 12rd Mar
 5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
