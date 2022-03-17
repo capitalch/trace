@@ -1329,7 +1329,7 @@ allSqls = {
         ), cte1 as ( -- opening balance
             select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
                 from "ProductOpBal" p where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
-        ), cte2 as ( -- create columns for sale, saleRet, purch...
+        ), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
             select "productId","tranTypeId", 
                 SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
                 , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
@@ -1339,7 +1339,7 @@ allSqls = {
                 , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
                 from cte0
             group by "productId", "tranTypeId" order by "productId", "tranTypeId"
-        ), cte3 as ( -- sum / organize columns group by productId
+        ), cte3 as ( -- sum columns group by productId
             select "productId"
             , coalesce(SUM("sale"),0) as "sale"
             , coalesce(SUM("purchase"),0) as "purchase"
@@ -1390,10 +1390,7 @@ allSqls = {
         ), cte8 as( -- get summary
             select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("dr") debits, SUM("cr") credits, SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
                 from cte7
-        ) , cte9 as (
-			select * from cte7
-				where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= 100
-		)
+        ) 
         select json_build_object(
             'stock', (SELECT json_agg(row_to_json(a)) from cte7 a),
             'summary', (SELECT row_to_json(b) from cte8 b)
