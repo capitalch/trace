@@ -109,6 +109,10 @@ function utils() {
         return (ret)
     }
 
+    function getAccountsStorage(){
+        
+    }
+
     function getMappedAccounts(accounts: any[]) {
         return accounts.map((x: any) => ({
             label: x.accName,

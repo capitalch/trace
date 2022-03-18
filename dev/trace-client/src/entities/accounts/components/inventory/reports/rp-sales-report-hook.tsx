@@ -21,16 +21,10 @@ function useSalesReport() {
         searchTextRef: null,
         selectedOption: { label: 'All', value: 'all' },
         setRefresh: setRefresh,
-        sqlKey: '',
+        sqlKey: 'get_sale_report',
         startDate: finYearObject.isoStartDate,
         subTitle: '',
         title: 'Sales',
-
-        dataPath: 'jsonResult.stock',
-        getTotals: getTotals,
-        origJsonData: {},
-        selectedRowsObject: {},
-        totals: {}
     })
     const pre = meta.current
 
@@ -41,7 +35,7 @@ function useSalesReport() {
     })
 
     useEffect(() => {
-        multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
+        // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
         const subs1 = debounceFilterOn('STOCK-SUMMARY-AGEING-DEBOUNCE').subscribe((d: any) => {
@@ -57,22 +51,19 @@ function useSalesReport() {
     async function fetchData() {
         let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
-        // pre.origJsonData = await execGenericView({
-        //     isMultipleRows: false,
-        //     sqlKey: pre.sqlKey,
-        //     args: {
-        //         onDate:
-        //             multiData?.generic?.stockOnDate
-        //             || null, days: pre.selectedAgeingOption.value || 0
-        //     },
-        // }) || {}
-
-        // const rows: any[] = _.get(pre.origJsonData, pre.dataPath, []) || []
-        // setId(rows)
-        // pre.allRows = rows
-        // pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
-        // pre.totals = getTotals() || {}
-        // pre.filteredRows.push(pre.totals)
+        const rows = await execGenericView({
+            isMultipleRows: true,
+            sqlKey: pre.sqlKey,
+            args: {
+                startDate: pre.startDate,
+                endDate: pre.endDate
+            },
+        }) || []
+        setId(rows)
+        pre.allRows = rows
+        pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
+        pre.totals = getTotals() || {}
+        pre.filteredRows.push(pre.totals)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
@@ -97,13 +88,48 @@ function useSalesReport() {
 
     function handleOptionSelected(selectedOption: { label: string; value: any }) {
         pre.selectedOption = selectedOption
-        function logic() {
-            const ifElse = {
+        let value = selectedOption.value
+
+        Number.isInteger(value) ? execNumLogic(value) : execStringlogic(value)
+
+        function execNumLogic(val: number) {
+            const isoFormat = 'YYYY-MM-DD'
+            const finYearId = finYearObject.finYearId
+            const isoStartDate = finYearObject.isoStartDate
+            const finStartMonth = moment(isoStartDate).get('month') + 1
+            const y = (val < finStartMonth) ? finYearId + 1 : finYearId
+            const m = val < 10 ? '0' + val : '' + val
+            const isoDate = ''.concat(y + '', '-', m, '-', '01')
+            const startDate = moment(isoDate).startOf('month').format(isoFormat)
+            const endDate = moment(isoDate).endOf('month').format(isoFormat)
+            pre.startDate = startDate
+            pre.endDate = endDate
+        }
+
+        function execStringlogic(val: string) {
+            const obj: any = {
                 'all': () => {
                     pre.startDate = finYearObject.isoStartDate
                     pre.endDate = finYearObject.isoEndDate
+                },
+                'today': () => {
+                    pre.startDate = moment().format('YYYY-MM-DD')
+                    pre.endDate = pre.startDate
+                },
+                'prevDay': () => {
+                    pre.startDate = moment().subtract(1, 'days').format('YYYY-MM-DD')
+                    pre.endDate = pre.startDate
+                },
+                'thisMonth': () => {
+                    pre.startDate = moment().startOf('month').format('YYYY-MM-DD')
+                    pre.endDate = moment().endOf('month').format('YYYY-MM-DD')
+                },
+                'prevMonth': () => {
+                    pre.startDate = moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
+                    pre.endDate = moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
                 }
             }
+            obj[val]()
         }
     }
 
@@ -143,6 +169,15 @@ function useSalesReport() {
                 width: 60,
             },
             {
+                headerName: 'Sale date',
+                headerClassName: 'header-class',
+                description: 'Sale date',
+                field: 'tranDate',
+                type: 'date',
+                width: 90,
+                valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
+            },
+            {
                 headerName: 'Pr code',
                 headerClassName: 'header-class',
                 description: 'Product code',
@@ -165,87 +200,74 @@ function useSalesReport() {
                 field: 'label'
             },
             {
-                headerName: 'Op Price',
+                headerName: 'Qty',
                 headerClassName: 'header-class',
-                description: 'Opening price',
-                field: 'openingPrice',
+                description: 'Qty',
+                field: 'qty',
+                type: 'number',
+                width: 60,
+                // valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Price',
+                headerClassName: 'header-class',
+                description: 'Price',
+                field: 'price',
                 type: 'number',
                 width: 100,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Op value',
+                headerName: 'Amount',
                 headerClassName: 'header-class',
-                field: 'opValue',
+                field: 'amount',
                 type: 'number',
                 width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Op',
+                headerName: 'Profit(GP)',
                 headerClassName: 'header-class',
-                description: 'Opening',
-                field: 'op',
+                description: 'Gross profit',
+                field: 'grossProfit',
                 type: 'number',
                 width: 60,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Debits',
+                headerName: 'Gst rate',
                 headerClassName: 'header-class',
-                field: 'dr',
+                description: 'Gst rate',
+                field: 'gstRate',
                 type: 'number',
                 width: 70,
             },
             {
-                headerName: 'Credits',
+                headerName: 'Cgst',
                 headerClassName: 'header-class',
-                field: 'cr',
-                type: 'number',
-                width: 70,
-            },
-            {
-                headerName: 'Clos',
-                headerClassName: 'header-class',
-                description: 'Closing',
-                field: 'clos',
+                description: 'Cgst',
+                field: 'cgst',
                 type: 'number',
                 width: 60,
-            },
-            {
-                headerName: 'Clos val',
-                headerClassName: 'header-class',
-                description: 'Closing value',
-                field: 'closValue',
-                type: 'number',
-                width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Pur price(Lst)',
+                headerName: 'Sgst',
                 headerClassName: 'header-class',
-                description: 'Last purchase price',
-                field: 'lastPurchasePrice',
+                description: 'Sgst',
+                field: 'sgst',
                 type: 'number',
-                width: 110,
+                width: 60,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Pur dt(Lst)',
+                headerName: 'Igst',
                 headerClassName: 'header-class',
-                description: 'Last purchase date',
-                field: 'lastPurchaseDate',
-                type: 'date',
-                width: 90,
-                valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
-            },
-            {
-                headerName: 'Sal dt(Lst)',
-                headerClassName: 'header-class',
-                description: 'Last sale date',
-                field: 'lastSaleDate',
-                type: 'date',
-                width: 90,
-                valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
+                description: 'Igst',
+                field: 'cgsigstt',
+                type: 'number',
+                width: 60,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
                 headerName: 'Pr id',
@@ -299,31 +321,24 @@ function useSalesReport() {
     function getTotals() {
         const rows: any[] = pre.filteredRows
         const totals = rows.reduce((prev: any, curr: any, index: number) => {
-            prev.op = prev.op + curr.op
-            prev.opValue = prev.opValue + curr.opValue
-            prev.dr = prev.dr + curr.dr
-            prev.cr = prev.cr + curr.cr
-            prev.clos = prev.clos + curr.clos
-            prev.closValue = prev.closValue + curr.closValue
+            prev.qty = prev.qty + curr.qty
+            prev.cgst = prev.cgst + curr.cgst
+            prev.sgst = prev.sgst + curr.sgst
+            prev.igst = prev.igst + curr.igst
+            prev.amount = prev.amount + curr.amount
+            prev.grossProfit = prev.grossProfit + curr.grossProfit
             prev.count++
             return (prev)
-        }, {
-            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0
-        })
+        }, {})
         totals.id = 'Total'
         return (totals)
-    }
-
-    function handleMonthSelected(selectedMonthOption: { label: string; value: string }) {
-        pre.selectedMonthOtion = selectedMonthOption
-        fetchData()
     }
 
     function onSelectModelChange(rowIds: any) {
         const rows = pre.allRows
         const obj = rowIds.reduce((prev: any, current: any) => {
             prev.count = prev.count ? prev.count + 1 : 1
-            prev.closValue = (prev.closValue || 0) + (rows[current - 1]?.closValue || 0)
+            // prev.closValue = (prev.closValue || 0) + (rows[current - 1]?.closValue || 0)
             return prev
         }, {})
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj

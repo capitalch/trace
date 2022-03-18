@@ -12,7 +12,7 @@ import {
 import { GridSearchBox } from './grid-search-box'
 
 function StockSummaryAgeingReport() {
-    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, multiData } = useStockSummaryAgeingReport()
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, } = useStockSummaryAgeingReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -83,7 +83,8 @@ function StockSummaryAgeingReport() {
                                 aria-label="Clear"
                                 size="small"
                                 onClick={() => {
-                                    multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
+                                    // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
+                                    pre.stockDate = moment().format('YYYY-MM-DD')
                                     fetchData()
                                 }}>
                                 <CloseSharp fontSize="small" />
@@ -94,11 +95,13 @@ function StockSummaryAgeingReport() {
                                 type="date"
                                 InputLabelProps={{ shrink: true }}
                                 onChange={(e: any) => {
-                                    multiData.generic.stockOnDate = e.target.value
+                                    // multiData.generic.stockOnDate = e.target.value
+                                    pre.stockDate = e.target.value
                                     setRefresh({})
                                 }}
                                 onFocus={(e: any) => e.target.select()}
-                                value={multiData.generic.stockOnDate || ''}
+                                // value={multiData.generic.stockOnDate || ''}
+                                value={pre.stockDate || ''}
                             />
                             {/* Sync */}
                             <IconButton

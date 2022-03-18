@@ -2,7 +2,7 @@ import { Box, ReactSelect, Typography, useTheme} from '../redirect'
 import { useInventoryReports } from './inventory-reports-hook'
 
 function InventoryReports() {
-    const {meta, onReportSelected } = useInventoryReports()
+    const {mega, meta, onReportSelected } = useInventoryReports()
     const pre = meta.current
     const theme = useTheme()
     // To reduce space between two items of drop down
@@ -21,16 +21,28 @@ function InventoryReports() {
             // width: '80%',
         })
     }
-    return (<Box>       
+    return (
+    <Box>       
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.breadcumb)}</Typography>
+            <Typography variant='subtitle1'>{''.concat(mega.title, ' > ', mega.breadcumb)}</Typography>
             <ReactSelect  menuPlacement='auto' placeholder='Select report' styles={styles}
-                options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
+                options={reportsJson} value={mega.selectedReport} onChange={onReportSelected} />
         </Box>
         <Box sx = {{marginTop:theme.spacing(1) }}>
-            <pre.currentReportComponent />
+            <mega.currentReportComponent />
         </Box>
-    </Box>)
+    </Box>
+    // <Box>       
+    //     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+    //         <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.breadcumb)}</Typography>
+    //         <ReactSelect  menuPlacement='auto' placeholder='Select report' styles={styles}
+    //             options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
+    //     </Box>
+    //     <Box sx = {{marginTop:theme.spacing(1) }}>
+    //         <pre.currentReportComponent />
+    //     </Box>
+    // </Box>
+    )
 }
 export { InventoryReports }
 

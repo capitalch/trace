@@ -6,7 +6,7 @@ function useStockSummaryAgeingReport() {
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-    const multiData: any = useContext(MultiDataContext)
+    // const multiData: any = useContext(MultiDataContext)
 
     const meta: any = useRef({
         allRows: [],
@@ -21,6 +21,7 @@ function useStockSummaryAgeingReport() {
         selectedAgeingOption: { label: 'All stock', value: 0 },
         selectedRowsObject: {},
         sqlKey: 'getJson_stock_summary_ageing',
+        stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
         title: 'Stock summary with ageing',
         totals: {}
@@ -34,7 +35,7 @@ function useStockSummaryAgeingReport() {
     })
 
     useEffect(() => {
-        multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
+        // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
         const subs1 = debounceFilterOn('STOCK-SUMMARY-AGEING-DEBOUNCE').subscribe((d: any) => {
@@ -55,8 +56,10 @@ function useStockSummaryAgeingReport() {
             sqlKey: pre.sqlKey,
             args: {
                 onDate:
-                    multiData?.generic?.stockOnDate
-                    || null, days: pre.selectedAgeingOption.value || 0
+                    // multiData?.generic?.stockOnDate
+                    pre.stockDate
+                    || null,
+                days: pre.selectedAgeingOption.value || 0
             },
         }) || {}
 
@@ -334,7 +337,7 @@ function useStockSummaryAgeingReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, multiData, onSelectModelChange })
+    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange })
 }
 
 export { useStockSummaryAgeingReport }

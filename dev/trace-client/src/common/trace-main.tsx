@@ -62,16 +62,16 @@ function TraceMain({ open }: any) {
     function LaunchPad() {
         return meta.current.launchPad
     }
-
+    
     return (
         <Container
             className={clsx(classes.content, {
                 [classes.contentShift]: open,
             })}>
                 {/* initialize accounts entity for all global data  */}
-            <MegaContext.Provider value={{ accounts: {} }}>
+            {/* <MegaContext.Provider value={{ accounts: {} }}> */}
                 <LaunchPad></LaunchPad>
-            </MegaContext.Provider>
+            {/* </MegaContext.Provider> */}
         </Container>
     )
 }

@@ -1,16 +1,20 @@
-import {_, MegaContext, SalesReport, StockSummaryAgeingReport,useContext, useEffect, useRef, useState, } from '../redirect'
+import { _, MegaContext, SalesReport, StockSummaryAgeingReport, useContext, useEffect, useRef, useState, } from '../redirect'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
-    const megaBundle:any = useContext(MegaContext)
-    const mega = megaBundle?.accounts?.invRepo
-    if(_.isEmpty( mega)){
-        megaBundle.accounts.invRepo = {a:1}
-    }
-        
-    const meta: any = useRef({
+    const megaBundle: any = useContext(MegaContext)
+    _.isEmpty(megaBundle.accounts.invRepo) && (megaBundle.accounts.invRepo = {})
+    const mega = megaBundle.accounts.invRepo
+
+    _.isEmpty(mega) && _.assign(mega, {
         currentReportComponent: () => <></>,
         breadcumb: '',
+        title: 'Inventory reports',
+    })
+
+    const meta: any = useRef({
+        currentReportComponent: () => <></>,
+        breadcrumb: '',
         title: 'Inventory reports',
     })
     const pre = meta.current
@@ -25,9 +29,12 @@ function useInventoryReports() {
 
     function onReportSelected(selected: any) {
         const reportName = selected.value
-        pre.breadcumb = selected.breadcumb
+        mega.selectedReport = selected
+        // pre.breadcumb = selected.breadcumb
+        mega.breadCrumb = selected.breadcumb
         const reportsMap: any = getReportsMap() // make use of javascript hoisting
-        pre.currentReportComponent = reportsMap[reportName]
+        // pre.currentReportComponent = reportsMap[reportName]
+        mega.currentReportComponent = reportsMap[reportName]
         setRefresh({})
 
         function getReportsMap() {
@@ -38,6 +45,6 @@ function useInventoryReports() {
         }
     }
 
-    return ({ handleCloseDialog, meta, onReportSelected, setRefresh })
+    return ({ handleCloseDialog,mega, meta, onReportSelected, setRefresh })
 }
 export { useInventoryReports }
