@@ -1,15 +1,16 @@
-import { useState, useEffect, useRef } from '../../imports/regular-imports'
+import { createContext, useContext, useState, useEffect, useRef } from '../../imports/regular-imports'
 import {
     makeStyles,
     Theme,
     Typography,
     createStyles,
 } from '../../imports/gui-imports'
-import { useIbuki, manageEntitiesState, } from '../../imports/trace-imports'
+import { useIbuki, manageEntitiesState, MegaContext } from '../../imports/trace-imports'
 import { getArtifacts } from '../../react-form/common/react-form-hook'
 import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
 import { utils } from './utils'
 import {
+    // MegaContext,
     MultiDataContext,
     getPurchasesArbitraryData,
     getSalesArbitraryData,
@@ -18,6 +19,7 @@ import {
 } from './components/common/multi-data-bridge'
 import { useLinkClient } from '../../global-utils/link-client'
 import { useServerSocketMessageHandler } from './components/common/server-socket-message-handler-hook'
+
 function LaunchPad() {
     const { getUnitHeading } = utils()
     const {
@@ -39,6 +41,8 @@ function LaunchPad() {
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
     const classes = useStyles()
     meta.current.mainHeading = getUnitHeading()
+    // const MegaContext:any = createContext({})
+    const mega = useContext(MegaContext)
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -92,16 +96,18 @@ function LaunchPad() {
             <Typography variant="h6" className={classes.title}>
                 {meta.current.mainHeading}
             </Typography>
-            <MultiDataContext.Provider
-                value={{
-                    sales: salesData,
-                    purchases: purchasesData,
-                    debitCreditNotes: debitCreditNotesData,
-                    vouchers: vouchersArbitraryData,
-                    generic: {}
-                }}>
-                <Comp></Comp>
-            </MultiDataContext.Provider>
+            {/* <MegaContext.Provider value={mega}> */}
+                <MultiDataContext.Provider
+                    value={{
+                        sales: salesData,
+                        purchases: purchasesData,
+                        debitCreditNotes: debitCreditNotesData,
+                        vouchers: vouchersArbitraryData,
+                        generic: {}
+                    }}>
+                    <Comp></Comp>
+                </MultiDataContext.Provider>
+            {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>
     )

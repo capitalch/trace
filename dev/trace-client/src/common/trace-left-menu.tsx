@@ -36,7 +36,11 @@ function TraceLeftMenu(props: any) {
         root?.children?.forEach((item: any, index: number) => {
             const listItem = (
                 <ListItem
+                    // dense
+                    // divider
                     button
+                    // disablePadding
+                    // disableGutters
                     key={index}
                     disabled={isControlDisabled(item.hierarchy)}
                     onClick={(e:any) => {
@@ -63,12 +67,12 @@ function TraceLeftMenu(props: any) {
                         <ListItemIcon
                             style={{
                                 color: theme.palette.success.light,
-                                marginLeft: `${item.children ? 0 : '2rem'}`,
+                                marginLeft: `${item.children ? 0 : '0.8rem'}`,
                             }}>
                             {iconMap[item.name]}
                         </ListItemIcon>
                     }
-                    <ListItemText primary={item.label}></ListItemText>
+                    <ListItemText primary={item.label} ></ListItemText>
                     {getUpDownArrowIcon(item, index)}
                 </ListItem>
             )

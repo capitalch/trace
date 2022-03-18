@@ -14,6 +14,7 @@ import { getArtifacts } from '../react-form/common/react-form-hook'
 import { LedgerSubledger } from '../entities/accounts/components/common/ledger-subledger'
 import { LedgerSubledgerCascade } from '../entities/accounts/components/common/ledger-subledger-cascade'
 import { XXGrid } from '../global-utils/xx-grid'
+import { MegaContext } from '../entities/accounts/components/common/mega-context'
 export {
     componentStore,
     getArtifacts,
@@ -21,6 +22,7 @@ export {
     graphqlService,
     LedgerSubledger,
     LedgerSubledgerCascade,
+    MegaContext,
     manageFormsState,
     manageEntitiesState,
     queries,

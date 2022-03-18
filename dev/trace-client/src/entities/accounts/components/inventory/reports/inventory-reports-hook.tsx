@@ -1,7 +1,13 @@
-import { SalesReport, StockSummaryAgeingReport, useEffect, useRef, useState, } from '../redirect'
+import {_, MegaContext, SalesReport, StockSummaryAgeingReport,useContext, useEffect, useRef, useState, } from '../redirect'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
+    const megaBundle:any = useContext(MegaContext)
+    const mega = megaBundle?.accounts?.invRepo
+    if(_.isEmpty( mega)){
+        megaBundle.accounts.invRepo = {a:1}
+    }
+        
     const meta: any = useRef({
         currentReportComponent: () => <></>,
         breadcumb: '',

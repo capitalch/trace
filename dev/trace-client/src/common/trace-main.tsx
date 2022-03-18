@@ -1,10 +1,10 @@
-import { clsx, useState, useEffect, useRef } from '../imports/regular-imports'
+import { clsx, useContext, useState, useEffect, useRef } from '../imports/regular-imports'
 import {
     Container,
     makeStyles,
     createStyles,
 } from '../imports/gui-imports'
-import { manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-imports'
+import { manageEntitiesState, MegaContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 
@@ -33,7 +33,7 @@ function TraceMain({ open }: any) {
     }
 
     const classes = useStyles({ meta: meta })
-
+    // const mega:any = useContext(MegaContext)
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -49,7 +49,7 @@ function TraceMain({ open }: any) {
             curr.launchPad = currentEntity
                 ? launchMap[currentEntity]
                 : null
-                curr.isMounted && setRefresh({})
+            curr.isMounted && setRefresh({})
         })
 
         return () => {
@@ -68,7 +68,10 @@ function TraceMain({ open }: any) {
             className={clsx(classes.content, {
                 [classes.contentShift]: open,
             })}>
-            <LaunchPad></LaunchPad>
+                {/* initialize accounts entity for all global data  */}
+            <MegaContext.Provider value={{ accounts: {} }}>
+                <LaunchPad></LaunchPad>
+            </MegaContext.Provider>
         </Container>
     )
 }

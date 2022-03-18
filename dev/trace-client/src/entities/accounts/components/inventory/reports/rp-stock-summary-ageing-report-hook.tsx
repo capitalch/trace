@@ -20,7 +20,7 @@ function useStockSummaryAgeingReport() {
         searchTextRef: null,
         selectedAgeingOption: { label: 'All stock', value: 0 },
         selectedRowsObject: {},
-        sqlKey: 'getJson_stock_summary',
+        sqlKey: 'getJson_stock_summary_ageing',
         subTitle: '',
         title: 'Stock summary with ageing',
         totals: {}

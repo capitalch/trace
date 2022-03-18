@@ -1,4 +1,5 @@
-import { _, CloseSharp, GridCellParams, IconButton, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { stringify } from 'querystring'
+import { _, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useSalesReport() {
     const [, setRefresh] = useState({})
@@ -7,22 +8,28 @@ function useSalesReport() {
     const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
     const multiData: any = useContext(MultiDataContext)
-
+    const { getFromBag } = manageEntitiesState()
+    const finYearObject = getFromBag('finYearObject')
+    // const startDate = 
+    // const endDate = 
     const meta: any = useRef({
         allRows: [],
-        dataPath: 'jsonResult.stock',
+        endDate: finYearObject.isoEndDate,
         filteredRows: [],
-        getTotals: getTotals,
         isSearchTextEdited: false,
-        origJsonData: {},
-        setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
-        selectedMonthOtion: { label: 'April', value: 4 },
-        selectedRowsObject: {},
-        sqlKey: 'getJson_stock_summary',
+        selectedOption: { label: 'All', value: 'all' },
+        setRefresh: setRefresh,
+        sqlKey: '',
+        startDate: finYearObject.isoStartDate,
         subTitle: '',
         title: 'Sales',
+
+        dataPath: 'jsonResult.stock',
+        getTotals: getTotals,
+        origJsonData: {},
+        selectedRowsObject: {},
         totals: {}
     })
     const pre = meta.current
@@ -50,22 +57,22 @@ function useSalesReport() {
     async function fetchData() {
         let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
-        pre.origJsonData = await execGenericView({
-            isMultipleRows: false,
-            sqlKey: pre.sqlKey,
-            args: {
-                onDate:
-                    multiData?.generic?.stockOnDate
-                    || null, days: pre.selectedAgeingOption.value || 0
-            },
-        }) || {}
+        // pre.origJsonData = await execGenericView({
+        //     isMultipleRows: false,
+        //     sqlKey: pre.sqlKey,
+        //     args: {
+        //         onDate:
+        //             multiData?.generic?.stockOnDate
+        //             || null, days: pre.selectedAgeingOption.value || 0
+        //     },
+        // }) || {}
 
-        const rows: any[] = _.get(pre.origJsonData, pre.dataPath, []) || []
-        setId(rows)
-        pre.allRows = rows
-        pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
-        pre.totals = getTotals() || {}
-        pre.filteredRows.push(pre.totals)
+        // const rows: any[] = _.get(pre.origJsonData, pre.dataPath, []) || []
+        // setId(rows)
+        // pre.allRows = rows
+        // pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
+        // pre.totals = getTotals() || {}
+        // pre.filteredRows.push(pre.totals)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
@@ -80,12 +87,26 @@ function useSalesReport() {
         }
     }
 
-    function getMonths() {
-        const months = [{ label: 'April', value: 4 }, { label: 'May', value: 5 }, { label: 'June', value: 6 }, { label: 'July', value: 7 }, { label: 'August', value: 8 },
+    function getSalesPeriodOptions() {
+        const periods: { label: string; value: any }[] = [{ label: 'All', value: 'all' }, { label: 'Today', value: 'today' }, { label: 'Prev day', value: 'prevDay' }, { label: 'This month', value: 'thisMonth' }, { label: 'Prev month', value: 'prevMonth' }]
+        const months: { label: string; value: any }[] = [{ label: 'April', value: 4 }, { label: 'May', value: 5 }, { label: 'June', value: 6 }, { label: 'July', value: 7 }, { label: 'August', value: 8 },
         { label: 'September', value: 9 }, { label: 'October', value: 11 }, { label: 'November', value: 11 }, { label: 'December', value: 12, },
         { label: 'January', value: 1 }, { label: 'February', value: 2 }, { label: 'March', value: 3 },]
-        return (months)
+        return (periods.concat(months))
     }
+
+    function handleOptionSelected(selectedOption: { label: string; value: any }) {
+        pre.selectedOption = selectedOption
+        function logic() {
+            const ifElse = {
+                'all': () => {
+                    pre.startDate = finYearObject.isoStartDate
+                    pre.endDate = finYearObject.isoEndDate
+                }
+            }
+        }
+    }
+
 
     function getColumns(): any[] {
         return ([
@@ -256,6 +277,7 @@ function useSalesReport() {
                 },
                 '& .grid-toolbar': {
                     width: '100%',
+                    paddingBottom: theme.spacing(0.5),
                     borderBottom: '1px solid lightgrey',
                     display: 'flex',
                     flexDirection: 'column',
@@ -272,6 +294,7 @@ function useSalesReport() {
             ret = 'footer-row-class'
         return (ret)
     }
+
 
     function getTotals() {
         const rows: any[] = pre.filteredRows
@@ -316,6 +339,6 @@ function useSalesReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getColumns, getGridSx, getMonths, getRowClassName, handleMonthSelected, meta, multiData, onSelectModelChange })
+    return ({ fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, meta, multiData, onSelectModelChange })
 }
 export { useSalesReport }

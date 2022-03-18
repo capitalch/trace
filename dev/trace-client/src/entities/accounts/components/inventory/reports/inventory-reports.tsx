@@ -45,8 +45,4 @@ const reportsJson = [
         value:'salesReport',
         breadcumb:'Sales'
     },
-    // {
-    //     label:'Stock summary',
-    //     value:'stockSummaryReport'
-    // }
 ]

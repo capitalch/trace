@@ -1316,7 +1316,7 @@ allSqls = {
                     order by "tranDate" DESC
     ''',
 
-    "getJson_stock_summary": '''
+    "getJson_stock_summary_ageing": '''
         with cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate"
             from "TranH" h

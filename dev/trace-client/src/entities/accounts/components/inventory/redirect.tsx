@@ -29,4 +29,5 @@ export {
 export { useIbuki, } from '../../../../global-utils/ibuki'
 export { MultiDataContext } from '../common/multi-data-bridge'
 export { SalesReport } from './reports/rp-sales-report'
+export { manageEntitiesState, MegaContext } from '../../../../imports/trace-imports'
 // export ReactSelect from 'react-select'

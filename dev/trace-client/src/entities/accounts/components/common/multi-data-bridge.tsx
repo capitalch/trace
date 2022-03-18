@@ -1,5 +1,6 @@
 import { createContext, moment } from '../../../../imports/regular-imports'
 const MultiDataContext = createContext({})
+// const MegaContext = createContext({})
 
 const isoDateFormat = 'YYYY-MM-DD'
 
@@ -131,6 +132,7 @@ function getVouchersArbitraryData() {
 }
 
 export {
+    // MegaContext,
     MultiDataContext,
     getSalesArbitraryData,
     getPurchasesArbitraryData,
