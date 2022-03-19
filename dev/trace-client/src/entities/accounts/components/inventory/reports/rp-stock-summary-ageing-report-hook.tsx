@@ -11,11 +11,12 @@ function useStockSummaryAgeingReport() {
     const meta: any = useRef({
         allRows: [],
         dataPath: 'jsonResult.stock',
+        debounceMessage:'STOCK-SUMMARY-AGEING-DEBOUNCE',
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
         origJsonData: {},
-        parentRefresh: setRefresh,
+        setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
         selectedAgeingOption: { label: 'All stock', value: 0 },
@@ -38,7 +39,7 @@ function useStockSummaryAgeingReport() {
         // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
-        const subs1 = debounceFilterOn('STOCK-SUMMARY-AGEING-DEBOUNCE').subscribe((d: any) => {
+        const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
             const requestSearch = d.data[0]
             const searchText = d.data[1]
             requestSearch(searchText)
@@ -221,7 +222,7 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Pur price(Lst)',
+                headerName: 'Pur price',
                 headerClassName: 'header-class',
                 description: 'Last purchase price',
                 field: 'lastPurchasePrice',
@@ -230,7 +231,7 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Pur dt(Lst)',
+                headerName: 'Pur date',
                 headerClassName: 'header-class',
                 description: 'Last purchase date',
                 field: 'lastPurchaseDate',
@@ -239,7 +240,7 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                headerName: 'Sal dt(Lst)',
+                headerName: 'Sal date',
                 headerClassName: 'header-class',
                 description: 'Last sale date',
                 field: 'lastSaleDate',

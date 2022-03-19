@@ -25,12 +25,12 @@ function SalesReport() {
             ...base,
             padding: '.1rem',
             paddingLeft: '0.8rem',
-            width: theme.spacing(22),
+            width: theme.spacing(15),
             fontSize: theme.spacing(1.6)
         }),
         control: (provided: any) => ({
             ...provided,
-            width: theme.spacing(24),
+            width: theme.spacing(18),
             fontSize: theme.spacing(1.7),
             // height:theme.spacing(1.5)
         })
@@ -46,7 +46,7 @@ function SalesReport() {
             }}
             disableColumnMenu={true}
             disableSelectionOnClick={true}
-            // getRowClassName={getRowClassName}
+            getRowClassName={getRowClassName}
             // onSelectionModelChange={onSelectModelChange}
             rowHeight={25}
             rows={pre.filteredRows}
@@ -111,7 +111,6 @@ function SalesReport() {
 
                             value={pre.endDate || ''}
                         />
-
                         {/* Sync */}
                         <IconButton
                             size="small"
@@ -120,81 +119,26 @@ function SalesReport() {
                             <SyncSharp fontSize='small'></SyncSharp>
                         </IconButton>
                     </Box>
-                </Box>
-
+                    <GridSearchBox parentMeta={meta} />
+                </Box>      
             </GridToolbarContainer>
         )
     }
 
     function CustomFooter() {
         return (<GridFooterContainer >
-            {/* <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
                 <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
-                <Box>{''.concat('Sel count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
-                <Box>{''.concat('Sel close value', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
-                <Box>{''.concat('Op stock value', ' : ', toDecimalFormat(pre?.totals?.opValue || 0))}</Box>
-                <Box>{''.concat('Clos stock value', ' : ', toDecimalFormat(pre?.totals?.closValue || 0))}</Box>
-                <Box>{''.concat('Incr in stock value', ' : ', toDecimalFormat((pre?.totals?.closValue || 0) - (pre?.totals?.opValue || 0)))}</Box>
-            </Box> */}
+                <Box>{''.concat('Select count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
+                <Box>{''.concat('Select sale value', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
+                <Box>{''.concat('Total qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
+                <Box>{''.concat('Aggr sale', ' : ', toDecimalFormat(pre?.totals?.aggrSale || 0))}</Box>
+                <Box>{''.concat('Sale with gst', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
+                <Box>{''.concat('Gross profit', ' : ', toDecimalFormat((pre?.totals?.grossProfit || 0) - (pre?.totals?.opValue || 0)))}</Box>
+            </Box>
         </GridFooterContainer>)
     }
 
 }
 
 export { SalesReport }
-
-// <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-//                     <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
-//                         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
-//                         <GridToolbarColumnsButton color='secondary' />
-//                         <GridToolbarFilterButton color='primary' />
-//                         <GridToolbarExport color='info' />
-//                         {/* Sync */}
-//                         <IconButton
-//                             size="small"
-//                             color="secondary"
-//                             onClick={fetchData}>
-//                             <SyncSharp fontSize='small'></SyncSharp>
-//                         </IconButton>
-//                         <ReactSelect menuPlacement='auto' placeholder='Select ageing'
-//                             styles={reactSelectStyles}
-//                             options={getMonths()}
-//                             value={pre.selectedAgeingOption} onChange={handleMonthSelected}
-//                         />
-//                         <Box sx={{ display: 'flex', ml: 1, flexWrap: 'wrap', alignItems: 'center', border: '1px solid lightGrey' }}>
-//                             <Typography sx={{ ml: 1, }} variant='subtitle2'>Stock on date:</Typography>
-//                             <IconButton
-//                                 title="Clear"
-//                                 aria-label="Clear"
-//                                 size="small"
-//                                 onClick={() => {
-//                                     multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
-//                                     fetchData()
-//                                 }}>
-//                                 <CloseSharp fontSize="small" />
-//                             </IconButton>
-//                             <TextField
-//                                 color='primary'
-//                                 variant="standard"
-//                                 type="date"
-//                                 InputLabelProps={{ shrink: true }}
-//                                 onChange={(e: any) => {
-//                                     multiData.generic.stockOnDate = e.target.value
-//                                     setRefresh({})
-//                                 }}
-//                                 onFocus={(e: any) => e.target.select()}
-//                                 value={multiData.generic.stockOnDate || ''}
-//                             />
-//                             {/* Sync */}
-//                             <IconButton
-//                                 size="small"
-//                                 color="secondary"
-//                                 onClick={() => {
-//                                     fetchData()
-//                                 }}>
-//                                 <SyncSharp fontSize='small'></SyncSharp>
-//                             </IconButton>
-//                         </Box>
-//                     </Box>
-//                     <GridSearchBox parentMeta={meta} />
-//                 </Box>

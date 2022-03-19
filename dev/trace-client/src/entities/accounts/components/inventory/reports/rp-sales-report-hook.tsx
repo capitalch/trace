@@ -10,12 +10,13 @@ function useSalesReport() {
     const multiData: any = useContext(MultiDataContext)
     const { getFromBag } = manageEntitiesState()
     const finYearObject = getFromBag('finYearObject')
-    // const startDate = 
-    // const endDate = 
+
     const meta: any = useRef({
         allRows: [],
+        debounceMessage: 'SALES-REPORT-SEARCH-DEBOUNCE',
         endDate: finYearObject.isoEndDate,
         filteredRows: [],
+        getTotals: getTotals,
         isSearchTextEdited: false,
         searchText: '',
         searchTextRef: null,
@@ -25,6 +26,7 @@ function useSalesReport() {
         startDate: finYearObject.isoStartDate,
         subTitle: '',
         title: 'Sales',
+        totals: {},
     })
     const pre = meta.current
 
@@ -35,10 +37,9 @@ function useSalesReport() {
     })
 
     useEffect(() => {
-        // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
-        const subs1 = debounceFilterOn('STOCK-SUMMARY-AGEING-DEBOUNCE').subscribe((d: any) => {
+        const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
             const requestSearch = d.data[0]
             const searchText = d.data[1]
             requestSearch(searchText)
@@ -133,7 +134,6 @@ function useSalesReport() {
         }
     }
 
-
     function getColumns(): any[] {
         return ([
             {
@@ -197,7 +197,8 @@ function useSalesReport() {
             {
                 headerName: 'Label',
                 headerClassName: 'header-class',
-                field: 'label'
+                field: 'label',
+                width: 110
             },
             {
                 headerName: 'Qty',
@@ -205,21 +206,30 @@ function useSalesReport() {
                 description: 'Qty',
                 field: 'qty',
                 type: 'number',
-                width: 60,
-                // valueFormatter: (params: any) => toDecimalFormat(params.value),
+                width: 40,
             },
             {
-                headerName: 'Price',
+                headerName: 'Sale Price',
                 headerClassName: 'header-class',
-                description: 'Price',
+                description: 'Sale price',
                 field: 'price',
                 type: 'number',
                 width: 100,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Amount',
+                headerName: 'Aggr sale',
                 headerClassName: 'header-class',
+                description: 'Aggregate sale',
+                field: 'aggrSale',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Sale with gst',
+                headerClassName: 'header-class',
+                description: 'Sale with gst',
                 field: 'amount',
                 type: 'number',
                 width: 120,
@@ -231,16 +241,25 @@ function useSalesReport() {
                 description: 'Gross profit',
                 field: 'grossProfit',
                 type: 'number',
-                width: 60,
+                width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Gst rate',
+                headerName: 'Pur Price',
+                headerClassName: 'header-class',
+                description: 'Purchase price',
+                field: 'lastPurchasePrice',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Gst%',
                 headerClassName: 'header-class',
                 description: 'Gst rate',
                 field: 'gstRate',
                 type: 'number',
-                width: 70,
+                width: 60,
             },
             {
                 headerName: 'Cgst',
@@ -248,7 +267,7 @@ function useSalesReport() {
                 description: 'Cgst',
                 field: 'cgst',
                 type: 'number',
-                width: 60,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -257,17 +276,23 @@ function useSalesReport() {
                 description: 'Sgst',
                 field: 'sgst',
                 type: 'number',
-                width: 60,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
                 headerName: 'Igst',
                 headerClassName: 'header-class',
                 description: 'Igst',
-                field: 'cgsigstt',
+                field: 'igst',
                 type: 'number',
-                width: 60,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Type',
+                headerClassName: 'header-class',
+                field: 'saleType',
+                width: 60
             },
             {
                 headerName: 'Pr id',
@@ -275,7 +300,7 @@ function useSalesReport() {
                 headerClassName: 'header-class',
                 field: 'productId',
                 type: 'number',
-                width: 60,
+                width: 80,
             },
         ])
     }
@@ -283,10 +308,9 @@ function useSalesReport() {
     function getGridSx() {
         return (
             {
-                // border: '4px solid orange',
                 p: 1, width: '100%',
                 fontSize: theme.spacing(1.5),
-                minHeight: theme.spacing(80),
+                minHeight: theme.spacing(60),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',
                 '& .footer-row-class': {
@@ -304,6 +328,12 @@ function useSalesReport() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'start'
+                },
+                '& .row-sales-return': {
+                    color:theme.palette.warning.main
+                },
+                '& .row-loss': {
+                    color: theme.palette.error.main
                 }
             }
         )
@@ -314,6 +344,11 @@ function useSalesReport() {
         let ret = ''
         if (row.id === 'Total')
             ret = 'footer-row-class'
+        else if(row.tranTypeId === 9){
+            ret = 'row-sales-return'
+        } else if(row.grossProfit < 0){
+            ret = 'row-loss'
+        }
         return (ret)
     }
 
@@ -326,10 +361,11 @@ function useSalesReport() {
             prev.sgst = prev.sgst + curr.sgst
             prev.igst = prev.igst + curr.igst
             prev.amount = prev.amount + curr.amount
+            prev.aggrSale = prev.aggrSale + curr.aggrSale
             prev.grossProfit = prev.grossProfit + curr.grossProfit
             prev.count++
             return (prev)
-        }, {})
+        }, { qty: 0, aggrSale: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0 })
         totals.id = 'Total'
         return (totals)
     }

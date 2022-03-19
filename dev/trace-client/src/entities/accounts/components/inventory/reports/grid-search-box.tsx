@@ -35,7 +35,7 @@ function GridSearchBox({ parentMeta }: any) {
         pre.isSearchTextEdited = true
 
         pre.setRefresh({})
-        debounceEmit('STOCK-SUMMARY-AGEING-DEBOUNCE', [requestSearch, e.target.value])
+        debounceEmit(pre.debounceMessage, [requestSearch, e.target.value])
     }
 
     function handleClear(e: any) {
