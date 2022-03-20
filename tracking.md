@@ -84,7 +84,16 @@
 17. Database backup strategy
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
-20. Upgrade database for all instances 
+20. Upgrade database for all instances
+
+# 20-03-2022
+1. Workbench: categories, Brands to sort
+2. Optimized Accounts launchpad
+
+# 10-03-2022 - 19-03-2033
+1. Misc bug fix
+2. Stock and ageing report, Sales report
+3. DB scripts creation and upload
 
 # 08-03-2022 - 09-03-2022
 1. Database table modifications done for all schemas
@@ -104,6 +113,7 @@
 # 23-02-2022 - 28-02-2022
 1. Opening stock all items in continuation
 2. Bug fixing etc.
+
 # 15-02-2022 - 22-02-2022
 1. Full implementation of socket based refresh data in vouchers, sales, purchase, dr/cr notes, Accounts masters and associated bug fixes
 2. Account balances in vouchers and final reports

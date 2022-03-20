@@ -1,13 +1,9 @@
 import { Box, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, } from './redirect'
 import { NewProduct } from './new-product'
-
-
-// import { useSharedElements } from '../common/shared-elements-hook'
-// import { Box, Typography } from '../../../../imports/gui-imports'
 import { useProducts, useStyles } from './products-hook'
 
 function Products() {
-    const { getXXGridParams, handleCloseDialog, meta } = useProducts()
+    const {getXXGridParams, handleCloseDialog, meta } = useProducts()
     const classes = useStyles()
     const { getGridReportSubTitle,  XXGrid } = useSharedElements()
     const pre = meta.current

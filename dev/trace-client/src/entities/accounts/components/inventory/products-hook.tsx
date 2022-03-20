@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSharedElements, } from './redirect'
+import { useInventoryUtils, useEffect, useRef, useState, useSharedElements, } from './redirect'
 import {
     makeStyles,
     Theme,
@@ -18,7 +18,7 @@ function useProducts() {
     })
     const pre = meta.current
     const { handleDelete, } = useCrudUtils(meta)
-
+    const { fetchBrandsCategoriesUnits } = useInventoryUtils()
     const {
         emit,
         execGenericView,
@@ -62,7 +62,7 @@ function useProducts() {
 
     useEffect(() => {
         const products: any[] = pre.sharedData?.allRows || []
-        if(products.length > 0){
+        if (products.length > 0) {
             setInBag('products', products)
         }
     })
@@ -203,53 +203,43 @@ function useProducts() {
         }
     }
 
-    async function ensureBrandsCategoriesUnits() {
-        const categories = getFromBag('categories')
-        const brands = getFromBag('brands')
-        const units = getFromBag('units')
-        if (!(categories && brands && units)) {
-            await getBrandsCategoriesUnits()
-        }
+    // async function fetchBrandsCategoriesUnits() {
+    //     emit('SHOW-LOADING-INDICATOR', true)
+    //     const result: any = await execGenericView({
+    //         isMultipleRows: false,
+    //         sqlKey: 'getJson_brands_categories_units',
+    //         args: {
+    //         },
+    //     })
 
-        async function getBrandsCategoriesUnits() {
-            emit('SHOW-LOADING-INDICATOR', true)
-            const result: any = await execGenericView({
-                isMultipleRows: false,
-                sqlKey: 'getJson_brands_categories_units',
-                args: {
-                },
-            })
-
-            const brands = (result?.jsonResult?.brands || []).map((x: any) => {
-                return {
-                    label: x.brandName,
-                    value: x.id,
-                }
-            })
-            setInBag('brands', brands)
-            const categories = (result?.jsonResult?.categories || []).map((x: any) => {
-                return {
-                    label: x.catName,
-                    value: x.id,
-                }
-            })
-            setInBag('categories', categories)
-            const units = result?.jsonResult.units
-            setInBag('units', units)
-            emit('SHOW-LOADING-INDICATOR', false)
-
-        }
-    }
+    //     const brands = (result?.jsonResult?.brands || []).map((x: any) => {
+    //         return {
+    //             label: x.brandName,
+    //             value: x.id,
+    //         }
+    //     })
+    //     setInBag('brands', brands)
+    //     const categories = (result?.jsonResult?.categories || []).map((x: any) => {
+    //         return {
+    //             label: x.catName,
+    //             value: x.id,
+    //         }
+    //     })
+    //     setInBag('categories', categories)
+    //     const units = result?.jsonResult.units
+    //     setInBag('units', units)
+    //     emit('SHOW-LOADING-INDICATOR', false)
+    // }
 
     async function handleAdd() {
-        await ensureBrandsCategoriesUnits()
+        await fetchBrandsCategoriesUnits()
         pre.title = 'Add new product'
         pre.showDialog = true
         setRefresh({})
     }
 
     async function handleEdit(d: any) {
-        await ensureBrandsCategoriesUnits()
+        await fetchBrandsCategoriesUnits()
         pre.title = 'Edit product'
         pre.product = d.data?.row
         pre.showDialog = true

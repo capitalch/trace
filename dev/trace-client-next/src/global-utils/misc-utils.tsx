@@ -5,6 +5,7 @@ import {
     manageFormsState,
     usingIbuki as getIbuki,
 } from '../imports/trace-imports'
+import { Typography } from '@mui/material'
 import messages from '../messages.json'
 const { emit } = getIbuki()
 
@@ -106,6 +107,8 @@ function utilMethods() {
             (sqlObject.updateCodeBlock = options.updateCodeBlock)
         options.customCodeBlock &&
             (sqlObject.customCodeBlock = options.customCodeBlock)
+        options.insertCodeBlock &&
+            (sqlObject.insertCodeBlock = options.insertCodeBlock)
 
         sqlObject.tableName = options.tableName
         options.deletedIds && (sqlObject.deletedIds = options.deletedIds)
@@ -118,6 +121,7 @@ function utilMethods() {
         formId?: any
         data?: {}
         customCodeBlock?: string
+        insertCodeBlock?: string
         updateCodeBlock?: string
         entityName?: string
         tableName?: string
@@ -144,6 +148,7 @@ function utilMethods() {
                 const sqlObjectString = getSqlObjectString({
                     data: options.data,
                     customCodeBlock: options.customCodeBlock,
+                    insertCodeBlock: options.insertCodeBlock,
                     updateCodeBlock: options.updateCodeBlock,
                     tableName: options.tableName,
                     deletedIds: options.deletedIds,
@@ -226,6 +231,7 @@ function utilMethods() {
             const sqlObjectString = getSqlObjectString({
                 data: options.data,
                 customCodeBlock: options.customCodeBlock,
+                insertCodeBlock: options.insertCodeBlock,
                 updateCodeBlock: options.updateCodeBlock,
                 tableName: options.tableName,
                 deletedIds: options.deletedIds,
@@ -269,6 +275,10 @@ function utilMethods() {
             ret = true // Controls which are not considered are active
         }
         return !ret
+    }
+
+    function Mandatory(){
+        return <Typography variant='subtitle2' sx={{color:'red'}} component='span'> *</Typography>
     }
 
     function numberToWordsInRs(value: any) {
@@ -387,6 +397,7 @@ function utilMethods() {
         tableName?: string
         updateCodeBlock?: string
         customCodeBlock?: string
+        insertCodeBlock?: string
         deletedIds?: any[]
         idInsert?: boolean
         data?: any[]
@@ -514,6 +525,7 @@ function utilMethods() {
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
+        Mandatory,
         numberToWordsInRs,
         objectPropsToDecimalFormat,
         removeProp,

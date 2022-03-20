@@ -13,7 +13,7 @@ import {
     createStyles,
     TextareaAutosize,
 } from '../../../../imports/gui-imports'
-import {} from '../../../../imports/icons-import'
+// import {} from '../../../../imports/icons-import'
 import { useProductUtils } from '../common/product-utils-hook'
 import { useSharedElements } from '../common/shared-elements-hook'
 
@@ -404,7 +404,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     '& div': { fontSize: '0.7rem', marginTop: '-0.5rem' },
                 },
                 '& .gst-details': {
-                    fontSize: '0.7rem',
+                    fontSize: '0.8rem',
                     color: theme.palette.grey[900],
                 },
                 '& .back-calculate': {

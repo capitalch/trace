@@ -8,7 +8,7 @@ function useOpeningStock() {
     })
     const actionMessages = getXXGriArtifacts().actionMessages
     const dateFormat = getFromBag('dateFormat')
-    // const pre = meta.current
+    
     useEffect(() => {
         const subs1 = filterOn(actionMessages.deleteIbukiMessage).subscribe(handleDelete)
         return (() => {

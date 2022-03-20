@@ -95,7 +95,6 @@ function AccountsOpBal() {
         },
         xl: () => mediaLogic['lg'](),
     }
-
     const currentMediaSize = getCurrentMediaSize()
     currentMediaSize && mediaLogic[currentMediaSize]()
 
@@ -190,13 +189,14 @@ function AccountsOpBal() {
                             }
                             meta.current.isMounted && setRefresh({})
                         }}></InputSwitch>
-
+                        
+                    {/* Save */}
                     <IconButton
                         disabled={utilFunc().getNotAllowSubmit()}
                         className={classes.iconButton}
                         size="medium"
                         color="secondary"
-                        onClick={(e: any) => {
+                        onClick={async (e: any) => {
                             const diffObj = utilFunc().getDataDiff(
                                 meta.current.initialFlatData,
                                 meta.current.flatData
@@ -206,7 +206,7 @@ function AccountsOpBal() {
                                     data: diffObj,
                                 }
                                 try {
-                                    saveForm({
+                                    await saveForm({
                                         data: finalData,
                                         queryId: 'accountsUpdateOpBal',
                                     })
@@ -223,7 +223,7 @@ function AccountsOpBal() {
                         }}>
                         <Save></Save>
                     </IconButton>
-
+                    {/* Sync */}
                     <IconButton
                         className={classes.iconButton}
                         size="medium"

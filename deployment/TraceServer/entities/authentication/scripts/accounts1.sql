@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3
--- Dumped by pg_dump version 12.3
+-- Dumped by pg_dump version 13.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -75,7 +75,8 @@ CREATE TABLE public."AccM" (
     "parentId" integer,
     "accLeaf" character(1) DEFAULT 'n'::bpchar NOT NULL,
     "isPrimary" boolean DEFAULT false NOT NULL,
-    "classId" smallint NOT NULL
+    "classId" smallint NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -151,7 +152,8 @@ CREATE TABLE public."BankOpBal" (
     "accId" integer NOT NULL,
     amount numeric(14,2) DEFAULT 0 NOT NULL,
     dc character(1) NOT NULL,
-    "finYearId" smallint NOT NULL
+    "finYearId" smallint NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -166,7 +168,8 @@ CREATE TABLE public."BranchM" (
     "branchName" text NOT NULL,
     remarks text,
     "jData" jsonb,
-    "branchCode" text NOT NULL
+    "branchCode" text NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -202,7 +205,8 @@ CREATE TABLE public."BrandM" (
     id integer NOT NULL,
     "brandName" text NOT NULL,
     remarks text,
-    "jData" jsonb
+    "jData" jsonb,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -237,7 +241,10 @@ ALTER SEQUENCE public."BrandM_id_seq" OWNED BY public."BrandM".id;
 CREATE TABLE public."CategoryM" (
     id integer NOT NULL,
     "catName" text NOT NULL,
-    "parentId" integer
+    "parentId" integer,
+    "isLeaf" boolean DEFAULT false NOT NULL,
+    descr text,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -263,6 +270,57 @@ ALTER TABLE public."Category_id_seq" OWNER TO webadmin;
 --
 
 ALTER SEQUENCE public."Category_id_seq" OWNED BY public."CategoryM".id;
+
+
+--
+-- Name: Contacts; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."Contacts" (
+    id integer NOT NULL,
+    "contactName" text NOT NULL,
+    "mobileNumber" text,
+    "otherMobileNumber" text,
+    "landPhone" text,
+    email text,
+    descr text,
+    "jData" jsonb,
+    "anniversaryDate" date,
+    address1 text NOT NULL,
+    address2 text,
+    country text NOT NULL,
+    state text,
+    city text,
+    gstin character(15),
+    pin text NOT NULL,
+    "dateOfBirth" date,
+    "stateCode" smallint,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public."Contacts" OWNER TO webadmin;
+
+--
+-- Name: Contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+CREATE SEQUENCE public."Contacts_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Contacts_id_seq" OWNER TO webadmin;
+
+--
+-- Name: Contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
+--
+
+ALTER SEQUENCE public."Contacts_id_seq" OWNED BY public."Contacts".id;
 
 
 --
@@ -295,7 +353,8 @@ CREATE TABLE public."ExtBankReconTranD" (
     id integer NOT NULL,
     "clearDate" date,
     "clearRemarks" text,
-    "tranDetailsId" integer NOT NULL
+    "tranDetailsId" integer NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -324,19 +383,66 @@ ALTER SEQUENCE public."ExtBankReconTranD_id_seq" OWNED BY public."ExtBankReconTr
 
 
 --
+-- Name: ExtBusinessContactsAccM; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."ExtBusinessContactsAccM" (
+    id integer NOT NULL,
+    "contactName" text NOT NULL,
+    "contactCode" text NOT NULL,
+    "mobileNumber" text,
+    "otherMobileNumber" text,
+    "landPhone" text,
+    email text NOT NULL,
+    "otherEmail" text,
+    "jAddress" jsonb NOT NULL,
+    descr text,
+    "accId" integer,
+    "jData" jsonb,
+    gstin character varying(15),
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public."ExtBusinessContactsAccM" OWNER TO webadmin;
+
+--
+-- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+CREATE SEQUENCE public."ExtBusinessContactsAccM_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."ExtBusinessContactsAccM_id_seq" OWNER TO webadmin;
+
+--
+-- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
+--
+
+ALTER SEQUENCE public."ExtBusinessContactsAccM_id_seq" OWNED BY public."ExtBusinessContactsAccM".id;
+
+
+--
 -- Name: ExtGstTranD; Type: TABLE; Schema: public; Owner: webadmin
 --
 
 CREATE TABLE public."ExtGstTranD" (
     id integer NOT NULL,
     gstin text,
-    rate numeric(5,2) NOT NULL,
+    rate numeric(5,2),
     cgst numeric(12,2) NOT NULL,
     sgst numeric(12,2) NOT NULL,
     igst numeric(12,2) NOT NULL,
     "isInput" boolean DEFAULT true NOT NULL,
     "tranDetailsId" integer NOT NULL,
-    hsn text
+    hsn text,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -365,38 +471,30 @@ ALTER SEQUENCE public."ExtGstTranD_id_seq" OWNED BY public."ExtGstTranD".id;
 
 
 --
--- Name: ExtMetaTranD; Type: TABLE; Schema: public; Owner: webadmin
+-- Name: ExtMiscAccM; Type: TABLE; Schema: public; Owner: webadmin
 --
 
-CREATE TABLE public."ExtMetaTranD" (
+CREATE TABLE public."ExtMiscAccM" (
     id integer NOT NULL,
-    "instrNo" text NOT NULL,
-    "tranDetailsId" integer NOT NULL
+    "accId" integer NOT NULL,
+    "isAutoSubledger" boolean DEFAULT false NOT NULL
 );
 
 
-ALTER TABLE public."ExtMetaTranD" OWNER TO webadmin;
+ALTER TABLE public."ExtMiscAccM" OWNER TO webadmin;
 
 --
--- Name: ExtMetaTranD_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+-- Name: ExtMiscAccM_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
 --
 
-CREATE SEQUENCE public."ExtMetaTranD_id_seq"
-    AS integer
+ALTER TABLE public."ExtMiscAccM" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."ExtMiscAccM_id_seq"
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public."ExtMetaTranD_id_seq" OWNER TO webadmin;
-
---
--- Name: ExtMetaTranD_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
---
-
-ALTER SEQUENCE public."ExtMetaTranD_id_seq" OWNED BY public."ExtMetaTranD".id;
+    CACHE 1
+);
 
 
 --
@@ -420,7 +518,8 @@ CREATE TABLE public."GodownM" (
     id smallint NOT NULL,
     "godCode" text NOT NULL,
     remarks text,
-    "jData" jsonb
+    "jData" jsonb,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -446,44 +545,6 @@ ALTER TABLE public."GodownM_id_seq" OWNER TO webadmin;
 --
 
 ALTER SEQUENCE public."GodownM_id_seq" OWNED BY public."GodownM".id;
-
-
---
--- Name: InvExtD; Type: TABLE; Schema: public; Owner: webadmin
---
-
-CREATE TABLE public."InvExtD" (
-    id integer NOT NULL,
-    "prId" integer NOT NULL,
-    price numeric(12,2) DEFAULT 0 NOT NULL,
-    qty smallint DEFAULT 0 NOT NULL,
-    amount numeric(12,2) DEFAULT 0 NOT NULL,
-    discount numeric(12,2) DEFAULT 0 NOT NULL
-);
-
-
-ALTER TABLE public."InvExtD" OWNER TO webadmin;
-
---
--- Name: InvD_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
---
-
-CREATE SEQUENCE public."InvD_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public."InvD_id_seq" OWNER TO webadmin;
-
---
--- Name: InvD_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
---
-
-ALTER SEQUENCE public."InvD_id_seq" OWNED BY public."InvExtD".id;
 
 
 --
@@ -585,9 +646,23 @@ CREATE TABLE public."ProductM" (
     hsn numeric(8,0),
     "brandId" integer NOT NULL,
     info text,
-    "unitId" smallint,
+    "unitId" smallint DEFAULT 1 NOT NULL,
     label text NOT NULL,
-    "jData" jsonb
+    "jData" jsonb,
+    "productCode" text NOT NULL,
+    "upcCode" text,
+    "gstRate" numeric(5,2) DEFAULT 0 NOT NULL,
+    "salePrice" numeric(12,2) DEFAULT 0 NOT NULL,
+    "saleDiscount" numeric(12,2) DEFAULT 0 NOT NULL,
+    "isActive" boolean DEFAULT true NOT NULL,
+    "maxRetailPrice" numeric(12,2) DEFAULT 0 NOT NULL,
+    "dealerPrice" numeric(12,2) DEFAULT 0 NOT NULL,
+    "salePriceGst" numeric(12,2) DEFAULT 0 NOT NULL,
+    "purPriceGst" numeric(12,2) DEFAULT 0 NOT NULL,
+    "purPrice" numeric(12,2) DEFAULT 0 NOT NULL,
+    "purDiscount" numeric(12,2) DEFAULT 0 NOT NULL,
+    "purDiscountRate" numeric(5,2) DEFAULT 0 NOT NULL,
+    "saleDiscountRate" numeric(5,2) DEFAULT 0 NOT NULL
 );
 
 
@@ -616,6 +691,45 @@ ALTER SEQUENCE public."ProductM_id_seq" OWNED BY public."ProductM".id;
 
 
 --
+-- Name: SalePurchaseDetails; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."SalePurchaseDetails" (
+    id integer NOT NULL,
+    "tranDetailsId" integer NOT NULL,
+    "productId" integer NOT NULL,
+    qty integer DEFAULT 0 NOT NULL,
+    price numeric(12,2) DEFAULT 0 NOT NULL,
+    "priceGst" numeric(12,2) DEFAULT 0 NOT NULL,
+    discount numeric(12,2) DEFAULT 0 NOT NULL,
+    cgst numeric(12,2) DEFAULT 0 NOT NULL,
+    sgst numeric(12,2) DEFAULT 0 NOT NULL,
+    igst numeric(12,2) DEFAULT 0 NOT NULL,
+    amount numeric(12,2) DEFAULT 0 NOT NULL,
+    "jData" jsonb,
+    hsn integer NOT NULL,
+    "gstRate" numeric(5,2) DEFAULT 0 NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public."SalePurchaseDetails" OWNER TO webadmin;
+
+--
+-- Name: SalePurchaseDetails_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE public."SalePurchaseDetails" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."SalePurchaseDetails_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: Settings; Type: TABLE; Schema: public; Owner: webadmin
 --
 
@@ -624,7 +738,8 @@ CREATE TABLE public."Settings" (
     key text NOT NULL,
     "textValue" text,
     "jData" jsonb,
-    "intValue" integer DEFAULT 0 NOT NULL
+    "intValue" integer DEFAULT 0 NOT NULL,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -642,7 +757,8 @@ CREATE TABLE public."TranD" (
     amount numeric(12,2) NOT NULL,
     "tranHeaderId" integer NOT NULL,
     "lineRefNo" text,
-    "instrNo" text
+    "instrNo" text,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -686,7 +802,9 @@ CREATE TABLE public."TranH" (
     "branchId" smallint NOT NULL,
     "posId" smallint,
     "autoRefNo" text NOT NULL,
-    "timestamp" timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "contactsId" integer,
+    checked boolean DEFAULT false
 );
 
 
@@ -735,7 +853,7 @@ CREATE TABLE public."UnitM" (
     id smallint NOT NULL,
     "unitName" text NOT NULL,
     "jData" jsonb,
-    symbol text NOT NULL
+    symbol text
 );
 
 
@@ -784,10 +902,24 @@ ALTER TABLE ONLY public."CategoryM" ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Name: Contacts id; Type: DEFAULT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Contacts" ALTER COLUMN id SET DEFAULT nextval('public."Contacts_id_seq"'::regclass);
+
+
+--
 -- Name: ExtBankReconTranD id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
 ALTER TABLE ONLY public."ExtBankReconTranD" ALTER COLUMN id SET DEFAULT nextval('public."ExtBankReconTranD_id_seq"'::regclass);
+
+
+--
+-- Name: ExtBusinessContactsAccM id; Type: DEFAULT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ExtBusinessContactsAccM" ALTER COLUMN id SET DEFAULT nextval('public."ExtBusinessContactsAccM_id_seq"'::regclass);
 
 
 --
@@ -798,24 +930,10 @@ ALTER TABLE ONLY public."ExtGstTranD" ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: ExtMetaTranD id; Type: DEFAULT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."ExtMetaTranD" ALTER COLUMN id SET DEFAULT nextval('public."ExtMetaTranD_id_seq"'::regclass);
-
-
---
 -- Name: GodownM id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
 ALTER TABLE ONLY public."GodownM" ALTER COLUMN id SET DEFAULT nextval('public."GodownM_id_seq"'::regclass);
-
-
---
--- Name: InvExtD id; Type: DEFAULT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."InvExtD" ALTER COLUMN id SET DEFAULT nextval('public."InvD_id_seq"'::regclass);
 
 
 --
@@ -915,51 +1033,41 @@ INSERT INTO public."AccM" VALUES (3, 'CapitalSubgroup', 'Capital Account Subgrou
 -- Data for Name: AccOpBal; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-
-
 --
 -- Data for Name: BankOpBal; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
 
 
 --
 -- Data for Name: BranchM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-INSERT INTO public."BranchM" VALUES (1, 'head office', NULL, NULL, 'head');
-
+INSERT INTO public."BranchM" VALUES (1, 'head office', NULL, NULL, 'head', '2021-03-25 09:55:23.321624+00');
 
 --
 -- Data for Name: BrandM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-
-
 --
 -- Data for Name: CategoryM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-
-
+--
+-- Data for Name: Contacts; Type: TABLE DATA; Schema: public; Owner: webadmin
+--
 --
 -- Data for Name: ExtBankReconTranD; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-
-
+--
+-- Data for Name: ExtBusinessContactsAccM; Type: TABLE DATA; Schema: public; Owner: webadmin
+--
 --
 -- Data for Name: ExtGstTranD; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
-
-
 --
--- Data for Name: ExtMetaTranD; Type: TABLE DATA; Schema: public; Owner: webadmin
+-- Data for Name: ExtMiscAccM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
-
-
 --
 -- Data for Name: FinYearM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
@@ -981,25 +1089,21 @@ INSERT INTO public."FinYearM" VALUES ('2016-04-01', '2017-03-31', 2016);
 INSERT INTO public."FinYearM" VALUES ('2017-04-01', '2018-03-31', 2017);
 INSERT INTO public."FinYearM" VALUES ('2018-04-01', '2019-03-31', 2018);
 INSERT INTO public."FinYearM" VALUES ('2019-04-01', '2020-03-31', 2019);
-INSERT INTO public."FinYearM" VALUES ('2020-04-01', '2021-03-31', 2020);
 INSERT INTO public."FinYearM" VALUES ('2021-04-01', '2022-03-31', 2021);
 INSERT INTO public."FinYearM" VALUES ('2002-04-01', '2003-03-31', 2002);
 INSERT INTO public."FinYearM" VALUES ('2022-04-02', '2023-03-30', 2022);
 INSERT INTO public."FinYearM" VALUES ('2023-04-01', '2024-03-30', 2023);
 INSERT INTO public."FinYearM" VALUES ('2024-04-01', '2025-03-31', 2024);
+INSERT INTO public."FinYearM" VALUES ('2025-04-01', '2026-03-31', 2025);
+INSERT INTO public."FinYearM" VALUES ('2026-04-01', '2027-03-31', 2026);
+INSERT INTO public."FinYearM" VALUES ('2020-04-01', '2021-03-31', 2020);
 
 
 --
 -- Data for Name: GodownM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-INSERT INTO public."GodownM" VALUES (1, 'main', NULL, NULL);
-
-
---
--- Data for Name: InvExtD; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
+INSERT INTO public."GodownM" VALUES (1, 'main', NULL, NULL, '2021-03-25 09:58:55.45763+00');
 
 
 --
@@ -1018,8 +1122,9 @@ INSERT INTO public."PosM" VALUES (1, 'sample1', NULL, NULL, 1);
 --
 -- Data for Name: ProductM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
-
+--
+-- Data for Name: SalePurchaseDetails; Type: TABLE DATA; Schema: public; Owner: webadmin
+--
 
 --
 -- Data for Name: Settings; Type: TABLE DATA; Schema: public; Owner: webadmin
@@ -1027,24 +1132,16 @@ INSERT INTO public."PosM" VALUES (1, 'sample1', NULL, NULL, 1);
 
 INSERT INTO public."Settings" VALUES (1, 'menu', NULL, '{"menu": [{"name": "financialAccounting", "label": "Accounts", "children": [{"name": "finalAccounts", "label": "Final Accounts", "children": [{"name": "trialBalance", "label": "Trial Balance", "component": "TraceTrialBalance"}, {"name": "balanceSheet", "label": "Balance Sheet", "component": "balanceSheet"}, {"name": "pl", "label": "PL Account", "component": "plAccount"}]}, {"name": "sales", "label": "Sales", "children": [{"name": "creditSales", "label": "Credit Sales"}, {"name": "cashSales", "label": "Cash Sales"}, {"name": "mixedSales", "label": "Mixed Sales"}, {"name": "cardSales", "label": "Card Sales"}]}, {"name": "purchase", "label": "Purchase", "children": [{"name": "creditPurchase", "label": "Credit Purchase"}, {"name": "cashPurchase", "label": "Cash Purchase"}]}, {"name": "misc", "label": "Misc", "children": [{"name": "contra", "label": "Contra"}, {"name": "journal", "label": "Journals"}, {"name": "stockJournal", "label": "Stock Journal"}]}, {"name": "payments", "label": "Payments", "children": [{"name": "cashPayment", "label": "Cash Payment"}, {"name": "chequePayment", "label": "Cheque Payment"}]}, {"name": "receipts", "label": "Receipts", "children": [{"name": "cashReceipt", "label": "Cash Receipt"}, {"name": "cashReceipt", "label": "Cash receipt"}]}]}, {"name": "payroll", "label": "Payroll", "children": [{"name": "transactions", "label": "Transactions", "children": [{"name": "timeSheet", "label": "Time Sheet", "children": []}, {"name": "leaves", "label": "Leaves", "children": []}]}, {"name": "processing", "label": "Processing", "children": [{"name": "processPayroll", "label": "Process Payroll", "children": []}, {"name": "undoProcessing", "label": "Undo Processing", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "payslips", "label": "Payslips", "children": []}, {"name": "loanAccount", "label": "Loan Account", "children": []}]}, {"name": "reports", "label": "Reports", "children": [{"name": "providentFund", "label": "ProvidentFund", "children": []}, {"name": "esi", "label": "ESI", "children": []}]}]}, {"name": "marketing", "label": "Marketing", "children": [{"name": "mission", "label": "Mission", "children": [{"name": "missionStatement", "label": "Mission Statement", "children": []}, {"name": "objectives", "label": "Objectives", "children": []}]}, {"name": "analysis", "label": "Analysis", "children": [{"name": "opportunities", "label": "Opportunities", "children": []}, {"name": "5canalysis", "label": "5C Analysis", "children": []}, {"name": "swotAnalysis", "label": "SWOT Analysis", "children": []}, {"name": "pestAnalysis", "label": "PEST Analysis", "children": []}]}, {"name": "strategy", "label": "Strategy", "children": [{"name": "targetAudience", "label": "Target Audience", "children": []}, {"name": "measurableGoals", "label": "Measurable Goals", "children": []}, {"name": "budget", "label": "Budget", "children": []}]}, {"name": "marketingMix", "label": "Marketing Mix", "children": [{"name": "productDevelopment", "label": "Product Dev", "children": []}, {"name": "pricing", "label": "Pricing", "children": []}, {"name": "promotion", "label": "Promotion", "children": []}, {"name": "placeAndDistribution", "label": "Place and Distribution", "children": []}]}, {"name": "implementation", "label": "Implementation", "children": [{"name": "planToAction", "label": "Plan to Action", "children": []}, {"name": "monitorResults", "label": "Monitor Results", "children": []}]}]}, {"name": "recruitment", "label": "Recruitment", "children": [{"name": "planning", "label": "Planning", "children": [{"name": "vacancy", "label": "Vacancy", "children": []}, {"name": "resumesScreening", "label": "Resume Screening", "children": []}, {"name": "jobAnalysis", "label": "Job Analysis", "children": []}, {"name": "jobDescription", "label": "Job Description", "children": []}, {"name": "jobSpecification", "label": "Job Specification", "children": []}, {"name": "jobEvaluation", "label": "Job Evaluation", "children": []}]}, {"name": "execution", "label": "Execution", "children": [{"name": "directRecruitment", "label": "Direct Recruitment", "children": []}, {"name": "employmentExchange", "label": "Employment Exch.", "children": []}, {"name": "employmentAgencies", "label": "Employment Ag.", "children": []}, {"name": "advertisement", "label": "Advertisement", "children": []}, {"name": "professionalAssociation", "label": "Proff Associations", "children": []}, {"name": "campusRecruitment", "label": "Campus Recruit", "children": []}, {"name": "wordOfMouth", "label": "Word Of Mouth", "children": []}]}, {"name": "screening", "label": "Screening", "children": [{"name": "processing", "label": "Processing", "children": []}, {"name": "finalization", "label": "Finalization", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "coverLetter", "label": "Cover Letter", "children": []}, {"name": "appointmentLetter", "label": "Appointment Letter", "children": []}]}]}, {"name": "sampleForms", "label": "Sample Forms", "children": [{"name": "registrations", "label": "Registrations", "children": [{"name": "gym", "label": "Gym", "children": []}, {"name": "studentAdmission", "label": "Student Admission", "children": []}, {"name": "clubMembership", "label": "Club Membership", "children": []}, {"name": "employeeInfo", "label": "Employee Information", "children": []}]}, {"name": "applications", "label": "Applications", "children": [{"name": "loanApplication", "label": "Loan Application", "children": []}, {"name": "electronicsRental", "label": "Electronics Rental", "children": []}]}, {"name": "feedbacks", "label": "Feedbacks", "children": [{"name": "employeePerformance", "label": "Employee Performance", "children": []}, {"name": "softwareEvaluation", "label": "Software Evaluation", "children": []}, {"name": "eventFeedback", "label": "Event Feedback", "children": []}]}, {"name": "others", "label": "Others", "children": [{"name": "deeplyNested", "label": "Deeply Nested", "children": []}]}]}]}', 0);
 
-
 --
 -- Data for Name: TranCounter; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
-
-
 --
 -- Data for Name: TranD; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-
-
 --
 -- Data for Name: TranH; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
-
-
 
 --
 -- Data for Name: TranTypeM; Type: TABLE DATA; Schema: public; Owner: webadmin
@@ -1056,27 +1153,32 @@ INSERT INTO public."TranTypeM" VALUES (3, 'Receipt', 'REC');
 INSERT INTO public."TranTypeM" VALUES (4, 'Sales', 'SAL');
 INSERT INTO public."TranTypeM" VALUES (5, 'Purchase', 'PUR');
 INSERT INTO public."TranTypeM" VALUES (6, 'Contra', 'CON');
+INSERT INTO public."TranTypeM" VALUES (7, 'Debit note', 'DRN');
+INSERT INTO public."TranTypeM" VALUES (8, 'Credit note', 'CRN');
+INSERT INTO public."TranTypeM" VALUES (9, 'Sale return', 'SRT');
+INSERT INTO public."TranTypeM" VALUES (10, 'Purchase return', 'PRT');
 
 
 --
 -- Data for Name: UnitM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
-INSERT INTO public."UnitM" VALUES (1, 'piece', NULL, 'pc');
+INSERT INTO public."UnitM" VALUES (1, 'piece', NULL, 'Pc');
+INSERT INTO public."UnitM" VALUES (2, 'kilogram', NULL, 'Kg');
 
 
 --
 -- Name: AccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccM_id_seq"', 116, true);
+SELECT pg_catalog.setval('public."AccM_id_seq"', 168, true);
 
 
 --
 -- Name: AccOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 120, true);
 
 
 --
@@ -1090,42 +1192,56 @@ SELECT pg_catalog.setval('public."BranchM_id_seq"', 4, true);
 -- Name: BrandM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BrandM_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."BrandM_id_seq"', 11, true);
 
 
 --
 -- Name: Category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Category_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."Category_id_seq"', 41, true);
+
+
+--
+-- Name: Contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+SELECT pg_catalog.setval('public."Contacts_id_seq"', 243, true);
 
 
 --
 -- Name: ExtBankOpBalAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 1, true);
 
 
 --
 -- Name: ExtBankReconTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 66, true);
+
+
+--
+-- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 10, true);
 
 
 --
 -- Name: ExtGstTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 246, true);
 
 
 --
--- Name: ExtMetaTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+-- Name: ExtMiscAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtMetaTranD_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 1, true);
 
 
 --
@@ -1136,17 +1252,10 @@ SELECT pg_catalog.setval('public."GodownM_id_seq"', 1, false);
 
 
 --
--- Name: InvD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
---
-
-SELECT pg_catalog.setval('public."InvD_id_seq"', 1, false);
-
-
---
 -- Name: LastTranNumber_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 1, true);
+SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 11, true);
 
 
 --
@@ -1160,21 +1269,28 @@ SELECT pg_catalog.setval('public."PosM_id_seq"', 1, true);
 -- Name: ProductM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ProductM_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."ProductM_id_seq"', 24, true);
+
+
+--
+-- Name: SalePurchaseDetails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 179, true);
 
 
 --
 -- Name: TranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranD_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."TranD_id_seq"', 695, true);
 
 
 --
 -- Name: TranH_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranH_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."TranH_id_seq"', 369, true);
 
 
 --
@@ -1250,11 +1366,59 @@ ALTER TABLE ONLY public."CategoryM"
 
 
 --
+-- Name: Contacts Contacts_contactName_pin_address1_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Contacts"
+    ADD CONSTRAINT "Contacts_contactName_pin_address1_key" UNIQUE ("contactName", pin, address1);
+
+
+--
+-- Name: Contacts Contacts_email_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Contacts"
+    ADD CONSTRAINT "Contacts_email_key" UNIQUE (email);
+
+
+--
+-- Name: Contacts Contacts_mobileNumber_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Contacts"
+    ADD CONSTRAINT "Contacts_mobileNumber_key" UNIQUE ("mobileNumber");
+
+
+--
+-- Name: Contacts Contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Contacts"
+    ADD CONSTRAINT "Contacts_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: ExtBankReconTranD ExtBankReconTranD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
 ALTER TABLE ONLY public."ExtBankReconTranD"
     ADD CONSTRAINT "ExtBankReconTranD_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: ExtBusinessContactsAccM ExtBusinessContactsAccM_contactCode_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ExtBusinessContactsAccM"
+    ADD CONSTRAINT "ExtBusinessContactsAccM_contactCode_key" UNIQUE ("contactCode");
+
+
+--
+-- Name: ExtBusinessContactsAccM ExtBusinessContactsAccM_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ExtBusinessContactsAccM"
+    ADD CONSTRAINT "ExtBusinessContactsAccM_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1266,11 +1430,11 @@ ALTER TABLE ONLY public."ExtGstTranD"
 
 
 --
--- Name: ExtMetaTranD ExtMetaTranD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+-- Name: ExtMiscAccM ExtMiscAccM_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
-ALTER TABLE ONLY public."ExtMetaTranD"
-    ADD CONSTRAINT "ExtMetaTranD_pkey" PRIMARY KEY (id);
+ALTER TABLE ONLY public."ExtMiscAccM"
+    ADD CONSTRAINT "ExtMiscAccM_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1287,14 +1451,6 @@ ALTER TABLE ONLY public."FinYearM"
 
 ALTER TABLE ONLY public."GodownM"
     ADD CONSTRAINT "GodownM_pkey" PRIMARY KEY (id);
-
-
---
--- Name: InvExtD InvD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."InvExtD"
-    ADD CONSTRAINT "InvD_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1327,6 +1483,30 @@ ALTER TABLE ONLY public."PosM"
 
 ALTER TABLE ONLY public."ProductM"
     ADD CONSTRAINT "ProductM_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: ProductM ProductM_productCode_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductM"
+    ADD CONSTRAINT "ProductM_productCode_key" UNIQUE ("productCode");
+
+
+--
+-- Name: ProductM ProductM_upcCode_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ProductM"
+    ADD CONSTRAINT "ProductM_upcCode_key" UNIQUE ("upcCode");
+
+
+--
+-- Name: SalePurchaseDetails SalePurchaseDetails_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."SalePurchaseDetails"
+    ADD CONSTRAINT "SalePurchaseDetails_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1442,6 +1622,13 @@ ALTER TABLE ONLY public."UnitM"
 
 
 --
+-- Name: fki; Type: INDEX; Schema: public; Owner: webadmin
+--
+
+CREATE INDEX fki ON public."ExtBusinessContactsAccM" USING btree ("accId");
+
+
+--
 -- Name: fki_branchId; Type: INDEX; Schema: public; Owner: webadmin
 --
 
@@ -1506,7 +1693,39 @@ ALTER TABLE ONLY public."BankOpBal"
 --
 
 ALTER TABLE ONLY public."ExtBankReconTranD"
-    ADD CONSTRAINT "ExtBankReconTranD_tranDetailsId_fkey" FOREIGN KEY ("tranDetailsId") REFERENCES public."TranD"(id);
+    ADD CONSTRAINT "ExtBankReconTranD_tranDetailsId_fkey" FOREIGN KEY ("tranDetailsId") REFERENCES public."TranD"(id) ON DELETE CASCADE;
+
+
+--
+-- Name: ExtBusinessContactsAccM ExtBusinessContactsAccM_accId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ExtBusinessContactsAccM"
+    ADD CONSTRAINT "ExtBusinessContactsAccM_accId_fkey" FOREIGN KEY ("accId") REFERENCES public."AccM"(id);
+
+
+--
+-- Name: ExtMiscAccM ExtMiscAccM_accId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."ExtMiscAccM"
+    ADD CONSTRAINT "ExtMiscAccM_accId_fkey" FOREIGN KEY ("accId") REFERENCES public."AccM"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: SalePurchaseDetails SalePurchaseDetails_productId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."SalePurchaseDetails"
+    ADD CONSTRAINT "SalePurchaseDetails_productId_fkey" FOREIGN KEY ("productId") REFERENCES public."ProductM"(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: SalePurchaseDetails SalePurchaseDetails_tranDetailsId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."SalePurchaseDetails"
+    ADD CONSTRAINT "SalePurchaseDetails_tranDetailsId_fkey" FOREIGN KEY ("tranDetailsId") REFERENCES public."TranD"(id) ON DELETE CASCADE;
 
 
 --
@@ -1566,6 +1785,14 @@ ALTER TABLE ONLY public."ProductM"
 
 
 --
+-- Name: TranH contactsId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."TranH"
+    ADD CONSTRAINT "contactsId" FOREIGN KEY ("contactsId") REFERENCES public."Contacts"(id);
+
+
+--
 -- Name: AccOpBal finYearId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -1595,30 +1822,6 @@ ALTER TABLE ONLY public."CategoryM"
 
 ALTER TABLE ONLY public."TranH"
     ADD CONSTRAINT "posId" FOREIGN KEY ("posId") REFERENCES public."PosM"(id);
-
-
---
--- Name: InvExtD prId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."InvExtD"
-    ADD CONSTRAINT "prId" FOREIGN KEY ("prId") REFERENCES public."ProductM"(id);
-
-
---
--- Name: InvExtD tranDetailsId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."InvExtD"
-    ADD CONSTRAINT "tranDetailsId" FOREIGN KEY (id) REFERENCES public."TranD"(id);
-
-
---
--- Name: ExtMetaTranD tranDetailsId; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."ExtMetaTranD"
-    ADD CONSTRAINT "tranDetailsId" FOREIGN KEY ("tranDetailsId") REFERENCES public."TranD"(id) ON DELETE CASCADE;
 
 
 --

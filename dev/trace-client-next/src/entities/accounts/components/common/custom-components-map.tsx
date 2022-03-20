@@ -20,6 +20,7 @@ import { FinancialYears } from '../masters/financial-years'
 import { Brands } from '../inventory/brands'
 import { Products } from '../inventory/products'
 import { OpeningStock } from '../inventory/opening-stock'
+import { InventoryReports } from '../inventory/reports/inventory-reports'
 
 const customComponents = {
     accountsMaster: AccountsMaster,
@@ -44,6 +45,7 @@ const customComponents = {
     taxation: Taxation,
     trialBalance: TrialBalance,
     vouchers: Voucher,
-    openingStock: OpeningStock
+    openingStock: OpeningStock,
+    inventoryReports: InventoryReports
 }
 export { customComponents }

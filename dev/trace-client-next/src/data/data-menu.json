@@ -256,6 +256,12 @@
                             "hierarchy":"inventory-opening-stock",
                             "label": "Opening stock",
                             "componentName": "openingStock"
+                        },
+                        {
+                            "name": "inventoryReportsSubMenu",
+                            "hierarchy":"inventory-reports",
+                            "label": "Reports",
+                            "componentName": "inventoryReports"
                         }
                     ]
                 }

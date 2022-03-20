@@ -29,7 +29,6 @@ function SaleHeader() {
 
     const {
         accountsMessages,
-        getMappedAccounts,
         isInvalidDate,
         LedgerSubledger,
         TraceDialog,

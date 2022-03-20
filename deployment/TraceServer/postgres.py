@@ -45,7 +45,7 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, fi
         elif(tableName == 'ProductM'):
             if(deletedIds): # account deleted
                 pass
-            else: # update or new account
+            else: # update or new
                 product = sqlObject.get('data', None)
                 if(product):
                     if(product.get('id', None)): # edit

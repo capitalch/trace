@@ -55,9 +55,9 @@ function useServerSocketMessageHandler() {
         if(_.isEmpty(products)){
             return
         }
-        let product = products.find((x: any) => x.id === data.id)
-        if(product){
-            product = data
+        const index = products.findIndex((x: any) => x.id === data.id)
+        if(index >= 0){ // product already there so update
+            products[index] = data
         } else{
             products.unshift(data)
         }

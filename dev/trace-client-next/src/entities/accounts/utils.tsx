@@ -109,6 +109,10 @@ function utils() {
         return (ret)
     }
 
+    function getAccountsStorage(){
+        
+    }
+
     function getMappedAccounts(accounts: any[]) {
         return accounts.map((x: any) => ({
             label: x.accName,
@@ -318,6 +322,12 @@ function utils() {
         accStore.allAccounts = allAccounts
     }
 
+    function toCurrentDateFormat(date: string) {
+        const dateFormat = getFromBag('dateFormat')
+        const ret = date ? moment(date).format(dateFormat) : ''
+        return (ret)
+    }
+
     async function transferClosingBalances() {
         const q = graphqlQueries['genericQueryBuilder']({
             // in shared artifacts
@@ -353,6 +363,7 @@ function utils() {
         isInvalidStateCode,
         registerAccounts,
         execSaleInvoiceView,
+        toCurrentDateFormat,
         transferClosingBalances,
     }
 }

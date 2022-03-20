@@ -635,14 +635,14 @@ allSqls = {
                     on d."id" = s."tranDetailsId"
                 where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
                 --where "branchId" = 1 and "finYearId" = 2021
-                and "tranDate" <= CURRENT_DATE
+                and "tranDate" <= %(endDate)s
         ), cte1 as ( -- opening balance
             select "productId", "openingPrice"
                 from "ProductOpBal" p 
                 where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
                 --where "branchId" = 1 and "finYearId" = 2021
         ), cte2 as( -- compute last purchase price till sale date
-        select "tranDate", "productId",	"qty", "price", "tranTypeId", (
+        select "tranDate", "productId",	"qty", "price", "tranTypeId", "salePurchaseDetailsId", (
             select ("price" - "discount") 
                 from cte0
                     where "tranTypeId" = 5
@@ -654,7 +654,7 @@ allSqls = {
                 where "tranTypeId" in (4, 9) --and "productId" in(66,67)
         ), cte3 as ( -- take last purchase price from ProductOpBal if no purchase is made in current year
             select "tranDate", c2."productId", c2."qty", "price", coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice",
-                    "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId"
+                    "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId","salePurchaseDetailsId"
                 from cte2 c2
                     left join cte1 c1
                         on c2."productId" = c1."productId"
@@ -662,7 +662,7 @@ allSqls = {
             select cte3.*, "qty" * ("price" - "discount" - "lastPurchasePrice") as "grossProfit"
                 from cte3
         ), cte5 as ( --negate for sales return
-			select "tranDate", "productId", "price", "lastPurchasePrice", "discount", "gstRate","tranTypeId"
+			select "tranDate", "productId", "price", "lastPurchasePrice", "discount", "gstRate","tranTypeId","salePurchaseDetailsId"
 			, CASE when "tranTypeId" = 4 then "qty" else -"qty" end as "qty"
 			, CASE when "tranTypeId" = 4 then "aggrSale" else -"aggrSale" end as "aggrSale"
 			, CASE when "tranTypeId" = 4 then "cgst" else -"cgst" end as "cgst"
@@ -681,7 +681,8 @@ allSqls = {
 						on c."id" = p."catId"
 					join "BrandM" b
 						on b.id = p."brandId"
-				order by "tranDate"
+                where "tranDate" between %(startDate)s and %(endDate)s
+				order by "tranDate", "salePurchaseDetailsId"
     ''',
 
     "get_search_product": '''

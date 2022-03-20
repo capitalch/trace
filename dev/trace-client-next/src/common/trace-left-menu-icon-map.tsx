@@ -91,6 +91,7 @@ const iconMap: any = {
     categoriesSubMenu: <Category />,
     productsSubMenu: <LibraryBooks />,
     openingStockSubMenu: <AccountBalanceWallet />,
+    inventoryReportsSubMenu: <ListAlt />,
 
     //Admin menu
     artifacts: <CheckCircle></CheckCircle>,

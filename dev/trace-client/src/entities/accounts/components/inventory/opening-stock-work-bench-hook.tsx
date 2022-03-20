@@ -1,3 +1,4 @@
+import { toLower } from 'lodash'
 import { _, moment, useEffect, useRef, useSharedElements, useState } from './redirect'
 
 function useOpeningStockWorkBench() {
@@ -13,6 +14,7 @@ function useOpeningStockWorkBench() {
         id: undefined,
         lastPurchaseDate: today,
         openingPrice: 0,
+        products: [],
         qty: 0,
         selectedBrand: undefined,
         selectedCategory: undefined,
@@ -26,7 +28,8 @@ function useOpeningStockWorkBench() {
     useEffect(() => {
         loadProducts()
         const subs1 = filterOn('OPENING-STOCK-XX-GRID-EDIT-CLICKED').subscribe(handleEdit)
-        const subs2 = filterOn('OPENING-STOCK-WORK-BENCH-HOOK-PRODUCT-UPSERTED-AT-SERVER').subscribe(onProductUpsertedAtServer)
+        const subs2 = filterOn('OPENING-STOCK-WORK-BENCH-HOOK-PRODUCT-UPSERTED-AT-SERVER')
+            .subscribe(onProductUpsertedAtServer)
         return (() => {
             subs1.unsubscribe()
             subs2.unsubscribe()
@@ -62,7 +65,7 @@ function useOpeningStockWorkBench() {
         onBrandChanged(selectedBrand)
 
         const selectedProduct = { label: row.label, value: row.productId }
-        onProductChanged(selectedProduct)
+        onProductLabelChanged(selectedProduct)
 
         pre.qty = row.qty
         pre.openingPrice = row.openingPrice
@@ -121,9 +124,10 @@ function useOpeningStockWorkBench() {
         return (!isBefore)
     }
 
-    async function loadProducts() {
+    async function loadProducts(isForced = false) {
         let products = getFromBag('products')
-        if (_.isEmpty(products)) {
+
+        if (_.isEmpty(products) || isForced) {
             emit('SHOW-LOADING-INDICATOR', true)
             const ret: any = await execGenericView({
                 isMultipleRows: false,
@@ -148,8 +152,8 @@ function useOpeningStockWorkBench() {
         function fillFilteredCategories() {
             const categories = pre?.products.map((x: any) => ({ label: x.catName, value: x.catId })) || []
             pre.filteredCategories = _.uniqBy(categories, (x: any) => x.value).sort((a: any, b: any) => {
-                if (a.label > b.label) return 1
-                if (a.label < b.label) return -1
+                if (toLower(a.label) > toLower(b.label)) return 1
+                if (toLower(a.label) < toLower(b.label)) return -1
                 return 0
             })
         }
@@ -158,7 +162,13 @@ function useOpeningStockWorkBench() {
     function onBrandChanged(selectedItem: any) {
         pre.selectedBrand = selectedItem
         pre.selectedProduct = { label: '', value: undefined }
-        pre.filteredProducts = pre?.products.filter((x: any) => ((x.brandId === selectedItem.value) && (x.catId === pre?.selectedCategory?.value))).map((x: any) => ({ label: x.label, value: x.id }))
+        pre.filteredProducts = pre?.products.filter((x: any) =>
+            ((x.brandId === selectedItem.value) && (x.catId === pre?.selectedCategory?.value)))
+            .map((x: any) => ({ label: x.label, value: x.id })).sort((a: any, b: any) => {
+                if (toLower(a.label) > toLower(b.label)) return 1
+                if (toLower(a.label) < toLower(b.label)) return -1
+                return 0
+            })
         setRefresh({})
     }
 
@@ -166,7 +176,13 @@ function useOpeningStockWorkBench() {
         pre.selectedCategory = selectedItem
         pre.selectedBrand = { label: '', value: undefined }
         pre.selectedProduct = { label: '', value: undefined }
-        pre.filteredProducts = pre?.products.filter((x: any) => ((x.catId === selectedItem.value) && (x.brandId === pre?.selectedBrand?.value))).map((x: any) => ({ label: x.label, value: x.id }))
+        pre.filteredProducts = pre?.products.filter((x: any) =>
+            ((x.catId === selectedItem.value) && (x.brandId === pre?.selectedBrand?.value)))
+            .map((x: any) => ({ label: x.label, value: x.id })).sort((a: any, b: any) => {
+                if (toLower(a.label) > toLower(b.label)) return 1
+                if (toLower(a.label) < toLower(b.label)) return -1
+                return 0
+            })
         fillFilteredBrands()
         setRefresh({})
 
@@ -178,14 +194,14 @@ function useOpeningStockWorkBench() {
             }))
             const uniques = _.uniqBy(filteredBrands, (x: any) => x.value)
             pre.filteredBrands = uniques.sort((a: any, b: any) => {
-                if (a.label > b.label) return 1
-                if (a.label < b.label) return -1
+                if (toLower(a.label) > toLower(b.label)) return 1
+                if (toLower(a.label) < toLower(b.label)) return -1
                 return 0
             })
         }
     }
 
-    function onProductChanged(selectedItem: any) {
+    function onProductLabelChanged(selectedItem: any) {
         pre.selectedProduct = selectedItem
         setRefresh({})
     }
@@ -205,7 +221,7 @@ function useOpeningStockWorkBench() {
         pre.id = undefined
     }
 
-    return ({ checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, isLastPurchaseDateError, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh })
+    return ({ checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, isLastPurchaseDateError, loadProducts, meta, onBrandChanged, onCategoryChanged, onProductLabelChanged, setRefresh })
 
 }
 

@@ -1,26 +1,8 @@
-import {
-    PrimeColumn,
-    TreeTable,
-    useState,
-    useEffect,
-} from '../../../../imports/regular-imports'
-import {
-    Box,
-    Grid,
-    IconButton,
-    Typography,
-    Button,
-    Switch,
-} from '../../../../imports/gui-imports'
-import {
-    Add,
-    DeleteForever,
-    Edit,
-    Link,
-    SyncSharp,
-} from '../../../../imports/icons-import'
-import { useSharedElements } from '../common/shared-elements-hook'
 import { useCategoriesMaster, useStyles } from './categories-master-hook'
+import {
+    Add, Box, Button, DeleteForever, Edit, Grid, IconButton, Link, PrimeColumn,
+    Switch, SyncSharp, TreeTable, Typography, useState, useEffect, useSharedElements,
+} from './redirect'
 
 function CategoriesMaster() {
     const [, setRefresh] = useState({})
@@ -306,7 +288,8 @@ function CategoriesMaster() {
                 queryId: 'genericUpdateMaster',
             }
             if (isValidForm(formId)) {
-                saveForm(options)
+                await saveForm(options)
+                await getData()
             } else {
                 meta.current.isMounted && setRefresh({})
             }
@@ -314,11 +297,11 @@ function CategoriesMaster() {
     }
 
     function handleChangeParent(node: any) {
+        const pre = meta.current.dialogConfig
         const selectedNodeId = node.data.id
         let destinationPath: string
         let newParentId: any
         //Open dialog and show tree to select from
-        const pre = meta.current.dialogConfig
         pre.title = `Select new parent for ${node.data.catName}`
         pre.content = () => {
             return (
@@ -360,12 +343,11 @@ function CategoriesMaster() {
 
         async function submit() {
             try {
+                // No form required. This is direct update
                 const pathArray = destinationPath.split(',')
-                const formId = meta.current.dialogConfig.formId
                 if (pathArray.includes(String(selectedNodeId))) {
                     alert('not allowed')
                 } else {
-                    await doValidateForm(formId)
                     const options: any = {
                         data: {
                             tableName: 'CategoryM',
@@ -377,11 +359,8 @@ function CategoriesMaster() {
                         queryId: 'genericUpdateMaster',
                         afterMethod: handleOnCloseDialog,
                     }
-                    if (isValidForm(formId)) {
-                        await saveForm(options)
-                    } else {
-                        meta.current.isMounted && setRefresh({})
-                    }
+                    await saveForm(options)
+                    await getData()
                 }
             } catch (e: any) {
                 console.log(e.message)
@@ -408,6 +387,7 @@ function CategoriesMaster() {
             confirm(confirmOptions)
                 .then(async () => {
                     await saveForm(options)
+                    await getData()
                 })
                 .catch(() => { })
         } catch (e: any) {
@@ -507,6 +487,7 @@ function CategoriesMaster() {
                 afterMethod: handleOnCloseDialog,
                 queryId: 'genericUpdateMaster',
             })
+            getData()
         }
     }
 
@@ -523,7 +504,7 @@ function CategoriesMaster() {
         )
         meta.current.isMounted && setRefresh({})
 
-        function handleOnSubmit() {
+        async function handleOnSubmit() {
             const formData = JSON.parse(
                 JSON.stringify(getFormData(meta.current.dialogConfig.formId))
             )
@@ -535,6 +516,7 @@ function CategoriesMaster() {
                 afterMethod: handleOnCloseDialog,
                 queryId: 'genericUpdateMaster',
             })
+            await getData()
         }
 
         function rootCategoryEntry() {
@@ -545,7 +527,6 @@ function CategoriesMaster() {
                     name={getCurrentEntity()}
                 />
             )
-
             function rootCategoryEntryJson() {
                 return {
                     class: 'generic-dialog',

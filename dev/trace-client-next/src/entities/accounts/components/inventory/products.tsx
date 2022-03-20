@@ -1,12 +1,12 @@
-import { useSharedElements } from '../common/shared-elements-hook'
-import { Box, Typography } from '../../../../imports/gui-imports'
+import { Box, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, } from './redirect'
+import { NewProduct } from './new-product'
 import { useProducts, useStyles } from './products-hook'
 
 function Products() {
-    const { getXXGridParams, handleCloseDialog, meta } = useProducts()
+    const {getXXGridParams, handleCloseDialog, meta } = useProducts()
     const classes = useStyles()
-    const { getGridReportSubTitle, TraceDialog, XXGrid } = useSharedElements()
-
+    const { getGridReportSubTitle,  XXGrid } = useSharedElements()
+    const pre = meta.current
     const {
         columns,
         gridActionMessages,
@@ -26,6 +26,7 @@ function Products() {
                 autoFetchData={true}
                 columns={columns}
                 className="xx-grid"
+                sharedData={pre.sharedData}
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
                 specialColumns={specialColumns}
@@ -33,9 +34,34 @@ function Products() {
                 title="All products view"
                 summaryColNames={summaryColNames}
                 toShowAddButton={true}
-                viewLimit="100"
+                viewLimit="1000"
             />
-            <TraceDialog meta={meta} onClose={handleCloseDialog} />
+            <Dialog
+                open={pre.showDialog}
+                onClose={(e, reason) => {
+                    if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
+                        handleCloseDialog()
+                    }
+                }}
+                fullWidth={true}>
+                <DialogTitle>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant='h6'>{pre.title}</Typography>
+                        <Tooltip title="Close">
+                            <IconButton
+                                size="small"
+                                disabled={false}
+                                onClick={handleCloseDialog}>
+                                <CloseSharp />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </DialogTitle>
+                <DialogContent>
+                    <NewProduct onClose={handleCloseDialog} product={pre.product} />
+                </DialogContent>
+            </Dialog>
+            {/* <TraceDialog meta={meta} onClose={handleCloseDialog} /> */}
         </Box>
     )
 }

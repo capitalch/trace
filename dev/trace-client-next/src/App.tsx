@@ -58,6 +58,12 @@ declare module '@mui/material/styles/' {
 
 const App: React.FC = () => {
     const theme = createTheme({
+        // typography: {
+        //     h6: {
+        //         fontWeight: 'bold',
+        //         fontSize:'1rem'
+        //     },
+        // },
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },

@@ -6,9 +6,11 @@ import { manageEntitiesState } from './esm'
 function useXXGrid(gridOptions: any) {
     const [, setRefresh] = useState({})
     let { summaryColNames } = gridOptions
+    summaryColNames = summaryColNames || []
     const meta: any = useRef({
         allRows: [],
         allSummary: {},
+        fetchedData: {},
         filteredRows: [],
         filteredSummary: {},
         hashCurrentData: null,
@@ -21,12 +23,19 @@ function useXXGrid(gridOptions: any) {
         selectedSummary: {},
         searchText: '',
         viewLimit: 0,
+        isSearchTextEdited: false
     })
 
     const { emit, debounceFilterOn, filterOn } = useIbuki()
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const pre: any = meta.current
+
+    useEffect(() => {
+        if (meta.current.isSearchTextEdited && meta.current.searchTextRef.current) {
+            meta.current.searchTextRef.current.focus()
+        }
+    })
 
     useEffect(() => {
         let { sqlQueryArgs, sqlQueryId } = gridOptions
@@ -65,7 +74,8 @@ function useXXGrid(gridOptions: any) {
             fillColumnBalance()
             setRefresh({})
         })
-
+        // meta.current.dummyRefFirstTime.current && meta.current.dummyRefFirstTime.current.focus()
+        // setRefresh({})
         return () => {
             pre.isMounted = false
             subs1.unsubscribe()
@@ -129,6 +139,7 @@ function useXXGrid(gridOptions: any) {
                     ret1
                 )
             }
+            meta.current.fetchedData = ret1
             emit('SHOW-LOADING-INDICATOR', false)
             const path = gridOptions.jsonFieldPath
             let rows = ret1
@@ -269,14 +280,14 @@ function useXXGrid(gridOptions: any) {
             function toOpeningDrCr(value: number) {
                 return 'Opening: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
 
             function toClosingDrCr(value: number) {
                 return 'Closing: '.concat(
                     String(toDecimalFormat(Math.abs(value))) +
-                        (value >= 0 ? ' Dr' : ' Cr')
+                    (value >= 0 ? ' Dr' : ' Cr')
                 )
             }
         }

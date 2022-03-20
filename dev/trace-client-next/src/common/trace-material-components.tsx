@@ -111,13 +111,16 @@ function useTraceMaterialComponents() {
         onClick,
         disabled,
         style = {},
+        ref,
     }: {
         onClick: any
         disabled?: boolean
         style?: any
+        ref?: any
     }) {
         const btn = (
             <Button
+                ref={ref}
                 style={{ ...style }}
                 disabled={disabled}
                 fullWidth
@@ -278,7 +281,7 @@ const styles = {
         '& .serial-number': {
             width: '100%',
         },
-        '& .MuiInputBase-root':{
+        '& .MuiInputBase-root': {
             width: '80%'
         }
     },

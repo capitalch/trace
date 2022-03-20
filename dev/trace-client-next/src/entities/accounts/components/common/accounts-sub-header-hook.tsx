@@ -168,6 +168,7 @@ function useAccountsSubHeader() {
                     },
                     setRefresh: setRefresh,
                 })
+                
                 if (ret === true || ret?.length <= 9) {
                     setInBag('branchObject', branchObject)
                     emit('SHOW-MESSAGE', {})

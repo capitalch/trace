@@ -104,6 +104,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                 headerName: 'Ind',
                 description: 'Index',
                 field: 'id',
+                type:'number',
                 width: 80,
                 disableColumnMenu: true,
             },
@@ -111,6 +112,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                 headerName: 'Id',
                 description: 'Id',
                 field: 'id1',
+                type:'number',
                 width: 90,
             },
             {

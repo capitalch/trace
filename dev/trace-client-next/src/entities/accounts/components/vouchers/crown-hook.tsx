@@ -10,6 +10,7 @@ function useCrown(meta: any, componentRef: any) {
         accountsMessages,
         emit,
         genericUpdateMasterDetails,
+        getAccountClass,
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
@@ -135,13 +136,6 @@ function useCrown(meta: any, componentRef: any) {
                         }
                     }
                     return m
-                }
-
-                function getAccountClass(accId: number) {
-                    const account = ad.accounts.all.find(
-                        (x: any) => x.id === accId
-                    )
-                    return (account?.accClass || '')
                 }
 
                 m = accountError() ||

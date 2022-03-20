@@ -624,6 +624,67 @@ allSqls = {
                 order by "tranDate" DESC, cte1."id" DESC LIMIT %(no)s
     ''',
 
+    "get_sale_report":'''
+        with cte0 as( --base cte used many times in next
+        select "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
+            , s."amount", "gstRate", s."id" as "salePurchaseDetailsId"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+                where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+                --where "branchId" = 1 and "finYearId" = 2021
+                and "tranDate" <= %(endDate)s
+        ), cte1 as ( -- opening balance
+            select "productId", "openingPrice"
+                from "ProductOpBal" p 
+                where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+                --where "branchId" = 1 and "finYearId" = 2021
+        ), cte2 as( -- compute last purchase price till sale date
+        select "tranDate", "productId",	"qty", "price", "tranTypeId", "salePurchaseDetailsId", (
+            select ("price" - "discount") 
+                from cte0
+                    where "tranTypeId" = 5
+                        and "productId" = c0."productId"
+                        and "tranDate" <= c0."tranDate"
+                order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
+        ) as "lastPurchasePrice", "discount", "cgst", "sgst","igst", "amount", "gstRate"
+            from cte0 c0
+                where "tranTypeId" in (4, 9) --and "productId" in(66,67)
+        ), cte3 as ( -- take last purchase price from ProductOpBal if no purchase is made in current year
+            select "tranDate", c2."productId", c2."qty", "price", coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice",
+                    "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId","salePurchaseDetailsId"
+                from cte2 c2
+                    left join cte1 c1
+                        on c2."productId" = c1."productId"
+        ), cte4 as ( -- compute gross profit
+            select cte3.*, "qty" * ("price" - "discount" - "lastPurchasePrice") as "grossProfit"
+                from cte3
+        ), cte5 as ( --negate for sales return
+			select "tranDate", "productId", "price", "lastPurchasePrice", "discount", "gstRate","tranTypeId","salePurchaseDetailsId"
+			, CASE when "tranTypeId" = 4 then "qty" else -"qty" end as "qty"
+			, CASE when "tranTypeId" = 4 then "aggrSale" else -"aggrSale" end as "aggrSale"
+			, CASE when "tranTypeId" = 4 then "cgst" else -"cgst" end as "cgst"
+			, CASE when "tranTypeId" = 4 then "sgst" else -"sgst" end as "sgst"
+			, CASE when "tranTypeId" = 4 then "igst" else -"igst" end as "igst"
+			, CASE when "tranTypeId" = 4 then "amount" else -"amount" end as "amount"
+			, CASE when "tranTypeId" = 4 then 'Sale' else 'Return' end as "saleType"
+			, CASE when "tranTypeId" = 4 then "grossProfit" else -"grossProfit" end as "grossProfit"
+				from cte4
+		)
+        select cte5.*, "productCode", "catName", "brandName", "label"
+				from cte5
+					join "ProductM" p
+						on p."id" = cte5."productId"
+					join "CategoryM" c
+						on c."id" = p."catId"
+					join "BrandM" b
+						on b.id = p."brandId"
+                where "tranDate" between %(startDate)s and %(endDate)s
+				order by "tranDate", "salePurchaseDetailsId"
+    ''',
+
     "get_search_product": '''
         select p."id", 
 		"catName", "isActive", "brandName", 
@@ -1316,7 +1377,7 @@ allSqls = {
                     order by "tranDate" DESC
     ''',
 
-    "getJson_stock_summary": '''
+    "getJson_stock_summary_ageing": '''
         with cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate"
             from "TranH" h

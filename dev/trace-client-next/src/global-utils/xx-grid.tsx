@@ -1,5 +1,6 @@
 import { useStyles } from './xx-grid-hook'
-import { _, clsx } from '../imports/regular-imports'
+import { _, clsx, useRef, } from '../imports/regular-imports'
+import { useTheme } from '../imports/gui-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -56,9 +57,12 @@ interface GridActionMessagesOptions {
 }
 
 interface XXGridOptions {
+    alternateFooter?: { path: string; displayMap?: { [key: string]: any } } // format is: {path:'jsonResult.summary', displayMap:{count: Count, opValue: 'Opening value', closValue:'Closing value'  }}
+
     autoFetchData?: boolean
     className?: string
     columns: any[]
+    customFooterField1?: { label: string, path?: string, value?: number }
     disableSelectionOnClick?: boolean
     editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
@@ -74,12 +78,13 @@ interface XXGridOptions {
     isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
     postFetchMethod?: any // method to call after fetching of data
+    rowHeight?: number
     sharedData?: any // data shared with parent
     sqlQueryArgs?: any
     sqlQueryId?: any
-    specialColumns: SpecialColumnOptions
+    specialColumns?: SpecialColumnOptions
     subTitle?: string
-    summaryColNames: string[]
+    summaryColNames?: string[]
     sx?: any
     title?: string
     toShowAddButton?: boolean
@@ -94,6 +99,7 @@ interface XXGridOptions {
 
 function XXGrid(gridOptions: XXGridOptions) {
     const {
+        alternateFooter,
         className,
         gridActionMessages,
         columns,
@@ -101,13 +107,16 @@ function XXGrid(gridOptions: XXGridOptions) {
         specialColumns,
         sqlQueryArgs,
         sqlQueryId,
-        summaryColNames,
         sx,
         title,
         viewLimit,
     }: any = gridOptions
-    let { subTitle } = gridOptions
+    const theme = useTheme()
+    let { rowHeight, subTitle, summaryColNames }: any = gridOptions
+    summaryColNames = summaryColNames || []
+    rowHeight = rowHeight || 32
     const apiRef: any = useGridApiRef()
+
     gridOptions.sharedData && (gridOptions.sharedData.apiRef = apiRef)
     const {
         fetchRows,
@@ -120,14 +129,15 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleOrder,
     } = useXXGrid(gridOptions)
-    // subTitle = subTitle || 'abcd'
+    meta.current.searchTextRef = useRef() // To set focus to search box after refresh
+    // meta.current.dummyRefFirstTime = useRef()
     const { debounceEmit, emit } = useIbuki()
     const { isMediumSizeDown } = useTraceGlobal()
     const { toDecimalFormat } = utilMethods()
     meta.current.viewLimit = meta.current.viewLimit || viewLimit || 0
     meta.current.isMediumSizeDown = isMediumSizeDown
     const classes = useStyles(meta)
-    addSpecialColumns(specialColumns, gridActionMessages)
+    specialColumns && addSpecialColumns(specialColumns, gridActionMessages)
 
     return (
         <DataGridPro
@@ -142,11 +152,11 @@ function XXGrid(gridOptions: XXGridOptions) {
             sx={sx}
             columns={columns}
             rows={meta.current.filteredRows}
-            rowHeight={32}
+            rowHeight={rowHeight}
             disableColumnMenu={true}
             components={{
                 Toolbar: CustomGridToolbar,
-                Footer: CustomGridFooter,
+                Footer: alternateFooter ? AlternateFooter : CustomGridFooter,
                 BooleanCellFalseIcon: CheckBoxOutlineBlankSharp,
                 BooleanCellTrueIcon: CheckBoxOutlined
             }}
@@ -156,6 +166,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     value: meta.current.searchText,
                     onChange: (event: any) => {
                         meta.current.searchText = event.target.value
+                        meta.current.isSearchTextEdited = true // For not to setfocus search box first time. Otherwise mobit edit pad occurs which takes lot of screen space. Only on click of search box the focus happens
                         meta.current.isMounted && setRefresh({})
                         debounceEmit(
                             'XX-GRID-SEARCH-DEBOUNCE',
@@ -171,6 +182,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                     selectedSummary: meta.current.selectedSummary,
                     filteredSummary: meta.current.filteredSummary,
                     allSummary: meta.current.allSummary,
+                    customFooterField1: gridOptions.customFooterField1
                 },
             }}
             onSelectionModelChange={onSelectModelChange}
@@ -178,6 +190,28 @@ function XXGrid(gridOptions: XXGridOptions) {
             showCellRightBorder={true}
         />
     )
+
+    function AlternateFooter() {
+        const altFooter = gridOptions?.alternateFooter
+        const path: any = altFooter?.path
+        const displayMap = altFooter?.displayMap || {}
+        const data = meta.current?.fetchedData
+        const summary = _.get(data, path, {})
+        const keys = Object.keys(displayMap)
+        const ret = keys.map((key: any) => (
+            <Box sx={{ p: 1, fontWeight: 'bold' }}>
+                {''.concat(displayMap[key], ' : ', toDecimalFormat(summary[key]))}
+            </Box>
+        ))
+
+        console.log(summary, ' ', displayMap)
+        return (
+            <Box sx={{ display:'flex', border: '1px solid lightGrey', backgroundColor:theme.palette.grey[100], columnGap: theme.spacing(1), flexWrap:'wrap', }}>
+                {/* <Box sx={{ p: 1 }} >ABCD</Box> */}
+                {ret}
+            </Box>
+        )
+    }
 
     function CustomGridToolbar(props: any) {
         return (
@@ -220,7 +254,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             <div className="view-limit">
                                 <span>View</span>
                                 <select
-                                    value={meta.current.viewLimit || null}
+                                    value={meta.current.viewLimit || ''}
                                     style={{
                                         fontSize: '0.8rem',
                                         width: '4rem',
@@ -305,8 +339,10 @@ function XXGrid(gridOptions: XXGridOptions) {
 
                         {/* global filter */}
                         <TextField
+                            inputRef={meta.current.searchTextRef}
                             variant="standard"
-                            autoFocus
+                            autoComplete='off'
+                            // autoFocus={!meta.current.isFirstTime}
                             value={props.value}
                             onChange={props.onChange}
                             placeholder="Search…"
@@ -342,6 +378,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 <FilteredMarkup />
                 <AllMarkup />
                 {gridOptions.toShowClosingBalance && <ClosingBalanceMarkup />}
+                {gridOptions.customFooterField1 && <CustomFooterField1Markup />}
             </GridFooterContainer>
         )
 
@@ -363,6 +400,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 function incr() {
                     return k++
                 }
+
                 return summaryColNames.map((col: string) => {
                     return (
                         <div key={incr()}>
@@ -374,6 +412,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 })
             }
         }
+
         function ClosingBalanceMarkup() {
             return (
                 <div style={{ display: 'flex' }}>
@@ -407,6 +446,15 @@ function XXGrid(gridOptions: XXGridOptions) {
                     </div>
                 )
             }
+        }
+
+        function CustomFooterField1Markup() {
+            const { customFooterField1 }: any = props
+            const value = _.get(meta.current.fetchedData, 'jsonResult.value', 0)
+            return (<Box component='div'>
+                <b>{customFooterField1?.label}{' '}</b>
+                <b>{toDecimalFormat(value || 0)}</b>
+            </Box>)
         }
 
         function FilteredMarkup() {
@@ -496,7 +544,6 @@ function XXGrid(gridOptions: XXGridOptions) {
         options: SpecialColumnOptions,
         gridActionMessages: GridActionMessagesOptions
     ) {
-
         if (options.customColumn1 && (!_.isEmpty(options.customColumn1))) {
             const cc = options.customColumn1
             const customColumn1 = {

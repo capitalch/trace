@@ -4,7 +4,7 @@ import { NewProduct } from './new-product'
 
 function OpeningStockWorkBench() {
     const { ReactSelect } = useSharedElements()
-    const { checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit,isLastPurchaseDateError, meta, onBrandChanged, onCategoryChanged, onProductChanged, setRefresh } = useOpeningStockWorkBench()
+    const { checkError, handleCloseDialog, handleNewProduct, handleReset, handleSubmit, isLastPurchaseDateError, loadProducts, meta, onBrandChanged, onCategoryChanged, onProductLabelChanged, setRefresh } = useOpeningStockWorkBench()
     const pre = meta.current
     const theme = useTheme()
 
@@ -34,7 +34,11 @@ function OpeningStockWorkBench() {
         <Box sx={{ display: 'flex', border: '4px solid orange', rowGap: 3, flexDirection: 'column', p: 3, w: 30 }}>
             {/* category */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="caption" color='GrayText'>Category</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="caption" color='GrayText'>Category</Typography>
+                    <Button sx={{ height: theme.spacing(1), fontSize: theme.spacing(1.6) }}
+                        color='info' onClick={async () => { await loadProducts(true) }}>Refresh</Button>
+                </Box>
                 <ReactSelect options={pre.filteredCategories || []} maxMenuHeight={250} placeholder='Select category'
                     menuPlacement="auto" styles={{ ...styles, ...errorStyle('selectedCategory') }} onChange={onCategoryChanged} value={pre.selectedCategory} />
             </Box>
@@ -48,8 +52,8 @@ function OpeningStockWorkBench() {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="caption" color='GrayText'>Label</Typography>
                 <ReactSelect options={pre.filteredProducts || []} maxMenuHeight={200} placeholder='Select label'
-                    menuPlacement="auto" styles={{ ...styles, ...errorStyle('selectedProduct') }} onChange={onProductChanged} value={pre.selectedProduct} />
-            </Box>            
+                    menuPlacement="auto" styles={{ ...styles, ...errorStyle('selectedProduct') }} onChange={onProductLabelChanged} value={pre.selectedProduct} />
+            </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 {/* qty */}
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>

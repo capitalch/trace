@@ -1,51 +1,53 @@
-import { useSharedElements } from "../common/shared-elements-hook"
-import {
-    Box,
-    Card,
-    Theme,
-    Typography,
-    createStyles,
-    makeStyles,
-} from '../../../../imports/gui-imports'
+import { Box, Typography, useSharedElements, useTheme } from './redirect'
 import { useOpeningStock } from "./opening-stock-hook"
 import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
 function OpeningStock() {
     const { XXGrid } = useSharedElements()
-    const { getXXGriArtifacts, meta } = useOpeningStock()
-    const { actionMessages, columns, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, title } = getXXGriArtifacts()
-    return (<Box>
-        {/* <Typography
-            color="primary"
-            variant='subtitle1'
-            component="span">
-            {meta.current.title}
-        </Typography> */}
-        <Box sx={{ display: 'flex', columnGap: 2 }}>
-            <OpeningStockWorkBench />
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="subtitle1">
-                    Opening stock view
+    const { getXXGriArtifacts, } = useOpeningStock()
+    const { actionMessages, columns, jsonFieldPath,meta, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
+    const theme = useTheme()
+    const pre = meta.current
+    return (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: theme.spacing(1), columnGap: theme.spacing(3), justifyContent: 'space-evenly' }}>
+            {/* New / Edit entry */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                <Typography
+                    color="primary"
+                    variant='subtitle1'
+                    component="span">
+                    {pre.title}
+                </Typography>
+                <OpeningStockWorkBench />
+            </Box>
+
+            {/* View  */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', flex: 3 }}>
+                <Typography
+                    color="primary"
+                    variant='subtitle1'
+                    component="span">
+                    Opening stock (View)
                 </Typography>
                 <XXGrid
-                    sx={{ border: '4px solid blue', p: 2 }}
+                    sx={{ border: '4px solid orange', p: 2, width: '100%' }}
+                    autoFetchData={true}
                     columns={columns}
+                    customFooterField1={{ label: 'Value', value: 233.44, path: 'jsonResult.value' }}
                     gridActionMessages={actionMessages}
-                    hideFiltersButton={true}
-                    hideColumnsButton={true}
                     // hideFilteredButton={true}
+                    hideColumnsButton={true}
                     hideExportButton={true}
                     hideViewLimit={true}
-                    // subTitle='Year'
+                    jsonFieldPath={jsonFieldPath}
                     specialColumns={specialColumns}
                     sqlQueryArgs={sqlQueryArgs}
                     sqlQueryId={sqlQueryId}
                     summaryColNames={summaryColNames}
-                    title={title}
+                // title={title}
                 />
             </Box>
-        </Box>
-    </Box>)
+        </Box>)
 }
 
 export { OpeningStock }

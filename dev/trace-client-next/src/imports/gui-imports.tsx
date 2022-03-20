@@ -37,6 +37,8 @@ export {
     List,
     ListItem,
     ListItemAvatar,
+    ListItemButton,
+    ListItemIcon,
     ListItemText,
     NativeSelect,
     Paper,
