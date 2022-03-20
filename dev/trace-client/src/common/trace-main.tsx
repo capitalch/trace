@@ -15,10 +15,11 @@ function TraceMain({ open }: any) {
     } = manageEntitiesState()
     const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
-    const meta = useRef({
+
+    const meta:any = useRef({
         isMounted: false,
         marginTop: 0,
-        launchPad: null,
+        launchPad: ()=><></>,
     })
     const { getCurrentMediaSize } = useTraceGlobal()
 
@@ -38,8 +39,8 @@ function TraceMain({ open }: any) {
         const curr = meta.current
         curr.isMounted = true
         const launchMap: any = {
-            accounts: <LaunchPadAccounts></LaunchPadAccounts>,
-            authentication: <LaunchPadAuthentication></LaunchPadAuthentication>,
+            accounts: <LaunchPadAccounts />,
+            authentication: <LaunchPadAuthentication />,
         }
         const subs = filterOn('TRACE-MAIN:JUST-REFRESH').subscribe((d) => {
             const currentEntity = getCurrentEntity()
@@ -71,6 +72,7 @@ function TraceMain({ open }: any) {
                 {/* initialize accounts entity for all global data  */}
             {/* <MegaContext.Provider value={{ accounts: {} }}> */}
                 <LaunchPad></LaunchPad>
+                {/* <meta.current.launchPad /> */}
             {/* </MegaContext.Provider> */}
         </Container>
     )

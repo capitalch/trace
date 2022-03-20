@@ -1,3 +1,4 @@
+
 import {
     _, AccountsLedgerDialog, createContext, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
     getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MegaContext, MultiDataContext, Typography,
@@ -97,7 +98,7 @@ function LaunchPad() {
                     vouchers: vouchersArbitraryData,
                     generic: {}
                 }}>
-                <Comp></Comp>
+                {/* <Comp></Comp> */}
             </MultiDataContext.Provider>
             {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
@@ -131,12 +132,13 @@ function LaunchPad() {
             openingStock: OpeningStock,
             inventoryReports: InventoryReports
         }
-        let ret = <div></div>
-        const currentComponent = getCurrentComponent()
-        if (!_.isEmpty(currentComponent)) {
-            const currentComponentName = currentComponent.componentName
-            ret = componentsMap[currentComponentName](currentComponent.args)
-        }
+        let ret: any =()=> <div></div>
+
+        // const currentComponent = getCurrentComponent()
+        // if (!_.isEmpty(currentComponent)) {
+        //     const currentComponentName = currentComponent.componentName
+        //     ret = componentsMap[currentComponentName](currentComponent.args)
+        // }
         return ret
     }
 

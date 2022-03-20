@@ -1,3 +1,3 @@
 import { createContext} from '../../../../imports/regular-imports'
-const MegaContext = createContext({accounts:{}})
+const MegaContext = createContext({})
 export {MegaContext}
