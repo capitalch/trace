@@ -20,7 +20,7 @@
                                                                                         3. Bug while login, when press enter key                  .5 day, 5the Mar
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
-2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
+                                                                                        2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
 
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
 4. Full reporting of Inventory and allied:                1 week, 12rd Mar
@@ -86,9 +86,11 @@
 19. Backup and restore strategy
 20. Upgrade database for all instances
 
+# 21-03-2022
+Todo: purchase report, sale bill print improve, email SMS fixing, start new simple sales, persistence
 # 20-03-2022
 1. Workbench: categories, Brands to sort
-2. Optimized Accounts launchpad
+2. Optimized Accounts launchpa3. fixed bug for opening stock
 
 # 10-03-2022 - 19-03-2033
 1. Misc bug fix

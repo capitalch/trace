@@ -1,4 +1,4 @@
-import { _, MegaContext, SalesReport, StockSummaryAgeingReport, useContext, useEffect, useRef, useState, } from '../redirect'
+import { _, MegaContext, PurchaseReport, SalesReport, StockSummaryAgeingReport, useContext, useEffect, useRef, useState, } from '../redirect'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
@@ -30,21 +30,20 @@ function useInventoryReports() {
     function onReportSelected(selected: any) {
         const reportName = selected.value
         mega.selectedReport = selected
-        // pre.breadcumb = selected.breadcumb
         mega.breadCrumb = selected.breadcumb
-        const reportsMap: any = getReportsMap() // make use of javascript hoisting
-        // pre.currentReportComponent = reportsMap[reportName]
+        const reportsMap: any = getReportsMap() // making use of javascript hoisting
         mega.currentReportComponent = reportsMap[reportName]
         setRefresh({})
 
         function getReportsMap() {
             return {
                 stockSummaryAgeingReport: StockSummaryAgeingReport,
-                salesReport: SalesReport
+                salesReport: SalesReport,
+                purchaseReport: PurchaseReport,
             }
         }
     }
 
-    return ({ handleCloseDialog,mega, meta, onReportSelected, setRefresh })
+    return ({ handleCloseDialog, mega, meta, onReportSelected, setRefresh })
 }
 export { useInventoryReports }

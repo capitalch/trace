@@ -98,7 +98,7 @@ function LaunchPad() {
                     vouchers: vouchersArbitraryData,
                     generic: {}
                 }}>
-                {/* <Comp></Comp> */}
+                <Comp></Comp>
             </MultiDataContext.Provider>
             {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
@@ -132,13 +132,13 @@ function LaunchPad() {
             openingStock: OpeningStock,
             inventoryReports: InventoryReports
         }
-        let ret: any =()=> <div></div>
+        let ret: any = <></>
 
-        // const currentComponent = getCurrentComponent()
-        // if (!_.isEmpty(currentComponent)) {
-        //     const currentComponentName = currentComponent.componentName
-        //     ret = componentsMap[currentComponentName](currentComponent.args)
-        // }
+        const currentComponent = getCurrentComponent()
+        if (!_.isEmpty(currentComponent)) {
+            const currentComponentName = currentComponent.componentName
+            ret = componentsMap[currentComponentName](currentComponent.args)
+        }
         return ret
     }
 

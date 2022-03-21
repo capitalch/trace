@@ -1,6 +1,6 @@
 import { _, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
-function useSalesReport() {
+function usePurchaseReport(){
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
@@ -48,7 +48,7 @@ function useSalesReport() {
             subs1.unsubscribe()
         })
     }, [])
-
+    
     async function fetchData() {
         let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
@@ -76,60 +76,6 @@ function useSalesReport() {
             function incr() {
                 return (count++)
             }
-        }
-    }
-
-    function getSalesPeriodOptions() {
-        const periods: { label: string; value: any }[] = [{ label: 'All', value: 'all' }, { label: 'Today', value: 'today' }, { label: 'Prev day', value: 'prevDay' }, { label: 'This month', value: 'thisMonth' }, { label: 'Prev month', value: 'prevMonth' }]
-        const months: { label: string; value: any }[] = [{ label: 'April', value: 4 }, { label: 'May', value: 5 }, { label: 'June', value: 6 }, { label: 'July', value: 7 }, { label: 'August', value: 8 },
-        { label: 'September', value: 9 }, { label: 'October', value: 11 }, { label: 'November', value: 11 }, { label: 'December', value: 12, },
-        { label: 'January', value: 1 }, { label: 'February', value: 2 }, { label: 'March', value: 3 },]
-        return (periods.concat(months))
-    }
-
-   async function handleOptionSelected(selectedOption: { label: string; value: any }) {
-        pre.selectedOption = selectedOption
-        let value = selectedOption.value
-        
-        Number.isInteger(value) ? execNumLogic(value) : execStringlogic(value)
-        await fetchData()
-        function execNumLogic(val: number) {
-            const finYearId = finYearObject.finYearId
-            const isoStartDate = finYearObject.isoStartDate
-            const finStartMonth = moment(isoStartDate).get('month') + 1
-            const y = (val < finStartMonth) ? finYearId + 1 : finYearId
-            const m = val < 10 ? '0' + val : '' + val
-            const isoDate = ''.concat(y + '', '-', m, '-', '01')
-            const startDate = moment(isoDate).startOf('month').format(isoFormat)
-            const endDate = moment(isoDate).endOf('month').format(isoFormat)
-            pre.startDate = startDate
-            pre.endDate = endDate
-        }
-
-        function execStringlogic(val: string) {
-            const obj: any = {
-                'all': () => {
-                    pre.startDate = finYearObject.isoStartDate
-                    pre.endDate = finYearObject.isoEndDate
-                },
-                'today': () => {
-                    pre.startDate = moment().format('YYYY-MM-DD')
-                    pre.endDate = pre.startDate
-                },
-                'prevDay': () => {
-                    pre.startDate = moment().subtract(1, 'days').format('YYYY-MM-DD')
-                    pre.endDate = pre.startDate
-                },
-                'thisMonth': () => {
-                    pre.startDate = moment().startOf('month').format('YYYY-MM-DD')
-                    pre.endDate = moment().endOf('month').format('YYYY-MM-DD')
-                },
-                'prevMonth': () => {
-                    pre.startDate = moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
-                    pre.endDate = moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
-                }
-            }
-            obj[val]()
         }
     }
 
@@ -302,6 +248,15 @@ function useSalesReport() {
                 width: 80,
             },
         ])
+
+        function removeRow(params: any) {
+            const id = params.id
+            const temp = [...pre.filteredRows]
+            _.remove(temp, (x: any) => x.id === id)
+            pre.filteredRows = temp
+            pre.totals = getTotals()
+            setRefresh({})
+        } 
     }
 
     function getGridSx() {
@@ -338,20 +293,6 @@ function useSalesReport() {
         )
     }
 
-    function getRowClassName(e: any) {
-        const row = e?.row || {}
-        let ret = ''
-        if (row.id === 'Total')
-            ret = 'footer-row-class'
-        else if(row.tranTypeId === 9){
-            ret = 'row-sales-return'
-        } else if(row.grossProfit < 0){
-            ret = 'row-loss'
-        }
-        return (ret)
-    }
-
-
     function getTotals() {
         const rows: any[] = pre.filteredRows
         const totals = rows.reduce((prev: any, curr: any, index: number) => {
@@ -369,26 +310,10 @@ function useSalesReport() {
         return (totals)
     }
 
-    function onSelectModelChange(rowIds: any) {
-        const rows = pre.allRows
-        const obj = rowIds.reduce((prev: any, current: any) => {
-            prev.count = prev.count ? prev.count + 1 : 1
-            // prev.closValue = (prev.closValue || 0) + (rows[current - 1]?.closValue || 0)
-            return prev
-        }, {})
-        pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
-        setRefresh({})
-    }
-
-    function removeRow(params: any) {
-        const id = params.id
-        const temp = [...pre.filteredRows]
-        _.remove(temp, (x: any) => x.id === id)
-        pre.filteredRows = temp
-        pre.totals = getTotals()
-        setRefresh({})
-    }
-
-    return ({ fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, meta, multiData, onSelectModelChange })
+    return ({ fetchData, getColumns, getGridSx, 
+        // getSalesPeriodOptions, getRowClassName, handleOptionSelected, 
+        meta, multiData, 
+        // onSelectModelChange 
+    })
 }
-export { useSalesReport }
+export {usePurchaseReport}

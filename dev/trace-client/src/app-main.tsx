@@ -11,7 +11,7 @@ import { TraceHeader } from './common/trace-header'
 import { TraceLeft } from './common/trace-left'
 import { TraceMain } from './common/trace-main'
 import { TraceSubHeader } from './common/trace-subheader'
-
+import { MegaContext } from './imports/trace-imports'
 
 function AppMain() {
     const { emit } = useIbuki()
@@ -65,7 +65,9 @@ function AppMain() {
                 matches={isMediumSizeUp}
                 handleDrawerClose={handleDrawerClose}></TraceLeft>
             {/* Main */}
-            <TraceMain open={open}></TraceMain>
+            {/*   */}
+                <TraceMain open={open}></TraceMain>
+            {/* </MegaContext.Provider> */}
             {/* universal loading indicator */}
             <TraceLoadingIndicator></TraceLoadingIndicator>
         </Box>

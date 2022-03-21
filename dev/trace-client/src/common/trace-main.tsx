@@ -19,7 +19,7 @@ function TraceMain({ open }: any) {
     const meta:any = useRef({
         isMounted: false,
         marginTop: 0,
-        launchPad: ()=><></>,
+        launchPad: null,
     })
     const { getCurrentMediaSize } = useTraceGlobal()
 

@@ -624,7 +624,7 @@ allSqls = {
                 order by "tranDate" DESC, cte1."id" DESC LIMIT %(no)s
     ''',
 
-    "get_sale_report":'''
+    "get_sale_report": '''
         with cte0 as( --base cte used many times in next
         select "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
             , s."amount", "gstRate", s."id" as "salePurchaseDetailsId"
@@ -712,7 +712,7 @@ allSqls = {
     #                 on c."id" = p."catId"
     #             join "BrandM" b
     #                 on b."id" = p."brandId"
-    #     where "finYearId" = %(finYearId)s 
+    #     where "finYearId" = %(finYearId)s
     #         and "branchId" = %(branchId)s
     #     order by a."id" DESC
     # ''',
@@ -1231,7 +1231,7 @@ allSqls = {
 		) as "jsonResult"
     ''',
 
-    "getJson_opening_stock":'''
+    "getJson_opening_stock": '''
         with cte1 as (
             select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
                         from "ProductOpBal" a
@@ -1254,7 +1254,7 @@ allSqls = {
                 , 'value', (SELECT value from cte2)
             ) as "jsonResult"
     ''',
-    
+
     'getJson_sale_purchase_on_id': '''
         with cte1 as (
             select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "jData", "tranTypeId"
@@ -1502,7 +1502,7 @@ allSqls = {
                         and "tranTypeId" = %(tranTypeId)s and "finYearId" = %(finYearId)s);
     ''',
 
-    "insert_product_block":'''
+    "insert_product_block": '''
         with cte1 as(
 	        select "intValue" + 1 as "productCode" from "Settings" where "key" = 'lastProductCode'
         ),
