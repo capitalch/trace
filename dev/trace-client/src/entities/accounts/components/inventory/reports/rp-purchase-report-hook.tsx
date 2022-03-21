@@ -1,6 +1,6 @@
 import { _, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
-function usePurchaseReport(){
+function usePurchaseReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
@@ -13,19 +13,19 @@ function usePurchaseReport(){
 
     const meta: any = useRef({
         allRows: [],
-        debounceMessage: 'SALES-REPORT-SEARCH-DEBOUNCE',
-        endDate: moment().format(isoFormat),
+        debounceMessage: 'PURCHASE-REPORT-SEARCH-DEBOUNCE',
+        endDate: moment().endOf('month').format(isoFormat),
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
         searchText: '',
         searchTextRef: null,
-        selectedOption: { label: 'Today', value: 'today' },
+        selectedOption: { label: 'thisMonth', value: 'thisMonth' },
         setRefresh: setRefresh,
-        sqlKey: 'get_sale_report',
-        startDate: moment().format(isoFormat),
+        sqlKey: 'get_purchase_report',
+        startDate: moment().startOf('month').format(isoFormat),
         subTitle: '',
-        title: 'Sales',
+        title: 'Purchases',
         totals: {},
     })
     const pre = meta.current
@@ -48,7 +48,7 @@ function usePurchaseReport(){
             subs1.unsubscribe()
         })
     }, [])
-    
+
     async function fetchData() {
         let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
@@ -105,7 +105,6 @@ function usePurchaseReport(){
                     )
                 },
             },
-
             {
                 headerName: '#',
                 headerClassName: 'header-class',
@@ -114,14 +113,28 @@ function usePurchaseReport(){
                 width: 60,
             },
             {
-                headerName: 'Sale date',
+                headerName: 'Pur date',
                 headerClassName: 'header-class',
-                description: 'Sale date',
+                description: 'Purchase date',
                 field: 'tranDate',
                 type: 'date',
                 width: 90,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
+            {
+                headerName: 'Ref no',
+                headerClassName: 'header-class',
+                description: 'Ref no',
+                field: 'autoRefNo',
+                width: 130,
+            },
+            {
+                headerName: 'Invoice no',
+                headerClassName: 'header-class',
+                description: 'Invoice no',
+                field: 'userRefNo',
+                width: 120,
+            },           
             {
                 headerName: 'Pr code',
                 headerClassName: 'header-class',
@@ -154,48 +167,30 @@ function usePurchaseReport(){
                 width: 40,
             },
             {
-                headerName: 'Sale Price',
+                headerName: 'Pur Price',
                 headerClassName: 'header-class',
-                description: 'Sale price',
+                description: 'Purchase price',
                 field: 'price',
                 type: 'number',
                 width: 100,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Aggr sale',
+                headerName: 'Aggr pur',
                 headerClassName: 'header-class',
-                description: 'Aggregate sale',
-                field: 'aggrSale',
+                description: 'Aggregate purchase',
+                field: 'aggrPurchase',
                 type: 'number',
                 width: 100,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Sale with gst',
+                headerName: 'Pur with gst',
                 headerClassName: 'header-class',
-                description: 'Sale with gst',
+                description: 'Purchase with gst',
                 field: 'amount',
                 type: 'number',
                 width: 120,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Profit(GP)',
-                headerClassName: 'header-class',
-                description: 'Gross profit',
-                field: 'grossProfit',
-                type: 'number',
-                width: 120,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Pur Price',
-                headerClassName: 'header-class',
-                description: 'Purchase price',
-                field: 'lastPurchasePrice',
-                type: 'number',
-                width: 100,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -236,8 +231,8 @@ function usePurchaseReport(){
             {
                 headerName: 'Type',
                 headerClassName: 'header-class',
-                field: 'saleType',
-                width: 60
+                field: 'purchaseType',
+                width: 80
             },
             {
                 headerName: 'Pr id',
@@ -256,7 +251,7 @@ function usePurchaseReport(){
             pre.filteredRows = temp
             pre.totals = getTotals()
             setRefresh({})
-        } 
+        }
     }
 
     function getGridSx() {
@@ -283,14 +278,76 @@ function usePurchaseReport(){
                     flexDirection: 'column',
                     alignItems: 'start'
                 },
-                '& .row-sales-return': {
-                    color:theme.palette.blue.light
+                '& .row-return': {
+                    color: theme.palette.blue.light
                 },
-                '& .row-loss': {
-                    color: theme.palette.error.main
-                }
             }
         )
+    }
+
+    function getRowClassName(e: any) {
+        const row = e.row || {}
+        let ret = ''
+        if (row.id === 'Total')
+            ret = 'footer-row-class'
+        else if (row.tranTypeId === 10) {
+            ret = 'row-return'            
+        }
+        return (ret)
+    }
+
+    function getPurchasePeriodOptions() {
+        const periods: { label: string; value: any }[] = [{ label: 'All', value: 'all' }, { label: 'Today', value: 'today' }, { label: 'Prev day', value: 'prevDay' }, { label: 'This month', value: 'thisMonth' }, { label: 'Prev month', value: 'prevMonth' }]
+        const months: { label: string; value: any }[] = [{ label: 'April', value: 4 }, { label: 'May', value: 5 }, { label: 'June', value: 6 }, { label: 'July', value: 7 }, { label: 'August', value: 8 },
+        { label: 'September', value: 9 }, { label: 'October', value: 11 }, { label: 'November', value: 11 }, { label: 'December', value: 12, },
+        { label: 'January', value: 1 }, { label: 'February', value: 2 }, { label: 'March', value: 3 },]
+        return (periods.concat(months))
+    }
+
+    async function handleOptionSelected(selectedOption: { label: string; value: any }) {
+        pre.selectedOption = selectedOption
+        let value = selectedOption.value
+
+        Number.isInteger(value) ? execNumLogic(value) : execStringlogic(value)
+        await fetchData()
+        function execNumLogic(val: number) {
+            const finYearId = finYearObject.finYearId
+            const isoStartDate = finYearObject.isoStartDate
+            const finStartMonth = moment(isoStartDate).get('month') + 1
+            const y = (val < finStartMonth) ? finYearId + 1 : finYearId
+            const m = val < 10 ? '0' + val : '' + val
+            const isoDate = ''.concat(y + '', '-', m, '-', '01')
+            const startDate = moment(isoDate).startOf('month').format(isoFormat)
+            const endDate = moment(isoDate).endOf('month').format(isoFormat)
+            pre.startDate = startDate
+            pre.endDate = endDate
+        }
+
+        function execStringlogic(val: string) {
+            const obj: any = {
+                'all': () => {
+                    pre.startDate = finYearObject.isoStartDate
+                    pre.endDate = finYearObject.isoEndDate
+                },
+                'today': () => {
+                    pre.startDate = moment().format('YYYY-MM-DD')
+                    pre.endDate = pre.startDate
+                },
+                'prevDay': () => {
+                    pre.startDate = moment().subtract(1, 'days').format('YYYY-MM-DD')
+                    pre.endDate = pre.startDate
+                },
+                'thisMonth': () => {
+                    pre.startDate = moment().startOf('month').format('YYYY-MM-DD')
+                    pre.endDate = moment().endOf('month').format('YYYY-MM-DD')
+                },
+                'prevMonth': () => {
+                    pre.startDate = moment().subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
+                    pre.endDate = moment().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
+                }
+            }
+            obj[val]()
+        }
     }
 
     function getTotals() {
@@ -301,19 +358,35 @@ function usePurchaseReport(){
             prev.sgst = prev.sgst + curr.sgst
             prev.igst = prev.igst + curr.igst
             prev.amount = prev.amount + curr.amount
-            prev.aggrSale = prev.aggrSale + curr.aggrSale
-            prev.grossProfit = prev.grossProfit + curr.grossProfit
+            prev.aggrPurchase = prev.aggrPurchase + curr.aggrPurchase
             prev.count++
             return (prev)
-        }, { qty: 0, aggrSale: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0 })
+        }, { qty: 0, aggrPurchase: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0 })
         totals.id = 'Total'
         return (totals)
     }
 
-    return ({ fetchData, getColumns, getGridSx, 
-        // getSalesPeriodOptions, getRowClassName, handleOptionSelected, 
-        meta, multiData, 
-        // onSelectModelChange 
+    function onSelectionModelChange(rowIds: any) {
+        const rows = pre.allRows
+        const obj = rowIds.reduce((prev: any, current: any) => {
+            prev.count = prev.count +1
+            prev.qty = prev.qty + (rows[current -1]?.qty || 0)
+            prev.aggrPurchase = prev.aggrPurchase +(rows[current -1]?.aggrPurchase || 0)
+            prev.amount = prev.amount +(rows[current -1]?.amount || 0)
+            prev.profit = prev.grossProfit +(rows[current -1]?.grossProfit || 0)
+            return prev
+        }, { count: 0, qty: 0, aggrPurchase: 0, amount: 0, })
+        pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
+        setRefresh({})
+    }
+
+    return ({
+        fetchData, getColumns, getGridSx,
+        getPurchasePeriodOptions, 
+        getRowClassName,
+        handleOptionSelected, 
+        meta, multiData,
+        onSelectionModelChange 
     })
 }
-export {usePurchaseReport}
+export { usePurchaseReport }

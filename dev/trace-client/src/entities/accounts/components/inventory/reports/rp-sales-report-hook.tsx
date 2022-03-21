@@ -87,10 +87,10 @@ function useSalesReport() {
         return (periods.concat(months))
     }
 
-   async function handleOptionSelected(selectedOption: { label: string; value: any }) {
+    async function handleOptionSelected(selectedOption: { label: string; value: any }) {
         pre.selectedOption = selectedOption
         let value = selectedOption.value
-        
+
         Number.isInteger(value) ? execNumLogic(value) : execStringlogic(value)
         await fetchData()
         function execNumLogic(val: number) {
@@ -175,6 +175,13 @@ function useSalesReport() {
                 type: 'date',
                 width: 90,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
+            },
+            {
+                headerName: 'Ref no',
+                headerClassName: 'header-class',
+                description: 'Ref no',
+                field: 'autoRefNo',
+                width: 160,
             },
             {
                 headerName: 'Pr code',
@@ -309,7 +316,7 @@ function useSalesReport() {
             {
                 p: 1, width: '100%',
                 fontSize: theme.spacing(1.5),
-                minHeight: theme.spacing(60),
+                minHeight: theme.spacing(70),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',
                 '& .footer-row-class': {
@@ -329,7 +336,7 @@ function useSalesReport() {
                     alignItems: 'start'
                 },
                 '& .row-sales-return': {
-                    color:theme.palette.blue.light
+                    color: theme.palette.blue.light
                 },
                 '& .row-loss': {
                     color: theme.palette.error.main
@@ -343,14 +350,13 @@ function useSalesReport() {
         let ret = ''
         if (row.id === 'Total')
             ret = 'footer-row-class'
-        else if(row.tranTypeId === 9){
+        else if (row.tranTypeId === 9) {
             ret = 'row-sales-return'
-        } else if(row.grossProfit < 0){
+        } else if (row.grossProfit < 0) {
             ret = 'row-loss'
         }
         return (ret)
     }
-
 
     function getTotals() {
         const rows: any[] = pre.filteredRows
@@ -372,10 +378,13 @@ function useSalesReport() {
     function onSelectModelChange(rowIds: any) {
         const rows = pre.allRows
         const obj = rowIds.reduce((prev: any, current: any) => {
-            prev.count = prev.count ? prev.count + 1 : 1
-            // prev.closValue = (prev.closValue || 0) + (rows[current - 1]?.closValue || 0)
+            prev.count = prev.count +1
+            prev.qty = prev.qty + (rows[current -1]?.qty || 0)
+            prev.aggrSale = prev.aggrSale +(rows[current -1]?.aggrSale || 0)
+            prev.amount = prev.amount +(rows[current -1]?.amount || 0)
+            prev.profit = prev.grossProfit +(rows[current -1]?.grossProfit || 0)
             return prev
-        }, {})
+        }, { count: 0, qty: 0, aggrSale: 0, amount: 0, grossProfit: 0 })
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
         setRefresh({})
     }

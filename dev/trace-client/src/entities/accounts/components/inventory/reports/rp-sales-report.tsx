@@ -13,7 +13,7 @@ import { GridSearchBox } from './grid-search-box'
 import { useSalesReport } from './rp-sales-report-hook'
 
 function SalesReport() {
-    const { fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, meta, multiData } = useSalesReport()
+    const { fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, meta, multiData, onSelectModelChange } = useSalesReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -47,7 +47,7 @@ function SalesReport() {
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
-            // onSelectionModelChange={onSelectModelChange}
+            onSelectionModelChange={onSelectModelChange}
             rowHeight={25}
             rows={pre.filteredRows}
             showCellRightBorder={true}
@@ -129,8 +129,10 @@ function SalesReport() {
         return (<GridFooterContainer >
             <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
                 <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
-                <Box>{''.concat('Select count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
-                <Box>{''.concat('Select sale value', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
+                <Box>{''.concat('Count(Selected)', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
+                <Box>{''.concat('Aggr sale(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.aggrSale || 0))}</Box>
+                <Box>{''.concat('Sale with gst(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.amount || 0))}</Box>
+                <Box>{''.concat('Gross profit(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.profit || 0))}</Box>
                 <Box>{''.concat('Total qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
                 <Box>{''.concat('Aggr sale', ' : ', toDecimalFormat(pre?.totals?.aggrSale || 0))}</Box>
                 <Box>{''.concat('Sale with gst', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>

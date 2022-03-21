@@ -88,6 +88,8 @@
 
 # 21-03-2022
 Todo: purchase report, sale bill print improve, email SMS fixing, start new simple sales, persistence
+1. Added ref-no column in sales report
+
 # 20-03-2022
 1. Workbench: categories, Brands to sort
 2. Optimized Accounts launchpa3. fixed bug for opening stock

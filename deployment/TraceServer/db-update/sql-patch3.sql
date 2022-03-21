@@ -88,3 +88,5 @@ ALTER TABLE IF EXISTS "AccOpBal"
    DROP CONSTRAINT IF EXISTS "accOpBal_accId_branchId_finYearId_unique_key",
    ADD  CONSTRAINT "accOpBal_accId_branchId_finYearId_unique_key"
    UNIQUE ("accId", "branchId", "finYearId");
+
+-- 21-03-2022; Upto this point all changes are included in database creation script; all databases are updated.

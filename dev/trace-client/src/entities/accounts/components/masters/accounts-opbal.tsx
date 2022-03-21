@@ -159,7 +159,8 @@ function AccountsOpBal() {
     return (
         <div
             className={classes.content}
-            style={{ width: getCurrentWindowSize() }}>
+            // style={{ width: getCurrentWindowSize() }}
+            >
             <Box className={classes.header}>
                 <Typography
                     color="primary"

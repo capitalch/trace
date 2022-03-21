@@ -49,7 +49,6 @@ function LaunchPad() {
                 curr.isMounted && setRefresh({})
             }
         )
-
         return () => {
             subs.unsubscribe()
             curr.isMounted = false

@@ -578,7 +578,42 @@ allSqls = {
             order by "catName", "brandName", "label" 
             limit (%(no)s)
     ''',
-
+    "get_purchase_report":'''
+        select "autoRefNo", "userRefNo", "tranDate", s."productId", "productCode", "catName", "brandName","label", "tranTypeId", "price", "discount", s."gstRate"
+			, s."id" as "salePurchaseDetailsId"
+            , CASE WHEN "tranTypeId" = 5 THEN 'Purchase' ELSE 'Return' END as "purchaseType"
+			, CASE WHEN "tranTypeId" = 5 THEN "qty"*("price" - "discount") ELSE -"qty"*("price" - "discount") END as "aggrPurchase"
+			, CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE -"qty" END as "qty"
+			, CASE WHEN "tranTypeId" = 5 THEN "cgst" ELSE -"cgst" END as "cgst"
+			, CASE WHEN "tranTypeId" = 5 THEN "sgst" ELSE -"sgst" END as "sgst"
+			, CASE WHEN "tranTypeId" = 5 THEN "igst" ELSE -"igst" END as "igst"
+			, CASE WHEN "tranTypeId" = 5 THEN s."amount" ELSE -s."amount" END as "amount"
+			, (	select DISTINCT  "accName" 
+					from "AccM" a
+						join "AccClassM" m
+							on m."id" = a."classId"
+						join "TranD" t
+							on a."id" = t."accId"
+					where t."tranHeaderId" = h."id"
+						and "accClass" in ('creditor', 'debtor', 'cash', 'bank', 'card', 'ecash')
+			) as "party"
+        from "TranH" h
+            join "TranD" d
+                on h."id" = d."tranHeaderId"
+            join "SalePurchaseDetails" s
+                on d."id" = s."tranDetailsId"
+            join "ProductM" p
+                on p."id" = s."productId"
+            join "CategoryM" c
+                on c."id" = p."catId"
+            join "BrandM" b
+                on b."id" = p."brandId"
+            where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+            --where "branchId" = 1 and "finYearId" = 2021
+            and "tranDate" between %(startDate)s and %(endDate)s
+            and "tranTypeId" in(5,10)
+            order by "tranDate", "salePurchaseDetailsId"
+    ''',
     "get_sale_purchase_headers": '''
         with cte1 as (
             select h."id", string_agg("accName",', ') as "accounts", "clearDate"
@@ -627,7 +662,7 @@ allSqls = {
     "get_sale_report": '''
         with cte0 as( --base cte used many times in next
         select "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
-            , s."amount", "gstRate", s."id" as "salePurchaseDetailsId"
+            , s."amount", "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo"
             from "TranH" h
                 join "TranD" d
                     on h."id" = d."tranHeaderId"
@@ -649,12 +684,12 @@ allSqls = {
                         and "productId" = c0."productId"
                         and "tranDate" <= c0."tranDate"
                 order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
-        ) as "lastPurchasePrice", "discount", "cgst", "sgst","igst", "amount", "gstRate"
+        ) as "lastPurchasePrice", "discount", "cgst", "sgst","igst", "amount", "gstRate", "autoRefNo"
             from cte0 c0
                 where "tranTypeId" in (4, 9) --and "productId" in(66,67)
         ), cte3 as ( -- take last purchase price from ProductOpBal if no purchase is made in current year
             select "tranDate", c2."productId", c2."qty", "price", coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice",
-                    "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId","salePurchaseDetailsId"
+                    "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId","salePurchaseDetailsId", "autoRefNo"
                 from cte2 c2
                     left join cte1 c1
                         on c2."productId" = c1."productId"
@@ -662,7 +697,7 @@ allSqls = {
             select cte3.*, "qty" * ("price" - "discount" - "lastPurchasePrice") as "grossProfit"
                 from cte3
         ), cte5 as ( --negate for sales return
-			select "tranDate", "productId", "price", "lastPurchasePrice", "discount", "gstRate","tranTypeId","salePurchaseDetailsId"
+			select "tranDate", "productId", "price", "lastPurchasePrice", "discount", "gstRate","tranTypeId","salePurchaseDetailsId", "autoRefNo"
 			, CASE when "tranTypeId" = 4 then "qty" else -"qty" end as "qty"
 			, CASE when "tranTypeId" = 4 then "aggrSale" else -"aggrSale" end as "aggrSale"
 			, CASE when "tranTypeId" = 4 then "cgst" else -"cgst" end as "cgst"
