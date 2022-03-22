@@ -1,7 +1,7 @@
 
 import {
-    _, AccountsLedgerDialog, createContext, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
-    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MegaContext, MultiDataContext, Typography,
+    _, AccountsLedgerDialog, AccSales, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
+    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MegaDataContext, MultiDataContext, Typography,
     useContext, useIbuki, useLinkClient, useRef, useServerSocketMessageHandler, useState, useEffect,
     useTheme, utils
 } from './components/common/redirect'
@@ -33,7 +33,7 @@ function LaunchPad() {
 
     meta.current.mainHeading = getUnitHeading()
     // const MegaContext:any = createContext({})
-    const mega = useContext(MegaContext)
+    const mega = useContext(MegaDataContext)
     const { socketMessageHandler } = useServerSocketMessageHandler()
 
     useEffect(() => {
@@ -109,6 +109,7 @@ function LaunchPad() {
         const componentsMap: any = {
             accountsMaster: AccountsMaster,
             accountsOpBal: AccountsOpBal,
+            accSales: AccSales,
             balanceSheet: BalanceSheetProfitLoss,
             bankRecon: BankRecon,
             brands: Brands,

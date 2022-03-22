@@ -11,7 +11,6 @@ import { TraceHeader } from './common/trace-header'
 import { TraceLeft } from './common/trace-left'
 import { TraceMain } from './common/trace-main'
 import { TraceSubHeader } from './common/trace-subheader'
-import { MegaContext } from './imports/trace-imports'
 
 function AppMain() {
     const { emit } = useIbuki()

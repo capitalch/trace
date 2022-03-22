@@ -1,10 +1,10 @@
-import { clsx, useContext, useState, useEffect, useRef } from '../imports/regular-imports'
+import { clsx, useState, useEffect, useRef } from '../imports/regular-imports'
 import {
     Container,
     makeStyles,
     createStyles,
 } from '../imports/gui-imports'
-import { manageEntitiesState, MegaContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
+import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 
@@ -20,7 +20,7 @@ function TraceMain({ open }: any) {
         isMounted: false,
         marginTop: 0,
         launchPad: null,
-        mega: { accounts: {} }
+        megaData: { accounts: { common: {}, sales: {} } }
     })
     const { getCurrentMediaSize } = useTraceGlobal()
 
@@ -71,10 +71,10 @@ function TraceMain({ open }: any) {
                 [classes.contentShift]: open,
             })}>
             {/* initialize accounts entity for all global data  */}
-            <MegaContext.Provider value={meta.current.mega}>
+            <MegaDataContext.Provider value={meta.current.megaData}>
                 <LaunchPad></LaunchPad>
                 {/* <meta.current.launchPad /> */}
-            </MegaContext.Provider>
+            </MegaDataContext.Provider>
         </Container>
     )
 }

@@ -22,7 +22,7 @@ import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
-import { MegaContext } from './imports/trace-imports'
+// import { MegaContext } from './imports/trace-imports'
 
 declare module '@mui/material/styles/' {
     interface Palette {

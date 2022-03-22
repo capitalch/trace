@@ -19,8 +19,9 @@
                                                                                         2. Remaining of Opening stock and products                1 day, 4th Mar
                                                                                         3. Bug while login, when press enter key                  .5 day, 5the Mar
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
-1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
                                                                                         2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
+0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
+1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 2. email SMS fixing,
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
 4. Full reporting of Inventory and allied:                1 week, 12rd Mar

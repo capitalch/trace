@@ -29,7 +29,7 @@ export {
 export { useIbuki, } from '../../../../global-utils/ibuki'
 export { MultiDataContext } from '../common/multi-data-bridge'
 export { SalesReport } from './reports/rp-sales-report'
-export { manageEntitiesState, MegaContext } from '../../../../imports/trace-imports'
+export { manageEntitiesState, MegaDataContext } from '../../../../imports/trace-imports'
 export { useInventoryUtils } from './inventory-utils-hook'
 export { PurchaseReport } from './reports/rp-purchase-report'
 // export * from '@mui/x-data-grid-pro'

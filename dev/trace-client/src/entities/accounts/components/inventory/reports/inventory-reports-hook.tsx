@@ -1,8 +1,8 @@
-import { _, MegaContext, PurchaseReport, SalesReport, StockSummaryAgeingReport, useContext, useEffect, useRef, useState, } from '../redirect'
+import { _, MegaDataContext, PurchaseReport, SalesReport, StockSummaryAgeingReport, useContext, useEffect, useRef, useState, } from '../redirect'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
-    const megaBundle: any = useContext(MegaContext)
+    const megaBundle: any = useContext(MegaDataContext)
     _.isEmpty(megaBundle.accounts.invRepo) && (megaBundle.accounts.invRepo = {})
     const mega = megaBundle.accounts.invRepo
 

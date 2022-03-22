@@ -79,6 +79,7 @@ const iconMap: any = {
     //Sales and purchases menu
     salesPurchasesMenu: <DynamicFeed></DynamicFeed>,
     salesSubMenu: <Money></Money>,
+    simpleSalesSubMenu: <Money />,
     purchasesSubMenu: <MoneyOff></MoneyOff>,
     salesReturnSubMenu: <AssignmentReturn></AssignmentReturn>,
     purchasesReturnSubMenu: <AssignmentReturned></AssignmentReturned>,
