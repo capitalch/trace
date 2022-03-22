@@ -21,7 +21,7 @@
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
                                                                                         2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
-
+2. email SMS fixing,
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
 4. Full reporting of Inventory and allied:                1 week, 12rd Mar
 5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
@@ -39,7 +39,8 @@
 
 
 # Priority 1
-                                                                                                1.0 Auto subledger create bill
+1.0 Data grid change font size control
+1.0 Auto subledger create bill
 2.0 Category-> Product hierarchy with stock qty and value, search on product
 3.0 Purchase invoice scanned pdf save
 4.0 Opening stock entry mechanism
@@ -87,8 +88,11 @@
 20. Upgrade database for all instances
 
 # 21-03-2022
-Todo: purchase report, sale bill print improve, email SMS fixing, start new simple sales, persistence
+Todo: purchase report,  start new simple sales, persistence
 1. Added ref-no column in sales report
+2. Completed purchase report
+3. Prepared new persistence strategy for simple sales
+4. Changes in db to allow same category under different parents
 
 # 20-03-2022
 1. Workbench: categories, Brands to sort

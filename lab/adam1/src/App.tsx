@@ -28,6 +28,7 @@ import _ from 'lodash'
 import { useIbuki } from './utils/ibuki'
 
 import { Component8 } from './components/component8'
+import { Component1 } from './components/component1'
 
 declare module '@mui/material/styles/' {
     interface Palette {
@@ -125,7 +126,7 @@ const App: React.FC = () => {
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
-                <Component8 />
+                <Component1 />
             </ThemeProvider>
         </StyledEngineProvider>
     )

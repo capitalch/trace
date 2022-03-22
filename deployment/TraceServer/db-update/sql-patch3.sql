@@ -90,3 +90,9 @@ ALTER TABLE IF EXISTS "AccOpBal"
    UNIQUE ("accId", "branchId", "finYearId");
 
 -- 21-03-2022; Upto this point all changes are included in database creation script; all databases are updated.
+-- 22-03-2022 Allow same category name with different parent
+ALTER TABLE IF EXISTS "CategoryM"
+   DROP CONSTRAINT IF EXISTS "catName",
+   DROP CONSTRAINT IF EXISTS "CategoryM_catName_parentId_unique_key",
+   ADD  CONSTRAINT "CategoryM_catName_parentId_unique_key"
+   UNIQUE ("catName", "parentId");
