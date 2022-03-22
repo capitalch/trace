@@ -65,6 +65,7 @@ const App: React.FC = () => {
         //         fontSize:'1rem'
         //     },
         // },
+        
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
@@ -112,6 +113,7 @@ const App: React.FC = () => {
             },
         },
     })
+
     LicenseInfo.setLicenseKey(
         '094c13fcff99f49fe015161354d1d052T1JERVI6MjkzMjgsRVhQSVJZPTE2NjMxMjQ0NjcwMDAsS0VZVkVSU0lPTj0x'
     )
@@ -125,13 +127,13 @@ const App: React.FC = () => {
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 {/* Global context for all modules */}
-                <MegaContext.Provider value={{ accounts: {}, authentication: {} }}> 
+                {/* <MegaContext.Provider value={{ accounts: {}, authentication: {} }}>  */}
                     <ConfirmProvider>
                         {' '}
                         {/* confirm dialog box all over the application */}
                         <AppMain></AppMain>
                     </ConfirmProvider>
-                </MegaContext.Provider>
+                {/* </MegaContext.Provider> */}
             </ThemeProvider>
         </StyledEngineProvider>
     )

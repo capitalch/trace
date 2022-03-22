@@ -16,10 +16,11 @@ function TraceMain({ open }: any) {
     const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
 
-    const meta:any = useRef({
+    const meta: any = useRef({
         isMounted: false,
         marginTop: 0,
         launchPad: null,
+        mega: { accounts: {} }
     })
     const { getCurrentMediaSize } = useTraceGlobal()
 
@@ -63,17 +64,17 @@ function TraceMain({ open }: any) {
     function LaunchPad() {
         return meta.current.launchPad
     }
-    
+
     return (
         <Container
             className={clsx(classes.content, {
                 [classes.contentShift]: open,
             })}>
-                {/* initialize accounts entity for all global data  */}
-            {/* <MegaContext.Provider value={{ accounts: {} }}> */}
+            {/* initialize accounts entity for all global data  */}
+            <MegaContext.Provider value={meta.current.mega}>
                 <LaunchPad></LaunchPad>
                 {/* <meta.current.launchPad /> */}
-            {/* </MegaContext.Provider> */}
+            </MegaContext.Provider>
         </Container>
     )
 }

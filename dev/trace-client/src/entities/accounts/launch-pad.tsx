@@ -27,6 +27,7 @@ function LaunchPad() {
     const meta: any = useRef({
         isMounted: false,
         mainHeading: '',
+        // mega: { accounts: {} }
     })
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
 
@@ -88,17 +89,17 @@ function LaunchPad() {
             <Typography variant="h6" sx={{ color: theme.palette.common.black, fontWeight: 'bold' }}>
                 {meta.current.mainHeading}
             </Typography>
-            {/* <MegaContext.Provider value={mega}> */}
-            <MultiDataContext.Provider
-                value={{
-                    sales: salesData,
-                    purchases: purchasesData,
-                    debitCreditNotes: debitCreditNotesData,
-                    vouchers: vouchersArbitraryData,
-                    generic: {}
-                }}>
-                <Comp></Comp>
-            </MultiDataContext.Provider>
+            {/* <MegaContext.Provider value={meta.current.mega}> */}
+                <MultiDataContext.Provider
+                    value={{
+                        sales: salesData,
+                        purchases: purchasesData,
+                        debitCreditNotes: debitCreditNotesData,
+                        vouchers: vouchersArbitraryData,
+                        generic: {}
+                    }}>
+                    <Comp></Comp>
+                </MultiDataContext.Provider>
             {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>

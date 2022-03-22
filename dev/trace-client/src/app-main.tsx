@@ -1,4 +1,4 @@
-import { clsx, useEffect, useState } from './imports/regular-imports'
+import { clsx, useEffect, useRef, useState } from './imports/regular-imports'
 import 'fontsource-roboto'
 import { createStyles, makeStyles, Theme } from './imports/gui-imports'
 import { Box, AppBar } from './imports/gui-imports'
@@ -18,7 +18,11 @@ function AppMain() {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
     const { setInGlobalBag, isMediumSizeUp } = useTraceGlobal()
-
+    // const meta = useRef({
+    //     mega: {
+    //         accounts: {}
+    //     }
+    // })
     useEffect(() => {
         setInGlobalBag('isDrawyerOpen', isMediumSizeUp)
         setOpen(isMediumSizeUp)
@@ -66,6 +70,7 @@ function AppMain() {
                 handleDrawerClose={handleDrawerClose}></TraceLeft>
             {/* Main */}
             {/*   */}
+            {/* <MegaContext.Provider value={meta.current.mega}> */}
                 <TraceMain open={open}></TraceMain>
             {/* </MegaContext.Provider> */}
             {/* universal loading indicator */}
