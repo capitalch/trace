@@ -20,7 +20,7 @@ function TraceMain({ open }: any) {
         isMounted: false,
         marginTop: 0,
         launchPad: null,
-        megaData: { accounts: { common: {}, sales: {} } }
+        megaData: { accounts: { common: {}, sales: {}, settings: {} } }
     })
     const { getCurrentMediaSize } = useTraceGlobal()
 

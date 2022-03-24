@@ -1,4 +1,4 @@
-import namor from 'namor'
+// import namor from 'namor'
 
 const range = (len: number) => {
     const arr = []
@@ -11,8 +11,8 @@ const range = (len: number) => {
 const newPerson = () => {
     const statusChance = Math.random()
     return {
-        firstName: namor.generate({ words: 1, numbers: 0 }),
-        lastName: namor.generate({ words: 1, numbers: 0 }),
+        // firstName: namor.generate({ words: 1, numbers: 0 }),
+        // lastName: namor.generate({ words: 1, numbers: 0 }),
         age: Math.floor(Math.random() * 30),
         visits: Math.floor(Math.random() * 100),
         progress: Math.floor(Math.random() * 100),
@@ -26,15 +26,16 @@ const newPerson = () => {
 }
 
 export default function makeData(...lens:any) {
-    const makeDataLevel: any = (depth: number = 0) => {
-        const len = lens[depth]
-        return range(len).map(d => {
-            return {
-                ...newPerson(),
-                subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
-            }
-        })
-    }
+    return(<div>abcd</div>)
+    // const makeDataLevel: any = (depth: number = 0) => {
+    //     const len = lens[depth]
+    //     return range(len).map(d => {
+    //         return {
+    //             ...newPerson(),
+    //             subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
+    //         }
+    //     })
+    // }
 
-    return makeDataLevel()
+    // return makeDataLevel()
 }

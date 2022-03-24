@@ -32,8 +32,7 @@ function LaunchPad() {
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
 
     meta.current.mainHeading = getUnitHeading()
-    // const MegaContext:any = createContext({})
-    const mega = useContext(MegaDataContext)
+    // const mega = useContext(MegaDataContext)
     const { socketMessageHandler } = useServerSocketMessageHandler()
 
     useEffect(() => {
@@ -90,16 +89,16 @@ function LaunchPad() {
                 {meta.current.mainHeading}
             </Typography>
             {/* <MegaContext.Provider value={meta.current.mega}> */}
-                <MultiDataContext.Provider
-                    value={{
-                        sales: salesData,
-                        purchases: purchasesData,
-                        debitCreditNotes: debitCreditNotesData,
-                        vouchers: vouchersArbitraryData,
-                        generic: {}
-                    }}>
-                    <Comp></Comp>
-                </MultiDataContext.Provider>
+            <MultiDataContext.Provider
+                value={{
+                    sales: salesData,
+                    purchases: purchasesData,
+                    debitCreditNotes: debitCreditNotesData,
+                    vouchers: vouchersArbitraryData,
+                    generic: {}
+                }}>
+                <Comp></Comp>
+            </MultiDataContext.Provider>
             {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>
@@ -138,7 +137,15 @@ function LaunchPad() {
         const currentComponent = getCurrentComponent()
         if (!_.isEmpty(currentComponent)) {
             const currentComponentName = currentComponent.componentName
+            // if (currentComponentName === mega.accounts.settings?.loadedComponent?.name) {
+            //     ret = mega.accounts.settings.loadedComponent.component
+            // } else {
             ret = componentsMap[currentComponentName](currentComponent.args)
+            // mega.accounts.settings.loadedComponent = {}
+            // const loaded = mega.accounts.settings.loadedComponent
+            // loaded.name = currentComponentName
+            // loaded.component = ret
+            // }
         }
         return ret
     }

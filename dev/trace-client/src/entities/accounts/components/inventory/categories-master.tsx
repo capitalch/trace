@@ -472,14 +472,14 @@ function CategoriesMaster() {
             }
         }
 
-        function submit() {
+       async function submit() {
             const formData = JSON.parse(
                 JSON.stringify(getFormData(meta.current.dialogConfig.formId))
             )
             formData.isLeaf = formData.isLeaf || false
             formData.id = node.data.id
             // this is update because id is present in data
-            saveForm({
+            await saveForm({
                 data: {
                     data: formData,
                     tableName: 'CategoryM',
@@ -487,7 +487,7 @@ function CategoriesMaster() {
                 afterMethod: handleOnCloseDialog,
                 queryId: 'genericUpdateMaster',
             })
-            getData()
+            await getData()
         }
     }
 

@@ -1,5 +1,6 @@
-import { _, MegaDataContext, useContext, useEffect } from './redirect'
+import { _, MegaDataContext, useContext, useEffect, useState } from './redirect'
 function useAccSales() {
+    const [,setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
 
     useEffect(() => {
@@ -18,6 +19,6 @@ function useAccSales() {
 
     }
 
-    return ({ })
+    return ({megaData, setRefresh })
 }
 export { useAccSales }

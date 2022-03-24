@@ -808,47 +808,6 @@ CREATE TABLE public."Settings" (
 
 ALTER TABLE public."Settings" OWNER TO webadmin;
 
---
--- Name: Test; Type: TABLE; Schema: public; Owner: webadmin
---
-
-CREATE TABLE public."Test" (
-    id integer NOT NULL,
-    "accName" text NOT NULL,
-    amount numeric DEFAULT 0 NOT NULL,
-    "parentId" integer,
-    "jData" jsonb
-);
-
-
-ALTER TABLE public."Test" OWNER TO webadmin;
-
---
--- Name: Test_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
---
-
-CREATE SEQUENCE public."Test_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public."Test_id_seq" OWNER TO webadmin;
-
---
--- Name: Test_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
---
-
-ALTER SEQUENCE public."Test_id_seq" OWNED BY public."Test".id;
-
-
---
--- Name: TranD; Type: TABLE; Schema: public; Owner: webadmin
---
-
 CREATE TABLE public."TranD" (
     id integer NOT NULL,
     "accId" integer NOT NULL,
@@ -1060,14 +1019,6 @@ ALTER TABLE ONLY public."PosM" ALTER COLUMN id SET DEFAULT nextval('public."PosM
 
 ALTER TABLE ONLY public."ProductM" ALTER COLUMN id SET DEFAULT nextval('public."ProductM_id_seq"'::regclass);
 
-
---
--- Name: Test id; Type: DEFAULT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."Test" ALTER COLUMN id SET DEFAULT nextval('public."Test_id_seq"'::regclass);
-
-
 --
 -- Name: TranCounter id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
@@ -1204,7 +1155,8 @@ INSERT INTO public."PosM" VALUES (1, 'sample1', NULL, NULL, 1);
 
 
 INSERT INTO public."Settings" VALUES (1, 'menu', NULL, '{"menu": [{"name": "financialAccounting", "label": "Accounts", "children": [{"name": "finalAccounts", "label": "Final Accounts", "children": [{"name": "trialBalance", "label": "Trial Balance", "component": "TraceTrialBalance"}, {"name": "balanceSheet", "label": "Balance Sheet", "component": "balanceSheet"}, {"name": "pl", "label": "PL Account", "component": "plAccount"}]}, {"name": "sales", "label": "Sales", "children": [{"name": "creditSales", "label": "Credit Sales"}, {"name": "cashSales", "label": "Cash Sales"}, {"name": "mixedSales", "label": "Mixed Sales"}, {"name": "cardSales", "label": "Card Sales"}]}, {"name": "purchase", "label": "Purchase", "children": [{"name": "creditPurchase", "label": "Credit Purchase"}, {"name": "cashPurchase", "label": "Cash Purchase"}]}, {"name": "misc", "label": "Misc", "children": [{"name": "contra", "label": "Contra"}, {"name": "journal", "label": "Journals"}, {"name": "stockJournal", "label": "Stock Journal"}]}, {"name": "payments", "label": "Payments", "children": [{"name": "cashPayment", "label": "Cash Payment"}, {"name": "chequePayment", "label": "Cheque Payment"}]}, {"name": "receipts", "label": "Receipts", "children": [{"name": "cashReceipt", "label": "Cash Receipt"}, {"name": "cashReceipt", "label": "Cash receipt"}]}]}, {"name": "payroll", "label": "Payroll", "children": [{"name": "transactions", "label": "Transactions", "children": [{"name": "timeSheet", "label": "Time Sheet", "children": []}, {"name": "leaves", "label": "Leaves", "children": []}]}, {"name": "processing", "label": "Processing", "children": [{"name": "processPayroll", "label": "Process Payroll", "children": []}, {"name": "undoProcessing", "label": "Undo Processing", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "payslips", "label": "Payslips", "children": []}, {"name": "loanAccount", "label": "Loan Account", "children": []}]}, {"name": "reports", "label": "Reports", "children": [{"name": "providentFund", "label": "ProvidentFund", "children": []}, {"name": "esi", "label": "ESI", "children": []}]}]}, {"name": "marketing", "label": "Marketing", "children": [{"name": "mission", "label": "Mission", "children": [{"name": "missionStatement", "label": "Mission Statement", "children": []}, {"name": "objectives", "label": "Objectives", "children": []}]}, {"name": "analysis", "label": "Analysis", "children": [{"name": "opportunities", "label": "Opportunities", "children": []}, {"name": "5canalysis", "label": "5C Analysis", "children": []}, {"name": "swotAnalysis", "label": "SWOT Analysis", "children": []}, {"name": "pestAnalysis", "label": "PEST Analysis", "children": []}]}, {"name": "strategy", "label": "Strategy", "children": [{"name": "targetAudience", "label": "Target Audience", "children": []}, {"name": "measurableGoals", "label": "Measurable Goals", "children": []}, {"name": "budget", "label": "Budget", "children": []}]}, {"name": "marketingMix", "label": "Marketing Mix", "children": [{"name": "productDevelopment", "label": "Product Dev", "children": []}, {"name": "pricing", "label": "Pricing", "children": []}, {"name": "promotion", "label": "Promotion", "children": []}, {"name": "placeAndDistribution", "label": "Place and Distribution", "children": []}]}, {"name": "implementation", "label": "Implementation", "children": [{"name": "planToAction", "label": "Plan to Action", "children": []}, {"name": "monitorResults", "label": "Monitor Results", "children": []}]}]}, {"name": "recruitment", "label": "Recruitment", "children": [{"name": "planning", "label": "Planning", "children": [{"name": "vacancy", "label": "Vacancy", "children": []}, {"name": "resumesScreening", "label": "Resume Screening", "children": []}, {"name": "jobAnalysis", "label": "Job Analysis", "children": []}, {"name": "jobDescription", "label": "Job Description", "children": []}, {"name": "jobSpecification", "label": "Job Specification", "children": []}, {"name": "jobEvaluation", "label": "Job Evaluation", "children": []}]}, {"name": "execution", "label": "Execution", "children": [{"name": "directRecruitment", "label": "Direct Recruitment", "children": []}, {"name": "employmentExchange", "label": "Employment Exch.", "children": []}, {"name": "employmentAgencies", "label": "Employment Ag.", "children": []}, {"name": "advertisement", "label": "Advertisement", "children": []}, {"name": "professionalAssociation", "label": "Proff Associations", "children": []}, {"name": "campusRecruitment", "label": "Campus Recruit", "children": []}, {"name": "wordOfMouth", "label": "Word Of Mouth", "children": []}]}, {"name": "screening", "label": "Screening", "children": [{"name": "processing", "label": "Processing", "children": []}, {"name": "finalization", "label": "Finalization", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "coverLetter", "label": "Cover Letter", "children": []}, {"name": "appointmentLetter", "label": "Appointment Letter", "children": []}]}]}, {"name": "sampleForms", "label": "Sample Forms", "children": [{"name": "registrations", "label": "Registrations", "children": [{"name": "gym", "label": "Gym", "children": []}, {"name": "studentAdmission", "label": "Student Admission", "children": []}, {"name": "clubMembership", "label": "Club Membership", "children": []}, {"name": "employeeInfo", "label": "Employee Information", "children": []}]}, {"name": "applications", "label": "Applications", "children": [{"name": "loanApplication", "label": "Loan Application", "children": []}, {"name": "electronicsRental", "label": "Electronics Rental", "children": []}]}, {"name": "feedbacks", "label": "Feedbacks", "children": [{"name": "employeePerformance", "label": "Employee Performance", "children": []}, {"name": "softwareEvaluation", "label": "Software Evaluation", "children": []}, {"name": "eventFeedback", "label": "Event Feedback", "children": []}]}, {"name": "others", "label": "Others", "children": [{"name": "deeplyNested", "label": "Deeply Nested", "children": []}]}]}]}', 0, '2021-03-25 10:00:14.291414+00');
-
+INSERT INTO public."Settings" ("id", "key", "intValue")
+	SELECT 4, 'lastProductCode', 1000;
 --
 -- Data for Name: TranTypeM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
@@ -1353,13 +1305,6 @@ SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 19, true);
 --
 
 SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 9720, true);
-
-
---
--- Name: Test_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
---
-
-SELECT pg_catalog.setval('public."Test_id_seq"', 36, true);
 
 
 --
@@ -1614,15 +1559,6 @@ ALTER TABLE ONLY public."SalePurchaseDetails"
 
 ALTER TABLE ONLY public."Settings"
     ADD CONSTRAINT "Settings_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Test Test_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."Test"
-    ADD CONSTRAINT "Test_pkey" PRIMARY KEY (id);
-
 
 --
 -- Name: TranD TranD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin

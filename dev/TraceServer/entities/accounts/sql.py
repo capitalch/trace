@@ -874,7 +874,7 @@ allSqls = {
 						on a."id" = x."accId"
                     left outer join "ExtMiscAccM" e
                         on a."id" = e."accId"
-				order by "accType", "accName", a."id"
+				order by  "accName", "accType", a."id"
         ),
         cte2 as (
             select a."id", "accCode", "accName", "accType", "accLeaf", "classId", "accClass"
@@ -1129,8 +1129,11 @@ allSqls = {
 	 			from "BrandM" order by "brandName"
         ),
         cte2 as (
-            select "id", "catName" 
-                from "CategoryM"
+            select "id", "catName" , (
+				select "catName" from "CategoryM"
+					where id = c."parentId"
+			) as "parent"
+                from "CategoryM" c
 					where "isLeaf" = true order by "catName"
         ),
         cte3 as (
@@ -1156,7 +1159,7 @@ allSqls = {
             select c."id", c."catName", c."descr", c."parentId", c."isLeaf", 
             ( select array_agg(id) from "CategoryM" m where c."id" = m."parentId") as "children",
             "id"::text as "path"
-                from "CategoryM" c where "parentId" is null
+                from "CategoryM" c where "parentId" is null                  
         union
             select c."id", c."catName", c."descr", c."parentId", c."isLeaf", 
             ( select array_agg(id) from "CategoryM" m where c."id" = m."parentId") as "children",
@@ -1164,7 +1167,8 @@ allSqls = {
                 from "CategoryM" c join
                 cte on cte."id" = c."parentId" ),
             cte1 as (select * from cte order by "catName")
-            select json_build_object('categories', (select json_agg(row_to_json(a)) from cte1 a ) ) as "jsonResult"
+            
+            select json_build_object('categories', (select json_agg(row_to_json(a)) from cte1 a) ) as "jsonResult"
     ''',
 
     "getJson_datacache": '''

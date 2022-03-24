@@ -1,13 +1,7 @@
 
 
 function Component1() {
-
-    function func1() {
-        console.log(var1())
-    }
-    func1()
-    return (<div>Comp1</div>)
-
-    function var1 (){return 'abcd'}
+return(<div>comp1</div>)
+   
 }
 export { Component1 }
