@@ -15,9 +15,7 @@ interface LedgerSubledgerOptions {
     showAutoSubledgerValues?: boolean
 }
 function LedgerSubledger({
-    // allAccounts,
     className,
-    // controlId,
     ledgerAccounts,
     ledgerFilterMethodName,
     onChange,

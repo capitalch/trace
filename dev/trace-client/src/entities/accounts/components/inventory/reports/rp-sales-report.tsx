@@ -1,13 +1,12 @@
 import {
-    Box, CloseSharp, DataGridPro,
+    Box, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect, SyncSharp, TextField,
-    Typography, useRef, useState, useTheme,
-    useStockSummaryAgeingReport, utilMethods,
+    IconButton, ReactSelect, SyncSharp, TextField,
+    Typography, useRef, useState, useTheme, utilMethods,
 } from '../redirect'
 import { GridSearchBox } from './grid-search-box'
 import { useSalesReport } from './rp-sales-report-hook'
@@ -120,7 +119,7 @@ function SalesReport() {
                         </IconButton>
                     </Box>
                     <GridSearchBox parentMeta={meta} />
-                </Box>      
+                </Box>
             </GridToolbarContainer>
         )
     }

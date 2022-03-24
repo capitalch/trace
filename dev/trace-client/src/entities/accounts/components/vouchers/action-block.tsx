@@ -123,10 +123,6 @@ function ActionBlock({
                             <TypographySmart item={item} />
                         </Box>
                         <LedgerSubledger
-                            // allAccounts={ad.accounts.all}
-                            // ledgerAccounts={getMappedAccounts(
-                            //     ad.accounts[ledgerAccounts] || []
-                            // )}
                             ledgerFilterMethodName={ledgerAccounts} // method is available in ledgerSubledger control itself
                             onChange={() => {
                                 emit('CROWN-REFRESH', '')

@@ -919,17 +919,6 @@ CREATE TABLE public."UnitM" (
 ALTER TABLE public."UnitM" OWNER TO webadmin;
 
 --
--- Name: profitorloss; Type: TABLE; Schema: public; Owner: webadmin
---
-
-CREATE TABLE public.profitorloss (
-    "coalesce" numeric
-);
-
-
-ALTER TABLE public.profitorloss OWNER TO webadmin;
-
---
 -- Name: AccM id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
