@@ -1,6 +1,8 @@
-import { Box, Button, FormControlLabel, LedgerSubledger, NumberFormat, Radio, TextField, Typography, useContext, useTheme } from './redirect'
+import { Box, Button, CloseSharp, FormControlLabel, IconButton, LedgerSubledger, NumberFormat, Radio, TextField, Typography, useContext, useTheme } from './redirect'
 import { useAccSales } from './acc-sales-hook'
 import { useState } from 'react'
+import { } from '@mui/material'
+import { minWidth } from '@mui/system'
 
 function AccSales() {
     const { megaData, setRefresh } = useAccSales()
@@ -36,11 +38,11 @@ function AccSales() {
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='subtitle2'>Bill to</Typography>
                         <Typography variant='caption'>Customer search</Typography>
-                        <Box sx={{ display: 'flex' }}>
-                            <TextField variant='standard' sx={{ flex: 2 }} />
-                            <Button variant='contained' size='small' sx={{ ml: 2 }} >Search</Button>
-                            <Button >New / Edit</Button>
-                            <Button >Clear</Button>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <TextField variant='standard' sx={{ flex: 0.95 }} />
+                            <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Search</Button>
+                            <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>New / Edit</Button>
+                            <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
                         </Box>
                     </Box>
 
@@ -48,8 +50,8 @@ function AccSales() {
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', }}>
                         <Typography variant='subtitle2'>Ship to</Typography>
                         <Box sx={{ display: 'flex' }}>
-                            <Button >New / Edit</Button>
-                            <Button >Clear</Button>
+                            <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>New / Edit</Button>
+                            <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
                         </Box>
                     </Box>
 
@@ -139,28 +141,41 @@ function AccSales() {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='body2'>Payment methods</Typography>
-                    <Button sx={{ color: theme.palette.lightBlue.main }}>Add</Button>
+                    <Button sx={{ color: theme.palette.lightBlue.main }} onClick={handleAddPaymentMethod}>Add</Button>
                 </Box>
                 <ItemRows itemList={list} />
             </Box>
         )
 
+        function handleAddPaymentMethod() {
+            list.push({})
+            setRefresh({})
+        }
+
         function ItemRows({ itemList }: any) {
             const itemRows = itemList.map(() => {
                 return (
-                    <Box sx={{ disply: 'flex' , flexWrap:'wrap', flexDirection:'row'}} key={1} >
-                        {/* <Box sx={{ display: 'flex', flexDirection: 'column', width:'50%' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Debit account</Typography>
-                           
-                        </Box> */}
-                        <Box sx={{width:'50%'}}>
-                        <TextField label='Instr no' variant='standard' sx={{ flex: '0.2' }} />
-                        <TextField label='Instr no' variant='standard' sx={{ flex: '0.2' }} />
+                            <LedgerSubledger rowData={{}} />
                         </Box>
-                        
-                        <LedgerSubledger rowData={{}}   />
-                    </Box>
-                )
+                        <TextField label='Instr no' variant='standard' sx={{ flex: 0.4, minWidth: theme.spacing(7) }} />
+                        <NumberFormat sx={{ flex: 0.4, minWidth: theme.spacing(7) }}
+                            allowNegative={false}
+                            customInput={TextField}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            label='Amount'
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            variant='standard' />
+
+                        <IconButton size='small' color='error'>
+                            <CloseSharp />
+                        </IconButton>
+                    </Box>)
             })
             return (itemRows)
         }
@@ -171,13 +186,5 @@ export { AccSales }
 
 // {/* <Box sx={{ display: 'flex' }}>
 // {/* <TextField label='Instr no' variant='standard' sx={{ flex: '0.2' }} /> */}
-// <NumberFormat sx={{ flex: '0.2' }}
-//     allowNegative={false}
-//     customInput={TextField}
-//     decimalScale={2}
-//     fixedDecimalScale={true}
-//     onFocus={(e: any) => {
-//         e.target.select()
-//     }}
-//     variant='standard' />
+
 // </Box> */}
