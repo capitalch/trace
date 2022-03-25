@@ -1,5 +1,4 @@
-# understan Trace
-App.tsx:theme -> AppMain:TraceMain -> LaunchPad: loads current component
+# npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome @mui/material @mui/x-data-grid-pro @testing-library/jest-dom @types/node @types/react @types/react-dom @types/react-table react-widgets styled-components typescript url-join
 
 ## Required reports
 1. Profitibality
