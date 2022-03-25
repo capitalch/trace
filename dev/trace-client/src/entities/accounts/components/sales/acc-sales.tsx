@@ -1,11 +1,10 @@
 import { Box, Button, CloseSharp, FormControlLabel, IconButton, LedgerSubledger, NumberFormat, Radio, TextField, Typography, useContext, useTheme } from './redirect'
 import { useAccSales } from './acc-sales-hook'
 import { useState } from 'react'
-import { } from '@mui/material'
-import { minWidth } from '@mui/system'
+import { RadioGroup } from '@mui/material'
 
 function AccSales() {
-    const { megaData, setRefresh } = useAccSales()
+    const { handleTextChanged, megaData, setRefresh } = useAccSales()
     const sales = megaData.accounts.sales
     const theme = useTheme()
     return (
@@ -19,15 +18,18 @@ function AccSales() {
                     <Box sx={{ display: 'flex', columnGap: 2, rowGap: 1, mt: 1 }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Ref no</Typography>
-                            <TextField variant='standard' />
+                            <TextField variant='standard' value={sales.autoRefNo || ''}
+                                onChange={(e: any) => handleTextChanged(sales, 'autoRefNo', e)} />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Date</Typography>
-                            <TextField variant='standard' type='date' />
+                            <TextField variant='standard' type='date' value={sales.tranDate || ''}
+                                onChange={(e: any) => handleTextChanged(sales, 'tranDate', e)} />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>User ref no</Typography>
-                            <TextField variant='standard' />
+                            <TextField variant='standard' value={sales.userRefNo || ''}
+                                onChange={(e: any) => handleTextChanged(sales, 'userRefNo', e)} />
                         </Box>
                     </Box>
 
@@ -58,13 +60,10 @@ function AccSales() {
                     {/* Gstin, remarks */}
                     <Box sx={{ display: 'flex', columnGap: 2 }}>
                         {/* Gstin */}
-                        <TextField variant='standard' label='Gstin' value={sales.gstin}
-                            onChange={(e: any) => {
-                                sales.gstin = e.target.value || ''
-                            }} />
-                        <TextField variant='standard' label='Remarks' sx={{ flex: 2 }} />
+                        <TextField variant='standard' label='Gstin' value={sales.gstin || ''}
+                            onChange={(e: any) => handleTextChanged(sales, 'gstin', e)} />
+                        <TextField variant='standard' value={sales.commonRemarks || ''} label='Remarks' sx={{ flex: 2 }} onChange={(e: any) => handleTextChanged(sales, 'commonRemarks', e)} />
                     </Box>
-
                     <PaymentMethods />
                 </Box>
             </Box>
@@ -79,64 +78,74 @@ function AccSales() {
     function SaleVariety() {
         return (
             // <Box sx={{ display: 'flex' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <FormControlLabel
-                    control={
-                        <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                            onClick={(e: any) => {
-                                // handleSaleVariety('r')
-                                // resetAddresses()
-                                // handleRetailCashBankSales()
-                            }}
-                            size="small"
-                            color="secondary"
-                        // checked={arbitraryData.saleVariety === 'r'}
-                        />
-                    }
-                    label="Retail sales"
-                />
-                <FormControlLabel
-                    control={
-                        <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                            onClick={(e: any) => {
-                                // handleSaleVariety('a')
-                                // resetAddresses()
-                                // handleAutoSubledgerSales()
-                            }}
-                            size="small"
-                            color="secondary"
-                        // checked={arbitraryData.saleVariety === 'a'}
-                        />
-                    }
-                    label="Auto subledger sales"
-                />
-                <FormControlLabel
-                    control={
-                        <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                            onClick={(e: any) => {
-                                // handleSaleVariety('i')
-                                // resetAddresses()
-                                // handleInstitutionSales()
-                            }}
-                            size="small"
-                            color="secondary"
-                        // checked={arbitraryData.saleVariety === 'i'}
-                        />
-                    }
-                    label="Institution sales"
-                />
+            <Box >
+                <RadioGroup row>
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                                onClick={(e: any) => {
+                                    handleSaleVariety('r')
+                                    // resetAddresses()
+                                    // handleRetailCashBankSales()
+                                }}
+                                size="small"
+                                color="secondary"
+                                checked={sales.saleVariety === 'r'}
+                            />
+                        }
+                        label="Retail sales"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                                onClick={(e: any) => {
+                                    handleSaleVariety('a')
+                                    // resetAddresses()
+                                    // handleAutoSubledgerSales()
+                                }}
+                                size="small"
+                                color="secondary"
+                                checked={sales.saleVariety === 'a'}
+                            />
+                        }
+                        label="Auto subledger sales"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                                onClick={(e: any) => {
+                                    handleSaleVariety('i')
+                                    // resetAddresses()
+                                    // handleInstitutionSales()
+                                }}
+                                size="small"
+                                color="secondary"
+                                checked={sales.saleVariety === 'i'}
+                            />
+                        }
+                        label="Institution sales"
+                    />
+                </RadioGroup>
             </Box>
             // </Box>
         )
+
+        function handleSaleVariety(variety: string) {
+            sales.saleVariety = variety
+            setRefresh({})
+        }
     }
 
     function PaymentMethods() {
         const [, setRefresh] = useState({})
         const list: any[] = [{},]
-
+        const paymentMethods: any[] = sales.paymentMethods
+        if (paymentMethods.length === 0) {
+            paymentMethods.push({})
+        }
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
