@@ -3,18 +3,19 @@ import { _, MegaDataContext, useContext, useEffect, useState } from './redirect'
 function useAccSales() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
+    const sales: any = megaData?.accounts.sales
     const isoDateFormat = 'YYYY-MM-DD'
     useEffect(() => {
         initSalesMegaData()
     }, [])
 
-    function handleTextChanged(sales: any, propName: string, e: any) {
+    function handleTextChanged( propName: string, e: any) {
         sales[propName] = e.target.value
         setRefresh({})
     }
 
     function initSalesMegaData(isForced: boolean = false) {
-        const sales: any = megaData?.accounts.sales
+       
         if (_.isEmpty(sales) || isForced) {
             setSalesMegaData(sales)
             setRefresh({})
@@ -26,8 +27,8 @@ function useAccSales() {
                 billTo: {},
                 commonRemarks: undefined,
                 gstin: undefined,
-                items: [],
                 paymentMethods: [],
+                products:[],
                 saleVariety: 'r',
                 shipTo: {},
                 tranDate: moment().format(isoDateFormat),
@@ -43,6 +44,6 @@ function useAccSales() {
 
 
 
-    return ({ handleTextChanged, megaData, setRefresh })
+    return ({ handleTextChanged, })
 }
 export { useAccSales }

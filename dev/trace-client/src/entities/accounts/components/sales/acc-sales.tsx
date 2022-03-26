@@ -1,14 +1,16 @@
-import { Box, Button, CloseSharp, FormControlLabel, IconButton, LedgerSubledger, NumberFormat, Radio, TextField, Typography, useContext, useTheme } from './redirect'
+import { Box, Button, CloseSharp, FormControlLabel, IconButton, LedgerSubledger, MegaDataContext, NumberFormat, Radio, TextField, Typography, useContext, useTheme } from './redirect'
 import { useAccSales } from './acc-sales-hook'
 import { useState } from 'react'
 import { RadioGroup } from '@mui/material'
 
 function AccSales() {
-    const { handleTextChanged, megaData, setRefresh } = useAccSales()
+    const [, setRefresh] = useState({})
+    const { handleTextChanged, } = useAccSales()
+    const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const theme = useTheme()
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap' }} >
             {/* Left */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant='subtitle2' component='div'>Sales</Typography>
@@ -19,17 +21,17 @@ function AccSales() {
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Ref no</Typography>
                             <TextField variant='standard' value={sales.autoRefNo || ''}
-                                onChange={(e: any) => handleTextChanged(sales, 'autoRefNo', e)} />
+                                onChange={(e: any) => handleTextChanged('autoRefNo', e)} />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Date</Typography>
                             <TextField variant='standard' type='date' value={sales.tranDate || ''}
-                                onChange={(e: any) => handleTextChanged(sales, 'tranDate', e)} />
+                                onChange={(e: any) => handleTextChanged('tranDate', e)} />
                         </Box>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>User ref no</Typography>
                             <TextField variant='standard' value={sales.userRefNo || ''}
-                                onChange={(e: any) => handleTextChanged(sales, 'userRefNo', e)} />
+                                onChange={(e: any) => handleTextChanged('userRefNo', e)} />
                         </Box>
                     </Box>
 
@@ -61,16 +63,21 @@ function AccSales() {
                     <Box sx={{ display: 'flex', columnGap: 2 }}>
                         {/* Gstin */}
                         <TextField variant='standard' label='Gstin' value={sales.gstin || ''}
-                            onChange={(e: any) => handleTextChanged(sales, 'gstin', e)} />
-                        <TextField variant='standard' value={sales.commonRemarks || ''} label='Remarks' sx={{ flex: 2 }} onChange={(e: any) => handleTextChanged(sales, 'commonRemarks', e)} />
+                            onChange={(e: any) => handleTextChanged('gstin', e)} />
+                        <TextField variant='standard' value={sales.commonRemarks || ''} label='Remarks' sx={{ flex: 2 }} onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                     </Box>
                     <PaymentMethods />
                 </Box>
             </Box>
 
             {/* Right */}
-            <Box>
-
+            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 2, flex: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant='subtitle2'>Products</Typography>
+                    {/* Add button */}
+                    <Button sx={{ color: theme.palette.lightBlue.main, height: theme.spacing(2) }}>Add</Button>
+                </Box>
+                <Products />
             </Box>
         </Box>
     )
@@ -141,8 +148,8 @@ function AccSales() {
 
     function PaymentMethods() {
         const [, setRefresh] = useState({})
-        const list: any[] = [{},]
-        const paymentMethods: any[] = sales.paymentMethods
+        // const list: any[] = [{},]
+        const paymentMethods = sales.paymentMethods || []
         if (paymentMethods.length === 0) {
             paymentMethods.push({})
         }
@@ -150,26 +157,30 @@ function AccSales() {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='body2'>Payment methods</Typography>
+                    {/* Add button */}
                     <Button sx={{ color: theme.palette.lightBlue.main }} onClick={handleAddPaymentMethod}>Add</Button>
                 </Box>
-                <ItemRows itemList={list} />
+                <Payments paymentMethodsList={paymentMethods} />
             </Box>
         )
 
         function handleAddPaymentMethod() {
-            list.push({})
+            paymentMethods.push({})
             setRefresh({})
         }
 
-        function ItemRows({ itemList }: any) {
-            const itemRows = itemList.map(() => {
+        function Payments({ paymentMethodsList }: any) {
+            const [, setRefresh] = useState({})
+            const payments: any[] = paymentMethodsList.map((item: any, index: number) => {
+                // item.id = counter++
                 return (
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
+                    <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                             <Typography variant='caption'>Debit account</Typography>
                             <LedgerSubledger rowData={{}} />
                         </Box>
-                        <TextField label='Instr no' variant='standard' sx={{ flex: 0.4, minWidth: theme.spacing(7) }} />
+                        <TextField label='Instr no' variant='standard' value={item.instrNo || ''}
+                            sx={{ flex: 0.4, minWidth: theme.spacing(7) }} onChange={(e: any) => { item.instrNo = e.target.value; setRefresh({}) }} />
                         <NumberFormat sx={{ flex: 0.4, minWidth: theme.spacing(7) }}
                             allowNegative={false}
                             customInput={TextField}
@@ -181,13 +192,48 @@ function AccSales() {
                             }}
                             variant='standard' />
 
-                        <IconButton size='small' color='error'>
+                        <IconButton sx={{ ml: -6, mt: -3 }} size='small' color='error' onClick={() => handleRowDelete(index)}>
                             <CloseSharp />
                         </IconButton>
                     </Box>)
+
             })
-            return (itemRows)
+            return (<>{payments}</>)
+
+            function handleRowDelete(index: number) {
+                if (paymentMethodsList.length === 1) {
+                    return
+                }
+                paymentMethodsList.splice(index, 1)
+                setRefresh({})
+            }
         }
+    }
+
+    function Products() {
+        const [, setRefresh] = useState({})
+        const products = sales.products || []
+        if (products.length === 0) {
+            products.push({})
+        }
+
+        const items: any[] = products.map((item: any) => {
+            return (<Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 1, rowGap: 1, border: '4px solid orange', p: 2, flex: 1.5 }}>
+                <TextField variant='standard' label='Product search' value={item.productSearch || ''} onChange={(e: any) => { item.productSearch = e.target.value; setRefresh({}) }} />
+                <TextField variant='standard' label='Upc' value={item.upc} onChange={(e: any) => { item.upc = e.target.value; setRefresh({}) }} />
+                <TextField variant='standard' label='Product code' value={item.productCode} onChange={(e: any) => { item.productCode = e.target.value; setRefresh({}) }} />
+                <TextField variant='standard' label='Hsn' value={item.hsn} onChange={(e: any) => { item.hsn = e.target.value; setRefresh({}) }} />
+
+            </Box>)
+        })
+
+        return (<>{items}</>)
+
+        // function ProductItems() {
+        //     const [, setRefresh] = useState({})
+        //     const items:any[] = 
+        // }
+
     }
 
 }
