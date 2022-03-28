@@ -4,10 +4,11 @@ function useAccSales() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
     const isoDateFormat = 'YYYY-MM-DD'
-    const sales = megaData.accounts.sales
+    let sales = megaData.accounts.sales
 
     useEffect(() => {
         initSalesMegaData()
+        // setRefresh({})
     }, [])
 
     // function handleTextChanged( propName: string, e: any) {
@@ -27,6 +28,7 @@ function useAccSales() {
         }
 
         function setSalesMegaData(sales: any) {
+            // sales = {}
             const salesObj = {
                 autoRefNo: undefined,
                 billTo: {},
@@ -43,6 +45,6 @@ function useAccSales() {
         }
     }
 
-    return ({initSalesMegaData})
+    return ({ initSalesMegaData })
 }
 export { useAccSales }
