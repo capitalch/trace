@@ -1,7 +1,7 @@
 import './App.scss';
 import { LicenseInfo } from '@mui/x-data-grid-pro'
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
-
+import { megaData } from './mega-data-init'
 import {
   purple,
   teal,
@@ -113,7 +113,8 @@ function App() {
   LicenseInfo.setLicenseKey(
     '094c13fcff99f49fe015161354d1d052T1JERVI6MjkzMjgsRVhQSVJZPTE2NjMxMjQ0NjcwMDAsS0VZVkVSU0lPTj0x'
   )
-  const megaData = { accounts: { common: {}, sales: {}, settings: {} } }
+  // const megaData = Object.assign({}, salesMegaData)
+  // { accounts: { common: {}, sales: {}, settings: {} } }
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>

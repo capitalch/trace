@@ -6,7 +6,6 @@ import moment from 'moment'
 export { useState, useRef, useEffect, useContext, } from 'react'
 export { useTheme } from '@mui/material/styles'
 export { type Theme } from '@mui/material'
-export { getKey } from './key-generator'
 export {
     Alert,
     AppBar,
@@ -168,3 +167,4 @@ export { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export { faSpinner } from '@fortawesome/free-solid-svg-icons'
 export { _, ReactSelect, InputMask, moment, NumberFormat }
 export { MegaDataContext } from './mega-data-context'
+export { salesMegaData } from '../mega-data-init'

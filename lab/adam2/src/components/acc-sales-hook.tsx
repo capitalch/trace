@@ -1,4 +1,4 @@
-import { _, Box, Button, FormControlLabel, MegaDataContext, moment, Radio, TextField, Typography, useContext, useEffect, useState, useTheme } from './redirect'
+import { _, Box, Button, FormControlLabel, MegaDataContext, moment, Radio, salesMegaData, TextField, Typography, useContext, useEffect, useState, useTheme } from './redirect'
 
 function useAccSales() {
     const [, setRefresh] = useState({})
@@ -7,44 +7,15 @@ function useAccSales() {
     let sales = megaData.accounts.sales
 
     useEffect(() => {
-        initSalesMegaData()
+        // initSalesMegaData()
         // setRefresh({})
     }, [])
 
-    // function handleTextChanged( propName: string, e: any) {
-    //     sales[propName] = e.target.value
-    //     setRefresh({})
-    // }
-
-    // function handleSalesReset() {
-    //     initSalesMegaData(true)
-    // }
-
-    function initSalesMegaData(isForced: boolean = false) {
-
-        if (_.isEmpty(sales) || isForced) {
-            setSalesMegaData(sales)
-            setRefresh({})
-        }
-
-        function setSalesMegaData(sales: any) {
-            // sales = {}
-            const salesObj = {
-                autoRefNo: undefined,
-                billTo: {},
-                commonRemarks: undefined,
-                gstin: undefined,
-                paymentMethods: [],
-                products: [],
-                saleVariety: 'r',
-                shipTo: {},
-                tranDate: moment().format(isoDateFormat),
-                userRefNo: undefined,
-            }
-            Object.assign(sales, salesObj)
-        }
+    function resetSales() {
+        Object.assign(megaData.accounts.sales, salesMegaData)
+        setRefresh({})
     }
 
-    return ({ initSalesMegaData })
+    return ({resetSales})
 }
 export { useAccSales }

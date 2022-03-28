@@ -1,10 +1,8 @@
-import { _, Badge, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, MegaDataContext, moment, NumberFormat, Radio, RadioGroup, TextField, Typography, useContext, useState, useTheme } from './redirect'
+import { _, Badge, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, InputAdornment, MegaDataContext, moment, NumberFormat, Radio, RadioGroup, Search, TextField, Typography, useContext, useEffect, useState, useTheme } from './redirect'
 import { useAccSales } from './acc-sales-hook'
-import { useEffect } from 'react'
 
 function AccSales() {
     const [, setRefresh] = useState({})
-    useAccSales()
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, '& .vertical': { display: 'flex', flexDirection: 'column' }, '& .right-aligned': { '& input': { textAlign: 'end' }, } }}>
             <Drawyer />
@@ -12,7 +10,6 @@ function AccSales() {
                 <Typography variant='subtitle1' sx={{ mt: 1, ml: 1 }}>Sales</Typography>
                 <ButtonControls />
                 <CustomerInfo />
-
                 <PaymentsInfo />
             </Box>
             <ProductsInfo />
@@ -29,10 +26,10 @@ function Drawyer() {
 }
 
 function ButtonControls() {
-    // const { initSalesMegaData } = useAccSales()
+    const { resetSales } = useAccSales()
     return (<Box sx={{ border: '4px solid lightGrey', m: 1, mt: 0, p: 1, display: 'flex', flexWrap: 'wrap', rowGap: 1, columnGap: 2 }}>
         <Button variant='contained' size='small' color='error'
-        // onClick={(e: any) => initSalesMegaData(true)}
+            onClick={(e: any) => resetSales()}
         >Reset</Button>
         <Button variant='contained' size='small' color='secondary'>View</Button>
         <Button variant='contained' size='large' sx={{ ml: 'auto' }} color='success'>Submit</Button>
@@ -47,21 +44,23 @@ function CustomerInfo() {
     const isoDateFormat = 'YYYY-MM-DD'
     return (
         <Box className='vertical' sx={{ p: 1 }}>
-            {/* <Typography variant='subtitle1' component='div'>Sales</Typography> */}
             <Box className='vertical' sx={{ border: '4px solid orange', p: 2, }}>
                 <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
                 {/* Ref no, date, user ref no*/}
                 <Box sx={{ display: 'flex', columnGap: 2, mt: 1 }}>
+                    {/* ref no */}
                     <Box className='vertical'>
                         <Typography variant='caption'>Ref no</Typography>
                         <TextField variant='standard' value={sales.autoRefNo || ''}
                             onChange={(e: any) => handleTextChanged('autoRefNo', e)} />
                     </Box>
+                    {/* tran date */}
                     <Box className='vertical'>
                         <Typography variant='caption'>Date</Typography>
                         <TextField variant='standard' type='date' value={sales.tranDate || moment().format(isoDateFormat)}
                             onChange={(e: any) => handleTextChanged('tranDate', e)} />
                     </Box>
+                    {/* User ref no */}
                     <Box className='vertical'>
                         <Typography variant='caption'>User ref no</Typography>
                         <TextField variant='standard' value={sales.userRefNo || ''} sx={{ maxWidth: theme.spacing(16) }}
@@ -73,9 +72,47 @@ function CustomerInfo() {
                 <Box className='vertical' sx={{ mt: 1 }}>
                     <Typography variant='caption'>Customer search</Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <TextField variant='standard' sx={{ flex: 0.95 }} />
-                        <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Search</Button>
+                        {/* Customer search */}
+                        <TextField
+                            autoComplete='off'
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            size="small"
+                                            color='secondary'
+                                            onClick={(e: any) => {
+                                            }}>
+                                            <Search />
+                                        </IconButton>
+                                        <IconButton
+                                            size="small"
+                                            color='secondary'
+                                            onClick={(e: any) => {
+                                            }}>
+                                            <CloseSharp color='error' />
+                                        </IconButton>
+                                    </InputAdornment>
+
+                                ),
+                            }}
+                            onChange={(e: any) => handleTextChanged('customerSearch', e)}
+                            onKeyDown={(e: any) => {
+                                if (e.keyCode === 13) {
+                                    // handleSearch()
+                                }
+                            }}
+                            sx={{ flex: 0.95 }}
+
+                            value={sales.customerSearch || ''}
+
+                            variant='standard'
+
+                        />
+                        {/* <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Search</Button> */}
+                        {/* New / edit */}
                         <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>New / Edit</Button>
+                        {/* clear */}
                         <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
                     </Box>
                 </Box>
@@ -95,6 +132,9 @@ function CustomerInfo() {
                     </Box>
                 </Box>
             </Box>
+            {/* <Button onClick={() => {
+                sales.computeSummary()
+            }}>Test</Button> */}
         </Box>
         // </Box>
     )
@@ -107,36 +147,15 @@ function CustomerInfo() {
 
 function ProductsInfo() {
     const [, setRefresh] = useState({})
+
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    sales.productsInfoRefresh = setRefresh
-    if (_.isEmpty(sales.products)) {
-        sales.products = []
-    }
     const products = sales.products
-    // const products = sales.products || []
+
     useEffect(() => {
-        computeSummary()
-        setRefresh({})
     }, [])
 
-
-    const Summary = () => <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* Products label */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
-            <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Products info</Typography>
-            <Typography color='slateblue' sx={{ mt: .3 }} variant='caption'>{''.concat('Count:', products.length, ' Qty:', sales.qty)}</Typography>
-        </Box>
-        {/* Reset, Igst check, Add */}
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.lightBlue.main, mr: 1 }} onClick={handleReset}>Reset</Button>
-            <FormControlLabel sx={{ fontSize: theme.spacing(1) }} label='Igst'
-                control={
-                    <Checkbox size='small' checked={sales.isIgst || false} onChange={handleChangeIgst} />} />
-            <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.lightBlue.main }} onClick={handleAdd}>Add</Button>
-        </Box>
-    </Box>
     return (<Box sx={{ display: 'flex', flex: 2, border: '4px solid orange', m: 1, mt: 4.5, height: '100%' }}>
         <Box className='vertical' sx={{ p: 2, pt: 1 }}>
             <Summary />
@@ -145,14 +164,57 @@ function ProductsInfo() {
         </Box>
     </Box>)
 
+    function Summary() {
+        const [, setRefresh] = useState({})
+        sales.computeSummary = computeSummary
+        return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
+            {/* Products label */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
+                <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Products info</Typography>
+                <Typography color='slateblue' sx={{ mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) }} variant='caption'>{''.concat('Count:', products.length
+                    , ' Qty:', sales.qty, '  Cgst:', sales.cgst, ' Sgst:', sales.sgst, ' Igst:', sales.igst, ' Amount:', sales.amount)}</Typography>
+            </Box>
+            {/* Reset, Igst check, Add */}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {/* Reset */}
+                <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.error.main, mt: .4 }} onClick={handleReset}>Reset</Button>
+                {/* Igst */}
+                <FormControlLabel sx={{ fontSize: theme.spacing(1) }} label='Igst'
+                    control={
+                        <Checkbox size='small' sx={{ mt: -0.2 }} checked={sales.isIgst || false} onChange={handleChangeIgst} />} />
+                {/* Add */}
+                <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.lightBlue.main, mt: .4 }} onClick={handleAddProduct}>Add</Button>
+            </Box>
+        </Box>)
+
+        function computeSummary() {
+            const total = products.reduce((pre: any, curr: any) => {
+                const obj: any = {}
+                obj.qty = pre.qty + (curr.qty || 0)
+                obj.cgst = pre.cgst + (curr.cgst || 0.00)
+                obj.sgst = pre.sgst + (curr.sgst || 0.00)
+                obj.igst = pre.igst + (curr.igst || 0.00)
+                obj.amount = pre.amount + (curr.amount || 0.00)
+                return (obj)
+            }, { qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0 })
+            sales.qty = total.qty
+            sales.cgst = total.cgst
+            sales.sgst = total.sgst
+            sales.igst = total.igst
+            sales.amount = total.amount
+            setRefresh({})
+        }
+    }
+
     function ProductLineItems() {
         const [, setRefresh] = useState({})
         useEffect(() => {
-            // computeSummary()
+            if (products.length === 0) {
+                handleAddProduct()
+            }
+            setRefresh({})
         }, [])
-        if (products.length === 0) {
-            products.push({ productDetails: 'hjhjj jhjhj hjhjjh jhjhj hhjhj jhjh hj jhjhyuyer qe evbvb qe cqfhjfqk This is but the maximum last line. But this is nnnot to be shown in any manner' })
-        }
+
         const lineItems: any[] = products.map((item: any, index: number) => {
             return <Box key={index}>
                 <ProductLineItem item={item} index={index} />
@@ -161,14 +223,13 @@ function ProductsInfo() {
         return (<Box className='vertical' sx={{ rowGap: 1 }}>
             {lineItems}
         </Box>)
+
         function ProductLineItem({ item, index, }: any) {
             const [, setRefresh] = useState({})
-
             return (
                 <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid lightGrey', flexWrap: 'wrap', p: 2, rowGap: 2, columnGap: 2 }}>
                     {/* Index */}
                     <Box className='vertical' sx={{ width: theme.spacing(5) }}>
-                        {/* <Typography variant='caption' sx={{  }}>#</Typography> */}
                         {/* Delete */}
                         <IconButton sx={{ ml: -4, mt: -1 }} size='small' color='error'
                             onClick={() => handleDeleteRow(index)}>
@@ -182,9 +243,22 @@ function ProductsInfo() {
                         <TextField
                             autoComplete='off'
                             variant='standard'
-                            // label='Product search'
                             value={item.productSearch || ''}
-                            onChange={(e: any) => handleTextChanged(item, 'productSearch', e)} />
+                            onChange={(e: any) => handleTextChanged(item, 'productSearch', e)}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            size="large"
+                                            color='secondary'
+                                            onClick={(e: any) => {
+                                            }}>
+                                            <Search />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
                     </Box>
                     {/* Upc */}
                     <Box className='vertical'>
@@ -193,7 +267,6 @@ function ProductsInfo() {
                             autoComplete='off'
                             sx={{ maxWidth: theme.spacing(13), }}
                             variant='standard'
-                            // label='Upc'
                             value={item.upc || ''}
                             onChange={(e: any) => handleTextChanged(item, 'upc', e)} />
                     </Box>
@@ -208,7 +281,6 @@ function ProductsInfo() {
                             className='right-aligned'
                             sx={{ maxWidth: theme.spacing(13) }}
                             variant='standard'
-                            // label='Product code'
                             value={item.productCode || 0}
                             onChange={(e: any) => handleTextChanged(item, 'productCode', e)} />
                     </Box>
@@ -223,8 +295,7 @@ function ProductsInfo() {
                             }}
                             sx={{ maxWidth: theme.spacing(8) }}
                             variant='standard'
-                            // label='Hsn'
-                            value={sales.hsn}
+                            value={sales.hsn || ''}
                             onChange={(e: any) => {
                                 // handleTextChanged(item, 'hsn', e)
                                 sales.hsn = e.target.value
@@ -242,7 +313,6 @@ function ProductsInfo() {
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            // label='Gst(%)'
                             value={item.gstRate || 0.00}
                             variant='standard'
                             onFocus={(e: any) => {
@@ -259,7 +329,6 @@ function ProductsInfo() {
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            // label='Qty'
                             value={item.qty || 1.00}
                             onFocus={(e: any) => {
                                 e.target.select()
@@ -267,8 +336,8 @@ function ProductsInfo() {
                             onValueChange={(value) => {
                                 const { floatValue } = value
                                 item.qty = floatValue
-                                // sales.productsInfoRefresh({})
-                                // setRefresh({})
+                                setRefresh({})
+                                sales.computeSummary()
                             }}
                             variant='standard' />
                     </Box>
@@ -282,7 +351,6 @@ function ProductsInfo() {
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            // label='Price'
                             value={item.price || 0.00}
                             onFocus={(e: any) => {
                                 e.target.select()
@@ -300,7 +368,6 @@ function ProductsInfo() {
                             decimalScale={2}
                             fixedDecimalScale={true}
                             value={item.priceGst || 0.00}
-                            // label='Price(Gst)'
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
@@ -316,7 +383,6 @@ function ProductsInfo() {
                             customInput={TextField}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            // label='Discount(unit)'
                             value={item.discount || 0.00}
                             onFocus={(e: any) => {
                                 e.target.select()
@@ -370,37 +436,23 @@ function ProductsInfo() {
                         <Typography variant='subtitle1' sx={{ textAlign: 'right', }}>Amount</Typography>
                         <Typography variant='h6' sx={{ textAlign: 'right', color: theme.palette.lightBlue.main }} >{item.amount || 12345.00}</Typography>
                     </Card>
-
-
                 </Box>)
+
             function handleTextChanged(item: any, propName: string, e: any) {
                 item[propName] = e.target.value
-                computeSummary()
+                // computeSummary()
                 setRefresh({})
             }
         }
     }
 
-    function computeSummary() {
-        const total = products.reduce((pre: any, curr: any) => {
-            const obj: any = {}
-            obj.qty = pre.qty + (curr.qty || 0)
-            obj.cgst = pre.cgst + (curr.cgst || 0.00)
-            obj.sgst = pre.sgst + (curr.sgst || 0.00)
-            obj.igst = pre.igst + (curr.igst || 0.00)
-            obj.amount = pre.amount + (curr.amount || 0.00)
-            return (obj)
-        }, { qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0 })
-        sales.qty = total.qty
-        sales.cgst = total.cgst
-        sales.sgst = total.sgst
-        sales.igst = total.igst
-        sales.amount = total.amount
-        // setRefresh({})
+    function computeRow(item: any) {
+
     }
 
-    function handleAdd() {
-        products.push({})
+    function handleAddProduct() {
+        products.push({ upc: '', productCode: '', hsn: '', gstRate: 0, qty: 1, price: 0, priceGst: 0, discount: 0, remarks: null, amount: 0, cgst: 0, sgst: 0, igst: 0 })
+        sales.computeSummary()
         setRefresh({})
     }
 
@@ -419,8 +471,7 @@ function ProductsInfo() {
 
     function handleReset() {
         products.length = 0
-        products.push({})
-        setRefresh({})
+        handleAddProduct()
     }
 
     function handleSerialNo(item: any) {
