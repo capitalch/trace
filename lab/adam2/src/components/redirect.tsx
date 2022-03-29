@@ -1,5 +1,6 @@
 import ReactSelect from 'react-select'
 import InputMask from 'react-input-mask'
+import Big from 'big.js'
 import NumberFormat from 'react-number-format'
 import _ from 'lodash'
 import moment from 'moment'
@@ -153,7 +154,6 @@ export {
     SecuritySharp,
     VerifiedUserSharp,
     ExitToAppSharp,
-
     SystemUpdate,
     ViewColumn,
     ViewList,
@@ -168,3 +168,4 @@ export { faSpinner } from '@fortawesome/free-solid-svg-icons'
 export { _, ReactSelect, InputMask, moment, NumberFormat }
 export { MegaDataContext } from './mega-data-context'
 export { salesMegaData } from '../mega-data-init'
+export {Big}

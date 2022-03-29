@@ -1,24 +1,36 @@
-import { _, Badge, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, InputAdornment, MegaDataContext, moment, NumberFormat, Radio, RadioGroup, Search, TextField, Typography, useContext, useEffect, useState, useTheme } from './redirect'
+import { _, Badge, Big, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, InputAdornment, MegaDataContext, moment, NumberFormat, Radio, RadioGroup, Search, TextField, Typography, useContext, useEffect, useState, useTheme } from './redirect'
 import { useAccSales } from './acc-sales-hook'
 
 function AccSales() {
     const [, setRefresh] = useState({})
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, '& .vertical': { display: 'flex', flexDirection: 'column' }, '& .right-aligned': { '& input': { textAlign: 'end' }, '& .small-font': { '& input': { fontSize: '0.5rem' } } } }}>
+        <Box sx={{ display: 'flex', '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Drawyer />
-            {/* sx={{width:'0%', opacity:0}} */}
-            <Box className='vertical' 
-            // sx={{width:'0%', opacity:0}}
-            >
-                <Typography variant='subtitle1' sx={{ mt: 1, ml: 1 }}>Sales</Typography>
-                <ButtonControls />
-                <CustomerInfo />
-                <PaymentsInfo />
+            <Box className='vertical' sx={{ flex: 1 }}>
+                <Typography variant='subtitle1' sx={{ ml: 1 }}>Sales</Typography>
+                <Crown />
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1 }}>
+                    <CustomerInfo />
+                    <PaymentsInfo />
+                </Box>
+                <ProductsInfo />
             </Box>
-            <ProductsInfo />
         </Box>
     )
 }
+// <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, '& .vertical': { display: 'flex', flexDirection: 'column' }, '& .right-aligned': { '& input': { textAlign: 'end' },  } }}>
+//     <Drawyer />
+//     {/* sx={{width:'0%', opacity:0}} */}
+//     <Box className='vertical'
+//     // sx={{width:'0%', opacity:0}}
+//     >
+//         <Typography variant='subtitle1' sx={{ mt: 1, ml: 1 }}>Sales</Typography>
+//         <Crown />
+//         <CustomerInfo />
+//         <PaymentsInfo />
+//     </Box>
+//     <ProductsInfo />
+// </Box>
 export { AccSales }
 
 function Drawyer() {
@@ -28,11 +40,15 @@ function Drawyer() {
     )
 }
 
-function ButtonControls() {
-    const { resetSales } = useAccSales()
-    return (<Box sx={{ border: '4px solid lightGrey', m: 1, mt: 0, p: 1, display: 'flex', flexWrap: 'wrap', rowGap: 1, columnGap: 2 }}>
+function Crown() {
+    const [, setRefresh] = useState({})
+    const megaData = useContext(MegaDataContext)
+    const sales = megaData.accounts.sales
+    sales.setRefreshCrown = setRefresh
+    // const { resetSales } = useAccSales()
+    return (<Box sx={{ border: '4px solid lightGrey', m: 1, mt: 0, p: 1, display: 'flex', flexWrap: 'wrap', columnGap: 2, }}>
         <Button variant='contained' size='small' color='error'
-            onClick={(e: any) => resetSales()}
+        // onClick={(e: any) => resetSales()}
         >Reset</Button>
         <Button variant='contained' size='small' color='secondary'>View</Button>
         <Button variant='contained' size='large' sx={{ ml: 'auto' }} color='success'>Submit</Button>
@@ -46,36 +62,39 @@ function CustomerInfo() {
     const sales = megaData.accounts.sales
     const isoDateFormat = 'YYYY-MM-DD'
     return (
-        <Box className='vertical' sx={{ p: 1, flex: 0 }}>
-            <Box className='vertical' sx={{ border: '4px solid orange', p: 2, }}>
-                <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
-                {/* Ref no, date, user ref no*/}
-                <Box sx={{ display: 'flex', columnGap: 2, mt: 1 }}>
-                    {/* ref no */}
-                    <Box className='vertical'>
-                        <Typography variant='caption'>Ref no</Typography>
-                        <TextField variant='standard' value={sales.autoRefNo || ''}
-                            onChange={(e: any) => handleTextChanged('autoRefNo', e)} />
-                    </Box>
-                    {/* tran date */}
-                    <Box className='vertical'>
-                        <Typography variant='caption'>Date</Typography>
-                        <TextField variant='standard' type='date' value={sales.tranDate || moment().format(isoDateFormat)}
-                            onChange={(e: any) => handleTextChanged('tranDate', e)} />
-                    </Box>
-                    {/* User ref no */}
-                    <Box className='vertical'>
-                        <Typography variant='caption'>User ref no</Typography>
-                        <TextField variant='standard' value={sales.userRefNo || ''} sx={{ maxWidth: theme.spacing(16) }}
-                            onChange={(e: any) => handleTextChanged('userRefNo', e)} />
-                    </Box>
+        // <Box className='vertical' sx={{ p: 1, flex: 0 }}> </Box>
+        <Box className='vertical' sx={{ border: '4px solid orange', p: 2, flex: 1, ml: 1, mr: 1, flexWrap: 'wrap', minWidth: theme.spacing(50) }}>
+            <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
+            {/* Ref no, date, user ref no*/}
+            <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2 }}>
+                {/* ref no */}
+                <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
+                    <Typography variant='caption'>Ref no</Typography>
+                    <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off'
+                        onChange={(e: any) => handleTextChanged('autoRefNo', e)} />
                 </Box>
-
-                {/* Bill to */}
-                <Box className='vertical' sx={{ mt: 1 }}>
-                    <Typography variant='caption'>Customer search</Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        {/* Customer search */}
+                {/* tran date */}
+                <Box className='vertical'>
+                    <Typography variant='caption'>Date</Typography>
+                    <TextField variant='standard' type='date' value={sales.tranDate || moment().format(isoDateFormat)}
+                        onChange={(e: any) => handleTextChanged('tranDate', e)} />
+                </Box>
+                {/* User ref no */}
+                <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
+                    <Typography variant='caption'>User ref no</Typography>
+                    <TextField variant='standard' value={sales.userRefNo || ''} sx={{ maxWidth: theme.spacing(16) }} autoComplete='off'
+                        onChange={(e: any) => handleTextChanged('userRefNo', e)} />
+                </Box>
+                {/* Gstin */}
+                <Box className='vertical'>
+                    <Typography variant='caption'>Gstin no</Typography>
+                    <TextField variant='standard' value={sales.gstin || ''} autoComplete='off'
+                        onChange={(e: any) => handleTextChanged('gstin', e)} />
+                </Box>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', width: '100%', rowGap: 1 }}>
+                    {/* Customer search */}
+                    <Box className='vertical'>
+                        <Typography variant='caption'>Customer search</Typography>
                         <TextField
                             autoComplete='off'
                             InputProps={{
@@ -105,41 +124,30 @@ function CustomerInfo() {
                                     // handleSearch()
                                 }
                             }}
-                            sx={{ flex: 0.95 }}
+                            sx={{ minWidth: theme.spacing(15) }}
 
                             value={sales.customerSearch || ''}
 
                             variant='standard'
-
                         />
-                        {/* <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Search</Button> */}
+                    </Box>
+                    {/* Customer details */}
+                    <Typography variant='caption' sx={{ minWidth: theme.spacing(25), height: theme.spacing(8), backgroundColor: theme.palette.grey[200] }}>{sales.customerDetails}</Typography>
+                    <Box sx={{ display: 'flex', }}>
                         {/* New / edit */}
-                        <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>New / Edit</Button>
+                        <Button size='medium' sx={{ color: theme.palette.lightBlue.main, }}>New / Edit</Button>
                         {/* clear */}
                         <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
+                        {/* CommonRemarks */}
                     </Box>
                 </Box>
 
-                {/* Gstin, remarks */}
-                <Box sx={{ display: 'flex', columnGap: 2, mt: 1 }}>
-                    {/* Gstin */}
-                    <Box className='vertical'>
-                        <Typography variant='caption'>Gstin no</Typography>
-                        <TextField variant='standard' value={sales.gstin || ''}
-                            onChange={(e: any) => handleTextChanged('gstin', e)} />
-                    </Box>
-                    {/* CommonRemarks */}
-                    <Box className='vertical' sx={{ flex: 2 }}>
-                        <Typography variant='caption'>Common remarks</Typography>
-                        <TextField variant='standard' value={sales.commonRemarks || ''} onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
-                    </Box>
+                <Box className='vertical' sx={{ minWidth: theme.spacing(14), flex: 1 }}>
+                    <Typography variant='caption'>Common remarks</Typography>
+                    <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
-            {/* <Button onClick={() => {
-                sales.computeSummary()
-            }}>Test</Button> */}
         </Box>
-        // </Box>
     )
 
     function handleTextChanged(propName: string, e: any) {
@@ -150,17 +158,13 @@ function CustomerInfo() {
 
 function ProductsInfo() {
     const [, setRefresh] = useState({})
-
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const products = sales.products
 
-    useEffect(() => {
-    }, [])
-
-    return (<Box sx={{ display: 'flex', flex: 2, border: '4px solid orange', m: 1, mt: 4.5, height: '100%' }}>
-        <Box className='vertical' sx={{ p: 2, pt: 1,pb:0 }}>
+    return (<Box sx={{ display: 'flex', flex: 1, border: '4px solid orange', m: 1, height: '100%' }}>
+        <Box className='vertical' sx={{ p: 2, pt: 1, pb: 0, flex: 1 }}>
             <Summary />
             <ProductLineItems />
             <Summary />
@@ -170,15 +174,19 @@ function ProductsInfo() {
     function Summary() {
         const [, setRefresh] = useState({})
         sales.computeSummary = computeSummary
-        return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
+        return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
             {/* Products label */}
             <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
                 <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Products info</Typography>
-                <Typography color='slateblue' sx={{ mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) }} variant='caption'>{''.concat('Count:', products.length
-                    , ' Qty:', sales.qty, '  Cgst:', sales.cgst, ' Sgst:', sales.sgst, ' Igst:', sales.igst, ' Amount:', sales.amount)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Count: ', products.length)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Qty: ', sales.summary.qty)}</Typography>
             </Box>
             {/* Reset, Igst check, Add */}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
+                <Typography color='slateblue' className='footer' >{''.concat('Cgst: ', sales.summary.cgst)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Sgst: ', sales.summary.sgst)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Igst: ', sales.summary.igst)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Amount: ', sales.summary.amount)}</Typography>
                 {/* Reset */}
                 <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.error.main, mt: .4 }} onClick={handleReset}>Reset</Button>
                 {/* Igst */}
@@ -193,18 +201,18 @@ function ProductsInfo() {
         function computeSummary() {
             const total = products.reduce((pre: any, curr: any) => {
                 const obj: any = {}
-                obj.qty = pre.qty + (curr.qty || 0)
-                obj.cgst = pre.cgst + (curr.cgst || 0.00)
-                obj.sgst = pre.sgst + (curr.sgst || 0.00)
-                obj.igst = pre.igst + (curr.igst || 0.00)
-                obj.amount = pre.amount + (curr.amount || 0.00)
+                obj.qty = +Big(pre.qty).plus(Big(curr.qty || 0))
+                obj.cgst = +Big(pre.cgst).plus(Big(curr.cgst || 0.00))
+                obj.sgst = +Big(pre.sgst).plus(Big(curr.sgst || 0.00))
+                obj.igst = +Big(pre.igst).plus(Big(curr.igst || 0.00))
+                obj.amount = +Big(pre.amount).plus(Big(curr.amount || 0.00))
                 return (obj)
             }, { qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0 })
-            sales.qty = total.qty
-            sales.cgst = total.cgst
-            sales.sgst = total.sgst
-            sales.igst = total.igst
-            sales.amount = total.amount
+            sales.summary.qty = total.qty
+            sales.summary.cgst = total.cgst
+            sales.summary.sgst = total.sgst
+            sales.summary.igst = total.igst
+            sales.summary.amount = total.amount
             setRefresh({})
         }
     }
@@ -246,7 +254,6 @@ function ProductsInfo() {
                         <Typography variant='caption'>Product search</Typography>
                         <TextField
                             autoComplete='off'
-                            // inputProps={smallFontTextField}
                             variant='standard'
                             value={item.productSearch || ''}
                             onChange={(e: any) => handleTextChanged(item, 'productSearch', e)}
@@ -278,37 +285,38 @@ function ProductsInfo() {
                     {/* Product code */}
                     <Box className='vertical'>
                         <Typography variant='caption'>Product code</Typography>
-                        <TextField
+                        <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
+                            allowNegative={false}
                             autoComplete='off'
                             InputProps={smallFontTextField}
+                            className='right-aligned'
+                            customInput={TextField}
+                            decimalScale={0}
+                            fixedDecimalScale={true}
+                            value={item.productCode || 0.00}
+                            variant='standard'
+                            onChange={(e: any) => handleTextChanged(item, 'productCode', e)}
                             onFocus={(e: any) => {
                                 e.target.select()
-                            }}
-                            className='right-aligned'
-                            sx={{ maxWidth: theme.spacing(8) }}
-                            variant='standard'
-                            value={item.productCode || 0}
-                            onChange={(e: any) => handleTextChanged(item, 'productCode', e)} />
+                            }} />
                     </Box>
                     {/* Hsn */}
                     <Box className='vertical'>
-                        <Typography variant='caption'>Hsn</Typography>
-                        <TextField
+                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Hsn</Typography>
+                        <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
+                            allowNegative={false}
                             autoComplete='off'
-                            className='right-aligned'
                             InputProps={smallFontTextField}
+                            className='right-aligned'
+                            customInput={TextField}
+                            decimalScale={0}
+                            fixedDecimalScale={true}
+                            value={item.hsn || 0}
+                            variant='standard'
+                            onChange={(e: any) => handleTextChanged(item, 'productCode', e)}
                             onFocus={(e: any) => {
                                 e.target.select()
-                            }}
-                            sx={{ maxWidth: theme.spacing(8) }}
-                            variant='standard'
-                            value={sales.hsn || ''}
-                            onChange={(e: any) => {
-                                // handleTextChanged(item, 'hsn', e)
-                                sales.hsn = e.target.value
-                                setRefresh({})
-                            }
-                            } />
+                            }} />
                     </Box>
                     {/* Gst(%) */}
                     <Box className='vertical'>
@@ -407,7 +415,7 @@ function ProductsInfo() {
                         <TextField
                             autoComplete='off'
                             InputProps={smallFontTextField}
-                            sx={{maxWidth:theme.spacing(18)}}
+                            sx={{ maxWidth: theme.spacing(18) }}
                             variant='standard'
                             value={item.remarks || ''}
                             onChange={(e: any) => handleTextChanged(item, 'remarks', e)} />
@@ -434,8 +442,9 @@ function ProductsInfo() {
                         />
                     </Badge>
                     {/* Product details */}
-                    <Card variant='outlined' sx={{ ml: 'auto', width: theme.spacing(20), height: theme.spacing(8), p: .5,pt:0, backgroundColor: theme.palette.grey[100] }}>
-                        <Typography sx={{ fontSize:theme.spacing(1.4), 
+                    <Card variant='outlined' sx={{ ml: 'auto', width: theme.spacing(20), height: theme.spacing(8), p: .5, pt: 0, backgroundColor: theme.palette.grey[100] }}>
+                        <Typography sx={{
+                            fontSize: theme.spacing(1.4),
                             fontWeight: 'bold', overflow: 'hidden', color: theme.palette.primary.dark,
                         }} variant='caption'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
                     </Card>
@@ -461,7 +470,7 @@ function ProductsInfo() {
     }
 
     function computeRow(item: any) {
-
+        
     }
 
     function handleAddProduct() {
@@ -499,7 +508,7 @@ function PaymentsInfo() {
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     return (
-        <Box className='vertical' sx={{ p: 2, m: 1, backgroundColor: theme.palette.grey[200], border: '4px solid orange' }}>
+        <Box className='vertical' sx={{ p: 2, mr: 1, ml: 1, mt: 0, mb: 0, backgroundColor: theme.palette.grey[200], border: '4px solid orange', flex: 1 }}>
             <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Payments info</Typography>
             <SaleVariety />
             <PaymentMethods />
@@ -579,7 +588,6 @@ function PaymentsInfo() {
 
     function PaymentMethods() {
         const [, setRefresh] = useState({})
-        // const list: any[] = [{},]
         const paymentMethods = sales.paymentMethods || []
         if (paymentMethods.length === 0) {
             paymentMethods.push({})
@@ -610,10 +618,11 @@ function PaymentsInfo() {
                             <TextField />
                             {/* <LedgerSubledger rowData={{}} /> */}
                         </Box>
-                        <TextField label='Instr no' variant='standard' value={item.instrNo || ''}
+                        <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
                             sx={{ maxWidth: theme.spacing(15) }} onChange={(e: any) => { item.instrNo = e.target.value; setRefresh({}) }} />
                         <NumberFormat sx={{ flex: 0.4, minWidth: theme.spacing(15) }}
                             allowNegative={false}
+                            autoComplete='off'
                             className='right-aligned'
                             customInput={TextField}
                             decimalScale={2}
@@ -624,7 +633,7 @@ function PaymentsInfo() {
                             }}
                             variant='standard' />
 
-                        <IconButton sx={{ ml: -6, mt: -5 }} size='small' color='error' onClick={() => handleDeleteRow(index)}>
+                        <IconButton sx={{ mt: -6, ml: -10, }} size='small' color='error' onClick={() => handleDeleteRow(index)}>
                             <CloseSharp />
                         </IconButton>
                     </Box>)
