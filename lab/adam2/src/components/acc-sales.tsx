@@ -4,9 +4,12 @@ import { useAccSales } from './acc-sales-hook'
 function AccSales() {
     const [, setRefresh] = useState({})
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, '& .vertical': { display: 'flex', flexDirection: 'column' }, '& .right-aligned': { '& input': { textAlign: 'end' }, } }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, '& .vertical': { display: 'flex', flexDirection: 'column' }, '& .right-aligned': { '& input': { textAlign: 'end' }, '& .small-font': { '& input': { fontSize: '0.5rem' } } } }}>
             <Drawyer />
-            <Box className='vertical'>
+            {/* sx={{width:'0%', opacity:0}} */}
+            <Box className='vertical' 
+            // sx={{width:'0%', opacity:0}}
+            >
                 <Typography variant='subtitle1' sx={{ mt: 1, ml: 1 }}>Sales</Typography>
                 <ButtonControls />
                 <CustomerInfo />
@@ -43,7 +46,7 @@ function CustomerInfo() {
     const sales = megaData.accounts.sales
     const isoDateFormat = 'YYYY-MM-DD'
     return (
-        <Box className='vertical' sx={{ p: 1 }}>
+        <Box className='vertical' sx={{ p: 1, flex: 0 }}>
             <Box className='vertical' sx={{ border: '4px solid orange', p: 2, }}>
                 <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
                 {/* Ref no, date, user ref no*/}
@@ -157,7 +160,7 @@ function ProductsInfo() {
     }, [])
 
     return (<Box sx={{ display: 'flex', flex: 2, border: '4px solid orange', m: 1, mt: 4.5, height: '100%' }}>
-        <Box className='vertical' sx={{ p: 2, pt: 1 }}>
+        <Box className='vertical' sx={{ p: 2, pt: 1,pb:0 }}>
             <Summary />
             <ProductLineItems />
             <Summary />
@@ -226,12 +229,13 @@ function ProductsInfo() {
 
         function ProductLineItem({ item, index, }: any) {
             const [, setRefresh] = useState({})
+            const smallFontTextField = megaData.accounts.settings.smallFontTextField
             return (
                 <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid lightGrey', flexWrap: 'wrap', p: 2, rowGap: 2, columnGap: 2 }}>
                     {/* Index */}
-                    <Box className='vertical' sx={{ width: theme.spacing(5) }}>
+                    <Box className='vertical' sx={{ width: theme.spacing(3) }}>
                         {/* Delete */}
-                        <IconButton sx={{ ml: -4, mt: -1 }} size='small' color='error'
+                        <IconButton sx={{ ml: -2, mt: -1 }} size='small' color='error'
                             onClick={() => handleDeleteRow(index)}>
                             <CloseSharp />
                         </IconButton>
@@ -242,6 +246,7 @@ function ProductsInfo() {
                         <Typography variant='caption'>Product search</Typography>
                         <TextField
                             autoComplete='off'
+                            // inputProps={smallFontTextField}
                             variant='standard'
                             value={item.productSearch || ''}
                             onChange={(e: any) => handleTextChanged(item, 'productSearch', e)}
@@ -256,12 +261,12 @@ function ProductsInfo() {
                                             <Search />
                                         </IconButton>
                                     </InputAdornment>
-                                ),
+                                ), ...smallFontTextField
                             }}
                         />
                     </Box>
                     {/* Upc */}
-                    <Box className='vertical'>
+                    {/* <Box className='vertical'>
                         <Typography variant='caption'>Upc</Typography>
                         <TextField
                             autoComplete='off'
@@ -269,17 +274,18 @@ function ProductsInfo() {
                             variant='standard'
                             value={item.upc || ''}
                             onChange={(e: any) => handleTextChanged(item, 'upc', e)} />
-                    </Box>
+                    </Box> */}
                     {/* Product code */}
                     <Box className='vertical'>
                         <Typography variant='caption'>Product code</Typography>
                         <TextField
                             autoComplete='off'
+                            InputProps={smallFontTextField}
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
                             className='right-aligned'
-                            sx={{ maxWidth: theme.spacing(13) }}
+                            sx={{ maxWidth: theme.spacing(8) }}
                             variant='standard'
                             value={item.productCode || 0}
                             onChange={(e: any) => handleTextChanged(item, 'productCode', e)} />
@@ -290,6 +296,7 @@ function ProductsInfo() {
                         <TextField
                             autoComplete='off'
                             className='right-aligned'
+                            InputProps={smallFontTextField}
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
@@ -306,9 +313,10 @@ function ProductsInfo() {
                     {/* Gst(%) */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Gst(%)</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(7) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(5) }}
                             allowNegative={false}
                             autoComplete='off'
+                            InputProps={smallFontTextField}
                             className='right-aligned'
                             customInput={TextField}
                             decimalScale={2}
@@ -322,9 +330,10 @@ function ProductsInfo() {
                     {/* Qty */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Qty</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(7) }}
                             autoComplete='off'
                             allowNegative={false}
+                            InputProps={smallFontTextField}
                             className='right-aligned'
                             customInput={TextField}
                             decimalScale={2}
@@ -344,9 +353,10 @@ function ProductsInfo() {
                     {/* Price */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Price</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(13) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
                             autoComplete='off'
                             allowNegative={false}
+                            InputProps={smallFontTextField}
                             className='right-aligned'
                             customInput={TextField}
                             decimalScale={2}
@@ -360,9 +370,10 @@ function ProductsInfo() {
                     {/* Price(Gst) */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Price(Gst)</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(13) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
                             autoComplete='off'
                             allowNegative={false}
+                            InputProps={smallFontTextField}
                             className='right-aligned'
                             customInput={TextField}
                             decimalScale={2}
@@ -375,10 +386,11 @@ function ProductsInfo() {
                     </Box>
                     {/* Discount(unit) */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Discount(unit)</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(13) }}
+                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Disc(unit)</Typography>
+                        <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                             autoComplete='off'
                             allowNegative={false}
+                            InputProps={smallFontTextField}
                             className='right-aligned'
                             customInput={TextField}
                             decimalScale={2}
@@ -394,6 +406,8 @@ function ProductsInfo() {
                         <Typography variant='caption'>Remarks</Typography>
                         <TextField
                             autoComplete='off'
+                            InputProps={smallFontTextField}
+                            sx={{maxWidth:theme.spacing(18)}}
                             variant='standard'
                             value={item.remarks || ''}
                             onChange={(e: any) => handleTextChanged(item, 'remarks', e)} />
@@ -420,21 +434,21 @@ function ProductsInfo() {
                         />
                     </Badge>
                     {/* Product details */}
-                    <Card variant='outlined' sx={{ ml: 'auto', maxWidth: theme.spacing(20), maxHeight: theme.spacing(8), p: 1, backgroundColor: theme.palette.grey[200] }}>
-                        <Typography sx={{
+                    <Card variant='outlined' sx={{ ml: 'auto', width: theme.spacing(20), height: theme.spacing(8), p: .5,pt:0, backgroundColor: theme.palette.grey[100] }}>
+                        <Typography sx={{ fontSize:theme.spacing(1.4), 
                             fontWeight: 'bold', overflow: 'hidden', color: theme.palette.primary.dark,
-                        }} variant='caption'>{item.productDetails || ''}</Typography>
+                        }} variant='caption'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
                     </Card>
                     {/* Gst */}
-                    <Card variant='outlined' className='vertical' sx={{ textAlign: 'right', p: 1, backgroundColor: theme.palette.grey[200] }} >
+                    {/* <Card variant='outlined' className='vertical' sx={{ textAlign: 'right', p: 1, backgroundColor: theme.palette.grey[200] }} >
                         <Typography fontWeight='bold' variant='caption'>{''.concat('Cgst: ', item.cgst || 0.00)}</Typography>
                         <Typography fontWeight='bold' variant='caption'>{''.concat('Sgst: ', item.sgst || 0.00)}</Typography>
                         <Typography fontWeight='bold' variant='caption'>{''.concat('Igst: ', item.igst || 0.00)}</Typography>
-                    </Card>
+                    </Card> */}
                     {/* amount */}
                     <Card variant='outlined' className='vertical' sx={{ p: 1, backgroundColor: theme.palette.grey[200] }} >
-                        <Typography variant='subtitle1' sx={{ textAlign: 'right', }}>Amount</Typography>
-                        <Typography variant='h6' sx={{ textAlign: 'right', color: theme.palette.lightBlue.main }} >{item.amount || 12345.00}</Typography>
+                        <Typography variant='caption' sx={{ textAlign: 'right', }}>Amount</Typography>
+                        <Typography variant='caption' sx={{ textAlign: 'right', color: theme.palette.lightBlue.main }} >{item.amount || 12345.00}</Typography>
                     </Card>
                 </Box>)
 

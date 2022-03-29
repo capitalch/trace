@@ -51,22 +51,25 @@ declare module '@mui/material/styles/' {
     cyan?: any
     lightBlue?: any
   }
+
+  interface FontSizes {
+    medium: 14,
+  }
 }
 
 
 function App() {
   const theme = createTheme({
-    // typography: {
-    //     h6: {
-    //         fontWeight: 'bold',
-    //         fontSize:'1rem'
-    //     },
-    // },
-
+    typography: {
+      // h6: {
+      //     fontWeight: 'bold',
+      //     fontSize:'1rem'
+      // },
+    },
+    // FontSizes:{},
     palette: {
       primary: { main: brown[800] },
       secondary: { main: teal[500] },
-
       blueGrey: {
         main: blueGrey[500],
         dark: blueGrey[900],

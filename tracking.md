@@ -1,3 +1,34 @@
+## Director remuneration revise
+# Risk and responsibilities as director
+# For attaining 50M turnover
+# A close eye on accounts, legal aspects and operations
+    a. Guiding the accountants, lawyers etc.
+1. Agreements
+2. Legal compliance
+3. GST compliance
+4. Cases followups
+5. Statuary compliances
+6. GST appeals
+7. Court cases
+8. Disaster management
+9. Contingency management
+10. Offered an accounting package Trace
+
+
+## Sales
+1. Port to Trace
+2. Compute row
+3. Error validations
+4. Submit show / not show
+5. View function
+6. reset function
+7. Back calculate
+8. Submit function
+9. Edit function
+10. Full screen function
+11. Serial numbers
+12. Total Debits / Credits
+13. Print view
 ## Planning
                                                                                         1. Authentication and user management:                    1 week, 5th Feb 2022
                                                                                             SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
@@ -87,6 +118,9 @@
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 22-03-2022 - 28-03-2022
+1. Working on new sales
 
 # 21-03-2022
 Todo: purchase report,  start new simple sales, persistence
