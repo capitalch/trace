@@ -37,12 +37,12 @@ function Crown() {
     const sales = megaData.accounts.sales
     const theme = useTheme()
     sales.setRefreshCrown = setRefresh
-    return (<Box className='vertical' sx={{ border: '4px solid lightGrey', m: 1, mt: 0, mb: 0, p: 1, display: 'flex', columnGap: 2, rowGap: 2 }}>
+    return (<Box className='vertical' sx={{ border: '1px solid lightGrey', m: 1, mt: 0, mb: 0, p: 1, display: 'flex', columnGap: 2, rowGap: 2 }}>
         <Button variant='contained' size='large' sx={{ height: theme.spacing(5), ml: 'auto' }} color='success'>Submit</Button>
         <Button variant='contained' size='small' sx={{ height: theme.spacing(5) }} color='secondary'>View</Button>
-        <Button variant='contained' size='small' sx={{ height: theme.spacing(5), mt:'auto' }} color='error'>Reset</Button>
-        
-        
+        <Button variant='contained' size='small' sx={{ height: theme.spacing(5), mt: 'auto' }} color='error'>Reset</Button>
+
+
     </Box>)
 }
 
@@ -53,7 +53,7 @@ function CustomerInfo() {
     const sales = megaData.accounts.sales
     const isoDateFormat = 'YYYY-MM-DD'
     return (
-        <Box className='vertical' sx={{ display: 'flex', border: '4px solid orange', p: 2, ml: 1, mr: 1, rowGap: 2, flexWrap: 'wrap', flexGrow: 1 }}>
+        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, ml: 1, mr: 1, rowGap: 2, flexWrap: 'wrap', flexGrow: 1 }}>
             <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
             {/* Ref no, date, user ref no*/}
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2 }}>
@@ -87,7 +87,7 @@ function CustomerInfo() {
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', columnGap: 3, rowGap:2,  flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap' }}>
                 {/* Customer search */}
                 <Box className='vertical'>
                     <Typography variant='caption'>Customer search</Typography>
@@ -150,7 +150,7 @@ function PaymentsInfo() {
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     return (
-        <Box className='vertical' sx={{ p: 2, ml: 1, mr: 1, mb: 1, backgroundColor: theme.palette.grey[200], border: '4px solid orange', maxWidth: theme.spacing(70) }}>
+        <Box className='vertical' sx={{ p: 2, ml: 1, mr: 1, mb: 1, backgroundColor: theme.palette.grey[200], border: '1px solid lightGrey', maxWidth: theme.spacing(70) }}>
             <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Payments info</Typography>
             <SaleVariety />
             <PaymentMethods />
@@ -300,7 +300,7 @@ function ProductsInfo() {
     const sales = megaData.accounts.sales
     const products = sales.products
 
-    return (<Box sx={{ display: 'flex', flex: 1, border: '4px solid orange', m: 1, height: '100%' }}>
+    return (<Box sx={{ display: 'flex', flex: 1, border: '1px solid lightGrey', m: 1, height: '100%' }}>
         <Box className='vertical' sx={{ p: 2, pt: 1, pb: 0, flex: 1 }}>
             <Summary />
             <ProductLineItems />
@@ -320,15 +320,40 @@ function ProductsInfo() {
             </Box>
             {/* Reset, Igst check, Add */}
             <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
+                {/* cgst */}
                 <Typography color='slateblue' className='footer' >{''.concat('Cgst: ', toDecimalFormat(sales.summary.cgst))}</Typography>
+                {/* sgst */}
                 <Typography color='slateblue' className='footer' >{''.concat('Sgst: ', toDecimalFormat(sales.summary.sgst))}</Typography>
+                {/* igst */}
                 <Typography color='slateblue' className='footer' >{''.concat('Igst: ', toDecimalFormat(sales.summary.igst))}</Typography>
-                <Typography color='slateblue' className='footer' >{''.concat('Amount: ', toDecimalFormat(sales.summary.amount))}</Typography>
+
+
+                <Button size='small' variant='outlined' color='info' onClick={handleRoundOff}>Round off</Button>
                 {/* Back calculate */}
                 <Box sx={{ display: 'flex', columnGap: 1 }}>
-                    <Button size='small' variant='outlined' color='info' >Back cal</Button>
-                    <NumberFormat />
+                    <Button size='small' variant='outlined' color='info' onClick={handleBackCalculate}>Back cal</Button>
+                    <NumberFormat
+                        sx={{ maxWidth: theme.spacing(15) }}
+                        autoComplete='off'
+                        className='right-aligned'
+                        allowNegative={false}
+                        customInput={TextField}
+                        decimalScale={2}
+                        InputProps={megaData.accounts.settings.smallFontTextField}
+                        variant='standard'
+                        fixedDecimalScale={true}
+                        onFocus={(e: any) => e.target.select()}
+                        onValueChange={(value: any) => {
+                            const { floatValue } = value
+                            sales.summary.backCalculateAmount = floatValue
+                            setRefresh({})
+                        }}
+                        thousandSeparator={true}
+                        value={sales.summary.backCalculateAmount}
+                    />
                 </Box>
+                {/* amount */}
+                <Typography color='dodgerBlue' sx={{ fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{''.concat('Amount: ', toDecimalFormat(sales.summary.amount))}</Typography>
                 {/* Reset */}
                 <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.error.main, mt: .3 }} onClick={handleReset}>Reset</Button>
                 {/* Igst */}
@@ -355,12 +380,35 @@ function ProductsInfo() {
             sales.summary.sgst = total.sgst
             sales.summary.igst = total.igst
             sales.summary.amount = total.amount
+            sales.summary.backCalculateAmount = total.amount
             setRefresh({})
+        }
+
+        function handleBackCalculate() {
+            const defaultAmount = sales.summary.backCalculateAmount
+            if (defaultAmount === 0) {
+                return
+            }
+
+            const factor: number = defaultAmount / sales.summary.amount
+            for (let item of sales.products) {
+                item.priceGst = item.priceGst - (item.discount || 0)
+                item.discount = 0.0
+                item.priceGst = item.priceGst * factor
+                item.price = _.round(item.priceGst / (1 + item.gstRate / 100), 2)
+            }
+            sales.computeAllRows() // Does the entire calculation on each row
+        }
+
+        function handleRoundOff(){
+            sales.summary.backCalculateAmount = Math.round(sales.summary.amount)
+            handleBackCalculate()
         }
     }
 
     function ProductLineItems() {
         const [, setRefresh] = useState({})
+        sales.computeAllRows = computeAllRows
         useEffect(() => {
             if (products.length === 0) {
                 handleAddProduct()
@@ -381,7 +429,7 @@ function ProductsInfo() {
             const [, setRefresh] = useState({})
             const smallFontTextField = megaData.accounts.settings.smallFontTextField
             return (
-                <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid lightGrey', flexWrap: 'wrap', p: 2, rowGap: 2, columnGap: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', border: '4px solid orange', flexWrap: 'wrap', p: 2, rowGap: 2, columnGap: 2 }}>
                     {/* Index */}
                     <Box className='vertical' sx={{ width: theme.spacing(3) }}>
                         {/* Delete */}
@@ -642,6 +690,7 @@ function ProductsInfo() {
             computeRow(lineItem, false)
         }
         sales.computeSummary()
+        setRefresh({})
     }
 
     function computeRow(item: any, toComputeSummary = true) {
@@ -690,8 +739,7 @@ function ProductsInfo() {
 
     function handleChangeIgst(e: any) {
         sales.isIgst = e.target.checked
-        computeAllRows()
-        setRefresh({})
+        computeAllRows()        
     }
 
     function handleDeleteRow(index: number) {

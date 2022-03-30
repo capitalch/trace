@@ -16,7 +16,7 @@ const salesMegaData = {
     saleVariety: 'r',
     shipTo: {},
     summary: {
-        qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0,
+        qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, backCalculateAmount: 0,
     },
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
