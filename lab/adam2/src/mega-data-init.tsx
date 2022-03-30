@@ -5,21 +5,15 @@ const settingsMegaData = {
     smallFontTextField: { style: { fontSize: 14 } }
 }
 const salesMegaData = {
-    // amount: 0,
     autoRefNo: undefined,
     billTo: {},
-    // cgst: 0,
     commonRemarks: undefined,
     credits: 0,
     debits: 0,
     gstin: undefined,
-    // igst: 0,
     paymentMethods: [],
     products: [],
-    // qty: 0,
-    // setRefresh: {},
     saleVariety: 'r',
-    // sgst: 0,
     shipTo: {},
     summary: {
         qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0,

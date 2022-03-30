@@ -168,4 +168,25 @@ export { faSpinner } from '@fortawesome/free-solid-svg-icons'
 export { _, ReactSelect, InputMask, moment, NumberFormat }
 export { MegaDataContext } from './mega-data-context'
 export { salesMegaData } from '../mega-data-init'
-export {Big}
+export { Big }
+export function extractAmount(s: string) {
+    if (typeof s === 'string') {
+        s = s.replace(/[^0-9.]/g, '') //remove any not digit but allow dot
+    }
+    return s
+}
+export function toDecimalFormat(s: any) {
+    s ?? (s = '')
+    if (s === '') {
+        return s
+    }
+    if (typeof s !== 'string') {
+        s = String(s)
+    }
+    let ret: string = s
+    const v = Number(s)
+    if (!isNaN(v)) {
+        ret = v.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
+    }
+    return ret
+}

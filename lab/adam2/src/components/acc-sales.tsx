@@ -1,36 +1,27 @@
-import { _, Badge, Big, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, InputAdornment, MegaDataContext, moment, NumberFormat, Radio, RadioGroup, Search, TextField, Typography, useContext, useEffect, useState, useTheme } from './redirect'
+import { _, Badge, Big, Box, Button, Card, Checkbox, Chip, CloseSharp, extractAmount, FormControlLabel, IconButton, InputAdornment, MegaDataContext, moment, NumberFormat, Radio, RadioGroup, Search, TextField, toDecimalFormat, Typography, useContext, useEffect, useState, useTheme } from './redirect'
 import { useAccSales } from './acc-sales-hook'
+import { isTemplateTail } from 'typescript'
+import { TodayTwoTone } from '@mui/icons-material'
+import { ThemeContext } from '@emotion/react'
 
 function AccSales() {
     const [, setRefresh] = useState({})
+    const theme = useTheme()
     return (
-        <Box sx={{ display: 'flex', '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
+        <Box sx={{ display: 'flex', flexGrow: 1, '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Drawyer />
-            <Box className='vertical' sx={{ flex: 1 }}>
+            <Box className='vertical' sx={{ flexGrow: 1 }}>
                 <Typography variant='subtitle1' sx={{ ml: 1 }}>Sales</Typography>
-                <Crown />
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1 }}>
+                <Box sx={{ display: 'flex' }}>
                     <CustomerInfo />
-                    <PaymentsInfo />
+                    <Crown />
                 </Box>
                 <ProductsInfo />
+                <PaymentsInfo />
             </Box>
         </Box>
     )
 }
-// <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, '& .vertical': { display: 'flex', flexDirection: 'column' }, '& .right-aligned': { '& input': { textAlign: 'end' },  } }}>
-//     <Drawyer />
-//     {/* sx={{width:'0%', opacity:0}} */}
-//     <Box className='vertical'
-//     // sx={{width:'0%', opacity:0}}
-//     >
-//         <Typography variant='subtitle1' sx={{ mt: 1, ml: 1 }}>Sales</Typography>
-//         <Crown />
-//         <CustomerInfo />
-//         <PaymentsInfo />
-//     </Box>
-//     <ProductsInfo />
-// </Box>
 export { AccSales }
 
 function Drawyer() {
@@ -44,14 +35,14 @@ function Crown() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
+    const theme = useTheme()
     sales.setRefreshCrown = setRefresh
-    // const { resetSales } = useAccSales()
-    return (<Box sx={{ border: '4px solid lightGrey', m: 1, mt: 0, p: 1, display: 'flex', flexWrap: 'wrap', columnGap: 2, }}>
-        <Button variant='contained' size='small' color='error'
-        // onClick={(e: any) => resetSales()}
-        >Reset</Button>
-        <Button variant='contained' size='small' color='secondary'>View</Button>
-        <Button variant='contained' size='large' sx={{ ml: 'auto' }} color='success'>Submit</Button>
+    return (<Box className='vertical' sx={{ border: '4px solid lightGrey', m: 1, mt: 0, mb: 0, p: 1, display: 'flex', columnGap: 2, rowGap: 2 }}>
+        <Button variant='contained' size='large' sx={{ height: theme.spacing(5), ml: 'auto' }} color='success'>Submit</Button>
+        <Button variant='contained' size='small' sx={{ height: theme.spacing(5) }} color='secondary'>View</Button>
+        <Button variant='contained' size='small' sx={{ height: theme.spacing(5), mt:'auto' }} color='error'>Reset</Button>
+        
+        
     </Box>)
 }
 
@@ -62,8 +53,7 @@ function CustomerInfo() {
     const sales = megaData.accounts.sales
     const isoDateFormat = 'YYYY-MM-DD'
     return (
-        // <Box className='vertical' sx={{ p: 1, flex: 0 }}> </Box>
-        <Box className='vertical' sx={{ border: '4px solid orange', p: 2, flex: 1, ml: 1, mr: 1, flexWrap: 'wrap', minWidth: theme.spacing(50) }}>
+        <Box className='vertical' sx={{ display: 'flex', border: '4px solid orange', p: 2, ml: 1, mr: 1, rowGap: 2, flexWrap: 'wrap', flexGrow: 1 }}>
             <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
             {/* Ref no, date, user ref no*/}
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2 }}>
@@ -91,60 +81,58 @@ function CustomerInfo() {
                     <TextField variant='standard' value={sales.gstin || ''} autoComplete='off'
                         onChange={(e: any) => handleTextChanged('gstin', e)} />
                 </Box>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', width: '100%', rowGap: 1 }}>
-                    {/* Customer search */}
-                    <Box className='vertical'>
-                        <Typography variant='caption'>Customer search</Typography>
-                        <TextField
-                            autoComplete='off'
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            size="small"
-                                            color='secondary'
-                                            onClick={(e: any) => {
-                                            }}>
-                                            <Search />
-                                        </IconButton>
-                                        <IconButton
-                                            size="small"
-                                            color='secondary'
-                                            onClick={(e: any) => {
-                                            }}>
-                                            <CloseSharp color='error' />
-                                        </IconButton>
-                                    </InputAdornment>
-
-                                ),
-                            }}
-                            onChange={(e: any) => handleTextChanged('customerSearch', e)}
-                            onKeyDown={(e: any) => {
-                                if (e.keyCode === 13) {
-                                    // handleSearch()
-                                }
-                            }}
-                            sx={{ minWidth: theme.spacing(15) }}
-
-                            value={sales.customerSearch || ''}
-
-                            variant='standard'
-                        />
-                    </Box>
-                    {/* Customer details */}
-                    <Typography variant='caption' sx={{ minWidth: theme.spacing(25), height: theme.spacing(8), backgroundColor: theme.palette.grey[200] }}>{sales.customerDetails}</Typography>
-                    <Box sx={{ display: 'flex', }}>
-                        {/* New / edit */}
-                        <Button size='medium' sx={{ color: theme.palette.lightBlue.main, }}>New / Edit</Button>
-                        {/* clear */}
-                        <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
-                        {/* CommonRemarks */}
-                    </Box>
-                </Box>
-
+                {/* Remarks */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(14), flex: 1 }}>
                     <Typography variant='caption'>Common remarks</Typography>
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
+                </Box>
+            </Box>
+            <Box sx={{ display: 'flex', columnGap: 3, rowGap:2,  flexWrap: 'wrap' }}>
+                {/* Customer search */}
+                <Box className='vertical'>
+                    <Typography variant='caption'>Customer search</Typography>
+                    <TextField
+                        autoComplete='off'
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        size="small"
+                                        color='secondary'
+                                        onClick={(e: any) => {
+                                        }}>
+                                        <Search />
+                                    </IconButton>
+                                    <IconButton
+                                        size="small"
+                                        color='secondary'
+                                        onClick={(e: any) => {
+                                        }}>
+                                        <CloseSharp color='error' />
+                                    </IconButton>
+                                </InputAdornment>
+
+                            ),
+                        }}
+                        onChange={(e: any) => handleTextChanged('customerSearch', e)}
+                        onKeyDown={(e: any) => {
+                            if (e.keyCode === 13) {
+                                // handleSearch()
+                            }
+                        }}
+                        sx={{ minWidth: theme.spacing(15) }}
+
+                        value={sales.customerSearch || ''}
+
+                        variant='standard'
+                    />
+                </Box>
+                <Typography variant='caption' sx={{ minWidth: theme.spacing(50), height: theme.spacing(8), backgroundColor: theme.palette.grey[200] }}>{sales.customerDetails}</Typography>
+                <Box sx={{ display: 'flex', }}>
+                    {/* New / edit */}
+                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main, }}>New / Edit</Button>
+                    {/* clear */}
+                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
                 </Box>
             </Box>
         </Box>
@@ -153,6 +141,155 @@ function CustomerInfo() {
     function handleTextChanged(propName: string, e: any) {
         sales[propName] = e.target.value
         setRefresh({})
+    }
+}
+
+function PaymentsInfo() {
+    const [, setRefresh] = useState({})
+    const theme = useTheme()
+    const megaData = useContext(MegaDataContext)
+    const sales = megaData.accounts.sales
+    return (
+        <Box className='vertical' sx={{ p: 2, ml: 1, mr: 1, mb: 1, backgroundColor: theme.palette.grey[200], border: '4px solid orange', maxWidth: theme.spacing(70) }}>
+            <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Payments info</Typography>
+            <SaleVariety />
+            <PaymentMethods />
+            {/* ship to */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
+                <Typography variant='subtitle2'>Ship to</Typography>
+                <Box sx={{ display: 'flex' }}>
+                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>New / Edit</Button>
+                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
+                </Box>
+            </Box>
+        </Box>)
+
+    function SaleVariety() {
+        return (
+            <Box >
+                <RadioGroup row>
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                                onClick={(e: any) => {
+                                    handleSaleVariety('r')
+                                    // resetAddresses()
+                                    // handleRetailCashBankSales()
+                                }}
+                                size="small"
+                                color="secondary"
+                                checked={sales.saleVariety === 'r'}
+                            />
+                        }
+                        label="Retail sales"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                                onClick={(e: any) => {
+                                    handleSaleVariety('a')
+                                    // resetAddresses()
+                                    // handleAutoSubledgerSales()
+                                }}
+                                size="small"
+                                color="secondary"
+                                checked={sales.saleVariety === 'a'}
+                            />
+                        }
+                        label="Auto subledger sales"
+                    />
+                    <FormControlLabel
+                        control={
+                            <Radio
+                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                                onClick={(e: any) => {
+                                    handleSaleVariety('i')
+                                    // resetAddresses()
+                                    // handleInstitutionSales()
+                                }}
+                                size="small"
+                                color="secondary"
+                                checked={sales.saleVariety === 'i'}
+                            />
+                        }
+                        label="Institution sales"
+                    />
+                </RadioGroup>
+            </Box>
+            // </Box>
+        )
+
+        function handleSaleVariety(variety: string) {
+            sales.saleVariety = variety
+            setRefresh({})
+        }
+    }
+
+    function PaymentMethods() {
+        const [, setRefresh] = useState({})
+        const paymentMethods = sales.paymentMethods || []
+        if (paymentMethods.length === 0) {
+            paymentMethods.push({})
+        }
+        return (
+            <Box className='vertical' >
+                <Box sx={{ display: 'flex', alignItems: 'center', }}>
+                    <Typography variant='body2'>Payment methods</Typography>
+                    {/* Add button */}
+                    <Button sx={{ color: theme.palette.lightBlue.main, ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
+                </Box>
+                <Payments paymentMethodsList={paymentMethods} />
+            </Box>
+        )
+
+        function handleAddPaymentMethod() {
+            paymentMethods.push({})
+            setRefresh({})
+        }
+
+        function Payments({ paymentMethodsList }: any) {
+            const [, setRefresh] = useState({})
+            const payments: any[] = paymentMethodsList.map((item: any, index: number) => {
+                return (
+                    <Box key={index} sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', alignItems: 'center', rowGap: 2, }}>
+                        <Box className='vertical'>
+                            <Typography variant='caption'>Debit account</Typography>
+                            <TextField />
+                            {/* <LedgerSubledger rowData={{}} /> */}
+                        </Box>
+                        <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
+                            sx={{ maxWidth: theme.spacing(15) }} onChange={(e: any) => { item.instrNo = e.target.value; setRefresh({}) }} />
+                        <NumberFormat sx={{ maxWidth: theme.spacing(18) }}
+                            allowNegative={false}
+                            autoComplete='off'
+                            className='right-aligned'
+                            customInput={TextField}
+                            decimalScale={2}
+                            fixedDecimalScale={true}
+                            label='Amount'
+                            onFocus={(e: any) => {
+                                e.target.select()
+                            }}
+                            variant='standard' />
+
+                        <IconButton sx={{ mt: -6, ml: -5, }} size='small' color='error' onClick={() => handleDeleteRow(index)}>
+                            <CloseSharp />
+                        </IconButton>
+                    </Box>)
+
+            })
+            return (<Box className='vertical' sx={{ rowGap: 1 }}>{payments}</Box>)
+
+            function handleDeleteRow(index: number) {
+                if (paymentMethodsList.length === 1) {
+                    return
+                }
+                paymentMethodsList.splice(index, 1)
+                setRefresh({})
+            }
+        }
     }
 }
 
@@ -174,27 +311,32 @@ function ProductsInfo() {
     function Summary() {
         const [, setRefresh] = useState({})
         sales.computeSummary = computeSummary
-        return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+        return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
             {/* Products label */}
             <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
                 <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Products info</Typography>
                 <Typography color='slateblue' className='footer' >{''.concat('Count: ', products.length)}</Typography>
-                <Typography color='slateblue' className='footer' >{''.concat('Qty: ', sales.summary.qty)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Qty: ', toDecimalFormat(sales.summary.qty))}</Typography>
             </Box>
             {/* Reset, Igst check, Add */}
             <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
-                <Typography color='slateblue' className='footer' >{''.concat('Cgst: ', sales.summary.cgst)}</Typography>
-                <Typography color='slateblue' className='footer' >{''.concat('Sgst: ', sales.summary.sgst)}</Typography>
-                <Typography color='slateblue' className='footer' >{''.concat('Igst: ', sales.summary.igst)}</Typography>
-                <Typography color='slateblue' className='footer' >{''.concat('Amount: ', sales.summary.amount)}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Cgst: ', toDecimalFormat(sales.summary.cgst))}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Sgst: ', toDecimalFormat(sales.summary.sgst))}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Igst: ', toDecimalFormat(sales.summary.igst))}</Typography>
+                <Typography color='slateblue' className='footer' >{''.concat('Amount: ', toDecimalFormat(sales.summary.amount))}</Typography>
+                {/* Back calculate */}
+                <Box sx={{ display: 'flex', columnGap: 1 }}>
+                    <Button size='small' variant='outlined' color='info' >Back cal</Button>
+                    <NumberFormat />
+                </Box>
                 {/* Reset */}
-                <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.error.main, mt: .4 }} onClick={handleReset}>Reset</Button>
+                <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.error.main, mt: .3 }} onClick={handleReset}>Reset</Button>
                 {/* Igst */}
                 <FormControlLabel sx={{ fontSize: theme.spacing(1) }} label='Igst'
                     control={
                         <Checkbox size='small' sx={{ mt: -0.2 }} checked={sales.isIgst || false} onChange={handleChangeIgst} />} />
                 {/* Add */}
-                <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.lightBlue.main, mt: .4 }} onClick={handleAddProduct}>Add</Button>
+                <Button size='small' variant='outlined' sx={{ color: theme.palette.lightBlue.main, }} onClick={handleAddProduct}>Add</Button>
             </Box>
         </Box>)
 
@@ -333,12 +475,18 @@ function ProductsInfo() {
                             variant='standard'
                             onFocus={(e: any) => {
                                 e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.gstRate = floatValue || 0.0
+                                setRefresh({})
+                                computeRow(item)
                             }} />
                     </Box>
                     {/* Qty */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Qty</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(7) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                             autoComplete='off'
                             allowNegative={false}
                             InputProps={smallFontTextField}
@@ -354,14 +502,15 @@ function ProductsInfo() {
                                 const { floatValue } = value
                                 item.qty = floatValue
                                 setRefresh({})
-                                sales.computeSummary()
+                                computeRow(item)
                             }}
+                            thousandSeparator={true}
                             variant='standard' />
                     </Box>
                     {/* Price */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Price</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(11) }}
                             autoComplete='off'
                             allowNegative={false}
                             InputProps={smallFontTextField}
@@ -370,15 +519,22 @@ function ProductsInfo() {
                             decimalScale={2}
                             fixedDecimalScale={true}
                             value={item.price || 0.00}
+                            onChange={(e: any) => {
+                                item.price = +extractAmount(e.target.value) || 0.0
+                                setPriceGst(item)
+                                setRefresh({})
+                                computeRow(item)
+                            }}
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
+                            thousandSeparator={true}
                             variant='standard' />
                     </Box>
                     {/* Price(Gst) */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='caption'>Price(Gst)</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(11) }}
                             autoComplete='off'
                             allowNegative={false}
                             InputProps={smallFontTextField}
@@ -390,6 +546,13 @@ function ProductsInfo() {
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
+                            onChange={(e: any) => {
+                                item.priceGst = +extractAmount(e.target.value) || 0.0
+                                setPrice(item)
+                                setRefresh({})
+                                computeRow(item)
+                            }}
+                            thousandSeparator={true}
                             variant='standard' />
                     </Box>
                     {/* Discount(unit) */}
@@ -406,6 +569,12 @@ function ProductsInfo() {
                             value={item.discount || 0.00}
                             onFocus={(e: any) => {
                                 e.target.select()
+                            }}
+                            onValueChange={(values: any) => {
+                                const { floatValue } = values
+                                item.discount = floatValue || 0.0
+                                setRefresh({})
+                                computeRow(item)
                             }}
                             variant='standard' />
                     </Box>
@@ -457,20 +626,60 @@ function ProductsInfo() {
                     {/* amount */}
                     <Card variant='outlined' className='vertical' sx={{ p: 1, backgroundColor: theme.palette.grey[200] }} >
                         <Typography variant='caption' sx={{ textAlign: 'right', }}>Amount</Typography>
-                        <Typography variant='caption' sx={{ textAlign: 'right', color: theme.palette.lightBlue.main }} >{item.amount || 12345.00}</Typography>
+                        <Typography variant='caption' sx={{ textAlign: 'right', color: theme.palette.lightBlue.main }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
                     </Card>
                 </Box>)
 
             function handleTextChanged(item: any, propName: string, e: any) {
                 item[propName] = e.target.value
-                // computeSummary()
                 setRefresh({})
             }
         }
     }
 
-    function computeRow(item: any) {
-        
+    function computeAllRows() {
+        for (let lineItem of sales.products) {
+            computeRow(lineItem, false)
+        }
+        sales.computeSummary()
+    }
+
+    function computeRow(item: any, toComputeSummary = true) {
+        const gstRate = item.gstRate || 0.0
+        let priceGst = item.priceGst
+        let price = item.price
+        const discount = item.discount
+        const qty = item.qty
+        let amount, gst, sgst, cgst
+
+        if (priceGst) {
+            price = priceGst / (1 + gstRate / 100)
+            item.price = price
+        } else if (price) {
+            priceGst = price * (1 + gstRate / 100)
+            item.priceGst = priceGst
+        }
+
+        if (discount === 0) {
+            amount = priceGst * qty
+            gst = (priceGst - price) * qty
+        } else {
+            amount = (price - discount) * qty * (1 + gstRate / 100)
+            gst = amount - (price - discount) * qty
+        }
+        cgst = _.round(gst / 2, 2)
+        sgst = cgst
+        if (sales.isIgst) {
+            item.igst = _.round(gst, 2)
+            item.cgst = 0.0
+            item.sgst = 0.0
+        } else {
+            item.igst = 0.0
+            item.cgst = cgst
+            item.sgst = sgst
+        }
+        item.amount = _.round(amount, 2)
+        toComputeSummary && sales.computeSummary()
     }
 
     function handleAddProduct() {
@@ -481,6 +690,7 @@ function ProductsInfo() {
 
     function handleChangeIgst(e: any) {
         sales.isIgst = e.target.checked
+        computeAllRows()
         setRefresh({})
     }
 
@@ -500,154 +710,18 @@ function ProductsInfo() {
     function handleSerialNo(item: any) {
 
     }
-}
 
-function PaymentsInfo() {
-    const [, setRefresh] = useState({})
-    const theme = useTheme()
-    const megaData = useContext(MegaDataContext)
-    const sales = megaData.accounts.sales
-    return (
-        <Box className='vertical' sx={{ p: 2, mr: 1, ml: 1, mt: 0, mb: 0, backgroundColor: theme.palette.grey[200], border: '4px solid orange', flex: 1 }}>
-            <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Payments info</Typography>
-            <SaleVariety />
-            <PaymentMethods />
-            {/* ship to */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1 }}>
-                <Typography variant='subtitle2'>Ship to</Typography>
-                <Box sx={{ display: 'flex' }}>
-                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>New / Edit</Button>
-                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
-                </Box>
-            </Box>
-        </Box>)
-
-    function SaleVariety() {
-        return (
-            // <Box sx={{ display: 'flex' }}>
-            <Box >
-                <RadioGroup row>
-                    <FormControlLabel
-                        control={
-                            <Radio
-                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                                onClick={(e: any) => {
-                                    handleSaleVariety('r')
-                                    // resetAddresses()
-                                    // handleRetailCashBankSales()
-                                }}
-                                size="small"
-                                color="secondary"
-                                checked={sales.saleVariety === 'r'}
-                            />
-                        }
-                        label="Retail sales"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Radio
-                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                                onClick={(e: any) => {
-                                    handleSaleVariety('a')
-                                    // resetAddresses()
-                                    // handleAutoSubledgerSales()
-                                }}
-                                size="small"
-                                color="secondary"
-                                checked={sales.saleVariety === 'a'}
-                            />
-                        }
-                        label="Auto subledger sales"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Radio
-                                // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                                onClick={(e: any) => {
-                                    handleSaleVariety('i')
-                                    // resetAddresses()
-                                    // handleInstitutionSales()
-                                }}
-                                size="small"
-                                color="secondary"
-                                checked={sales.saleVariety === 'i'}
-                            />
-                        }
-                        label="Institution sales"
-                    />
-                </RadioGroup>
-            </Box>
-            // </Box>
-        )
-
-        function handleSaleVariety(variety: string) {
-            sales.saleVariety = variety
-            setRefresh({})
-        }
+    function setPrice(item: any) {
+        const priceGst = item.priceGst
+        const gstRate = item.gstRate
+        const price = +Big(priceGst).div(Big(1).plus(Big(gstRate).div(Big(100))))
+        item.price = price
     }
 
-    function PaymentMethods() {
-        const [, setRefresh] = useState({})
-        const paymentMethods = sales.paymentMethods || []
-        if (paymentMethods.length === 0) {
-            paymentMethods.push({})
-        }
-        return (
-            <Box className='vertical' >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant='body2'>Payment methods</Typography>
-                    {/* Add button */}
-                    <Button sx={{ color: theme.palette.lightBlue.main }} onClick={handleAddPaymentMethod}>Add</Button>
-                </Box>
-                <Payments paymentMethodsList={paymentMethods} />
-            </Box>
-        )
-
-        function handleAddPaymentMethod() {
-            paymentMethods.push({})
-            setRefresh({})
-        }
-
-        function Payments({ paymentMethodsList }: any) {
-            const [, setRefresh] = useState({})
-            const payments: any[] = paymentMethodsList.map((item: any, index: number) => {
-                return (
-                    <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
-                        <Box className='vertical'>
-                            <Typography variant='caption'>Debit account</Typography>
-                            <TextField />
-                            {/* <LedgerSubledger rowData={{}} /> */}
-                        </Box>
-                        <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
-                            sx={{ maxWidth: theme.spacing(15) }} onChange={(e: any) => { item.instrNo = e.target.value; setRefresh({}) }} />
-                        <NumberFormat sx={{ flex: 0.4, minWidth: theme.spacing(15) }}
-                            allowNegative={false}
-                            autoComplete='off'
-                            className='right-aligned'
-                            customInput={TextField}
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                            label='Amount'
-                            onFocus={(e: any) => {
-                                e.target.select()
-                            }}
-                            variant='standard' />
-
-                        <IconButton sx={{ mt: -6, ml: -10, }} size='small' color='error' onClick={() => handleDeleteRow(index)}>
-                            <CloseSharp />
-                        </IconButton>
-                    </Box>)
-
-            })
-            return (<>{payments}</>)
-
-            function handleDeleteRow(index: number) {
-                if (paymentMethodsList.length === 1) {
-                    return
-                }
-                paymentMethodsList.splice(index, 1)
-                setRefresh({})
-            }
-        }
+    function setPriceGst(item: any) {
+        const price = item.price
+        const gstRate = item.gstRate
+        const priceGst = +Big(price).mul(Big(1).plus(Big(gstRate).div(Big(100))))
+        item.priceGst = priceGst
     }
 }
