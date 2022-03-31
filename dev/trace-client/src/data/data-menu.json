@@ -65,7 +65,7 @@
                             "name": "simpleSalesSubMenu",
                             "hierarchy": "salespurchases-simpleSales",
                             "label": "Simple sales",
-                            "componentName": "accSales",
+                            "componentName": "salesNew",
                             "args":{
                                 "saleType": "sal"
                             }

@@ -1,9 +1,9 @@
-import {manageEntitiesState, useIbuki, utilMethods} from './redirect'
-function useInventoryUtils(){
-    const {emit} = useIbuki()
-    const {execGenericView} = utilMethods()
-    const {setInBag} = manageEntitiesState()
-    
+import { manageEntitiesState, useIbuki, utilMethods } from './redirect'
+function useInventoryUtils() {
+    const { emit } = useIbuki()
+    const { execGenericView } = utilMethods()
+    const { setInBag } = manageEntitiesState()
+
     async function fetchBrandsCategoriesUnits() {
         emit('SHOW-LOADING-INDICATOR', true)
         const result: any = await execGenericView({
@@ -22,7 +22,7 @@ function useInventoryUtils(){
         setInBag('brands', brands)
         const categories = (result?.jsonResult?.categories || []).map((x: any) => {
             return {
-                label: x.catName,
+                label: ''.concat(x.catName, ' (', x?.parent || '', ')'),
                 value: x.id,
             }
         })
@@ -31,6 +31,6 @@ function useInventoryUtils(){
         setInBag('units', units)
         emit('SHOW-LOADING-INDICATOR', false)
     }
-    return({fetchBrandsCategoriesUnits})
+    return ({ fetchBrandsCategoriesUnits })
 }
-export {useInventoryUtils}
+export { useInventoryUtils }

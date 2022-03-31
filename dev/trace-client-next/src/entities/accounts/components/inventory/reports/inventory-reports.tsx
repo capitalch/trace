@@ -32,16 +32,6 @@ function InventoryReports() {
             <mega.currentReportComponent />
         </Box>
     </Box>
-    // <Box>       
-    //     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-    //         <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.breadcumb)}</Typography>
-    //         <ReactSelect  menuPlacement='auto' placeholder='Select report' styles={styles}
-    //             options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
-    //     </Box>
-    //     <Box sx = {{marginTop:theme.spacing(1) }}>
-    //         <pre.currentReportComponent />
-    //     </Box>
-    // </Box>
     )
 }
 export { InventoryReports }
@@ -56,5 +46,10 @@ const reportsJson = [
         label:'Sales',
         value:'salesReport',
         breadcumb:'Sales'
+    },
+    {
+        label:'Purchases',
+        value:'purchaseReport',
+        breadcumb:'Purchases'
     },
 ]

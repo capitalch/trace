@@ -1,6 +1,6 @@
 
 import {
-    _, AccountsLedgerDialog, AccSales, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
+    _, AccountsLedgerDialog, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
     getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MegaDataContext, MultiDataContext, Typography,
     useContext, useIbuki, useLinkClient, useRef, useServerSocketMessageHandler, useState, useEffect,
     useTheme, utils
@@ -8,9 +8,10 @@ import {
 import {
     AccountsMaster, AccountsOpBal, BalanceSheetProfitLoss, BankRecon, Brands, Branches,
     CategoriesMaster, CommonUtilities, CreditNotes, DebitNotes, FinancialYears, GenericDialoges,
-    GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales, Taxation,
+    GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales,SalesNew, Taxation,
     TrialBalance, Voucher, OpeningStock, InventoryReports
 } from './components/common/redirect'
+import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -27,12 +28,15 @@ function LaunchPad() {
     const meta: any = useRef({
         isMounted: false,
         mainHeading: '',
-        // mega: { accounts: {} }
     })
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
 
     meta.current.mainHeading = getUnitHeading()
-    // const mega = useContext(MegaDataContext)
+    
+    const megaData = useContext(MegaDataContext)
+    Object.assign(megaData.accounts.sales, salesMegaData)
+    Object.assign(megaData.accounts.settings, settingsMegaData)
+
     const { socketMessageHandler } = useServerSocketMessageHandler()
 
     useEffect(() => {
@@ -108,7 +112,6 @@ function LaunchPad() {
         const componentsMap: any = {
             accountsMaster: AccountsMaster,
             accountsOpBal: AccountsOpBal,
-            accSales: AccSales,
             balanceSheet: BalanceSheetProfitLoss,
             bankRecon: BankRecon,
             brands: Brands,
@@ -126,6 +129,7 @@ function LaunchPad() {
             profitLoss: BalanceSheetProfitLoss,
             purchases: Purchases,
             sales: Sales,
+            salesNew:SalesNew,
             taxation: Taxation,
             trialBalance: TrialBalance,
             vouchers: Voucher,
@@ -163,23 +167,6 @@ function LaunchPad() {
 }
 
 export { LaunchPad }
- // if (currentComponentName) {
-        //     if (artifacts) {
-        //         if (artifacts['allForms']) {
-        //             if (artifacts['allForms'][currentComponentName]) {
-        //                 ret = artifacts['allForms'][currentComponentName]()
-        //                 const currentFormId =
-        //                     ret && ret.props && ret.props.formId
-        //                 currentFormId && setCurrentFormId(currentFormId)
-        //             } else if (
-        //                 artifacts['customComponents'] &&
-        //                 artifacts['customComponents'][currentComponentName]
-        //             ) {
-        //                 ret = artifacts['customComponents'][
-        //                     currentComponentName
-        //                 ](currentComponent.args)
-        //             }
-        //         }
-        //     }
-        // }
+
+
 

@@ -1,28 +1,16 @@
-## Director remuneration revise
-# Risk and responsibilities as director
-# For attaining 50M turnover
-# A close eye on accounts, legal aspects and operations
-    a. Guiding the accountants, lawyers etc.
-1. Agreements
-2. Legal compliance
-3. GST compliance
-4. Cases followups
-5. Statuary compliances
-6. GST appeals
-7. Court cases
-8. Disaster management
-9. Contingency management
-10. Offered an accounting package Trace
-
-
 ## Sales
-1. Port to Trace
-2. Compute row
+                                                            1. Port to Trace
+2. Product search
+2.1 Customer search
+2.2 new / edit customer
+                                                            2.3 Round off button  2. Compute row
 3. Error validations
-4. Submit show / not show
+4. Submit 
 5. View function
-6. reset function
-7. Back calculate
+6. Reset function
+                                                            7. Back calculate
+7. saleVariety implementation
+7. Convert computeSummary to ibuki
 8. Submit function
 9. Edit function
 10. Full screen function

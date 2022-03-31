@@ -1,4 +1,4 @@
-import { clsx, useEffect, useState } from './imports/regular-imports'
+import { clsx, useEffect, useRef, useState } from './imports/regular-imports'
 import 'fontsource-roboto'
 import { createStyles, makeStyles, Theme } from './imports/gui-imports'
 import { Box, AppBar } from './imports/gui-imports'
@@ -12,13 +12,16 @@ import { TraceLeft } from './common/trace-left'
 import { TraceMain } from './common/trace-main'
 import { TraceSubHeader } from './common/trace-subheader'
 
-
 function AppMain() {
     const { emit } = useIbuki()
     const classes = useStyles()
     const [open, setOpen] = useState(false)
     const { setInGlobalBag, isMediumSizeUp } = useTraceGlobal()
-
+    // const meta = useRef({
+    //     mega: {
+    //         accounts: {}
+    //     }
+    // })
     useEffect(() => {
         setInGlobalBag('isDrawyerOpen', isMediumSizeUp)
         setOpen(isMediumSizeUp)
@@ -32,13 +35,13 @@ function AppMain() {
     }, [])
 
     function handleDrawerOpen() {
-        setInGlobalBag('isDrawyerOpen', true)
+        // setInGlobalBag('isDrawyerOpen', true)
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(true)
     }
 
     function handleDrawerClose() {
-        setInGlobalBag('isDrawyerOpen', false)
+        // setInGlobalBag('isDrawyerOpen', false)
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(false)
     }
@@ -65,7 +68,10 @@ function AppMain() {
                 matches={isMediumSizeUp}
                 handleDrawerClose={handleDrawerClose}></TraceLeft>
             {/* Main */}
-            <TraceMain open={open}></TraceMain>
+            {/*   */}
+            {/* <MegaContext.Provider value={meta.current.mega}> */}
+                <TraceMain open={open}></TraceMain>
+            {/* </MegaContext.Provider> */}
             {/* universal loading indicator */}
             <TraceLoadingIndicator></TraceLoadingIndicator>
         </Box>

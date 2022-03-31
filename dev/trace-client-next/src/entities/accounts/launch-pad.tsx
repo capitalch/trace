@@ -1,48 +1,44 @@
-import { createContext, useContext, useState, useEffect, useRef } from '../../imports/regular-imports'
+
 import {
-    makeStyles,
-    Theme,
-    Typography,
-    createStyles,
-} from '../../imports/gui-imports'
-import { useIbuki, manageEntitiesState, MegaContext } from '../../imports/trace-imports'
-import { getArtifacts } from '../../react-form/common/react-form-hook'
-import { AccountsLedgerDialog } from './components/final-accounts/accounts-ledger-dialog'
-import { utils } from './utils'
+    _, AccountsLedgerDialog, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
+    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MegaDataContext, MultiDataContext, Typography,
+    useContext, useIbuki, useLinkClient, useRef, useServerSocketMessageHandler, useState, useEffect,
+    useTheme, utils
+} from './components/common/redirect'
 import {
-    // MegaContext,
-    MultiDataContext,
-    getPurchasesArbitraryData,
-    getSalesArbitraryData,
-    getDebitCreditNotesArbitraryData,
-    getVouchersArbitraryData,
-} from './components/common/multi-data-bridge'
-import { useLinkClient } from '../../global-utils/link-client'
-import { useServerSocketMessageHandler } from './components/common/server-socket-message-handler-hook'
+    AccountsMaster, AccountsOpBal, BalanceSheetProfitLoss, BankRecon, Brands, Branches,
+    CategoriesMaster, CommonUtilities, CreditNotes, DebitNotes, FinancialYears, GenericDialoges,
+    GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales,SalesNew, Taxation,
+    TrialBalance, Voucher, OpeningStock, InventoryReports
+} from './components/common/redirect'
+import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
+    const theme = useTheme()
     const {
         getFromBag,
         getLoginData,
         setCurrentComponent,
         getCurrentEntity,
         getCurrentComponent,
-        setCurrentFormId,
     } = manageEntitiesState()
     const { filterOn } = useIbuki()
-    const currentEntityName = getCurrentEntity()
-    const artifacts = getArtifacts(currentEntityName)
     const [, setRefresh] = useState({})
     const meta: any = useRef({
         isMounted: false,
         mainHeading: '',
     })
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
-    const classes = useStyles()
+
     meta.current.mainHeading = getUnitHeading()
-    // const MegaContext:any = createContext({})
-    const mega = useContext(MegaContext)
+    
+    const megaData = useContext(MegaDataContext)
+    Object.assign(megaData.accounts.sales, salesMegaData)
+    Object.assign(megaData.accounts.settings, settingsMegaData)
+
+    const { socketMessageHandler } = useServerSocketMessageHandler()
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -57,13 +53,12 @@ function LaunchPad() {
                 curr.isMounted && setRefresh({})
             }
         )
-
         return () => {
             subs.unsubscribe()
             curr.isMounted = false
         }
     }, [])
-    const { socketMessageHandler } = useServerSocketMessageHandler()
+
     useEffect(() => {
         const configuration = getFromBag('configuration')
         const { linkServerUrl, linkServerKey } = configuration
@@ -91,55 +86,70 @@ function LaunchPad() {
     const purchasesData = getPurchasesArbitraryData()
     const debitCreditNotesData = getDebitCreditNotesArbitraryData()
     const vouchersArbitraryData = getVouchersArbitraryData()
+
     return (
         <>
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6" sx={{ color: theme.palette.common.black, fontWeight: 'bold' }}>
                 {meta.current.mainHeading}
             </Typography>
-            {/* <MegaContext.Provider value={mega}> */}
-                <MultiDataContext.Provider
-                    value={{
-                        sales: salesData,
-                        purchases: purchasesData,
-                        debitCreditNotes: debitCreditNotesData,
-                        vouchers: vouchersArbitraryData,
-                        generic: {}
-                    }}>
-                    <Comp></Comp>
-                </MultiDataContext.Provider>
+            {/* <MegaContext.Provider value={meta.current.mega}> */}
+            <MultiDataContext.Provider
+                value={{
+                    sales: salesData,
+                    purchases: purchasesData,
+                    debitCreditNotes: debitCreditNotesData,
+                    vouchers: vouchersArbitraryData,
+                    generic: {}
+                }}>
+                <Comp></Comp>
+            </MultiDataContext.Provider>
             {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>
     )
 
     function Comp() {
-        let ret = <div></div>
-        const currentComponent = getCurrentComponent()
-        if (!currentComponent) {
-            return ret
+        const componentsMap: any = {
+            accountsMaster: AccountsMaster,
+            accountsOpBal: AccountsOpBal,
+            balanceSheet: BalanceSheetProfitLoss,
+            bankRecon: BankRecon,
+            brands: Brands,
+            branches: Branches,
+            categoriesMaster: CategoriesMaster,
+            commonUtilities: CommonUtilities,
+            creditNotes: CreditNotes,
+            debitNotes: DebitNotes,
+            financialYears: FinancialYears,
+            genericDialoges: GenericDialoges,
+            genericExports: GenericExports,
+            genericReports: GenericReports,
+            generalLedger: GeneralLedger,
+            products: Products,
+            profitLoss: BalanceSheetProfitLoss,
+            purchases: Purchases,
+            sales: Sales,
+            salesNew:SalesNew,
+            taxation: Taxation,
+            trialBalance: TrialBalance,
+            vouchers: Voucher,
+            openingStock: OpeningStock,
+            inventoryReports: InventoryReports
         }
-        let currentComponentName = currentComponent.componentName
+        let ret: any = <></>
 
-        // if finYearId is not actuated then don't try to refresh component. This is to avoid unnecessary call to server with null finYearId and branchId during initialize (init-code execution) period
-
-        if (currentComponentName) {
-            if (artifacts) {
-                if (artifacts['allForms']) {
-                    if (artifacts['allForms'][currentComponentName]) {
-                        ret = artifacts['allForms'][currentComponentName]()
-                        const currentFormId =
-                            ret && ret.props && ret.props.formId
-                        currentFormId && setCurrentFormId(currentFormId)
-                    } else if (
-                        artifacts['customComponents'] &&
-                        artifacts['customComponents'][currentComponentName]
-                    ) {
-                        ret = artifacts['customComponents'][
-                            currentComponentName
-                        ](currentComponent.args)
-                    }
-                }
-            }
+        const currentComponent = getCurrentComponent()
+        if (!_.isEmpty(currentComponent)) {
+            const currentComponentName = currentComponent.componentName
+            // if (currentComponentName === mega.accounts.settings?.loadedComponent?.name) {
+            //     ret = mega.accounts.settings.loadedComponent.component
+            // } else {
+            ret = componentsMap[currentComponentName](currentComponent.args)
+            // mega.accounts.settings.loadedComponent = {}
+            // const loaded = mega.accounts.settings.loadedComponent
+            // loaded.name = currentComponentName
+            // loaded.component = ret
+            // }
         }
         return ret
     }
@@ -158,13 +168,5 @@ function LaunchPad() {
 
 export { LaunchPad }
 
-const useStyles: any = makeStyles((theme: Theme) =>
-    createStyles({
-        title: {
-            color: theme.palette.common.black,
-            fontWeight: 'bold',
-            // marginTop: theme.spacing(0.1),
-            // marginBottom: theme.spacing(2),
-        },
-    })
-)
+
+

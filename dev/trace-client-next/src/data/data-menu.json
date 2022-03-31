@@ -62,6 +62,15 @@
                             }
                         },
                         {
+                            "name": "simpleSalesSubMenu",
+                            "hierarchy": "salespurchases-simpleSales",
+                            "label": "Simple sales",
+                            "componentName": "salesNew",
+                            "args":{
+                                "saleType": "sal"
+                            }
+                        },
+                        {
                             "name": "salesReturnSubMenu",
                             "hierarchy": "salespurchases-sales-return",
                             "label": "Sales return",

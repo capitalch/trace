@@ -42,6 +42,7 @@ function TraceLeftMenu(props: any) {
                     // disablePadding
                     // disableGutters
                     key={index}
+                    sx={{height:theme.spacing(4.5)}}
                     disabled={isControlDisabled(item.hierarchy)}
                     onClick={(e:any) => {
                         if (item.children) {

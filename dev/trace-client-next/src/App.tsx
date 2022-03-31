@@ -22,6 +22,7 @@ import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
+// import { MegaContext } from './imports/trace-imports'
 
 declare module '@mui/material/styles/' {
     interface Palette {
@@ -64,6 +65,7 @@ const App: React.FC = () => {
         //         fontSize:'1rem'
         //     },
         // },
+        
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
@@ -111,6 +113,7 @@ const App: React.FC = () => {
             },
         },
     })
+
     LicenseInfo.setLicenseKey(
         '094c13fcff99f49fe015161354d1d052T1JERVI6MjkzMjgsRVhQSVJZPTE2NjMxMjQ0NjcwMDAsS0VZVkVSU0lPTj0x'
     )
@@ -123,11 +126,14 @@ const App: React.FC = () => {
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
-                <ConfirmProvider>
-                    {' '}
-                    {/* confirm dialog box all over the application */}
-                    <AppMain></AppMain>
-                </ConfirmProvider>
+                {/* Global context for all modules */}
+                {/* <MegaContext.Provider value={{ accounts: {}, authentication: {} }}>  */}
+                    <ConfirmProvider>
+                        {' '}
+                        {/* confirm dialog box all over the application */}
+                        <AppMain></AppMain>
+                    </ConfirmProvider>
+                {/* </MegaContext.Provider> */}
             </ThemeProvider>
         </StyledEngineProvider>
     )

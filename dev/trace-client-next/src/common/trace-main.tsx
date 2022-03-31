@@ -1,10 +1,10 @@
-import { clsx, useContext, useState, useEffect, useRef } from '../imports/regular-imports'
+import { clsx, useState, useEffect, useRef } from '../imports/regular-imports'
 import {
     Container,
     makeStyles,
     createStyles,
 } from '../imports/gui-imports'
-import { manageEntitiesState, MegaContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
+import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 
@@ -15,10 +15,12 @@ function TraceMain({ open }: any) {
     } = manageEntitiesState()
     const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
-    const meta = useRef({
+
+    const meta: any = useRef({
         isMounted: false,
         marginTop: 0,
         launchPad: null,
+        megaData: { accounts: { common: {}, sales: {}, settings: {} } }
     })
     const { getCurrentMediaSize } = useTraceGlobal()
 
@@ -38,8 +40,8 @@ function TraceMain({ open }: any) {
         const curr = meta.current
         curr.isMounted = true
         const launchMap: any = {
-            accounts: <LaunchPadAccounts></LaunchPadAccounts>,
-            authentication: <LaunchPadAuthentication></LaunchPadAuthentication>,
+            accounts: <LaunchPadAccounts />,
+            authentication: <LaunchPadAuthentication />,
         }
         const subs = filterOn('TRACE-MAIN:JUST-REFRESH').subscribe((d) => {
             const currentEntity = getCurrentEntity()
@@ -62,16 +64,17 @@ function TraceMain({ open }: any) {
     function LaunchPad() {
         return meta.current.launchPad
     }
-    
+
     return (
         <Container
             className={clsx(classes.content, {
                 [classes.contentShift]: open,
             })}>
-                {/* initialize accounts entity for all global data  */}
-            {/* <MegaContext.Provider value={{ accounts: {} }}> */}
+            {/* initialize accounts entity for all global data  */}
+            <MegaDataContext.Provider value={meta.current.megaData}>
                 <LaunchPad></LaunchPad>
-            {/* </MegaContext.Provider> */}
+                {/* <meta.current.launchPad /> */}
+            </MegaDataContext.Provider>
         </Container>
     )
 }

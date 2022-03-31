@@ -348,12 +348,22 @@ allSqls = {
 	        where "mobileNumber" = %(mobileNumber)s
     ''',
 
+    # 'get_contact_on_mobile_email_contactName1': '''
+    #     select * from "Contacts"
+    #         where "mobileNumber" = %(searchString)s
+    #             or "otherMobileNumber" like '%%' || %(searchString)s || '%%'
+    #             or LOWER("email") like '%%' || LOWER(%(searchString)s) || '%%'
+    #             or LOWER("contactName") like  '%%' || LOWER(%(searchString)s) || '%%'
+    #             order by "contactName"
+    #             limit 100
+    # ''',
+
     'get_contact_on_mobile_email_contactName': '''
         select * from "Contacts"
-            where "mobileNumber" = %(searchString)s
-                or "otherMobileNumber" like '%%' || %(searchString)s || '%%'
-                or LOWER("email") like '%%' || LOWER(%(searchString)s) || '%%'
-                or LOWER("contactName") like  '%%' || LOWER(%(searchString)s) || '%%'
+            where "mobileNumber" ~* %(searchString)s
+                or "otherMobileNumber" ~*  %(searchString)s
+                or "email" ~* %(searchString)s
+                or "contactName" ~*  %(searchString)s
                 order by "contactName"
                 limit 100
     ''',

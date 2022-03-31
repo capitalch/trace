@@ -40,7 +40,8 @@ function BankRecon() {
     return (
         <div
             className={classes.content}
-            style={{ width: getCurrentWindowSize() }}>
+            // style={{ width: getCurrentWindowSize() }}
+            >
             <Box className="header">
                 <Box className="bank">
                     <Typography
