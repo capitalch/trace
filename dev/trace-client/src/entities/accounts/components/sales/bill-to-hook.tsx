@@ -18,7 +18,6 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { NewEditContact } from './new-edit-contact'
 import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'
-import cities from '../../../../data/cities.json'
 
 function useBillTo(arbitraryData: any) {
     const [, setRefresh] = useState({})

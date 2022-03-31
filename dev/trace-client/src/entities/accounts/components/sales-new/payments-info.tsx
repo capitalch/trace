@@ -6,7 +6,7 @@ function PaymentsInfo() {
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     return (
-        <Box className='vertical' sx={{ p: 2, ml: 1, mr: 1, mb: 1, border: '1px solid lightGrey', maxWidth: theme.spacing(70) }}>
+        <Box className='vertical' sx={{ p: 2, mr: 1, mb: 1, border: '1px solid lightGrey', maxWidth: theme.spacing(70) }}>
             <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Payments info</Typography>
             <SaleVariety />
             <PaymentMethods />

@@ -1,15 +1,17 @@
 import { useCustomerInfo } from './customer-info-hook'
-import { Box, Button, CloseSharp, IconButton, InputAdornment, moment, Search, TextField, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
+import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
+import { CustomerDialogContent } from './customer-info-hook'
 
 function CustomerInfo() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCustomerSearch } = useCustomerInfo()
+    const { handleCloseDialog, handleCustomerSearch, meta } = useCustomerInfo()
+    const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
     return (
-        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, ml: 1, mr: 1, rowGap: 2, flexWrap: 'wrap', flexGrow: 1 }}>
+        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, rowGap: 2, flexWrap: 'wrap', flexGrow: 1 }}>
             <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
             {/* Ref no, date, user ref no*/}
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2 }}>
@@ -68,16 +70,14 @@ function CustomerInfo() {
                                 </InputAdornment>
                             ),
                         }}
-                        onChange={(e: any) => handleTextChanged('customerSearch', e)}
+                        onChange={(e: any) => { pre.searchFilter = e.target.value; setRefresh({}) }}
                         onKeyDown={(e: any) => {
                             if (e.keyCode === 13) {
                                 handleCustomerSearch()
                             }
                         }}
                         sx={{ minWidth: theme.spacing(15) }}
-
-                        value={sales.customerSearch || ''}
-
+                        value={pre.searchFilter || ''}
                         variant='standard'
                     />
                 </Box>
@@ -89,6 +89,32 @@ function CustomerInfo() {
                     <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
                 </Box>
             </Box>
+            <Dialog
+                open={pre.showDialog}
+                onClose={(e, reason) => {
+                    if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
+                        handleCloseDialog()
+                    }
+                }}
+                fullWidth={true}>
+                <DialogTitle>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant='h6'>{pre.dialogConfig.title}</Typography>
+                        <Tooltip title="Close">
+                            <IconButton
+                                size="small"
+                                disabled={false}
+                                onClick={handleCloseDialog}>
+                                <CloseSharp />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </DialogTitle>
+                <DialogContent>
+                    <CustomerDialogContent meta={meta} />
+                    {/* <NewProduct onClose={handleCloseDialog} /> */}
+                </DialogContent>
+            </Dialog>
         </Box>
     )
 

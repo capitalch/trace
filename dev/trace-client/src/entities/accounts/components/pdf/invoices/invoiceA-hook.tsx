@@ -10,7 +10,7 @@ function useInvoiceA() {
     } = useSharedElements()
 
     function InvoicePdf({ invoiceData }: any) {
-        console.log(JSON.stringify(invoiceData))
+        // console.log(JSON.stringify(invoiceData))
         const gStyles = StyleSheet.create({
             page: {
                 flexDirection: 'column',
@@ -38,13 +38,13 @@ function useInvoiceA() {
                 borderBottom: 1,
             },
             footer: {
-                position: 'absolute',
-                bottom: 30,
+                // position: 'absolute',
+                // bottom: 30,
                 fontWeight: 'bold',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 width: '100%',
-                left: 30,
+                // left: 30,
             },
             normal: {
                 fontSize: 8,
@@ -149,7 +149,7 @@ function useInvoiceA() {
                     },
                     buyersCopy: {
                         fontSize: 8,
-                        color: 'gray',
+                        color: 'black',
                         marginTop: 3,
                     },
                     headerInvoice: {
