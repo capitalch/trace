@@ -45,7 +45,8 @@ def traceSendSmsForBill(options):
         jsonBody = {
             "route": dltConfig['route'],
             "sender_id": dltConfig['senderId'],
-            "message": f"Thanks for purchasing from {company}. See your bill here {viewUrl} - Capital",
+            "message": f"Thanks from {company}. View your bill at {viewUrl} - Capital",
+            # "message": f"Thanks for purchasing from {company}. See your bill here {viewUrl} - Capital",
             "template_id": dltConfig['templateId'],
             "entity_id": dltConfig['entityId'],
 
@@ -63,3 +64,7 @@ def traceSendSmsForBill(options):
     except(Exception) as error:
         print(error)
     return(ret)
+
+# Old template Id and message in config.json
+# "message": "Thanks for purchasing from {#var#}. See your bill here {#var#}{#var#}{#var#} - Capital",
+# "templateId": "1207162101678479661",
