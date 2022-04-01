@@ -17,6 +17,10 @@
 11. Serial numbers
 12. Total Debits / Credits
 13. Print view
+## Bug fixes
+1. When new user is created there is null in database TraceEntry against buCode. If it is null then program fails. You need to manually set this field in PgAdmin.
+2. Permissions not working
+3. Provide days in sales report
 ## Planning
                                                                                         1. Authentication and user management:                    1 week, 5th Feb 2022
                                                                                             SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
@@ -39,11 +43,11 @@
                                                                                         3. Bug while login, when press enter key                  .5 day, 5the Mar
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
                                                                                         2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
-0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
+                                                                                        0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
-2. email SMS fixing,
+                                                                                        2. email SMS fixing,
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
-4. Full reporting of Inventory and allied:                1 week, 12rd Mar
+                                                                                        4. Full reporting of Inventory and allied:                1 week, 12rd Mar
 5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
 19. Stock Journals                                        3 days, 17th Mar
 3. Sale bill print correction                             1 day, 18th Mar
@@ -107,8 +111,13 @@
 19. Backup and restore strategy
 20. Upgrade database for all instances
 
-# 22-03-2022 - 28-03-2022
+# 31-03-2022
+1. Finalized  SMS, email, implemented new sms
+2. Bug fixed in finyears file
+
+# 22-03-2022 - 30-03-2022
 1. Working on new sales
+3. Updated create scripts for new database creation
 
 # 21-03-2022
 Todo: purchase report,  start new simple sales, persistence

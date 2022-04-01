@@ -36,7 +36,7 @@ function TraceLeftMenu(props: any) {
         root?.children?.forEach((item: any, index: number) => {
             const listItem = (
                 <ListItem
-                    // dense
+                    dense
                     // divider
                     button
                     // disablePadding
