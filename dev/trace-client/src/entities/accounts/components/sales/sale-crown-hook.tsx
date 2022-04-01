@@ -248,7 +248,7 @@ function useSaleCrown(
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        console.log(JSON.stringify(header))
+        // console.log(JSON.stringify(header))
         let ret = await genericUpdateMasterDetails([header])
         // console.log(JSON.stringify(header))
         if (ret.error) {
@@ -291,7 +291,7 @@ function useSaleCrown(
             }
             const item = {
                 contactsId: ad.billTo.id,
-                id: ad.id,
+                id: ad.id || undefined,
                 tranDate: ad.tranDate,
                 userRefNo: ad.userRefNo,
                 remarks: ad.commonRemarks,
