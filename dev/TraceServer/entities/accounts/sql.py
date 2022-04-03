@@ -1547,7 +1547,7 @@ allSqls = {
     'insert_or_update_contact':'''
         with cte1 as (
             select id from "Contacts"
-                where "mobileNumber" = %(mobileNumber)s --'1111111113'
+                where "mobileNumber" = %(mobileNumber)s::text --'1111111113'
                 or "email" = %(email)s -- ''
                 or "id" = %(id)s		
         ), cte2 as(
@@ -1561,10 +1561,10 @@ allSqls = {
         , cte3 as (
                 update "Contacts" 
                     set "contactName" = %(contactName)s
-                        , "mobileNumber" = 'mobileNumber'
-                        , "otherMobileNumber" = 'otherMobileNumber'
-                        , "landPhone" = 'landPhone'
-                        , "email" = 'email'
+                        , "mobileNumber" = %(mobileNumber)s
+                        , "otherMobileNumber" = %(otherMobileNumber)s
+                        , "landPhone" = %(landPhone)s
+                        , "email" = %(email)s
                         , "descr" = %(descr)s
                         , "anniversaryDate" = %(anniversaryDate)s
                         , "address1" = %(address1)s

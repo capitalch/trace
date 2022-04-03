@@ -28,7 +28,6 @@ function useNewEditContact(arbitraryData: any) {
         curr.isMounted = true
         setOptions()
         setRefresh({})
-
         return () => {
             curr.isMounted = false
         }
@@ -102,13 +101,11 @@ function useNewEditContact(arbitraryData: any) {
 
     async function handleOnBlurMobileNumber(e: any) {
         const mobileNumber = e.target.value.replace(/[^0-9]/g, '')
-        // const mobileNumber = parseInt(num, 10)
         if (!isInvalidIndiaMobile(mobileNumber)) {
-            // search mobile for address
-            const contact = await getContactFromMobile()
+            await setContactFromMobile()
         }
 
-        async function getContactFromMobile() {
+        async function setContactFromMobile() {
             const ret = await execGenericView({
                 isMultipleRows: false,
                 sqlKey: 'get_contact_for_mobile',
@@ -118,17 +115,18 @@ function useNewEditContact(arbitraryData: any) {
                 description: accountsMessages.contactExists,
                 confirmationText: 'Yes',
                 cancellationText: 'No',
-                confirmationButtonProps: { }
+                confirmationButtonProps: {autoFocus: true, variant:'contained', color:'secondary' },
+                cancellationButtonProps: {variant:'contained', color:'secondary'},
+                titleProps:{ color:'dodgerBlue'},
+                title: "Notification !!!"
             }
             if (!_.isEmpty(ret)) {
                 confirm(options).then(() => {
                     arbitraryData.billTo = ret
                     emit('BILL-TO-CLOSE-DIALOG', null)
-                    // billTo.selectedCountryOption = ret.country
                 }).catch(() => { })
             }
         }
-
     }
 
     async function handleSubmit() {
@@ -137,30 +135,35 @@ function useNewEditContact(arbitraryData: any) {
             data: [],
         }
         const item = {
-            id: billTo.id || undefined, // null value for id is not allowed, undefined is allowed
+            id: billTo.id || null, // null value for id is not allowed, undefined is allowed
             contactName: billTo.contactName,
             mobileNumber: billTo.mobileNumber,
-            otherMobileNumber: billTo.otherMobileNumber,
-            landPhone: billTo.landPhone,
+            otherMobileNumber: billTo.otherMobileNumber || null,
+            landPhone: billTo.landPhone || null,
             email: billTo.email || null,
-            descr: billTo.descr,
+            descr: billTo.descr || null,
             anniversaryDate: billTo.anniversaryDate,
             address1: billTo.address1,
-            address2: billTo.address2,
+            address2: billTo.address2 || null,
             country: billTo.selectedCountryOption.label,
             state: billTo.selectedStateOption.label,
             city: billTo.selectedCityOption.label,
-            gstin: billTo.gstin,
+            gstin: billTo.gstin || null,
             pin: billTo.pin,
             dateOfBirth: billTo.dateOfBirth,
             stateCode: billTo.stateCode,
         }
-        obj.data.push(item)
-        const ret = await genericUpdateMasterNoForm({
-            data: item,
-            tableName: 'Contacts',
+        const ret = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'insert_or_update_contact',
+            args: { ...item }
         })
-        billTo.id = billTo.id || ret || null // To take care when ret = false, or the save fails
+        // obj.data.push(item)        
+        // const ret = await genericUpdateMasterNoForm({
+        //     data: item,
+        //     tableName: 'Contacts',
+        // })
+        billTo.id = billTo.id || ret?.id || undefined // To take care when ret = false, or the save fails
         if (ret) {
             meta.current.showDialog = false
             meta.current.isMounted && setRefresh({})
