@@ -160,7 +160,7 @@ function BillTo({ arbitraryData }: any) {
                     <CloseSharp />
                 </IconButton>
             </div>
-            <TraceDialog meta={meta} onSearchBoxFilter={onSearchBoxFilter} />
+            <TraceDialog meta={meta} onSearchBoxFilter={onSearchBoxFilter}  />
         </Paper>
     )
 }

@@ -44,6 +44,17 @@
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
                                                                                         2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
                                                                                         0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
+1. New query for contacts save taking care of existing contact returning the id
+1. Dashboard reports: Sales, Products
+2. provide search for customer list
+3. * character in customer any filed shows error server side
+4. Show print option in sales view
+4. Receipts and vouchers print show not at bottom but up
+6. Minimize the sms length
+5. Meaningful server messages
+6. Security and permissions
+7. Mobile authentication
+
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
                                                                                         2. email SMS fixing,
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
@@ -110,6 +121,10 @@
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 01-04-2022 - 02-04-2022
+1. Implementation and bug fixing
+2. Bug fixed: Sometimes when no cust details entry. Print preview click crashes program. In some situations it takes entry without customer details
 
 # 31-03-2022
 1. Finalized  SMS, email, implemented new sms

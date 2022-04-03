@@ -6,6 +6,7 @@
     "cgstSgstEqual": "SGST and CGST should be equal",        
     "commonAccountCodesInDebitsCredits":"Common account code in Debits and Credits are not allowed",
     "contraSameAccountCodes":"Debit and credit account codes for contra entry cannot be same",
+    "contactExists":"This contact exists. Use it?",
     "dateRangeError": "Date range error",
     "debitCreditNotEqual":"Debits and credits are not equal",
     "debitCreditError": "There is error in total debits and credits", 

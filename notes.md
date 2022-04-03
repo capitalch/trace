@@ -34,7 +34,7 @@ create installer from innosetup
 
 ## all schemas
 demounit1
-
+capitalchowringhee
 capitalelectronics
 kamalikaroy
 kushenclave

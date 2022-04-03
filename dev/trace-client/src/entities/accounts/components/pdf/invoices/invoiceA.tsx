@@ -58,19 +58,19 @@ function InvoiceA({
         }
         const billTo = ti.billTo || ti.businessContacts
         i.billTo = {
-            name: billTo.contactName,
-            address1: billTo.address1,
-            address2: billTo.address2,
-            pin: billTo.pin || billTo.jAddress?.pin,
+            name: billTo?.contactName || '',
+            address1: billTo?.address1 || '',
+            address2: billTo?.address2 || '',
+            pin: billTo?.pin || billTo?.jAddress?.pin || '',
             phone: ''.concat(
-                billTo.mobileNumber || '',
+                billTo?.mobileNumber || '',
                 ' ',
-                billTo.landPhone || ''
+                billTo?.landPhone || ''
             ),
-            email: billTo.email,
-            gstin: billTo.gstin,
-            stateName: billTo.selectedStateOption?.label || billTo?.state || billTo.jAddress?.state,
-            stateCode: billTo.stateCode,
+            email: billTo?.email,
+            gstin: billTo?.gstin,
+            stateName: billTo?.selectedStateOption?.label || billTo?.state || billTo?.jAddress?.state,
+            stateCode: billTo?.stateCode,
         }
         let shipTo = ti.tranH.jData?.shipTo
         if (_.isEmpty(shipTo)) {

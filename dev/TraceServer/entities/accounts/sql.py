@@ -340,12 +340,12 @@ allSqls = {
 
     'get_contact_for_email': '''
         select * from "Contacts"
-	        where "email" = %(email)s
+	        where "email" = %(email)s limit 1
     ''',
 
     'get_contact_for_mobile': '''
         select * from "Contacts"
-	        where "mobileNumber" = %(mobileNumber)s
+	        where "mobileNumber" = %(mobileNumber)s limit 1
     ''',
 
     # 'get_contact_on_mobile_email_contactName1': '''
@@ -1544,6 +1544,47 @@ allSqls = {
                 values (%(accId)s, %(finYearId)s, %(amount)s, %(dc)s, %(branchId)s)
     ''',
 
+    'insert_or_update_contact':'''
+        with cte1 as (
+            select id from "Contacts"
+                where "mobileNumber" = %(mobileNumber)s --'1111111113'
+                or "email" = %(email)s -- ''
+                or "id" = %(id)s		
+        ), cte2 as(
+            insert into "Contacts" ("contactName","mobileNumber", "otherMobileNumber", "landPhone", "email"
+                    , "descr", "anniversaryDate", "address1", "address2", "country", "state", "city", "gstin", "pin", "dateOfBirth", "stateCode")
+                        select %(contactName)s, %(mobileNumber)s, %(otherMobileNumber)s, %(landPhone)s, %(email)s, %(descr)s
+                        , %(anniversaryDate)s, %(address1)s, %(address2)s, %(country)s, %(state)s, %(city)s
+                        , %(gstin)s, %(pin)s, %(dateOfBirth)s, %(stateCode)s
+                where not exists(select 1 from cte1)
+            returning "id")
+        , cte3 as (
+                update "Contacts" 
+                    set "contactName" = %(contactName)s
+                        , "mobileNumber" = 'mobileNumber'
+                        , "otherMobileNumber" = 'otherMobileNumber'
+                        , "landPhone" = 'landPhone'
+                        , "email" = 'email'
+                        , "descr" = %(descr)s
+                        , "anniversaryDate" = %(anniversaryDate)s
+                        , "address1" = %(address1)s
+                        , "address2" = %(address2)s
+                        , "country" = %(country)s
+                        , "state" = %(state)s
+                        , "city" = %(city)s
+                        , "gstin" = %(gstin)s
+                        , "pin" = %(pin)s
+                        , "dateOfBirth" = %(dateOfBirth)s
+                        , "stateCode" = %(stateCode)s
+                where "id" in (select "id" from cte1)
+                    returning "id"
+            )
+        SELECT DISTINCT "id" from cte1
+            UNION select "id" from cte2
+            Union select "id" from cte3
+            LIMIT 1
+    ''',
+
     'insert_last_no': '''
         insert into "TranCounter" ("finYearId", "branchId", "tranTypeId", "lastNo")
                 select  %(finYearId)s, %(branchId)s, %(tranTypeId)s, 1
@@ -1769,8 +1810,6 @@ allSqls = {
                                     and "branchId" = %(branchId)s)
             returning "id" as "result"
         ),
-        
-
         cte8 as (
             select SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end) as "amount"
                 from "TranD" t

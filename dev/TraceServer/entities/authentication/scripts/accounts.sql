@@ -1402,8 +1402,8 @@ ALTER TABLE ONLY public."CategoryM"
 -- Name: Contacts Contacts_contactName_pin_address1_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
-ALTER TABLE ONLY public."Contacts"
-    ADD CONSTRAINT "Contacts_contactName_pin_address1_key" UNIQUE ("contactName", pin, address1);
+-- ALTER TABLE ONLY public."Contacts"
+--    ADD CONSTRAINT "Contacts_contactName_pin_address1_key" UNIQUE ("contactName", pin, address1);
 
 
 --

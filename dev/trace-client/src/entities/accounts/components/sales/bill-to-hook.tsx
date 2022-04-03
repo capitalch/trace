@@ -69,10 +69,9 @@ function useBillTo(arbitraryData: any) {
 
         function billToError() {
             return !(
-                arbitraryData.billTo.id || arbitraryData.billTo.contactName
+                arbitraryData.billTo.id && arbitraryData.billTo.contactName
             )
         }
-
         return { billToError, gstinError }
     }
 

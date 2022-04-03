@@ -42,7 +42,14 @@ function useTraceMaterialComponents() {
                 // className={classes.dialog}
                 {...options.materialDialogProps}
                 open={options.meta.current.showDialog}
-                onClose={options.onClose || handleClose}>
+                // onClose={options.onClose || handleClose}
+                onClose={(e, reason) => {
+                    if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
+                        options.onClose || handleClose()
+                    }
+                }}
+            >
+
                 <DialogTitle id="generic-dialog-title" className="dialog-title">
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Box>{pre.title}</Box>

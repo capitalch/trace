@@ -1,22 +1,22 @@
 import {
-    Box, CloseSharp, DataGridPro,
+    Box, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect, SyncSharp, TextField,
+    IconButton, ReactSelect, SyncSharp, TextField,
     Typography, useRef, useState, useTheme,
-    useStockSummaryAgeingReport, utilMethods,
+    utilMethods,
 } from '../redirect'
 import { GridSearchBox } from './grid-search-box'
-import {usePurchaseReport} from './rp-purchase-report-hook'
+import { usePurchaseReport } from './rp-purchase-report-hook'
 
 function PurchaseReport() {
-    const { fetchData, getColumns, getGridSx, 
-        getPurchasePeriodOptions, 
-        getRowClassName, 
-        handleOptionSelected, 
+    const { fetchData, getColumns, getGridSx,
+        getPurchasePeriodOptions,
+        getRowClassName,
+        handleOptionSelected,
         onSelectionModelChange,
         meta, multiData } = usePurchaseReport()
     const pre = meta.current
@@ -121,7 +121,7 @@ function PurchaseReport() {
                         </IconButton>
                     </Box>
                     <GridSearchBox parentMeta={meta} />
-                </Box>      
+                </Box>
             </GridToolbarContainer>
         )
     }
