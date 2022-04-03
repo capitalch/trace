@@ -105,22 +105,22 @@ function useNewEditContact(arbitraryData: any) {
         // const mobileNumber = parseInt(num, 10)
         if (!isInvalidIndiaMobile(mobileNumber)) {
             // search mobile for address
-            const contact = await getContactForMobile()
+            const contact = await getContactFromMobile()
         }
 
-        async function getContactForMobile() {
+        async function getContactFromMobile() {
             const ret = await execGenericView({
                 isMultipleRows: false,
                 sqlKey: 'get_contact_for_mobile',
                 args: { mobileNumber: mobileNumber }
             })
-            const options = {
+            const options: any = {
                 description: accountsMessages.contactExists,
                 confirmationText: 'Yes',
                 cancellationText: 'No',
+                confirmationButtonProps: { }
             }
             if (!_.isEmpty(ret)) {
-
                 confirm(options).then(() => {
                     arbitraryData.billTo = ret
                     emit('BILL-TO-CLOSE-DIALOG', null)
@@ -244,12 +244,10 @@ function useNewEditContact(arbitraryData: any) {
 
     function Form() {
         const [, setRefresh] = useState({})
-
         return (
             <div className={classes.content}>
                 {/* Mobile number */}
                 <InputMask
-                    // inputRef={pre.mobileNumberTextRef}
                     mask="(999) 999-9999"
                     alwaysShowMask={true}
                     onChange={(e: any) => {
@@ -274,7 +272,7 @@ function useNewEditContact(arbitraryData: any) {
                 </InputMask>
 
                 {/* Contact name */}
-                <TextField                    
+                <TextField
                     label="Contact name"
                     variant="standard"
                     className="text-field"
