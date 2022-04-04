@@ -44,12 +44,16 @@
                                                                                         4. Bug fix: Opening account balances                      .5 day, 5th Mar
                                                                                         2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
                                                                                         0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
-1. New query for contacts save taking care of existing contact returning the id
+                                                                                        1. New query for contacts save taking care of existing contact returning the id
+0. Quick reports: Stock summary, daily sales, Jakar, orders, health
+2. Quick entry for HSN in products and sale
+2.1 Provide hsn in category leaf an product level
 1. Dashboard reports: Sales, Products
 2. provide search for customer list
+1. Give more info in view of sales, like gp, days
 3. * character in customer any filed shows error server side
 4. Show print option in sales view
-4. Receipts and vouchers print show not at bottom but up
+                                                                                        4. Receipts and vouchers print show not at bottom but up
 6. Minimize the sms length
 5. Meaningful server messages
 6. Security and permissions

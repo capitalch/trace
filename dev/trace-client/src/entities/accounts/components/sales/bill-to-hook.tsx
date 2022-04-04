@@ -94,11 +94,12 @@ function useBillTo(arbitraryData: any) {
 
     async function handleSearch() {
         if (meta.current.searchFilter) {
+            const searchFilter = meta.current.searchFilter.replaceAll('*', '\\*')
             emit('SHOW-LOADING-INDICATOR', true)
             const ret = await execGenericView({
                 isMultipleRows: true,
                 sqlKey: 'get_contact_on_mobile_email_contactName',
-                args: { searchString: meta.current.searchFilter },
+                args: { searchString: searchFilter},// meta.current.searchFilter  },
             })
             emit('SHOW-LOADING-INDICATOR', false)
             if (ret && ret.length > 0) {
@@ -326,15 +327,17 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
 
             '& .bill-to-address': {
-                color: theme.palette.grey[500],
+                color: theme.palette.common.black,
+                fontWeight: 'bold',
                 display: 'flex',
                 alignItems: 'center',
                 columnGap: theme.spacing(1),
                 flexWrap: 'wrap',
                 marginTop: theme.spacing(1),
-                fontSize: '0.8rem',
+                // fontSize: '0.8rem',
                 '& span': {
                     color: theme.palette.secondary.main,
+                    fontWeight:'normal'
                 },
             },
         },

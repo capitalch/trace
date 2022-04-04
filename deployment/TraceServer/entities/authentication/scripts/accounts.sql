@@ -1174,140 +1174,140 @@ INSERT INTO public."UnitM" VALUES (2, 'kilogram', NULL, 'Kg');
 -- Name: AccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccM_id_seq"', 307, true);
+-- SELECT pg_catalog.setval('public."AccM_id_seq"', 307, true);
 
 
 --
 -- Name: AccOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 724, true);
+-- SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 724, true);
 
 
 --
 -- Name: AutoSubledgerCounter_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 2, true);
+-- SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 2, true);
 
 
 --
 -- Name: BranchM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BranchM_id_seq"', 4, true);
+-- SELECT pg_catalog.setval('public."BranchM_id_seq"', 4, true);
 
 
 --
 -- Name: BrandM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BrandM_id_seq"', 15, true);
+-- SELECT pg_catalog.setval('public."BrandM_id_seq"', 15, true);
 
 
 --
 -- Name: Category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Category_id_seq"', 61, true);
+-- SELECT pg_catalog.setval('public."Category_id_seq"', 61, true);
 
 
 --
 -- Name: Contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Contacts_id_seq"', 258, true);
+-- SELECT pg_catalog.setval('public."Contacts_id_seq"', 258, true);
 
 
 --
 -- Name: ExtBankOpBalAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 3, true);
+-- SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 3, true);
 
 
 --
 -- Name: ExtBankReconTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 137, true);
+-- SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 137, true);
 
 
 --
 -- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 15, true);
+-- SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 15, true);
 
 
 --
 -- Name: ExtGstTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 9801, true);
+-- SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 9801, true);
 
 
 --
 -- Name: ExtMiscAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 1, true);
+-- SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 1, true);
 
 
 --
 -- Name: GodownM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."GodownM_id_seq"', 1, false);
+-- SELECT pg_catalog.setval('public."GodownM_id_seq"', 1, false);
 
 
 --
 -- Name: LastTranNumber_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 22, true);
+-- SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 22, true);
 
 
 --
 -- Name: PosM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."PosM_id_seq"', 1, true);
+-- SELECT pg_catalog.setval('public."PosM_id_seq"', 1, true);
 
 
 --
 -- Name: ProductM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ProductM_id_seq"', 68, true);
+-- SELECT pg_catalog.setval('public."ProductM_id_seq"', 68, true);
 
 
 --
 -- Name: ProductOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 19, true);
+-- SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 19, true);
 
 
 --
 -- Name: SalePurchaseDetails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 9720, true);
+-- SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 9720, true);
 
 
 --
 -- Name: TranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranD_id_seq"', 20278, true);
+-- SELECT pg_catalog.setval('public."TranD_id_seq"', 20278, true);
 
 
 --
 -- Name: TranH_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranH_id_seq"', 10188, true);
+-- SELECT pg_catalog.setval('public."TranH_id_seq"', 10188, true);
 
 
 --
@@ -1402,8 +1402,8 @@ ALTER TABLE ONLY public."CategoryM"
 -- Name: Contacts Contacts_contactName_pin_address1_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
-ALTER TABLE ONLY public."Contacts"
-    ADD CONSTRAINT "Contacts_contactName_pin_address1_key" UNIQUE ("contactName", pin, address1);
+-- ALTER TABLE ONLY public."Contacts"
+--    ADD CONSTRAINT "Contacts_contactName_pin_address1_key" UNIQUE ("contactName", pin, address1);
 
 
 --

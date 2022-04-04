@@ -57,6 +57,7 @@ function useNewEditContact(arbitraryData: any) {
         isMounted: false,
         showDialog: false,
         mobileNumberTextRef: undefined,
+        isMobileNumberChanged: false,
         dialogConfig: {
             title: '',
             content: () => { },
@@ -101,7 +102,7 @@ function useNewEditContact(arbitraryData: any) {
 
     async function handleOnBlurMobileNumber(e: any) {
         const mobileNumber = e.target.value.replace(/[^0-9]/g, '')
-        if (!isInvalidIndiaMobile(mobileNumber)) {
+        if ((!isInvalidIndiaMobile(mobileNumber)) && (pre.isMobileNumberChanged)) {
             await setContactFromMobile()
         }
 
@@ -115,14 +116,15 @@ function useNewEditContact(arbitraryData: any) {
                 description: accountsMessages.contactExists,
                 confirmationText: 'Yes',
                 cancellationText: 'No',
-                confirmationButtonProps: {autoFocus: true, variant:'contained', color:'secondary' },
-                cancellationButtonProps: {variant:'contained', color:'secondary'},
-                titleProps:{ color:'dodgerBlue'},
+                confirmationButtonProps: { autoFocus: true, variant: 'contained', color: 'secondary' },
+                cancellationButtonProps: { variant: 'contained', color: 'secondary' },
+                titleProps: { color: 'dodgerBlue' },
                 title: "Notification !!!"
             }
             if (!_.isEmpty(ret)) {
                 confirm(options).then(() => {
                     arbitraryData.billTo = ret
+                    pre.contactSelectedFlag = true
                     emit('BILL-TO-CLOSE-DIALOG', null)
                 }).catch(() => { })
             }
@@ -251,17 +253,19 @@ function useNewEditContact(arbitraryData: any) {
             <div className={classes.content}>
                 {/* Mobile number */}
                 <InputMask
-                    mask="(999) 999-9999"
+                    mask="99-999-99999"
                     alwaysShowMask={true}
                     onChange={(e: any) => {
                         const num = e.target.value.replace(/[^0-9]/g, '')
                         arbitraryData.billTo.mobileNumber = parseInt(num, 10)
+                        pre.isMobileNumberChanged = true
                         setRefresh({})
                     }}
                     onBlur={handleOnBlurMobileNumber}
                     value={billTo.mobileNumber || ''}>
                     {() => (
                         <TextField
+                            autoComplete='off'
                             label="Mobile"
                             variant="standard"
                             inputRef={pre.mobileNumberTextRef}
@@ -276,6 +280,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Contact name */}
                 <TextField
+                    autoComplete='off'
                     label="Contact name"
                     variant="standard"
                     className="text-field"
@@ -289,6 +294,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Other mobile number */}
                 <TextField
+                    autoComplete='off'
                     label="Other mobile numbers"
                     variant="standard"
                     className="text-field"
@@ -301,6 +307,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Land phone  */}
                 <TextField
+                    autoComplete='off'
                     label="Land phone"
                     variant="standard"
                     className="text-field"
@@ -313,6 +320,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Email */}
                 <TextField
+                    autoComplete='off'
                     label="Email"
                     variant="standard"
                     className="text-field"
@@ -326,6 +334,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Address1 */}
                 <TextField
+                    autoComplete='off'
                     label="Address1"
                     variant="standard"
                     className="text-field"
@@ -339,6 +348,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Address2 */}
                 <TextField
+                    autoComplete='off'
                     label="Address2"
                     variant="standard"
                     className="text-field"
@@ -393,6 +403,7 @@ function useNewEditContact(arbitraryData: any) {
                     value={billTo.pin || ''}>
                     {() => (
                         <TextField
+                            autoComplete='off'
                             variant="standard"
                             label="Pin"
                             error={isInvalidIndiaPin(arbitraryData.billTo.pin)}
@@ -411,6 +422,7 @@ function useNewEditContact(arbitraryData: any) {
                     value={billTo.stateCode || ''}>
                     {() => (
                         <TextField
+                            autoComplete='off'
                             label="State code"
                             variant="standard"
                             error={isInvalidStateCode(billTo?.stateCode)}
@@ -421,6 +433,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Gstin */}
                 <TextField
+                    autoComplete='off'
                     label="Gstin"
                     variant="standard"
                     className="text-field"
@@ -462,6 +475,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Description */}
                 <TextField
+                    autoComplete='off'
                     label="Description"
                     variant="standard"
                     className="text-field"
