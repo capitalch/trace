@@ -9,7 +9,7 @@ function InventoryReports() {
     const styles = {
         option: (base: any) => ({
             ...base,
-            padding: '.1rem',
+            padding: '.4rem',
             paddingLeft: '0.8rem',
             // color: theme.palette.blue,
             // backgroundColor: 'white'

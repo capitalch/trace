@@ -28,7 +28,7 @@ function utilMethods() {
         entityName?: string
         args?: {}
     }
-    
+
     async function execGenericView(options: GenericViewOptions) {
         let ret: any = undefined
         const currentEntityName = getCurrentEntity()
@@ -172,7 +172,7 @@ function utilMethods() {
                 duration: null,
             })
             ret = { message: error.message }
-            throw(error)
+            throw (error)
         }
         return ret
     }
@@ -265,20 +265,31 @@ function utilMethods() {
         const logindata = getLoginData()
         const permissions: any[] = logindata.permissions || []
         const control = permissions.find(
-            (item) => item.hierarchy === hierarchy
+            (item:any) => item.hierarchy === hierarchy
         )
         //For admin users all controls are visible
-        let ret = logindata.userType === 'a' ? true : false
-        if (control) {
-            ret = control.isActive
+        let enabled = false
+        if (logindata.userType === 'a') {
+            enabled = true
         } else {
-            ret = true // Controls which are not considered are active
+            if (control) {
+                enabled = control.isActive
+            } else {
+                enabled = false
+            }
         }
-        return !ret
+        // let ret = logindata.userType === 'a' ? true : false
+        // if (control) {
+        //     ret = control.isActive
+        // } else {
+        //     // ret = true // Controls which are not considered are active
+        //     ret = false
+        // }
+        return !enabled
     }
 
-    function Mandatory(){
-        return <Typography variant='subtitle2' sx={{color:'red'}} component='span'> *</Typography>
+    function Mandatory() {
+        return <Typography variant='subtitle2' sx={{ color: 'red' }} component='span'> *</Typography>
     }
 
     function numberToWordsInRs(value: any) {

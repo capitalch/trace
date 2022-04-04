@@ -45,9 +45,16 @@
                                                                                         2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
                                                                                         0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
                                                                                         1. New query for contacts save taking care of existing contact returning the id
+
+Emergency bug fixes
+1. Change uid does not close the window
+2. When a new user is created and is not associated, and tries to login, program crashes without any warning
+3. When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked.
+
+
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 2. Quick entry for HSN in products and sale
-2.1 Provide hsn in category leaf an product level
+2.1 Provide hsn in category leaf at product level
 1. Dashboard reports: Sales, Products
 2. provide search for customer list
 1. Give more info in view of sales, like gp, days
@@ -125,6 +132,11 @@
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 03-04-2022 - 04-04-2022
+1. Bug fixes for contacts
+2. Fixed: When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked
+3. Fixed: permissions not working properly issue
 
 # 01-04-2022 - 02-04-2022
 1. Implementation and bug fixing

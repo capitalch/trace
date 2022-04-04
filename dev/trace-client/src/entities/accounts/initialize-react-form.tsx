@@ -8,11 +8,11 @@ import { manageEntitiesState } from '../../global-utils/esm'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { sharedArtifacts } from '../../shared-artifacts/shared-artifacts-map'
 import { customComponents } from './components/common/custom-components-map'
-import {initCode} from './init-code'
+import { initCode } from './init-code'
 
 const { getCurrentEntity } = manageEntitiesState()
-const {filterOn} = usingIbuki()
-const {setLastBuCodeFinYearIdBranchId} = initCode()
+const { filterOn } = usingIbuki()
+const { setLastBuCodeFinYearIdBranchId } = initCode()
 
 initialize({
     entityName: getCurrentEntity()
@@ -26,6 +26,6 @@ initialize({
     , graphqlQueries: graphqlQueries
 })
 
-filterOn(getCurrentEntity().concat('-', 'EXECUTE-INIT-CODE')).subscribe((d:any)=>{
+filterOn(getCurrentEntity().concat('-', 'EXECUTE-INIT-CODE')).subscribe((d: any) => {
     setLastBuCodeFinYearIdBranchId()
 })
