@@ -303,9 +303,10 @@ function PdfVoucher({ arbitraryData }: any) {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     fontSize: 9,
-                    position: 'absolute',
-                    bottom: 30,
-                    left: 30,
+                    top: 10,
+                    // position: 'absolute',
+                    // bottom: 30,
+                    // left: 30,
                     width: '100%'
                 }}>
                 <Text style={{ width: '65%' }}>{vou.summary.comments}</Text>

@@ -1,4 +1,4 @@
-# npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/react-fontawesome @mui/material @mui/x-data-grid-pro @testing-library/jest-dom @types/node @types/react @types/react-dom @types/react-table react-widgets styled-components typescript url-join
+# npm install  @mui/x-data-grid-pro @testing-library/react @testing-library/user-event moment react react-dom react-to-print sass 
 
 ## Required reports
 1. Profitibality

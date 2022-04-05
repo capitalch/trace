@@ -11,7 +11,7 @@ import {
     GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales,SalesNew, Taxation,
     TrialBalance, Voucher, OpeningStock, InventoryReports
 } from './components/common/redirect'
-import { settingsMegaData, salesMegaData } from './mega-data-init-values'
+// import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -30,12 +30,10 @@ function LaunchPad() {
         mainHeading: '',
     })
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
-
+    const megaData = useContext(MegaDataContext)
     meta.current.mainHeading = getUnitHeading()
     
-    const megaData = useContext(MegaDataContext)
-    Object.assign(megaData.accounts.sales, salesMegaData)
-    Object.assign(megaData.accounts.settings, settingsMegaData)
+    
 
     const { socketMessageHandler } = useServerSocketMessageHandler()
 
@@ -61,6 +59,9 @@ function LaunchPad() {
 
     useEffect(() => {
         const configuration = getFromBag('configuration')
+        if(_.isEmpty(configuration)){
+            return
+        }
         const { linkServerUrl, linkServerKey } = configuration
         let subs2: any = undefined
         const subs1 = connectToLinkServer(linkServerUrl, undefined, linkServerKey).subscribe(
@@ -164,6 +165,11 @@ function LaunchPad() {
         )}:${buCode}:${finYearId}:${branchId}`
         return room
     }
+
+    // function initAccountsMegaData() {
+    //     Object.assign(megaData.accounts.sales, salesMegaData)
+    //     Object.assign(megaData.accounts.settings, settingsMegaData)
+    // }
 }
 
 export { LaunchPad }

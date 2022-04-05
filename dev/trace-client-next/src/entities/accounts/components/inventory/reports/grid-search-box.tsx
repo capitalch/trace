@@ -33,7 +33,6 @@ function GridSearchBox({ parentMeta }: any) {
     function handleOnChange(e: any) {
         pre.searchText = e.target.value
         pre.isSearchTextEdited = true
-
         pre.setRefresh({})
         debounceEmit(pre.debounceMessage, [requestSearch, e.target.value])
     }

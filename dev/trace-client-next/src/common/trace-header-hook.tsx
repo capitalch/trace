@@ -90,9 +90,7 @@ function useTraceHeader() {
         message: globalMessages['operationSuccessful'],
         duration: 5000,
     })
-    // useEffect(()=>{
-    //     const x = meta.current.submitButtonRef
-    // })
+  
     // for closing snackbar
     function handleClose() {
         snackbar.current.open = false
@@ -662,7 +660,7 @@ const adminMenuJson: any = {
             children: [
                 {
                     name: 'manageUsers',
-                    label: 'Manage business users',
+                    label: 'Manage users',
                     componentName: 'manageUsers',
                     // componentName: 'genericCRUD',
                     // args: {
@@ -680,7 +678,7 @@ const adminMenuJson: any = {
                 },
                 {
                     name: 'manageBu',
-                    label: 'Manage business units (Bu)',
+                    label: 'Manage business units',
                     componentName: 'adminManageBu',
                     // componentName: 'genericCRUD',
                     // args: {
@@ -689,7 +687,7 @@ const adminMenuJson: any = {
                 },
                 {
                     name: 'adminAssociateUsersRolesBu',
-                    label: 'Associate business users with roles and Bu',
+                    label: 'Associate users',
                     componentName: 'adminAssociateUsersRolesBu',
                     // args: {
                     //     loadComponent: 'associateBusinessUsersWithRolesAndBu',

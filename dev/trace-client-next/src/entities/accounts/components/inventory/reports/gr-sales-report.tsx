@@ -1,28 +1,24 @@
 import {
-    Box, CloseSharp, DataGridPro,
+    Box, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect, SyncSharp, TextField,
-    Typography, useRef, useState, useTheme,
-    useStockSummaryAgeingReport, utilMethods,
+    IconButton, ReactSelect, SyncSharp, TextField,
+    Typography, useRef, useState, useTheme, utilMethods,
 } from '../redirect'
 import { GridSearchBox } from './grid-search-box'
-import {usePurchaseReport} from './rp-purchase-report-hook'
+import { useSalesReport } from './gr-sales-report-hook'
 
-function PurchaseReport() {
-    const { fetchData, getColumns, getGridSx, 
-        getPurchasePeriodOptions, 
-        getRowClassName, 
-        handleOptionSelected, 
-        onSelectionModelChange,
-        meta, multiData } = usePurchaseReport()
+function SalesReport() {
+    const { fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, meta, multiData, onSelectModelChange } = useSalesReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
+
     pre.searchTextRef = useRef({})
+
     const reactSelectStyles = {
         option: (base: any) => ({
             ...base,
@@ -38,6 +34,7 @@ function PurchaseReport() {
             // height:theme.spacing(1.5)
         })
     }
+
     return (
         <DataGridPro
             checkboxSelection={true}
@@ -49,7 +46,7 @@ function PurchaseReport() {
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
-            onSelectionModelChange={onSelectionModelChange}
+            onSelectionModelChange={onSelectModelChange}
             rowHeight={25}
             rows={pre.filteredRows}
             showCellRightBorder={true}
@@ -81,7 +78,7 @@ function PurchaseReport() {
                         {/* Sale period */}
                         <ReactSelect menuPlacement='auto' placeholder='Select Sale period'
                             styles={reactSelectStyles}
-                            options={getPurchasePeriodOptions()}
+                            options={getSalesPeriodOptions()}
                             value={pre.selectedOption}
                             onChange={
                                 (optionSelected: any) => {
@@ -110,6 +107,7 @@ function PurchaseReport() {
                                 pre.endDate = e.target.value
                                 setRefresh({})
                             }}
+
                             value={pre.endDate || ''}
                         />
                         {/* Sync */}
@@ -121,7 +119,7 @@ function PurchaseReport() {
                         </IconButton>
                     </Box>
                     <GridSearchBox parentMeta={meta} />
-                </Box>      
+                </Box>
             </GridToolbarContainer>
         )
     }
@@ -130,16 +128,18 @@ function PurchaseReport() {
         return (<GridFooterContainer >
             <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
                 <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
-                <Box>{''.concat('Count(selected)', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
-                <Box>{''.concat('Aggr purchase(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.aggrPurchase || 0))}</Box>
-                <Box>{''.concat('Purchase with gst(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.amount || 0))}</Box>
-                {/* <Box>{''.concat('Selected gross profit', ' : ', toDecimalFormat(pre?.selectedRowsObject?.profit || 0))}</Box> */}
+                <Box>{''.concat('Count(Selected)', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
+                <Box>{''.concat('Aggr sale(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.aggrSale || 0))}</Box>
+                <Box>{''.concat('Sale with gst(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.amount || 0))}</Box>
+                <Box>{''.concat('Gross profit(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.profit || 0))}</Box>
                 <Box>{''.concat('Total qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
-                <Box>{''.concat('Aggr purchase', ' : ', toDecimalFormat(pre?.totals?.aggrPurchase || 0))}</Box>
-                <Box>{''.concat('Purchase with gst', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
-                {/* <Box>{''.concat('Gross profit', ' : ', toDecimalFormat((pre?.totals?.grossProfit || 0) - (pre?.totals?.opValue || 0)))}</Box> */}
+                <Box>{''.concat('Aggr sale', ' : ', toDecimalFormat(pre?.totals?.aggrSale || 0))}</Box>
+                <Box>{''.concat('Sale with gst', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
+                <Box>{''.concat('Gross profit', ' : ', toDecimalFormat((pre?.totals?.grossProfit || 0) - (pre?.totals?.opValue || 0)))}</Box>
             </Box>
         </GridFooterContainer>)
     }
+
 }
-export { PurchaseReport }
+
+export { SalesReport }

@@ -1,11 +1,11 @@
-import { Box, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, } from './redirect'
+import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, } from './redirect'
 import { NewProduct } from './new-product'
 import { useProducts, useStyles } from './products-hook'
 
 function Products() {
-    const {getXXGridParams, handleCloseDialog, meta } = useProducts()
+    const { getXXGridParams, handleCloseDialog, handleSubmit, meta } = useProducts()
     const classes = useStyles()
-    const { getGridReportSubTitle,  XXGrid } = useSharedElements()
+    const { getGridReportSubTitle, XXGrid } = useSharedElements()
     const pre = meta.current
     const {
         columns,
@@ -18,9 +18,14 @@ function Products() {
 
     return (
         <Box className={classes.content}>
-            <Typography variant="subtitle1" component="div" color="secondary">
-                Products
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="subtitle1" component="div" color="secondary">
+                    Products
+                </Typography>
+                <Button color='secondary' size='small' variant='contained' disabled={!pre.isDataChanged}
+                    onClick={handleSubmit}
+                >Submit</Button>
+            </Box>
             <XXGrid
                 gridActionMessages={gridActionMessages}
                 autoFetchData={true}

@@ -1,4 +1,4 @@
-import { useRef, useState } from '../imports/regular-imports'
+import { _, useRef, useState } from '../imports/regular-imports'
 import {
     Button,
     IconButton,
@@ -90,7 +90,7 @@ function useTraceHeader() {
         message: globalMessages['operationSuccessful'],
         duration: 5000,
     })
-  
+
     // for closing snackbar
     function handleClose() {
         snackbar.current.open = false
@@ -392,10 +392,8 @@ function useTraceHeader() {
             if (q) {
                 try {
                     const result = await mutateGraphql(q)
-                    if (
-                        result?.data?.authentication?.genericUpdateMaster ===
-                        true
-                    ) {
+                    if (!_.isEmpty(result?.data?.authentication?.genericUpdateMaster)) 
+                    {
                         logout()
                         closeDialog()
                     }

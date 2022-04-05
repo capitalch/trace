@@ -38,10 +38,7 @@ function BankRecon() {
     } = getXXGridParams()
 
     return (
-        <div
-            className={classes.content}
-            // style={{ width: getCurrentWindowSize() }}
-            >
+        <div className={classes.content}>
             <Box className="header">
                 <Box className="bank">
                     <Typography
@@ -123,7 +120,7 @@ function BankRecon() {
                 className="xx-grid"
                 gridActionMessages={gridActionMessages}
                 columns={columns}
-                editableFields={['clearDate', 'remarks']}
+                // editableFields={['clearDate', 'remarks']}
                 hideViewLimit={true}
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}

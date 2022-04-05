@@ -7,7 +7,7 @@ function ProductsInfo() {
     const sales = megaData.accounts.sales
     const products = sales.products
     const { extractAmount, toDecimalFormat } = utilMethods()
-    return (<Box sx={{ display: 'flex', flex: 1, border: '1px solid lightGrey', m: 1, height: '100%' }}>
+    return (<Box sx={{ display: 'flex', flex: 1, border: '1px solid lightGrey', m: 1, ml:0, height: '100%' }}>
         <Box className='vertical' sx={{ p: 2, pt: 1, pb: 0, flex: 1 }}>
             <Summary />
             <ProductLineItems />

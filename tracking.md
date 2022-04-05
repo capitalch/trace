@@ -47,7 +47,7 @@
                                                                                         1. New query for contacts save taking care of existing contact returning the id
 
 Emergency bug fixes
-1. Change uid does not close the window
+                                                                                        1. Change uid does not close the window
 2. When a new user is created and is not associated, and tries to login, program crashes without any warning
 3. When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked.
 
@@ -137,6 +137,7 @@ Emergency bug fixes
 1. Bug fixes for contacts
 2. Fixed: When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked
 3. Fixed: permissions not working properly issue
+4. Change uid does not close the window
 
 # 01-04-2022 - 02-04-2022
 1. Implementation and bug fixing

@@ -1,4 +1,5 @@
-import { clsx, useState, useEffect, useRef } from '../imports/regular-imports'
+import { clsx, useState, useEffect, useRef, useContext } from '../imports/regular-imports'
+import { salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
 import {
     Container,
     makeStyles,
@@ -39,6 +40,7 @@ function TraceMain({ open }: any) {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
+        initAccountsMegaData() //inits the global object for accounts
         const launchMap: any = {
             accounts: <LaunchPadAccounts />,
             authentication: <LaunchPadAuthentication />,
@@ -60,6 +62,11 @@ function TraceMain({ open }: any) {
         }
     }, [])
 
+    // function initAccountsMegaData() {
+    //     Object.assign(meta.current.megaData.accounts.sales, salesMegaData)
+    //     Object.assign(meta.current.megaData.accounts.settings, settingsMegaData)
+    // }
+
     // For every entity there is separate launch-pad file. Its exported object is mapped in launchMap
     function LaunchPad() {
         return meta.current.launchPad
@@ -77,6 +84,11 @@ function TraceMain({ open }: any) {
             </MegaDataContext.Provider>
         </Container>
     )
+
+    function initAccountsMegaData() {
+        Object.assign(meta.current.megaData.accounts.sales, salesMegaData)
+        Object.assign(meta.current.megaData.accounts.settings, settingsMegaData)
+    }
 }
 
 export { TraceMain }

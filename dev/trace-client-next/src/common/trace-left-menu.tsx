@@ -1,7 +1,7 @@
 import { useState, useRef } from '../imports/regular-imports'
-import { ClickAwayListener,Collapse,Divider, List, ListItem,ListItemText,Theme, useTheme } from '../imports/gui-imports'
-import {manageEntitiesState, useIbuki} from '../imports/trace-imports'
-import {ExpandLess, ExpandMore} from '../imports/icons-import'
+import { ClickAwayListener, Collapse, Divider, List, ListItem, ListItemText, Theme, useTheme } from '../imports/gui-imports'
+import { manageEntitiesState, useIbuki } from '../imports/trace-imports'
+import { ExpandLess, ExpandMore } from '../imports/icons-import'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import { utilMethods } from '../global-utils/misc-utils'
 import { iconMap } from './trace-left-menu-icon-map'
@@ -11,7 +11,7 @@ function TraceLeftMenu(props: any) {
     const [, setRefresh] = useState({})
     const rootChildren = props?.value?.children
     const { emit } = useIbuki()
-    const theme:Theme = useTheme()
+    const theme: Theme = useTheme()
     const { isControlDisabled } = utilMethods()
     const { getCurrentEntity } = manageEntitiesState()
     const meta: any = useRef({
@@ -37,14 +37,14 @@ function TraceLeftMenu(props: any) {
             const listItem = (
                 <ListItem
                     // dense
-                    // divider
+                    divider
                     button
                     // disablePadding
                     // disableGutters
                     key={index}
-                    sx={{height:theme.spacing(4.5)}}
+                    sx={{ height: theme.spacing(4.0),  display:'flex', alignItems:'center' }}
                     disabled={isControlDisabled(item.hierarchy)}
-                    onClick={(e:any) => {
+                    onClick={(e: any) => {
                         if (item.children) {
                             const currentItemIndex =
                                 meta.current.openArray[index]
@@ -66,14 +66,15 @@ function TraceLeftMenu(props: any) {
                     }}>
                     {
                         <ListItemIcon
-                            style={{
+                            sx={{
                                 color: theme.palette.success.light,
-                                marginLeft: `${item.children ? 0 : '0.8rem'}`,
-                            }}>
+                                ml: `${item.children ? 0 : '0.7rem'}`,
+                            }}
+                        >
                             {iconMap[item.name]}
                         </ListItemIcon>
                     }
-                    <ListItemText primary={item.label} ></ListItemText>
+                    <ListItemText primary={item.label} sx={{ ml: -2.5, }} ></ListItemText>
                     {getUpDownArrowIcon(item, index)}
                 </ListItem>
             )

@@ -64,7 +64,7 @@ interface XXGridOptions {
     columns: any[]
     customFooterField1?: { label: string, path?: string, value?: number }
     disableSelectionOnClick?: boolean
-    editableFields?: string[]
+    // editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
 
@@ -146,6 +146,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 return summ
             }}
             disableSelectionOnClick={disableSelectionOnClick || true}
+            experimentalFeatures={{ newEditingApi: true }}
             className={clsx(className || '', classes.content)}
             {...gridOptions.xGridProps}
             apiRef={apiRef}

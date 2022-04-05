@@ -11,7 +11,7 @@
         "@mui/icons-material": "^5.5.1",
         "@mui/material": "^5.5.3",
         "@mui/styles": "^5.5.3",
-        "@mui/x-data-grid-pro": "^5.7.0",
+        "@mui/x-data-grid-pro": "^5.8.0",
         "@react-pdf/renderer": "^2.1.1",
         "@testing-library/jest-dom": "^5.16.3",
         "@testing-library/react": "^12.1.4",
@@ -42,7 +42,7 @@
         "graphql": "^16.3.0",
         "graphql-tag": "^2.12.6",
         "material-ui-confirm": "^3.0.3",
-        "moment": "^2.29.1",
+        "moment": "^2.29.2",
         "object-hash": "^3.0.0",
         "primeicons": "^5.0.0",
         "primereact": "^7.2.1",
@@ -53,7 +53,7 @@
         "react-number-format": "^4.9.1",
         "react-scripts": "^4.0.3",
         "react-select": "^5.2.2",
-        "react-to-print": "^2.14.4",
+        "react-to-print": "^2.14.5",
         "react-widgets": "^5.8.4",
         "rxjs": "^7.5.5",
         "socket.io-client": "^4.4.1",
@@ -87,6 +87,6 @@
     "devDependencies": {
         "gzip": "^0.1.0",
         "react-error-overlay": "6.0.9",
-        "sass": "^1.49.9"
+        "sass": "^1.49.11"
     }
 }

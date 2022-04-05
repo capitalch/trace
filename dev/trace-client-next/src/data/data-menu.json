@@ -63,7 +63,7 @@
                         },
                         {
                             "name": "simpleSalesSubMenu",
-                            "hierarchy": "salespurchases-simpleSales",
+                            "hierarchy": "salespurchases-simple-sales",
                             "label": "Simple sales",
                             "componentName": "salesNew",
                             "args":{

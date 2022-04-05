@@ -134,6 +134,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     let ret: any = undefined
                     if (entityNames.includes(item.name)) {
                         ret = (
+                            // Accounts button 
                             <Button
                                 color="inherit"
                                 variant="outlined"
