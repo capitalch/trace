@@ -96,3 +96,7 @@ ALTER TABLE IF EXISTS "CategoryM"
    DROP CONSTRAINT IF EXISTS "CategoryM_catName_parentId_unique_key",
    ADD  CONSTRAINT "CategoryM_catName_parentId_unique_key"
    UNIQUE ("catName", "parentId");
+
+-- 05-04-2022 Added a hsn column for root category and updated in all databases
+ALTER TABLE IF EXISTS "CategoryM"
+	ADD COLUMN IF NOT EXISTS "hsn" NUMERIC(8) NULL;

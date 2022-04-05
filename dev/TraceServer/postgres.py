@@ -15,7 +15,8 @@ with open('config.json') as f:
 
 poolStore = {}
 
-def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, finYearId = None):
+
+def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId=1, finYearId=None):
     connection = None
     ret = None
     res = None
@@ -30,31 +31,32 @@ def execGenericUpdateMaster(dbName, sqlObject, buCode='public', branchId = 1, fi
             'deletedIds', None) is not None else 'generic'
         ret = execSqlObject(sqlObject, cursor, buCode=buCode)
         if(tableName == 'AccM'):
-            if(deletedIds): # account deleted
+            if(deletedIds):  # account deleted
                 pass
-            else: # update or new account
+            else:  # update or new account
                 acc = sqlObject.get('data', None)
                 if(acc):
-                    if(acc.get('id', None)): # it is edit account
+                    if(acc.get('id', None)):  # it is edit account
                         res = acc
-                    else: # it is new account
+                    else:  # it is new account
                         acc['accClass'] = sqlObject.get('accClass', None)
-                        acc['isAutoSubledger'] = sqlObject.get('isAutoSubledger', None)
+                        acc['isAutoSubledger'] = sqlObject.get(
+                            'isAutoSubledger', None)
                         acc['id'] = ret
                 res = acc
         elif(tableName == 'ProductM'):
-            if(deletedIds): # account deleted
+            if(deletedIds):  # account deleted
                 pass
-            else: # update or new
+            else:  # update or new
                 product = sqlObject.get('data', None)
-                if(product):
-                    if(product.get('id', None)): # edit
+                if(product and (not isinstance(product, list))):
+                    if(product.get('id', None)):  # edit
                         res = product
-                    else: # insert
+                    else:  # insert
                         product['id'] = ret
                 res = product
         connection.commit()
-        
+
     except (Exception, psycopg2.Error) as error:
         ret = False
         if connection:

@@ -551,7 +551,7 @@ allSqls = {
             "catName", "isActive","brandName",             
             "salePriceGst", "saleDiscount", "saleDiscountRate", 
             "purPrice", "purDiscount", "purDiscountRate",            
-            "hsn", "info", "label", "productCode", "upcCode", "gstRate"
+            CASE WHEN p."hsn" is null THEN c."hsn" ELSE p."hsn" END, "info", "label", "productCode", "upcCode", "gstRate"
             from "ProductM" p
                 join "CategoryM" c
                     on c."id" = p."catId"
@@ -565,7 +565,7 @@ allSqls = {
             "catName", "isActive","brandName",             
             "salePriceGst", "saleDiscount", "saleDiscountRate", 
             "purPrice", "purDiscount", "purDiscountRate",            
-            "hsn", "info", "label", "productCode", "upcCode", "gstRate"
+            CASE WHEN p."hsn" is null THEN c."hsn" ELSE p."hsn" END, "info", "label", "productCode", "upcCode", "gstRate"
             from "ProductM" p
                 join "CategoryM" c
                     on c."id" = p."catId"
@@ -576,7 +576,7 @@ allSqls = {
 
     "get_products": '''
         select ROW_NUMBER() over(order by "catName", "brandName", "label") as "index", p."id"  as "id" , c."id" as "catId", u."id" as "unitId", b."id" as "brandId",
-        "catName", "hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode",
+        "catName", p."hsn", "brandName", "info", "unitName", "label", p."jData", "productCode","gstRate", "upcCode",
         "maxRetailPrice", "salePrice", "salePriceGst", "dealerPrice", "purPrice", "purPriceGst"
         from "ProductM" p
             join "CategoryM" c
@@ -735,7 +735,7 @@ allSqls = {
 		"catName", "isActive", "brandName", 
         "salePrice", "saleDiscount", "saleDiscountRate", "salePriceGst",
         "purPrice", "purDiscount", "purDiscountRate", "purPriceGst",
-		"hsn", "info", "label", "productCode", "upcCode", "gstRate"
+		CASE WHEN p."hsn" is null THEN c."hsn" ELSE p."hsn" END, "info", "label", "productCode", "upcCode", "gstRate"
 		from "ProductM" p
 			join "CategoryM" c
 				on c."id" = p."catId"

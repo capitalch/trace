@@ -1,4 +1,4 @@
-import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, } from './redirect'
+import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, Tooltip, Typography, useSharedElements, utilMethods } from './redirect'
 import { NewProduct } from './new-product'
 import { useProducts, useStyles } from './products-hook'
 
@@ -40,6 +40,7 @@ function Products() {
                 summaryColNames={summaryColNames}
                 toShowAddButton={true}
                 viewLimit="1000"
+                // xGridProps={{ onCellClick: handleCellClicked }}
             />
             <Dialog
                 open={pre.showDialog}

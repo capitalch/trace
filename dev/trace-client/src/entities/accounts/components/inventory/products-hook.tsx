@@ -1,4 +1,4 @@
-import { NumberFormat, useInventoryUtils, useEffect, useRef, useState, useSharedElements, } from './redirect'
+import { NumberFormat, useInventoryUtils, useEffect, useRef, useState, useSharedElements, utilMethods, } from './redirect'
 import {
     makeStyles,
     TextField,
@@ -19,6 +19,7 @@ function useProducts() {
         sharedData: {},
     })
     const pre = meta.current
+    const { genericUpdateMasterNoForm } = utilMethods()
     const { handleDelete, } = useCrudUtils(meta)
     const { fetchBrandsCategoriesUnits } = useInventoryUtils()
     const {
@@ -109,18 +110,15 @@ function useProducts() {
                 field: 'hsn',
                 editable: true,
                 width: '80',
+                cellClassName: 'editable-column',
                 renderEditCell: (params: any) => {
                     return (
                         <NumberFormat
-                            // label="Amount"
-                            // variant="standard"
                             allowNegative={false}
-                            // className="right-aligned-numeric"
                             customInput={TextField}
                             onChange={setHsn}
                             onFocus={(e: any) => e.target.select()}
-                            // thousandSeparator={true}
-                            value={params.row.hsn || ''}
+                            value={params.row.hsn || null}
                         />)
                     function setHsn(e: any) {
                         const value = e.target.value
@@ -134,31 +132,10 @@ function useProducts() {
                         apiRef.current.setEditCellValue({
                             id: params.row.id,
                             field: 'hsn',
-                            value: e.target.value,
+                            value: e.target.value || null,
                         })
                         setRefresh({})
                     }
-                    // <TextField
-                    //     type='tel'
-                    //     value={params.row.hsn || ''}
-                    //     color='info'
-                    //     sx={{ backgroundColor: 'yellow' }}
-                    //     onChange={(e: any) => {
-                    //         params.row.hsn = e.target.value
-                    //         pre.isDataChanged = true
-                    //         const id1 = params.row.id1
-                    //         const changedRow = pre.sharedData.allRows.find((x: any) => x.id1 === id1)
-                    //         changedRow.hsn = e.target.value
-                    //         changedRow.isChanged = true
-                    //         const apiRef = pre.sharedData.apiRef
-                    //         apiRef.current.setEditCellValue({
-                    //             id: params.row.id,
-                    //             field: 'hsn',
-                    //             value: e.target.value,
-                    //         })
-                    //         setRefresh({})
-                    //     }}
-                    // />)
                 }
             },
             {
@@ -264,6 +241,14 @@ function useProducts() {
         setRefresh({})
     }
 
+    // function handleCellClicked(params: any) {
+    //     if (params.field === 'hsn') {
+    //         const apiRef:any = pre.sharedData.apiRef
+    //         apiRef.current.setCellMode(params.id, 'hsn', 'edit')
+    //         setRefresh({})
+    //     }
+    // }
+
     async function handleEdit(d: any) {
         await fetchBrandsCategoriesUnits()
         pre.title = 'Edit product'
@@ -281,9 +266,16 @@ function useProducts() {
     async function handleSubmit() {
         const changedData = pre.sharedData.allRows.filter((x: any) => x.isDataChanged).map((y: any) => ({
             id: y.id1,
-            hsn: y.hsn
+            hsn: y.hsn || null
         }))
-        console.log(changedData)
+        const ret = await genericUpdateMasterNoForm({
+            data: changedData,
+            tableName: 'ProductM',
+        })
+        if (ret) {
+            pre.isDataChanged = false
+            setRefresh({})
+        }
     }
 
     return { getXXGridParams, handleCloseDialog, handleSubmit, meta }
@@ -299,6 +291,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: '5px',
             '& .xx-grid': {
                 marginTop: theme.spacing(1),
+                '& .editable-column': {
+                    backgroundColor: theme.palette.yellow.light,
+                    color: theme.palette.yellow.contrastText,
+                },
             },
         },
     })

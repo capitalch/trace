@@ -1,4 +1,4 @@
-import { _, CloseSharp, GridCellParams, IconButton, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _,Box, CloseSharp, GridCellParams, IconButton, moment, Typography, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryAgeingReport() {
     const [, setRefresh] = useState({})
@@ -163,7 +163,7 @@ function useStockSummaryAgeingReport() {
             {
                 headerName: 'Label',
                 headerClassName: 'header-class',
-                field: 'label'
+                field: 'label',
             },
             {
                 headerName: 'Op Price',
