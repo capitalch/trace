@@ -474,6 +474,13 @@ allSqls = {
     
     ''',
 
+    "get_leaf_categories": '''
+        select id, "catName","descr", "hsn"
+            from "CategoryM"
+        where "isLeaf" = true
+            order by "catName"
+    ''',
+
     # This method is working. it's for academic purpose. At present client side tree populating is done. This method populates the entire tree from child values
     "get_opBal1": '''
         with recursive cte as (
@@ -1115,7 +1122,7 @@ allSqls = {
             select id as "value", "brandName" as "label"
                 from "BrandM" order by "brandName"
         ), cte3 as (
-            select p.id, "catId", "hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
+            select p.id, "catId", p."hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
                 from "ProductM" p
                     join "CategoryM" c
                         on c."id" = p."catId"

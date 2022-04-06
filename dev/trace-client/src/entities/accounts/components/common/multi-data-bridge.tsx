@@ -124,7 +124,9 @@ function getVouchersArbitraryData() {
             all: [],
             journal: [],
         },
-        header: {},
+        header: {
+            tranDate: moment().format(isoDateFormat),
+        },
         deletedDetailsIds: [],
         debits: [{ key: 0 }],
         credits: [{ key: 0 }],

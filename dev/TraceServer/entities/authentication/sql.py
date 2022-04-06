@@ -372,6 +372,7 @@ allSqls = {
                         join "TraceUser" u1
                             on u1.id = x1."userId"
                     where (u1."uid" = %(uidOrEmail)s or u1."userEmail" = %(uidOrEmail)s)
+                    limit 1 -- needs to remove limit 1
                 ) as "permissions"
                     from "TraceUser" u
                         join "ClientEntityX" x
