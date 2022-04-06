@@ -1122,7 +1122,7 @@ allSqls = {
             select id as "value", "brandName" as "label"
                 from "BrandM" order by "brandName"
         ), cte3 as (
-            select p.id, "catId", "hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
+            select p.id, "catId", p."hsn", "brandId", "label", "info", p."jData", "productCode", "upcCode", "catName", "brandName"
                 from "ProductM" p
                     join "CategoryM" c
                         on c."id" = p."catId"
