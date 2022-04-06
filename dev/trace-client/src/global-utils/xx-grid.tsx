@@ -212,10 +212,9 @@ function XXGrid(gridOptions: XXGridOptions) {
             </Box>
         ))
 
-        console.log(summary, ' ', displayMap)
+        // console.log(summary, ' ', displayMap)
         return (
             <Box sx={{ display: 'flex', border: '1px solid lightGrey', backgroundColor: theme.palette.grey[100], columnGap: theme.spacing(1), flexWrap: 'wrap', }}>
-                {/* <Box sx={{ p: 1 }} >ABCD</Box> */}
                 {ret}
             </Box>
         )

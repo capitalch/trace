@@ -1,8 +1,10 @@
-import  { useRef } from '../../../../imports/regular-imports'
+import { useRef, useState} from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {HsnLeafCategories} from './hsn-leaf-categories'
 
 function useCategoriesMaster() {
+    const [, setRefresh] = useState({})
     const meta: any = useRef({
         isMounted: false,
         allKeys: [],
@@ -11,7 +13,7 @@ function useCategoriesMaster() {
         showDialog: false,
         dialogConfig: {
             title: '',
-            formId:'',
+            formId: '',
             content: () => { },
             actions: () => { },
             isSearchBox: false,
@@ -21,11 +23,19 @@ function useCategoriesMaster() {
             title: 'Item categories'
         },
     })
-
+    const pre = meta.current
     const {
         getFromBag,
         setInBag
     } = useSharedElements()
+
+    function handleHsnLeafCategories() {
+        pre.showDialog = true
+        pre.dialogConfig.title = 'Hsn for leaf categories'
+        pre.dialogConfig.content = HsnLeafCategories
+        pre.dialogConfig.isSearchBox = false
+        setRefresh({})
+    }
 
     function utilFunc() {
         function saveScrollPos() {
@@ -40,7 +50,7 @@ function useCategoriesMaster() {
         return { saveScrollPos, applyScrollPos }
     }
 
-    return { meta, utilFunc }
+    return { handleHsnLeafCategories, meta, utilFunc }
 }
 
 export { useCategoriesMaster }
@@ -54,7 +64,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginBottom: theme.spacing(1),               
+                marginBottom: theme.spacing(1),
             },
 
             '& .add-category': {
@@ -81,7 +91,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
 
         },
 
-        dialog: {            
+        dialog: {
 
             '& .dialogTitle': {
                 display: 'flex',
