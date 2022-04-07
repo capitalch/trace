@@ -1,4 +1,16 @@
-# npm install  @mui/x-data-grid-pro @testing-library/react @testing-library/user-event moment react react-dom react-to-print sass 
+select row_to_json(pb) as "buCodesWithPermissions" from 
+    (select "buCode", "permissions"
+        from "ClientEntityRole" r
+            join "ClientEntityRoleBuUserX" x1
+                on r."id" = x1."clientEntityRoleId"
+            join "TraceUser" u1
+                on u1.id = x1."userId"      
+            join "ClientEntityBu" c
+                on c.id = x1."clientEntityBuId"
+        where (u1."uid" = 'dummy1' --%(uidOrEmail)s or u1."userEmail" = %(uidOrEmail)s
+              )) pb
+
+# npm install @mui/x-data-grid-pro moment react-to-print sass
 
 ## Required reports
 1. Profitibality

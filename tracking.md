@@ -1,3 +1,10 @@
+## logic for change in login process
+1. In getJson_userDetails implement "bucodesWithPermissions" at server side, without disturbing buCodes and permissions
+2. At client:trace-header-hook in submitDialog: processLogin: setLoginData add prop buCodesWithPermissions
+3. In accounts-sub-header-hook: handleSelectBu: consider not using getJson_businessUnits_permissions_for_loggedinUser, because information is already there from earlier query.
+4. Check in all program where getLoginData or permissions are being used and act accordingly
+
+
 ## Sales
                                                             1. Port to Trace
 2. Product search
@@ -48,8 +55,8 @@
 
 Emergency bug fixes
                                                                                         1. Change uid does not close the window
-2. When a new user is created and is not associated, and tries to login, program crashes without any warning
-3. When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked.
+                                                                                        2. When a new user is created and is not associated, and tries to login, program crashes without any warning
+                                                                                        3. When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked.
 
 
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health

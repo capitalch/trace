@@ -105,10 +105,6 @@ function SaleHeader() {
                     <div>
                         <Typography>Sale account</Typography>
                         <LedgerSubledger
-                            // allAccounts={arbitraryData.allAccounts}                            
-                            // ledgerAccounts={getMappedAccounts(
-                            //     arbitraryData.ledgerAccounts
-                            // )}
                             controlId='sales'
                             ledgerFilterMethodName='saleAccounts'
                             onChange={onChangeLedgerSubledger}

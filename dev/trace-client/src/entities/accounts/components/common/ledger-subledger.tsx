@@ -140,7 +140,7 @@ function LedgerSubledger({
     const styles = {
         option: (base: any) => ({
             ...base,
-            padding: '.1rem',
+            padding: '.3rem',
             paddingLeft: '0.5rem',
         }),
     }

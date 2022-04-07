@@ -394,7 +394,9 @@ function useSalesReport() {
         const temp = [...pre.filteredRows]
         _.remove(temp, (x: any) => x.id === id)
         pre.filteredRows = temp
-        pre.totals = getTotals()
+        pre.filteredRows.pop()
+        pre.totals = getTotals()        
+        pre.filteredRows.push(pre.totals)
         setRefresh({})
     }
 
