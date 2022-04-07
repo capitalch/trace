@@ -3,16 +3,23 @@ function useHsnLeafCategories({ apiRef }: any) {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
         allRows: [],
+        filteredRows: [],
+        ibukiMessag: 'HSN-FOR-LEAF-CATEGORIES-SERCHBOX-CHANGED',
         isDataChanged: false,
+        setRefresh: setRefresh,
     })
 
     const pre = meta.current
-    const { emit } = useIbuki()
+    const { emit, filterOn } = useIbuki()
     const { execGenericView, genericUpdateMasterNoForm } = utilMethods()
     const theme = useTheme()
 
     useEffect(() => {
         fetchData()
+        const subs1 = filterOn(pre.ibukiMessage).subscribe(requestSearch)
+        return (() => {
+            subs1.unsubscribe()
+        })
     }, [])
 
     async function fetchData() {
@@ -25,6 +32,7 @@ function useHsnLeafCategories({ apiRef }: any) {
         }) || []
         setId(rows)
         pre.allRows = rows
+        pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
@@ -117,7 +125,7 @@ function useHsnLeafCategories({ apiRef }: any) {
     function getGridSx() {
         return (
             {
-                minHeight: theme.spacing(40),
+                minHeight: theme.spacing(60),
                 '& .header-class': {
                     fontWeight: 'bold',
                     color: 'dodgerBlue',
@@ -165,11 +173,34 @@ function useHsnLeafCategories({ apiRef }: any) {
     async function processRowUpdate(newRow: any, oldRow: any) {
         if (oldRow.hsn !== newRow.hsn) {
             const changedRow = pre.allRows.find((x: any) => x.id1 === newRow.id1)
-            changedRow.hsn = newRow.hsn
+            changedRow.hsn = newRow.hsn || null
             changedRow.isDataChanged = true
             pre.isDataChanged = true
             setRefresh({})
         }
+    }
+
+    function requestSearch({ data }: any) {
+        const searchValue = data
+        if (searchValue) {
+            pre.filteredRows = pre.allRows.filter(
+                (row: any) => {
+                    return Object.keys(row).some((field) => {
+                        const temp: string = row[field]
+                            ? row[field].toString()
+                            : ''
+                        return temp
+                            .toLowerCase()
+                            .includes(searchValue.toLowerCase())
+                    })
+                }
+            )
+        } else {
+            pre.filteredRows = pre.allRows.map((x: any) => ({
+                ...x,
+            }))
+        }
+        pre.setRefresh({})
     }
 
     return ({ fetchData, getColumns, getGridSx, handleCellClick, handleCellFocusOut, handleSubmit, meta, processRowUpdate })
