@@ -94,8 +94,8 @@ function usePurchaseItems(arbitraryData: any) {
         tranType: 'purchase',
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
             serialNumbers: '',
         },
         isMounted: false,
@@ -368,10 +368,10 @@ function usePurchaseItems(arbitraryData: any) {
                 component="span"
                 variant="body2"
                 className="gst-details">{`Cgst: ${toDecimalFormat(
-                rowData?.cgst
-            )}, Sgst: ${toDecimalFormat(rowData?.sgst)}, Igst:${toDecimalFormat(
-                rowData?.igst
-            )},`}</Typography>
+                    rowData?.cgst
+                )}, Sgst: ${toDecimalFormat(rowData?.sgst)}, Igst:${toDecimalFormat(
+                    rowData?.igst
+                )},`}</Typography>
         )
     }
 
@@ -476,7 +476,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* upc */}
                         <TextField
                             placeholder="Upc"
-                            sx={{mt:1}}
+                            sx={{ mt: 1 }}
                             variant="standard"
                             value={rowData.upcCode || ''}
                             onChange={(e: any) => {
@@ -548,7 +548,7 @@ function usePurchaseItems(arbitraryData: any) {
                         {/* hsn */}
                         <NumberFormat
                             placeholder="Hsn"
-                            sx={{mt:1}}
+                            sx={{ mt: 1 }}
                             allowNegative={false}
                             customInput={TextField}
                             variant="standard"
@@ -716,7 +716,7 @@ function usePurchaseItems(arbitraryData: any) {
                             error={errorObject.isDiscountError(rowData)}
                             fixedDecimalScale={true}
                             onValueChange={(values: any) => {
-                                const { floatValue} = values
+                                const { floatValue } = values
                                 rowData.priceGst = floatValue || 0.0
                                 meta.current.isDataChanged = true
                                 meta.current.isMounted && setRefresh({})
@@ -792,7 +792,7 @@ function usePurchaseItems(arbitraryData: any) {
                     arbitraryData?.summary?.discount || 0.0
                 )}
             />,
-            
+
             //Sub total
             <PrimeColumn
                 key={incr()}
@@ -801,17 +801,20 @@ function usePurchaseItems(arbitraryData: any) {
                 style={{ width: '8rem', textAlign: 'end' }}
                 body={(rowData: any) => {
                     return (
-                        <NumberFormat
-                            variant='standard'
-                            allowNegative={false}
-                            className="right-aligned-numeric"
-                            customInput={TextField}
-                            decimalScale={2}
-                            disabled={true}
-                            fixedDecimalScale={true}
-                            thousandSeparator={true}
-                            value={rowData.subTotal || 0.0}
-                        />
+                        // <NumberFormat
+                        //     sx={{fontWeight:'bold'}}
+                        //     variant='standard'
+                        //     allowNegative={false}
+                        //     className="right-aligned-numeric"
+                        //     customInput={TextField}
+                        //     decimalScale={2}
+                        //     disabled={true}
+                        //     // readOnly={true}
+                        //     fixedDecimalScale={true}
+                        //     thousandSeparator={true}
+                        //     value={rowData.subTotal || 0.0}
+                        // />
+                        <Typography sx={{ml:'auto'}} >{toDecimalFormat(rowData.subTotal) || 0.0}</Typography>
                     )
                 }}
                 footer={toDecimalFormat(
@@ -879,7 +882,7 @@ function usePurchaseItems(arbitraryData: any) {
                                         .split(',')
                                         .filter(Boolean).length // .filter(Boolean) removes empty values from the array
                                 }
-                                
+
                                 color={
                                     errorObject.isSlNoError(rowData)
                                         ? 'error'
@@ -897,7 +900,7 @@ function usePurchaseItems(arbitraryData: any) {
                                 placeholder="Remarks"
                                 variant="standard"
                                 autoComplete='off'
-                                sx={{mt:1}}
+                                sx={{ mt: 1 }}
                                 value={rowData.remarks || ''}
                                 onChange={(e: any) => {
                                     rowData.remarks = e.target.value
@@ -960,8 +963,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
 
                 '& input': {
-                    fontFamily: 'modern', // good font for numeric
-                    fontSize: '0.9rem',
+                    fontFamily: 'Helvetica', // good font for numeric
+                    color: theme.palette.common.black
+                    // fontSize: '0.9rem',
                 },
                 '& .product-details': {
                     fontFamily: 'lato',

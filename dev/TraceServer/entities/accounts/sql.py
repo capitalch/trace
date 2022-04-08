@@ -736,7 +736,7 @@ allSqls = {
             , "lastPurchaseDate"
 				from cte4
 		)
-        select cte5.*, "productCode", "catName", "brandName", "label", (date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp)) as "age"
+        select cte5.*, "productCode", "catName", "brandName", "label", (date_part('day', %(endDate)s::timestamp - "lastPurchaseDate"::timestamp)) as "age"
 				from cte5
 					join "ProductM" p
 						on p."id" = cte5."productId"

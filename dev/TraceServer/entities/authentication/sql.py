@@ -381,6 +381,7 @@ allSqls = {
 							join "ClientEntityBu" c
 								on c.id = x1."clientEntityBuId"
 						where u.id = x1."userId"
+                        order by "buCode"
 					) pb
 				) as "buCodesWithPermissions" 
                     from "TraceUser" u
@@ -407,7 +408,7 @@ allSqls = {
                     from "ClientEntityBu" c
                         join "ClientEntityX" x1
                             on x1."id" = c."clientEntityId"
-                        where x1."userId" = u."id") pb
+                        where x1."userId" = u."id" order by "buCode") pb
                     ) as "buCodesWithPermissions"
 
                     from "TraceUser" u

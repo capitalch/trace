@@ -359,7 +359,12 @@ function useTraceHeader() {
                 return
             } else {
                 buCodes = buCodesWithPermissions.map((x: any) => x.buCode)
-                permissions = buCodesWithPermissions.map((x: any) => x.permissions)
+                const lastUsedBuCode = login?.lastUsedBuCode
+                // set permissions for last used bu code
+                if(lastUsedBuCode){
+                    permissions = buCodesWithPermissions.find((x:any)=>x.buCode === lastUsedBuCode)?.permissions || []
+                }
+                // permissions = buCodesWithPermissions.map((x: any) => x.permissions)
             }
             setLoginData({
                 buCodes: buCodes, // login?.buCodes,
@@ -369,7 +374,7 @@ function useTraceHeader() {
                 id: login?.id,
                 lastUsedbranchId: login?.lastUsedBranchId,
                 lastUsedBuCode: login?.lastUsedBuCode,
-                permissions: permissions[0], // login?.permissions,
+                permissions: permissions, // login?.permissions,
                 token: token,
                 uid: uid,
                 userType: login?.userType,
