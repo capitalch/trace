@@ -240,6 +240,14 @@ function useStockSummaryAgeingReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
+                headerName: 'Age',
+                headerClassName: 'header-class',
+                description: 'Age of product sold',
+                field: 'age',
+                type: 'number',
+                width: 60,                
+            },
+            {
                 headerName: 'Sal date',
                 headerClassName: 'header-class',
                 description: 'Last sale date',
@@ -282,6 +290,9 @@ function useStockSummaryAgeingReport() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'start'
+                },
+                '& .row-jakar':{
+                    color: theme.palette.error.main
                 }
             }
         )
@@ -292,6 +303,9 @@ function useStockSummaryAgeingReport() {
         let ret = ''
         if (row.id === 'Total')
             ret = 'footer-row-class'
+        else if(row.age >= 360){
+            ret = 'row-jakar'
+        }
         return (ret)
     }
 

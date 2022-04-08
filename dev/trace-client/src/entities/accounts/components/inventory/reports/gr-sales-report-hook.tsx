@@ -260,6 +260,14 @@ function useSalesReport() {
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
+                headerName: 'Age',
+                headerClassName: 'header-class',
+                description: 'Age of product sold',
+                field: 'age',
+                type: 'number',
+                width: 60,                
+            },
+            {
                 headerName: 'Gst%',
                 headerClassName: 'header-class',
                 description: 'Gst rate',
@@ -340,6 +348,9 @@ function useSalesReport() {
                 },
                 '& .row-loss': {
                     color: theme.palette.error.main
+                },
+                '& .row-jakar': {
+                    backgroundColor: theme.palette.lime.light
                 }
             }
         )
@@ -354,6 +365,8 @@ function useSalesReport() {
             ret = 'row-sales-return'
         } else if (row.grossProfit < 0) {
             ret = 'row-loss'
+        } else if(row.age > 360) {
+            ret = 'row-jakar'
         }
         return (ret)
     }

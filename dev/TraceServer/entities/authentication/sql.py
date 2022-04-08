@@ -403,6 +403,13 @@ allSqls = {
                         where b."clientEntityId" = x."id"
                 ) as "buCodes",
                     null as "permissions"
+                , (select array_agg(row_to_json(pb)) from (select "buCode", null as "permissions"
+                    from "ClientEntityBu" c
+                        join "ClientEntityX" x1
+                            on x1."id" = c."clientEntityId"
+                        where x1."userId" = u."id") pb
+                    ) as "buCodesWithPermissions"
+
                     from "TraceUser" u
                         join "ClientEntityX" x
                             on x."userId" = u."id"
