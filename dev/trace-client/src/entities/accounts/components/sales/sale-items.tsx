@@ -171,6 +171,7 @@ function SaleItems() {
                     <div>
                         {/* product search */}
                         <TextField
+                            autoComplete='off'
                             autoFocus={true}
                             variant='standard'
                             style={{ maxWidth: '12rem' }}
@@ -204,6 +205,7 @@ function SaleItems() {
                         />
                         {/* upc */}
                         <TextField
+                            autoComplete='off'
                             placeholder="Upc"
                             sx={{mt:1}}
                             variant='standard'
@@ -242,6 +244,7 @@ function SaleItems() {
                 body={(rowData: any) => (
                     <div>
                         <NumberFormat
+                            autoComplete='off'
                             placeholder="Product code"
                             variant='standard'
                             allowNegative={false}
@@ -276,6 +279,7 @@ function SaleItems() {
                         />
                         {/* hsn */}
                         <NumberFormat
+                            autoComplete='off'
                             placeholder="Hsn"
                             variant='standard'
                             sx={{mt:1}}

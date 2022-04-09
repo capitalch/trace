@@ -171,7 +171,7 @@ function useStockSummaryAgeingReport() {
                 description: 'Opening price',
                 field: 'openingPrice',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -236,7 +236,7 @@ function useStockSummaryAgeingReport() {
                 description: 'Last purchase date',
                 field: 'lastPurchaseDate',
                 type: 'date',
-                width: 90,
+                width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
@@ -253,7 +253,7 @@ function useStockSummaryAgeingReport() {
                 description: 'Last sale date',
                 field: 'lastSaleDate',
                 type: 'date',
-                width: 90,
+                width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
@@ -272,10 +272,10 @@ function useStockSummaryAgeingReport() {
             {
                 // border: '4px solid orange',
                 p: 1, width: '100%',
-                fontSize: theme.spacing(1.5),
+                fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(80),
                 height: 'calc(100vh - 230px)',
-                fontFamily: 'sans-serif',
+                fontFamily: 'Helvetica',
                 '& .footer-row-class': {
                     backgroundColor: theme.palette.grey[300]
                 },

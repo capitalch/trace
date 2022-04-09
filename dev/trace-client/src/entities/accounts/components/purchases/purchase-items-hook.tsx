@@ -442,7 +442,8 @@ function usePurchaseItems(arbitraryData: any) {
                     <div>
                         {/* product search */}
                         <TextField
-                            autoFocus={true}
+                            autoComplete='off'
+                            // autoFocus={true}
                             variant="standard"
                             style={{ maxWidth: '12rem' }}
                             placeholder="Product(abc, def,...)"
@@ -475,6 +476,7 @@ function usePurchaseItems(arbitraryData: any) {
                         />
                         {/* upc */}
                         <TextField
+                            autoComplete='off'
                             placeholder="Upc"
                             sx={{ mt: 1 }}
                             variant="standard"
@@ -516,6 +518,7 @@ function usePurchaseItems(arbitraryData: any) {
                 body={(rowData: any) => (
                     <div>
                         <NumberFormat
+                            autoComplete='off'
                             placeholder="Product code"
                             allowNegative={false}
                             customInput={TextField}
@@ -547,6 +550,7 @@ function usePurchaseItems(arbitraryData: any) {
                         />
                         {/* hsn */}
                         <NumberFormat
+                            autoComplete='off'
                             placeholder="Hsn"
                             sx={{ mt: 1 }}
                             allowNegative={false}
@@ -814,7 +818,7 @@ function usePurchaseItems(arbitraryData: any) {
                         //     thousandSeparator={true}
                         //     value={rowData.subTotal || 0.0}
                         // />
-                        <Typography sx={{ml:'auto'}} >{toDecimalFormat(rowData.subTotal) || 0.0}</Typography>
+                        <Typography sx={{ ml: 'auto' }} >{toDecimalFormat(rowData.subTotal) || 0.0}</Typography>
                     )
                 }}
                 footer={toDecimalFormat(

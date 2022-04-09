@@ -47,7 +47,7 @@ function SalesReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
-            rowHeight={25}
+            rowHeight={35}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}

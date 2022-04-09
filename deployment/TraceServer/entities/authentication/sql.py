@@ -354,7 +354,81 @@ allSqls = {
         ) as "jsonResult"
     ''',
     
-    'getJson_userDetails': '''
+'getJson_userDetails': '''
+        with cte1 as(--business user
+            select u."id", "uid", "parentId", c."id" as "clientId", "clientCode", "clientName", 
+                "lastUsedBuCode", "lastUsedBranchId",
+                array_agg("entityName") as "entityNames",
+                ( select array_agg("buCode") 
+                    from "ClientEntityBu" b
+                        join "ClientEntityRoleBuUserX" x1
+                            on b."id" = x1."clientEntityBuId"
+                    where x1."userId" = u."id"
+                ) as "buCodes"
+                , ( select "permissions"
+                    from "ClientEntityRole" r
+                        join "ClientEntityRoleBuUserX" x1
+                            on r."id" = x1."clientEntityRoleId" 
+                         where u."id" = x1."userId"
+                    limit 1 -- needs to remove limit 1
+                ) as "permissions"
+				, (
+				select array_agg(row_to_json(pb)) from 
+					(select "buCode", "permissions"
+						from "ClientEntityRole" r
+							join "ClientEntityRoleBuUserX" x1
+								on r."id" = x1."clientEntityRoleId"
+							join "ClientEntityBu" c
+								on c.id = x1."clientEntityBuId"
+						where u.id = x1."userId"
+                        order by "buCode"
+					) pb
+				) as "buCodesWithPermissions" 
+                    from "TraceUser" u
+                        join "ClientEntityX" x
+                            on x."userId" = u."parentId"
+                        join "TraceEntity" e
+                            on e."id" = x."entityId"
+                        join "TraceClient" c
+                            on c."id" = x."clientId"
+                        where ("uid" = %(uidOrEmail)s or "userEmail" = %(uidOrEmail)s)
+                                and u."isActive" = true
+                                    and c."isActive" = true
+                group by u."id", c."id"),
+        cte2 as( --admin user
+            select u."id", "parentId", "uid", c."id" as "clientId","clientCode", "clientName", 
+                    "lastUsedBuCode", "lastUsedBranchId",
+                array_agg("entityName") as "entityNames",
+                (select array_agg("buCode") 
+                    from "ClientEntityBu" b
+                        where b."clientEntityId" = x."id"
+                ) as "buCodes",
+                    null as "permissions"
+                , (select array_agg(row_to_json(pb)) from (select "buCode", null as "permissions"
+                    from "ClientEntityBu" c
+                        join "ClientEntityX" x1
+                            on x1."id" = c."clientEntityId"
+                        where x1."userId" = u."id" order by "buCode") pb
+                    ) as "buCodesWithPermissions"
+
+                    from "TraceUser" u
+                        join "ClientEntityX" x
+                            on x."userId" = u."id"
+                        join "TraceEntity" e
+                            on e."id" = x."entityId"
+                        join "TraceClient" c
+                            on c."id" = x."clientId"
+                        where ("uid" = %(uidOrEmail)s or "userEmail" = %(uidOrEmail)s)
+                                and u."isActive" = true
+                                    and c."isActive" = true
+                    group by u."id" ,c."id", x."id")
+            select json_build_object(
+                    'businessUser', (select row_to_json(a) from cte1 a)
+                    , 'adminUser', (SELECT row_to_json(b) from cte2 b)
+                ) as "jsonResult"
+        ''',
+
+    'getJson_userDetails1': '''
         with cte1 as(--business user
             select u."id", "uid", "parentId", c."id" as "clientId", "clientCode", "clientName", 
                 "lastUsedBuCode", "lastUsedBranchId",

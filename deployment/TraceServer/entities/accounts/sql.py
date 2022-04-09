@@ -688,8 +688,8 @@ allSqls = {
                 where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
                 --where "branchId" = 1 and "finYearId" = 2021
                 and "tranDate" <= %(endDate)s
-        ), cte1 as ( -- opening balance
-            select "productId", "openingPrice"
+        ), cte1 as ( -- opening balance, lastPurchaseDate in ProductOpBal
+            select "productId", "openingPrice", "lastPurchaseDate"
                 from "ProductOpBal" p 
                 where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
                 --where "branchId" = 1 and "finYearId" = 2021
@@ -701,12 +701,22 @@ allSqls = {
                         and "productId" = c0."productId"
                         and "tranDate" <= c0."tranDate"
                 order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
-        ) as "lastPurchasePrice", "discount", "cgst", "sgst","igst", "amount", "gstRate", "autoRefNo"
+        ) as "lastPurchasePrice"
+        , (
+             select "tranDate" 
+                 from cte0
+                     where "tranTypeId" = 5
+                         and "productId" = c0."productId"
+                         and "tranDate" <= c0."tranDate"
+                order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
+         ) as "lastPurchaseDate",
+        "discount", "cgst", "sgst","igst", "amount", "gstRate", "autoRefNo"
             from cte0 c0
                 where "tranTypeId" in (4, 9) --and "productId" in(66,67)
         ), cte3 as ( -- take last purchase price from ProductOpBal if no purchase is made in current year
             select "tranDate", c2."productId", c2."qty", "price", coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice",
-                    "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId","salePurchaseDetailsId", "autoRefNo"
+            coalesce(c2."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate", "discount", c2."qty" * ("price" - "discount") as "aggrSale", 
+            "cgst", "sgst", "igst", "amount", "gstRate", "tranTypeId","salePurchaseDetailsId", "autoRefNo"
                 from cte2 c2
                     left join cte1 c1
                         on c2."productId" = c1."productId"
@@ -723,9 +733,10 @@ allSqls = {
 			, CASE when "tranTypeId" = 4 then "amount" else -"amount" end as "amount"
 			, CASE when "tranTypeId" = 4 then 'Sale' else 'Return' end as "saleType"
 			, CASE when "tranTypeId" = 4 then "grossProfit" else -"grossProfit" end as "grossProfit"
+            , "lastPurchaseDate"
 				from cte4
 		)
-        select cte5.*, "productCode", "catName", "brandName", "label"
+        select cte5.*, "productCode", "catName", "brandName", "label", (date_part('day', (CASE WHEN %(endDate)s > CURRENT_DATE then CURRENT_DATE ELSE %(endDate)s END)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
 				from cte5
 					join "ProductM" p
 						on p."id" = cte5."productId"
@@ -1495,7 +1506,7 @@ allSqls = {
             select c6."productId", "productCode", "catName", "brandName", "label","openingPrice", "op"::numeric(10,2),"opValue"
             , ("purchase" + "saleRet")::numeric(10,2) as "dr", ("sale" + "purchaseRet"):: numeric(10,2) as "cr",
             "sale"::numeric(10,2), "purchase"::numeric(10,2), "saleRet"::numeric(10,2), "purchaseRet"::numeric(10,2), "clos"::numeric(10,2), "lastPurchasePrice", ("clos" * "lastPurchasePrice")::numeric(12,2) as "closValue"
-                    , "lastPurchaseDate", "lastSaleDate"
+                    , "lastPurchaseDate", "lastSaleDate", (date_part('day',coalesce(%(onDate)s, CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
                 from cte6 c6
                     join "ProductM" p
                         on p."id" = c6."productId"

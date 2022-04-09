@@ -346,8 +346,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(1),
             '& .sale-items': {
                 '& input': {
-                    fontFamily: 'modern', // good font for numeric
-                    fontSize: '0.9rem',
+                    fontFamily: 'Helvetica', // good font for numeric
+                    // fontSize: '0.9rem',
                 },
                 '& .index-header': {
                     display: 'flex',

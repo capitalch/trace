@@ -50,7 +50,7 @@ function PurchaseReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectionModelChange}
-            rowHeight={25}
+            rowHeight={35}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}

@@ -165,35 +165,35 @@ allSqls = {
             and "entityId" = %(entityId)s
     ''',
 
-    'getJson_businessUnits_permissions_for_loggedinUser': '''
-        with cte1 as ( select bu."id", bu."buCode", bu."buName",  --for admin user
-        null as "permissions"
-        from "TraceUser" u
-            join "ClientEntityX" x
-                on u."id" = x."userId"
-            join "ClientEntityBu" bu
-                on x."id" = bu."clientEntityId"
-        where u."id" = %(userId)s
-        order by "buCode")
+    # 'getJson_businessUnits_permissions_for_loggedinUser': '''
+    #     with cte1 as ( select bu."id", bu."buCode", bu."buName",  --for admin user
+    #     null as "permissions"
+    #     from "TraceUser" u
+    #         join "ClientEntityX" x
+    #             on u."id" = x."userId"
+    #         join "ClientEntityBu" bu
+    #             on x."id" = bu."clientEntityId"
+    #     where u."id" = %(userId)s
+    #     order by "buCode")
 
-        , cte2 as (select bu."id", bu."buCode", bu."buName",  --for business user
-            ( select "permissions"
-                from "ClientEntityRole" r
-                    where r."id" = x."clientEntityRoleId"
-            ) as "permissions"
-            from "TraceUser" u
-                join "ClientEntityRoleBuUserX" x
-                    on u."id" = x."userId"
-                join "ClientEntityBu" bu
-                    on x."clientEntityBuId" = bu."id"
-            where u."id" = %(userId)s
-            order by "buCode")
+    #     , cte2 as (select bu."id", bu."buCode", bu."buName",  --for business user
+    #         ( select "permissions"
+    #             from "ClientEntityRole" r
+    #                 where r."id" = x."clientEntityRoleId"
+    #         ) as "permissions"
+    #         from "TraceUser" u
+    #             join "ClientEntityRoleBuUserX" x
+    #                 on u."id" = x."userId"
+    #             join "ClientEntityBu" bu
+    #                 on x."clientEntityBuId" = bu."id"
+    #         where u."id" = %(userId)s
+    #         order by "buCode")
 	
-        select json_build_object(
-                    'adminUserBuListPermissions', (SELECT json_agg(a) from cte1 a)
-                    , 'businessUserBuListPermissions', (SELECT json_agg(b) from cte2 b)
-                ) as "jsonResult"
-    ''',
+    #     select json_build_object(
+    #                 'adminUserBuListPermissions', (SELECT json_agg(a) from cte1 a)
+    #                 , 'businessUserBuListPermissions', (SELECT json_agg(b) from cte2 b)
+    #             ) as "jsonResult"
+    # ''',
 
     'getJson_clientCode_entityName': '''
         with cte1 as (select "clientCode"
@@ -358,22 +358,8 @@ allSqls = {
         with cte1 as(--business user
             select u."id", "uid", "parentId", c."id" as "clientId", "clientCode", "clientName", 
                 "lastUsedBuCode", "lastUsedBranchId",
-                array_agg("entityName") as "entityNames",
-                ( select array_agg("buCode") 
-                    from "ClientEntityBu" b
-                        join "ClientEntityRoleBuUserX" x1
-                            on b."id" = x1."clientEntityBuId"
-                    where x1."userId" = u."id"
-                ) as "buCodes"
-                , ( select "permissions"
-                    from "ClientEntityRole" r
-                        join "ClientEntityRoleBuUserX" x1
-                            on r."id" = x1."clientEntityRoleId" 
-                         where u."id" = x1."userId"
-                    limit 1 -- needs to remove limit 1
-                ) as "permissions"
-				, (
-				select array_agg(row_to_json(pb)) from 
+                array_agg("entityName") as "entityNames"                
+				, (select array_agg(row_to_json(pb)) from 
 					(select "buCode", "permissions"
 						from "ClientEntityRole" r
 							join "ClientEntityRoleBuUserX" x1
@@ -398,12 +384,7 @@ allSqls = {
         cte2 as( --admin user
             select u."id", "parentId", "uid", c."id" as "clientId","clientCode", "clientName", 
                     "lastUsedBuCode", "lastUsedBranchId",
-                array_agg("entityName") as "entityNames",
-                (select array_agg("buCode") 
-                    from "ClientEntityBu" b
-                        where b."clientEntityId" = x."id"
-                ) as "buCodes",
-                    null as "permissions"
+                array_agg("entityName") as "entityNames"               
                 , (select array_agg(row_to_json(pb)) from (select "buCode", null as "permissions"
                     from "ClientEntityBu" c
                         join "ClientEntityX" x1
@@ -504,3 +485,24 @@ allSqls = {
                 where "id" = %(userId)s
     '''
 }
+
+
+# , (select array_agg("buCode") 
+#                     from "ClientEntityBu" b
+#                         join "ClientEntityRoleBuUserX" x1
+#                             on b."id" = x1."clientEntityBuId"
+#                     where x1."userId" = u."id"
+#                 ) as "buCodes"
+#                 , ( select "permissions"
+#                     from "ClientEntityRole" r
+#                         join "ClientEntityRoleBuUserX" x1
+#                             on r."id" = x1."clientEntityRoleId" 
+#                          where u."id" = x1."userId"
+#                     limit 1 -- needs to remove limit 1
+#                 ) as "permissions"
+
+#  , (select array_agg("buCode") 
+#                     from "ClientEntityBu" b
+#                         where b."clientEntityId" = x."id"
+#                 ) as "buCodes",
+#                     null as "permissions"
