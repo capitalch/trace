@@ -461,15 +461,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                         marginRight: theme.spacing(1),
                     },
                 },
-
-                // '& .global-search': {
-                //     marginLeft: 'auto',
-                //     marginRight: '1rem',
-                // },
-
-                // '& .add-button': {
-                //     marginRight: theme.spacing(1),
-                // },
             },
             '& .custom-footer': {
                 display: 'flex',

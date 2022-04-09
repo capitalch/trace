@@ -58,13 +58,12 @@ interface GridActionMessagesOptions {
 
 interface XXGridOptions {
     alternateFooter?: { path: string; displayMap?: { [key: string]: any } } // format is: {path:'jsonResult.summary', displayMap:{count: Count, opValue: 'Opening value', closValue:'Closing value'  }}
-
     autoFetchData?: boolean
     className?: string
     columns: any[]
     customFooterField1?: { label: string, path?: string, value?: number }
     disableSelectionOnClick?: boolean
-    editableFields?: string[]
+    // editableFields?: string[]
     gridActionMessages?: GridActionMessagesOptions
     hideViewLimit?: boolean
 
@@ -77,6 +76,7 @@ interface XXGridOptions {
     isReverseOrderChecked?: boolean // does not do reversing of data. Only makes the reverse checkbox as checked
     isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
+    // onCellClick?: (params: GridCellParams) => void
     postFetchMethod?: any // method to call after fetching of data
     rowHeight?: number
     sharedData?: any // data shared with parent
@@ -141,11 +141,13 @@ function XXGrid(gridOptions: XXGridOptions) {
 
     return (
         <DataGridPro
+            // onCellClick={onCellClick}
             getRowClassName={(params: any) => {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
             }}
             disableSelectionOnClick={disableSelectionOnClick || true}
+            experimentalFeatures={{ newEditingApi: true }}
             className={clsx(className || '', classes.content)}
             {...gridOptions.xGridProps}
             apiRef={apiRef}
@@ -191,6 +193,12 @@ function XXGrid(gridOptions: XXGridOptions) {
         />
     )
 
+    // function onCellClick(params: any) {
+    //     if (params.field === 'hsn') {
+    //         apiRef.current.setCellMode(params.id, 'hsn', 'edit')
+    //     }
+    // }
+
     function AlternateFooter() {
         const altFooter = gridOptions?.alternateFooter
         const path: any = altFooter?.path
@@ -204,10 +212,9 @@ function XXGrid(gridOptions: XXGridOptions) {
             </Box>
         ))
 
-        console.log(summary, ' ', displayMap)
+        // console.log(summary, ' ', displayMap)
         return (
-            <Box sx={{ display:'flex', border: '1px solid lightGrey', backgroundColor:theme.palette.grey[100], columnGap: theme.spacing(1), flexWrap:'wrap', }}>
-                {/* <Box sx={{ p: 1 }} >ABCD</Box> */}
+            <Box sx={{ display: 'flex', border: '1px solid lightGrey', backgroundColor: theme.palette.grey[100], columnGap: theme.spacing(1), flexWrap: 'wrap', }}>
                 {ret}
             </Box>
         )

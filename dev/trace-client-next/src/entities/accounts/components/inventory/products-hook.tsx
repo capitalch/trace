@@ -1,6 +1,7 @@
-import { useInventoryUtils, useEffect, useRef, useState, useSharedElements, } from './redirect'
+import { NumberFormat, useInventoryUtils, useEffect, useRef, useState, useSharedElements, utilMethods, } from './redirect'
 import {
     makeStyles,
+    TextField,
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
@@ -11,12 +12,14 @@ function useProducts() {
     const [, setRefresh] = useState({})
     const FETCH_DATA_MESSAGE = 'PRODUCTS-HOOK-FETCH-DATA'
     const meta: any = useRef({
+        isDataChanged: false,
         showDialog: false,
         product: {},
         title: '',
         sharedData: {},
     })
     const pre = meta.current
+    const { genericUpdateMasterNoForm } = utilMethods()
     const { handleDelete, } = useCrudUtils(meta)
     const { fetchBrandsCategoriesUnits } = useInventoryUtils()
     const {
@@ -73,44 +76,120 @@ function useProducts() {
                 headerName: 'Ind',
                 description: 'Index',
                 field: 'id',
-                width: 80,
+                width: 60,
                 disableColumnMenu: true,
             },
             {
                 headerName: 'Id',
                 description: 'Id',
                 field: 'id1',
-                width: 90,
+                width: 60,
             },
             {
                 headerName: 'Code',
                 field: 'productCode',
-                width: '140'
+                width: '100'
             },
             {
                 headerName: 'Category',
                 field: 'catName',
-                width: '140'
+                width: '120'
             },
             {
                 headerName: 'Brand',
                 field: 'brandName',
-                width: '140'
+                width: '120'
             },
             {
                 headerName: 'Label',
                 field: 'label',
-                width: '180',
+                width: '160',
             },
             {
                 headerName: 'HSN',
                 field: 'hsn',
-                width: '120'
+                editable: true,
+                width: '80',
+                cellClassName: 'editable-column',
+                renderEditCell: (params: any) => {
+                    return (
+                        <NumberFormat
+                            allowNegative={false}
+                            customInput={TextField}
+                            onChange={setHsn}
+                            onFocus={(e: any) => e.target.select()}
+                            value={params.row.hsn || null}
+                        />)
+                    function setHsn(e: any) {
+                        const value = e.target.value
+                        params.row.hsn = value
+                        pre.isDataChanged = true
+                        const id1 = params.row.id1
+                        const changedRow = pre.sharedData.allRows.find((x: any) => x.id1 === id1)
+                        changedRow.hsn = value
+                        changedRow.isDataChanged = true
+                        const apiRef = pre.sharedData.apiRef
+                        apiRef.current.setEditCellValue({
+                            id: params.row.id,
+                            field: 'hsn',
+                            value: e.target.value || null,
+                        })
+                        setRefresh({})
+                    }
+                }
+            },
+            {
+                headerName: 'MRP',
+                description: 'Maximum retail price',
+                field: 'maxRetailPrice',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Sale pr',
+                description: 'Sale price',
+                field: 'salePrice',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Sale pr (Gst)',
+                description: 'Sale price with Gst',
+                field: 'salePriceGst',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Dealer pr',
+                description: 'Dealer price',
+                field: 'dealerPrice',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Purch pr',
+                description: 'Purchase price',
+                field: 'purPrice',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Pur pr (Gst)',
+                description: 'Purchase price with Gst',
+                field: 'purPriceGst',
+                type: 'number',
+                width: 100,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
                 headerName: 'Gst(%)',
                 field: 'gstRate',
-                width: '120'
+                width: '80'
             },
             {
                 headerName: 'Unit',
@@ -126,54 +205,6 @@ function useProducts() {
                 headerName: 'UPC',
                 field: 'upcCode',
                 width: '120'
-            },
-            {
-                headerName: 'MRP',
-                description: 'Maximum retail price',
-                field: 'maxRetailPrice',
-                type: 'number',
-                width: 130,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Sale pr',
-                description: 'Sale price',
-                field: 'salePrice',
-                type: 'number',
-                width: 130,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Sale pr (Gst)',
-                description: 'Sale price with Gst',
-                field: 'salePriceGst',
-                type: 'number',
-                width: 130,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Dealer pr',
-                description: 'Dealer price',
-                field: 'dealerPrice',
-                type: 'number',
-                width: 130,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Purch pr',
-                description: 'Purchase price',
-                field: 'purPrice',
-                type: 'number',
-                width: 130,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Pur price (Gst)',
-                description: 'Purchase price with Gst',
-                field: 'purPriceGst',
-                type: 'number',
-                width: 130,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
         ]
 
@@ -203,40 +234,20 @@ function useProducts() {
         }
     }
 
-    // async function fetchBrandsCategoriesUnits() {
-    //     emit('SHOW-LOADING-INDICATOR', true)
-    //     const result: any = await execGenericView({
-    //         isMultipleRows: false,
-    //         sqlKey: 'getJson_brands_categories_units',
-    //         args: {
-    //         },
-    //     })
-
-    //     const brands = (result?.jsonResult?.brands || []).map((x: any) => {
-    //         return {
-    //             label: x.brandName,
-    //             value: x.id,
-    //         }
-    //     })
-    //     setInBag('brands', brands)
-    //     const categories = (result?.jsonResult?.categories || []).map((x: any) => {
-    //         return {
-    //             label: x.catName,
-    //             value: x.id,
-    //         }
-    //     })
-    //     setInBag('categories', categories)
-    //     const units = result?.jsonResult.units
-    //     setInBag('units', units)
-    //     emit('SHOW-LOADING-INDICATOR', false)
-    // }
-
     async function handleAdd() {
         await fetchBrandsCategoriesUnits()
         pre.title = 'Add new product'
         pre.showDialog = true
         setRefresh({})
     }
+
+    // function handleCellClicked(params: any) {
+    //     if (params.field === 'hsn') {
+    //         const apiRef:any = pre.sharedData.apiRef
+    //         apiRef.current.setCellMode(params.id, 'hsn', 'edit')
+    //         setRefresh({})
+    //     }
+    // }
 
     async function handleEdit(d: any) {
         await fetchBrandsCategoriesUnits()
@@ -252,7 +263,22 @@ function useProducts() {
         setRefresh({})
     }
 
-    return { getXXGridParams, handleCloseDialog, meta }
+    async function handleSubmit() {
+        const changedData = pre.sharedData.allRows.filter((x: any) => x.isDataChanged).map((y: any) => ({
+            id: y.id1,
+            hsn: y.hsn || null
+        }))
+        const ret = await genericUpdateMasterNoForm({
+            data: changedData,
+            tableName: 'ProductM',
+        })
+        if (ret) {
+            pre.isDataChanged = false
+            setRefresh({})
+        }
+    }
+
+    return { getXXGridParams, handleCloseDialog, handleSubmit, meta }
 }
 
 export { useProducts }
@@ -265,6 +291,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: '5px',
             '& .xx-grid': {
                 marginTop: theme.spacing(1),
+                '& .editable-column': {
+                    backgroundColor: theme.palette.yellow.light,
+                    color: theme.palette.yellow.contrastText,
+                },
             },
         },
     })

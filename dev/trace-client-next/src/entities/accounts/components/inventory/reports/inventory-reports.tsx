@@ -17,6 +17,7 @@ function InventoryReports() {
         }),
         control: (provided: any) => ({
             ...provided,
+            // fontSize:theme.spacing(1.7)
             // border: '2px solid orange'
             // width: '80%',
         })

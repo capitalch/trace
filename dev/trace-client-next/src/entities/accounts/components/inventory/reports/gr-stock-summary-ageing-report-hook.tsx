@@ -1,4 +1,4 @@
-import { _, CloseSharp, GridCellParams, IconButton, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _,Box, CloseSharp, GridCellParams, IconButton, moment, Typography, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryAgeingReport() {
     const [, setRefresh] = useState({})
@@ -163,7 +163,7 @@ function useStockSummaryAgeingReport() {
             {
                 headerName: 'Label',
                 headerClassName: 'header-class',
-                field: 'label'
+                field: 'label',
             },
             {
                 headerName: 'Op Price',
@@ -171,7 +171,7 @@ function useStockSummaryAgeingReport() {
                 description: 'Opening price',
                 field: 'openingPrice',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -236,8 +236,16 @@ function useStockSummaryAgeingReport() {
                 description: 'Last purchase date',
                 field: 'lastPurchaseDate',
                 type: 'date',
-                width: 90,
+                width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
+            },
+            {
+                headerName: 'Age',
+                headerClassName: 'header-class',
+                description: 'Age of product sold',
+                field: 'age',
+                type: 'number',
+                width: 60,                
             },
             {
                 headerName: 'Sal date',
@@ -245,7 +253,7 @@ function useStockSummaryAgeingReport() {
                 description: 'Last sale date',
                 field: 'lastSaleDate',
                 type: 'date',
-                width: 90,
+                width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
@@ -264,10 +272,10 @@ function useStockSummaryAgeingReport() {
             {
                 // border: '4px solid orange',
                 p: 1, width: '100%',
-                fontSize: theme.spacing(1.5),
+                fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(80),
                 height: 'calc(100vh - 230px)',
-                fontFamily: 'sans-serif',
+                fontFamily: 'Helvetica',
                 '& .footer-row-class': {
                     backgroundColor: theme.palette.grey[300]
                 },
@@ -282,6 +290,9 @@ function useStockSummaryAgeingReport() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'start'
+                },
+                '& .row-jakar':{
+                    color: theme.palette.error.main
                 }
             }
         )
@@ -292,6 +303,9 @@ function useStockSummaryAgeingReport() {
         let ret = ''
         if (row.id === 'Total')
             ret = 'footer-row-class'
+        else if(row.age >= 360){
+            ret = 'row-jakar'
+        }
         return (ret)
     }
 

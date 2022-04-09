@@ -110,7 +110,7 @@ function usePurchaseReport() {
                 headerClassName: 'header-class',
                 description: 'Index',
                 field: 'id',
-                width: 60,
+                width: 65,
             },
             {
                 headerName: 'Pur date',
@@ -118,7 +118,7 @@ function usePurchaseReport() {
                 description: 'Purchase date',
                 field: 'tranDate',
                 type: 'date',
-                width: 90,
+                width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
@@ -126,14 +126,14 @@ function usePurchaseReport() {
                 headerClassName: 'header-class',
                 description: 'Ref no',
                 field: 'autoRefNo',
-                width: 130,
+                width: 145,
             },
             {
                 headerName: 'Invoice no',
                 headerClassName: 'header-class',
                 description: 'Invoice no',
                 field: 'userRefNo',
-                width: 120,
+                width: 140,
             },           
             {
                 headerName: 'Pr code',
@@ -156,7 +156,7 @@ function usePurchaseReport() {
                 headerName: 'Label',
                 headerClassName: 'header-class',
                 field: 'label',
-                width: 110
+                width: 120
             },
             {
                 headerName: 'Qty',
@@ -164,7 +164,7 @@ function usePurchaseReport() {
                 description: 'Qty',
                 field: 'qty',
                 type: 'number',
-                width: 40,
+                width: 45,
             },
             {
                 headerName: 'Pur Price',
@@ -172,7 +172,7 @@ function usePurchaseReport() {
                 description: 'Purchase price',
                 field: 'price',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -181,7 +181,7 @@ function usePurchaseReport() {
                 description: 'Aggregate purchase',
                 field: 'aggrPurchase',
                 type: 'number',
-                width: 100,
+                width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -190,7 +190,7 @@ function usePurchaseReport() {
                 description: 'Purchase with gst',
                 field: 'amount',
                 type: 'number',
-                width: 120,
+                width: 130,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -258,7 +258,7 @@ function usePurchaseReport() {
         return (
             {
                 p: 1, width: '100%',
-                fontSize: theme.spacing(1.5),
+                fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(60),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',

@@ -66,6 +66,7 @@ const App: React.FC = () => {
         //     },
         // },
         
+    
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },

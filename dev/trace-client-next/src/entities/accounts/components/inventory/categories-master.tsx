@@ -6,7 +6,7 @@ import {
 
 function CategoriesMaster() {
     const [, setRefresh] = useState({})
-    const { meta, utilFunc } = useCategoriesMaster()
+    const {handleHsnLeafCategories, meta, utilFunc } = useCategoriesMaster()
     const classes = useStyles()
 
     useEffect(() => {
@@ -86,7 +86,10 @@ function CategoriesMaster() {
                         </Grid>
                     </Grid>
                 </Typography>
-                {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
+                <Box sx={{display:'flex', alignItems:'center', columnGap:4, rowGap:1, }}>
+                    <Button size='small' color='secondary' variant='contained' onClick={handleHsnLeafCategories}>HSN for leaf categories</Button>
+                    {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
+                </Box>
             </Box>
 
             <TreeTable
@@ -205,7 +208,6 @@ function CategoriesMaster() {
                     }}
                 />
             </TreeTable>
-
             <TraceDialog meta={meta} />
         </div>
     )
@@ -472,7 +474,7 @@ function CategoriesMaster() {
             }
         }
 
-       async function submit() {
+        async function submit() {
             const formData = JSON.parse(
                 JSON.stringify(getFormData(meta.current.dialogConfig.formId))
             )

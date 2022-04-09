@@ -57,7 +57,6 @@ function useStockSummaryAgeingReport() {
             sqlKey: pre.sqlKey,
             args: {
                 onDate:
-                    // multiData?.generic?.stockOnDate
                     pre.stockDate
                     || null,
                 days: pre.selectedAgeingOption.value || 0

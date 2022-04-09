@@ -1,4 +1,4 @@
-import { useRef, useState } from '../imports/regular-imports'
+import { _, useRef, useState } from '../imports/regular-imports'
 import {
     Button,
     IconButton,
@@ -90,7 +90,7 @@ function useTraceHeader() {
         message: globalMessages['operationSuccessful'],
         duration: 5000,
     })
-  
+
     // for closing snackbar
     function handleClose() {
         snackbar.current.open = false
@@ -353,17 +353,31 @@ function useTraceHeader() {
             const login: any = result?.data?.authentication?.doLogin
             const token: string = login && login.token ? login.token : undefined
             const uid: string = login && login.uid
+            const buCodesWithPermissions = login && login.buCodesWithPermissions
+            let buCodes, permissions
+            if (_.isEmpty(buCodesWithPermissions)) {
+                return
+            } else {
+                buCodes = buCodesWithPermissions.map((x: any) => x.buCode)
+                const lastUsedBuCode = login?.lastUsedBuCode
+                // set permissions for last used bu code
+                if(lastUsedBuCode){
+                    permissions = buCodesWithPermissions.find((x:any)=>x.buCode === lastUsedBuCode)?.permissions || []
+                }
+                // permissions = buCodesWithPermissions.map((x: any) => x.permissions)
+            }
             setLoginData({
-                token: token,
-                userType: login?.userType,
-                uid: uid,
-                id: login?.id,
+                buCodes: buCodes, // login?.buCodes,
+                buCodesWithPermissions: buCodesWithPermissions,
+                clientId: login?.clientId,
                 entityNames: login?.entityNames,
-                permissions: login?.permissions,
+                id: login?.id,
                 lastUsedbranchId: login?.lastUsedBranchId,
                 lastUsedBuCode: login?.lastUsedBuCode,
-                buCodes: login?.buCodes,
-                clientId: login?.clientId,
+                permissions: permissions, // login?.permissions,
+                token: token,
+                uid: uid,
+                userType: login?.userType,
             })
             if (token) {
                 meta.current.uid = uid
@@ -392,10 +406,7 @@ function useTraceHeader() {
             if (q) {
                 try {
                     const result = await mutateGraphql(q)
-                    if (
-                        result?.data?.authentication?.genericUpdateMaster ===
-                        true
-                    ) {
+                    if (!_.isEmpty(result?.data?.authentication?.genericUpdateMaster)) {
                         logout()
                         closeDialog()
                     }

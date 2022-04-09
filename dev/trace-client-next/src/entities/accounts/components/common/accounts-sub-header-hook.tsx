@@ -168,7 +168,7 @@ function useAccountsSubHeader() {
                     },
                     setRefresh: setRefresh,
                 })
-                
+
                 if (ret === true || ret?.length <= 9) {
                     setInBag('branchObject', branchObject)
                     emit('SHOW-MESSAGE', {})
@@ -269,40 +269,23 @@ function useAccountsSubHeader() {
 
     async function handleSelectBu() {
         meta.current.showDialog = true
-        const ifElse: any = {
-            a: 'adminUserBuListPermissions',
-            b: 'businessUserBuListPermissions',
-        }
         meta.current.dialogConfig.title = 'Select business unit'
-        emit('SHOW-LOADING-INDICATOR', true)
-        const ret = await execGenericView({
-            isMultipleRows: false,
-            sqlKey: 'getJson_businessUnits_permissions_for_loggedinUser',
-            args: {
-                entityName: entityName,
-                userId: loginData.id,
-            },
-            entityName: authEntityName,
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-        if (!ret) return
-        const pre = ret.jsonResult
-        const buArray = pre?.[ifElse[loginData.userType]] || []
+        const buArray = loginData.buCodes
         const buListItems: any[] = buArray.map((x: any) => {
             return (
                 <ListItem
                     dense={true}
                     divider={true}
                     button={true}
-                    key={x.buCode}
+                    key={x}
                     onClick={() => handleListItemClick(x)}
                     alignItems="flex-start">
                     <ListItemAvatar>
-                        <Avatar>{x.buCode[0].toUpperCase()}</Avatar>
+                        <Avatar>{x[0].toUpperCase()}</Avatar>
                     </ListItemAvatar>
                     <ListItemText
                         style={{ marginTop: '1.1rem' }}
-                        primary={x.buCode}
+                        primary={x}
                     />
                 </ListItem>
             )
@@ -317,25 +300,23 @@ function useAccountsSubHeader() {
                 customCodeBlock: 'update_lastUsedBuCode',
                 entityName: authEntityName,
                 data: {
-                    userId: getLoginData().id,
-                    buCode: item.buCode,
+                    userId: loginData.id,
+                    buCode: item,
                 },
                 setRefresh: setRefresh,
             })
             if (ret === true || ret?.length <= 9) {
-                setInBag('buCode', item.buCode)
-                getLoginData().lastUsedBuCode = item.buCode
+                setInBag('buCode', item)
+                loginData.lastUsedBuCode = item
                 emit('SHOW-MESSAGE', {})
                 //when buCode is changed then set the default branch id which is 1
                 setLastBuCodeFinYearIdBranchId(1) // to restart init-code to load bu, finYear and branch in trace-subheader. The finYear and branch depend on bu.
-                // now set permissions for the selected bu and user
-                const buObject = buArray.find(
-                    (x: any) => x.buCode === item.buCode
-                )
-                const permissions = _.isEmpty(buObject)
-                    ? []
-                    : buObject.permissions
-                getLoginData().permissions = permissions
+
+                const buCodesWithPermissions = loginData?.buCodesWithPermissions
+                if (!_.isEmpty(buCodesWithPermissions)) {
+                    const selectedBuWithPermissions = buCodesWithPermissions.find((x: any) => x.buCode === loginData.lastUsedBuCode)
+                    loginData.permissions = selectedBuWithPermissions?.permissions || []
+                }
                 meta.current.showDialog = false
                 meta.current.isMounted && setRefresh({})
             }
@@ -405,3 +386,32 @@ const useStyles: any = makeStyles(() =>
 )
 
 export { useStyles }
+
+
+// now set permissions for the selected bu and user
+// const buObject = buArray.find(
+//     (x: any) => x.buCode === item.buCode
+// )
+// const permissions = _.isEmpty(buObject)
+//     ? []
+//     : buObject.permissions
+// loginData.permissions = permissions
+// const ifElse: any = {
+//     a: 'adminUserBuListPermissions',
+//     b: 'businessUserBuListPermissions',
+// }
+// meta.current.dialogConfig.title = 'Select business unit'
+// emit('SHOW-LOADING-INDICATOR', true)
+// const ret = await execGenericView({
+//     isMultipleRows: false,
+//     sqlKey: 'getJson_businessUnits_permissions_for_loggedinUser',
+//     args: {
+//         entityName: entityName,
+//         userId: loginData.id,
+//     },
+//     entityName: authEntityName,
+// })
+// emit('SHOW-LOADING-INDICATOR', false)
+// if (!ret) return
+// const pre = ret.jsonResult
+// const buArray = pre?.[ifElse[loginData.userType]] || []

@@ -165,7 +165,7 @@ function useSalesReport() {
                 headerClassName: 'header-class',
                 description: 'Index',
                 field: 'id',
-                width: 60,
+                width: 65,
             },
             {
                 headerName: 'Sale date',
@@ -173,7 +173,7 @@ function useSalesReport() {
                 description: 'Sale date',
                 field: 'tranDate',
                 type: 'date',
-                width: 90,
+                width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
@@ -181,7 +181,7 @@ function useSalesReport() {
                 headerClassName: 'header-class',
                 description: 'Ref no',
                 field: 'autoRefNo',
-                width: 160,
+                width: 165,
             },
             {
                 headerName: 'Pr code',
@@ -204,7 +204,7 @@ function useSalesReport() {
                 headerName: 'Label',
                 headerClassName: 'header-class',
                 field: 'label',
-                width: 110
+                width: 120
             },
             {
                 headerName: 'Qty',
@@ -212,7 +212,7 @@ function useSalesReport() {
                 description: 'Qty',
                 field: 'qty',
                 type: 'number',
-                width: 40,
+                width: 45,
             },
             {
                 headerName: 'Sale Price',
@@ -220,7 +220,7 @@ function useSalesReport() {
                 description: 'Sale price',
                 field: 'price',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -229,7 +229,7 @@ function useSalesReport() {
                 description: 'Aggregate sale',
                 field: 'aggrSale',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -238,7 +238,7 @@ function useSalesReport() {
                 description: 'Sale with gst',
                 field: 'amount',
                 type: 'number',
-                width: 120,
+                width: 130,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
@@ -256,8 +256,16 @@ function useSalesReport() {
                 description: 'Purchase price',
                 field: 'lastPurchasePrice',
                 type: 'number',
-                width: 100,
+                width: 110,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Age',
+                headerClassName: 'header-class',
+                description: 'Age of product sold',
+                field: 'age',
+                type: 'number',
+                width: 65,                
             },
             {
                 headerName: 'Gst%',
@@ -314,8 +322,9 @@ function useSalesReport() {
     function getGridSx() {
         return (
             {
-                p: 1, width: '100%',
-                fontSize: theme.spacing(1.5),
+                p: 1, 
+                width: '100%',
+                fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(70),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',
@@ -340,6 +349,9 @@ function useSalesReport() {
                 },
                 '& .row-loss': {
                     color: theme.palette.error.main
+                },
+                '& .row-jakar': {
+                    backgroundColor: theme.palette.lime.light
                 }
             }
         )
@@ -354,6 +366,8 @@ function useSalesReport() {
             ret = 'row-sales-return'
         } else if (row.grossProfit < 0) {
             ret = 'row-loss'
+        } else if(row.age > 360) {
+            ret = 'row-jakar'
         }
         return (ret)
     }
@@ -394,7 +408,9 @@ function useSalesReport() {
         const temp = [...pre.filteredRows]
         _.remove(temp, (x: any) => x.id === id)
         pre.filteredRows = temp
-        pre.totals = getTotals()
+        pre.filteredRows.pop()
+        pre.totals = getTotals()        
+        pre.filteredRows.push(pre.totals)
         setRefresh({})
     }
 

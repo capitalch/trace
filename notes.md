@@ -1,44 +1,5 @@
-select u."id", "uid", "parentId", c."id" as "clientId", "clientCode", "clientName", 
-                "lastUsedBuCode", "lastUsedBranchId",
-                array_agg("entityName") as "entityNames",
-                ( select array_agg("buCode") 
-                    from "ClientEntityBu" b
-                        join "ClientEntityRoleBuUserX" x1
-                            on b."id" = x1."clientEntityBuId"
-                    where x1."userId" = u."id"
-                ) as "buCodes"
-                , ( select "permissions"
-                    from "ClientEntityRole" r
-                        join "ClientEntityRoleBuUserX" x1
-                            on r."id" = x1."clientEntityRoleId" 
-                         where u."id" = x1."userId"
-                    limit 1 -- needs to remove limit 1
-                ) as "permissions"
-                , (
-                select array_agg(row_to_json(pb)) from 
-                    (select "buCode", null as "permissions"
-                        from "ClientEntityRole" r
-                            join "ClientEntityRoleBuUserX" x1
-                                on r."id" = x1."clientEntityRoleId"
-                            join "ClientEntityBu" c
-                                on c.id = x1."clientEntityBuId"
-                        where u.id = x1."userId"
-                    ) pb
-                ) as "buCodesWithPermissions" 
-                    from "TraceUser" u
-                        join "ClientEntityX" x
-                            on x."userId" = u."parentId"
-                        join "TraceEntity" e
-                            on e."id" = x."entityId"
-                        join "TraceClient" c
-                            on c."id" = x."clientId"
-                        where ("uid" = 'dummy1' --%(uidOrEmail)s or "userEmail" = %(uidOrEmail)s
-                              )
-                                and u."isActive" = true
-                                    and c."isActive" = true
-                group by u."id", c."id"
+# npm install @emotion/react @mui/icons-material @mui/material @mui/styles @mui/x-data-grid-pro @testing-library/jest-dom @testing-library/react @testing-library/user-event @types/react @types/react-dom @types/styled-components sass
 
-# npm install @mui/x-data-grid-pro moment react-to-print sass
 
 ## Required reports
 1. Profitibality

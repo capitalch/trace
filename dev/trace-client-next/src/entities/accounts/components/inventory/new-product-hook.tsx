@@ -26,7 +26,7 @@ function useNewProduct(onClose: any, product: any = {}) {
     const pre: any = meta.current
 
     useEffect(() => {
-        console.log(product)
+        // console.log(product)
         if (!_.isEmpty(product)) {
             pre.id = product.id1
             pre.info = product.info
