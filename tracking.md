@@ -117,8 +117,8 @@
 # 10-04-2021
 1. Added stock in Sales report
 2. Logical AND and logical OR for search
-3. Search separated by special characters
-
+3. Search separated by special characters effectuated
+4. Deployment to flask, staging and development
 # 05-04-2022 - 09-04-2022
 1. Addressed several Ui and launching bugs
 2. Provide hsn in category leaf
