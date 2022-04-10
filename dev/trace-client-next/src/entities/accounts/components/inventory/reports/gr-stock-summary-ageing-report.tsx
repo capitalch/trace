@@ -5,7 +5,7 @@ import {
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect,  SyncSharp, TextField,
+    IconButton, moment, ReactSelect, SyncSharp, TextField,
     Typography, useRef, useState, useTheme,
     useStockSummaryAgeingReport, utilMethods,
 } from '../redirect'
@@ -39,9 +39,16 @@ function StockSummaryAgeingReport() {
                 Toolbar: CustomToolbar,
                 Footer: CustomFooter,
             }}
+            componentsProps={{
+                row: {
+                    // onMouseOver: handleOnMouseOver, 
+                    // onMouseEnter: handleOnMouseEnter
+                }
+            }}
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
+            // isRowSelectable={(e:any)=>false}
             onSelectionModelChange={onSelectModelChange}
             rowHeight={35}
             rows={pre.filteredRows}
@@ -50,6 +57,16 @@ function StockSummaryAgeingReport() {
             sx={getGridSx()}
         />
     )
+
+    // function handleOnMouseOver(e: any) {
+    //     e.stopPropagation()
+    //     e.preventDefault()
+    // }
+
+    // function handleOnMouseEnter(e: any) {
+    //     e.stopPropagation()
+    //     e.preventDefault()
+    // }
 
     function CustomToolbar() {
         const [, setRefresh] = useState({})

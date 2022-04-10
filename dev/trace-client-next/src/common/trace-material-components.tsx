@@ -287,6 +287,8 @@ const styles = {
     dialogContent: {
         '& .serial-number': {
             width: '100%',
+            fontSize:'1.2rem',
+            fontFamily:'roboto'
         },
         '& .MuiInputBase-root': {
             width: '80%'

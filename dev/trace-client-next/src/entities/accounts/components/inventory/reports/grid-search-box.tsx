@@ -1,4 +1,5 @@
 import {
+    Checkbox,
     CloseSharp, IconButton, Search, TextField, useIbuki,
 } from '../redirect'
 
@@ -14,7 +15,10 @@ function GridSearchBox({ parentMeta }: any) {
         onChange={handleOnChange}
         placeholder="Search…"
         InputProps={{
-            startAdornment: <Search fontSize="small" />,
+            startAdornment: <>
+                <Checkbox checked={pre.isSearchTextOr} onClick={handleOnClickCheckbox} size='small' />
+                <Search fontSize="small" />
+            </>,
             endAdornment: (
                 <IconButton
                     title="Clear"
@@ -39,23 +43,29 @@ function GridSearchBox({ parentMeta }: any) {
 
     function handleClear(e: any) {
         pre.searchText = ''
+        pre.isSearchTextOr = false
         requestSearch('')
+    }
+
+    function handleOnClickCheckbox(e:any){
+        pre.isSearchTextOr = e.target.checked
+        requestSearch(pre.searchText)
     }
 
     function requestSearch(searchValue: string) {
         if (searchValue) {
-            pre.filteredRows = pre.allRows.filter(
-                (row: any) => {
-                    return Object.keys(row).some((field) => {
-                        const temp: string = row[field]
-                            ? row[field].toString()
-                            : ''
-                        return temp
-                            .toLowerCase()
-                            .includes(searchValue.toLowerCase())
-                    })
-                }
-            )
+            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove emty elements
+            // row values are concatenated and checked against each item in the arr (split of searchText on any char which is not alphanumeric)
+            // if pre.isSearchTextOr then do logical OR for searchText arr else do logical end
+            pre.filteredRows = pre.isSearchTextOr ?
+                pre.allRows.filter((row: any) => arr.some((x: string) => Object.values(row).toString().toLowerCase().includes(x.toLowerCase())))
+                : pre.allRows.filter((row: any) => arr.every((x: string) => Object.values(row).toString().toLowerCase().includes(x.toLowerCase())))
+
+
+            // Object.values(row).some((value: any) =>
+            //     arr.every((x: string) => String(value).toLowerCase().includes(x.toLowerCase()))))
+
+            // arr.some((x: string) => String(value).toLowerCase().includes(x.toLowerCase()))))
         } else {
             pre.filteredRows = pre.allRows.map((x: any) => ({
                 ...x,

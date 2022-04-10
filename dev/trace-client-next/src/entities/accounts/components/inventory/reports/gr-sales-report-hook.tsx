@@ -215,6 +215,14 @@ function useSalesReport() {
                 width: 45,
             },
             {
+                headerName: 'Stk',
+                headerClassName: 'header-class',
+                description: 'Stock',
+                field: 'stock',
+                type: 'number',
+                width: 55,
+            },
+            {
                 headerName: 'Sale Price',
                 headerClassName: 'header-class',
                 description: 'Sale price',
@@ -345,13 +353,13 @@ function useSalesReport() {
                     alignItems: 'start'
                 },
                 '& .row-sales-return': {
-                    color: theme.palette.blue.light
+                    color: theme.palette.error.light
                 },
                 '& .row-loss': {
                     color: theme.palette.error.main
                 },
                 '& .row-jakar': {
-                    backgroundColor: theme.palette.lime.light
+                    color: 'dodgerBlue'
                 }
             }
         )

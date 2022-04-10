@@ -14,6 +14,7 @@
         "@mui/x-data-grid-pro": "^5.8.0",
         "@react-pdf/renderer": "^2.1.1",
         "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^13.0.0",
         "@testing-library/user-event": "^14.0.4",
         "@types/axios": "^0.14.0",
         "@types/big.js": "^6.1.3",

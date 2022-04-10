@@ -272,6 +272,7 @@ function useSaleItems(arbitraryData: any) {
                         badgeContent={met.current.count}></Badge>
                     <TextareaAutosize
                         autoFocus={true}
+                        
                         className="serial-number"
                         minRows={5}
                         onChange={(e: any) => {
@@ -346,7 +347,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(1),
             '& .sale-items': {
                 '& input': {
-                    // fontFamily: 'roboto', // good font for numeric
+                    fontFamily: 'Helvetica', // good font for numeric
                     // fontSize: '0.9rem',
                 },
                 '& .index-header': {

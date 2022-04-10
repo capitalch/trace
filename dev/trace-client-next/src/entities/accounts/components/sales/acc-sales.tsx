@@ -172,7 +172,6 @@ function AccSales() {
         function Payments({ paymentMethodsList }: any) {
             const [, setRefresh] = useState({})
             const payments: any[] = paymentMethodsList.map((item: any, index: number) => {
-                // item.id = counter++
                 return (
                     <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>

@@ -9,7 +9,7 @@ import {
     IconButton,
     Theme
 } from '@mui/material'
-import { makeStyles,  } from '@mui/styles'
+import { makeStyles } from '@mui/styles'
 import { Clear } from '@mui/icons-material'
 import { Button } from 'primereact/button'
 import { useGeneric } from '../core/generic-item'
@@ -122,7 +122,7 @@ const componentStore: any = {
         const { parent, item } = props
         const { XErrorDisplay, formId, controlId } = useGeneric(props)
         const isoDateFormat = 'YYYY-MM-DD'
-        // const classes = useStyles()
+        const classes = useStyles()
         const [, setRefresh] = useState({})
 
         const { getValidationFabric, setField, getField } = manageFormsState()
@@ -140,7 +140,7 @@ const componentStore: any = {
             <>
                 <TextField
                     InputLabelProps={{ shrink: true }} // the label is now fixed; not moving
-                    // className={classes.textField}
+                    className={classes.textField}
                     variant='standard'
                     label={item.label}
                     inputProps={{
@@ -171,7 +171,7 @@ const componentStore: any = {
     DatepickerWithReset: (props: any) => {
         const { parent, item } = props
         const { XErrorDisplay, formId, controlId } = useGeneric(props)
-        // const classes = useStyles()
+        const classes = useStyles()
         const [, setRefresh] = useState({})
 
         const { getValidationFabric, setField, getField } = manageFormsState()
@@ -186,7 +186,7 @@ const componentStore: any = {
             <>
                 <TextField
                     InputLabelProps={{ shrink: true }} // the label is now fixed; not moving
-                    // className={classes.textField}
+                    className={classes.textField}
                     variant='standard'
                     label={item.label}
                     inputProps={{
@@ -876,11 +876,11 @@ const componentStore: any = {
 
 export { componentStore }
 
-// const useStyles = makeStyles((theme: Theme) => ({
-//     container: {
-//         zIndex: 999999,
-//     },
+const useStyles = makeStyles((theme: Theme) => ({
+    container: {
+        zIndex: 999999,
+    },
 
-//     textField: {},
-// }))
+    textField: {},
+}))
 

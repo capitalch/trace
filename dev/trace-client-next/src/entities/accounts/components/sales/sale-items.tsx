@@ -584,6 +584,7 @@ function SaleItems() {
                                     onClick={() => handleSerialNo(rowData)}
                                 />
                             </Badge>
+                            {/* remarka */}
                             <TextField
                                 placeholder="Remarks"
                                 autoComplete='off'

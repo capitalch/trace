@@ -1,6 +1,6 @@
 export {
     Box,
-    Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, IconButton, Input,
+    Button, Checkbox, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, IconButton, Input,
     ListItem, ListItemButton, ListItemIcon, ListItemText,
     RadioGroup, Radio,
     Switch,

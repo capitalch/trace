@@ -57,7 +57,6 @@ function useStockSummaryAgeingReport() {
             sqlKey: pre.sqlKey,
             args: {
                 onDate:
-                    // multiData?.generic?.stockOnDate
                     pre.stockDate
                     || null,
                 days: pre.selectedAgeingOption.value || 0
@@ -292,7 +291,10 @@ function useStockSummaryAgeingReport() {
                     alignItems: 'start'
                 },
                 '& .row-jakar':{
-                    color: theme.palette.error.main
+                    color: 'dodgerBlue'
+                },
+                '& .row-negative-clos':{
+                    color: theme.palette.error.dark
                 }
             }
         )
@@ -305,6 +307,8 @@ function useStockSummaryAgeingReport() {
             ret = 'footer-row-class'
         else if(row.age >= 360){
             ret = 'row-jakar'
+        } else if(row.clos < 0){
+            ret = 'row-negative-clos'
         }
         return (ret)
     }
