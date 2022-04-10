@@ -1,4 +1,4 @@
-# npm install @emotion/react @mui/icons-material @mui/material @mui/styles @mui/x-data-grid-pro @testing-library/jest-dom @testing-library/react @testing-library/user-event @types/react @types/react-dom @types/styled-components sass
+# npm install @types/react @types/react-dom react react-dom react-to-print
 
 
 ## Required reports
