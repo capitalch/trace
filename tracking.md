@@ -1,12 +1,17 @@
-## logic for change in login process
-1. In getJson_userDetails implement "bucodesWithPermissions" at server side, without disturbing buCodes and permissions
-2. At client:trace-header-hook in submitDialog: processLogin: setLoginData add prop buCodesWithPermissions
-3. In accounts-sub-header-hook: handleSelectBu: consider not using getJson_businessUnits_permissions_for_loggedinUser, because information is already there from earlier query.
-4. Check in all program where getLoginData or permissions are being used and act accordingly
+## Logic for sales report
+1. cte0: from tranD where 4,5,9,10, branchId, finYearId, tranDate <= endDate
+2. cte1: from product op bal where branch, finYear
+3. cte2: compute last purchase date and last purchase price till sale date
+4. cte3: using productOpBal fill for missing lastPurchasePrice and lastPurchaseDate
+5. cte4: compute Gross profit
+6. cte5: negate for sales return
 
+7. cte6: cte0-> group by on productId, saleType, get columns as sale, ret, purchase
+8. cte7: sum up using group by to get rid of multiple productId
+9. cte8: cte7 + cte1 -> combine op bal to get opening stock figure, also compute       closing stock
+10. combine cte5 + cte8, left join to get desired columns including stock
 
-## Sales
-                                                            1. Port to Trace
+## Sales                                               1. Port to Trace
 2. Product search
 2.1 Customer search
 2.2 new / edit customer
@@ -25,43 +30,12 @@
 12. Total Debits / Credits
 13. Print view
 ## Bug fixes
-1. When new user is created there is null in database TraceEntry against buCode. If it is null then program fails. You need to manually set this field in PgAdmin.
-2. Permissions not working
-3. Provide days in sales report
+
 ## Planning
-                                                                                        1. Authentication and user management:                    1 week, 5th Feb 2022
-                                                                                            SuperAdmin: Manage admin users, Manage clients, Manage entities, Associate
-                                                                                            Admin: Check manage users, Manage BU. Complete manage roles. New Associate
-                                                                                        Global error catch mecanism. At present UI freezes when error happens
-                                                                                        Provide Subtitle wherever applicable
-                                                                                        2. Invoice correction:                                    2 days, 7th Feb
-                                                                                        Prevent inactive user from login and other works.
-                                                                                        5. Subledger billing:                                     2 days, 9th Feb
-                                                                                        13. Grid view provide title and subtitle                  2 days, 11 Mar
-
-                                                                                        6. Ledger subledger showing balance:                      2 days, 13th Feb
-                                                                                        11. Account balances in generic-vouchers                  3 days, 16th Mar
-                                                                                        14. Accounts master, when edited, data is not 
-                                                                                                refreshed after saved, accounts creation          1 day, 17th Feb
-                                                                                        10. New account code create, immediate effect             3 days, 20th Feb
-
-                                                                                        1. Bug: Product category self edit, and also not refreshing
-                                                                                        2. Remaining of Opening stock and products                1 day, 4th Mar
-                                                                                        3. Bug while login, when press enter key                  .5 day, 5the Mar
-                                                                                        4. Bug fix: Opening account balances                      .5 day, 5th Mar
-                                                                                        2. When opening stock entry, if any new product is created it is not available, you need to refresh the whole software. This might be because of using setInBag('products')
-                                                                                        0. Root accessory refresh, Accounts master sorting, Category drop down show parent accessory one more level
-                                                                                        1. New query for contacts save taking care of existing contact returning the id
-
-Emergency bug fixes
-                                                                                        1. Change uid does not close the window
-                                                                                        2. When a new user is created and is not associated, and tries to login, program crashes without any warning
-                                                                                        3. When a new user is created since lastUsedBuCode in table TraceUser is null, the program crashes when Accounts menu item is clicked.
-
 
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 2. Quick entry for HSN in products and sale
-2.1 Provide hsn in category leaf at product level
+
 1. Dashboard reports: Sales, Products
 2. provide search for customer list
 1. Give more info in view of sales, like gp, days
@@ -139,6 +113,17 @@ Emergency bug fixes
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 10-04-2021
+1. Added stock in Sales report
+2. Logical AND and logical OR for search
+3. Search separated by special characters
+
+# 05-04-2022 - 09-04-2022
+1. Addressed several Ui and launching bugs
+2. Provide hsn in category leaf
+3. Provided ageing in sales report
+4. Simplified login process
 
 # 03-04-2022 - 04-04-2022
 1. Bug fixes for contacts

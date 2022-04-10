@@ -207,6 +207,11 @@ function useXXGrid(gridOptions: any) {
         }
     }
 
+    function handleOnClickSearchCheckbox(e: any) {
+        pre.isSearchTextOr = e.target.checked
+        requestSearch(pre.searchText)
+    }
+
     function injectDailySummary() {
         if (pre.allRows.length === 0) {
             meta.current.isMounted && setRefresh({})
@@ -320,20 +325,17 @@ function useXXGrid(gridOptions: any) {
     function requestSearch(searchValue: string) {
         if (searchValue) {
             meta.current.searchText = searchValue
-            meta.current.filteredRows = meta.current.allRows.filter(
-                (row: any) => {
-                    return Object.keys(row).some((field) => {
-                        const temp: string = row[field]
-                            ? row[field].toString()
-                            : ''
-                        return temp
-                            .toLowerCase()
-                            .includes(searchValue.toLowerCase())
-                    })
-                }
-            )
+            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove emty elements
+            // row values are concatenated and checked against each item in the arr (split of searchText on any char which is not alphanumeric)
+            // if pre.isSearchTextOr then do logical OR for searchText arr else do logical end
+            pre.filteredRows = pre.isSearchTextOr ?
+                pre.allRows.filter((row: any) => arr.some((x: string) => Object.values(row).toString().toLowerCase().includes(x.toLowerCase())))
+                : pre.allRows.filter((row: any) => arr.every((x: string) => Object.values(row).toString().toLowerCase().includes(x.toLowerCase())))
+            // pre.filteredRows = pre.allRows.filter((row: any) =>
+            //     Object.values(row).some((value: any) =>
+            //         arr.some((x: string) => String(value).toLowerCase().includes(x.toLowerCase()))))
         } else {
-            meta.current.filteredRows = meta.current.allRows.map((x: any) => ({
+            pre.filteredRows = pre.allRows.map((x: any) => ({
                 ...x,
             }))
         }
@@ -377,6 +379,7 @@ function useXXGrid(gridOptions: any) {
     return {
         fetchRows,
         fillColumnBalance,
+        handleOnClickSearchCheckbox,
         injectDailySummary,
         meta,
         onSelectModelChange,

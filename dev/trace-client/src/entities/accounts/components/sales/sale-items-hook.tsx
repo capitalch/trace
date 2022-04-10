@@ -272,6 +272,7 @@ function useSaleItems(arbitraryData: any) {
                         badgeContent={met.current.count}></Badge>
                     <TextareaAutosize
                         autoFocus={true}
+                        
                         className="serial-number"
                         minRows={5}
                         onChange={(e: any) => {

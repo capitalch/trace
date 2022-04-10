@@ -121,6 +121,7 @@ function XXGrid(gridOptions: XXGridOptions) {
     const {
         fetchRows,
         fillColumnBalance,
+        handleOnClickSearchCheckbox,
         injectDailySummary,
         meta,
         onSelectModelChange,
@@ -129,6 +130,7 @@ function XXGrid(gridOptions: XXGridOptions) {
         setRefresh,
         toggleOrder,
     } = useXXGrid(gridOptions)
+    const pre = meta.current
     meta.current.searchTextRef = useRef() // To set focus to search box after refresh
     // meta.current.dummyRefFirstTime = useRef()
     const { debounceEmit, emit } = useIbuki()
@@ -355,7 +357,10 @@ function XXGrid(gridOptions: XXGridOptions) {
                             placeholder="Search…"
                             className="global-search"
                             InputProps={{
-                                startAdornment: <Search fontSize="small" />,
+                                startAdornment: <>
+                                    <Checkbox checked={pre.isSearchTextOr} onClick={handleOnClickSearchCheckbox} size='small' />
+                                    <Search fontSize="small" />
+                                </>,
                                 endAdornment: (
                                     <IconButton
                                         title="Clear"

@@ -805,19 +805,6 @@ function usePurchaseItems(arbitraryData: any) {
                 style={{ width: '8rem', textAlign: 'end' }}
                 body={(rowData: any) => {
                     return (
-                        // <NumberFormat
-                        //     sx={{fontWeight:'bold'}}
-                        //     variant='standard'
-                        //     allowNegative={false}
-                        //     className="right-aligned-numeric"
-                        //     customInput={TextField}
-                        //     decimalScale={2}
-                        //     disabled={true}
-                        //     // readOnly={true}
-                        //     fixedDecimalScale={true}
-                        //     thousandSeparator={true}
-                        //     value={rowData.subTotal || 0.0}
-                        // />
                         <Typography sx={{ ml: 'auto' }} >{toDecimalFormat(rowData.subTotal) || 0.0}</Typography>
                     )
                 }}
