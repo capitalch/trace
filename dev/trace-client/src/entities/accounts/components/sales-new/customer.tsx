@@ -1,5 +1,5 @@
-import { useCustomer} from './customer-hook'
-import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
+import { useCustomer } from './customer-hook'
+import { Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
 import { CustomerDialogContent } from './customer-hook'
 
 function Customer() {
@@ -7,21 +7,19 @@ function Customer() {
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog, handleCustomerSearch, meta } = useCustomer()
+    const { handleCloseDialog, handleCustomerSearch, handleCustomerSearchClear, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
-    // sales.autoRefNo = 'ref/11/234/2022'
+
     return (
         <Box className='vertical' sx={{ display: 'flex', border: '1px solid orange', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
-            {/* Ref no, date, user ref no*/}
+
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
                 <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
                 {/* ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12), ml: 4 }}>
                     <Typography variant='caption' >Ref no</Typography>
-                    {/* <Typography variant='subtitle2' sx={{height: theme.spacing(2.6)}}>{sales.autoRefNo || ''}</Typography> */}
-                    <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true}
-                        onChange={(e: any) => handleTextChanged('autoRefNo', e)} />
+                    <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true} />
                 </Box>
                 {/* tran date */}
                 <Box className='vertical'>
@@ -49,12 +47,23 @@ function Customer() {
             </Box>
             <Box sx={{ display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
                 {/* Customer search */}
-                <Box className='vertical' sx={{minWidth: theme.spacing(40)}}>
+                <Box className='vertical' sx={{ minWidth: theme.spacing(40) }}>
                     <Typography variant='caption'>Customer search</Typography>
                     <TextField
                         autoComplete='off'
                         autoFocus={true}
                         InputProps={{
+                            startAdornment: (
+                                <InputAdornment position='start' >
+                                    <Box sx={{ display: 'flex', flexDirection: 'column',  }}>
+                                        <Typography variant='caption' sx={{mt:0, ml:1.25, color:theme.palette.common.black}}>OR</Typography>
+                                        <Checkbox sx={{mt:-2}} size='small' checked={sales.searchFilterOr || false} onClick={(e: any) => {
+                                            sales.searchFilterOr = e.target.checked
+                                            setRefresh({})
+                                        }} />
+                                    </Box>
+                                </InputAdornment>
+                            ),
                             endAdornment: (
                                 <InputAdornment position="end">
                                     <IconButton
@@ -66,21 +75,20 @@ function Customer() {
                                     <IconButton
                                         size="small"
                                         color='secondary'
-                                        onClick={(e: any) => {
-                                        }}>
+                                        onClick={handleCustomerSearchClear}>
                                         <CloseSharp color='error' />
                                     </IconButton>
                                 </InputAdornment>
                             ),
                         }}
-                        onChange={(e: any) => { pre.searchFilter = e.target.value; setRefresh({}) }}
+                        onChange={(e: any) => handleTextChanged('searchFilter', e)}
                         onKeyDown={(e: any) => {
                             if (e.keyCode === 13) {
                                 handleCustomerSearch()
                             }
                         }}
                         sx={{ minWidth: theme.spacing(15) }}
-                        value={pre.searchFilter || ''}
+                        value={sales.searchFilter || ''}
                         variant='standard'
                     />
                 </Box>
@@ -127,4 +135,4 @@ function Customer() {
     }
 }
 
-export { Customer}
+export { Customer }

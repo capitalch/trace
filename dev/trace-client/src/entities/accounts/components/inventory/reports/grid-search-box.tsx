@@ -54,7 +54,7 @@ function GridSearchBox({ parentMeta }: any) {
 
     function requestSearch(searchValue: string) {
         if (searchValue) {
-            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove emty elements
+            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove empty elements
             // row values are concatenated and checked against each item in the arr (split of searchText on any char which is not alphanumeric)
             // if pre.isSearchTextOr then do logical OR for searchText arr else do logical end
             pre.filteredRows = pre.isSearchTextOr ?

@@ -4,11 +4,11 @@ import { Crown } from './crown'
 import { Payments } from './payments'
 import { Items } from './items'
 function SalesNew() {
-    const theme = useTheme()
+    // const theme = useTheme()
     return (
         <Box sx={{ display: 'flex', flexGrow: 1, '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Box className='vertical' sx={{ flexGrow: 1 }}>
-                <Typography variant='subtitle1' sx={{ ml: 1 }}>Sales</Typography>
+                <Typography variant='subtitle1' sx={{  }}>Sales</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Customer />
                     <Crown />

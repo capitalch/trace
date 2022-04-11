@@ -368,6 +368,14 @@ allSqls = {
                 limit 100
     ''',
 
+    'get_contacts_on_regexp':'''
+        select * from "Contacts"
+            where concat("mobileNumber", "otherMobileNumber", "email", "contactName"
+                , "landPhone", "descr", "address1", "address2", "pin") ~* %(searchString)s
+        order by "contactName"
+		    limit 100
+    ''',
+
     'get_debtors_creditors': '''
        select a."id", "accCode", "accName", e."isAutoSubledger", c."accClass", "gstin"
 		from "AccM" a
