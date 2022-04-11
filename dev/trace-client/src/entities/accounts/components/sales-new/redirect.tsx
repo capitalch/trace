@@ -12,7 +12,7 @@ export {
 } from '../../../../imports/gui-imports'
 export { MegaDataContext } from '../../../../common/mega-data-context'
 export { _, moment, NumberFormat, PrimeColumn, ReactSelect, TreeTable, useContext, useEffect, useRef, useState, XXGrid } from '../../../../imports/regular-imports'
-export { CloseSharp, Search, } from '../../../../imports/icons-import'
+export { AddCircle, CloseSharp, Search, } from '../../../../imports/icons-import'
 export { LedgerSubledger } from '../common/ledger-subledger'
 export { Big }
 export { utilMethods } from '../../../../global-utils/misc-utils'

@@ -1,24 +1,26 @@
-import { useCustomerInfo } from './customer-info-hook'
+import { useCustomer} from './customer-hook'
 import { Box, Button, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
-import { CustomerDialogContent } from './customer-info-hook'
+import { CustomerDialogContent } from './customer-hook'
 
-function CustomerInfo() {
+function Customer() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog, handleCustomerSearch, meta } = useCustomerInfo()
+    const { handleCloseDialog, handleCustomerSearch, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
+    // sales.autoRefNo = 'ref/11/234/2022'
     return (
-        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, rowGap: 2, flexWrap: 'wrap', flexGrow: 1 }}>
-            <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Customer info ( Bill to )</Typography>
+        <Box className='vertical' sx={{ display: 'flex', border: '1px solid orange', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
             {/* Ref no, date, user ref no*/}
-            <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2 }}>
+            <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
+                <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
                 {/* ref no */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
-                    <Typography variant='caption'>Ref no</Typography>
-                    <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off'
+                <Box className='vertical' sx={{ minWidth: theme.spacing(12), ml: 4 }}>
+                    <Typography variant='caption' >Ref no</Typography>
+                    {/* <Typography variant='subtitle2' sx={{height: theme.spacing(2.6)}}>{sales.autoRefNo || ''}</Typography> */}
+                    <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true}
                         onChange={(e: any) => handleTextChanged('autoRefNo', e)} />
                 </Box>
                 {/* tran date */}
@@ -40,17 +42,18 @@ function CustomerInfo() {
                         onChange={(e: any) => handleTextChanged('gstin', e)} />
                 </Box>
                 {/* Remarks */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(14), flex: 1 }}>
-                    <Typography variant='caption'>Common remarks</Typography>
+                <Box className='vertical' sx={{ minWidth: theme.spacing(14), }}>
+                    <Typography variant='caption'>Remarks</Typography>
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
                 {/* Customer search */}
-                <Box className='vertical'>
+                <Box className='vertical' sx={{minWidth: theme.spacing(40)}}>
                     <Typography variant='caption'>Customer search</Typography>
                     <TextField
                         autoComplete='off'
+                        autoFocus={true}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">
@@ -81,12 +84,12 @@ function CustomerInfo() {
                         variant='standard'
                     />
                 </Box>
-                <Typography variant='caption' sx={{ minWidth: theme.spacing(50), height: theme.spacing(8), backgroundColor: theme.palette.grey[200] }}>{sales.customerDetails}</Typography>
-                <Box sx={{ display: 'flex', }}>
+                <Typography variant='caption' sx={{ minWidth: theme.spacing(50), height: theme.spacing(8), backgroundColor: theme.palette.grey[200], flexGrow: 1 }}>{sales.customerDetails}</Typography>
+                <Box sx={{ display: 'flex', ml: 'auto' }}>
                     {/* New / edit */}
-                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main, }}>New / Edit</Button>
+                    <Button size='medium' color='secondary' variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
-                    <Button size='medium' sx={{ color: theme.palette.lightBlue.main }}>Clear</Button>
+                    <Button size='medium' color='secondary' variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
                 </Box>
             </Box>
             <Dialog
@@ -124,4 +127,4 @@ function CustomerInfo() {
     }
 }
 
-export { CustomerInfo }
+export { Customer}

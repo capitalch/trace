@@ -1,20 +1,20 @@
 import { Box, Typography, useTheme } from './redirect'
-import { CustomerInfo } from './customer-info'
+import { Customer } from './customer'
 import { Crown } from './crown'
-import { PaymentsInfo } from './payments-info'
-import { ProductsInfo } from './products-info'
+import { Payments } from './payments'
+import { Items } from './items'
 function SalesNew() {
     const theme = useTheme()
     return (
         <Box sx={{ display: 'flex', flexGrow: 1, '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Box className='vertical' sx={{ flexGrow: 1 }}>
                 <Typography variant='subtitle1' sx={{ ml: 1 }}>Sales</Typography>
-                <Box sx={{ display: 'flex' }}>
-                    <CustomerInfo />
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Customer />
                     <Crown />
                 </Box>
-                <ProductsInfo />
-                <PaymentsInfo />
+                <Items />
+                <Payments />
             </Box>
         </Box>
     )

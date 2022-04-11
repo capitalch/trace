@@ -1,40 +1,28 @@
-## Logic for sales report
-1. cte0: from tranD where 4,5,9,10, branchId, finYearId, tranDate <= endDate
-2. cte1: from product op bal where branch, finYear
-3. cte2: compute last purchase date and last purchase price till sale date
-4. cte3: using productOpBal fill for missing lastPurchasePrice and lastPurchaseDate
-5. cte4: compute Gross profit
-6. cte5: negate for sales return
+## To do in sales
+1. Add + icon in add button
+2. Gstin, date, other validations
+2. cgst, sgst, igst group spacing
+3. Customer search
+4. New / edit button
+5. Product search
+6. Summary, calculations, amount etc.
+7. Serial no mechanism
+8. Population of product details
+9. Reset, roundoff, back cal buttons, Igst, Add button
+10. saleVariety implementation
+11. Add, New, clear button, ship to
+12. Total error handling and show of submit
+13. Submit functionality
+14. View and drill through
+15. Page reset
+16. Total Debits / Credits
+17. New error window in open space
 
-7. cte6: cte0-> group by on productId, saleType, get columns as sale, ret, purchase
-8. cte7: sum up using group by to get rid of multiple productId
-9. cte8: cte7 + cte1 -> combine op bal to get opening stock figure, also compute       closing stock
-10. combine cte5 + cte8, left join to get desired columns including stock
-
-## Sales                                               1. Port to Trace
-2. Product search
-2.1 Customer search
-2.2 new / edit customer
-                                                            2.3 Round off button  2. Compute row
-3. Error validations
-4. Submit 
-5. View function
-6. Reset function
-                                                            7. Back calculate
-7. saleVariety implementation
-7. Convert computeSummary to ibuki
-8. Submit function
-9. Edit function
-10. Full screen function
-11. Serial numbers
-12. Total Debits / Credits
-13. Print view
-## Bug fixes
 
 ## Planning
 
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
-2. Quick entry for HSN in products and sale
+
 
 1. Dashboard reports: Sales, Products
 2. provide search for customer list
@@ -114,7 +102,9 @@
 19. Backup and restore strategy
 20. Upgrade database for all instances
 
-# 10-04-2021
+# 11-04-2022
+1. Simple sales continue
+# 10-04-2022
 1. Added stock in Sales report
 2. Logical AND and logical OR for search
 3. Search separated by special characters effectuated

@@ -1,13 +1,13 @@
 import { Box, Button, CloseSharp, FormControlLabel, IconButton, NumberFormat, Radio, RadioGroup, TextField, Typography, useContext, MegaDataContext, useState, useTheme } from './redirect'
 
-function PaymentsInfo() {
+function Payments() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     return (
         <Box className='vertical' sx={{ p: 2, mr: 1, mb: 1, border: '1px solid lightGrey', maxWidth: theme.spacing(70) }}>
-            <Typography variant='subtitle2' sx={{ textDecoration: 'underline' }}>Payments info</Typography>
+            <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight:'bold' }}>Payments</Typography>
             <SaleVariety />
             <PaymentMethods />
             {/* ship to */}
@@ -148,4 +148,4 @@ function PaymentsInfo() {
         }
     }
 }
-export { PaymentsInfo }
+export { Payments }

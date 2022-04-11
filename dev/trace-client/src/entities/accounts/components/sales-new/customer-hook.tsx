@@ -1,5 +1,5 @@
 import { accountsMessages, Box, MegaDataContext, useConfirm, useContext, useEffect, useRef, useState } from './redirect'
-function useCustomerInfo() {
+function useCustomer() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
@@ -34,7 +34,7 @@ function useCustomerInfo() {
 
     return ({ handleCloseDialog, handleCustomerSearch, meta })
 }
-export { useCustomerInfo }
+export { useCustomer }
 
 function CustomerDialogContent({ meta }: any) {
     const [, setRefresh] = useState({})
