@@ -1,7 +1,7 @@
 export {
     Box,
     Button, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, IconButton, Input,
-    ListItem, ListItemButton, ListItemIcon, ListItemText,
+    List, ListItem, ListItemButton, ListItemIcon, ListItemText,
     RadioGroup, Radio,
     Switch,
     TextField, Tooltip, Typography,

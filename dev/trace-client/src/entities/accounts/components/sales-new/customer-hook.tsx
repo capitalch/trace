@@ -1,12 +1,12 @@
-import { } from '../inventory/redirect'
-import { accountsMessages, Box, MegaDataContext, useConfirm, useContext, useEffect, useIbuki, useRef, useState, utilMethods } from './redirect'
+import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
 function useCustomer() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const confirm = useConfirm()
     const meta: any = useRef({
-        // searchFilter: '',
+        allRows: [],
+        filteredRows: [],
         setRefresh: setRefresh,
         showDialog: false,
         dialogConfig: {
@@ -44,7 +44,7 @@ function useCustomer() {
 export { useCustomer }
 
 function CustomerDialogContent({ meta }: any) {
-    // const [, setRefresh] = useState({})
+    const [, setRefresh] = useState({})
     const pre = meta.current
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
@@ -52,21 +52,22 @@ function CustomerDialogContent({ meta }: any) {
     const confirm = useConfirm()
     const { emit } = useIbuki()
     const { execGenericView } = utilMethods()
+    const theme = useTheme()
     useEffect(() => {
         fetchData()
     }, [])
 
     function closeDialog() {
-        pre.shoDialog = false
+        pre.showDialog = false
         pre.setRefresh({})
     }
 
     async function fetchData() {
         let searchString
         //split on non alphanumeric character
-        const arr = sales.searchFilter.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
+        const arr = searchFilter.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
 
-        if (sales.searchFilterOr) {
+        if (sales.searchFilterOr) { // The checkbox
             searchString = arr.join('|')
         } else { //and arr elements for regex
             const tempArr = arr.map((x: any) => `(?=.*${x})`)
@@ -79,7 +80,7 @@ function CustomerDialogContent({ meta }: any) {
         const ret = await execGenericView({
             isMultipleRows: true,
             sqlKey: 'get_contacts_on_regexp',
-            args: { searchString: searchString } // searchFilter.replaceAll('*', '\\*') ,
+            args: { searchString: searchString }
         })
         emit('SHOW-LOADING-INDICATOR', false)
 
@@ -88,6 +89,9 @@ function CustomerDialogContent({ meta }: any) {
                 sales.billTo = ret[0]
                 // setCountryStateCityValuesFromLabels()
                 closeDialog()
+            } else { //show list
+                pre.allRows = ret
+                pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
             }
         } else {
             const options = {
@@ -97,11 +101,40 @@ function CustomerDialogContent({ meta }: any) {
             }
             confirm(options)
         }
-
-
+        pre.setRefresh({})
     }
 
-    return (<Box>cust</Box>)
+    return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <List>
+            {
+                pre.filteredRows.map((item: any, index: number) => (
+                    <ListItem
+                        alignItems='flex-start'
+                        key={index}
+                        dense={true}
+                        divider={true}
+                        button={true}>
+                        <ListItemAvatar>
+                            <Avatar sx={{ backgroundColor: theme.palette.lightBlue.main, color: theme.palette.common.white }}>
+                                {item.contactName[0].toUpperCase()}
+                            </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={item.contactName} sx={{  }}
+                            secondary={
+                                <>
+                                    <Typography component='li' variant='body1' color= {theme.palette.common.black}>
+                                        {'M: '}
+                                        {item.mobileNumber}
+                                    </Typography>
+                                </>
+                            }
+                        ></ListItemText>
+                    </ListItem>
+                ))
+            }
+        </List>
+
+    </Box>)
 }
 
 export { CustomerDialogContent }
