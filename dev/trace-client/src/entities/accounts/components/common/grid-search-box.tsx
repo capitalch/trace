@@ -1,11 +1,11 @@
 import {
     Checkbox,
     CloseSharp, IconButton, Search, TextField, useIbuki,
-} from '../redirect'
+} from '../inventory/redirect'
 
 function GridSearchBox({ parentMeta }: any) {
     const pre = parentMeta.current
-    const { debounceEmit, } = useIbuki()
+    const { debounceEmit} = useIbuki()    
 
     return (<TextField
         inputRef={pre.searchTextRef}
@@ -47,7 +47,7 @@ function GridSearchBox({ parentMeta }: any) {
         requestSearch('')
     }
 
-    function handleOnClickCheckbox(e:any){
+    function handleOnClickCheckbox(e: any) {
         pre.isSearchTextOr = e.target.checked
         requestSearch(pre.searchText)
     }
@@ -71,8 +71,10 @@ function GridSearchBox({ parentMeta }: any) {
                 ...x,
             }))
         }
-        pre.totals = pre.getTotals()
-        pre.filteredRows.push(pre.totals)
+        if (pre.getTotals) {
+            pre.totals = pre.getTotals()
+            pre.filteredRows.push(pre.totals)
+        }
         pre.setRefresh({})
     }
 }

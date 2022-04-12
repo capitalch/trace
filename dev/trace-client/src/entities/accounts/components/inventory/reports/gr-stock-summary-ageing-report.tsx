@@ -9,7 +9,7 @@ import {
     Typography, useRef, useState, useTheme,
     useStockSummaryAgeingReport, utilMethods,
 } from '../redirect'
-import { GridSearchBox } from './grid-search-box'
+import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockSummaryAgeingReport() {
     const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, } = useStockSummaryAgeingReport()
@@ -57,16 +57,6 @@ function StockSummaryAgeingReport() {
             sx={getGridSx()}
         />
     )
-
-    // function handleOnMouseOver(e: any) {
-    //     e.stopPropagation()
-    //     e.preventDefault()
-    // }
-
-    // function handleOnMouseEnter(e: any) {
-    //     e.stopPropagation()
-    //     e.preventDefault()
-    // }
 
     function CustomToolbar() {
         const [, setRefresh] = useState({})

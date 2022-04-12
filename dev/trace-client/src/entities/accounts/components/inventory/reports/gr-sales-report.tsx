@@ -8,7 +8,7 @@ import {
     IconButton, ReactSelect, SyncSharp, TextField,
     Typography, useRef, useState, useTheme, utilMethods,
 } from '../redirect'
-import { GridSearchBox } from './grid-search-box'
+import { GridSearchBox } from '../../common/grid-search-box'
 import { useSalesReport } from './gr-sales-report-hook'
 
 function SalesReport() {

@@ -1,13 +1,13 @@
 import { useCustomer } from './customer-hook'
 import { Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
-import { CustomerDialogContent } from './customer-hook'
+import { CustomerSearchDialogContent } from './customer-hook'
 
 function Customer() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog,handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, meta } = useCustomer()
+    const { handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
@@ -93,19 +93,19 @@ function Customer() {
                 </Box>
                 {/* Customer details */}
                 <Box sx={{
-                    display: 'flex', fontFamily:'sans-serif', color:theme.palette.common.black,
+                    display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
                     fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(50), maxWidth: theme.spacing(60)
-                    , height: theme.spacing(10),  flexWrap: 'wrap', overflow:'clip'
+                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip'
                 }}>
-                    <Typography sx={{fontWeight:'bold'}}>{billTo?.contactName ? billTo.contactName.concat(',') : ''}</Typography>
-                    <Typography sx={{fontWeight:'bold'}}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(',') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
                     <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ',') : ''}</Typography>
                     <Typography>{billTo?.address2 ? ''.concat(' ', billTo.address2, ',') : ''}</Typography>
                     <Typography>{billTo?.email ? ''.concat(' ', billTo.email, ',') : ''}</Typography>
                     <Typography>{billTo?.country ? ''.concat(' ', billTo.country, ',') : ''}</Typography>
                     <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ',') : ''}</Typography>
-                    <Typography sx={{fontWeight:'bold'}}>{billTo?.city ? ''.concat(' ', billTo.city, ',') : ''}</Typography>
-                    <Typography sx={{fontWeight:'bold'}}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ',') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', ml: 'auto' }}>
                     {/* New / edit */}
@@ -136,7 +136,8 @@ function Customer() {
                     </Box>
                 </DialogTitle>
                 <DialogContent>
-                    <CustomerDialogContent meta={meta} />
+                    <pre.content />
+                    {/* <CustomerSearchDialogContent meta={meta} /> */}
                     {/* <NewProduct onClose={handleCloseDialog} /> */}
                 </DialogContent>
             </Dialog>

@@ -6,7 +6,6 @@ function useStockSummaryAgeingReport() {
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-    // const multiData: any = useContext(MultiDataContext)
 
     const meta: any = useRef({
         allRows: [],

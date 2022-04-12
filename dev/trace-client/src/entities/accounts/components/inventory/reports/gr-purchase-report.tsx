@@ -9,7 +9,7 @@ import {
     Typography, useRef, useState, useTheme,
     utilMethods,
 } from '../redirect'
-import { GridSearchBox } from './grid-search-box'
+import { GridSearchBox } from '../../common/grid-search-box'
 import { usePurchaseReport } from './gr-purchase-report-hook'
 
 function PurchaseReport() {

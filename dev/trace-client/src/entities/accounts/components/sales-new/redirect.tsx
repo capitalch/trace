@@ -20,3 +20,4 @@ export { utilMethods } from '../../../../global-utils/misc-utils'
 export { useConfirm } from 'material-ui-confirm'
 export { accountsMessages }
 export { useIbuki } from '../../../../imports/trace-imports'
+export { SearchBox } from '../common/search-box'

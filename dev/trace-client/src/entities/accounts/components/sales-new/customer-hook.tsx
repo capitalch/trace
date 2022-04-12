@@ -1,4 +1,5 @@
-import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
+import { TextField } from '@mui/material'
+import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, SearchBox, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
 function useCustomer() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
@@ -7,10 +8,12 @@ function useCustomer() {
     const meta: any = useRef({
         allRows: [],
         filteredRows: [],
+        searchText: '',
         setRefresh: setRefresh,
         showDialog: false,
         dialogConfig: {
             title: 'Select customer',
+            content: <></>
         }
     })
     const pre = meta.current
@@ -32,6 +35,7 @@ function useCustomer() {
             pre.allRows = []
             pre.filteredRows = []
             pre.showDialog = true
+            pre.dialogConfig.content = ()=><CustomerSearchDialogContent meta={meta} />
             setRefresh({})
         } else {
             const options = {
@@ -53,8 +57,7 @@ function useCustomer() {
 }
 export { useCustomer }
 
-function CustomerDialogContent({ meta }: any) {
-    // const [, setRefresh] = useState({})
+function CustomerSearchDialogContent({ meta }: any) {
     const pre = meta.current
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
@@ -63,7 +66,8 @@ function CustomerDialogContent({ meta }: any) {
     const { emit } = useIbuki()
     const { execGenericView } = utilMethods()
     const theme = useTheme()
-    useEffect(() => {       
+
+    useEffect(() => {
         fetchData()
     }, [])
 
@@ -116,7 +120,10 @@ function CustomerDialogContent({ meta }: any) {
     }
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography>{''.concat(pre.filteredRows.length || 0, ' Items')}</Typography>
+        <Box sx={{ ml: 'auto' }}>
+            <SearchBox parentMeta={meta} />
+        </Box>
+        <Typography sx={{ mt: 2, ml: 'auto' }}>{''.concat(pre.filteredRows.length || 0, ' Items')}</Typography>
         <List>
             {
                 pre.filteredRows.map((item: any, index: number) => (
@@ -170,10 +177,6 @@ function CustomerDialogContent({ meta }: any) {
             }
         </List>
     </Box>)
-
-    // function handleContactSelected(e:any){
-    //     sales.billTo = item
-    // }
 }
 
-export { CustomerDialogContent }
+export { CustomerSearchDialogContent }
