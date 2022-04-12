@@ -7,58 +7,57 @@ function Customer() {
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog, handleCustomerSearch, handleCustomerSearchClear, meta } = useCustomer()
+    const { handleCloseDialog,handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
-
+    const billTo = sales?.billTo
     return (
         <Box className='vertical' sx={{ display: 'flex', border: '1px solid orange', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
-
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
                 <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
                 {/* ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12), ml: 4 }}>
-                    <Typography variant='caption' >Ref no</Typography>
+                    <Typography variant='body2' >Ref no</Typography>
                     <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true} />
                 </Box>
                 {/* tran date */}
                 <Box className='vertical'>
-                    <Typography variant='caption'>Date</Typography>
+                    <Typography variant='body2'>Date</Typography>
                     <TextField variant='standard' type='date' value={sales.tranDate || moment().format(isoDateFormat)}
                         onChange={(e: any) => handleTextChanged('tranDate', e)} />
                 </Box>
                 {/* User ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
-                    <Typography variant='caption'>User ref no</Typography>
+                    <Typography variant='body2'>User ref no</Typography>
                     <TextField variant='standard' value={sales.userRefNo || ''} sx={{ maxWidth: theme.spacing(16) }} autoComplete='off'
                         onChange={(e: any) => handleTextChanged('userRefNo', e)} />
                 </Box>
                 {/* Gstin */}
                 <Box className='vertical'>
-                    <Typography variant='caption'>Gstin no</Typography>
+                    <Typography variant='body2'>Gstin no</Typography>
                     <TextField variant='standard' value={sales.gstin || ''} autoComplete='off'
                         onChange={(e: any) => handleTextChanged('gstin', e)} />
                 </Box>
                 {/* Remarks */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(14), }}>
-                    <Typography variant='caption'>Remarks</Typography>
+                    <Typography variant='body2'>Remarks</Typography>
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
             <Box sx={{ display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
                 {/* Customer search */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(40) }}>
-                    <Typography variant='caption'>Customer search</Typography>
+                    <Typography variant='body2'>Customer search</Typography>
                     <TextField
                         autoComplete='off'
                         autoFocus={true}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position='start' >
-                                    <Box sx={{ display: 'flex', flexDirection: 'column',  }}>
-                                        <Typography variant='caption' sx={{mt:0, ml:1.25, color:theme.palette.common.black}}>OR</Typography>
-                                        <Checkbox sx={{mt:-2}} size='small' checked={sales.searchFilterOr || false} onClick={(e: any) => {
-                                            sales.searchFilterOr = e.target.checked
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                                        <Typography variant='caption' sx={{ mt: 0, ml: 1.35, color: theme.palette.cyan.light }}>Or</Typography>
+                                        <Checkbox sx={{ mt: -2 }} size='small' checked={sales.isSearchTextOr || false} onClick={(e: any) => {
+                                            sales.isSearchTextOr = e.target.checked
                                             setRefresh({})
                                         }} />
                                     </Box>
@@ -81,23 +80,38 @@ function Customer() {
                                 </InputAdornment>
                             ),
                         }}
-                        onChange={(e: any) => handleTextChanged('searchFilter', e)}
+                        onChange={(e: any) => handleTextChanged('searchText', e)}
                         onKeyDown={(e: any) => {
                             if (e.keyCode === 13) {
                                 handleCustomerSearch()
                             }
                         }}
                         sx={{ minWidth: theme.spacing(15) }}
-                        value={sales.searchFilter || ''}
+                        value={sales.searchText || ''}
                         variant='standard'
                     />
                 </Box>
-                <Typography variant='caption' sx={{ minWidth: theme.spacing(50), height: theme.spacing(8), backgroundColor: theme.palette.grey[200], flexGrow: 1 }}>{sales.customerDetails}</Typography>
+                {/* Customer details */}
+                <Box sx={{
+                    display: 'flex', fontFamily:'sans-serif', color:theme.palette.common.black,
+                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(50), maxWidth: theme.spacing(60)
+                    , height: theme.spacing(10),  flexWrap: 'wrap', overflow:'clip'
+                }}>
+                    <Typography sx={{fontWeight:'bold'}}>{billTo?.contactName ? billTo.contactName.concat(',') : ''}</Typography>
+                    <Typography sx={{fontWeight:'bold'}}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
+                    <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ',') : ''}</Typography>
+                    <Typography>{billTo?.address2 ? ''.concat(' ', billTo.address2, ',') : ''}</Typography>
+                    <Typography>{billTo?.email ? ''.concat(' ', billTo.email, ',') : ''}</Typography>
+                    <Typography>{billTo?.country ? ''.concat(' ', billTo.country, ',') : ''}</Typography>
+                    <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ',') : ''}</Typography>
+                    <Typography sx={{fontWeight:'bold'}}>{billTo?.city ? ''.concat(' ', billTo.city, ',') : ''}</Typography>
+                    <Typography sx={{fontWeight:'bold'}}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
+                </Box>
                 <Box sx={{ display: 'flex', ml: 'auto' }}>
                     {/* New / edit */}
                     <Button size='medium' color='secondary' variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
-                    <Button size='medium' color='secondary' variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
+                    <Button size='medium' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
                 </Box>
             </Box>
             <Dialog

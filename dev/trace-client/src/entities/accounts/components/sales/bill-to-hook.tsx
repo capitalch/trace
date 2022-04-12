@@ -29,21 +29,21 @@ function useBillTo(arbitraryData: any) {
         filterOn,
         isInvalidGstin,
     } = useSharedElements()
-    
+
     const meta: any = useRef({
         isMounted: false,
         searchFilter: '',
         showDialog: false,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
             isSearchBox: true,
             searchBoxFilter: '',
         },
     })
     const pre = meta.current.dialogConfig
-    
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -99,7 +99,7 @@ function useBillTo(arbitraryData: any) {
             const ret = await execGenericView({
                 isMultipleRows: true,
                 sqlKey: 'get_contact_on_mobile_email_contactName',
-                args: { searchString: searchFilter},// meta.current.searchFilter  },
+                args: { searchString: searchFilter },// meta.current.searchFilter  },
             })
             emit('SHOW-LOADING-INDICATOR', false)
             if (ret && ret.length > 0) {
@@ -134,7 +134,7 @@ function useBillTo(arbitraryData: any) {
         function setSearchDialog() {
             pre.title = 'Select contact from following'
             pre.content = ContactList
-            pre.actions = () => {}
+            pre.actions = () => { }
             pre.searchBoxFilter = ''
             meta.current.showDialog = true
         }
@@ -337,7 +337,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 // fontSize: '0.8rem',
                 '& span': {
                     color: theme.palette.secondary.main,
-                    fontWeight:'normal'
+                    fontWeight: 'normal'
                 },
             },
         },

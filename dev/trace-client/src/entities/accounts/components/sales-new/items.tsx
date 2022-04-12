@@ -127,42 +127,7 @@ function Items() {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
-                {/* cgst */}
-                {/* <Typography color='slateblue' className='footer' >{''.concat('Cgst: ', toDecimalFormat(sales.summary.cgst))}</Typography> */}
-                {/* sgst */}
-                {/* <Typography color='slateblue' className='footer' >{''.concat('Sgst: ', toDecimalFormat(sales.summary.sgst))}</Typography> */}
-                {/* igst */}
-                {/* <Typography color='slateblue' className='footer' >{''.concat('Igst: ', toDecimalFormat(sales.summary.igst))}</Typography> */}
-
-
-                {/* <Button size='small' variant='outlined' color='info' onClick={handleRoundOff}>Round off</Button> */}
-                {/* Back calculate */}
-                {/* <Box sx={{ display: 'flex', columnGap: 1 }}>
-                    <Button size='small' variant='outlined' color='info' onClick={handleBackCalculate}>Back cal</Button>
-                    <NumberFormat
-                        sx={{ maxWidth: theme.spacing(15) }}
-                        autoComplete='off'
-                        className='right-aligned'
-                        allowNegative={false}
-                        customInput={TextField}
-                        decimalScale={2}
-                        InputProps={megaData.accounts.settings.smallFontTextField}
-                        variant='standard'
-                        fixedDecimalScale={true}
-                        onFocus={(e: any) => e.target.select()}
-                        onValueChange={(value: any) => {
-                            const { floatValue } = value
-                            sales.summary.backCalculateAmount = floatValue
-                            setRefresh({})
-                        }}
-                        thousandSeparator={true}
-                        value={sales.summary.backCalculateAmount}
-                    />
-                </Box> */}
-                {/* amount */}
-                {/* Reset */}
-                {/* <Button size='small' sx={{ height: theme.spacing(3), color: theme.palette.blue.main, mt: .3 }} onClick={handleReset}>Reset</Button> */}
-                {/* Igst */}
+                
                 <FormControlLabel sx={{ fontSize: theme.spacing(1) }} label='Igst'
                     control={
                         <Checkbox size='small' sx={{ mt: -0.2 }} checked={sales.isIgst || false} onChange={handleChangeIgst} />} />
@@ -249,7 +214,7 @@ function Items() {
                     </Box>
                     {/* Product search */}
                     <Box className='vertical' >
-                        <Typography variant='caption'>Product search</Typography>
+                        <Typography variant='body2'>Product search</Typography>
                         <TextField
                             autoComplete='off'
                             variant='standard'
@@ -282,7 +247,7 @@ function Items() {
                     </Box> */}
                     {/* Product code */}
                     <Box className='vertical'>
-                        <Typography variant='caption'>Product code</Typography>
+                        <Typography variant='body2'>Product code</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                             allowNegative={false}
                             autoComplete='off'
@@ -300,7 +265,7 @@ function Items() {
                     </Box>
                     {/* Hsn */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Hsn</Typography>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Hsn</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                             allowNegative={false}
                             autoComplete='off'
@@ -318,7 +283,7 @@ function Items() {
                     </Box>
                     {/* Gst(%) */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Gst(%)</Typography>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Gst(%)</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(5) }}
                             allowNegative={false}
                             autoComplete='off'
@@ -341,7 +306,7 @@ function Items() {
                     </Box>
                     {/* Qty */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Qty</Typography>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Qty</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                             autoComplete='off'
                             allowNegative={false}
@@ -365,7 +330,7 @@ function Items() {
                     </Box>
                     {/* Price */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Price</Typography>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Price</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(11) }}
                             autoComplete='off'
                             allowNegative={false}
@@ -389,7 +354,7 @@ function Items() {
                     </Box>
                     {/* Price(Gst) */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Price(Gst)</Typography>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Price(Gst)</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(11),  }}
                             autoComplete='off'
                             allowNegative={false}
@@ -413,7 +378,7 @@ function Items() {
                     </Box>
                     {/* Discount(unit) */}
                     <Box className='vertical'>
-                        <Typography sx={{ textAlign: 'right' }} variant='caption'>Disc(unit)</Typography>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Disc(unit)</Typography>
                         <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                             autoComplete='off'
                             allowNegative={false}
@@ -436,7 +401,7 @@ function Items() {
                     </Box>
                     {/* Remarks */}
                     <Box className='vertical' >
-                        <Typography variant='caption'>Remarks</Typography>
+                        <Typography variant='body2'>Remarks</Typography>
                         <TextField
                             autoComplete='off'
                             InputProps={smallFontTextField}

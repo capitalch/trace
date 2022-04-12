@@ -1,3 +1,5 @@
+## GridSearchBox
+searchTextRef, searchText, isSearchTextOr, isSearchTextEdited, setRefresh, debounceMessage, filteredRows, allRows, totals, getTotals
 ## To do in sales
 1. Add + icon in add button
 2. Gstin, date, other validations

@@ -20,8 +20,17 @@ function useCustomer() {
         setRefresh({})
     }
 
+    function handleCustomerClear() {
+        sales.billTo = {}
+        sales.searchText = ''
+        sales.isSearchTextOr = false
+        setRefresh({})
+    }
+
     function handleCustomerSearch() {
-        if (sales.searchFilter) {
+        if (sales.searchText) {
+            pre.allRows = []
+            pre.filteredRows = []
             pre.showDialog = true
             setRefresh({})
         } else {
@@ -35,25 +44,26 @@ function useCustomer() {
     }
 
     function handleCustomerSearchClear() {
-        sales.searchFilter = ''
+        sales.searchText = ''
+        sales.isSearchTextOr = false
         setRefresh({})
     }
 
-    return ({ handleCloseDialog, handleCustomerSearch, handleCustomerSearchClear, meta })
+    return ({ handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, meta })
 }
 export { useCustomer }
 
 function CustomerDialogContent({ meta }: any) {
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const pre = meta.current
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const searchFilter = sales.searchFilter.replaceAll('*', '\\*')
+    const searchText = sales.searchText.replaceAll('*', '\\*')
     const confirm = useConfirm()
     const { emit } = useIbuki()
     const { execGenericView } = utilMethods()
     const theme = useTheme()
-    useEffect(() => {
+    useEffect(() => {       
         fetchData()
     }, [])
 
@@ -65,9 +75,9 @@ function CustomerDialogContent({ meta }: any) {
     async function fetchData() {
         let searchString
         //split on non alphanumeric character
-        const arr = searchFilter.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
+        const arr = searchText.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
 
-        if (sales.searchFilterOr) { // The checkbox
+        if (sales.isSearchTextOr) { // The checkbox
             searchString = arr.join('|')
         } else { //and arr elements for regex
             const tempArr = arr.map((x: any) => `(?=.*${x})`)
@@ -100,11 +110,13 @@ function CustomerDialogContent({ meta }: any) {
                 cancellationText: null,
             }
             confirm(options)
+            closeDialog()
         }
         pre.setRefresh({})
     }
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Typography>{''.concat(pre.filteredRows.length || 0, ' Items')}</Typography>
         <List>
             {
                 pre.filteredRows.map((item: any, index: number) => (
@@ -113,18 +125,42 @@ function CustomerDialogContent({ meta }: any) {
                         key={index}
                         dense={true}
                         divider={true}
+                        onClick={() => {
+                            sales.billTo = item
+                            pre.searchText = ''
+                            // setCountryStateCityValuesFromLabels()
+                            closeDialog()
+                        }}
                         button={true}>
                         <ListItemAvatar>
                             <Avatar sx={{ backgroundColor: theme.palette.lightBlue.main, color: theme.palette.common.white }}>
                                 {item.contactName[0].toUpperCase()}
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={item.contactName} sx={{  }}
+                        <ListItemText primary={item.contactName} sx={{}}
                             secondary={
                                 <>
-                                    <Typography component='li' variant='body1' color= {theme.palette.common.black}>
+                                    <Typography component='li' variant='body1' color={theme.palette.common.black}>
                                         {'M: '}
                                         {item.mobileNumber}
+                                    </Typography>
+                                    <Typography
+                                        component="li"
+                                        variant="body2"
+                                        color="textPrimary">
+                                        {item.address1}
+                                    </Typography>
+                                    <Typography
+                                        component="li"
+                                        variant="body2"
+                                        color="textPrimary">
+                                        {item.address2}
+                                    </Typography>
+                                    <Typography
+                                        component="li"
+                                        variant="body2"
+                                        color="textPrimary">
+                                        {item.email}
                                     </Typography>
                                 </>
                             }
@@ -133,8 +169,11 @@ function CustomerDialogContent({ meta }: any) {
                 ))
             }
         </List>
-
     </Box>)
+
+    // function handleContactSelected(e:any){
+    //     sales.billTo = item
+    // }
 }
 
 export { CustomerDialogContent }
