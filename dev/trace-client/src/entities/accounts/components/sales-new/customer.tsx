@@ -1,5 +1,5 @@
 import { useCustomer } from './customer-hook'
-import { Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme } from './redirect'
+import { accountsMessages, Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme, utils, } from './redirect'
 import { CustomerSearchDialogContent } from './customer-hook'
 
 function Customer() {
@@ -7,10 +7,11 @@ function Customer() {
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, meta } = useCustomer()
+    const { handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewOrEditCustomer, handleTextChanged, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
+    const { isInvalidDate, isInvalidGstin } = utils()
     return (
         <Box className='vertical' sx={{ display: 'flex', border: '1px solid orange', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
@@ -24,6 +25,12 @@ function Customer() {
                 <Box className='vertical'>
                     <Typography variant='body2'>Date</Typography>
                     <TextField variant='standard' type='date' value={sales.tranDate || moment().format(isoDateFormat)}
+                        error={isInvalidDate(sales.tranDate) || (!sales.tranDate)}
+                        helperText={
+                            isInvalidDate(sales.tranDate)
+                                ? accountsMessages.dateRangeAuditLockMessage
+                                : ''
+                        }
                         onChange={(e: any) => handleTextChanged('tranDate', e)} />
                 </Box>
                 {/* User ref no */}
@@ -35,8 +42,9 @@ function Customer() {
                 {/* Gstin */}
                 <Box className='vertical'>
                     <Typography variant='body2'>Gstin no</Typography>
-                    <TextField variant='standard' value={sales.gstin || ''} autoComplete='off'
-                        onChange={(e: any) => handleTextChanged('gstin', e)} />
+                    <TextField variant='standard' value={billTo.gstin || ''} autoComplete='off'
+                        error={isInvalidGstin(billTo.gstin)}
+                        onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(14), }}>
@@ -95,7 +103,7 @@ function Customer() {
                 <Box sx={{
                     display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
                     fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(50), maxWidth: theme.spacing(60)
-                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip'
+                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey'
                 }}>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(',') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
@@ -109,7 +117,7 @@ function Customer() {
                 </Box>
                 <Box sx={{ display: 'flex', ml: 'auto' }}>
                     {/* New / edit */}
-                    <Button size='medium' color='secondary' variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
+                    <Button size='medium' color='secondary' onClick={handleNewOrEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
                     <Button size='medium' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
                 </Box>
@@ -136,18 +144,11 @@ function Customer() {
                     </Box>
                 </DialogTitle>
                 <DialogContent>
-                    <pre.content />
-                    {/* <CustomerSearchDialogContent meta={meta} /> */}
-                    {/* <NewProduct onClose={handleCloseDialog} /> */}
+                    <pre.dialogConfig.content />
                 </DialogContent>
             </Dialog>
         </Box>
     )
-
-    function handleTextChanged(propName: string, e: any) {
-        sales[propName] = e.target.value
-        setRefresh({})
-    }
 }
 
 export { Customer }

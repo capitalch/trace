@@ -1,5 +1,4 @@
-import { TextField } from '@mui/material'
-import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, SearchBox, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
+import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NewEditCustomer, SearchBox, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
 function useCustomer() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
@@ -12,12 +11,13 @@ function useCustomer() {
         setRefresh: setRefresh,
         showDialog: false,
         dialogConfig: {
-            title: 'Select customer',
-            content: <></>
+            title: '',
+            content: () => <></>
         }
     })
-    const pre = meta.current
 
+    const pre = meta.current
+    const dialogConfig = pre.dialogConfig
     function handleCloseDialog() {
         pre.showDialog = false
         setRefresh({})
@@ -35,7 +35,8 @@ function useCustomer() {
             pre.allRows = []
             pre.filteredRows = []
             pre.showDialog = true
-            pre.dialogConfig.content = ()=><CustomerSearchDialogContent meta={meta} />
+            dialogConfig.title = 'Select customer'
+            dialogConfig.content = () => <CustomerSearchDialogContent meta={meta} />
             setRefresh({})
         } else {
             const options = {
@@ -53,7 +54,19 @@ function useCustomer() {
         setRefresh({})
     }
 
-    return ({ handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, meta })
+    function handleNewOrEditCustomer() {
+        pre.showDialog = true
+        dialogConfig.title = 'New / Edit customer'
+        dialogConfig.content = () => <NewEditCustomer />
+        setRefresh({})
+    }
+
+    function handleTextChanged(propName: string, e: any) {
+        sales[propName] = e.target.value
+        setRefresh({})
+    }
+
+    return ({ handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewOrEditCustomer, handleTextChanged, meta })
 }
 export { useCustomer }
 
@@ -70,54 +83,6 @@ function CustomerSearchDialogContent({ meta }: any) {
     useEffect(() => {
         fetchData()
     }, [])
-
-    function closeDialog() {
-        pre.showDialog = false
-        pre.setRefresh({})
-    }
-
-    async function fetchData() {
-        let searchString
-        //split on non alphanumeric character
-        const arr = searchText.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
-
-        if (sales.isSearchTextOr) { // The checkbox
-            searchString = arr.join('|')
-        } else { //and arr elements for regex
-            const tempArr = arr.map((x: any) => `(?=.*${x})`)
-            searchString = tempArr.join('')
-        }
-        emit('SHOW-LOADING-INDICATOR', true)
-
-        // regex search at server. '|' is logical OR and '?=.*' is logical AND operator for regexp in postgresql
-        // The args is formed at client to work as logical OR / AND at server. If '57' and '300' both required in any order then args is '(?=.*57)(?=.*300)'. If either of '57' or '300' is required then args='57|300'
-        const ret = await execGenericView({
-            isMultipleRows: true,
-            sqlKey: 'get_contacts_on_regexp',
-            args: { searchString: searchString }
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-
-        if (ret && ret.length > 0) {
-            if (ret.length === 1) {
-                sales.billTo = ret[0]
-                // setCountryStateCityValuesFromLabels()
-                closeDialog()
-            } else { //show list
-                pre.allRows = ret
-                pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
-            }
-        } else {
-            const options = {
-                description: accountsMessages.newContact,
-                title: accountsMessages.notFound,
-                cancellationText: null,
-            }
-            confirm(options)
-            closeDialog()
-        }
-        pre.setRefresh({})
-    }
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ ml: 'auto' }}>
@@ -177,6 +142,54 @@ function CustomerSearchDialogContent({ meta }: any) {
             }
         </List>
     </Box>)
+
+    function closeDialog() {
+        pre.showDialog = false
+        pre.setRefresh({})
+    }
+
+    async function fetchData() {
+        let searchString
+        //split on non alphanumeric character
+        const arr = searchText.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
+
+        if (sales.isSearchTextOr) { // The checkbox
+            searchString = arr.join('|')
+        } else { //and arr elements for regex
+            const tempArr = arr.map((x: any) => `(?=.*${x})`)
+            searchString = tempArr.join('')
+        }
+        emit('SHOW-LOADING-INDICATOR', true)
+
+        // regex search at server. '|' is logical OR and '?=.*' is logical AND operator for regexp in postgresql
+        // The args is formed at client to work as logical OR / AND at server. If '57' and '300' both required in any order then args is '(?=.*57)(?=.*300)'. If either of '57' or '300' is required then args='57|300'
+        const ret = await execGenericView({
+            isMultipleRows: true,
+            sqlKey: 'get_contacts_on_regexp',
+            args: { searchString: searchString }
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+
+        if (ret && ret.length > 0) {
+            if (ret.length === 1) {
+                sales.billTo = ret[0]
+                // setCountryStateCityValuesFromLabels()
+                closeDialog()
+            } else { //show list
+                pre.allRows = ret
+                pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
+            }
+        } else {
+            const options = {
+                description: accountsMessages.newContact,
+                title: accountsMessages.notFound,
+                cancellationText: null,
+            }
+            confirm(options)
+            closeDialog()
+        }
+        pre.setRefresh({})
+    }
 }
 
 export { CustomerSearchDialogContent }
