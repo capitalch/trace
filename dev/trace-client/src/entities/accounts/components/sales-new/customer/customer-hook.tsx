@@ -1,4 +1,4 @@
-import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NewEditCustomer, SearchBox, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
+import { accountsMessages,MegaDataContext, NewEditCustomer, useConfirm, useContext, useRef, useState, } from '../redirect'
 import { CustomerSearch } from './customer-search'
 function useCustomer() {
     const [, setRefresh] = useState({})

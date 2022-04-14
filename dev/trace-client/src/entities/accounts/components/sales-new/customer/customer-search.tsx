@@ -1,4 +1,4 @@
-import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NewEditCustomer, SearchBox, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from './redirect'
+import { accountsMessages, Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NewEditCustomer, SearchBox, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utilMethods } from '../redirect'
 function CustomerSearch({ meta }: any) {
     const pre = meta.current
     const megaData = useContext(MegaDataContext)

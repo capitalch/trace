@@ -1,8 +1,8 @@
 import { Box, Typography, useTheme } from './redirect'
-import { Customer } from './customer'
+import { Customer } from './customer/customer'
 import { Crown } from './crown'
 import { Payments } from './payments'
-import { Items } from './items'
+import { Items } from './items/items'
 function SalesNew() {
     // const theme = useTheme()
     return (

@@ -25,4 +25,7 @@ export { useConfirm } from 'material-ui-confirm'
 export { accountsMessages }
 export { useIbuki } from '../../../../imports/trace-imports'
 export { SearchBox } from '../common/search-box'
-export { NewEditCustomer } from './new-edit-customer'
+export { NewEditCustomer } from './customer/new-edit-customer'
+export { ItemsHeader } from './items/items-header'
+export { LineItems } from './items/line-items'
+export { ItemsFooter } from './items/items-footer'

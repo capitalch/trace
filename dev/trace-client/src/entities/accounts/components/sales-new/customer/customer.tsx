@@ -1,5 +1,5 @@
 import { useCustomer } from './customer-hook'
-import { accountsMessages, Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme, utils, } from './redirect'
+import { accountsMessages, Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme, utils, } from '../redirect'
 // import { CustomerSearch } from './customer-hook'
 
 function Customer() {
