@@ -1,4 +1,4 @@
-import { _, MegaDataContext, PurchaseReport, SalesReport, StockSummaryAgeingReport, useContext, useEffect, useRef, useState, } from '../redirect'
+import { _, MegaDataContext, PurchaseReport, SalesReport, StockSummaryReport, useContext, useEffect, useRef, useState, } from '../redirect'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
@@ -37,7 +37,7 @@ function useInventoryReports() {
 
         function getReportsMap() {
             return {
-                stockSummaryAgeingReport: StockSummaryAgeingReport,
+                stockSummaryReport: StockSummaryReport,
                 salesReport: SalesReport,
                 purchaseReport: PurchaseReport,
             }

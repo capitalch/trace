@@ -1,13 +1,13 @@
 import { useCustomer } from './customer-hook'
 import { accountsMessages, Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme, utils, } from './redirect'
-import { CustomerSearchDialogContent } from './customer-hook'
+// import { CustomerSearch } from './customer-hook'
 
 function Customer() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewOrEditCustomer, handleTextChanged, meta } = useCustomer()
+    const { handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
@@ -24,15 +24,15 @@ function Customer() {
                 {/* tran date */}
                 <Box className='vertical'>
                     <Typography variant='body2'>Date</Typography>
-                    <TextField variant='standard' type='date' value={sales.tranDate || moment().format(isoDateFormat)}
+                    <TextField variant='standard' type='date' value={sales.tranDate || ''}
                         error={isInvalidDate(sales.tranDate) || (!sales.tranDate)}
                         helperText={
                             isInvalidDate(sales.tranDate)
                                 ? accountsMessages.dateRangeAuditLockMessage
                                 : ''
                         }
-                        onChange={(e: any) => handleTextChanged('tranDate', e)} />
-                </Box>
+                        onChange={(e: any) => {sales.tranDate = e.target.value; setRefresh({})}} />                        
+                </Box>                
                 {/* User ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
                     <Typography variant='body2'>User ref no</Typography>
@@ -117,14 +117,14 @@ function Customer() {
                 </Box>
                 <Box sx={{ display: 'flex', ml: 'auto' }}>
                     {/* New / edit */}
-                    <Button size='medium' color='secondary' onClick={handleNewOrEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
+                    <Button size='medium' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
                     <Button size='medium' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
                 </Box>
             </Box>
             <Dialog
                 open={pre.showDialog}
-                onClose={(e, reason) => {
+                onClose={(e: any, reason: any) => {
                     if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
                         handleCloseDialog()
                     }

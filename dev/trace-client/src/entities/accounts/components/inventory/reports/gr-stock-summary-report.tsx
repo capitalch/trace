@@ -7,12 +7,12 @@ import {
     GridFooterContainer,
     IconButton, moment, ReactSelect, SyncSharp, TextField,
     Typography, useRef, useState, useTheme,
-    useStockSummaryAgeingReport, utilMethods,
+    useStockSummaryReport, utilMethods,
 } from '../redirect'
 import { GridSearchBox } from '../../common/grid-search-box'
 
-function StockSummaryAgeingReport() {
-    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, } = useStockSummaryAgeingReport()
+function StockSummaryReport() {
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, } = useStockSummaryReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -129,16 +129,20 @@ function StockSummaryAgeingReport() {
 
     function CustomFooter() {
         return (<GridFooterContainer >
-            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
-                <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
-                <Box>{''.concat('Select count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
-                <Box>{''.concat('Select close value', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
-                <Box>{''.concat('Op stock value', ' : ', toDecimalFormat(pre?.totals?.opValue || 0))}</Box>
-                <Box>{''.concat('Clos stock value', ' : ', toDecimalFormat(pre?.totals?.closValue || 0))}</Box>
-                <Box>{''.concat('Incr in stock value', ' : ', toDecimalFormat((pre?.totals?.closValue || 0) - (pre?.totals?.opValue || 0)))}</Box>
+            <Box sx={{ width:'100%', display: 'flex', fontSize: theme.spacing(1.8), color: theme.palette.common.black }}>
+                <Box sx={{ display: 'flex', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
+                    <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
+                    <Box>{''.concat('Selected count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
+                    <Box>{''.concat('Selected close', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
+                </Box>
+                <Box sx={{ display: 'flex', ml: 'auto', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
+                    <Box>{''.concat('Op', ' : ', toDecimalFormat(pre?.totals?.opValue || 0))}</Box>
+                    <Box sx={{ fontWeight: 'bolder' }}>{''.concat('Clos', ' : ', toDecimalFormat(pre?.totals?.closValue || 0))}</Box>
+                    <Box>{''.concat('Increase', ' : ', toDecimalFormat((pre?.totals?.closValue || 0) - (pre?.totals?.opValue || 0)))}</Box>
+                </Box>
             </Box>
         </GridFooterContainer>)
     }
 }
 
-export { StockSummaryAgeingReport }
+export { StockSummaryReport }

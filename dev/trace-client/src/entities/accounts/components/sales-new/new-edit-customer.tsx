@@ -1,13 +1,14 @@
 import { selectOptions } from '@testing-library/user-event/dist/types/utility'
 import { _, accountsMessages, Avatar, Box, Button, cities, countries, InputMask, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, ReactSelect, SearchBox, states, TextField, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from './redirect'
 
-function NewEditCustomer() {
+function NewEditCustomer({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const billTo = sales.billTo
-    billTo.anniversaryDate = '1900-01-01'
-    billTo.dateOfBirth = '1900-01-01'
+    const pre = parentMeta.current
+    // billTo.anniversaryDate = '1900-01-01'
+    // billTo.dateOfBirth = '1900-01-01'
     const theme = useTheme()
     const confirm = useConfirm()
     const { execGenericView, } = utilMethods()
@@ -224,7 +225,7 @@ function NewEditCustomer() {
                     type="date"
                     error={isImproperDate(billTo.dateOfBirth)}
                     // className="text-field"
-                    value={billTo.dateOfBirth || '1900-01-01'}
+                    value={billTo.dateOfBirth || ''}
                     onChange={(e: any) => handleTextChanged('dateOfBirth', e)}
                 />
 
@@ -235,7 +236,7 @@ function NewEditCustomer() {
                     type="date"
                     error={isImproperDate(billTo.anniversaryDate)}
                     // className="text-field"
-                    value={billTo.anniversaryDate || '1900-01-01'}
+                    value={billTo.anniversaryDate || ''}
                     onChange={(e: any) => handleTextChanged('anniversaryDate', e)}
                 />
                 {/* Description */}
@@ -267,6 +268,11 @@ function NewEditCustomer() {
         setRefresh({})
     }
 
+    function handleCloseDialog() {
+        pre.showDialog = false
+        pre.setRefresh({})
+    }
+
     function handleCountryChange(e: any) {
         billTo.selectedCountryOption = { value: e.value, label: e.label }
         billTo.selectedStateOption = { label: null, value: null, stateCode: 0 }
@@ -286,8 +292,6 @@ function NewEditCustomer() {
         billTo.stateCode = e.stateCode
         setRefresh({})
     }
-
-
 
     async function handleOnBlurMobileNumber(e: any) {
         const mobileNumber = e.target.value.replace(/[^0-9]/g, '')
@@ -314,6 +318,7 @@ function NewEditCustomer() {
                 confirm(options).then(() => {
                     sales.billTo = ret
                     billTo.contactSelectedFlag = true
+                    handleCloseDialog()
                     // emit('BILL-TO-CLOSE-DIALOG', null)
                 }).catch(() => { })
             }

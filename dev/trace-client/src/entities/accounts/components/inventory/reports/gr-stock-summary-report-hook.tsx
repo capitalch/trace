@@ -1,6 +1,6 @@
 import { _,Box, CloseSharp, GridCellParams, IconButton, moment, Typography, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
-function useStockSummaryAgeingReport() {
+function useStockSummaryReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
@@ -10,7 +10,7 @@ function useStockSummaryAgeingReport() {
     const meta: any = useRef({
         allRows: [],
         dataPath: 'jsonResult.stock',
-        debounceMessage:'STOCK-SUMMARY-AGEING-DEBOUNCE',
+        debounceMessage:'STOCK-SUMMARY-DEBOUNCE',
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
@@ -20,10 +20,10 @@ function useStockSummaryAgeingReport() {
         searchTextRef: null,
         selectedAgeingOption: { label: 'All stock', value: 0 },
         selectedRowsObject: {},
-        sqlKey: 'getJson_stock_summary_ageing',
+        sqlKey: 'getJson_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
-        title: 'Stock summary with ageing',
+        title: 'Stock summary',
         totals: {}
     })
     const pre = meta.current
@@ -358,4 +358,4 @@ function useStockSummaryAgeingReport() {
     return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange })
 }
 
-export { useStockSummaryAgeingReport }
+export { useStockSummaryReport }

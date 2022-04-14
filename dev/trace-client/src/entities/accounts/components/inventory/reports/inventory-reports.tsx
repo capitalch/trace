@@ -1,8 +1,8 @@
-import { Box, ReactSelect, Typography, useTheme} from '../redirect'
+import { Box, ReactSelect, Typography, useTheme } from '../redirect'
 import { useInventoryReports } from './inventory-reports-hook'
 
 function InventoryReports() {
-    const {mega, meta, onReportSelected } = useInventoryReports()
+    const { mega, meta, onReportSelected } = useInventoryReports()
     const pre = meta.current
     const theme = useTheme()
     // To reduce space between two items of drop down
@@ -11,46 +11,43 @@ function InventoryReports() {
             ...base,
             padding: '.4rem',
             paddingLeft: '0.8rem',
-            // color: theme.palette.blue,
-            // backgroundColor: 'white'
-            // width: '80%',
+            fontWeight:'bold'
+            // width: '60%'
         }),
         control: (provided: any) => ({
             ...provided,
-            // fontSize:theme.spacing(1.7)
-            // border: '2px solid orange'
-            // width: '80%',
+            // width: '60%'
         })
     }
     return (
-    <Box>       
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant='subtitle1'>{''.concat(mega.title, ' > ', mega.breadcumb)}</Typography>
-            <ReactSelect  menuPlacement='auto' placeholder='Select report' styles={styles}
-                options={reportsJson} value={mega.selectedReport} onChange={onReportSelected} />
+        <Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', '& .react-select': { width: '60%' } }}>
+                <Typography variant='subtitle1'>{''.concat(mega.title, ' > ', mega.breadcumb)}</Typography>
+                <ReactSelect className='react-select' menuPlacement='auto' placeholder='Select ...' styles={styles}
+                    options={reportsJson} value={mega.selectedReport} onChange={onReportSelected} />
+            </Box>
+            <Box sx={{ marginTop: theme.spacing(1) }}>
+                <mega.currentReportComponent />
+            </Box>
         </Box>
-        <Box sx = {{marginTop:theme.spacing(1) }}>
-            <mega.currentReportComponent />
-        </Box>
-    </Box>
     )
 }
 export { InventoryReports }
 
 const reportsJson = [
     {
-        label:'Stock summary with ageing',
-        value:'stockSummaryAgeingReport',
-        breadcumb:'Stock summary with ageing'
+        label: 'Stock summary',
+        value: 'stockSummaryReport',
+        breadcumb: 'Stock summary'
     },
     {
-        label:'Sales',
-        value:'salesReport',
-        breadcumb:'Sales'
+        label: 'Sales',
+        value: 'salesReport',
+        breadcumb: 'Sales'
     },
     {
-        label:'Purchases',
-        value:'purchaseReport',
-        breadcumb:'Purchases'
+        label: 'Purchases',
+        value: 'purchaseReport',
+        breadcumb: 'Purchases'
     },
 ]

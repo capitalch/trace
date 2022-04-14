@@ -1,5 +1,4 @@
-# npm install @types/react @types/react-dom react react-dom react-to-print
-
+# npm install @mui/icons-material @mui/material @mui/styles react-select react-to-print
 
 ## Required reports
 1. Profitibality

@@ -1,31 +1,33 @@
-import { _, AddCircle, Badge, Big, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, InputAdornment, NumberFormat, Radio, RadioGroup, Search, TextField, Typography, useContext, useEffect, MegaDataContext, useState, useTheme, utilMethods } from './redirect'
+import { _, AddCircle, Badge, Big, Box, Button, Card, Checkbox, Chip, CloseSharp, FormControlLabel, IconButton, Input, InputAdornment, NumberFormat, Radio, RadioGroup, Search, TextField, Typography, useContext, useEffect, MegaDataContext, useState, useTheme, utilMethods } from './redirect'
 
 function Items() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const products = sales.products
+    const items = sales.products
     const { extractAmount, toDecimalFormat } = utilMethods()
     return (<Box sx={{ display: 'flex', flex: 1, border: '1px solid orange', m: 1, ml: 0, height: '100%' }}>
         <Box className='vertical' sx={{ p: 2, pt: 1, pb: 0, flex: 1 }}>
-            <ProductsHeader />
-            <ProductLineItems />
-            <ProductsFooter />
+            <ItemsHeader />
+            <LineItems />
+            <ItemsFooter />
         </Box>
     </Box>)
 
-    function ProductsFooter() {
+    function ItemsFooter() {
         const [, setRefresh] = useState({})
         sales.computeSummary = computeSummary
         return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
-            {/* Products label */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
-                {/* <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Products</Typography> */}
-                <Typography color={theme.palette.common.black} className='footer' >{''.concat('Count: ', products.length)}</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>                
+                {/* Count */}
+                <Typography color={theme.palette.common.black} className='footer' >{''.concat('Count: ', items.length)}</Typography>
+                {/* Qty */}
                 <Typography color={theme.palette.common.black} className='footer' >{''.concat('Qty: ', toDecimalFormat(sales.summary.qty))}</Typography>
+                {/* Item search button */}
+                <Button size='small' variant='outlined' color='info' onClick={handleItemSearch}>Item search</Button>
             </Box>
-           
+
             <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
                 {/* cgst */}
                 <Typography color={theme.palette.common.black} className='footer' >{''.concat('Cgst: ', toDecimalFormat(sales.summary.cgst))}</Typography>
@@ -34,13 +36,12 @@ function Items() {
                 {/* igst */}
                 <Typography color={theme.palette.common.black} className='footer' >{''.concat('Igst: ', toDecimalFormat(sales.summary.igst))}</Typography>
 
-                {/* Reset */}
-                <Button size='small' color='secondary' variant='outlined' onClick={handleReset}>Reset</Button>
+                {/* clear */}
+                <Button size='small' color='secondary' variant='outlined' onClick={handleClear}>Clear</Button>
 
                 <Button size='small' variant='outlined' color='secondary' onClick={handleRoundOff}>Round off</Button>
                 {/* Back calculate */}
                 <Box sx={{ display: 'flex', columnGap: 1 }}>
-                    <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
                     <NumberFormat
                         sx={{ maxWidth: theme.spacing(15) }}
                         autoComplete='off'
@@ -60,6 +61,7 @@ function Items() {
                         thousandSeparator={true}
                         value={sales.summary.backCalculateAmount}
                     />
+                    <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
                 </Box>
 
                 {/* Igst */}
@@ -67,15 +69,15 @@ function Items() {
                     control={
                         <Checkbox size='small' sx={{ mt: -0.2 }} checked={sales.isIgst || false} onChange={handleChangeIgst} />} />
                 {/* Add */}
-                <Button size='small' variant='outlined' color='secondary' 
+                <Button size='small' variant='outlined' color='secondary'
                     onClick={handleAddProduct} startIcon={<AddCircle />} >Add</Button>
-                {/* amount */}
+                {/* Amount */}
                 <Typography color={theme.palette.common.black} sx={{ fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
             </Box>
         </Box>)
 
         function computeSummary() {
-            const total = products.reduce((pre: any, curr: any) => {
+            const total = items.reduce((pre: any, curr: any) => {
                 const obj: any = {}
                 obj.qty = +Big(pre.qty).plus(Big(curr.qty || 0))
                 obj.cgst = +Big(pre.cgst).plus(Big(curr.cgst || 0.00))
@@ -109,13 +111,16 @@ function Items() {
             sales.computeAllRows() // Does the entire calculation on each row
         }
 
+        function handleItemSearch() {
+        }
+
         function handleRoundOff() {
             sales.summary.backCalculateAmount = Math.round(sales.summary.amount)
             handleBackCalculate()
         }
     }
 
-    function ProductsHeader() {
+    function ItemsHeader() {
         const [, setRefresh] = useState({})
         sales.computeSummary = computeSummary
         return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
@@ -127,19 +132,19 @@ function Items() {
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
-                
+
                 <FormControlLabel sx={{ fontSize: theme.spacing(1) }} label='Igst'
                     control={
                         <Checkbox size='small' sx={{ mt: -0.2 }} checked={sales.isIgst || false} onChange={handleChangeIgst} />} />
                 {/* Add */}
-                <Button size='small' variant='outlined' color='secondary' 
+                <Button size='small' variant='outlined' color='secondary'
                     onClick={handleAddProduct} startIcon={<AddCircle />} >Add</Button>
                 <Typography color={theme.palette.common.black} sx={{ fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
             </Box>
         </Box>)
 
         function computeSummary() {
-            const total = products.reduce((pre: any, curr: any) => {
+            const total = items.reduce((pre: any, curr: any) => {
                 const obj: any = {}
                 obj.qty = +Big(pre.qty).plus(Big(curr.qty || 0))
                 obj.cgst = +Big(pre.cgst).plus(Big(curr.cgst || 0.00))
@@ -179,26 +184,26 @@ function Items() {
         }
     }
 
-    function ProductLineItems() {
+    function LineItems() {
         const [, setRefresh] = useState({})
         sales.computeAllRows = computeAllRows
         useEffect(() => {
-            if (products.length === 0) {
+            if (items.length === 0) {
                 handleAddProduct()
             }
             setRefresh({})
         }, [])
 
-        const lineItems: any[] = products.map((item: any, index: number) => {
+        const lineItems: any[] = items.map((item: any, index: number) => {
             return <Box key={index}>
-                <ProductLineItem item={item} index={index} />
+                <LineItem item={item} index={index} />
             </Box>
         })
         return (<Box className='vertical' sx={{ rowGap: 1 }}>
             {lineItems}
         </Box>)
 
-        function ProductLineItem({ item, index, }: any) {
+        function LineItem({ item, index, }: any) {
             const [, setRefresh] = useState({})
             const smallFontTextField = megaData.accounts.settings.smallFontTextField
             return (
@@ -213,7 +218,7 @@ function Items() {
                         <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
                     </Box>
                     {/* Product search */}
-                    <Box className='vertical' >
+                    {/* <Box className='vertical' >
                         <Typography variant='body2'>Product search</Typography>
                         <TextField
                             autoComplete='off'
@@ -234,7 +239,7 @@ function Items() {
                                 ), ...smallFontTextField
                             }}
                         />
-                    </Box>
+                    </Box> */}
                     {/* Upc */}
                     {/* <Box className='vertical'>
                         <Typography variant='caption'>Upc</Typography>
@@ -263,6 +268,13 @@ function Items() {
                                 e.target.select()
                             }} />
                     </Box>
+                     {/* Product details */}
+                     <Card variant='outlined' sx={{ width: theme.spacing(20), height: theme.spacing(8), p: .5, pt: 0, backgroundColor: theme.palette.grey[100] }}>
+                        <Typography sx={{
+                            fontSize: theme.spacing(1.6),
+                            fontWeight: 'bold', overflow: 'hidden', color: theme.palette.primary.dark,
+                        }} variant='caption'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
+                    </Card>
                     {/* Hsn */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='body2'>Hsn</Typography>
@@ -326,12 +338,13 @@ function Items() {
                                 computeRow(item)
                             }}
                             thousandSeparator={true}
-                            variant='standard' />
+                            variant='standard'
+                        />
                     </Box>
                     {/* Price */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='body2'>Price</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(11) }}
+                        <NumberFormat style={{ maxWidth: theme.spacing(11) }}
                             autoComplete='off'
                             allowNegative={false}
                             InputProps={smallFontTextField}
@@ -355,7 +368,7 @@ function Items() {
                     {/* Price(Gst) */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='body2'>Price(Gst)</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(11),  }}
+                        <NumberFormat sx={{ maxWidth: theme.spacing(11), }}
                             autoComplete='off'
                             allowNegative={false}
                             InputProps={smallFontTextField}
@@ -379,7 +392,7 @@ function Items() {
                     {/* Discount(unit) */}
                     <Box className='vertical'>
                         <Typography sx={{ textAlign: 'right' }} variant='body2'>Disc(unit)</Typography>
-                        <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
+                        <NumberFormat style={{ maxWidth: theme.spacing(8) }}
                             autoComplete='off'
                             allowNegative={false}
                             InputProps={smallFontTextField}
@@ -423,21 +436,16 @@ function Items() {
                         //         : 'secondary'
                         // }
                         showZero={true}>
-                        <Chip
-                            sx={{ p: 2 }}
+                        {/* <Button size='small' color='secondary' variant='outlined' >Serial no's</Button> */}
+                        <Chip                            
+                            sx={{ p: 2, color:theme.palette.common.white, backgroundColor:theme.palette.grey[800] }}
                             size="small"
                             label="Serial no's"
-                            color="info"
+                            
                             onClick={() => handleSerialNo(item)}
                         />
                     </Badge>
-                    {/* Product details */}
-                    <Card variant='outlined' sx={{ ml: 'auto', width: theme.spacing(20), height: theme.spacing(8), p: .5, pt: 0, backgroundColor: theme.palette.grey[100] }}>
-                        <Typography sx={{
-                            fontSize: theme.spacing(1.6),
-                            fontWeight: 'bold', overflow: 'hidden', color: theme.palette.primary.dark,
-                        }} variant='caption'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
-                    </Card>
+                   
                     {/* Gst */}
                     {/* <Card variant='outlined' className='vertical' sx={{ textAlign: 'right', p: 1, backgroundColor: theme.palette.grey[200] }} >
                         <Typography fontWeight='bold' variant='caption'>{''.concat('Cgst: ', item.cgst || 0.00)}</Typography>
@@ -445,9 +453,9 @@ function Items() {
                         <Typography fontWeight='bold' variant='caption'>{''.concat('Igst: ', item.igst || 0.00)}</Typography>
                     </Card> */}
                     {/* amount */}
-                    <Card variant='outlined' className='vertical' sx={{ p: 1, backgroundColor: theme.palette.grey[200] }} >
-                        <Typography variant='caption' sx={{ textAlign: 'right', }}>Amount</Typography>
-                        <Typography variant='caption' sx={{ textAlign: 'right', color: theme.palette.lightBlue.main }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
+                    <Card variant='outlined' className='vertical' sx={{ml:'auto', p: 1, backgroundColor: theme.palette.grey[100] }} >
+                        {/* <Typography variant='caption' sx={{ textAlign: 'right', }}>Amount</Typography> */}
+                        <Typography variant='caption' sx={{ textAlign: 'right', color: theme.palette.common.black, fontWeight:'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
                     </Card>
                 </Box>)
 
@@ -505,7 +513,7 @@ function Items() {
     }
 
     function handleAddProduct() {
-        products.push({ upc: '', productCode: '', hsn: '', gstRate: 0, qty: 1, price: 0, priceGst: 0, discount: 0, remarks: null, amount: 0, cgst: 0, sgst: 0, igst: 0 })
+        items.push({ upc: '', productCode: '', hsn: '', gstRate: 0, qty: 1, price: 0, priceGst: 0, discount: 0, remarks: null, amount: 0, cgst: 0, sgst: 0, igst: 0 })
         sales.computeSummary()
         setRefresh({})
     }
@@ -516,15 +524,15 @@ function Items() {
     }
 
     function handleDeleteRow(index: number) {
-        if (products.length === 1) {
+        if (items.length === 1) {
             return
         }
-        products.splice(index, 1)
+        items.splice(index, 1)
         setRefresh({})
     }
 
-    function handleReset() {
-        products.length = 0
+    function handleClear() {
+        items.length = 0
         handleAddProduct()
     }
 

@@ -128,16 +128,17 @@ function PurchaseReport() {
 
     function CustomFooter() {
         return (<GridFooterContainer >
-            <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: 'dodgerblue', flexWrap: 'wrap', }}>
+            <Box sx={{ width: '100%', display: 'flex', columnGap: theme.spacing(2), fontSize: theme.spacing(1.8), color: theme.palette.common.black, flexWrap: 'wrap', }}>
                 <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
                 <Box>{''.concat('Count(selected)', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
-                <Box>{''.concat('Aggr purchase(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.aggrPurchase || 0))}</Box>
-                <Box>{''.concat('Purchase with gst(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.amount || 0))}</Box>
-                {/* <Box>{''.concat('Selected gross profit', ' : ', toDecimalFormat(pre?.selectedRowsObject?.profit || 0))}</Box> */}
-                <Box>{''.concat('Total qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
-                <Box>{''.concat('Aggr purchase', ' : ', toDecimalFormat(pre?.totals?.aggrPurchase || 0))}</Box>
-                <Box>{''.concat('Purchase with gst', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
-                {/* <Box>{''.concat('Gross profit', ' : ', toDecimalFormat((pre?.totals?.grossProfit || 0) - (pre?.totals?.opValue || 0)))}</Box> */}
+                <Box>{''.concat('Qty(selected)', ' : ', String(pre.selectedRowsObject?.qty || 0))}</Box>
+                <Box>{''.concat('Aggr(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.aggrPurchase || 0))}</Box>
+                <Box>{''.concat('Purchase(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.amount || 0))}</Box>
+                <Box sx={{ display: 'flex', ml: 'auto', rowGap: theme.spacing(1), columnGap: theme.spacing(2), flexWrap: 'wrap' }}>
+                    <Box>{''.concat('Qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
+                    <Box>{''.concat('Aggr', ' : ', toDecimalFormat(pre?.totals?.aggrPurchase || 0))}</Box>
+                    <Box>{''.concat('Purchase', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
+                </Box>
             </Box>
         </GridFooterContainer>)
     }

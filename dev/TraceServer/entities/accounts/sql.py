@@ -1488,7 +1488,7 @@ allSqls = {
                     order by "tranDate" DESC
     ''',
 
-    "getJson_stock_summary_ageing": '''
+    "getJson_stock_summary": '''
         with cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate"
             from "TranH" h
@@ -1545,7 +1545,7 @@ allSqls = {
                 from cte4 c4
                     full join cte5 c5
                         on c4."productId" = c5."productId"
-                --where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= coalesce(%(days)s,0)
+                where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= coalesce(%(days)s,0)
         ), cte7 as ( -- combine latest result set with ProductM, CategoryM and BrandM tables to attach catName, brandName, label
             select c6."productId", "productCode", "catName", "brandName", "label","openingPrice", "op"::numeric(10,2),"opValue"
             , ("purchase" + "saleRet")::numeric(10,2) as "dr", ("sale" + "purchaseRet"):: numeric(10,2) as "cr",
@@ -1558,6 +1558,7 @@ allSqls = {
                         on c."id" = p."catId"
                     join "BrandM" b
                         on b."id" = p."brandId"
+                where NOT(("clos" = 0) and ("op" = 0) and ("sale" = 0) and ("purchase" = 0) and ("saleRet" = 0) and ("purchaseRet" = 0))
             order by "catName", "brandName", "label"
         ), cte8 as( -- get summary
             select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("dr") debits, SUM("cr") credits, SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
