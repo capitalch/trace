@@ -20,9 +20,7 @@
 
 
 ## Planning
-a. time in sales report
-b. 
-c. 
+
 d. Purchase if change in last purchase price show alert
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 1. Include jData or serial no in sales report so that search on sl no may occur
@@ -81,6 +79,8 @@ d. Purchase if change in last purchase price show alert
 2. Continued with sale bill
 3. Bug fix delete in product not working
 4. Hot sale refresh
+5. Deletion in product not working bug fixed
+6. Time in sale report
 
 # 11-04-2022
 1. Simple sales continue
