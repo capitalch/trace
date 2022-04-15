@@ -64,9 +64,9 @@ function useLineItems() {
 
     async function fetchAllProducts() {
         sales.products = await execGenericView({
-            isMultipleRows: true,
-            args: { onDate: null, isAll: true, days: 0 },
-            sqlKey: 'get_stock_summary'
+            isMultipleRows:true,
+            args: {},
+            sqlKey:''
         })
         setRefresh({})
     }

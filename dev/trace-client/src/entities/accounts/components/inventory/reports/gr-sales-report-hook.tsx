@@ -4,12 +4,13 @@ function useSalesReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
-    const { debounceFilterOn, emit, } = useIbuki()
+    const { debounceFilterOn, emit, filterOn } = useIbuki()
     const theme = useTheme()
     const multiData: any = useContext(MultiDataContext)
     const { getFromBag } = manageEntitiesState()
     const finYearObject = getFromBag('finYearObject')
     const isoFormat = 'YYYY-MM-DD'
+    const dateFormat = getFromBag('dateFormat')
 
     const meta: any = useRef({
         allRows: [],
@@ -44,14 +45,15 @@ function useSalesReport() {
             const searchText = d.data[1]
             requestSearch(searchText)
         })
+        const subs2 = filterOn('TRACE-SERVER-SALES-ADDED-OR-UPDATED').subscribe(() => fetchData(false))
         return (() => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
         })
     }, [])
 
-    async function fetchData() {
-        let count = 1
-        emit('SHOW-LOADING-INDICATOR', true)
+    async function fetchData(showWaitCursor: any = true) {
+        showWaitCursor && emit('SHOW-LOADING-INDICATOR', true)
         const rows = await execGenericView({
             isMultipleRows: true,
             sqlKey: pre.sqlKey,
@@ -69,6 +71,7 @@ function useSalesReport() {
         setRefresh({})
 
         function setId(rows: any[]) {
+            let count = 1
             for (const row of rows) {
                 row.id1 = row.id
                 row.id = incr()
@@ -273,7 +276,7 @@ function useSalesReport() {
                 description: 'Age of product sold',
                 field: 'age',
                 type: 'number',
-                width: 65,                
+                width: 65,
             },
             {
                 headerName: 'Gst%',
@@ -317,6 +320,15 @@ function useSalesReport() {
                 width: 60
             },
             {
+                headerName: 'Time',
+                description: 'Time',
+                headerClassName: 'header-class',
+                field: 'timestamp',
+                type: 'date',
+                width: 100,
+                valueFormatter: (params: any) => params.value ? moment(params.value).format('hh:mm:ss A') : ''
+            },
+            {
                 headerName: 'Pr id',
                 description: 'Product id',
                 headerClassName: 'header-class',
@@ -330,7 +342,7 @@ function useSalesReport() {
     function getGridSx() {
         return (
             {
-                p: 1, 
+                p: 1,
                 width: '100%',
                 fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(70),
@@ -374,7 +386,7 @@ function useSalesReport() {
             ret = 'row-sales-return'
         } else if (row.grossProfit < 0) {
             ret = 'row-loss'
-        } else if(row.age > 360) {
+        } else if (row.age > 360) {
             ret = 'row-jakar'
         }
         return (ret)
@@ -400,11 +412,11 @@ function useSalesReport() {
     function onSelectModelChange(rowIds: any) {
         const rows = pre.allRows
         const obj = rowIds.reduce((prev: any, current: any) => {
-            prev.count = prev.count +1
-            prev.qty = prev.qty + (rows[current -1]?.qty || 0)
-            prev.aggrSale = prev.aggrSale +(rows[current -1]?.aggrSale || 0)
-            prev.amount = prev.amount +(rows[current -1]?.amount || 0)
-            prev.profit = prev.grossProfit +(rows[current -1]?.grossProfit || 0)
+            prev.count = prev.count + 1
+            prev.qty = prev.qty + (rows[current - 1]?.qty || 0)
+            prev.aggrSale = prev.aggrSale + (rows[current - 1]?.aggrSale || 0)
+            prev.amount = prev.amount + (rows[current - 1]?.amount || 0)
+            prev.profit = prev.grossProfit + (rows[current - 1]?.grossProfit || 0)
             return prev
         }, { count: 0, qty: 0, aggrSale: 0, amount: 0, grossProfit: 0 })
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
@@ -417,7 +429,7 @@ function useSalesReport() {
         _.remove(temp, (x: any) => x.id === id)
         pre.filteredRows = temp
         pre.filteredRows.pop()
-        pre.totals = getTotals()        
+        pre.totals = getTotals()
         pre.filteredRows.push(pre.totals)
         setRefresh({})
     }

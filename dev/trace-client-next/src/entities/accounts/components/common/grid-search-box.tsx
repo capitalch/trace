@@ -1,11 +1,11 @@
 import {
     Checkbox,
     CloseSharp, IconButton, Search, TextField, useIbuki,
-} from '../redirect'
+} from '../inventory/redirect'
 
 function GridSearchBox({ parentMeta }: any) {
     const pre = parentMeta.current
-    const { debounceEmit, } = useIbuki()
+    const { debounceEmit} = useIbuki()    
 
     return (<TextField
         inputRef={pre.searchTextRef}
@@ -47,14 +47,14 @@ function GridSearchBox({ parentMeta }: any) {
         requestSearch('')
     }
 
-    function handleOnClickCheckbox(e:any){
+    function handleOnClickCheckbox(e: any) {
         pre.isSearchTextOr = e.target.checked
         requestSearch(pre.searchText)
     }
 
     function requestSearch(searchValue: string) {
         if (searchValue) {
-            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove emty elements
+            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove empty elements
             // row values are concatenated and checked against each item in the arr (split of searchText on any char which is not alphanumeric)
             // if pre.isSearchTextOr then do logical OR for searchText arr else do logical end
             pre.filteredRows = pre.isSearchTextOr ?
@@ -71,8 +71,10 @@ function GridSearchBox({ parentMeta }: any) {
                 ...x,
             }))
         }
-        pre.totals = pre.getTotals()
-        pre.filteredRows.push(pre.totals)
+        if (pre.getTotals) {
+            pre.totals = pre.getTotals()
+            pre.filteredRows.push(pre.totals)
+        }
         pre.setRefresh({})
     }
 }

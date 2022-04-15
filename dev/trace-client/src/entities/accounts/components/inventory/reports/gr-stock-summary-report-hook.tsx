@@ -20,7 +20,7 @@ function useStockSummaryReport() {
         searchTextRef: null,
         selectedAgeingOption: { label: 'All stock', value: 0 },
         selectedRowsObject: {},
-        sqlKey: 'getJson_stock_summary',
+        sqlKey: 'get_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
         title: 'Stock summary',
@@ -58,7 +58,7 @@ function useStockSummaryReport() {
                     pre.stockDate
                     || null,
                 days: pre.selectedAgeingOption.value || 0,
-                isAll: true
+                isAll: false // Only products having some transaction or OP bal are shown
             },
         }) || {}
         setId(pre.allRows)

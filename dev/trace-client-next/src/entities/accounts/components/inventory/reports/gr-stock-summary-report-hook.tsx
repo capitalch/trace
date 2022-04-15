@@ -1,30 +1,29 @@
 import { _,Box, CloseSharp, GridCellParams, IconButton, moment, Typography, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
-function useStockSummaryAgeingReport() {
+function useStockSummaryReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-    // const multiData: any = useContext(MultiDataContext)
 
     const meta: any = useRef({
         allRows: [],
         dataPath: 'jsonResult.stock',
-        debounceMessage:'STOCK-SUMMARY-AGEING-DEBOUNCE',
+        debounceMessage:'STOCK-SUMMARY-DEBOUNCE',
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
-        origJsonData: {},
+        // origJsonData: {},
         setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
         selectedAgeingOption: { label: 'All stock', value: 0 },
         selectedRowsObject: {},
-        sqlKey: 'getJson_stock_summary_ageing',
+        sqlKey: 'getJson_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
-        title: 'Stock summary with ageing',
+        title: 'Stock summary',
         totals: {}
     })
     const pre = meta.current
@@ -36,7 +35,6 @@ function useStockSummaryAgeingReport() {
     })
 
     useEffect(() => {
-        // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
@@ -50,29 +48,28 @@ function useStockSummaryAgeingReport() {
     }, [])
 
     async function fetchData() {
-        let count = 1
+        // let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
-        pre.origJsonData = await execGenericView({
-            isMultipleRows: false,
+        pre.allRows = await execGenericView({
+            isMultipleRows: true,
             sqlKey: pre.sqlKey,
             args: {
                 onDate:
                     pre.stockDate
                     || null,
-                days: pre.selectedAgeingOption.value || 0
+                days: pre.selectedAgeingOption.value || 0,
+                isAll: true
             },
         }) || {}
-
-        const rows: any[] = _.get(pre.origJsonData, pre.dataPath, []) || []
-        setId(rows)
-        pre.allRows = rows
-        pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
+        setId(pre.allRows)
+        pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
         pre.totals = getTotals() || {}
         pre.filteredRows.push(pre.totals)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
         function setId(rows: any[]) {
+            let count = 1
             for (const row of rows) {
                 row.id1 = row.id
                 row.id = incr()
@@ -359,4 +356,4 @@ function useStockSummaryAgeingReport() {
     return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange })
 }
 
-export { useStockSummaryAgeingReport }
+export { useStockSummaryReport }

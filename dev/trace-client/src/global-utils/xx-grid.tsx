@@ -195,12 +195,6 @@ function XXGrid(gridOptions: XXGridOptions) {
         />
     )
 
-    // function onCellClick(params: any) {
-    //     if (params.field === 'hsn') {
-    //         apiRef.current.setCellMode(params.id, 'hsn', 'edit')
-    //     }
-    // }
-
     function AlternateFooter() {
         const altFooter = gridOptions?.alternateFooter
         const path: any = altFooter?.path
@@ -699,3 +693,10 @@ function XXGrid(gridOptions: XXGridOptions) {
 }
 
 export { XXGrid }
+
+
+// function onCellClick(params: any) {
+//     if (params.field === 'hsn') {
+//         apiRef.current.setCellMode(params.id, 'hsn', 'edit')
+//     }
+// }
