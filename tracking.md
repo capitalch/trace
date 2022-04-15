@@ -1,16 +1,14 @@
-## GridSearchBox
-searchTextRef, searchText, isSearchTextOr, isSearchTextEdited, setRefresh, debounceMessage, filteredRows, allRows, totals, getTotals
-## To do in sales
-1. Add + icon in add button
-2. Gstin, date, other validations
-2. cgst, sgst, igst group spacing
-3. Customer search
-4. New / edit button
-5. Product search
-6. Summary, calculations, amount etc.
+### To do in sales
+                                                                                        1. Add + icon in add button
+                                                                                        2. Gstin, date, other validations
+                                                                                        2. cgst, sgst, igst group spacing
+                                                                                        3. Customer search
+                                                                                        4. New / edit button
+    5. Product search
+                                                                                        6. Summary, calculations, amount etc.
 7. Serial no mechanism
 8. Population of product details
-9. Reset, roundoff, back cal buttons, Igst, Add button
+                                                                                        9. Reset, roundoff, back cal buttons, Igst, Add button
 10. saleVariety implementation
 11. Add, New, clear button, ship to
 12. Total error handling and show of submit
@@ -24,85 +22,60 @@ searchTextRef, searchText, isSearchTextOr, isSearchTextEdited, setRefresh, debou
 ## Planning
 
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
+1. Include jData or serial no in sales report so that search on sl no may occur
+2. ledger report for inventory
+3. Stock journal
+4. Dashboard reports: Sales, Products
+5. SMS as html also
+6. Meaningful server messages
+7. Purchase invoice scanned pdf save
+8. Debit credit notes printing
+9. PDF print, BS, PL and TB. Export of PL, BL and TB should be lowest and highest levels, in PDF print
+10. Edit from bank recon
+11. Fix Accounts master, new contact twice
+12. Show category hierarchy in products and stock and sales reports
+13. Remember last product sale price and purchase price and pop them at purchase and sale entry time
+14. Debit credit notes printing
+15. Accounts address entry, do it modal and make email address optional
+16. Journal, When ASSET GST is not allowed. Make it allowed for assets also
+17. Voucher copy and paste
+18. Bill wise payment
+19. Automate orders mechanism
 
-
-1. Dashboard reports: Sales, Products
-2. provide search for customer list
-1. Give more info in view of sales, like gp, days
-3. * character in customer any filed shows error server side
-4. Show print option in sales view
-                                                                                        4. Receipts and vouchers print show not at bottom but up
-6. Minimize the sms length
-5. Meaningful server messages
-6. Security and permissions
-7. Mobile authentication
-
+## Bugs
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
-                                                                                        2. email SMS fixing,
-3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices.
-                                                                                        4. Full reporting of Inventory and allied:                1 week, 12rd Mar
-5. Purchase invoice scanned pdf save:                     2 days, 14th Mar
-19. Stock Journals                                        3 days, 17th Mar
-3. Sale bill print correction                             1 day, 18th Mar
-4. Simple sale bill
-                                                                                        
-13. Debit credit notes printing                           3 days, 12th Mar
-15. PDF print, BS, PL and TB                              3 days, 15th Mar
-16. Purchase entry, unable to enter GST price             2 days, 17th Mar
-17. Edit from bank recon                                  2 days, 19th Mar
-18. Fix Accounts master, new contact twice                4 days, 23th Mar
+3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
+4. Purchase entry, unable to enter GST price
+5. Swapan reported selected count, totals etc not correct in vouchers
+6. Deletion in product not working
+ 
 
 
-
-
-# Priority 1
+# Priority
 1.0 Data grid change font size control
-1.0 Auto subledger create bill
-2.0 Category-> Product hierarchy with stock qty and value, search on product
-3.0 Purchase invoice scanned pdf save
-4.0 Opening stock entry mechanism
-                                                                                                5.0 Permissions in the server is made None. So everything is enabled. Need to fix permission. The getJson_userDetails: permission is commented since it give multiple rows as subquery, Need to fix. System is at present having all controls enabled
-6.0 Provision to input product price. At present cannot input product price
-7.0 When new account code is created that should immediately be visible at payment options
-
-# Fixing short pending
-
-1.2 Headings and labels uniform font and naming
-1.3 Left menu to make consige and more accomodating
-1.4 Remove material-table from authentication/generic-crud; its using old version of material-ui
-2. Debit credit notes printing
-3. In Grid view provide title, header and subtitle. Check if alteration possible while PDF printing
-4. Accounts master, when edited, data is not refreshed after save
-5. Accounts address entry, do it modal and make email address optional
-6. Journal, When ASSET GST is not allowed. Make it allowed for assets also
-7. In vouchers, if party selected and its GSTIN available then display it
-8. Accounts creation email should be optional
-9. Export of PL, BL and TB should be lowest and highest levels, in PDF print
-10. Show ledger balance at the time of data entry
-11. Purchase entry unable to enter gst price of an item
-
-# Long term
-1. Convert sales and purchases to div and remove table, to make them more responsive
-2. Easy sales implementation
-2.1 Voucher copy and paste
-3. Provide a way to come out of app in mobile. Presently there is no way
-4. Footer Trace version copyright
-5. Universally make it responsive
-6. Remove references to datacache for accounts and use getFromBag concept
-7. Purchase invoice upload and search on metadata. Click will show invoice in PDF
-8. Bill wise payment
-9. First page reporting charts
-10. Approval of transactions
-11. Edit from Bank Recon
-12. From Voucher entry add master accounts
-13. Rework on accounts master. It is too big and new contact save takes twice at first time
+2.0 Provision to input product price. At present cannot input product price
+3. Headings and labels uniform font and naming
+4. Left menu to make consige and more accomodating
+5. Remove material-table from authentication/generic-crud; its using old version of material-ui
+6. Accounts master, when edited, data is not refreshed after save
+7. Provide a way to come out of app in mobile. Presently there is no way
+8. Footer Trace version copyright
+9. Universally make it responsive
+10. Purchase invoice upload and search on metadata. Click will show invoice in PDF
+11. First page reporting charts
+12. Analysis reports
+13. Approval of transactions
 14. Server logs, client logs
 15. Mechanism to connect to local or any other database on cloud
-16. Provide a writeup on how GST is taken care in Trace
-17. Database backup strategy
+16. Provide a writeup on how GST is taken care in Trace, Documentation
+17. Database backup and restore strategy
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 12-04-2022 - 15-04-2022
+1. Added stock and ageing options in sales report
+2. Continued with sale bill
 
 # 11-04-2022
 1. Simple sales continue

@@ -2,11 +2,10 @@ import { Badge, Box, Card, Chip, CloseSharp, IconButton, NumberFormat, TextField
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
-    // const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const items = sales.products
+    const items = sales.items
 
     const { extractAmount, toDecimalFormat } = utilMethods()
     const { computeRow, handleDeleteRow, handleSerialNo, setPrice, setPriceGst } = useLineItems()
@@ -25,23 +24,23 @@ function LineItems() {
         const [, setRefresh] = useState({})
         const smallFontTextField = megaData.accounts.settings.smallFontTextField
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid lightGrey', flexWrap: 'wrap', p: 2, rowGap: 2, columnGap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid lightGrey', flexWrap: 'wrap', p: 2, pr: 1, rowGap: 2, columnGap: 2 }}>
                 {/* Index */}
                 <Box className='vertical' sx={{ width: theme.spacing(3) }}>
-                    {/* Delete
+                    {/* Delete */}
                     <IconButton sx={{ ml: -2, mt: -1 }} size='small' color='error'
                         onClick={() => handleDeleteRow(index)}>
                         <CloseSharp />
-                    </IconButton> */}
+                    </IconButton>
                     <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
                 </Box>
                 {/* Product code */}
                 <Box className='vertical'>
                     <Typography variant='body2'>Product code</Typography>
-                    <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
+                    <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
                         allowNegative={false}
                         autoComplete='off'
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={0}
@@ -54,19 +53,19 @@ function LineItems() {
                         }} />
                 </Box>
                 {/* Product details */}
-                <Card variant='outlined' sx={{ width: theme.spacing(20), height: theme.spacing(8), p: .5, pt: 0, backgroundColor: theme.palette.grey[100] }}>
+                <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>
                     <Typography sx={{
                         fontSize: theme.spacing(1.6),
-                        fontWeight: 'bold', overflow: 'hidden', color: theme.palette.primary.dark,
-                    }} variant='caption'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
+                        fontWeight: 'bold', overflow: 'hidden', color: theme.palette.common.black,
+                    }} variant='body1'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
                 </Card>
                 {/* Hsn */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Hsn</Typography>
-                    <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
+                    <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
                         allowNegative={false}
                         autoComplete='off'
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={0}
@@ -81,10 +80,10 @@ function LineItems() {
                 {/* Gst(%) */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Gst(%)</Typography>
-                    <NumberFormat sx={{ maxWidth: theme.spacing(5) }}
+                    <NumberFormat sx={{ maxWidth: theme.spacing(6) }}
                         allowNegative={false}
                         autoComplete='off'
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -107,7 +106,7 @@ function LineItems() {
                     <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                         autoComplete='off'
                         allowNegative={false}
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -129,10 +128,10 @@ function LineItems() {
                 {/* Price */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Price</Typography>
-                    <NumberFormat style={{ maxWidth: theme.spacing(11) }}
+                    <NumberFormat style={{ maxWidth: theme.spacing(12) }}
                         autoComplete='off'
                         allowNegative={false}
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -153,10 +152,10 @@ function LineItems() {
                 {/* Price(Gst) */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Price(Gst)</Typography>
-                    <NumberFormat sx={{ maxWidth: theme.spacing(11), }}
+                    <NumberFormat sx={{ maxWidth: theme.spacing(12), }}
                         autoComplete='off'
                         allowNegative={false}
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -177,10 +176,10 @@ function LineItems() {
                 {/* Discount(unit) */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Disc(unit)</Typography>
-                    <NumberFormat style={{ maxWidth: theme.spacing(8) }}
+                    <NumberFormat style={{ maxWidth: theme.spacing(10) }}
                         autoComplete='off'
                         allowNegative={false}
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -202,7 +201,7 @@ function LineItems() {
                     <Typography variant='body2'>Remarks</Typography>
                     <TextField
                         autoComplete='off'
-                        InputProps={smallFontTextField}
+                        // InputProps={smallFontTextField}
                         sx={{ maxWidth: theme.spacing(18) }}
                         variant='standard'
                         value={item.remarks || ''}
@@ -228,19 +227,10 @@ function LineItems() {
                         onClick={() => handleSerialNo(item)}
                     />
                 </Badge>
-                {/* <Box sx={{ display: 'flex', flexDirection: 'column', ml: 'auto', alignItems: 'flex-end' }}> */}
-                {/* sx={{ mt:-4, mr:-3.0 }}  */}
 
                 {/* amount */}
-                <Card variant='outlined' className='vertical' sx={{ ml: 'auto', mr:-1, p: 1, backgroundColor: theme.palette.grey[100] }} >
-                    <Typography variant='caption' sx={{ textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
-                </Card>
-                {/* Delete */}
-                <IconButton size='small' color='error' sx={{mr:-2}}
-                    onClick={() => handleDeleteRow(index)}>
-                    <CloseSharp />
-                </IconButton>
-                {/* </Box> */}
+                <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
+
             </Box>)
 
         function handleTextChanged(item: any, propName: string, e: any) {

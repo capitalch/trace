@@ -1,22 +1,23 @@
-import { _, Big, useContext, MegaDataContext, useEffect, useState, } from '../redirect'
+import { _, Big, useContext, MegaDataContext, useEffect, useState, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const items = sales.products
-
+    const items = sales.items
+    const { execGenericView } = utilMethods()
     useEffect(() => {
         sales.computeSummary = () => { }
         if (items.length === 0) {
-            handleAddProduct()
+            handleAddItem()
         }
-        sales.handleAddProduct = handleAddProduct
+        sales.handleAddItem = handleAddItem
         sales.computeAllRows = computeAllRows
+        fetchAllProducts()
     }, [])
 
     function computeAllRows() {
-        for (let lineItem of sales.products) {
+        for (let lineItem of sales.items) {
             computeRow(lineItem, false)
         }
         sales.computeSummary()
@@ -61,7 +62,16 @@ function useLineItems() {
         toComputeSummary && sales.computeSummary()
     }
 
-    function handleAddProduct() {
+    async function fetchAllProducts() {
+        sales.products = await execGenericView({
+            isMultipleRows:true,
+            args: {},
+            sqlKey:''
+        })
+        setRefresh({})
+    }
+
+    function handleAddItem() {
         items.push({ upc: '', productCode: '', hsn: '', gstRate: 0, qty: 1, price: 0, priceGst: 0, discount: 0, remarks: null, amount: 0, cgst: 0, sgst: 0, igst: 0 })
         sales.computeSummary()
         setRefresh({})

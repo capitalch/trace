@@ -14,7 +14,7 @@ function useStockSummaryReport() {
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
-        origJsonData: {},
+        // origJsonData: {},
         setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
@@ -35,7 +35,6 @@ function useStockSummaryReport() {
     })
 
     useEffect(() => {
-        // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
         pre.subTitle = getGridReportSubTitle()
         fetchData()
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
@@ -49,29 +48,28 @@ function useStockSummaryReport() {
     }, [])
 
     async function fetchData() {
-        let count = 1
+        // let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
-        pre.origJsonData = await execGenericView({
-            isMultipleRows: false,
+        pre.allRows = await execGenericView({
+            isMultipleRows: true,
             sqlKey: pre.sqlKey,
             args: {
                 onDate:
                     pre.stockDate
                     || null,
-                days: pre.selectedAgeingOption.value || 0
+                days: pre.selectedAgeingOption.value || 0,
+                isAll: true
             },
         }) || {}
-
-        const rows: any[] = _.get(pre.origJsonData, pre.dataPath, []) || []
-        setId(rows)
-        pre.allRows = rows
-        pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
+        setId(pre.allRows)
+        pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
         pre.totals = getTotals() || {}
         pre.filteredRows.push(pre.totals)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
         function setId(rows: any[]) {
+            let count = 1
             for (const row of rows) {
                 row.id1 = row.id
                 row.id = incr()

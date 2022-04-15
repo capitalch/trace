@@ -1552,22 +1552,23 @@ allSqls = {
             "sale"::numeric(10,2), "purchase"::numeric(10,2), "saleRet"::numeric(10,2), "purchaseRet"::numeric(10,2), "clos"::numeric(10,2), "lastPurchasePrice", ("clos" * "lastPurchasePrice")::numeric(12,2) as "closValue"
                     , "lastPurchaseDate", "lastSaleDate", (date_part('day',coalesce(%(onDate)s, CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
                 from cte6 c6
-                    join "ProductM" p
+                    right join "ProductM" p
                         on p."id" = c6."productId"
                     join "CategoryM" c
                         on c."id" = p."catId"
                     join "BrandM" b
                         on b."id" = p."brandId"
-                where NOT(("clos" = 0) and ("op" = 0) and ("sale" = 0) and ("purchase" = 0) and ("saleRet" = 0) and ("purchaseRet" = 0))
+                where (NOT(("clos" = 0) and ("op" = 0) and ("sale" = 0) and ("purchase" = 0) and ("saleRet" = 0) and ("purchaseRet" = 0))) OR %(isAll)s::boolean
             order by "catName", "brandName", "label"
-        ), cte8 as( -- get summary
-            select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("dr") debits, SUM("cr") credits, SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
-                from cte7
-        ) 
-        select json_build_object(
-            'stock', (SELECT json_agg(row_to_json(a)) from cte7 a),
-            'summary', (SELECT row_to_json(b) from cte8 b)
-            ) as "jsonResult"
+        ) select * from cte7
+        --, cte8 as( -- get summary
+        --   select count(*) as "count", SUM("op") as "op",SUM("opValue") "opValue", SUM("dr") debits, SUM("cr") credits, SUM("sale") as "sale", SUM("purchase") "purchase", SUM("saleRet") "saleRet", SUM("purchaseRet") "purchaseRet", SUM("clos") "clos", SUM("closValue") "closValue"
+        --        from cte7
+        --) 
+        --select json_build_object(
+        --    'stock', (SELECT json_agg(row_to_json(a)) from cte7 a),
+        --    'summary', (SELECT row_to_json(b) from cte8 b)
+        --    ) as "jsonResult"
     ''',
 
     "getJson_tranHeader_details": '''

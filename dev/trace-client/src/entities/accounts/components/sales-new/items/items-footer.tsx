@@ -1,11 +1,11 @@
-import { _, AddCircle, Big, Box, Button, MegaDataContext, NumberFormat, TextField, Typography, useContext, useEffect, useState, useTheme, utilMethods } from '../redirect'
+import { _,  Big, Box, Button, MegaDataContext, NumberFormat, TextField, Typography, useContext, useEffect, useState, useTheme, utilMethods } from '../redirect'
 
 function ItemsFooter() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const items = sales.products
+    const items = sales.items
     const {toDecimalFormat } = utilMethods()
 
     useEffect(() => {
@@ -58,12 +58,8 @@ function ItemsFooter() {
                 />
                 <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
             </Box>
-            {/* Add */}
-            <Button size='small' variant='outlined' color='secondary'
-                onClick={() => sales.handleAddProduct()} startIcon={<AddCircle />}
-            >Add</Button>
             {/* Amount */}
-            <Typography color={theme.palette.common.black} sx={{ fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
+            <Typography color={theme.palette.common.black} sx={{mr:.5, fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
         </Box>
     </Box>)
 
@@ -88,7 +84,7 @@ function ItemsFooter() {
 
     function handleClear() {
         items.length = 0
-        // handleAddProduct()
+        sales.handleAddItem()
     }
 
     function handleBackCalculate() {
@@ -98,7 +94,7 @@ function ItemsFooter() {
         }
 
         const factor: number = defaultAmount / sales.summary.amount
-        for (let item of sales.products) {
+        for (let item of sales.items) {
             item.priceGst = item.priceGst - (item.discount || 0)
             item.discount = 0.0
             item.priceGst = item.priceGst * factor
