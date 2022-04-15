@@ -1,4 +1,4 @@
-# npm install @mui/icons-material @mui/material @mui/styles react-select react-to-print
+# npm install @mui/x-data-grid-pro @types/node material-ui-confirm
 
 ## Required reports
 1. Profitibality
