@@ -1,4 +1,4 @@
-import { _,  Big, Box, Button, MegaDataContext, NumberFormat, TextField, Typography, useContext, useEffect, useState, useTheme, utilMethods } from '../redirect'
+import { _, Big, Box, Button, MegaDataContext, NumberFormat, ProductsSearch, TextField, Typography, useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function ItemsFooter() {
     const [, setRefresh] = useState({})
@@ -6,14 +6,21 @@ function ItemsFooter() {
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
-    const {toDecimalFormat } = utilMethods()
-
+    const { toDecimalFormat } = utilMethods()
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
+    const meta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            content: () => <></>
+        }
+    })
+    const pre = meta.current
     useEffect(() => {
         sales.computeSummary = computeSummary
         computeSummary()
     }, [])
 
-    return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+    return (<Box sx={{pt:1,pb:1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
             {/* Count */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Count: ', items.length)}</Typography>
@@ -59,8 +66,9 @@ function ItemsFooter() {
                 <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
             </Box>
             {/* Amount */}
-            <Typography color={theme.palette.common.black} sx={{mr:.5, fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
+            <Typography color={theme.palette.common.black} sx={{ mr: .5, fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
         </Box>
+        <BasicMaterialDialog meta={meta} />
     </Box>)
 
     function computeSummary() {
@@ -104,6 +112,10 @@ function ItemsFooter() {
     }
 
     function handleItemSearch() {
+        pre.dialogConfig.title = 'Search from all products'
+        pre.dialogConfig.content = () => <ProductsSearch />
+        pre.showDialog = true
+        setRefresh({})
     }
 
     function handleRoundOff() {

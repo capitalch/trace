@@ -1,4 +1,4 @@
-import { _, Big, useContext, MegaDataContext, useEffect, useState, utilMethods } from '../redirect'
+import { _, Big, useContext, MegaDataContext, useEffect, useRef, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -6,6 +6,7 @@ function useLineItems() {
     const sales = megaData.accounts.sales
     const items = sales.items
     const { execGenericView } = utilMethods()
+
     useEffect(() => {
         sales.computeSummary = () => { }
         if (items.length === 0) {
@@ -63,10 +64,10 @@ function useLineItems() {
     }
 
     async function fetchAllProducts() {
-        sales.products = await execGenericView({
+        megaData.accounts.allProducts = await execGenericView({
             isMultipleRows: true,
             args: { onDate: null, isAll: true, days: 0 },
-            sqlKey: 'get_stock_summary'
+            sqlKey: 'get_products_info'
         })
         setRefresh({})
     }

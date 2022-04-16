@@ -23,6 +23,42 @@ import messages from '../messages.json'
 function useTraceMaterialComponents() {
     const [, setRefresh] = useState({})
     const confirm = useConfirm()
+   
+    function BasicMaterialDialog({ meta }: any) {
+        const [, setRefresh] = useState({})
+        const pre = meta.current
+        const dialogConfig = pre.dialogConfig
+        return (<Dialog
+            fullWidth={true}
+            sx={pre.sx}
+            open={pre.showDialog}
+            onClose={(e, reason) => {
+                if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
+                    handleClose()
+                }
+            }}>
+
+            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box>{dialogConfig.title}</Box>
+                <IconButton
+                    sx={{mr:-2.5}}
+                    size="small"
+                    color="default"
+                    onClick={handleClose}
+                    aria-label="close">
+                    <CloseSharp />
+                </IconButton>
+            </DialogTitle>
+            <DialogContent>
+                {<dialogConfig.content />}
+            </DialogContent>
+        </Dialog>)
+
+        function handleClose() {
+            pre.showDialog = false
+            setRefresh({})
+        }
+    }
     interface TraceDialogOptions {
         meta: any
         onClose?: any
@@ -260,6 +296,7 @@ function useTraceMaterialComponents() {
     }
 
     return {
+        BasicMaterialDialog,
         TraceDialog,
         TraceFullWidthSubmitButton,
         traceGlobalSearch,
@@ -287,8 +324,8 @@ const styles = {
     dialogContent: {
         '& .serial-number': {
             width: '100%',
-            fontSize:'1.2rem',
-            fontFamily:'roboto'
+            fontSize: '1.2rem',
+            fontFamily: 'roboto'
         },
         '& .MuiInputBase-root': {
             width: '80%'

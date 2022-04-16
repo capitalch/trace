@@ -1,4 +1,4 @@
-import { Badge, Box, Card, Chip, CloseSharp, IconButton, NumberFormat, TextField, Typography, useContext, MegaDataContext, useState, useTheme, utilMethods, } from '../redirect'
+import { Badge, Box, Card, Chip, CloseSharp, IconButton, NumberFormat, TextField, Typography, useContext, MegaDataContext, useState, useTheme, useTraceMaterialComponents, utilMethods, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
@@ -6,9 +6,8 @@ function LineItems() {
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
-
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { computeRow, handleDeleteRow, handleSerialNo, setPrice, setPriceGst } = useLineItems()
+    const { computeRow, handleDeleteRow, handleSerialNo,  setPrice, setPriceGst } = useLineItems()
 
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
@@ -18,6 +17,7 @@ function LineItems() {
                 </div>
             )
         }
+
     </Box>)
 
     function LineItem({ item, index, }: any) {

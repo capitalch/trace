@@ -23,11 +23,11 @@ function TraceMain({ open }: any) {
         launchPad: null,
         megaData: {
             accounts: {
+                allProducts:[],
                 common: {},
                 sales: {
                     billTo: {},
                     items: [],
-                    products: [],
                     summary: {}
                 },
                 settings: {}

@@ -3,6 +3,7 @@ import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'
 import cities from '../../../../data/cities.json'
 import accountsMessages from '../../json/accounts-messages.json'
+
 export {
     Avatar,
     Badge,
@@ -29,3 +30,17 @@ export { NewEditCustomer } from './customer/new-edit-customer'
 export { ItemsHeader } from './items/items-header'
 export { LineItems } from './items/line-items'
 export { ItemsFooter } from './items/items-footer'
+export { useTraceMaterialComponents } from '../../../../common/trace-material-components'
+export { ProductsSearch } from './items/products-search'
+export {
+    DataGridPro,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridFooterContainer,
+    type GridRowId,
+    type GridRowData,
+    useGridApiRef,
+    type GridCellParams,
+} from '@mui/x-data-grid-pro'
