@@ -1,4 +1,4 @@
-import { _, Big, useContext, IMegaData, MegaDataContext, useEffect, useIbuki,useRef, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Badge, Big, Box, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -7,8 +7,16 @@ function useLineItems() {
     const sales = megaData.accounts.sales
     const items = sales.items
     const { execGenericView, setIdForDataGridRows } = utilMethods()
-    const productCodeRef:any = useRef({})
-
+    const theme = useTheme()
+    // const productCodeRef:any = useRef({})
+    const meta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            title: 'Serial numbers (Comma separated)',
+            content: () => <></>
+        }
+    })
+    const pre = meta.current
     useEffect(() => {
         megaData.registerKeyWithMethod('render:lineItems', setRefresh)
         if (items.length === 0) {
@@ -19,8 +27,8 @@ function useLineItems() {
         fetchAllProducts()
     }, [])
 
-    useEffect(()=>{
-        productCodeRef.current.setFocus()
+    useEffect(() => {
+        // productCodeRef.current.focus  && productCodeRef.current.focus()
     })
 
     function computeAllRows() {
@@ -91,7 +99,35 @@ function useLineItems() {
     }
 
     function handleSerialNo(item: any) {
+        pre.showDialog = true
+        pre.dialogConfig.maxWidth = 'sm'
+        pre.dialogConfig.content = () => <Content />
+        item.serialNumbers = item.serialNumbers ?? ''
+        item.serialNumerCount = item?.serialNumbers.split(',').filter(Boolean).length
+        setRefresh({})
 
+        function Content() {
+            const [, setRefresh] = useState({})
+            return (<Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto',  }}>{item.serialNumerCount + ' items'}</Typography>
+                <TextareaAutosize 
+                    autoFocus={true}
+                    style={{color:'black', fontSize:theme.spacing(2.0), fontWeight:'bold', fontFamily:'helvetica'}}
+                    className="serial-number"
+                    minRows={5}
+                    onChange={(e: any) => {
+                        item.serialNumbers = e.target.value
+                        setRefresh({})
+                        processCount()
+                    }}
+                    value={item.serialNumbers || ''}
+                />
+            </Box>)
+
+            function processCount() {
+
+            }
+        }
     }
 
     function setItemToSelectedProduct() {
@@ -125,7 +161,11 @@ function useLineItems() {
         item.priceGst = priceGst
     }
 
-    return ({ computeRow, handleDeleteRow, handleSerialNo,productCodeRef, setPrice, setPriceGst })
+    return ({
+        computeRow, handleDeleteRow, handleSerialNo, meta,
+        // productCodeRef, 
+        setPrice, setPriceGst
+    })
 }
 
 export { useLineItems }

@@ -1,4 +1,4 @@
-import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, } from '../redirect'
+import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
@@ -8,12 +8,10 @@ function LineItems() {
     const sales = megaData.accounts.sales
     const items = sales.items
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { computeRow, handleDeleteRow, handleSerialNo, productCodeRef, setPrice, setPriceGst } = useLineItems()
-
-    // useEffect(() => {
-    //     megaData.registerKeyWithMethod('render:lineItems', setRefresh)
-    // }, [])
-
+    const { computeRow, handleDeleteRow, handleSerialNo, meta,
+        // productCodeRef, 
+        setPrice, setPriceGst } = useLineItems()
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
@@ -22,6 +20,7 @@ function LineItems() {
                 </div>
             )
         }
+        <BasicMaterialDialog parentMeta={meta} />
     </Box>)
 
     function LineItem({ item, index, }: any) {
@@ -57,7 +56,7 @@ function LineItems() {
                 <Box className='vertical' >
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
-                        inputRef={productCodeRef}
+                        // inputRef={productCodeRef}
                         allowNegative={false}
                         autoComplete='off'
                         // InputProps={smallFontTextField}

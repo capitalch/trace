@@ -11,7 +11,7 @@ export {
     Button, Card, Checkbox, Chip, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, IconButton, Input,
     InputAdornment, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText,
     RadioGroup, Radio,
-    Switch,
+    Switch, TextareaAutosize,
     TextField, Tooltip, Typography,
     useTheme,
 } from '../../../../imports/gui-imports'

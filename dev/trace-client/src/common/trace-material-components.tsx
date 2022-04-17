@@ -1,4 +1,4 @@
-import { useConfirm, useState } from '../imports/regular-imports'
+import { useConfirm, useState, } from '../imports/regular-imports'
 import {
     Box,
     Button,
@@ -9,7 +9,7 @@ import {
     DialogTitle,
     DialogContent,
     InputAdornment,
-    TextField,
+    TextField, useTheme
 } from '../imports/gui-imports'
 
 import {
@@ -28,9 +28,10 @@ function useTraceMaterialComponents() {
         const [, setRefresh] = useState({})
         const pre = parentMeta.current
         const dialogConfig = pre.dialogConfig
+        const theme = useTheme()
         return (<Dialog
             fullWidth={true}
-            maxWidth='xl'
+            maxWidth={pre.dialogConfig.maxWidth || 'xl'}
             sx={pre.sx}
             open={pre.showDialog}
             onClose={(e, reason) => {
@@ -50,7 +51,7 @@ function useTraceMaterialComponents() {
                     <CloseSharp />
                 </IconButton>
             </DialogTitle>
-            <DialogContent>
+            <DialogContent >
                 {<dialogConfig.content />}
             </DialogContent>
         </Dialog>)
