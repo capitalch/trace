@@ -10,8 +10,9 @@ const salesMegaData = {
     credits: 0,
     debits: 0,
     gstin: undefined,
+    items:[],
     paymentMethods: [],
-    products: [],
+    // products: [],
     saleVariety: 'r',
     shipTo: {},
     summary: {

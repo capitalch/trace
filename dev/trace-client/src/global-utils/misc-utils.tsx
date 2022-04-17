@@ -265,7 +265,7 @@ function utilMethods() {
         const logindata = getLoginData()
         const permissions: any[] = logindata.permissions || []
         const control = permissions.find(
-            (item:any) => item.hierarchy === hierarchy
+            (item: any) => item.hierarchy === hierarchy
         )
         //For admin users all controls are visible
         let enabled = false
@@ -278,13 +278,6 @@ function utilMethods() {
                 enabled = false
             }
         }
-        // let ret = logindata.userType === 'a' ? true : false
-        // if (control) {
-        //     ret = control.isActive
-        // } else {
-        //     // ret = true // Controls which are not considered are active
-        //     ret = false
-        // }
         return !enabled
     }
 
@@ -510,6 +503,17 @@ function utilMethods() {
         return ret
     }
 
+    function setIdForDataGridRows(rows: any[]) {
+        let count = 1
+        for (const row of rows) {
+            row.id1 = row.id
+            row.id = incr()
+        }
+        function incr() {
+            return (count++)
+        }
+    }
+
     function toDecimalFormat(s: any) {
         s ?? (s = '')
         if (s === '') {
@@ -543,6 +547,7 @@ function utilMethods() {
         saveForm,
         sendEmail,
         sendSms,
+        setIdForDataGridRows,
         toDecimalFormat,
     }
 }

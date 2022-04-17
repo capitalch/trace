@@ -1,3 +1,12 @@
-import { createContext} from '../imports/regular-imports'
+import { createContext } from '../imports/regular-imports'
 const MegaDataContext = createContext<any>({})
-export {MegaDataContext}
+interface KeyWithMethod {
+    (key: string, method: (params?:any) => void): void
+}
+interface KeyWithParams {
+    (key: string, params?: any): void
+}
+interface IMegaData {
+    accounts: any, keysWithMethods: any, registerKeyWithMethod: KeyWithMethod, executeMethodForKey: KeyWithParams
+}
+export { MegaDataContext, type IMegaData }

@@ -1,9 +1,9 @@
-import { _, Big, Box, Button, MegaDataContext, NumberFormat, ProductsSearch, TextField, Typography, useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, Box, Button, IMegaData, MegaDataContext, NumberFormat, ProductsSearch, TextField, Typography, useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function ItemsFooter() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
-    const megaData = useContext(MegaDataContext)
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
     const { toDecimalFormat } = utilMethods()
@@ -12,15 +12,24 @@ function ItemsFooter() {
         showDialog: false,
         dialogConfig: {
             content: () => <></>
-        }
+        },
+        // setRefresh: setRefresh
     })
     const pre = meta.current
+
     useEffect(() => {
-        sales.computeSummary = computeSummary
+        megaData.registerKeyWithMethod('computeSummary:itemsFooter',computeSummary)
+        megaData.registerKeyWithMethod('render:itemsFooter', setRefresh)
         computeSummary()
     }, [])
 
-    return (<Box sx={{pt:1,pb:1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+    // useEffect(() => {        
+    //     if (megaData.accounts?.selectedProduct) {
+    //         sales.setItemToSelectedProduct()
+    //     }
+    // })
+
+    return (<Box sx={{ pt: 1, pb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
             {/* Count */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Count: ', items.length)}</Typography>
@@ -68,7 +77,7 @@ function ItemsFooter() {
             {/* Amount */}
             <Typography color={theme.palette.common.black} sx={{ mr: .5, fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>
         </Box>
-        <BasicMaterialDialog meta={meta} />
+        <BasicMaterialDialog parentMeta={meta} />
     </Box>)
 
     function computeSummary() {
@@ -92,7 +101,7 @@ function ItemsFooter() {
 
     function handleClear() {
         items.length = 0
-        sales.handleAddItem()
+        megaData.executeMethodForKey('handleAddItem:itemsHeader')
     }
 
     function handleBackCalculate() {
@@ -108,12 +117,12 @@ function ItemsFooter() {
             item.priceGst = item.priceGst * factor
             item.price = _.round(item.priceGst / (1 + item.gstRate / 100), 2)
         }
-        sales.computeAllRows() // Does the entire calculation on each row
+        megaData.executeMethodForKey('computeAllRows:lineItems')
     }
 
     function handleItemSearch() {
         pre.dialogConfig.title = 'Search from all products'
-        pre.dialogConfig.content = () => <ProductsSearch />
+        pre.dialogConfig.content = () => <ProductsSearch parentMeta={meta} />
         pre.showDialog = true
         setRefresh({})
     }

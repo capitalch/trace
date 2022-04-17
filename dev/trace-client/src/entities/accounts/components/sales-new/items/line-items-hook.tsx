@@ -1,27 +1,33 @@
-import { _, Big, useContext, MegaDataContext, useEffect, useRef, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, useContext, IMegaData, MegaDataContext, useEffect, useIbuki,useRef, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
-    const megaData = useContext(MegaDataContext)
+    const { emit } = useIbuki()
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
-    const { execGenericView } = utilMethods()
+    const { execGenericView, setIdForDataGridRows } = utilMethods()
+    const productCodeRef:any = useRef({})
 
     useEffect(() => {
-        sales.computeSummary = () => { }
+        megaData.registerKeyWithMethod('render:lineItems', setRefresh)
         if (items.length === 0) {
-            handleAddItem()
+            megaData.executeMethodForKey('handleAddItem:itemsHeader')
         }
-        sales.handleAddItem = handleAddItem
-        sales.computeAllRows = computeAllRows
+        megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
+        megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
         fetchAllProducts()
     }, [])
+
+    useEffect(()=>{
+        productCodeRef.current.setFocus()
+    })
 
     function computeAllRows() {
         for (let lineItem of sales.items) {
             computeRow(lineItem, false)
         }
-        sales.computeSummary()
+        megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
     }
 
@@ -60,21 +66,18 @@ function useLineItems() {
             item.sgst = sgst
         }
         item.amount = _.round(amount, 2)
-        toComputeSummary && sales.computeSummary()
+        toComputeSummary && megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
     async function fetchAllProducts() {
+        emit('SHOW-LOADING-INDICATOR', true)
         megaData.accounts.allProducts = await execGenericView({
             isMultipleRows: true,
             args: { onDate: null, isAll: true, days: 0 },
             sqlKey: 'get_products_info'
         })
-        setRefresh({})
-    }
-
-    function handleAddItem() {
-        items.push({ upc: '', productCode: '', hsn: '', gstRate: 0, qty: 1, price: 0, priceGst: 0, discount: 0, remarks: null, amount: 0, cgst: 0, sgst: 0, igst: 0 })
-        sales.computeSummary()
+        emit('SHOW-LOADING-INDICATOR', false)
+        setIdForDataGridRows(megaData.accounts.allProducts)
         setRefresh({})
     }
 
@@ -83,12 +86,29 @@ function useLineItems() {
             return
         }
         items.splice(index, 1)
-        sales.computeSummary()
+        megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
     }
 
     function handleSerialNo(item: any) {
 
+    }
+
+    function setItemToSelectedProduct() {
+        const currentItemIndex = sales.currentItemIndex
+        const currentItem = items[currentItemIndex]
+        const selectedProduct = megaData.accounts.selectedProduct
+        // populate current item with selectedProduct
+        currentItem.id = selectedProduct.id1
+        currentItem.productCode = selectedProduct.productCode
+        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info)
+        currentItem.hsn = selectedProduct.hsn
+        currentItem.gstRate = selectedProduct.gstRate
+        currentItem.clos = selectedProduct.clos
+        currentItem.priceGst = selectedProduct.salePriceGst || selectedProduct.maxRetailPrice || 0
+        currentItem.discount = selectedProduct.saleDiscount || 0
+        computeRow(currentItem)
+        setRefresh({})
     }
 
     function setPrice(item: any) {
@@ -105,7 +125,7 @@ function useLineItems() {
         item.priceGst = priceGst
     }
 
-    return ({ computeRow, handleDeleteRow, handleSerialNo, setPrice, setPriceGst })
+    return ({ computeRow, handleDeleteRow, handleSerialNo,productCodeRef, setPrice, setPriceGst })
 }
 
 export { useLineItems }

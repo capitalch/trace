@@ -23,13 +23,14 @@ import messages from '../messages.json'
 function useTraceMaterialComponents() {
     const [, setRefresh] = useState({})
     const confirm = useConfirm()
-   
-    function BasicMaterialDialog({ meta }: any) {
+
+    function BasicMaterialDialog({ parentMeta }: any) {
         const [, setRefresh] = useState({})
-        const pre = meta.current
+        const pre = parentMeta.current
         const dialogConfig = pre.dialogConfig
         return (<Dialog
             fullWidth={true}
+            maxWidth='xl'
             sx={pre.sx}
             open={pre.showDialog}
             onClose={(e, reason) => {
@@ -41,7 +42,7 @@ function useTraceMaterialComponents() {
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>{dialogConfig.title}</Box>
                 <IconButton
-                    sx={{mr:-2.5}}
+                    sx={{ mr: -2.5 }}
                     size="small"
                     color="default"
                     onClick={handleClose}
@@ -59,6 +60,7 @@ function useTraceMaterialComponents() {
             setRefresh({})
         }
     }
+
     interface TraceDialogOptions {
         meta: any
         onClose?: any

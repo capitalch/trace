@@ -20,7 +20,9 @@
 
 
 ## Planning
-
+a. Permissions of Export etc to manager
+b. Make product inactive
+c. Stock journal
 d. Purchase if change in last purchase price show alert
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 1. Include jData or serial no in sales report so that search on sl no may occur
@@ -73,6 +75,12 @@ d. Purchase if change in last purchase price show alert
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 17-04-2022
+1. Implemented in megaData the registerKeyWithMethod and ExecMethodFor key
+2. 
+# 16-04-2022
+1. Continued with Sales
 
 # 12-04-2022 - 15-04-2022
 1. Added stock and ageing options in sales report

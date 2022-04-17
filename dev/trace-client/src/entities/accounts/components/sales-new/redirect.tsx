@@ -15,7 +15,8 @@ export {
     TextField, Tooltip, Typography,
     useTheme,
 } from '../../../../imports/gui-imports'
-export { MegaDataContext } from '../../../../common/mega-data-context'
+
+export { MegaDataContext, type IMegaData } from '../../../../common/mega-data-context'
 export { _, moment, InputMask, NumberFormat, PrimeColumn, ReactSelect, TreeTable, useContext, useEffect, useRef, useState, XXGrid } from '../../../../imports/regular-imports'
 export { AddCircle, CloseSharp, Search, } from '../../../../imports/icons-import'
 export { LedgerSubledger } from '../common/ledger-subledger'
@@ -39,6 +40,7 @@ export {
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
+    // GridRenderCellParams,
     type GridRowId,
     type GridRowData,
     useGridApiRef,

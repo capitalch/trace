@@ -368,7 +368,7 @@ allSqls = {
                 limit 100
     ''',
 
-    'get_contacts_on_regexp':'''
+    'get_contacts_on_regexp': '''
         select * from "Contacts"
             where concat("mobileNumber", "otherMobileNumber", "email", "contactName"
                 , "landPhone", "descr", "address1", "address2", "pin") ~* %(searchString)s
@@ -604,7 +604,7 @@ allSqls = {
             limit (%(no)s)
     ''',
 
-    "get_products_info":'''
+    "get_products_info": '''
         with cte0 as( --base cte used many times in next
 	select "productId", "tranTypeId", "qty", "price", "tranDate"
 		from "TranH" h
@@ -659,16 +659,16 @@ allSqls = {
         ), cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
             select coalesce(c4."productId", c5."productId") as "productId"
                 , coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice","lastPurchaseDate"
-                , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos"
+                , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos", "sale"
                 from cte4 c4
                     full join cte5 c5
                         on c4."productId" = c5."productId"
                 --where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= coalesce(%(days)s,0)
         ), cte7 as ( -- combine latest result set with ProductM, CategoryM and BrandM tables to attach catName, brandName, label
-            select p."id", "productCode", "catName", "brandName", "label", coalesce("clos"::numeric(10,2),0) "clos", coalesce("lastPurchasePrice",0) "lastPurchasePrice", 
+            select p."id", "productCode", "catName", "brandName", "label", coalesce("clos"::numeric(10,2),0) "clos", (coalesce("lastPurchasePrice",0) * (1 + "gstRate"/ 100)) "lastPurchasePriceGst", 
                     "lastPurchaseDate", (date_part('day',CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp)) as "age"
 					, "catId", "brandId", coalesce(p."hsn", c."hsn") hsn, "info", "unitId", "upcCode", "gstRate"
-					, "salePrice", "salePriceGst", "maxRetailPrice", "purPrice", "purPriceGst"
+					, "salePrice", "salePriceGst", "maxRetailPrice", coalesce("lastPurchasePrice",0) "lastPurPrice", "sale", "saleDiscount"
                 from cte6 c6
                     right join "ProductM" p
                         on p."id" = c6."productId"
@@ -677,11 +677,12 @@ allSqls = {
                     join "BrandM" b
                         on b."id" = p."brandId"
                 where p."isActive"
-            order by "catName", "brandName", "label"
-        ) select * from cte7
+            order by "brandName", "catName",  "label", "info"
+        ) select "id", "productCode", "catName", "brandName", "label", "clos", "lastPurchasePriceGst", CASE WHEN "clos" > 0 THEN "age" ELSE 0 END "age"
+		, "hsn", "info", "upcCode", "gstRate", "salePrice", "salePriceGst", "maxRetailPrice", "sale", "saleDiscount" from cte7
     ''',
 
-    "get_purchase_report":'''
+    "get_purchase_report": '''
         select "autoRefNo", "userRefNo", "tranDate", s."productId", "productCode", "catName", "brandName","label", "tranTypeId", "price", "discount", s."gstRate"
 			, s."id" as "salePurchaseDetailsId"
             , CASE WHEN "tranTypeId" = 5 THEN 'Purchase' ELSE 'Return' END as "purchaseType"
@@ -1678,7 +1679,7 @@ allSqls = {
                 values (%(accId)s, %(finYearId)s, %(amount)s, %(dc)s, %(branchId)s)
     ''',
 
-    'insert_or_update_contact':'''
+    'insert_or_update_contact': '''
         with cte1 as (
             select id from "Contacts"
                 where "mobileNumber" = %(mobileNumber)s::text --'1111111113'
