@@ -215,7 +215,7 @@ function GenericExports() {
                     <SplitButton
                         onClick={() => { onDefaultExportClick(item.name) }}
                         style={{ padding: '0.5rem' }}
-                        disabled={isControlDisabled('doExports')}
+                        disabled={isControlDisabled('options-exports-all-buttons')}
                         label="Export"
                         icon="pi pi-download"
                         model={getItems(

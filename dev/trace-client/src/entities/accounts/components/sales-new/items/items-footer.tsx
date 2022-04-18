@@ -11,7 +11,8 @@ function ItemsFooter() {
     const meta: any = useRef({
         showDialog: false,
         dialogConfig: {
-            content: () => <></>
+            content: () => <></>,
+            maxWidth:'lg',
         },
         // setRefresh: setRefresh
     })
@@ -36,7 +37,7 @@ function ItemsFooter() {
             {/* Qty */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Qty: ', toDecimalFormat(sales.summary.qty))}</Typography>
             {/* Item search button */}
-            <Button size='small' variant='outlined' color='info' onClick={handleItemSearch}>Item search</Button>
+            <Button size='small' variant='contained' color='primary' onClick={handleItemSearch}>Item search</Button>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>

@@ -29,6 +29,10 @@
          "isActive": false
       },
       {
+         "hierarchy":"salespurchases-simple-sales",
+         "isActive": false
+      },
+      {
          "hierarchy":"salespurchases-sales-return",
          "isActive": false
       },
@@ -109,9 +113,17 @@
          "isActive": false
       },
       {
+         "hierarchy":"options-common-utilities-transfer",
+         "isActive": false
+      },
+      {
          "hierarchy":"options-exports",
          "isActive": false
       },
+      {
+         "hierarchy":"options-exports-all-buttons",
+         "isActive": false
+      },      
       {
          "hierarchy":"reports",
          "isActive": false
@@ -154,7 +166,7 @@
       },
       {
          "hierarchy":"masters-accounts-add-child",
-         "isActive": true
+         "isActive": false
       }
    ],
    "operator": [

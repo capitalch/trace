@@ -3,6 +3,7 @@ import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'
 import cities from '../../../../data/cities.json'
 import accountsMessages from '../../json/accounts-messages.json'
+
 export {
     Avatar,
     Badge,
@@ -10,11 +11,12 @@ export {
     Button, Card, Checkbox, Chip, Dialog, DialogContent, DialogTitle, FormControl, FormControlLabel, Grid, IconButton, Input,
     InputAdornment, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText,
     RadioGroup, Radio,
-    Switch,
+    Switch, TextareaAutosize,
     TextField, Tooltip, Typography,
     useTheme,
 } from '../../../../imports/gui-imports'
-export { MegaDataContext } from '../../../../common/mega-data-context'
+
+export { MegaDataContext, type IMegaData } from '../../../../common/mega-data-context'
 export { _, moment, InputMask, NumberFormat, PrimeColumn, ReactSelect, TreeTable, useContext, useEffect, useRef, useState, XXGrid } from '../../../../imports/regular-imports'
 export { AddCircle, CloseSharp, Search, } from '../../../../imports/icons-import'
 export { LedgerSubledger } from '../common/ledger-subledger'
@@ -29,3 +31,18 @@ export { NewEditCustomer } from './customer/new-edit-customer'
 export { ItemsHeader } from './items/items-header'
 export { LineItems } from './items/line-items'
 export { ItemsFooter } from './items/items-footer'
+export { useTraceMaterialComponents } from '../../../../common/trace-material-components'
+export { ProductsSearch } from './items/products-search'
+export {
+    DataGridPro,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridFooterContainer,
+    // GridRenderCellParams,
+    type GridRowId,
+    type GridRowData,
+    useGridApiRef,
+    type GridCellParams,
+} from '@mui/x-data-grid-pro'

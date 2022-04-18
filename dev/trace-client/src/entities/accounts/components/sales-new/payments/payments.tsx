@@ -1,4 +1,4 @@
-import { Box, Button, CloseSharp, FormControlLabel, IconButton, NumberFormat, Radio, RadioGroup, TextField, Typography, useContext, MegaDataContext, useState, useTheme } from './redirect'
+import { Box, Button, CloseSharp, FormControlLabel, IconButton, LedgerSubledger, NumberFormat, Radio, RadioGroup, TextField, Typography, useContext, MegaDataContext, useState, useTheme } from '../redirect'
 
 function Payments() {
     const [, setRefresh] = useState({})
@@ -6,7 +6,7 @@ function Payments() {
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     return (
-        <Box className='vertical' sx={{ p: 2, mr: 1, mb: 1, border: '1px solid lightGrey', maxWidth: theme.spacing(70) }}>
+        <Box className='vertical' sx={{ p: 2, mr: 1, mb: 1, border: '1px solid lightGrey', maxWidth: theme.spacing(85) }}>
             <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight:'bold' }}>Payments</Typography>
             <SaleVariety />
             <PaymentMethods />
@@ -110,13 +110,16 @@ function Payments() {
             const payments: any[] = paymentMethodsList.map((item: any, index: number) => {
                 return (
                     <Box key={index} sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', alignItems: 'center', rowGap: 2, }}>
+                        {/* Select account */}
                         <Box className='vertical'>
                             <Typography variant='caption'>Debit account</Typography>
-                            <TextField />
-                            {/* <LedgerSubledger rowData={{}} /> */}
+                            {/* <TextField /> */}
+                            <LedgerSubledger rowData={{}} />
                         </Box>
+                        {/* Instr no  */}
                         <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
                             sx={{ maxWidth: theme.spacing(15) }} onChange={(e: any) => { item.instrNo = e.target.value; setRefresh({}) }} />
+                        {/* Amount */}
                         <NumberFormat sx={{ maxWidth: theme.spacing(18) }}
                             allowNegative={false}
                             autoComplete='off'
@@ -130,7 +133,7 @@ function Payments() {
                             }}
                             variant='standard' />
 
-                        <IconButton sx={{ mt: -6, ml: -5, }} size='small' color='error' onClick={() => handleDeleteRow(index)}>
+                        <IconButton  size='small' color='error' onClick={() => handleDeleteRow(index)}>
                             <CloseSharp />
                         </IconButton>
                     </Box>)

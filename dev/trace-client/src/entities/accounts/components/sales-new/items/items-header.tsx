@@ -23,7 +23,7 @@ function ItemsHeader() {
             />
 
             {/* Add */}
-            <Button size='small' variant='outlined' color='secondary'
+            <Button size='small' variant='contained' color='secondary'
                 onClick={() => handleAddItem()}
                 startIcon={<AddCircle />} >Add</Button>
         </Box>

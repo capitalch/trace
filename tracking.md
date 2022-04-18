@@ -4,19 +4,20 @@
                                                                                         2. cgst, sgst, igst group spacing
                                                                                         3. Customer search
                                                                                         4. New / edit button
-    5. Product search
+                                                                                        5. Product search
                                                                                         6. Summary, calculations, amount etc.
-7. Serial no mechanism
-8. Population of product details
+                                                                                        7. Serial no mechanism
+                                                                                        8. Population of product details
                                                                                         9. Reset, roundoff, back cal buttons, Igst, Add button
 10. saleVariety implementation
-11. Add, New, clear button, ship to
+11. Ship to
 12. Total error handling and show of submit
 13. Submit functionality
 14. View and drill through
 15. Page reset
 16. Total Debits / Credits
 17. New error window in open space
+18. Printing
 
 
 ## Planning

@@ -12,6 +12,10 @@ function useProducts() {
     const [, setRefresh] = useState({})
     const FETCH_DATA_MESSAGE = 'PRODUCTS-HOOK-FETCH-DATA'
     const meta: any = useRef({
+        dialogConfig: {
+            tableName: 'ProductM',
+            ibukiFetchDataMessage: getXXGridParams().gridActionMessages.fetchIbukiMessage,
+        },
         isDataChanged: false,
         showDialog: false,
         product: {},

@@ -1,15 +1,17 @@
-import { Badge, Box, Card, Chip, CloseSharp, IconButton, NumberFormat, TextField, Typography, useContext, MegaDataContext, useState, useTheme, utilMethods, } from '../redirect'
+import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
+    // const [, setRefresh] = useState({})
     const theme = useTheme()
-    const megaData = useContext(MegaDataContext)
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
-
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { computeRow, handleDeleteRow, handleSerialNo, setPrice, setPriceGst } = useLineItems()
-
+    const { computeRow, handleDeleteRow, handleSerialNo, meta,
+        // productCodeRef, 
+        setPrice, setPriceGst } = useLineItems()
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
@@ -18,13 +20,29 @@ function LineItems() {
                 </div>
             )
         }
+        <BasicMaterialDialog parentMeta={meta} />
     </Box>)
 
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
-        const smallFontTextField = megaData.accounts.settings.smallFontTextField
+        // const smallFontTextField = megaData.accounts.settings.smallFontTextField
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center', border: '1px solid lightGrey', flexWrap: 'wrap', p: 2, pr: 1, rowGap: 2, columnGap: 2 }}>
+            <Box
+                onClick={(e: any) => {
+                    if (sales.currentItemIndex === index) {
+                        return
+                    }
+                    sales.currentItemIndex = index
+                    megaData.executeMethodForKey('render:lineItems', {})
+                    e.preventDefault()
+                    // setRefresh({})
+                }}
+                sx={{
+                    display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
+                    , borderColor: (sales.currentItemIndex === index) ? theme.palette.orange.main : theme.palette.grey[300], borderWidth: (sales.currentItemIndex === index) ? '4px' : '1px',
+                    flexWrap: 'wrap', p: 2, pr: 1, rowGap: 2, columnGap: 2
+                }} >
+
                 {/* Index */}
                 <Box className='vertical' sx={{ width: theme.spacing(3) }}>
                     {/* Delete */}
@@ -35,9 +53,10 @@ function LineItems() {
                     <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
                 </Box>
                 {/* Product code */}
-                <Box className='vertical'>
+                <Box className='vertical' >
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+                        // inputRef={productCodeRef}
                         allowNegative={false}
                         autoComplete='off'
                         // InputProps={smallFontTextField}
@@ -47,6 +66,9 @@ function LineItems() {
                         fixedDecimalScale={true}
                         value={item.productCode || 0.00}
                         variant='standard'
+                        // onClick={(e:any)=>{
+                        //     e.target.click()
+                        // }}
                         onChange={(e: any) => handleTextChanged(item, 'productCode', e)}
                         onFocus={(e: any) => {
                             e.target.select()
@@ -57,7 +79,7 @@ function LineItems() {
                     <Typography sx={{
                         fontSize: theme.spacing(1.6),
                         fontWeight: 'bold', overflow: 'hidden', color: theme.palette.common.black,
-                    }} variant='body1'>{item.productDetails || 'hgjg hggh hgh hg hjg'}</Typography>
+                    }} variant='body1'>{item.productDetails || ''}</Typography>
                 </Card>
                 {/* Hsn */}
                 <Box className='vertical'>
@@ -102,7 +124,12 @@ function LineItems() {
                 </Box>
                 {/* Qty */}
                 <Box className='vertical'>
-                    <Typography sx={{ textAlign: 'right' }} variant='body2'>Qty</Typography>
+                    <Badge badgeContent={item.clos || 0} color='info' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}>
+                        <Typography sx={{ textAlign: 'right' }} variant='body2'>Qty</Typography>
+                    </Badge>
                     <NumberFormat sx={{ maxWidth: theme.spacing(8) }}
                         autoComplete='off'
                         allowNegative={false}

@@ -74,8 +74,7 @@ function useXXGrid(gridOptions: any) {
             fillColumnBalance()
             setRefresh({})
         })
-        // meta.current.dummyRefFirstTime.current && meta.current.dummyRefFirstTime.current.focus()
-        // setRefresh({})
+        
         return () => {
             pre.isMounted = false
             subs1.unsubscribe()

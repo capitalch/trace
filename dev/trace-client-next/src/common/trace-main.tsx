@@ -1,4 +1,4 @@
-import { clsx, useState, useEffect, useRef, useContext } from '../imports/regular-imports'
+import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
 import { salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
 import {
     Container,
@@ -8,6 +8,8 @@ import {
 import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
+import { IMegaData } from './mega-data-context'
+import { method } from 'lodash'
 
 function TraceMain({ open }: any) {
     const {
@@ -21,19 +23,8 @@ function TraceMain({ open }: any) {
         isMounted: false,
         marginTop: 0,
         launchPad: null,
-        megaData: {
-            accounts: {
-                common: {},
-                sales: {
-                    billTo: {},
-                    items: [],
-                    products: [],
-                    summary: {}
-                },
-                settings: {}
-            }
-        }
     })
+
     const { getCurrentMediaSize } = useTraceGlobal()
 
     // xs is 600px. If viewport is less than xs then material-ui automatically reduces the header (AppBar) height to 48 pix or theme.spacing(6) otherwise it is 64 pix or theme.spacing(8).
@@ -51,7 +42,7 @@ function TraceMain({ open }: any) {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        initAccountsMegaData() //inits the global object for accounts
+        initMegaData() //inits the global object for accounts
         const launchMap: any = {
             accounts: <LaunchPadAccounts />,
             authentication: <LaunchPadAuthentication />,
@@ -73,11 +64,6 @@ function TraceMain({ open }: any) {
         }
     }, [])
 
-    // function initAccountsMegaData() {
-    //     Object.assign(meta.current.megaData.accounts.sales, salesMegaData)
-    //     Object.assign(meta.current.megaData.accounts.settings, settingsMegaData)
-    // }
-
     // For every entity there is separate launch-pad file. Its exported object is mapped in launchMap
     function LaunchPad() {
         return meta.current.launchPad
@@ -96,10 +82,50 @@ function TraceMain({ open }: any) {
         </Container>
     )
 
-    function initAccountsMegaData() {
-        Object.assign(meta.current.megaData.accounts.sales, salesMegaData)
-        Object.assign(meta.current.megaData.accounts.settings, settingsMegaData)
+
+    function initMegaData() {
+
+        const megaData: IMegaData // { accounts: any; keys: any; registerKeyWithMethod: KeyWithMethod; executeMethodForKey: KeyWithParams } 
+            = {
+            accounts: {
+                allProducts: [],
+                common: {},
+                sales: {},
+                settings: {}
+            },
+            keysWithMethods: {},
+
+            registerKeyWithMethod: function (key: string, method: () => void) {
+                // if (!this.keysWithMethods[key]) {
+                //     this.keysWithMethods[key] = []
+                // }
+                // this.keysWithMethods[key].push(method)
+                this.keysWithMethods[key] = method
+            },
+            executeMethodForKey: function (key: string, params?: any) {
+                if (!this.keysWithMethods[key]) {
+                    return
+                }
+                // for (let method of this.keysWithMethods[key]) {
+                //     if (params) {
+                //         method(params)
+                //     } else {
+                //         method()
+                //     }
+                // }
+                const method = this.keysWithMethods[key]
+                params ? method(params): method()
+            }
+        }
+        meta.current.megaData = megaData
+        initAccountsMegaData()
+        function initAccountsMegaData() {
+            Object.assign(megaData.accounts.sales, salesMegaData)
+            Object.assign(megaData.accounts.settings, settingsMegaData)
+        }
     }
+
+
 }
 
 export { TraceMain }

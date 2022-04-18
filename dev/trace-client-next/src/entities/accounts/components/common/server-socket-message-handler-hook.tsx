@@ -8,7 +8,8 @@ function useServerSocketMessageHandler() {
         'TRACE-SERVER-MASTER-DETAILS-UPDATE-DONE': handleMasterDetailsUpdateDone,
         'TRACE-SERVER-NEW-SUBLEDGER-ACCOUNT-CREATED': newSubledgerAccountCreated,
         'TRACE-SERVER-ACCOUNT-ADDED-OR-UPDATED': accountAddedOrUpdated,
-        'TRACE-SERVER-PRODUCT-ADDED-OR-UPDATED': productAddedOrUpdated
+        'TRACE-SERVER-PRODUCT-ADDED-OR-UPDATED': productAddedOrUpdated,
+        'TRACE-SERVER-SALES-ADDED-OR-UPDATED': salesAddedOrUpdated,
     }
     function socketMessageHandler(d: any) {
         const { message, data } = d
@@ -62,6 +63,10 @@ function useServerSocketMessageHandler() {
             products.unshift(data)
         }
         emit('OPENING-STOCK-WORK-BENCH-HOOK-PRODUCT-UPSERTED-AT-SERVER','')
+    }
+
+    function salesAddedOrUpdated(data:any){
+        emit('TRACE-SERVER-SALES-ADDED-OR-UPDATED',null)
     }
 
     return ({ socketMessageHandler })

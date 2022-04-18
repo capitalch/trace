@@ -25,7 +25,7 @@ function CommonUtilities() {
                             <TableCell style={{ border: '0px' }}>
                                 <Button
                                     disabled={isControlDisabled(
-                                        'transferAccountsBalances'
+                                        'options-common-utilities-transfer'
                                     )}
                                     endIcon={<Send></Send>}
                                     variant="contained"

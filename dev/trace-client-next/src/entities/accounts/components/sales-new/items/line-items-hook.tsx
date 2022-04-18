@@ -1,26 +1,41 @@
-import { _, Big, useContext, MegaDataContext, useEffect, useState, utilMethods } from '../redirect'
+import { _, Badge, Big, Box, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
-    const megaData = useContext(MegaDataContext)
+    const { emit } = useIbuki()
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
-    const { execGenericView } = utilMethods()
-    useEffect(() => {
-        sales.computeSummary = () => { }
-        if (items.length === 0) {
-            handleAddItem()
+    const { execGenericView, setIdForDataGridRows } = utilMethods()
+    const theme = useTheme()
+    // const productCodeRef:any = useRef({})
+    const meta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            title: 'Serial numbers (Comma separated)',
+            content: () => <></>
         }
-        sales.handleAddItem = handleAddItem
-        sales.computeAllRows = computeAllRows
+    })
+    const pre = meta.current
+    useEffect(() => {
+        megaData.registerKeyWithMethod('render:lineItems', setRefresh)
+        if (items.length === 0) {
+            megaData.executeMethodForKey('handleAddItem:itemsHeader')
+        }
+        megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
+        megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
         fetchAllProducts()
     }, [])
+
+    useEffect(() => {
+        // productCodeRef.current.focus  && productCodeRef.current.focus()
+    })
 
     function computeAllRows() {
         for (let lineItem of sales.items) {
             computeRow(lineItem, false)
         }
-        sales.computeSummary()
+        megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
     }
 
@@ -59,21 +74,18 @@ function useLineItems() {
             item.sgst = sgst
         }
         item.amount = _.round(amount, 2)
-        toComputeSummary && sales.computeSummary()
+        toComputeSummary && megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
     async function fetchAllProducts() {
-        sales.products = await execGenericView({
-            isMultipleRows:true,
-            args: {},
-            sqlKey:''
+        emit('SHOW-LOADING-INDICATOR', true)
+        megaData.accounts.allProducts = await execGenericView({
+            isMultipleRows: true,
+            args: { onDate: null, isAll: true, days: 0 },
+            sqlKey: 'get_products_info'
         })
-        setRefresh({})
-    }
-
-    function handleAddItem() {
-        items.push({ upc: '', productCode: '', hsn: '', gstRate: 0, qty: 1, price: 0, priceGst: 0, discount: 0, remarks: null, amount: 0, cgst: 0, sgst: 0, igst: 0 })
-        sales.computeSummary()
+        emit('SHOW-LOADING-INDICATOR', false)
+        setIdForDataGridRows(megaData.accounts.allProducts)
         setRefresh({})
     }
 
@@ -82,12 +94,57 @@ function useLineItems() {
             return
         }
         items.splice(index, 1)
-        sales.computeSummary()
+        megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
     }
 
     function handleSerialNo(item: any) {
+        pre.showDialog = true
+        pre.dialogConfig.maxWidth = 'sm'
+        pre.dialogConfig.content = () => <Content />
+        item.serialNumbers = item.serialNumbers ?? ''
+        item.serialNumerCount = item?.serialNumbers.split(',').filter(Boolean).length
+        setRefresh({})
 
+        function Content() {
+            const [, setRefresh] = useState({})
+            return (<Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto',  }}>{item.serialNumerCount + ' items'}</Typography>
+                <TextareaAutosize 
+                    autoFocus={true}
+                    style={{color:'black', fontSize:theme.spacing(2.0), fontWeight:'bold', fontFamily:'helvetica'}}
+                    className="serial-number"
+                    minRows={5}
+                    onChange={(e: any) => {
+                        item.serialNumbers = e.target.value
+                        setRefresh({})
+                        processCount()
+                    }}
+                    value={item.serialNumbers || ''}
+                />
+            </Box>)
+
+            function processCount() {
+
+            }
+        }
+    }
+
+    function setItemToSelectedProduct() {
+        const currentItemIndex = sales.currentItemIndex
+        const currentItem = items[currentItemIndex]
+        const selectedProduct = megaData.accounts.selectedProduct
+        // populate current item with selectedProduct
+        currentItem.id = selectedProduct.id1
+        currentItem.productCode = selectedProduct.productCode
+        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info)
+        currentItem.hsn = selectedProduct.hsn
+        currentItem.gstRate = selectedProduct.gstRate
+        currentItem.clos = selectedProduct.clos
+        currentItem.priceGst = selectedProduct.salePriceGst || selectedProduct.maxRetailPrice || 0
+        currentItem.discount = selectedProduct.saleDiscount || 0
+        computeRow(currentItem)
+        setRefresh({})
     }
 
     function setPrice(item: any) {
@@ -104,7 +161,11 @@ function useLineItems() {
         item.priceGst = priceGst
     }
 
-    return ({ computeRow, handleDeleteRow, handleSerialNo, setPrice, setPriceGst })
+    return ({
+        computeRow, handleDeleteRow, handleSerialNo, meta,
+        // productCodeRef, 
+        setPrice, setPriceGst
+    })
 }
 
 export { useLineItems }

@@ -69,7 +69,7 @@ function ProductsSearch({ parentMeta }: any) {
                 headerClassName: 'header-class',
                 description: 'Product details',
                 field: '',
-                width: 245,
+                width: 250,
                 renderCell: (params: any) => (
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', }}>
                         <Typography sx={{ fontSize: theme.spacing(1.7), fontFamily: 'helvetica' }}>{params.row.brandName}</Typography>&nbsp;
@@ -80,7 +80,7 @@ function ProductsSearch({ parentMeta }: any) {
                 )
             },
             {
-                headerName: 'Stock',
+                headerName: 'Stk',
                 headerClassName: 'header-class',
                 description: 'Stock',
                 field: 'clos',
@@ -96,7 +96,7 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 60,
             },
             {
-                headerName: 'MRP',
+                headerName: 'Mrp',
                 headerClassName: 'header-class',
                 description: 'Max retail price',
                 field: 'maxRetailPrice',
@@ -126,15 +126,15 @@ function ProductsSearch({ parentMeta }: any) {
                 description: 'Sale',
                 field: 'sale',
                 type: 'number',
-                width: 55,
+                width: 60,
             },
             {
-                headerName: 'Gst(%)',
+                headerName: 'Gst rate(%)',
                 headerClassName: 'header-class',
                 description: 'gst rate',
                 field: 'gstRate',
                 type: 'number',
-                width: 70,
+                width: 100,
             },
             {
                 headerName: 'HSN',
@@ -149,8 +149,8 @@ function ProductsSearch({ parentMeta }: any) {
                 headerClassName: 'header-class',
                 description: 'Discount',
                 field: 'saleDiscount',
-                type: 'number',
-                width: 75,
+                type: 'string',
+                width: 80,
             },
             {
                 headerName: 'Pr code',

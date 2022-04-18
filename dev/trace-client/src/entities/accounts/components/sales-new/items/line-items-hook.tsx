@@ -1,4 +1,4 @@
-import { _, Badge, Big, Box, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Badge, Big, Box, Button, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -89,6 +89,15 @@ function useLineItems() {
         setRefresh({})
     }
 
+    function getSlNoError(item: any) {
+        const ok = (getCount() === item.qty) || (getCount() === 0)
+        return !ok
+
+        function getCount() {
+            return item.serialNumbers ? item.serialNumbers.split(',').filter(Boolean).length : 0
+        }
+    }
+
     function handleDeleteRow(index: number) {
         if (items.length === 1) {
             return
@@ -108,24 +117,40 @@ function useLineItems() {
 
         function Content() {
             const [, setRefresh] = useState({})
-            return (<Box sx={{ display: 'flex', flexDirection: 'column', }}>
-                <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto',  }}>{item.serialNumerCount + ' items'}</Typography>
-                <TextareaAutosize 
-                    autoFocus={true}
-                    style={{color:'black', fontSize:theme.spacing(2.0), fontWeight:'bold', fontFamily:'helvetica'}}
-                    className="serial-number"
-                    minRows={5}
-                    onChange={(e: any) => {
-                        item.serialNumbers = e.target.value
-                        setRefresh({})
-                        processCount()
-                    }}
-                    value={item.serialNumbers || ''}
-                />
-            </Box>)
+            return (
+                <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                    <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto', }}>{item.serialNumerCount + ' items'}</Typography>
+                    <TextareaAutosize
+                        autoFocus={true}
+                        style={{ color: 'black', fontSize: theme.spacing(2.0), fontWeight: 'bold', fontFamily: 'helvetica' }}
+                        className="serial-number"
+                        minRows={5}
+                        onChange={(e: any) => {
+                            item.serialNumbers = e.target.value
+                            processCount()
+                        }}
+                        value={item.serialNumbers || ''}
+                    />
+                    <Box sx={{ display: 'flex', ml: 'auto', mt: 2 }}>
+                        <Button onClick={handleClear} size='small' color='info' variant='contained'>Clear</Button>
+                        <Button onClick={handleOk} size='small' color='secondary' variant='contained' sx={{ ml: 2 }} >Ok</Button>
+                    </Box>
+                </Box>)
+
+            function handleClear() {
+                item.serialNumbers = ''
+                processCount()
+            }
+
+            function handleOk() {
+                pre.showDialog = false
+                megaData.executeMethodForKey('render:lineItems', {})
+                // setRefresh({})
+            }
 
             function processCount() {
-
+                item.serialNumerCount = item?.serialNumbers.split(',').filter(Boolean).length
+                setRefresh({})
             }
         }
     }
@@ -162,7 +187,7 @@ function useLineItems() {
     }
 
     return ({
-        computeRow, handleDeleteRow, handleSerialNo, meta,
+        computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta,
         // productCodeRef, 
         setPrice, setPriceGst
     })

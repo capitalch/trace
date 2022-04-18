@@ -8,10 +8,11 @@ function LineItems() {
     const sales = megaData.accounts.sales
     const items = sales.items
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { computeRow, handleDeleteRow, handleSerialNo, meta,
+    const { computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta,
         // productCodeRef, 
         setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
+    
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
@@ -34,8 +35,6 @@ function LineItems() {
                     }
                     sales.currentItemIndex = index
                     megaData.executeMethodForKey('render:lineItems', {})
-                    e.preventDefault()
-                    // setRefresh({})
                 }}
                 sx={{
                     display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
@@ -66,9 +65,6 @@ function LineItems() {
                         fixedDecimalScale={true}
                         value={item.productCode || 0.00}
                         variant='standard'
-                        // onClick={(e:any)=>{
-                        //     e.target.click()
-                        // }}
                         onChange={(e: any) => handleTextChanged(item, 'productCode', e)}
                         onFocus={(e: any) => {
                             e.target.select()
@@ -124,7 +120,7 @@ function LineItems() {
                 </Box>
                 {/* Qty */}
                 <Box className='vertical'>
-                    <Badge badgeContent={item.clos || 0} color='info' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
+                    <Badge badgeContent={item.clos || 0} color='primary' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
@@ -241,11 +237,11 @@ function LineItems() {
                             .split(',')
                             .filter(Boolean).length
                     }
-                    // color={
-                    //     getSlNoError(item)
-                    //         ? 'error'
-                    //         : 'secondary'
-                    // }
+                    color={
+                        getSlNoError(item)
+                            ? 'error'
+                            : 'primary'
+                    }
                     showZero={true}>
                     <Chip color='secondary'
                         sx={{ p: 2, color: theme.palette.common.white }}

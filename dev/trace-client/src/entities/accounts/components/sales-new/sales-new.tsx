@@ -1,7 +1,7 @@
 import { Box, Typography, } from './redirect'
 import { Customer } from './customer/customer'
 import { Crown } from './crown'
-import { Payments } from './payments'
+import { Payments } from './payments/payments'
 import { Items } from './items/items'
 function SalesNew() {
     return (

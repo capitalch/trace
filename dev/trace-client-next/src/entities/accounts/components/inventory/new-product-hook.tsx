@@ -3,8 +3,6 @@ import { _, useEffect, useRef, useSharedElements, useState, utilMethods } from '
 function useNewProduct(onClose: any, product: any = {}) {
     const [, setRefresh] = useState({})
     const { emit, genericUpdateMasterNoForm, getFromBag } = useSharedElements()
-    // const finYearId = getFromBag('finYearObject')?.finYearId
-    // const branchId = getFromBag('branchObject')?.branchId || 1
     const {extractAmount} = utilMethods()
     const meta = useRef({
         id: undefined,

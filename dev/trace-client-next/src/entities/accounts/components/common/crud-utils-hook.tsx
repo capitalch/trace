@@ -89,7 +89,9 @@ function useCrudUtils(meta: any) {
                 emit('SHOW-MESSAGE', {})
                 emit(pre.ibukiFetchDataMessage, null)
             })
-            .catch(() => { }) // important to have otherwise eror
+            .catch(() => {
+                emit('SHOW-LOADING-INDICATOR', false)
+            }) // important to have otherwise eror
     }
 
     return {
