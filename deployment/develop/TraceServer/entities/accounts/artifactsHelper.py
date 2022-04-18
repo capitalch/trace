@@ -309,15 +309,16 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
         res = dict(res)
         for k,v in res.items():
             res[k] = str(v)
-        # out = dict(res)
-        # print(out)
+       
         connection.commit()
         #####
         # in case of autoSubledger a new account code is created. That is being sent to all connected clients through socket connection
-        if(context and childAccObj):
-            room = getRoomFromCtx(context)
+        room = getRoomFromCtx(context)
+        if(context and childAccObj):            
             if isLinkConnected():
-                sendToRoom('TRACE-SERVER-NEW-SUBLEDGER-ACCOUNT-CREATED', childAccObj, room)
+                sendToRoom('TRACE-SERVER-NEW-SUBLEDGER-ACCOUNT-CREATED', childAccObj, room)                
+        if(tranTypeId == 4): #sales
+            sendToRoom('TRACE-SERVER-SALES-ADDED-OR-UPDATED', None, room)
         return ret, res
     except (Exception, psycopg2.Error) as error:
         print("Error with PostgreSQL", error)

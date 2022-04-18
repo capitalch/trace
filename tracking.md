@@ -45,6 +45,7 @@ d. Purchase if change in last purchase price show alert
 17. Voucher copy and paste
 18. Bill wise payment
 19. Automate orders mechanism
+20. Notes, to do's, schemes
 
 ## Bugs
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
@@ -53,8 +54,6 @@ d. Purchase if change in last purchase price show alert
 5. Swapan reported selected count, totals etc not correct in vouchers
 6. Deletion in product not working
  
-
-
 # Priority
 1.0 Data grid change font size control
 2.0 Provision to input product price. At present cannot input product price
@@ -77,9 +76,11 @@ d. Purchase if change in last purchase price show alert
 19. Backup and restore strategy
 20. Upgrade database for all instances
 
+# 18-04-2022
+1. Implemented missing permissions and uploaded
 # 17-04-2022
 1. Implemented in megaData the registerKeyWithMethod and ExecMethodFor key
-2. 
+
 # 16-04-2022
 1. Continued with Sales
 
