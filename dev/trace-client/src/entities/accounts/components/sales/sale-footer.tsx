@@ -78,7 +78,7 @@ function SaleFooter() {
                     <LedgerSubledger
                         // allAccounts={arbitraryData.allAccounts}
                         // ledgerAccounts={rowData.ledgerAccounts}
-                        controlId={''.concat('footer')}
+                        // controlId={''.concat('footer')}
                         ledgerFilterMethodName={rowData.ledgerFilterMethodName}
                         onChange={() => onChangeLedgerSubledger(rowData)}
                         rowData={rowData}

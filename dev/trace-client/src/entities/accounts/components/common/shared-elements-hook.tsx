@@ -8,7 +8,6 @@ import {
     globalMessages,
     graphqlService,
     LedgerSubledger,
-    LedgerSubledgerCascade,
     manageEntitiesState,
     manageFormsState,
     queries,
@@ -18,6 +17,7 @@ import {
     useTraceMaterialComponents,
     XXGrid,
 } from '../../../../imports/trace-imports'
+
 import { utilMethods } from '../../../../global-utils/misc-utils'
 import accountsMessages from '../../json/accounts-messages.json'
 import messages from '../../../../messages.json'
@@ -155,7 +155,6 @@ function useSharedElements() {
         isInvalidStateCode,
         isValidForm,
         LedgerSubledger,
-        LedgerSubledgerCascade,
         Line,
         manageFormsState,
         map,

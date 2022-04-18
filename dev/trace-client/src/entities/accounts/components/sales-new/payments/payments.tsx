@@ -1,13 +1,24 @@
-import { Box, Button, CloseSharp, FormControlLabel, IconButton, LedgerSubledger, NumberFormat, Radio, RadioGroup, TextField, Typography, useContext, MegaDataContext, useState, useTheme } from '../redirect'
+import _, { isEmpty } from 'lodash'
+import { useEffect } from 'react'
+import { Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, Typography, useContext, useState, useTheme } from '../redirect'
 
 function Payments() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
-    const megaData = useContext(MegaDataContext)
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
+
+    useEffect(() => {
+        megaData.registerKeyWithMethod('render:payments', setRefresh)
+    }, [])
+
     return (
         <Box className='vertical' sx={{ p: 2, mr: 1, mb: 1, border: '1px solid lightGrey', maxWidth: theme.spacing(85) }}>
-            <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight:'bold' }}>Payments</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Payments</Typography>
+                <Typography variant='body2' >{''.concat('Count: ', sales?.paymentMethods?.length || 0 + '')}</Typography>
+                <Typography variant='body2' sx={{ fontWeight: 'bold' }}>{''.concat('Receipts:', ' ', String(12345.00))}</Typography>
+            </Box>
             <SaleVariety />
             <PaymentMethods />
             {/* ship to */}
@@ -21,6 +32,11 @@ function Payments() {
         </Box>)
 
     function SaleVariety() {
+        const [, setRefresh] = useState({})
+        // sales.filterMethodName = 'cashBank'
+        useEffect(() => {
+            sales.filterMethodName = 'cashBank'
+        }, [])
         return (
             <Box >
                 <RadioGroup row>
@@ -78,7 +94,14 @@ function Payments() {
         )
 
         function handleSaleVariety(variety: string) {
+            const logic: any = {
+                r: 'cashBank',
+                a: 'autoSubledgers',
+                i: 'debtorsCreditors'
+            }
             sales.saleVariety = variety
+            sales.filterMethodName = logic[variety]
+            megaData.executeMethodForKey('render:paymentMethods', {})
             setRefresh({})
         }
     }
@@ -86,9 +109,15 @@ function Payments() {
     function PaymentMethods() {
         const [, setRefresh] = useState({})
         const paymentMethods = sales.paymentMethods || []
-        if (paymentMethods.length === 0) {
-            paymentMethods.push({})
-        }
+
+        useEffect(() => {
+            if (sales.paymentMethods.length === 0) {
+                sales.paymentMethods.push({})
+                setRefresh({})
+            }
+            megaData.registerKeyWithMethod('render:paymentMethods', setRefresh)
+        }, [])
+
         return (
             <Box className='vertical' >
                 <Box sx={{ display: 'flex', alignItems: 'center', }}>
@@ -108,13 +137,16 @@ function Payments() {
         function Payments({ paymentMethodsList }: any) {
             const [, setRefresh] = useState({})
             const payments: any[] = paymentMethodsList.map((item: any, index: number) => {
+                if (_.isEmpty(item.rowData)) {
+                    item.rowData = {}
+                }
                 return (
                     <Box key={index} sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', alignItems: 'center', rowGap: 2, }}>
                         {/* Select account */}
                         <Box className='vertical'>
                             <Typography variant='caption'>Debit account</Typography>
                             {/* <TextField /> */}
-                            <LedgerSubledger rowData={{}} />
+                            <LedgerSubledger rowData={item.rowData} ledgerFilterMethodName={sales.filterMethodName} showAutoSubledgerValues={false} />
                         </Box>
                         {/* Instr no  */}
                         <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
@@ -131,9 +163,15 @@ function Payments() {
                             onFocus={(e: any) => {
                                 e.target.select()
                             }}
+                            value={item.amount || ''}
+                            onValueChange={(value: any) => {
+                                const { floatValue } = value
+                                item.amount = floatValue
+                                setRefresh({})
+                            }}
                             variant='standard' />
 
-                        <IconButton  size='small' color='error' onClick={() => handleDeleteRow(index)}>
+                        <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)}>
                             <CloseSharp />
                         </IconButton>
                     </Box>)
