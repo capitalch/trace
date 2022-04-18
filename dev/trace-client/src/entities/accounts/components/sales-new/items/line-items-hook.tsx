@@ -168,6 +168,7 @@ function useLineItems() {
         currentItem.clos = selectedProduct.clos
         currentItem.priceGst = selectedProduct.salePriceGst || selectedProduct.maxRetailPrice || 0
         currentItem.discount = selectedProduct.saleDiscount || 0
+        currentItem.age = selectedProduct.age
         computeRow(currentItem)
         setRefresh({})
     }

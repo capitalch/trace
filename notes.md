@@ -1,4 +1,4 @@
-# npm install @mui/x-data-grid-pro @types/node material-ui-confirm
+# npm install moment react-error-overlay @testing-library/user-event
 
 ## Required reports
 1. Profitibality

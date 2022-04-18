@@ -12,7 +12,7 @@ function LineItems() {
         // productCodeRef, 
         setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
-    
+
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
@@ -70,6 +70,12 @@ function LineItems() {
                             e.target.select()
                         }} />
                 </Box>
+                {/* Age */}
+                <Badge badgeContent={item.age || 0} color='info' sx={{ mt:-8, ml:-2 }} showZero overlap='circular' anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>                   
+                </Badge>
                 {/* Product details */}
                 <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>
                     <Typography sx={{
@@ -120,7 +126,7 @@ function LineItems() {
                 </Box>
                 {/* Qty */}
                 <Box className='vertical'>
-                    <Badge badgeContent={item.clos || 0} color='primary' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
+                    <Badge badgeContent={item.clos || 0} color='info' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
@@ -240,7 +246,7 @@ function LineItems() {
                     color={
                         getSlNoError(item)
                             ? 'error'
-                            : 'primary'
+                            : 'info'
                     }
                     showZero={true}>
                     <Chip color='secondary'
@@ -254,7 +260,7 @@ function LineItems() {
                 {/* amount */}
                 <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
 
-            </Box>)
+            </Box >)
 
         function handleTextChanged(item: any, propName: string, e: any) {
             item[propName] = e.target.value

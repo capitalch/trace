@@ -37,7 +37,7 @@ function ItemsFooter() {
             {/* Qty */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Qty: ', toDecimalFormat(sales.summary.qty))}</Typography>
             {/* Item search button */}
-            <Button size='small' variant='contained' color='primary' onClick={handleItemSearch}>Item search</Button>
+            <Button size='small' variant='contained' color='warning' onClick={handleItemSearch}>Item search</Button>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>

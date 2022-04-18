@@ -12,7 +12,6 @@ const salesMegaData = {
     gstin: undefined,
     items:[],
     paymentMethods: [],
-    // products: [],
     saleVariety: 'r',
     shipTo: {},
     summary: {
