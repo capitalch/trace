@@ -11,7 +11,7 @@ const salesMegaData = {
     debits: 0,
     gstin: undefined,
     items:[],
-    paymentMethods: [],
+    paymentMethodsList: [],
     saleVariety: 'r',
     shipTo: {},
     summary: {

@@ -9,7 +9,7 @@
                                                                                         7. Serial no mechanism
                                                                                         8. Population of product details
                                                                                         9. Reset, roundoff, back cal buttons, Igst, Add button
-10. saleVariety implementation
+                                                                                        10. saleVariety implementation
 11. Ship to
 12. Total error handling and show of submit
 13. Submit functionality
@@ -18,6 +18,11 @@
 16. Total Debits / Credits
 17. New error window in open space
 18. Printing
+19. Product code change populate
+20. Discount manage
+21. taking up the correct prices etc.
+22. Mapping the ui with megaData
+23. receipts in 0.00 format
 
 
 ## Planning

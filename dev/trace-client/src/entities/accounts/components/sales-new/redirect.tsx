@@ -46,4 +46,7 @@ export {
     useGridApiRef,
     type GridCellParams,
 } from '@mui/x-data-grid-pro'
-export { SalesVariety } from './payments/sales-variety'
+export { PaymentsVariety } from './payments/payments-variety'
+export { ShipTo } from './payments/ship-to'
+export { PaymentsHeader } from './payments/payments-header'
+export { PaymentsMethods } from './payments/payments-methods'

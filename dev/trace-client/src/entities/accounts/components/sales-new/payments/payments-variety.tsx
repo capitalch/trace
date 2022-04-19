@@ -1,16 +1,18 @@
-import { useRef } from 'react'
-import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, useTraceMaterialComponents, Typography, useContext, useEffect, useState, useTheme } from '../redirect'
+import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
-function SalesVariety() {
+function PaymentsVariety() {
     const [, setRefresh] = useState({})
+    const { emit } = useIbuki()
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const { BasicMaterialDialog } = useTraceMaterialComponents()
+    const { getAutoSubledgers, getCashBankAccountsWithSubledgers, getdebtorCreditorAccountsWithSubledgers } = utils()
+    const { keyGen } = utilMethods()
 
     useEffect(() => {
         sales.filterMethodName = 'cashBank'
-        megaData.registerKeyWithMethod('doClear:saleVariety', doClear)
+        megaData.registerKeyWithMethod('doClear:paymentsVariety', doClear)
     }, [])
 
     const meta: any = useRef({
@@ -30,7 +32,7 @@ function SalesVariety() {
                         <Radio
                             // disabled={arbitraryData.id} // in edit mode changeover is not allowed
                             onClick={(e: any) => {
-                                handleSalesVariety('r')
+                                // handleSalesVariety('r')
                                 // resetAddresses()
                                 handleRetailCashBankSales()
                             }}
@@ -46,9 +48,9 @@ function SalesVariety() {
                         <Radio
                             // disabled={arbitraryData.id} // in edit mode changeover is not allowed
                             onClick={(e: any) => {
-                                handleSalesVariety('a')
+                                // handleSalesVariety('a')
                                 // resetAddresses()
-                                // handleAutoSubledgerSales()
+                                handleAutoSubledgerSales()
                             }}
                             size="small"
                             color="secondary"
@@ -62,9 +64,9 @@ function SalesVariety() {
                         <Radio
                             // disabled={arbitraryData.id} // in edit mode changeover is not allowed
                             onClick={(e: any) => {
-                                handleSalesVariety('i')
+                                // handleSalesVariety('i')
                                 // resetAddresses()
-                                // handleInstitutionSales()
+                                handleInstitutionSales()
                             }}
                             size="small"
                             color="secondary"
@@ -82,16 +84,59 @@ function SalesVariety() {
         handleSalesVariety('r')
     }
 
-    async function handleRetailCashBankSales() {
+    function getContent(data: any[]) {
+        return (<List>
+            {getItems()}
+        </List>)
+
+        function getItems() {
+            const gen: any = keyGen()
+            return data.map((item: any) => (
+                <ListItem
+                    key={gen.next().value}
+                    dense={true}
+                    button={true}
+                    onClick={() => handleItemOnClick(item)}>
+                    <ListItemAvatar>
+                        <Avatar>
+                            {item.accName[0]?.toUpperCase()}
+                        </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={item.accName} secondary={''.concat('Type: ', item.accClass, item.gstin ? 'Gstin:' + item.gstin : '')} />
+                </ListItem>
+            ))
+
+            function handleItemOnClick(item: any) {
+                sales.paymentMethodsList[0].rowData.accId = item.id
+                pre.showDialog = false
+                setRefresh({})
+                emit('LEDGER-SUBLEDGER-JUST-REFRESH', null)
+            }
+        }
+    }
+
+    function handleAutoSubledgerSales() {
+        pre.dialogConfig.title = 'Select auto subledger account'
+        handleSalesVariety('a')
+        const data = getAutoSubledgers()
+        pre.dialogConfig.content = () => getContent(data)
+        showDialog()
+    }
+
+    function handleInstitutionSales(){
+        pre.dialogConfig.title = 'Select debtor /creditor account'
+        handleSalesVariety('i')
+        const data = getdebtorCreditorAccountsWithSubledgers()
+        pre.dialogConfig.content = () => getContent(data)
+        showDialog()
+    }
+
+    function handleRetailCashBankSales() {
         pre.dialogConfig.title = 'Select a cash / bank account'
-        meta.current.showDialog = true
-        meta.current.dialogConfig.data =
-            // arbitraryData.accounts.cashBankAccountsWithSubledgers
-        // meta.current.dialogConfig.content = () => (
-            // <AccountsList mapFunction={() => { }} />
-        // )
-        // setFirstFooterRow('cashBank')
-        setRefresh({})
+        handleSalesVariety('r')
+        const data = getCashBankAccountsWithSubledgers()
+        pre.dialogConfig.content = () => getContent(data)
+        showDialog()
     }
 
     function handleSalesVariety(variety: string) {
@@ -102,11 +147,9 @@ function SalesVariety() {
         }
         sales.saleVariety = variety
         sales.filterMethodName = logic[variety]
-        sales.paymentMethods.length = 0
-        sales.paymentMethods.push({})
-        megaData.executeMethodForKey('render:paymentMethods', {})
-        showDialog()
-        // setRefresh({})
+        sales.paymentMethodsList.length = 0
+        sales.paymentMethodsList.push({})
+        megaData.executeMethodForKey('render:paymentsMethods', {})
     }
 
     function showDialog() {
@@ -115,4 +158,4 @@ function SalesVariety() {
     }
 }
 
-export { SalesVariety }
+export { PaymentsVariety }

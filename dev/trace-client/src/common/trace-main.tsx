@@ -9,7 +9,6 @@ import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 import { IMegaData } from './mega-data-context'
-import { method } from 'lodash'
 
 function TraceMain({ open }: any) {
     const {
@@ -38,7 +37,6 @@ function TraceMain({ open }: any) {
     }
 
     const classes = useStyles({ meta: meta })
-    // const mega:any = useContext(MegaContext)
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -96,23 +94,12 @@ function TraceMain({ open }: any) {
             keysWithMethods: {},
 
             registerKeyWithMethod: function (key: string, method: () => void) {
-                // if (!this.keysWithMethods[key]) {
-                //     this.keysWithMethods[key] = []
-                // }
-                // this.keysWithMethods[key].push(method)
                 this.keysWithMethods[key] = method
             },
             executeMethodForKey: function (key: string, params?: any) {
                 if (!this.keysWithMethods[key]) {
                     return
                 }
-                // for (let method of this.keysWithMethods[key]) {
-                //     if (params) {
-                //         method(params)
-                //     } else {
-                //         method()
-                //     }
-                // }
                 const method = this.keysWithMethods[key]
                 params ? method(params): method()
             }
@@ -124,8 +111,6 @@ function TraceMain({ open }: any) {
             Object.assign(megaData.accounts.settings, settingsMegaData)
         }
     }
-
-
 }
 
 export { TraceMain }
