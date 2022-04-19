@@ -1,6 +1,6 @@
 import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, PaymentsMethods, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useState, useTheme } from '../redirect'
 
-function SalesPayments() {
+function Payments() {
     const theme = useTheme()
 
     return (
@@ -11,4 +11,5 @@ function SalesPayments() {
             <ShipTo />
         </Box>)
 }
-export { SalesPayments }
+
+export { Payments }

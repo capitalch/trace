@@ -1,8 +1,9 @@
+import { clearScreenDown } from 'readline'
 import { _, Badge, Big, Box, Button, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
-    const { emit } = useIbuki()
+    const { emit, debounceFilterOn } = useIbuki()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
@@ -22,14 +23,32 @@ function useLineItems() {
         if (items.length === 0) {
             megaData.executeMethodForKey('handleAddItem:itemsHeader')
         }
+
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(
+            (d: any) => {
+                doSearchProductOnProductCode(d.data.value)
+            }
+        )
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
         fetchAllProducts()
+        return () => {
+            subs1.unsubscribe()
+        }
     }, [])
 
-    useEffect(() => {
-        // productCodeRef.current.focus  && productCodeRef.current.focus()
-    })
+    function clearRow(item: any) {
+        item.productCode = undefined
+        item.productDetails = undefined
+        item.hsn = undefined
+        item.gstrate = 0.0
+        item.qty = 1
+        item.priceGst = 0.0
+        item.discount = 0.0
+        item.amount = 0.0
+        item.serialNumbers = ''
+        item.remarks = ''
+    }
 
     function computeAllRows() {
         for (let lineItem of sales.items) {
@@ -75,6 +94,23 @@ function useLineItems() {
         }
         item.amount = _.round(amount, 2)
         toComputeSummary && megaData.executeMethodForKey('computeSummary:itemsFooter')
+    }
+
+    async function doSearchProductOnProductCode(productCode: string) {
+        emit('SHOW-LOADING-INDICATOR', true)
+        try {
+            const result: any = await execGenericView({
+                sqlKey: 'get_product_on_product_code',
+                isMultipleRows: false,
+                args: {
+                    productCode: productCode,
+                },
+            })
+            // selectProduct(rowData, result)
+        } catch (e: any) {
+            console.log(e.message)
+        }
+        emit('SHOW-LOADING-INDICATOR', false)
     }
 
     async function fetchAllProducts() {
@@ -188,9 +224,7 @@ function useLineItems() {
     }
 
     return ({
-        computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta,
-        // productCodeRef, 
-        setPrice, setPriceGst
+        clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst
     })
 }
 

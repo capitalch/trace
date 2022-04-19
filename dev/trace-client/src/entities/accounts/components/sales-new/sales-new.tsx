@@ -1,8 +1,9 @@
 import { Box, Typography, } from './redirect'
 import { Customer } from './customer/customer'
 import { Crown } from './crown'
-import { SalesPayments } from './payments/sales-payments'
+import { Payments } from './payments/payments'
 import { Items } from './items/items'
+
 function SalesNew() {
     return (
         <Box sx={{ display: 'flex', flexGrow: 1, '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
@@ -13,9 +14,10 @@ function SalesNew() {
                     <Crown />
                 </Box>
                 <Items />
-                <SalesPayments />
+                <Payments />
             </Box>
         </Box>
     )
 }
+
 export { SalesNew }

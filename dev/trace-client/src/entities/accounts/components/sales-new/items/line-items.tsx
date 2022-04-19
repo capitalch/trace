@@ -1,4 +1,4 @@
-import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, } from '../redirect'
+import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
@@ -6,11 +6,10 @@ function LineItems() {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
+    const { debounceEmit } = useIbuki()
     const items = sales.items
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta,
-        // productCodeRef, 
-        setPrice, setPriceGst } = useLineItems()
+    const { clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
 
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
@@ -26,7 +25,7 @@ function LineItems() {
 
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
-        // const smallFontTextField = megaData.accounts.settings.smallFontTextField
+        const smallFontTextField = megaData.accounts.settings.smallFontTextField
         return (
             <Box
                 onClick={(e: any) => {
@@ -63,18 +62,27 @@ function LineItems() {
                         customInput={TextField}
                         decimalScale={0}
                         fixedDecimalScale={true}
-                        value={item.productCode || 0.00}
+                        value={item.productCode || ''}
                         variant='standard'
-                        onChange={(e: any) => handleTextChanged(item, 'productCode', e)}
+                        onChange={(e: any) => {
+                            item.productCode = e.target.value
+                            setRefresh({})
+                            if (item.productCode) {
+                                debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: item })
+                            } else {
+                                clearRow(item)
+                            }
+                        }}
+
                         onFocus={(e: any) => {
                             e.target.select()
                         }} />
                 </Box>
                 {/* Age */}
-                <Badge badgeContent={item.age || 0} color='info' sx={{ mt:-8, ml:-2 }} showZero overlap='circular' anchorOrigin={{
+                <Badge badgeContent={item.age || 0} color='info' sx={{ mt: -8, ml: -2 }} showZero overlap='circular' anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
-                }}>                   
+                }}>
                 </Badge>
                 {/* Product details */}
                 <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>

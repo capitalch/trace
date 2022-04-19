@@ -31,11 +31,7 @@ function PaymentsVariety() {
                     control={
                         <Radio
                             // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                            onClick={(e: any) => {
-                                // handleSalesVariety('r')
-                                // resetAddresses()
-                                handleRetailCashBankSales()
-                            }}
+                            onClick={handleRetailCashBankSales}
                             size="small"
                             color="secondary"
                             checked={sales.saleVariety === 'r'}
@@ -47,11 +43,7 @@ function PaymentsVariety() {
                     control={
                         <Radio
                             // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                            onClick={(e: any) => {
-                                // handleSalesVariety('a')
-                                // resetAddresses()
-                                handleAutoSubledgerSales()
-                            }}
+                            onClick={handleAutoSubledgerSales}
                             size="small"
                             color="secondary"
                             checked={sales.saleVariety === 'a'}
@@ -63,11 +55,7 @@ function PaymentsVariety() {
                     control={
                         <Radio
                             // disabled={arbitraryData.id} // in edit mode changeover is not allowed
-                            onClick={(e: any) => {
-                                // handleSalesVariety('i')
-                                // resetAddresses()
-                                handleInstitutionSales()
-                            }}
+                            onClick={handleInstitutionSales}
                             size="small"
                             color="secondary"
                             checked={sales.saleVariety === 'i'}
