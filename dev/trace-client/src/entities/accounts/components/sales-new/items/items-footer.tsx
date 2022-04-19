@@ -12,14 +12,14 @@ function ItemsFooter() {
         showDialog: false,
         dialogConfig: {
             content: () => <></>,
-            maxWidth:'lg',
+            maxWidth: 'lg',
         },
         // setRefresh: setRefresh
     })
     const pre = meta.current
 
     useEffect(() => {
-        megaData.registerKeyWithMethod('computeSummary:itemsFooter',computeSummary)
+        megaData.registerKeyWithMethod('computeSummary:itemsFooter', computeSummary)
         megaData.registerKeyWithMethod('render:itemsFooter', setRefresh)
         computeSummary()
     }, [])
@@ -52,6 +52,7 @@ function ItemsFooter() {
             <Button size='small' color='secondary' variant='outlined' onClick={handleClear}>Clear</Button>
 
             <Button size='small' variant='outlined' color='secondary' onClick={handleRoundOff}>Round off</Button>
+            <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
             {/* Back calculate */}
             <Box sx={{ display: 'flex', columnGap: 1 }}>
                 <NumberFormat
@@ -73,7 +74,6 @@ function ItemsFooter() {
                     thousandSeparator={true}
                     value={sales.summary.backCalculateAmount}
                 />
-                <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
             </Box>
             {/* Amount */}
             <Typography color={theme.palette.common.black} sx={{ mr: .5, fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>

@@ -1,4 +1,4 @@
-import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
+import { Badge, Box, Button, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
@@ -68,7 +68,7 @@ function LineItems() {
                             item.productCode = e.target.value
                             setRefresh({})
                             if (item.productCode) {
-                                debounceEmit('DEBOUNCE-ON-CHANGE', { source: 'productCode', value: item })
+                                debounceEmit('DEBOUNCE-ON-CHANGE', item)
                             } else {
                                 clearRow(item)
                             }
@@ -257,12 +257,13 @@ function LineItems() {
                             : 'info'
                     }
                     showZero={true}>
-                    <Chip color='secondary'
+                    {/* <Chip color='secondary'
                         sx={{ p: 2, color: theme.palette.common.white }}
                         size="small"
                         label="Serial no's"
                         onClick={() => handleSerialNo(item)}
-                    />
+                    /> */}
+                    <Button color='secondary' size='medium' variant='outlined' onClick={() => handleSerialNo(item)}>Serial no</Button>
                 </Badge>
 
                 {/* amount */}

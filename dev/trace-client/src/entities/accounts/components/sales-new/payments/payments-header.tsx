@@ -1,11 +1,11 @@
-import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, Radio, RadioGroup, ShipTo, TextField, Typography, useContext, useEffect, useState, useTheme } from '../redirect'
+import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, Radio, RadioGroup, ShipTo, TextField, Typography, useContext, useEffect, useState, useTheme, utilMethods } from '../redirect'
 
 function PaymentsHeader() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-
+    const {toDecimalFormat} = utilMethods()
     useEffect(() => {
         megaData.registerKeyWithMethod('render:paymentsHeader', setRefresh)
     }, [])
@@ -16,7 +16,7 @@ function PaymentsHeader() {
             <Typography variant='body2' >{''.concat('Count: ', sales?.paymentMethodsList?.length || 0 + '')}</Typography>
             <Box sx={{ display: 'flex', alignItems:'center'}}>
                 <Button variant='outlined' size='small' onClick={doClear} color='secondary'>Clear</Button>
-                <Typography variant='body2' sx={{ fontWeight: 'bold', ml:2 }}>{''.concat('Receipts:', ' ', (getTotalAmount() || 0 + ''))}</Typography>
+                <Typography variant='body2' sx={{ fontWeight: 'bold', ml:2 }}>{''.concat('Amount:', ' ', (getTotalAmount() || 0 + ''))}</Typography>
             </Box>
         </Box>
     )
@@ -32,7 +32,7 @@ function PaymentsHeader() {
         ({
             amount: (prev.amount ?? 0) + (current.amount ?? 0)
         }), { amount: 0 })
-        return (total.amount)
+        return (toDecimalFormat(total.amount))
     }
 }
 

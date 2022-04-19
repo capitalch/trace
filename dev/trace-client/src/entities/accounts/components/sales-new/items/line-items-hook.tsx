@@ -24,11 +24,7 @@ function useLineItems() {
             megaData.executeMethodForKey('handleAddItem:itemsHeader')
         }
 
-        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(
-            (d: any) => {
-                doSearchProductOnProductCode(d.data.value)
-            }
-        )
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
         fetchAllProducts()
@@ -96,7 +92,9 @@ function useLineItems() {
         toComputeSummary && megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
-    async function doSearchProductOnProductCode(productCode: string) {
+    async function doSearchProductOnProductCode(d: any) {
+        const productCode = d.data.productCode
+        const item = d.data
         emit('SHOW-LOADING-INDICATOR', true)
         try {
             const result: any = await execGenericView({
@@ -106,6 +104,15 @@ function useLineItems() {
                     productCode: productCode,
                 },
             })
+            item.id = result.id
+            item.productDetails = ''.concat(result.brandName, ' ', result.catName, ' ', result.label, ' ', result.info)
+            item.hsn = result.hsn
+            item.gstRate = result.gstRate
+            item.priceGst = result.salePriceGst || 0
+            item.discount = result.saleDiscount || 0
+            computeRow(item)
+
+            setRefresh({})
             // selectProduct(rowData, result)
         } catch (e: any) {
             console.log(e.message)

@@ -1,19 +1,15 @@
 import {
-    _, Card, Big, Box, Button, DataGridPro, GridCellParams, GridToolbarFilterButton,
-    GridToolbarExport,
-    GridToolbarContainer,
-    GridToolbarColumnsButton,
-    GridFooterContainer, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
+    _, Card, Big, Box, Button, DataGridPro, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
     useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
 } from '../redirect'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
-    const sales = megaData.accounts.sales
+    // const sales = megaData.accounts.sales
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
-    const items = sales.items
+    // const items = sales.items
 
     const meta: any = useRef({
         allRows: [],

@@ -580,7 +580,7 @@ allSqls = {
             "catName", "isActive","brandName",             
             "salePriceGst", "saleDiscount", "saleDiscountRate", 
             "purPrice", "purDiscount", "purDiscountRate",            
-            CASE WHEN p."hsn" is null THEN c."hsn" ELSE p."hsn" END, "info", "label", "productCode", "upcCode", "gstRate"
+            coalesce(p."hsn", c."hsn") hsn, "info", "label", "productCode", "upcCode", "gstRate"
             from "ProductM" p
                 join "CategoryM" c
                     on c."id" = p."catId"

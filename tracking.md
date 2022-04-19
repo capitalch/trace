@@ -18,18 +18,21 @@
 16. Total Debits / Credits
 17. New error window in open space
 18. Printing
-19. Product code change populate
+                                                                                        19. Product code change populate
 20. Discount manage
-21. taking up the correct prices etc.
+21. Taking up the correct prices etc.
 22. Mapping the ui with megaData
-23. receipts in 0.00 format
+                                                                                        23. receipts in 0.00 format
+23. Address management with payment methods change
 
 
 ## Planning
+a. Bank recon saving error has crept in
 a. Permissions of Export etc to manager
 b. Make product inactive
 c. Stock journal
 d. Purchase if change in last purchase price show alert
+e. Multiple cash entries in receipt
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 1. Include jData or serial no in sales report so that search on sl no may occur
 2. ledger report for inventory
