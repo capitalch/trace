@@ -25,7 +25,7 @@ function PaymentsMethods() {
             <Box sx={{ display: 'flex', alignItems: 'center', }}>
                 <Typography variant='body2'>Payment methods</Typography>
                 {/* Add button */}
-                <Button variant='outlined' size='small' color='secondary' sx={{  ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
+                <Button variant='outlined' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
             </Box>
             <Methods />
         </Box>
@@ -53,7 +53,10 @@ function PaymentsMethods() {
                     <Box className='vertical'>
                         <Typography variant='caption'>Debit account</Typography>
                         {/* <TextField /> */}
-                        <LedgerSubledger rowData={item.rowData} ledgerFilterMethodName={(index ===0) ? sales.filterMethodName : 'cashBank'} showAutoSubledgerValues={false} />
+                        <LedgerSubledger rowData={item.rowData}
+                            ledgerFilterMethodName={(index === 0) ? sales.filterMethodName : 'cashBank'}
+                            onChange={() => handleOnChangeLedgerSubledger(index, item)}
+                            showAutoSubledgerValues={false} />
                     </Box>
                     {/* Instr no  */}
                     <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
@@ -78,7 +81,7 @@ function PaymentsMethods() {
                             setRefresh({})
                         }}
                         variant='standard' />
-                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ml:1}}>
+                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 1 }}>
                         <CloseSharp />
                     </IconButton>
                 </Box>)
@@ -92,6 +95,12 @@ function PaymentsMethods() {
             }
             paymentMethodsList.splice(index, 1)
             megaData.executeMethodForKey('render:paymentsMethods', {})
+        }
+
+        function handleOnChangeLedgerSubledger(index: number, item: any) {
+            if ((index == 0) && (sales.paymentVariety === 'i')) { // for institution sales only
+                megaData.executeMethodForKey('getItems:populateInstitutionAddress', item.rowData.accId)
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ function PaymentsVariety() {
     const sales = megaData.accounts.sales
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     const { getAutoSubledgers, getCashBankAccountsWithSubledgers, getdebtorCreditorAccountsWithSubledgers } = utils()
-    const { keyGen } = utilMethods()
+    const { execGenericView, keyGen } = utilMethods()
 
     useEffect(() => {
         sales.filterMethodName = 'cashBank'
@@ -34,7 +34,7 @@ function PaymentsVariety() {
                             onClick={handleRetailCashBankSales}
                             size="small"
                             color="secondary"
-                            checked={sales.saleVariety === 'r'}
+                            checked={sales.paymentVariety === 'r'}
                         />
                     }
                     label="Retail sales"
@@ -46,7 +46,7 @@ function PaymentsVariety() {
                             onClick={handleAutoSubledgerSales}
                             size="small"
                             color="secondary"
-                            checked={sales.saleVariety === 'a'}
+                            checked={sales.paymentVariety === 'a'}
                         />
                     }
                     label="Auto subledger sales"
@@ -58,7 +58,7 @@ function PaymentsVariety() {
                             onClick={handleInstitutionSales}
                             size="small"
                             color="secondary"
-                            checked={sales.saleVariety === 'i'}
+                            checked={sales.paymentVariety === 'i'}
                         />
                     }
                     label="Institution sales"
@@ -73,6 +73,7 @@ function PaymentsVariety() {
     }
 
     function getContent(data: any[]) {
+
         return (<List>
             {getItems()}
         </List>)
@@ -96,14 +97,47 @@ function PaymentsVariety() {
 
             function handleItemOnClick(item: any) {
                 sales.paymentMethodsList[0].rowData.accId = item.id
+                if (sales.paymentVariety === 'i') { // institution sales, address already there
+                    populateInstitutionAddress(item.id)
+                }
                 pre.showDialog = false
                 setRefresh({})
                 emit('LEDGER-SUBLEDGER-JUST-REFRESH', null)
+            }
+
+            async function populateInstitutionAddress(id: number) {
+                megaData.registerKeyWithMethod('getItems:populateInstitutionAddress', populateInstitutionAddress)
+                emit('SHOW-LOADING-INDICATOR', true)
+                const item = await execGenericView({
+                    isMultipleRows: false,
+                    sqlKey: 'get_extBusinessContactsAccM_on_accId',
+                    args: { id: id },
+                })
+                emit('SHOW-LOADING-INDICATOR', false)
+                // copies businessContact to billTo
+                const businessContact = {
+                    contactName: item?.contactName,
+                    mobileNumber: item?.mobileNumber,
+                    email: item?.email,
+                    address1: item?.jAddress?.[0]?.address1,
+                    address2: item?.jAddress?.[0]?.address2,
+                    pin: item?.jAddress?.[0]?.pin,
+                    country: item?.jAddress?.[0]?.country,
+                    state: item?.jAddress?.[0]?.state,
+                    city: item?.jAddress?.[0]?.city,
+                    gstin: item?.gstin,
+                }
+                sales.billTo = {
+                    ...sales.billTo,
+                    ...businessContact,
+                }
+                megaData.executeMethodForKey('render:customer', {})
             }
         }
     }
 
     function handleAutoSubledgerSales() {
+        megaData.executeMethodForKey('doClear:paymentsHeader')
         pre.dialogConfig.title = 'Select auto subledger account'
         handleSalesVariety('a')
         const data = getAutoSubledgers()
@@ -111,15 +145,20 @@ function PaymentsVariety() {
         showDialog()
     }
 
-    function handleInstitutionSales(){
+    function handleInstitutionSales() {
+        megaData.executeMethodForKey('doClear:paymentsHeader')
         pre.dialogConfig.title = 'Select debtor /creditor account'
         handleSalesVariety('i')
         const data = getdebtorCreditorAccountsWithSubledgers()
         pre.dialogConfig.content = () => getContent(data)
         showDialog()
+        // if( sales?.paymentMethodsList[0]?.rowData?.accId){ //A selecton is done from dialog box list  of accounts
+        //     console.log('a')
+        // }
     }
 
     function handleRetailCashBankSales() {
+        megaData.executeMethodForKey('doClear:paymentsHeader')
         pre.dialogConfig.title = 'Select a cash / bank account'
         handleSalesVariety('r')
         const data = getCashBankAccountsWithSubledgers()
@@ -133,7 +172,9 @@ function PaymentsVariety() {
             a: 'autoSubledgers',
             i: 'debtorsCreditors'
         }
-        sales.saleVariety = variety
+        Object.keys(sales.billTo).forEach((key: string) => delete sales.billTo[key]) // cleanup billTo
+        megaData.executeMethodForKey('render:customer', {})
+        sales.paymentVariety = variety
         sales.filterMethodName = logic[variety]
         sales.paymentMethodsList.length = 0
         sales.paymentMethodsList.push({})

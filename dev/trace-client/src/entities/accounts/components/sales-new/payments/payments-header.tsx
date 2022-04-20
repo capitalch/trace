@@ -8,6 +8,7 @@ function PaymentsHeader() {
     const {toDecimalFormat} = utilMethods()
     useEffect(() => {
         megaData.registerKeyWithMethod('render:paymentsHeader', setRefresh)
+        megaData.registerKeyWithMethod('doClear:paymentsHeader', doClear)
     }, [])
 
     return (
@@ -15,7 +16,7 @@ function PaymentsHeader() {
             <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Payments</Typography>
             <Typography variant='body2' >{''.concat('Count: ', sales?.paymentMethodsList?.length || 0 + '')}</Typography>
             <Box sx={{ display: 'flex', alignItems:'center'}}>
-                <Button variant='outlined' size='small' onClick={doClear} color='secondary'>Clear</Button>
+                <Button sx={{mr:2}} variant='outlined' size='small' onClick={doClear} color='secondary'>Clear all</Button>
                 <Typography variant='body2' sx={{ fontWeight: 'bold', ml:2 }}>{''.concat('Amount:', ' ', (getTotalAmount() || 0 + ''))}</Typography>
             </Box>
         </Box>
@@ -24,6 +25,7 @@ function PaymentsHeader() {
     function doClear() {
         megaData.executeMethodForKey('doClear:paymentsVariety')
         megaData.executeMethodForKey('doClear:paymentsMethods')
+        megaData.executeMethodForKey('handleClear:shipTo')
     }
 
     function getTotalAmount() {

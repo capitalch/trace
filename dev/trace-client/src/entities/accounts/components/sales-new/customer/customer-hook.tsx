@@ -1,8 +1,9 @@
-import { accountsMessages,MegaDataContext, NewEditCustomer, useConfirm, useContext, useRef, useState, } from '../redirect'
+import { useEffect } from 'react'
+import { accountsMessages, IMegaData, MegaDataContext, NewEditCustomer, useConfirm, useContext, useRef, useState, } from '../redirect'
 import { CustomerSearch } from './customer-search'
 function useCustomer() {
     const [, setRefresh] = useState({})
-    const megaData = useContext(MegaDataContext)
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const confirm = useConfirm()
     const meta: any = useRef({
@@ -16,6 +17,10 @@ function useCustomer() {
             content: () => <></>
         }
     })
+
+    useEffect(() => {
+        megaData.registerKeyWithMethod('render:customer', setRefresh)
+    }, [])
 
     const pre = meta.current
     const dialogConfig = pre.dialogConfig

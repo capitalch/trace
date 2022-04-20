@@ -10,7 +10,7 @@
                                                                                         8. Population of product details
                                                                                         9. Reset, roundoff, back cal buttons, Igst, Add button
                                                                                         10. saleVariety implementation
-11. Ship to
+                                                                                        11. Ship to
 12. Total error handling and show of submit
 13. Submit functionality
 14. View and drill through
@@ -23,7 +23,11 @@
 21. Taking up the correct prices etc.
 22. Mapping the ui with megaData
                                                                                         23. receipts in 0.00 format
-23. Address management with payment methods change
+                                                                                        23. Address management with payment methods change
+24. Address mapping when institution sales selected
+25. validations
+26. Email and SMS
+27. Sale return
 
 
 ## Planning
