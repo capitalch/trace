@@ -4,11 +4,12 @@ const settingsMegaData = {
     smallFontTextField: { style: { fontSize: 14 } }
 }
 const salesMegaData = {
+    allErrors:{},
     autoRefNo: undefined,
     billTo: {},
     commonRemarks: undefined,
     credits: 0,
-    debits: 0,
+    debits: 0,    
     gstin: undefined,
     items:[],
     paymentMethodsList: [],

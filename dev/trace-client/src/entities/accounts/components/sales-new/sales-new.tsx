@@ -1,4 +1,4 @@
-import { Box, Typography, } from './redirect'
+import { AllErrors, Box, Typography, } from './redirect'
 import { Customer } from './customer/customer'
 import { Crown } from './crown'
 import { Payments } from './payments/payments'
@@ -11,6 +11,7 @@ function SalesNew() {
                 <Typography variant='subtitle1'>Sales</Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Customer />
+                    <AllErrors />
                     <Crown />
                 </Box>
                 <Items />

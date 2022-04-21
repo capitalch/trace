@@ -1,11 +1,13 @@
-import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useState, useTheme } from '../redirect'
+import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useIbuki, useState, useTheme, errorMessages } from '../redirect'
 
 function PaymentsMethods() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
+    const { emit, } = useIbuki()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const paymentMethodsList = sales.paymentMethodsList
+    const allErrors = sales.allErrors
 
     useEffect(() => {
         if (sales.paymentMethodsList.length === 0) {
@@ -19,6 +21,7 @@ function PaymentsMethods() {
     useEffect(() => {
         megaData.executeMethodForKey('render:paymentsHeader', {})
     })
+    checkAllErrors()
 
     return (
         <Box className='vertical' >
@@ -30,6 +33,22 @@ function PaymentsMethods() {
             <Methods />
         </Box>
     )
+
+    function checkAllErrors() {
+
+        setAllErrors()
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+
+        function checkAllRows() {
+            for (const row of paymentMethodsList) {
+                row.isAccountCodeError = row.rowData.isLedgerSubledgerError
+            }
+        }
+
+        function setAllErrors() {
+            allErrors.accountCodeError = paymentMethodsList.some((row: any) => row?.rowData?.isLedgerSubledgerError) ? errorMessages['accountCodeError'] : ''
+        }
+    }
 
     function doClear() {
         paymentMethodsList.length = 0

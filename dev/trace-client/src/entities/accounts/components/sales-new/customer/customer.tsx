@@ -7,11 +7,14 @@ function Customer() {
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta } = useCustomer()
+    const allErrors = sales.allErrors
+    const { checkAllErrors, handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta } = useCustomer()
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
-    const { isInvalidDate, isInvalidGstin } = utils()
+    // const { isInvalidDate, isInvalidGstin } = utils()
+    checkAllErrors()
+    // isInvalidDate(sales.tranDate) || (!sales.tranDate)
     return (
         <Box className='vertical' sx={{ display: 'flex', border: '1px solid orange', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
@@ -25,14 +28,15 @@ function Customer() {
                 <Box className='vertical'>
                     <Typography variant='body2'>Date</Typography>
                     <TextField variant='standard' type='date' value={sales.tranDate || ''}
-                        error={isInvalidDate(sales.tranDate) || (!sales.tranDate)}
-                        helperText={
-                            isInvalidDate(sales.tranDate)
-                                ? accountsMessages.dateRangeAuditLockMessage
-                                : ''
-                        }
-                        onChange={(e: any) => {sales.tranDate = e.target.value; setRefresh({})}} />                        
-                </Box>                
+                        error={allErrors['dateError']}
+                        helperText={allErrors['dateError']}
+                        // helperText={
+                        //     isInvalidDate(sales.tranDate)
+                        //         ? accountsMessages.dateRangeAuditLockMessage
+                        //         : ''
+                        // }
+                        onChange={(e: any) => { sales.tranDate = e.target.value; setRefresh({}) }} />
+                </Box>
                 {/* User ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
                     <Typography variant='body2'>User ref no</Typography>
@@ -43,7 +47,7 @@ function Customer() {
                 <Box className='vertical'>
                     <Typography variant='body2'>Gstin no</Typography>
                     <TextField variant='standard' value={billTo.gstin || ''} autoComplete='off'
-                        error={isInvalidGstin(billTo.gstin)}
+                        error={allErrors.gstinError}
                         onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
@@ -103,16 +107,17 @@ function Customer() {
                 <Box sx={{
                     display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
                     fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(50), maxWidth: theme.spacing(60)
-                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey'
+                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'lightgrey'
                 }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(',') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id,', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
-                    <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ',') : ''}</Typography>
-                    <Typography>{billTo?.address2 ? ''.concat(' ', billTo.address2, ',') : ''}</Typography>
-                    <Typography>{billTo?.email ? ''.concat(' ', billTo.email, ',') : ''}</Typography>
-                    <Typography>{billTo?.country ? ''.concat(' ', billTo.country, ',') : ''}</Typography>
-                    <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ',') : ''}</Typography>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ',') : ''}</Typography>
+                    <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ', ') : ''}</Typography>
+                    <Typography>{billTo?.address2 ? ''.concat(' ', billTo.address2, ', ') : ''}</Typography>
+                    <Typography>{billTo?.email ? ''.concat(' ', billTo.email, ', ') : ''}</Typography>
+                    <Typography>{billTo?.country ? ''.concat(' ', billTo.country, ', ') : ''}</Typography>
+                    <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', ml: 'auto' }}>

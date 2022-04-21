@@ -1,0 +1,13 @@
+{
+    "customerError":"Customer: missing customer",
+    "dateError":"Customer: invalid or locked date",    
+    "gstinError":"Customer: invalid GSTIN",
+
+    "productCodeError":"Items: missing product code",
+    "hsnError": "Items: missing HSN code",
+    "serialNumberError": "Items: serial numbers mismatch with qty",
+
+    "accountCodeError":"Payments: missing account code"
+
+
+}

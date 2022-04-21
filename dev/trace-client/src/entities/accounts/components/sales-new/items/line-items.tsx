@@ -9,9 +9,10 @@ function LineItems() {
     const { debounceEmit } = useIbuki()
     const items = sales.items
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
+    const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
-
+    checkAllErrors()
+    
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>

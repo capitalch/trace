@@ -1,11 +1,14 @@
-import { useEffect } from 'react'
-import { accountsMessages, IMegaData, MegaDataContext, NewEditCustomer, useConfirm, useContext, useRef, useState, } from '../redirect'
+import { accountsMessages, errorMessages, IMegaData, MegaDataContext, NewEditCustomer, useConfirm, useContext, useEffect, useIbuki, useRef, useState, utils } from '../redirect'
 import { CustomerSearch } from './customer-search'
+
 function useCustomer() {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
+    const allErrors = sales.allErrors
     const confirm = useConfirm()
+    const { isInvalidDate, isInvalidGstin } = utils()
+    const { emit } = useIbuki()
     const meta: any = useRef({
         allRows: [],
         filteredRows: [],
@@ -22,8 +25,31 @@ function useCustomer() {
         megaData.registerKeyWithMethod('render:customer', setRefresh)
     }, [])
 
+
     const pre = meta.current
     const dialogConfig = pre.dialogConfig
+
+    function checkAllErrors() {
+        dateError(); customerError(); gstinError()
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+
+        function dateError() {
+            const ret = (isInvalidDate(sales.tranDate) || (!sales.tranDate)) ?
+                errorMessages['dateError'] : ''
+            allErrors['dateError'] = ret
+        }
+
+        function customerError() {
+            const ret = !((sales?.billTo?.id) && (sales.billTo.contactName)) ? errorMessages['customerError'] : ''
+            allErrors['customerError'] = ret
+        }
+
+        function gstinError() {
+            const ret = isInvalidGstin(sales.billTo.gstin) ? errorMessages['gstinError'] : ''
+            allErrors['gstinError'] = ret
+        }
+    }
+
     function handleCloseDialog() {
         pre.showDialog = false
         setRefresh({})
@@ -72,6 +98,6 @@ function useCustomer() {
         setRefresh({})
     }
 
-    return ({ handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta })
+    return ({ checkAllErrors, handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta })
 }
 export { useCustomer }

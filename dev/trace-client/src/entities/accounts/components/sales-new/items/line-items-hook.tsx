@@ -1,5 +1,5 @@
 import { clearScreenDown } from 'readline'
-import { _, Badge, Big, Box, Button, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Badge, Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -7,6 +7,7 @@ function useLineItems() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
+    const allErrors = sales.allErrors
     const { execGenericView, setIdForDataGridRows } = utilMethods()
     const theme = useTheme()
     // const productCodeRef:any = useRef({})
@@ -32,6 +33,32 @@ function useLineItems() {
             subs1.unsubscribe()
         }
     }, [])
+
+    function checkAllErrors() {
+        checkAllRows(); setAllErrors()
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+
+        function checkAllRows() {
+            for (const item of items) {
+                item.isErrorProductCode = !Boolean(item.productCode)
+                item.isErrorHsn = !Boolean(item.hsn)
+                const slNoLength = (item.serialNumbers || '')
+                    .split(',')
+                    .filter(Boolean).length
+                if ((slNoLength > 0) && (slNoLength !== item.qty)) {
+                    item.isSerialNumberError = true
+                } else {
+                    item.isSerialNumberError = false
+                }
+            }
+        }
+
+        function setAllErrors() {
+            allErrors.productCodeError = items.some((item: any) => (item.isErrorProductCode)) ? errorMessages['productCodeError'] : ''
+            allErrors.hsnError = items.some((item: any) => (item.isErrorHsn)) ? errorMessages['hsnError'] : ''
+            allErrors.serialNumberError = items.some((item: any) => (item.isSerialNumberError)) ? errorMessages['serialNumberError'] : ''
+        }
+    }
 
     function clearRow(item: any) {
         item.productCode = undefined
@@ -231,7 +258,7 @@ function useLineItems() {
     }
 
     return ({
-        clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst
+        checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst
     })
 }
 
