@@ -1,11 +1,13 @@
-import { _, Badge, Big, Box, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { clearScreenDown } from 'readline'
+import { _, Badge, Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
-    const { emit } = useIbuki()
+    const { emit, debounceFilterOn } = useIbuki()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
+    const allErrors = sales.allErrors
     const { execGenericView, setIdForDataGridRows } = utilMethods()
     const theme = useTheme()
     // const productCodeRef:any = useRef({})
@@ -22,14 +24,58 @@ function useLineItems() {
         if (items.length === 0) {
             megaData.executeMethodForKey('handleAddItem:itemsHeader')
         }
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
-        fetchAllProducts()
+        // fetchAllProducts()
+        return () => {
+            subs1.unsubscribe()
+        }
     }, [])
 
     useEffect(() => {
-        // productCodeRef.current.focus  && productCodeRef.current.focus()
+        emit('ALL-ERRORS-JUST-REFRESH', null)
     })
+
+    function checkAllErrors() {
+        checkAllRows(); setAllErrors()
+        // megaData.executeMethodForKey('render:allErrors', {})
+        // emit('ALL-ERRORS-JUST-REFRESH', null)
+
+        function checkAllRows() {
+            for (const item of items) {
+                item.isErrorProductCode = !Boolean(item.productCode)
+                item.isErrorHsn = !Boolean(item.hsn)
+                const slNoLength = (item.serialNumbers || '')
+                    .split(',')
+                    .filter(Boolean).length
+                if ((slNoLength > 0) && (slNoLength !== item.qty)) {
+                    item.isSerialNumberError = true
+                } else {
+                    item.isSerialNumberError = false
+                }
+            }
+        }
+
+        function setAllErrors() {
+            allErrors.productCodeError = items.some((item: any) => (item.isErrorProductCode)) ? errorMessages['productCodeError'] : ''
+            allErrors.hsnError = items.some((item: any) => (item.isErrorHsn)) ? errorMessages['hsnError'] : ''
+            allErrors.serialNumberError = items.some((item: any) => (item.isSerialNumberError)) ? errorMessages['serialNumberError'] : ''
+        }
+    }
+
+    function clearRow(item: any) {
+        item.productCode = undefined
+        item.productDetails = undefined
+        item.hsn = undefined
+        item.gstrate = 0.0
+        item.qty = 1
+        item.priceGst = 0.0
+        item.discount = 0.0
+        item.amount = 0.0
+        item.serialNumbers = ''
+        item.remarks = ''
+    }
 
     function computeAllRows() {
         for (let lineItem of sales.items) {
@@ -77,6 +123,34 @@ function useLineItems() {
         toComputeSummary && megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
+    async function doSearchProductOnProductCode(d: any) {
+        const productCode = d.data.productCode
+        const item = d.data
+        emit('SHOW-LOADING-INDICATOR', true)
+        try {
+            const result: any = await execGenericView({
+                sqlKey: 'get_product_on_product_code',
+                isMultipleRows: false,
+                args: {
+                    productCode: productCode,
+                },
+            })
+            item.id = result.id
+            item.productDetails = ''.concat(result.brandName, ' ', result.catName, ' ', result.label, ' ', result.info)
+            item.hsn = result.hsn
+            item.gstRate = result.gstRate
+            item.priceGst = result.salePriceGst || 0
+            item.discount = result.saleDiscount || 0
+            computeRow(item)
+
+            setRefresh({})
+            // selectProduct(rowData, result)
+        } catch (e: any) {
+            console.log(e.message)
+        }
+        emit('SHOW-LOADING-INDICATOR', false)
+    }
+
     async function fetchAllProducts() {
         emit('SHOW-LOADING-INDICATOR', true)
         megaData.accounts.allProducts = await execGenericView({
@@ -87,6 +161,15 @@ function useLineItems() {
         emit('SHOW-LOADING-INDICATOR', false)
         setIdForDataGridRows(megaData.accounts.allProducts)
         setRefresh({})
+    }
+
+    function getSlNoError(item: any) {
+        const ok = (getCount() === item.qty) || (getCount() === 0)
+        return !ok
+
+        function getCount() {
+            return item.serialNumbers ? item.serialNumbers.split(',').filter(Boolean).length : 0
+        }
     }
 
     function handleDeleteRow(index: number) {
@@ -108,24 +191,40 @@ function useLineItems() {
 
         function Content() {
             const [, setRefresh] = useState({})
-            return (<Box sx={{ display: 'flex', flexDirection: 'column', }}>
-                <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto',  }}>{item.serialNumerCount + ' items'}</Typography>
-                <TextareaAutosize 
-                    autoFocus={true}
-                    style={{color:'black', fontSize:theme.spacing(2.0), fontWeight:'bold', fontFamily:'helvetica'}}
-                    className="serial-number"
-                    minRows={5}
-                    onChange={(e: any) => {
-                        item.serialNumbers = e.target.value
-                        setRefresh({})
-                        processCount()
-                    }}
-                    value={item.serialNumbers || ''}
-                />
-            </Box>)
+            return (
+                <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                    <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto', }}>{item.serialNumerCount + ' items'}</Typography>
+                    <TextareaAutosize
+                        autoFocus={true}
+                        style={{ color: 'black', fontSize: theme.spacing(2.0), fontWeight: 'bold', fontFamily: 'helvetica' }}
+                        className="serial-number"
+                        minRows={5}
+                        onChange={(e: any) => {
+                            item.serialNumbers = e.target.value
+                            processCount()
+                        }}
+                        value={item.serialNumbers || ''}
+                    />
+                    <Box sx={{ display: 'flex', ml: 'auto', mt: 2 }}>
+                        <Button onClick={handleClear} size='small' color='info' variant='contained'>Clear</Button>
+                        <Button onClick={handleOk} size='small' color='secondary' variant='contained' sx={{ ml: 2 }} >Ok</Button>
+                    </Box>
+                </Box>)
+
+            function handleClear() {
+                item.serialNumbers = ''
+                processCount()
+            }
+
+            function handleOk() {
+                pre.showDialog = false
+                megaData.executeMethodForKey('render:lineItems', {})
+                // setRefresh({})
+            }
 
             function processCount() {
-
+                item.serialNumerCount = item?.serialNumbers.split(',').filter(Boolean).length
+                setRefresh({})
             }
         }
     }
@@ -143,6 +242,7 @@ function useLineItems() {
         currentItem.clos = selectedProduct.clos
         currentItem.priceGst = selectedProduct.salePriceGst || selectedProduct.maxRetailPrice || 0
         currentItem.discount = selectedProduct.saleDiscount || 0
+        currentItem.age = selectedProduct.age
         computeRow(currentItem)
         setRefresh({})
     }
@@ -162,9 +262,7 @@ function useLineItems() {
     }
 
     return ({
-        computeRow, handleDeleteRow, handleSerialNo, meta,
-        // productCodeRef, 
-        setPrice, setPriceGst
+        checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst
     })
 }
 

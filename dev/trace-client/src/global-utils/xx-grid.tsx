@@ -76,8 +76,9 @@ interface XXGridOptions {
     isReverseOrderChecked?: boolean // does not do reversing of data. Only makes the reverse checkbox as checked
     isShowColBalanceByDefault?: boolean
     jsonFieldPath?: any // if input is a json object then give the path of json field
-    // onCellClick?: (params: GridCellParams) => void
+    onCellClick?: (params: GridCellParams) => void
     postFetchMethod?: any // method to call after fetching of data
+    processRowUpdate?: any
     rowHeight?: number
     sharedData?: any // data shared with parent
     sqlQueryArgs?: any
@@ -104,6 +105,8 @@ function XXGrid(gridOptions: XXGridOptions) {
         gridActionMessages,
         columns,
         disableSelectionOnClick,
+        onCellClick,
+        processRowUpdate,
         specialColumns,
         sqlQueryArgs,
         sqlQueryId,
@@ -143,7 +146,7 @@ function XXGrid(gridOptions: XXGridOptions) {
 
     return (
         <DataGridPro
-            // onCellClick={onCellClick}
+            onCellClick={onCellClick}
             getRowClassName={(params: any) => {
                 const summ = params.row.isDailySummary ? 'ledger-summary' : ''
                 return summ
@@ -155,6 +158,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             apiRef={apiRef}
             sx={sx}
             columns={columns}
+            processRowUpdate={processRowUpdate}
             rows={meta.current.filteredRows}
             rowHeight={rowHeight}
             disableColumnMenu={true}

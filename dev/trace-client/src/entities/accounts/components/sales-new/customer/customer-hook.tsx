@@ -25,13 +25,16 @@ function useCustomer() {
         megaData.registerKeyWithMethod('render:customer', setRefresh)
     }, [])
 
+    useEffect(() => {
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+    })
+
 
     const pre = meta.current
     const dialogConfig = pre.dialogConfig
 
     function checkAllErrors() {
         dateError(); customerError(); gstinError()
-        emit('ALL-ERRORS-JUST-REFRESH', null)
 
         function dateError() {
             const ret = (isInvalidDate(sales.tranDate) || (!sales.tranDate)) ?

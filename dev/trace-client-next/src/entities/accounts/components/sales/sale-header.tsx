@@ -105,7 +105,7 @@ function SaleHeader() {
                     <div>
                         <Typography>Sale account</Typography>
                         <LedgerSubledger
-                            controlId='sales'
+                            // controlId='sales'
                             ledgerFilterMethodName='saleAccounts'
                             onChange={onChangeLedgerSubledger}
                             rowData={arbitraryData.rowData}

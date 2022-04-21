@@ -109,6 +109,52 @@ function utils() {
         return (ret)
     }
 
+    function getCashBankAccountsWithSubledgers() {
+        const allAccounts = getFromBag('allAccounts') || []
+        const cashBankArray = ['cash', 'bank', 'card', 'ecash']
+        const cashBankAccountsWithSubledgers = allAccounts.filter(
+            (el: any) =>
+                cashBankArray.includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'S')
+        )
+        return (cashBankAccountsWithSubledgers)
+    }
+
+    function getdebtorCreditorAccountsWithSubledgers() {
+        const allAccounts = getFromBag('allAccounts') || []
+        const debtorCreditorAccountsWithSubledgers = allAccounts
+            .filter(
+                (el: any) =>
+                    ['debtor', 'creditor'].includes(el.accClass) &&
+                    (el.accLeaf === 'Y' || el.accLeaf === 'S') &&
+                    !(isParentAutoSubledger(el))
+            )
+            .sort((a: any, b: any) => {
+                if (a.accName > b.accName) return 1
+                if (a.accName < b.accName) return -1
+                return 0
+            })
+        function isParentAutoSubledger(acc: any) {
+            let ret = false
+            const parentId = acc.parentId
+            const account = allAccounts.find((x: any) => x.id === parentId)
+            ret = account.isAutoSubledger || false
+            return (ret)
+        }
+        return (debtorCreditorAccountsWithSubledgers)
+    }
+
+    function getAutoSubledgers() {
+        const allAccounts = getFromBag('allAccounts') || []
+        const autoSubledgerAccounts = allAccounts.filter(
+            (el: any) =>
+                ['debtor'].includes(el.accClass) &&
+                (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                el.isAutoSubledger
+        )
+        return (autoSubledgerAccounts)
+    }
+
     function getMappedAccounts(accounts: any[]) {
         return accounts.map((x: any) => ({
             label: x.accName,
@@ -342,6 +388,9 @@ function utils() {
         getAccountName,
         getAccountBalanceFormatted,
         getAccountClassWithAutoSubledger,
+        getAutoSubledgers,
+        getCashBankAccountsWithSubledgers,
+        getdebtorCreditorAccountsWithSubledgers,
         getMappedAccounts,
         getGridReportSubTitle,
         getTranType,
@@ -365,20 +414,3 @@ function utils() {
 }
 
 export { utils }
-
-// const useStyles: any = makeStyles((theme: Theme) =>
-//     createStyles({
-//         dataTable: {
-//             // '& .data-table': {
-//             '& .p-datatable-tfoot': {
-//                 '& tr': {
-//                     '& td': {
-//                         fontSize: '0.8rem',
-//                         color: 'dodgerBlue !important',
-//                     }
-//                 }
-//             },
-//             // },
-//         },
-//     })
-// )

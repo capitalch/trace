@@ -1,19 +1,15 @@
 import {
-    _, Card, Big, Box, Button, DataGridPro, GridCellParams, GridToolbarFilterButton,
-    GridToolbarExport,
-    GridToolbarContainer,
-    GridToolbarColumnsButton,
-    GridFooterContainer, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
+    _, Card, Big, Box, Button, DataGridPro, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
     useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
 } from '../redirect'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
-    const sales = megaData.accounts.sales
+    // const sales = megaData.accounts.sales
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
-    const items = sales.items
+    // const items = sales.items
 
     const meta: any = useRef({
         allRows: [],
@@ -69,7 +65,7 @@ function ProductsSearch({ parentMeta }: any) {
                 headerClassName: 'header-class',
                 description: 'Product details',
                 field: '',
-                width: 250,
+                width: 245,
                 renderCell: (params: any) => (
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', }}>
                         <Typography sx={{ fontSize: theme.spacing(1.7), fontFamily: 'helvetica' }}>{params.row.brandName}</Typography>&nbsp;
@@ -80,7 +76,7 @@ function ProductsSearch({ parentMeta }: any) {
                 )
             },
             {
-                headerName: 'Stk',
+                headerName: 'Stock',
                 headerClassName: 'header-class',
                 description: 'Stock',
                 field: 'clos',
@@ -96,7 +92,7 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 60,
             },
             {
-                headerName: 'Mrp',
+                headerName: 'MRP',
                 headerClassName: 'header-class',
                 description: 'Max retail price',
                 field: 'maxRetailPrice',
@@ -126,15 +122,15 @@ function ProductsSearch({ parentMeta }: any) {
                 description: 'Sale',
                 field: 'sale',
                 type: 'number',
-                width: 60,
+                width: 55,
             },
             {
-                headerName: 'Gst rate(%)',
+                headerName: 'Gst(%)',
                 headerClassName: 'header-class',
                 description: 'gst rate',
                 field: 'gstRate',
                 type: 'number',
-                width: 100,
+                width: 70,
             },
             {
                 headerName: 'HSN',
@@ -149,8 +145,8 @@ function ProductsSearch({ parentMeta }: any) {
                 headerClassName: 'header-class',
                 description: 'Discount',
                 field: 'saleDiscount',
-                type: 'string',
-                width: 80,
+                type: 'number',
+                width: 75,
             },
             {
                 headerName: 'Pr code',

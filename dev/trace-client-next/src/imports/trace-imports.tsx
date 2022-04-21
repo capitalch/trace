@@ -12,7 +12,6 @@ import { graphqlService } from '../global-utils/graphql-service'
 import { utilMethods } from '../global-utils/misc-utils'
 import { getArtifacts } from '../react-form/common/react-form-hook'
 import { LedgerSubledger } from '../entities/accounts/components/common/ledger-subledger'
-import { LedgerSubledgerCascade } from '../entities/accounts/components/common/ledger-subledger-cascade'
 import { XXGrid } from '../global-utils/xx-grid'
 export { MegaDataContext } from '../common/mega-data-context'
 export {
@@ -21,7 +20,6 @@ export {
     globalMessages,
     graphqlService,
     LedgerSubledger,
-    LedgerSubledgerCascade,
     manageFormsState,
     manageEntitiesState,
     queries,

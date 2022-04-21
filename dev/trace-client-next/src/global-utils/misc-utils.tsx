@@ -281,6 +281,13 @@ function utilMethods() {
         return !enabled
     }
 
+    function* keyGen() {
+        let i = 1
+        while (true) {
+            yield (i++)
+        }
+    }
+
     function Mandatory() {
         return <Typography variant='subtitle2' sx={{ color: 'red' }} component='span'> *</Typography>
     }
@@ -540,6 +547,7 @@ function utilMethods() {
         genericUpdateMasterDetails,
         genericUpdateMasterNoForm,
         isControlDisabled,
+        keyGen,
         Mandatory,
         numberToWordsInRs,
         objectPropsToDecimalFormat,

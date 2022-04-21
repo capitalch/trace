@@ -1,5 +1,4 @@
-import moment from 'moment'
-import { _, MegaDataContext, useContext, useEffect, useState } from './redirect'
+import { _, MegaDataContext, moment, useContext, useEffect, useState } from './redirect'
 function useAccSales() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)

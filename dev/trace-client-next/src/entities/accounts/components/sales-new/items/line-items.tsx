@@ -1,4 +1,4 @@
-import { Badge, Box, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, } from '../redirect'
+import { Badge, Box, Button, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
@@ -6,12 +6,13 @@ function LineItems() {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
+    const { debounceEmit } = useIbuki()
     const items = sales.items
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { computeRow, handleDeleteRow, handleSerialNo, meta,
-        // productCodeRef, 
-        setPrice, setPriceGst } = useLineItems()
+    const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
+    checkAllErrors()
+    
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
@@ -25,7 +26,7 @@ function LineItems() {
 
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
-        // const smallFontTextField = megaData.accounts.settings.smallFontTextField
+        const smallFontTextField = megaData.accounts.settings.smallFontTextField
         return (
             <Box
                 onClick={(e: any) => {
@@ -34,8 +35,6 @@ function LineItems() {
                     }
                     sales.currentItemIndex = index
                     megaData.executeMethodForKey('render:lineItems', {})
-                    e.preventDefault()
-                    // setRefresh({})
                 }}
                 sx={{
                     display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
@@ -64,16 +63,28 @@ function LineItems() {
                         customInput={TextField}
                         decimalScale={0}
                         fixedDecimalScale={true}
-                        value={item.productCode || 0.00}
+                        value={item.productCode || ''}
                         variant='standard'
-                        // onClick={(e:any)=>{
-                        //     e.target.click()
-                        // }}
-                        onChange={(e: any) => handleTextChanged(item, 'productCode', e)}
+                        onChange={(e: any) => {
+                            item.productCode = e.target.value
+                            setRefresh({})
+                            if (item.productCode) {
+                                debounceEmit('DEBOUNCE-ON-CHANGE', item)
+                            } else {
+                                clearRow(item)
+                            }
+                        }}
+
                         onFocus={(e: any) => {
                             e.target.select()
                         }} />
                 </Box>
+                {/* Age */}
+                <Badge badgeContent={item.age || 0} color='info' sx={{ mt: -8, ml: -2 }} showZero overlap='circular' anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}>
+                </Badge>
                 {/* Product details */}
                 <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>
                     <Typography sx={{
@@ -241,24 +252,25 @@ function LineItems() {
                             .split(',')
                             .filter(Boolean).length
                     }
-                    // color={
-                    //     getSlNoError(item)
-                    //         ? 'error'
-                    //         : 'secondary'
-                    // }
+                    color={
+                        getSlNoError(item)
+                            ? 'error'
+                            : 'info'
+                    }
                     showZero={true}>
-                    <Chip color='secondary'
+                    {/* <Chip color='secondary'
                         sx={{ p: 2, color: theme.palette.common.white }}
                         size="small"
                         label="Serial no's"
                         onClick={() => handleSerialNo(item)}
-                    />
+                    /> */}
+                    <Button color='secondary' size='medium' variant='outlined' onClick={() => handleSerialNo(item)}>Serial no</Button>
                 </Badge>
 
                 {/* amount */}
                 <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
 
-            </Box>)
+            </Box >)
 
         function handleTextChanged(item: any, propName: string, e: any) {
             item[propName] = e.target.value

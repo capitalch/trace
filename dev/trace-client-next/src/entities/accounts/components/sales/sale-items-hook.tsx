@@ -13,7 +13,6 @@ import {
     createStyles,
     TextareaAutosize,
 } from '../../../../imports/gui-imports'
-// import {} from '../../../../imports/icons-import'
 import { useProductUtils } from '../common/product-utils-hook'
 import { useSharedElements } from '../common/shared-elements-hook'
 

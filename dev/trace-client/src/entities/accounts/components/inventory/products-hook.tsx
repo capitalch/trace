@@ -1,4 +1,4 @@
-import { NumberFormat, useInventoryUtils, useEffect, useRef, useState, useSharedElements, utilMethods, } from './redirect'
+import { Input, NumberFormat, useInventoryUtils, useEffect, useRef, useState, useSharedElements, utilMethods, } from './redirect'
 import {
     makeStyles,
     TextField,
@@ -28,9 +28,7 @@ function useProducts() {
     const { fetchBrandsCategoriesUnits } = useInventoryUtils()
     const {
         emit,
-        execGenericView,
         filterOn,
-        getFromBag,
         setInBag,
         toDecimalFormat,
     } = useSharedElements()
@@ -114,7 +112,10 @@ function useProducts() {
                 field: 'hsn',
                 editable: true,
                 width: '80',
-                cellClassName: 'editable-column',
+                cellClassName: (params: any) =>
+                    params.row.isDataChanged
+                        ? 'data-changed'
+                        : 'editable-column',
                 renderEditCell: (params: any) => {
                     return (
                         <NumberFormat
@@ -123,13 +124,13 @@ function useProducts() {
                             onChange={setHsn}
                             onFocus={(e: any) => e.target.select()}
                             value={params.row.hsn || null}
-                        />)
+                        />                        
+                    )
                     function setHsn(e: any) {
                         const value = e.target.value
-                        params.row.hsn = value
                         pre.isDataChanged = true
-                        const id1 = params.row.id1
-                        const changedRow = pre.sharedData.allRows.find((x: any) => x.id1 === id1)
+                        const id = params.row.id
+                        const changedRow = pre.sharedData.filteredRows.find((x:any)=>(x.id === id))
                         changedRow.hsn = value
                         changedRow.isDataChanged = true
                         const apiRef = pre.sharedData.apiRef
@@ -145,6 +146,7 @@ function useProducts() {
             {
                 headerName: 'MRP',
                 description: 'Maximum retail price',
+                editable: true,
                 field: 'maxRetailPrice',
                 type: 'number',
                 width: 100,
@@ -245,13 +247,12 @@ function useProducts() {
         setRefresh({})
     }
 
-    // function handleCellClicked(params: any) {
-    //     if (params.field === 'hsn') {
-    //         const apiRef:any = pre.sharedData.apiRef
-    //         apiRef.current.setCellMode(params.id, 'hsn', 'edit')
-    //         setRefresh({})
-    //     }
-    // }
+    function handleCellClicked(params: any) {
+        if ((params.field==='hsn') && (params.cellMode === 'view')) {
+            const apiRef: any = pre.sharedData.apiRef
+            apiRef.current.startCellEditMode({ id: params.id, field: params.field })
+        }
+    }
 
     async function handleEdit(d: any) {
         await fetchBrandsCategoriesUnits()
@@ -268,7 +269,7 @@ function useProducts() {
     }
 
     async function handleSubmit() {
-        const changedData = pre.sharedData.allRows.filter((x: any) => x.isDataChanged).map((y: any) => ({
+        const changedData = pre.sharedData.filteredRows.filter((x: any) => x.isDataChanged).map((y: any) => ({
             id: y.id1,
             hsn: y.hsn || null
         }))
@@ -282,7 +283,12 @@ function useProducts() {
         }
     }
 
-    return { getXXGridParams, handleCloseDialog, handleSubmit, meta }
+    // function processRowUpdate(newRow: any) {
+    //     console.log(newRow)
+    //     newRow.isDataChanged = true
+    // }
+
+    return { getXXGridParams, handleCellClicked, handleCloseDialog, handleSubmit, meta, }
 }
 
 export { useProducts }
@@ -298,6 +304,10 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .editable-column': {
                     backgroundColor: theme.palette.yellow.light,
                     color: theme.palette.yellow.contrastText,
+                },
+                '& .data-changed': {
+                    backgroundColor: theme.palette.orange.main,
+                    color: theme.palette.orange.contrastText,
                 },
             },
         },

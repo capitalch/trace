@@ -86,24 +86,9 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
     function setAccounts() {
         //saleAccounts
         const allAccounts = getFromBag('allAccounts') || []
-        // multiData.sales.allAccounts = allAccounts
-        // const saleAccounts = allAccounts.filter(
-        //     (el: any) =>
-        //         ['sale'].includes(el.accClass) &&
-        //         (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        // )
-        // multiData.sales.ledgerAccounts = saleAccounts
 
         // Cash bank accounts
         const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-        // const cashBankAccountsWithLedgers = allAccounts.filter(
-        //     (el: any) =>
-        //         cashBankArray.includes(el.accClass) &&
-        //         (el.accLeaf === 'Y' || el.accLeaf === 'L')
-        // )
-        // multiData.sales.accounts.cashBankAccountsWithLedgers =
-        //     cashBankAccountsWithLedgers
-
         const cashBankAccountsWithSubledgers = allAccounts.filter(
             (el: any) =>
                 cashBankArray.includes(el.accClass) &&
@@ -111,28 +96,13 @@ function useSales(saleType: string, drillDownEditAttributes: any) {
         )
         multiData.sales.accounts.cashBankAccountsWithSubledgers =
             cashBankAccountsWithSubledgers
-        // Debtors creditors accounts
-        // const debtorCreditorAccountsWithLedgers = allAccounts
-        //     .filter(
-        //         (el: any) =>
-        //             ['debtor', 'creditor'].includes(el.accClass) &&
-        //             (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-        //             !el.isAutoSubledger
-        //     )
-        //     .sort((a: any, b: any) => {
-        //         if (a.accName > b.accName) return 1
-        //         if (a.accName < b.accName) return -1
-        //         return 0
-        //     })
-        // multiData.sales.accounts.debtorCreditorAccountsWithLedgers =
-        //     debtorCreditorAccountsWithLedgers
+        
         const debtorCreditorAccountsWithSubledgers = allAccounts
             .filter(
                 (el: any) =>
                     ['debtor', 'creditor'].includes(el.accClass) &&
                     (el.accLeaf === 'Y' || el.accLeaf === 'S') &&
                     !(isParentAutoSubledger(el))
-                    // !el.isAutoSubledger
             )
             .sort((a: any, b: any) => {
                 if (a.accName > b.accName) return 1

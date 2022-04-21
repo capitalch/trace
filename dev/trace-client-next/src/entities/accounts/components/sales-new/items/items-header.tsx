@@ -21,11 +21,11 @@ function ItemsHeader() {
                     <Checkbox size='small' sx={{ mt: -0.1 }} checked={sales.isIgst || false}
                         onChange={handleChangeIgst} />}
             />
-
             {/* Add */}
-            <Button size='small' variant='outlined' color='secondary'
+            <Button size='small' variant='outlined' color='secondary' sx={{width: theme.spacing(12.5)}}
                 onClick={() => handleAddItem()}
-                startIcon={<AddCircle />} >Add</Button>
+                startIcon={<AddCircle sx={{ml:-3}} />} 
+                >Add</Button>
         </Box>
     </Box>)
 

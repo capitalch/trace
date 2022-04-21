@@ -11,14 +11,15 @@ function ItemsFooter() {
     const meta: any = useRef({
         showDialog: false,
         dialogConfig: {
-            content: () => <></>
+            content: () => <></>,
+            maxWidth: 'lg',
         },
         // setRefresh: setRefresh
     })
     const pre = meta.current
 
     useEffect(() => {
-        megaData.registerKeyWithMethod('computeSummary:itemsFooter',computeSummary)
+        megaData.registerKeyWithMethod('computeSummary:itemsFooter', computeSummary)
         megaData.registerKeyWithMethod('render:itemsFooter', setRefresh)
         computeSummary()
     }, [])
@@ -36,7 +37,7 @@ function ItemsFooter() {
             {/* Qty */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Qty: ', toDecimalFormat(sales.summary.qty))}</Typography>
             {/* Item search button */}
-            <Button size='small' variant='outlined' color='info' onClick={handleItemSearch}>Item search</Button>
+            <Button size='small' variant='contained' color='warning' onClick={handleItemSearch}>Item search</Button>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
@@ -51,6 +52,7 @@ function ItemsFooter() {
             <Button size='small' color='secondary' variant='outlined' onClick={handleClear}>Clear</Button>
 
             <Button size='small' variant='outlined' color='secondary' onClick={handleRoundOff}>Round off</Button>
+            <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
             {/* Back calculate */}
             <Box sx={{ display: 'flex', columnGap: 1 }}>
                 <NumberFormat
@@ -72,7 +74,6 @@ function ItemsFooter() {
                     thousandSeparator={true}
                     value={sales.summary.backCalculateAmount}
                 />
-                <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
             </Box>
             {/* Amount */}
             <Typography color={theme.palette.common.black} sx={{ mr: .5, fontSize: theme.spacing(1.8), fontWeight: 'bolder' }} >{toDecimalFormat(sales.summary.amount)}</Typography>

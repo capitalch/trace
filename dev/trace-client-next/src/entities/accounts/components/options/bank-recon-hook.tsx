@@ -59,7 +59,7 @@ function useBankRecon() {
             title: '',
             formId: '',
             bankOpBalId: '',
-            actions: () => {},
+            actions: () => { },
             content: () => <></>,
         },
     })
@@ -108,7 +108,7 @@ function useBankRecon() {
                         null
                     )
                 })
-                .catch(() => {}) // important to have otherwise eror
+                .catch(() => { }) // important to have otherwise eror
         }
     }
 
@@ -183,13 +183,11 @@ function useBankRecon() {
                         <Input
                             type="date"
                             style={{ fontSize: '0.8rem' }}
-                            value={params.row.clearDate}
+                            value={params.row.clearDate || ''}
                             onKeyDown={(e: any) => {
                                 e.preventDefault() // disable edit from keyboard, it introduces error
                             }}
-                            onChange={(e: any) => {
-                                setValue(e)
-                            }}
+                            onChange={setValue}
                             startAdornment={
                                 <IconButton
                                     size="small"
@@ -203,6 +201,23 @@ function useBankRecon() {
                         />
                     )
                     function setValue(e: any, val: any = null) {
+                        let value
+                        e ? (value = e.target.value) : (value = val)
+                        const id = params.row.id
+                        params.row.isDataChanged = true
+                        const changedRow = pre.sharedData.filteredRows.find((x: any) => (x.id === id))
+                        changedRow.clearDate = value || ''
+                        changedRow.isDataChanged = true
+                        params.row.clearDate = value ||''
+                        const apiRef = pre.sharedData.apiRef
+                        apiRef.current.setEditCellValue({
+                            id: params.row.id,
+                            field: 'clearDate',
+                            value: value,
+                        })
+                        // setRefresh({})
+                    }
+                    function setValue1(e: any, val: any = null) {
                         let value
                         e ? (value = e.target.value) : (value = val)
                         const filteredRows: any[] =
@@ -372,11 +387,18 @@ function useBankRecon() {
         }
     }
 
+    function handleCellClicked(params: any) {
+        if (['clearDate', 'clearRemarks'].includes(params.field) && (params.cellMode === 'view')) {
+            const apiRef: any = pre.sharedData.apiRef
+            apiRef.current.startCellEditMode({ id: params.id, field: params.field })
+        }
+    }
+
     async function handleOnSelectBankClick() {
         await getAllBanks()
         meta.current.dialogConfig.title = 'Select a bank'
         meta.current.dialogConfig.content = BanksListItems
-        meta.current.dialogConfig.actions = () => {}
+        meta.current.dialogConfig.actions = () => { }
         meta.current.showDialog = true
         meta.current.isMounted && setRefresh({})
 
@@ -424,7 +446,7 @@ function useBankRecon() {
     function handleOpBalanceButtonClick() {
         dialogConfig.title = `Opening balance for ${pre.selectedBankName}`
         dialogConfig.content = OpeningBalanceContent
-        dialogConfig.actions = () => {}
+        dialogConfig.actions = () => { }
         meta.current.showDialog = true
         pre.isMounted && setRefresh({})
 
@@ -523,28 +545,28 @@ function useBankRecon() {
         }
     }
 
-    function getChangedData() {
-        const data1 = _.orderBy(meta.current.initialData, [(item) => item.id])
-        let data2 = JSON.parse(JSON.stringify(meta.current.reconData))
-        data2 = _.orderBy(data2, [(item) => item.id])
-        const diffObj: any[] = []
-        const len = data1.length
-        for (let i: number = 0; i < len; i++) {
-            if (hash(data1[i]) !== hash(data2[i])) {
-                const item = {
-                    clearDate: data2[i].clearDate || null, // for no data provide null instead of '' because '' is not valid date value
-                    clearRemarks: data2[i].clearRemarks,
-                    tranDetailsId: data2[i].id,
-                    id: data2[i].bankReconId,
-                }
-                if (!item.id) {
-                    delete item.id
-                }
-                diffObj.push(item)
-            }
-        }
-        return diffObj
-    }
+    // function getChangedData() {
+    //     const data1 = _.orderBy(meta.current.initialData, [(item) => item.id])
+    //     let data2 = JSON.parse(JSON.stringify(meta.current.reconData))
+    //     data2 = _.orderBy(data2, [(item) => item.id])
+    //     const diffObj: any[] = []
+    //     const len = data1.length
+    //     for (let i: number = 0; i < len; i++) {
+    //         if (hash(data1[i]) !== hash(data2[i])) {
+    //             const item = {
+    //                 clearDate: data2[i].clearDate || null, // for no data provide null instead of '' because '' is not valid date value
+    //                 clearRemarks: data2[i].clearRemarks,
+    //                 tranDetailsId: data2[i].id,
+    //                 id: data2[i].bankReconId,
+    //             }
+    //             if (!item.id) {
+    //                 delete item.id
+    //             }
+    //             diffObj.push(item)
+    //         }
+    //     }
+    //     return diffObj
+    // }
 
     function isDataNotChanged() {
         const hash1 =
@@ -570,7 +592,7 @@ function useBankRecon() {
 
     async function submitBankRecon() {
         const diffs = getDiff()
-        if (diffs && diffs.length > 0) {
+        if (diffs && (diffs.length > 0)) {
             emit('SHOW-LOADING-INDICATOR', true)
             const sqlObject = {
                 tableName: 'ExtBankReconTranD',
@@ -590,7 +612,6 @@ function useBankRecon() {
                 })
             }
             emit('SHOW-LOADING-INDICATOR', false)
-        } else {
         }
 
         function getDiff() {
@@ -617,10 +638,11 @@ function useBankRecon() {
     return {
         doSortOnClearDateTranDateAndId,
         getXXGridParams,
+        handleCellClicked,
         handleCloseDialog,
         handleOnSelectBankClick,
         handleOpBalanceButtonClick,
-        getChangedData,
+        // getChangedData,
         isDataNotChanged,
         meta,
         setRefresh,

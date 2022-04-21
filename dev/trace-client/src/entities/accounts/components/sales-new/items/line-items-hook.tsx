@@ -24,7 +24,6 @@ function useLineItems() {
         if (items.length === 0) {
             megaData.executeMethodForKey('handleAddItem:itemsHeader')
         }
-
         const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
@@ -34,9 +33,14 @@ function useLineItems() {
         }
     }, [])
 
+    useEffect(() => {
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+    })
+
     function checkAllErrors() {
         checkAllRows(); setAllErrors()
-        emit('ALL-ERRORS-JUST-REFRESH', null)
+        // megaData.executeMethodForKey('render:allErrors', {})
+        // emit('ALL-ERRORS-JUST-REFRESH', null)
 
         function checkAllRows() {
             for (const item of items) {

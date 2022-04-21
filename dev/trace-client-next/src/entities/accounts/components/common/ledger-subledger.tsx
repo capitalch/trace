@@ -6,24 +6,24 @@ import { useSharedElements } from './shared-elements-hook'
 
 interface LedgerSubledgerOptions {
     // allAccounts: any[]
+    // controlId?: string
+    // ledgerAccounts?: any[]
     className?: string
-    controlId?: string
-    ledgerAccounts?: any[]
     ledgerFilterMethodName?: string
     onChange?: any
     rowData: any // Object which has the final selected value as 'accId' and boolen error in 'isLedgerSubledgerError'
     showAutoSubledgerValues?: boolean
 }
-function LedgerSubledger({
+function LedgerSubledger({    
+    // ledgerAccounts,
     className,
-    ledgerAccounts,
     ledgerFilterMethodName,
     onChange,
     rowData,
     showAutoSubledgerValues = true,
 }: LedgerSubledgerOptions) {
     const [, setRefresh] = useState({})
-    const { emit, filterOn, getFromBag, getMappedAccounts, } = useSharedElements()
+    const { filterOn, getFromBag, getMappedAccounts, } = useSharedElements()
     const allAccounts = getFromBag('allAccounts') || []
 
     useEffect(() => {
@@ -91,10 +91,6 @@ function LedgerSubledger({
         })
 
         function loadLedgerAccounts() {
-            // meta.current.ledgerItem = { label: null, value: undefined }
-            // meta.current.subLedgerItem = { label: null, value: undefined }
-            // meta.current.subledgerOptions = []
-            // emit('TYPOGRAPHY-SMART-RESET', '')
             ledgerFilterMethodName && (meta.current.ledgerAccounts = ledgerFilterMethods()[ledgerFilterMethodName]())
             setRefresh({})
         }
