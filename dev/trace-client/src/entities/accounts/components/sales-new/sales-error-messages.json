@@ -1,13 +1,13 @@
 {
-    "customerError":"Customer: missing customer",
-    "dateError":"Customer: invalid or locked date",    
+    "customerError":"Customer: Missing customer",
+    "dateError":"Customer: Invalid or locked date",    
     "gstinError":"Customer: invalid GSTIN",
 
-    "productCodeError":"Items: missing product code",
-    "hsnError": "Items: missing HSN code",
-    "serialNumberError": "Items: serial numbers mismatch with qty",
+    "productCodeError":"Items: Missing product code",
+    "hsnError": "Items: Missing HSN code",
+    "serialNumberError": "Items: Serial numbers mismatch with qty",
 
-    "accountCodeError":"Payments: missing account code"
+    "accountCodeError":"Payments: Missing account code"
 
 
 }
