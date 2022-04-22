@@ -228,35 +228,7 @@ function useBankRecon() {
                 width: 170,
                 editable: true,
 
-                renderEditCell: (params: any) => {
-                    return (
-                        <Input
-                            value={params.row.clearRemarks}
-                            style={{ paddingLeft: '0.5rem' }}
-                            onFocus={(e: any) => e.target.select()}
-                            onChange={(e: any) => {
-                                const value = e.target.value
-                                const filteredRows: any[] =
-                                    meta.current.sharedData.filteredRows
-                                const row = params.row
-                                const idx = filteredRows.findIndex(
-                                    (x: any) => x.id === row.id
-                                )
-                                if (filteredRows[idx].clearRemarks !== value) {
-                                    filteredRows[idx].clearRemarks = value
-                                    params.row.isDataChanged = true
-                                }
-                                row.clearRemarks = value
-                                const apiRef = pre.sharedData.apiRef
-                                apiRef.current.setEditCellValue({
-                                    id: params.row.id,
-                                    field: 'clearRemarks',
-                                    value: value,
-                                })
-                            }}
-                        />
-                    )
-                },
+                renderEditCell: (params: any) => <ClearRemarks params={params} />,
             },
             {
                 headerName: 'Accounts',
@@ -322,53 +294,82 @@ function useBankRecon() {
     }
 
     function ClearDate({ params }: any) {
+        const { id, value, field } = params
         const [, setRefresh] = useState({})
         const theme = useTheme()
-        return (<Input
-            type='date'
-            sx={{ fontSize: theme.spacing(1.8) }}
-            value={params.row.clearDate || ''}
-            onKeyDown={(e: any) => {
-                e.preventDefault() // disable edit from keyboard, it introduces error
-            }}
-            onChange={setValue}
-            startAdornment={
+        const apiRef = pre.sharedData.apiRef
+
+        useEffect(() => {
+            if (!value) {
+                setValue(null, params.row.tranDate)
+            }
+        }, [])
+
+        return (
+            <Box sx={{ display: 'flex' }}>
                 <IconButton
                     size="small"
                     onClick={(e: any) => {
-                        // meta.current.crossClicked = true
                         setValue(null, '')
+                        apiRef.current.stopCellEditMode({ id: params.row.id, field: 'clearDate' })
                     }}>
                     {<CloseSharp></CloseSharp>}
                 </IconButton>
-            }
-        />)
+                <Input
+                    type='date'
+                    sx={{ fontSize: theme.spacing(1.8) }}
+                    value={value || ''}
+                    onKeyDown={(e: any) => {
+                        e.preventDefault() // disable edit from keyboard, it introduces error
+                    }}
+                    onChange={setValue}
 
-        function setValue(e: any, val: any = null) {
-            let value
-            e ? (value = e.target.value) : (value = val)
-            const id1 = params.row.id1
-            params.row.isDataChanged = true
-            const changedRow = pre.sharedData.filteredRows.find((x: any) => (x.id1 === id1))
+                /></Box>)
+
+        function setValue(e: any, val: any = '') {
+            const value = e ? e.target.value : val
+            const changedRow = pre.sharedData.filteredRows.find((x: any) => (x.id === id))
             changedRow.clearDate = value || null
             changedRow.isDataChanged = true
-            // params.row.clearDate = value ||''
-            const apiRef = pre.sharedData.apiRef
             apiRef.current.setEditCellValue({
-                id: params.row.id,
+                id: id,
                 field: 'clearDate',
-                value: value,
+                value: value || null,
             })
             setRefresh({})
         }
     }
 
-    function handleCellClicked(params: any) {
-        if (['clearDate', 'clearRemarks'].includes(params.field) && (params.cellMode === 'view')) {
-            const apiRef: any = pre.sharedData.apiRef
-            apiRef.current.startCellEditMode({ id: params.id, field: params.field })
+    function ClearRemarks({ params }: any) {
+        const { id, value, field } = params
+        const [, setRefresh] = useState({})
+        const theme = useTheme()
+        const apiRef = pre.sharedData.apiRef
+
+        return (
+            <Input
+                type='text'
+                sx={{ fontSize: theme.spacing(1.8) }}
+                value={value || ''}
+                onChange={setValue}
+            />)
+
+        function setValue(e: any) {
+            const value = e.target.value
+            const changedRow = pre.sharedData.filteredRows.find((x: any) => (x.id === id))
+            changedRow.clearRemarks = value || null
+            changedRow.isDataChanged = true
+            apiRef.current.setEditCellValue({
+                id: id,
+                field: field,
+                value: value || null,
+            })
+            setRefresh({})
         }
     }
+
+    // function handleCellClicked(params: any) {
+    // }
 
     async function handleOnSelectBankClick() {
         await getAllBanks()
@@ -521,15 +522,6 @@ function useBankRecon() {
         }
     }
 
-    function isDataNotChanged() {
-        const hash1 =
-            meta.current.reconData?.length > 0
-                ? hash(meta.current.reconData)
-                : ''
-        const ret = meta.current.initialDataHash === hash1 ? true : false
-        return ret
-    }
-
     function doSortOnClearDateTranDateAndId(pre: any) {
         let rows: any[] = [...pre.filteredRows]
         rows = _.orderBy(rows, [
@@ -571,7 +563,7 @@ function useBankRecon() {
             const changedData: any[] =
                 meta.current.sharedData.filteredRows.filter(
                     (item: any) => item.isDataChanged
-                )
+                ).filter((item: any) => (item.origClearDate !== item.clearDate) || (item.origClearRemarks !== item.clearRemarks))
             const diffObjs: any[] = changedData.map((item: any) => {
                 const it = {
                     clearDate: item.clearDate || null,
@@ -591,12 +583,10 @@ function useBankRecon() {
     return {
         doSortOnClearDateTranDateAndId,
         getXXGridParams,
-        handleCellClicked,
+        // handleCellClicked,
         handleCloseDialog,
         handleOnSelectBankClick,
         handleOpBalanceButtonClick,
-        // getChangedData,
-        isDataNotChanged,
         meta,
         setRefresh,
         submitBankRecon,
@@ -671,58 +661,3 @@ const useStyles: any = makeStyles((theme: Theme) =>
 )
 
 export { useStyles }
-
-// (params: any) => {
-//     // if (!params.row.clearDate) {
-//     //     if (meta.current.crossClicked) {
-//     //         meta.current.crossClicked = false
-//     //     } else {
-//     //         if (!params.row.isDataChanged) {
-//     //             setValue(null, params.row.tranDate)
-//     //         }
-//     //     }
-//     // }
-//     if(!params.row.clearDate){
-//         if(!params.row.isDataChanged){
-//             setValue(null, params.row.tranDate)
-//         }
-//     }
-//     return (
-//         <Input
-//             type="date"
-//             style={{ fontSize: '0.8rem' }}
-//             value={params.row.clearDate  || ''}
-            // onKeyDown={(e: any) => {
-            //     e.preventDefault() // disable edit from keyboard, it introduces error
-            // }}
-//             onChange={setValue}
-            // startAdornment={
-            //     <IconButton
-            //         size="small"
-            //         onClick={(e: any) => {
-            //             // meta.current.crossClicked = true
-            //             setValue(null, '')
-            //         }}>
-            //         {<CloseSharp></CloseSharp>}
-            //     </IconButton>
-            // }
-//         />
-//     )
-    // function setValue(e: any, val: any = null) {
-    //     let value
-    //     e ? (value = e.target.value) : (value = val)
-    //     const id1 = params.row.id1
-    //     params.row.isDataChanged = true
-    //     const changedRow = pre.sharedData.filteredRows.find((x: any) => (x.id1 === id1))
-    //     changedRow.clearDate = value || null
-    //     changedRow.isDataChanged = true
-    //     // params.row.clearDate = value ||''
-    //     const apiRef = pre.sharedData.apiRef
-    //     apiRef.current.setEditCellValue({
-    //         id: params.row.id,
-    //         field: 'clearDate',
-    //         value: value,
-    //     })
-    //     setRefresh({})
-    // }
-// }

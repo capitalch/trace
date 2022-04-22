@@ -1282,6 +1282,8 @@ allSqls = {
             , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
             , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
             , x."clearDate", "clearRemarks", x."id" as "bankReconId"
+            , x."clearDate" as "origClearDate"
+            , "clearRemarks" as "origClearRemarks"
                 from "TranD" d
                     left outer join "ExtBankReconTranD" x
                         on d."id" = x."tranDetailsId"
