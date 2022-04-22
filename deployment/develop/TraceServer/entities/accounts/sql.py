@@ -580,7 +580,7 @@ allSqls = {
             "catName", "isActive","brandName",             
             "salePriceGst", "saleDiscount", "saleDiscountRate", 
             "purPrice", "purDiscount", "purDiscountRate",            
-            CASE WHEN p."hsn" is null THEN c."hsn" ELSE p."hsn" END, "info", "label", "productCode", "upcCode", "gstRate"
+            coalesce(p."hsn", c."hsn") hsn, "info", "label", "productCode", "upcCode", "gstRate"
             from "ProductM" p
                 join "CategoryM" c
                     on c."id" = p."catId"
@@ -1282,6 +1282,8 @@ allSqls = {
             , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
             , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
             , x."clearDate", "clearRemarks", x."id" as "bankReconId"
+            , x."clearDate" as "origClearDate"
+            , "clearRemarks" as "origClearRemarks"
                 from "TranD" d
                     left outer join "ExtBankReconTranD" x
                         on d."id" = x."tranDetailsId"
