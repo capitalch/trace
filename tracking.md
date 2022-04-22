@@ -11,6 +11,7 @@
                                                                                         9. Reset, roundoff, back cal buttons, Igst, Add button
                                                                                         10. saleVariety implementation
                                                                                         11. Ship to
+13. Sales report to add auto subledger information
 12. Total error handling and show of submit
 13. Submit functionality
 14. View and drill through
