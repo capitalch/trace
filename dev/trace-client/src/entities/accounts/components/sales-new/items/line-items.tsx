@@ -38,8 +38,8 @@ function LineItems() {
                 }}
                 sx={{
                     display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
-                    , borderColor: (sales.currentItemIndex === index) ? theme.palette.orange.main : theme.palette.grey[300], borderWidth: (sales.currentItemIndex === index) ? '4px' : '1px',
-                    flexWrap: 'wrap', p: 2, pr: 1, rowGap: 2, columnGap: 2
+                    , borderColor: (sales.currentItemIndex === index) ? theme.palette.secondary.main : theme.palette.secondary.light, borderWidth: (sales.currentItemIndex === index) ? '4px' : '1px',
+                    flexWrap: 'wrap', p: 2, pr: 1, rowGap: 3, columnGap: 2
                 }} >
 
                 {/* Index */}
@@ -59,7 +59,7 @@ function LineItems() {
                         allowNegative={false}
                         autoComplete='off'
                         // InputProps={smallFontTextField}
-                        className='right-aligned'
+                        // className='right-aligned'
                         customInput={TextField}
                         decimalScale={0}
                         fixedDecimalScale={true}
@@ -80,7 +80,7 @@ function LineItems() {
                         }} />
                 </Box>
                 {/* Age */}
-                <Badge badgeContent={item.age || 0} color='info' sx={{ mt: -8, ml: -2 }} showZero overlap='circular' anchorOrigin={{
+                <Badge badgeContent={item.age || 0} color='secondary' sx={{ mt: -8, ml: -2 }} showZero overlap='circular' anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
@@ -135,7 +135,7 @@ function LineItems() {
                 </Box>
                 {/* Qty */}
                 <Box className='vertical'>
-                    <Badge badgeContent={item.clos || 0} color='info' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
+                    <Badge badgeContent={item.clos || 0} color='secondary' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
@@ -255,7 +255,7 @@ function LineItems() {
                     color={
                         getSlNoError(item)
                             ? 'error'
-                            : 'info'
+                            : 'secondary'
                     }
                     showZero={true}>
                     {/* <Chip color='secondary'

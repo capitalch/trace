@@ -12,7 +12,7 @@ function PaymentsHeader() {
     }, [])
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap:'wrap', rowGap:3, columnGap:1 }}>
             <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Payments</Typography>
             <Typography variant='body2' >{''.concat('Count: ', sales?.paymentMethodsList?.length || 0 + '')}</Typography>
             <Box sx={{ display: 'flex', alignItems:'center'}}>

@@ -19,6 +19,7 @@ function useLineItems() {
         }
     })
     const pre = meta.current
+    
     useEffect(() => {
         megaData.registerKeyWithMethod('render:lineItems', setRefresh)
         if (items.length === 0) {

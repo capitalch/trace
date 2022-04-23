@@ -11,11 +11,11 @@ function PaymentsMethods() {
 
     useEffect(() => {
         if (sales.paymentMethodsList.length === 0) {
-            sales.paymentMethodsList.push({})
-            setRefresh({})
+            handleAddPaymentMethod()
         }
         megaData.registerKeyWithMethod('render:paymentsMethods', setRefresh)
         megaData.registerKeyWithMethod('doClear:paymentsMethods', doClear)
+        megaData.registerKeyWithMethod('setAmountForPayment:paymentMethods', setAmountForPayment)
     }, [])
 
     useEffect(() => {
@@ -36,11 +36,10 @@ function PaymentsMethods() {
     )
 
     function checkAllErrors() {
-
         setAllErrors()
         // emit('ALL-ERRORS-JUST-REFRESH', null)
 
-        function checkAllRows() {
+        function checkAllPaymentRows() {
             for (const row of paymentMethodsList) {
                 row.isAccountCodeError = row.rowData.isLedgerSubledgerError
             }
@@ -57,7 +56,7 @@ function PaymentsMethods() {
     }
 
     function handleAddPaymentMethod() {
-        paymentMethodsList.push({})
+        paymentMethodsList.push({ rowData: { isLedgerSubledgerError: true } })
         setRefresh({})
     }
 
@@ -111,16 +110,26 @@ function PaymentsMethods() {
 
         function handleDeleteRow(index: number) {
             if (index === 0) {
-                return
+                doClear()
+            } else {
+                paymentMethodsList.splice(index, 1)
+                megaData.executeMethodForKey('render:paymentsMethods', {})
             }
-            paymentMethodsList.splice(index, 1)
-            megaData.executeMethodForKey('render:paymentsMethods', {})
         }
 
         function handleOnChangeLedgerSubledger(index: number, item: any) {
             if ((index == 0) && (sales.paymentVariety === 'i')) { // for institution sales only
                 megaData.executeMethodForKey('getItems:populateInstitutionAddress', item.rowData.accId)
             }
+            // setRefresh({})
+            megaData.executeMethodForKey('render:paymentsMethods', {})
+        }
+    }
+
+    function setAmountForPayment() {
+        if (paymentMethodsList.length === 1) {
+            paymentMethodsList[0].amount = sales.summary.amount
+            setRefresh({})
         }
     }
 }

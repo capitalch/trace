@@ -12,11 +12,10 @@ function Customer() {
     const pre = meta.current
     const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
-    // const { isInvalidDate, isInvalidGstin } = utils()
     checkAllErrors()
-    // isInvalidDate(sales.tranDate) || (!sales.tranDate)
-    return (
-        <Box className='vertical' sx={{ display: 'flex', border: '1px solid orange', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
+
+    return (        
+        <Box className='vertical' sx={{mr:1, display: 'flex', border: '1px solid lightBlue', p: 2, rowGap: 3,flexWrap: 'wrap', }}>
             <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
                 <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
                 {/* ref no */}
@@ -28,13 +27,8 @@ function Customer() {
                 <Box className='vertical'>
                     <Typography variant='body2'>Date</Typography>
                     <TextField variant='standard' type='date' value={sales.tranDate || ''}
-                        error={allErrors['dateError']}
+                        error={Boolean(allErrors['dateError'])}
                         helperText={allErrors['dateError']}
-                        // helperText={
-                        //     isInvalidDate(sales.tranDate)
-                        //         ? accountsMessages.dateRangeAuditLockMessage
-                        //         : ''
-                        // }
                         onChange={(e: any) => { sales.tranDate = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* User ref no */}
@@ -47,7 +41,7 @@ function Customer() {
                 <Box className='vertical'>
                     <Typography variant='body2'>Gstin no</Typography>
                     <TextField variant='standard' value={billTo.gstin || ''} autoComplete='off'
-                        error={allErrors.gstinError}
+                        error={Boolean(allErrors.gstinError)}
                         onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
@@ -56,7 +50,7 @@ function Customer() {
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
-            <Box sx={{ display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
                 {/* Customer search */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(40) }}>
                     <Typography variant='body2'>Customer search</Typography>
@@ -100,16 +94,16 @@ function Customer() {
                         }}
                         sx={{ minWidth: theme.spacing(15) }}
                         value={sales.searchText || ''}
-                        variant='standard'
-                    />
+                        variant='standard' />
                 </Box>
+
                 {/* Customer details */}
                 <Box sx={{
                     display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
-                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(50), maxWidth: theme.spacing(60)
+                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(40),  maxWidth: theme.spacing(60)
                     , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'lightgrey'
                 }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id,', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id, ', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
                     <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ', ') : ''}</Typography>
@@ -120,7 +114,7 @@ function Customer() {
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', ml: 'auto' }}>
+                <Box sx={{ display: 'flex', }}>
                     {/* New / edit */}
                     <Button size='medium' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}

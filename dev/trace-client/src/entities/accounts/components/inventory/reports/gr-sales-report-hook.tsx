@@ -1,4 +1,5 @@
-import { _, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { Typography } from '@mui/material'
+import { _, Box, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useSalesReport() {
     const [, setRefresh] = useState({})
@@ -192,6 +193,14 @@ function useSalesReport() {
                 description: 'Product code',
                 field: 'productCode',
                 width: 80,
+            },
+            {
+                headerName: 'Product details',
+                headerClassName: 'header-class',
+                description: 'Product details',
+                field: '',
+                renderCell: (params: any) => <ProductDetails params={params} />,
+                width: 300,
             },
             {
                 headerName: 'Category',
@@ -421,6 +430,14 @@ function useSalesReport() {
         }, { count: 0, qty: 0, aggrSale: 0, amount: 0, grossProfit: 0 })
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
         setRefresh({})
+    }
+
+    function ProductDetails({ params }: any) {
+        return (
+            <Box>
+                <Typography>{params.row.brandName}</Typography>
+            </Box>
+        )
     }
 
     function removeRow(params: any) {
