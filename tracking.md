@@ -11,6 +11,7 @@
                                                                                         9. Reset, roundoff, back cal buttons, Igst, Add button
                                                                                         10. saleVariety implementation
                                                                                         11. Ship to
+12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed
 13. Sales report to add auto subledger information
 12. Total error handling and show of submit
 13. Submit functionality
@@ -32,7 +33,7 @@
 
 
 ## Planning
-a. Bank recon saving error has crept in
+a. 
 a. Permissions of Export etc to manager
 b. Make product inactive
 c. Stock journal
@@ -89,8 +90,14 @@ e. Multiple cash entries in receipt
 19. Backup and restore strategy
 20. Upgrade database for all instances
 
-# 18-04-2022
+# 23-04-2022
+1. Reworked on Sales report for product details
+
+# 18-04-2022 - 22-04-2022
 1. Implemented missing permissions and uploaded
+2. Bank recon saving error now corrected
+3. New sales UI
+
 # 17-04-2022
 1. Implemented in megaData the registerKeyWithMethod and ExecMethodFor key
 

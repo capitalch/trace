@@ -7,5 +7,7 @@
     "hsnError": "Missing HSN code",
     "serialNumberError": "Serial numbers mismatch with qty",
 
-    "accountCodeError":"Missing account code"
+    "accountCodeError":"Missing account code",
+
+    "debitCreditMismatchError":"Mismatch of items and payments amount"
 }

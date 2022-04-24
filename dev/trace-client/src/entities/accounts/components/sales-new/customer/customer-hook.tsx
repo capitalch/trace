@@ -23,6 +23,7 @@ function useCustomer() {
 
     useEffect(() => {
         megaData.registerKeyWithMethod('render:customer', setRefresh)
+        megaData.registerKeyWithMethod('handleCloseDialog:customer', handleCloseDialog)
     }, [])
 
     useEffect(() => {

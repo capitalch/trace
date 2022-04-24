@@ -1,10 +1,12 @@
 import { AllErrors, Container, Box, Paper, Typography, } from './redirect'
 import { Customer } from './customer/customer'
-import { Crown } from './crown'
+import { Crown } from './crown/crown'
 import { Payments } from './payments/payments'
 import { Items } from './items/items'
+import { useSalesNew } from './sales-new-hook'
 
 function SalesNew() {
+    useSalesNew()
     return (
         <Box sx={{ '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Box className='vertical' sx={{ flex: 1 }} >

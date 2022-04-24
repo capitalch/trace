@@ -1,4 +1,4 @@
-import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, InputLabel, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NativeSelect, NumberFormat, Radio, RadioGroup, Select, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function PaymentsVariety() {
     const [, setRefresh] = useState({})
@@ -25,7 +25,7 @@ function PaymentsVariety() {
     })
     const pre = meta.current
     return (
-        <Box sx={{ mt: 1, display: 'flex', flexWrap: 'wrap', columnGap: 1, rowGap: 2 }}>
+        <Box sx={{ mt: 2, p: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1, border: '1px solid lightGrey' }}>
             <RadioGroup row>
                 <FormControlLabel
                     control={
@@ -64,6 +64,11 @@ function PaymentsVariety() {
                     label="Institution sales"
                 />
             </RadioGroup>
+            <InputLabel id='sale-1'>Sale A/c</InputLabel>            
+            <Select labelId='sale-1' size='small' sx={{minWidth:theme.spacing(25)}} native={true} value={2}>
+                <option value={1}>Sale</option>
+                <option value={2}>Sale2</option>
+            </Select>
             <BasicMaterialDialog parentMeta={meta} />
         </Box>
     )
@@ -152,9 +157,6 @@ function PaymentsVariety() {
         const data = getdebtorCreditorAccountsWithSubledgers()
         pre.dialogConfig.content = () => getContent(data)
         showDialog()
-        // if( sales?.paymentMethodsList[0]?.rowData?.accId){ //A selecton is done from dialog box list  of accounts
-        //     console.log('a')
-        // }
     }
 
     function handleRetailCashBankSales() {

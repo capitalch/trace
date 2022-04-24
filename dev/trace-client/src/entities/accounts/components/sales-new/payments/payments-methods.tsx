@@ -1,4 +1,4 @@
-import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useIbuki, useState, useTheme, errorMessages } from '../redirect'
+import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData,InputLabel, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useIbuki, useState, useTheme, errorMessages } from '../redirect'
 
 function PaymentsMethods() {
     const [, setRefresh] = useState({})
@@ -25,7 +25,7 @@ function PaymentsMethods() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' >
+        <Box className='vertical' sx={{mt:2,p:1, border:'1px solid lightGrey'}} >
             <Box sx={{ display: 'flex', alignItems: 'center', }}>
                 <Typography variant='body2'>Payment methods</Typography>
                 {/* Add button */}
@@ -39,11 +39,11 @@ function PaymentsMethods() {
         setAllErrors()
         // emit('ALL-ERRORS-JUST-REFRESH', null)
 
-        function checkAllPaymentRows() {
-            for (const row of paymentMethodsList) {
-                row.isAccountCodeError = row.rowData.isLedgerSubledgerError
-            }
-        }
+        // function checkAllPaymentRows() {
+        //     for (const row of paymentMethodsList) {
+        //         row.isAccountCodeError = row.rowData.isLedgerSubledgerError
+        //     }
+        // }
 
         function setAllErrors() {
             allErrors.accountCodeError = paymentMethodsList.some((row: any) => row?.rowData?.isLedgerSubledgerError) ? errorMessages['accountCodeError'] : ''
@@ -100,7 +100,7 @@ function PaymentsMethods() {
                             setRefresh({})
                         }}
                         variant='standard' />
-                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 1 }}>
+                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 'auto' }}>
                         <CloseSharp />
                     </IconButton>
                 </Box>)

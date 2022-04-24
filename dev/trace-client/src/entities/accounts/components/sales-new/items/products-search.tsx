@@ -34,7 +34,7 @@ function ProductsSearch({ parentMeta }: any) {
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}
-            rowHeight={55}
+            rowHeight={65}
             selectionModel={pre.selectionModel}
             onSelectionModelChange={(newModel: any) => {
                 const products = megaData.accounts.allProducts
@@ -61,19 +61,20 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 60,
             },
             {
+                headerName: 'Product',
+                headerClassName: 'header-class',
+                description: 'Product',
+                field: '1',
+                renderCell: (params: any) => <Product params={params} />,
+                width: 200,
+            },
+            {
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
                 field: '',
-                width: 245,
-                renderCell: (params: any) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', }}>
-                        <Typography sx={{ fontSize: theme.spacing(1.7), fontFamily: 'helvetica' }}>{params.row.brandName}</Typography>&nbsp;
-                        <Typography sx={{ fontSize: theme.spacing(1.7), fontFamily: 'helvetica' }}>{params.row.catName}</Typography>&nbsp;
-                        <Typography sx={{ fontSize: theme.spacing(1.7), fontFamily: 'helvetica' }}>{params.row.label ?? ''}</Typography>&nbsp;
-                        <Typography sx={{ fontSize: theme.spacing(1.7), fontFamily: 'helvetica' }}>{params.row.info ?? ''}</Typography>
-                    </Box>
-                )
+                renderCell: (params: any) => <ProductDetails params={params} />,
+                width: 300,
             },
             {
                 headerName: 'Stock',
@@ -196,6 +197,22 @@ function ProductsSearch({ parentMeta }: any) {
             ret = 'row-negative-clos'
         }
         return (ret)
+    }
+
+    function Product({ params }: any) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
+                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.catName}</Typography>}
+                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.label}</Typography>}
+            </Box>
+        )
+    }
+
+    function ProductDetails({ params }: any) {
+        return (
+            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+        )
     }
 }
 export { ProductsSearch }

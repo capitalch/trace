@@ -1,15 +1,11 @@
-import { selectOptions } from '@testing-library/user-event/dist/types/utility'
-import { _, accountsMessages, Avatar, Box, Button, cities, countries, InputMask, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, ReactSelect, SearchBox, states, TextField, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, accountsMessages, Box, Button, cities, countries, IMegaData, InputMask, MegaDataContext, ReactSelect, states, TextField, useConfirm, useContext, useEffect, useState, utils, utilMethods } from '../redirect'
 
 function NewEditCustomer({ parentMeta }: any) {
     const [, setRefresh] = useState({})
-    const megaData = useContext(MegaDataContext)
+    const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const billTo = sales.billTo
     const pre = parentMeta.current
-    // billTo.anniversaryDate = '1900-01-01'
-    // billTo.dateOfBirth = '1900-01-01'
-    const theme = useTheme()
     const confirm = useConfirm()
     const { execGenericView, } = utilMethods()
     const { isImproperDate, isInvalidEmail, isInvalidGstin, isInvalidIndiaMobile, isInvalidIndiaPin, isInvalidStateCode } = utils()
@@ -27,8 +23,7 @@ function NewEditCustomer({ parentMeta }: any) {
     }, [])
 
     return (
-        <Box sx={{ display: 'flex', rowGap: 4, flexDirection: 'column', '& .horiz': { display: 'flex', flexWrap: 'wrap', columnGap: 4 }, '& .select-country': { flex: 1 }, '& .select-state': { flex: 1 }, '& .select-city': { flex: 0.53 } }}>
-
+        <Box sx={{ display: 'flex', rowGap: 4, flexDirection: 'column', '& .horiz': { display: 'flex', flexWrap: 'wrap', columnGap: 4 }, '& .select-country': { flex: 1, border: getCountryStateCityBorder(billTo?.selectedCountryOption?.label) }, '& .select-state': { flex: 1, border: getCountryStateCityBorder(billTo?.selectedStateOption?.label) }, '& .select-city': { flex: 0.53, border: getCountryStateCityBorder(billTo?.selectedCityOption?.label) } }}>
             <Box className='horiz'>
                 {/* Mobile number */}
                 <InputMask
@@ -49,7 +44,6 @@ function NewEditCustomer({ parentMeta }: any) {
                             autoComplete='off'
                             label="Mobile"
                             variant="standard"
-                            // inputRef={pre.mobileNumberTextRef}
                             error={isInvalidIndiaMobile(
                                 billTo.mobileNumber
                             )}
@@ -62,7 +56,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     sx={{ flex: 1 }}
                     label="Other mobile numbers"
                     variant="standard"
-                    // className="text-field"
                     value={billTo.otherMobileNumber || ''}
                     onChange={(e: any) => handleTextChanged('otherMobileNumber', e)}
                 />
@@ -74,7 +67,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     autoComplete='off'
                     label="Contact name"
                     variant="standard"
-                    // className="text-field"
                     error={!billTo.contactName}
                     value={billTo.contactName || ''}
                     onChange={(e: any) => handleTextChanged('contactName', e)}
@@ -85,7 +77,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     autoComplete='off'
                     label="Land phone"
                     variant="standard"
-                    // className="text-field"
                     value={billTo.landPhone || ''}
                     onChange={(e: any) => handleTextChanged('landPhone', e)}
                 />
@@ -97,7 +88,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     sx={{ flex: 1 }}
                     label="Email"
                     variant="standard"
-                    // className="text-field"
                     error={isInvalidEmail(billTo.email)}
                     value={billTo.email || ''}
                     onChange={(e: any) => handleTextChanged('email', e)}
@@ -126,7 +116,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     value={billTo.address1 || ''}
                     onChange={(e: any) => handleTextChanged('address1', e)}
                 />
-
                 {/* Address2 */}
                 <TextField
                     autoComplete='off'
@@ -150,7 +139,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     styles={styles}
                     className="select-country"
                     value={billTo.selectedCountryOption}></ReactSelect>
-
                 {/* States */}
                 <ReactSelect
                     maxMenuHeight={150}
@@ -175,7 +163,6 @@ function NewEditCustomer({ parentMeta }: any) {
                     styles={styles}
                     className="select-city"
                     value={billTo.selectedCityOption}></ReactSelect>
-
                 {/* Pin */}
                 <InputMask
                     mask="999999"
@@ -192,7 +179,6 @@ function NewEditCustomer({ parentMeta }: any) {
                             label="Pin"
                             sx={{ flex: 0.2 }}
                             error={isInvalidIndiaPin(billTo.pin)}
-                        // className="short-text-field"
                         />
                     )}
                 </InputMask>
@@ -211,9 +197,7 @@ function NewEditCustomer({ parentMeta }: any) {
                             autoComplete='off'
                             label="State code"
                             variant="standard"
-                            error={isInvalidStateCode(billTo?.stateCode)}
-                        // className="short-text-field"
-                        />
+                            error={isInvalidStateCode(billTo?.stateCode)} />
                     )}
                 </InputMask>
             </Box>
@@ -224,18 +208,15 @@ function NewEditCustomer({ parentMeta }: any) {
                     variant="standard"
                     type="date"
                     error={isImproperDate(billTo.dateOfBirth)}
-                    // className="text-field"
                     value={billTo.dateOfBirth || ''}
                     onChange={(e: any) => handleTextChanged('dateOfBirth', e)}
                 />
-
                 {/* Anniversary date */}
                 <TextField
                     label="AnniversaryDate"
                     variant="standard"
                     type="date"
                     error={isImproperDate(billTo.anniversaryDate)}
-                    // className="text-field"
                     value={billTo.anniversaryDate || ''}
                     onChange={(e: any) => handleTextChanged('anniversaryDate', e)}
                 />
@@ -249,19 +230,22 @@ function NewEditCustomer({ parentMeta }: any) {
                     onChange={(e: any) => handleTextChanged('descr', e)}
                 />
             </Box>
-
             {/* Submit */}
             <Button
                 color="secondary"
                 className="submit"
+                disabled={isSubmitDisabled()}
                 // disabled={((x1 = isSubmitDisabled()), x1)}
                 variant="contained"
-            // onClick={handleSubmit}
-            >
+                onClick={handleSubmit}>
                 Submit
             </Button>
 
         </Box >)
+
+    function getCountryStateCityBorder(option: any) {
+        return (option ? '' : '3px solid red')
+    }
 
     function handleCityChange(e: any) {
         billTo.selectedCityOption = { value: e.value, label: e.label }
@@ -319,15 +303,62 @@ function NewEditCustomer({ parentMeta }: any) {
                     sales.billTo = ret
                     billTo.contactSelectedFlag = true
                     handleCloseDialog()
-                    // emit('BILL-TO-CLOSE-DIALOG', null)
                 }).catch(() => { })
             }
+        }
+    }
+
+    async function handleSubmit() {
+        const item = {
+            id: billTo.id || null,
+            contactName: billTo.contactName,
+            mobileNumber: billTo.mobileNumber,
+            otherMobileNumber: billTo.otherMobileNumber || null,
+            landPhone: billTo.landPhone || null,
+            email: billTo.email || null,
+            descr: billTo.descr || null,
+            anniversaryDate: billTo.anniversaryDate,
+            address1: billTo.address1,
+            address2: billTo.address2 || null,
+            country: billTo.selectedCountryOption.label,
+            state: billTo.selectedStateOption.label,
+            city: billTo.selectedCityOption.label,
+            gstin: billTo.gstin || null,
+            pin: billTo.pin,
+            dateOfBirth: billTo.dateOfBirth,
+            stateCode: billTo.stateCode,
+        }
+        const ret = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'insert_or_update_contact',
+            args: { ...item }
+        })
+        billTo.id = billTo.id || ret?.id || undefined // To take care when ret = false, or the save fails
+        if (ret) {
+            megaData.executeMethodForKey('handleCloseDialog:customer')
         }
     }
 
     function handleTextChanged(propName: string, e: any) {
         billTo[propName] = e.target.value
         setRefresh({})
+    }
+
+    function isSubmitDisabled() {
+        const ret =
+            isInvalidIndiaMobile(billTo.mobileNumber) ||
+            !billTo.contactName ||
+            isInvalidEmail(billTo.email) ||
+            !billTo.address1 ||
+            !billTo?.selectedCountryOption?.label ||
+            !billTo?.selectedStateOption?.label ||
+            !billTo?.selectedCityOption?.label ||
+            isInvalidIndiaPin(billTo.pin) ||
+            isInvalidStateCode(billTo.stateCode) ||
+            isInvalidGstin(billTo.gstin) ||
+            isImproperDate(billTo.dateOfBirth) ||
+            isImproperDate(billTo.anniversaryDate)
+        return !!ret
     }
 
     function setOptions() {

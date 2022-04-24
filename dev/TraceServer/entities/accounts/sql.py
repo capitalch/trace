@@ -856,7 +856,7 @@ allSqls = {
 				order by "productId"
 	)
 		
-	select c5.*, "productCode", "catName", "brandName", "label", "stock" 
+	select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
 			,(date_part('day', (CASE WHEN %(endDate)s > CURRENT_DATE then CURRENT_DATE ELSE %(endDate)s END)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
 		from cte5 c5
 			join "ProductM" p

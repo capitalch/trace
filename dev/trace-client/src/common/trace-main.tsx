@@ -88,8 +88,8 @@ function TraceMain({ open }: any) {
             accounts: {
                 allProducts: [],
                 common: {},
-                sales: {},
-                settings: {}
+                sales: salesMegaData(),
+                settings: settingsMegaData()
             },
             keysWithMethods: {},
 
@@ -101,15 +101,16 @@ function TraceMain({ open }: any) {
                     return
                 }
                 const method = this.keysWithMethods[key]
-                params ? method(params): method()
+                const ret = params ? method(params): method()
+                return(ret)
             }
         }
         meta.current.megaData = megaData
-        initAccountsMegaData()
-        function initAccountsMegaData() {
-            Object.assign(megaData.accounts.sales, salesMegaData)
-            Object.assign(megaData.accounts.settings, settingsMegaData)
-        }
+        // initAccountsMegaData()
+        // function initAccountsMegaData() {
+        //     Object.assign(megaData.accounts.sales, salesMegaData())
+        //     Object.assign(megaData.accounts.settings, settingsMegaData)
+        // }
     }
 }
 

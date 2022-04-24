@@ -166,7 +166,7 @@ function LineItems() {
                 {/* Price */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Price</Typography>
-                    <NumberFormat style={{ maxWidth: theme.spacing(12) }}
+                    <NumberFormat style={{ maxWidth: theme.spacing(13) }}
                         autoComplete='off'
                         allowNegative={false}
                         // InputProps={smallFontTextField}
@@ -190,7 +190,7 @@ function LineItems() {
                 {/* Price(Gst) */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Price(Gst)</Typography>
-                    <NumberFormat sx={{ maxWidth: theme.spacing(12), }}
+                    <NumberFormat sx={{ maxWidth: theme.spacing(13), }}
                         autoComplete='off'
                         allowNegative={false}
                         // InputProps={smallFontTextField}
@@ -209,7 +209,9 @@ function LineItems() {
                             computeRow(item)
                         }}
                         thousandSeparator={true}
-                        variant='standard' />
+                        size= 'small' color='secondary'
+                        variant='standard' 
+                        />
                 </Box>
                 {/* Discount(unit) */}
                 <Box className='vertical'>
@@ -258,12 +260,6 @@ function LineItems() {
                             : 'secondary'
                     }
                     showZero={true}>
-                    {/* <Chip color='secondary'
-                        sx={{ p: 2, color: theme.palette.common.white }}
-                        size="small"
-                        label="Serial no's"
-                        onClick={() => handleSerialNo(item)}
-                    /> */}
                     <Button color='secondary' size='medium' variant='outlined' onClick={() => handleSerialNo(item)}>Serial no</Button>
                 </Badge>
 
@@ -280,37 +276,3 @@ function LineItems() {
 }
 
 export { LineItems }
-
-// Product search
-// <Box className='vertical' >
-//     <Typography variant='body2'>Product search</Typography>
-//     <TextField
-//         autoComplete='off'
-//         variant='standard'
-//         value={item.productSearch || ''}
-//         onChange={(e: any) => handleTextChanged(item, 'productSearch', e)}
-//         InputProps={{
-//             endAdornment: (
-//                 <InputAdornment position="end">
-//                     <IconButton
-//                         size="large"
-//                         color='secondary'
-//                         onClick={(e: any) => {
-//                         }}>
-//                         <Search />
-//                     </IconButton>
-//                 </InputAdornment>
-//             ), ...smallFontTextField
-//         }}
-//     />
-// </Box> */}
-// Upc
-// <Box className='vertical'>
-//     <Typography variant='caption'>Upc</Typography>
-//     <TextField
-//         autoComplete='off'
-//         sx={{ maxWidth: theme.spacing(13), }}
-//         variant='standard'
-//         value={item.upc || ''}
-//         onChange={(e: any) => handleTextChanged(item, 'upc', e)} />
-// </Box>

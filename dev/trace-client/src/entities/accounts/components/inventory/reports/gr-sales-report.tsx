@@ -47,7 +47,7 @@ function SalesReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
-            rowHeight={35}
+            rowHeight={65}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}
@@ -134,8 +134,8 @@ function SalesReport() {
                 <Box>{''.concat('GP(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.profit || 0))}</Box>
                 <Box sx={{ display: 'flex', fontWeight:'bold', ml: 'auto', flexWrap: 'wrap', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
                     <Box>{''.concat('Qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
-                    <Box >{''.concat('Aggr', ' : ', toDecimalFormat(pre?.totals?.aggrSale || 0))}</Box>
                     <Box>{''.concat('Sale', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
+                    <Box >{''.concat('Aggr', ' : ', toDecimalFormat(pre?.totals?.aggrSale || 0))}</Box>                    
                     <Box>{''.concat('GP', ' : ', toDecimalFormat((pre?.totals?.grossProfit || 0) - (pre?.totals?.opValue || 0)))}</Box>
                 </Box>
             </Box>

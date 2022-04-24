@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import { _, Box, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Box, CloseSharp, Container, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useSalesReport() {
     const [, setRefresh] = useState({})
@@ -194,29 +194,22 @@ function useSalesReport() {
                 field: 'productCode',
                 width: 80,
             },
+
             {
-                headerName: 'Product details',
+                headerName: 'Product',
+                headerClassName: 'header-class',
+                description: 'Product',
+                field: '1',
+                renderCell: (params: any) => <Product params={params} />,
+                width: 200,
+            },
+            {
+                headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
                 field: '',
                 renderCell: (params: any) => <ProductDetails params={params} />,
                 width: 300,
-            },
-            {
-                headerName: 'Category',
-                headerClassName: 'header-class',
-                field: 'catName'
-            },
-            {
-                headerName: 'Brand',
-                headerClassName: 'header-class',
-                field: 'brandName'
-            },
-            {
-                headerName: 'Label',
-                headerClassName: 'header-class',
-                field: 'label',
-                width: 120
             },
             {
                 headerName: 'Qty',
@@ -432,11 +425,19 @@ function useSalesReport() {
         setRefresh({})
     }
 
+    function Product({ params }: any) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
+                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.catName}</Typography>}
+                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.label}</Typography>}
+            </Box>
+        )
+    }
+
     function ProductDetails({ params }: any) {
         return (
-            <Box>
-                <Typography>{params.row.brandName}</Typography>
-            </Box>
+            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
         )
     }
 
