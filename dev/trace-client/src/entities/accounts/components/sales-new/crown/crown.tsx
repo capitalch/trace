@@ -9,7 +9,7 @@ function Crown() {
     const { handleReset, handleSubmit } = useCrown()
     // sales.setRefreshCrown = setRefresh
 
-    return (<Box className='vertical' sx={{ border: '1px solid lightBlue', ml: 2, mt: 0, mb: 0, p: 1, display: 'flex', columnGap: 2, rowGap: 2 }}>
+    return (<Box className='vertical' sx={{ border: '1px solid lightBlue', ml:'auto', mt: 0, mb: 0, p: 1, display: 'flex', columnGap: 2, rowGap: 2 }}>
         <Button variant='contained' onClick={handleSubmit} size='large' sx={{ height: theme.spacing(5), ml: 'auto', }} disabled={sales.isAnyError} color='success'>Submit</Button>
         <Button variant='outlined' size='small' sx={{ height: theme.spacing(5) }} color='secondary'>View</Button>
         <Button variant='outlined' onClick={handleReset} size='small' sx={{ height: theme.spacing(5), mt: 'auto' }} color='info' >Reset</Button>

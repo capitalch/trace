@@ -1,4 +1,4 @@
-import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, InputLabel, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NativeSelect, NumberFormat, Radio, RadioGroup, Select, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, InputLabel, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, manageEntitiesState, MegaDataContext, NativeSelect, NumberFormat, Radio, RadioGroup, Select, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function PaymentsVariety() {
     const [, setRefresh] = useState({})
@@ -9,6 +9,7 @@ function PaymentsVariety() {
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     const { getAutoSubledgers, getCashBankAccountsWithSubledgers, getdebtorCreditorAccountsWithSubledgers } = utils()
     const { execGenericView, keyGen } = utilMethods()
+    const { getFromBag } = manageEntitiesState()
 
     useEffect(() => {
         sales.filterMethodName = 'cashBank'
@@ -64,10 +65,9 @@ function PaymentsVariety() {
                     label="Institution sales"
                 />
             </RadioGroup>
-            <InputLabel id='sale-1'>Sale A/c</InputLabel>            
-            <Select labelId='sale-1' size='small' sx={{minWidth:theme.spacing(25)}} native={true} value={2}>
-                <option value={1}>Sale</option>
-                <option value={2}>Sale2</option>
+            <InputLabel id='sale-1'>Sale A/c</InputLabel>
+            <Select labelId='sale-1' size='small' sx={{ minWidth: theme.spacing(25) }} native={true} value={sales.defaultSalesAccountId}>
+                {getSaleOptions()}
             </Select>
             <BasicMaterialDialog parentMeta={meta} />
         </Box>
@@ -75,6 +75,14 @@ function PaymentsVariety() {
 
     function doClear() {
         handleSalesVariety('r')
+    }
+
+    function getSaleOptions() {
+        const allAccounts = getFromBag('allAccounts')
+        const saleAccounts = allAccounts.filter((x: any) => (x.accClass === 'sale') && (['S', 'Y'].includes(x.accLeaf)))
+        const saleOptions = saleAccounts.map((x: any, index: number) => (<option key={index} value={x.id}>{x.accName}</option>))
+        sales.defaultSalesAccountId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
+        return (saleOptions)
     }
 
     function getContent(data: any[]) {

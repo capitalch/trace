@@ -20,8 +20,9 @@ function Customer() {
                 <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
                 {/* ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12), ml: 4 }}>
-                    <Typography variant='body2' >Ref no</Typography>
-                    <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true} />
+                    <Typography variant='body2' sx={{mt:-3.2}}>Ref no</Typography>
+                    <Typography variant='body2'>{sales.autoRefNo || ''}</Typography>
+                    {/* <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true} /> */}
                 </Box>
                 {/* tran date */}
                 <Box className='vertical'>
@@ -32,16 +33,16 @@ function Customer() {
                         onChange={(e: any) => { sales.tranDate = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* User ref no */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(12) }}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(12) }}>
                     <Typography variant='body2'>User ref no</Typography>
                     <TextField variant='standard' value={sales.userRefNo || ''} sx={{ maxWidth: theme.spacing(16) }} autoComplete='off'
                         onChange={(e: any) => handleTextChanged('userRefNo', e)} />
                 </Box>
                 {/* Gstin */}
-                <Box className='vertical'>
+                <Box className='vertical' sx = {{maxWidth:theme.spacing(15)}}>
                     <Typography variant='body2'>Gstin no</Typography>
                     <TextField variant='standard' value={billTo.gstin || ''} autoComplete='off'
-                        error={Boolean(allErrors.gstinError)}
+                        error={Boolean(allErrors.gstinError)} 
                         onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
@@ -52,7 +53,7 @@ function Customer() {
             </Box>
             <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
                 {/* Customer search */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(40) }}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(35) }}>
                     <Typography variant='body2'>Customer search</Typography>
                     <TextField
                         autoComplete='off'
@@ -116,9 +117,9 @@ function Customer() {
                 </Box>
                 <Box sx={{ display: 'flex', }}>
                     {/* New / edit */}
-                    <Button size='medium' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
+                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
-                    <Button size='medium' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
+                    <Button size='small' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
                 </Box>
             </Box>
             <Dialog

@@ -17,18 +17,18 @@ function useCrown() {
         megaData.accounts.sales = salesMegaData()
         emit('TRACE-MAIN:JUST-REFRESH', null)
     }
-
+    
     async function handleSubmit() {
         // const ad = arbitraryData
         // setInBag('rawSaleData', null)
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        let ret = await genericUpdateMasterDetails([header])
-        if (ret.error) {
-            console.log(ret.error)
-        } else {
-            const id = ret?.data?.accounts?.genericUpdateMasterDetails
+        // let ret = await genericUpdateMasterDetails([header])
+        // if (ret.error) {
+        //     console.log(ret.error)
+        // } else {
+        //     const id = ret?.data?.accounts?.genericUpdateMasterDetails
             // if (id) {
             //     ret = await execSaleInvoiceView({
             //         isMultipleRows: false,
@@ -53,7 +53,7 @@ function useCrown() {
             //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             // }
             // ad.isViewBack = false // no go back to view
-        }
+        // }
 
         function extractHeader() {
             const finYearId = getFromBag('finYearObject')?.finYearId
@@ -95,69 +95,69 @@ function useCrown() {
                 data: [],
             }
 
-            // const saleDataRow: any = {
-            //     id: ad.rowData.id || undefined,
-            //     accId: ad.rowData.accId,
-            //     dc: ad.saleType === 'sal' ? 'C' : 'D',
-            //     amount: ad.summary.amount,
-            //     details: [],
-            // }
-            // saleTranD.data.push(saleDataRow)
+            const saleDataRow: any = {
+                // id: sales.rowData.id || undefined,
+                accId: sales.defaultSalesAccountId,
+                dc: sales.saleType === 'sal' ? 'C' : 'D',
+                amount: sales.summary.amount,
+                details: [],
+            }
+            saleTranD.data.push(saleDataRow)
 
-            // for (let item of ad.footer.items) {
-            //     saleTranD.data.push({
-            //         accId: item.accId,
-            //         dc: ad.saleType === 'sal' ? 'D' : 'C',
-            //         amount: item.amount,
-            //         remarks: item.remarks,
-            //         instrNo: item.instrNo,
-            //         id: item.id || undefined,
-            //     })
-            // }
+            for (let item of sales.paymentMethodsList) {
+                saleTranD.data.push({
+                    accId: item.accId,
+                    dc: sales.saleType === 'sal' ? 'D' : 'C',
+                    amount: item.amount,
+                    remarks: item.remarks,
+                    instrNo: item.instrNo,
+                    id: item.id || undefined,
+                })
+            }
 
-            // const gst = {
-            //     tableName: 'ExtGstTranD',
-            //     fkeyName: 'tranDetailsId',
-            //     data: [
-            //         {
-            //             id: ad.extGstTranDId || undefined,
-            //             gstin: ad.billTo.gstin,
-            //             cgst: ad.summary.cgst,
-            //             sgst: ad.summary.sgst,
-            //             igst: ad.summary.igst,
-            //             isInput: ad.saleType === 'sal' ? false : true,
-            //         },
-            //     ],
-            // }
-            // saleDataRow.details.push(gst)
-            // const products = {
-            //     tableName: 'SalePurchaseDetails',
-            //     fkeyName: 'tranDetailsId',
-            //     deletedIds:
-            //         ad?.deletedSalePurchaseIds.length > 0
-            //             ? [...ad.deletedSalePurchaseIds]
-            //             : undefined,
-            //     data: ad.lineItems.map((item: any) => ({
-            //         id: item.id || undefined,
-            //         productId: item.productId,
-            //         qty: item.qty,
-            //         priceGst: item.priceGst,
-            //         price: item.price,
-            //         discount: item.discount,
-            //         amount: item.amount,
-            //         gstRate: item.gstRate,
-            //         cgst: item.cgst,
-            //         sgst: item.sgst,
-            //         igst: item.igst,
-            //         hsn: item.hsn,
-            //         jData: JSON.stringify({
-            //             serialNumbers: item.serialNumbers,
-            //             remarks: item.remarks,
-            //         }),
-            //     })),
-            // }
+            const gst = {
+                tableName: 'ExtGstTranD',
+                fkeyName: 'tranDetailsId',
+                data: [
+                    {
+                        id: sales.extGstTranDId || undefined,
+                        gstin: sales.billTo.gstin,
+                        cgst: sales.summary.cgst,
+                        sgst: sales.summary.sgst,
+                        igst: sales.summary.igst,
+                        isInput: sales.saleType === 'sal' ? false : true,
+                    },
+                ],
+            }
+            saleDataRow.details.push(gst)
+            const products = {
+                tableName: 'SalePurchaseDetails',
+                fkeyName: 'tranDetailsId',
+                // deletedIds:
+                //     ad?.deletedSalePurchaseIds.length > 0
+                //         ? [...ad.deletedSalePurchaseIds]
+                //         : undefined,
+                data: sales.items.map((item: any) => ({
+                    id: item.id || undefined,
+                    productId: item.productId,
+                    qty: item.qty,
+                    priceGst: item.priceGst,
+                    price: item.price,
+                    discount: item.discount,
+                    amount: item.amount,
+                    gstRate: item.gstRate,
+                    cgst: item.cgst,
+                    sgst: item.sgst,
+                    igst: item.igst,
+                    hsn: item.hsn,
+                    jData: JSON.stringify({
+                        serialNumbers: item.serialNumbers,
+                        remarks: item.remarks,
+                    }),
+                })),
+            }
 
-            // saleDataRow.details.push(products)
+            saleDataRow.details.push(products)
 
             return saleTranD
         }
