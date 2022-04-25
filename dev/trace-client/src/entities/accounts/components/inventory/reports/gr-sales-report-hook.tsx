@@ -428,9 +428,9 @@ function useSalesReport() {
     function Product({ params }: any) {
         return (
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
-                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.catName}</Typography>}
-                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.label}</Typography>}
+                <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
+                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.catName}</Typography>}
+                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
             </Box>
         )
     }

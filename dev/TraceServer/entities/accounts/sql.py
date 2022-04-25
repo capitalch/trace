@@ -965,7 +965,7 @@ allSqls = {
             select c6."productId", "productCode", "catName", "brandName", "label","openingPrice", "op"::numeric(10,2),"opValue"
             , ("purchase" + "saleRet")::numeric(10,2) as "dr", ("sale" + "purchaseRet"):: numeric(10,2) as "cr",
             "sale"::numeric(10,2), "purchase"::numeric(10,2), "saleRet"::numeric(10,2), "purchaseRet"::numeric(10,2), "clos"::numeric(10,2), "lastPurchasePrice", ("clos" * "lastPurchasePrice")::numeric(12,2) as "closValue"
-                    , "lastPurchaseDate", "lastSaleDate", (date_part('day',coalesce(%(onDate)s, CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
+                    , "lastPurchaseDate", "lastSaleDate", (date_part('day',coalesce(%(onDate)s, CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age", "info"
                 from cte6 c6
                     right join "ProductM" p
                         on p."id" = c6."productId"

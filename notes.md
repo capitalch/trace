@@ -1,6 +1,5 @@
-#  npm install @testing-library/react@latest @types/react@latest @types/react-dom@latest @types/react-table@latest  react@latest react-dom@latest 
+#  npm uninstall react-idle-timer
 
-primereact@latest tslib@latest
 ## Required reports
 1. Profitibality
 2. daily sales with profitability

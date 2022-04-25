@@ -50,7 +50,7 @@ function StockSummaryReport() {
             getRowClassName={getRowClassName}
             // isRowSelectable={(e:any)=>false}
             onSelectionModelChange={onSelectModelChange}
-            rowHeight={35}
+            rowHeight={70}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}

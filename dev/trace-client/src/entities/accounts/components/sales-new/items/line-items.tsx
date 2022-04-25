@@ -2,7 +2,6 @@ import { Badge, Box, Button, Card, Chip, CloseSharp, IconButton, IMegaData, Numb
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
-    // const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
@@ -27,6 +26,7 @@ function LineItems() {
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
         const smallFontTextField = megaData.accounts.settings.smallFontTextField
+
         return (
             <Box
                 onClick={(e: any) => {
@@ -44,22 +44,16 @@ function LineItems() {
 
                 {/* Index */}
                 <Box className='vertical' sx={{ width: theme.spacing(3) }}>
-                    {/* Delete */}
-                    <IconButton sx={{ ml: -2, mt: -1 }} size='small' color='error'
-                        onClick={() => handleDeleteRow(index)}>
-                        <CloseSharp />
-                    </IconButton>
-                    <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
-                </Box>
-                {/* Product code */}
-                <Box className='vertical' >
                     {/* Age */}
-                    <Badge badgeContent={item.age || 0} color='secondary' sx={{ ml: 10 }} showZero overlap='circular' anchorOrigin={{
+                    <Badge badgeContent={item.age || 0} color='secondary' sx={{mb:1, ml:-14 }} showZero overlap='circular' anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
-                        
                     </Badge>
+                    <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
+                </Box>
+                {/* Product code */}
+                <Box className='vertical' >                    
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
                         allowNegative={false}
@@ -78,7 +72,6 @@ function LineItems() {
                                 clearRow(item)
                             }
                         }}
-
                         onFocus={(e: any) => {
                             e.target.select()
                         }} />
@@ -263,8 +256,15 @@ function LineItems() {
 
                 {/* amount */}
                 <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
-
-            </Box >)
+                <Box sx={{ ml: -6.5, mt: -8 }}>
+                    {/* delete */}
+                    <IconButton sx={{ position: 'relative', left: theme.spacing(1.5), }} size='small' color='error'
+                        onClick={() => handleDeleteRow(index)}>
+                        <CloseSharp />
+                    </IconButton>
+                </Box>
+            </Box >
+        )
 
         function handleTextChanged(item: any, propName: string, e: any) {
             item[propName] = e.target.value
