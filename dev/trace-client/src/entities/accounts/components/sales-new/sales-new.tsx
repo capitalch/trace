@@ -13,11 +13,10 @@ function SalesNew() {
                 <Typography variant='subtitle1'>Sales</Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap-reverse', rowGap: 2 }}>
                     <Customer />
-                    {/* <AllErrors /> */}
                     <Crown />
                 </Box>
                 <Items />
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, columnGap: 1 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, columnGap: 1, }}>
                     <Payments />
                     <AllErrors />
                 </Box>

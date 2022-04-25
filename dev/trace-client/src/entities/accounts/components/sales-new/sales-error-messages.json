@@ -8,6 +8,7 @@
     "serialNumberError": "Serial numbers mismatch with qty",
 
     "accountCodeError":"Missing account code",
+    "shipToError":"Validation error in ship to",
 
     "debitCreditMismatchError":"Mismatch of items and payments amount"
 }

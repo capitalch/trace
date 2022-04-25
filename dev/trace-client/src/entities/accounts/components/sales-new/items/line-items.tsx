@@ -12,7 +12,7 @@ function LineItems() {
     const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     checkAllErrors()
-    
+
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
@@ -53,18 +53,22 @@ function LineItems() {
                 </Box>
                 {/* Product code */}
                 <Box className='vertical' >
+                    {/* Age */}
+                    <Badge badgeContent={item.age || 0} color='secondary' sx={{ ml: 10 }} showZero overlap='circular' anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}>
+                        
+                    </Badge>
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
-                        // inputRef={productCodeRef}
                         allowNegative={false}
                         autoComplete='off'
-                        // InputProps={smallFontTextField}
-                        // className='right-aligned'
                         customInput={TextField}
                         decimalScale={0}
                         fixedDecimalScale={true}
                         value={item.productCode || ''}
-                        variant='standard'
+                        variant='standard' size='small'
                         onChange={(e: any) => {
                             item.productCode = e.target.value
                             setRefresh({})
@@ -79,12 +83,6 @@ function LineItems() {
                             e.target.select()
                         }} />
                 </Box>
-                {/* Age */}
-                <Badge badgeContent={item.age || 0} color='secondary' sx={{ mt: -8, ml: -2 }} showZero overlap='circular' anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}>
-                </Badge>
                 {/* Product details */}
                 <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>
                     <Typography sx={{
@@ -209,9 +207,9 @@ function LineItems() {
                             computeRow(item)
                         }}
                         thousandSeparator={true}
-                        size= 'small' color='secondary'
-                        variant='standard' 
-                        />
+                        size='small' color='secondary'
+                        variant='standard'
+                    />
                 </Box>
                 {/* Discount(unit) */}
                 <Box className='vertical'>

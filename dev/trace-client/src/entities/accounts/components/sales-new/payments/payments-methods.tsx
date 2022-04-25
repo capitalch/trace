@@ -25,9 +25,9 @@ function PaymentsMethods() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' sx={{mt:2,p:1, border:'1px solid lightGrey'}} >
+        <Box className='vertical' sx={{mt:1,p:1, border:'1px solid lightGrey'}} >
             <Box sx={{ display: 'flex', alignItems: 'center', }}>
-                <Typography variant='body2'>Payment methods</Typography>
+                <Typography variant='body2' sx={{fontWeight:'bold'}}>Payment methods</Typography>
                 {/* Add button */}
                 <Button variant='outlined' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
             </Box>

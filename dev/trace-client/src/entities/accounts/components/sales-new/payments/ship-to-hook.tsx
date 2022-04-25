@@ -1,4 +1,4 @@
-import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Avatar, Box, Button, CloseSharp, errorMessages, FormControlLabel, IconButton, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useShipTo() {
     const [, setRefresh] = useState({})
@@ -6,6 +6,8 @@ function useShipTo() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const shipTo = sales.shipTo
+    const allErrors = sales.allErrors
+    const { emit } = useIbuki()
     const meta: any = useRef({
         showDialog: false,
         dialogConfig: {
@@ -21,21 +23,9 @@ function useShipTo() {
         megaData.registerKeyWithMethod('handleClear:shipTo', handleClear)
     }, [])
 
-    function closeDialog() {
-        pre.showDialog = false
-        setRefresh({})
-    }
-
-    function handleClear() {
-        Object.keys(sales.shipTo).forEach((key: any) => delete sales.shipTo[key])
-        setRefresh({})
-    }
-
-    function handleNewClicked() {
-        pre.showDialog = true
-        pre.dialogConfig.content = ShippingDetails
-        setRefresh({})
-    }
+    useEffect(() => {
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+    })
 
     function ShippingDetails() {
         const [, setRefresh] = useState({})
@@ -81,7 +71,6 @@ function useShipTo() {
                 {/* address2 */}
                 <TextField
                     autoComplete='new-password'
-                    error={!shipTo.address2}
                     label='Address2'
                     variant='standard'
                     value={shipTo.address2 || ''}
@@ -96,7 +85,7 @@ function useShipTo() {
                     value={shipTo.country || ''}
                     onChange={(e: any) => handleTextChanged('country', e)}
                 />
-                {/* address2 */}
+                {/* State */}
                 <TextField
                     autoComplete='new-password'
                     error={!shipTo.state}
@@ -105,7 +94,7 @@ function useShipTo() {
                     value={shipTo.state || ''}
                     onChange={(e: any) => handleTextChanged('state', e)}
                 />
-                {/* address2 */}
+                {/* city */}
                 <TextField
                     autoComplete='new-password'
                     error={!shipTo.city}
@@ -133,17 +122,17 @@ function useShipTo() {
                 />
             </Box>
             <Box sx={{ display: 'flex', }}>
-                <Button sx={{ ml: 'auto', }} color='secondary' variant='outlined' size='small' onClick={handleClearShippingAddress} >Clear</Button>
-                <Button color='secondary' variant='contained' size='small' sx={{ ml: 2, mr: 5 }} onClick={handleSubmit} >Submit</Button>
+                <Button sx={{ ml: 'auto', }} color='secondary' variant='outlined' size='small' onClick={handleClear} >Clear</Button>
+                <Button color='secondary' variant='contained' size='small' sx={{ ml: 2, mr: 5 }} onClick={handleOk} >Ok</Button>
             </Box>
         </Box>)
 
-        function handleClearShippingAddress() {
+        function handleClear() {
             Object.keys(sales.shipTo).forEach((key: any) => delete sales.shipTo[key])
             setRefresh({})
         }
 
-        function handleSubmit() {
+        function handleOk() {
             megaData.executeMethodForKey('closeDialog:shipTo')
         }
 
@@ -153,9 +142,38 @@ function useShipTo() {
         }
     }
 
+    function checkAllErrors() {
+        if (_.isEmpty(shipTo)) {
+            allErrors.shipToError = undefined
+        } else {
+            const ok = shipTo.name && shipTo.address1 && shipTo.country && shipTo.state && shipTo.city && shipTo.pin
+            allErrors.shipToError = ok ? undefined : errorMessages.shipToError
+        }
+    }
+
+    function closeDialog() {
+        pre.showDialog = false
+        setRefresh({})
+    }
+
+    function getShipToAsString() {
+        return (Object.values(shipTo).filter((x: any) => x).join(', ').replace(/^,/, ''))
+    }
+
+    function handleClear() {
+        Object.keys(sales.shipTo).forEach((key: any) => delete sales.shipTo[key])
+        setRefresh({})
+    }
+
+    function handleNewClicked() {
+        pre.showDialog = true
+        pre.dialogConfig.content = ShippingDetails
+        setRefresh({})
+    }
 
 
-    return ({ handleClear, handleNewClicked, meta })
+
+    return ({ allErrors, checkAllErrors, getShipToAsString, handleClear, handleNewClicked, meta })
 }
 
 export { useShipTo }
