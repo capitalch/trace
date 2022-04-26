@@ -1,5 +1,8 @@
 #  npm uninstall react-idle-timer
 
+## Chitta done
+# npm install @mui/material @mui/x-data-grid-pro @types/node axios graphql primereact react-number-format sass socket.io-client graphql
+
 ## Required reports
 1. Profitibality
 2. daily sales with profitability

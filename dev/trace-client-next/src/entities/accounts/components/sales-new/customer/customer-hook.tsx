@@ -23,6 +23,7 @@ function useCustomer() {
 
     useEffect(() => {
         megaData.registerKeyWithMethod('render:customer', setRefresh)
+        megaData.registerKeyWithMethod('handleCloseDialog:customer', handleCloseDialog)
     }, [])
 
     useEffect(() => {
@@ -43,7 +44,8 @@ function useCustomer() {
         }
 
         function customerError() {
-            const ret = !((sales?.billTo?.id) && (sales.billTo.contactName)) ? errorMessages['customerError'] : ''
+            const ret = (sales?.billTo?.id || sales?.billTo?.contactName) ? '': errorMessages['customerError']
+            // const ret = !((sales?.billTo?.id) && (sales.billTo.contactName)) ? errorMessages['customerError'] : ''
             allErrors['customerError'] = ret
         }
 

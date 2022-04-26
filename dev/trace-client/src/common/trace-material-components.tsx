@@ -31,6 +31,7 @@ function useTraceMaterialComponents() {
         const theme = useTheme()
         return (<Dialog
             fullWidth={true}
+            fullScreen= {pre.dialogConfig.fullScreen || false}
             maxWidth={pre.dialogConfig.maxWidth || 'xl'}
             sx={pre.sx}
             open={pre.showDialog}

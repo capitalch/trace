@@ -1,4 +1,4 @@
-import { _, Big, Box, Button, IMegaData, MegaDataContext, NumberFormat, ProductsSearch, TextField, Typography, useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, Box, Button, IMegaData, MegaDataContext, NumberFormat, ProductsSearch, TextField, Typography, useContext, useEffect, useIbuki, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function ItemsFooter() {
     const [, setRefresh] = useState({})
@@ -6,6 +6,7 @@ function ItemsFooter() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
+    const { emit } = useIbuki()
     const { toDecimalFormat } = utilMethods()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     const meta: any = useRef({
@@ -23,24 +24,23 @@ function ItemsFooter() {
         megaData.registerKeyWithMethod('render:itemsFooter', setRefresh)
         computeSummary()
     }, [])
+    
+    useEffect(() => {
+        emit('ALL-ERRORS-JUST-REFRESH', null)
+    })
 
-    // useEffect(() => {        
-    //     if (megaData.accounts?.selectedProduct) {
-    //         sales.setItemToSelectedProduct()
-    //     }
-    // })
+    return (<Box sx={{ pt: .5, pb: .5, display: 'flex', rowGap: 3, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
 
-    return (<Box sx={{ pt: 1, pb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, rowGap: 3, }}>
+            {/* Item search button */}
+            <Button size='small' variant='contained' color='secondary' onClick={handleItemSearch}>Item search</Button>
             {/* Count */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Count: ', items.length)}</Typography>
             {/* Qty */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Qty: ', toDecimalFormat(sales.summary.qty))}</Typography>
-            {/* Item search button */}
-            <Button size='small' variant='contained' color='warning' onClick={handleItemSearch}>Item search</Button>
         </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 3, alignItems: 'center', columnGap: 2, }}>
             {/* cgst */}
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Cgst: ', toDecimalFormat(sales.summary.cgst))}</Typography>
             {/* sgst */}
@@ -53,6 +53,7 @@ function ItemsFooter() {
 
             <Button size='small' variant='outlined' color='secondary' onClick={handleRoundOff}>Round off</Button>
             <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
+
             {/* Back calculate */}
             <Box sx={{ display: 'flex', columnGap: 1 }}>
                 <NumberFormat
@@ -97,6 +98,7 @@ function ItemsFooter() {
         sales.summary.igst = total.igst
         sales.summary.amount = total.amount
         sales.summary.backCalculateAmount = total.amount
+        megaData.executeMethodForKey('setAmountForPayment:paymentMethods')
         setRefresh({})
     }
 

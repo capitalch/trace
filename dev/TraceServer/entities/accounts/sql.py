@@ -767,15 +767,28 @@ allSqls = {
         with cte0 as( --base cte: from tranD where 4,5,9,10, branchId, finYearId, tranDate <= endDate
 	select "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
 		, s."amount", "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp"
+        , (
+			select string_agg("accName", ', ')
+				from "AccM" a
+					join "TranD" d
+						on a."id" = d."accId"
+					join "TranH" h1
+						on h1."id" = d."tranHeaderId"
+			where h1.id = h.id and "dc" <> 'C'
+		) as "accounts"
 		from "TranH" h
 			join "TranD" d
 				on h."id" = d."tranHeaderId"
+            join "AccM" a
+                        on a."id" = d."accId"
 			join "SalePurchaseDetails" s
 				on d."id" = s."tranDetailsId"
 			where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
 			--where "branchId" = 1 and "finYearId" = 2022
 			and "tranDate" <= %(endDate)s
 			and "tranTypeId" in (4, 5, 9, 10)
+        --group by h."tranDate" , s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
+		--   , s."amount", "gstRate", s."id", "autoRefNo", h."timestamp"
 	), cte1 as( --from ProductOpBal where branch, finYear
 		select "productId","qty", "openingPrice", "lastPurchaseDate"
 			from "ProductOpBal" p 
@@ -801,7 +814,7 @@ allSqls = {
             from cte0 c0
 		where "tranTypeId" in (4, 9)
 	), cte3 as ( -- using ProductOpBal fill for missing lastPurchasePrice and lastPurchaseDate (c1 is ProductOpBal)
-            select "tranDate", c2."productId", c2."qty", "price", "timestamp"
+            select "tranDate", c2."productId", c2."qty", "price", "timestamp", "accounts"
 			, coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice"
 			, coalesce(c2."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
 			, "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst"
@@ -822,7 +835,7 @@ allSqls = {
 			, CASE when "tranTypeId" = 4 then "amount" else -"amount" end as "amount"
 			, CASE when "tranTypeId" = 4 then 'Sale' else 'Return' end as "saleType"
 			, CASE when "tranTypeId" = 4 then "grossProfit" else -"grossProfit" end as "grossProfit"
-            , "lastPurchaseDate", "timestamp"
+            , "lastPurchaseDate", "timestamp", "accounts"
 				from cte4
 	), cte6 as ( --for stock: cte0-> group by on productId, saleType, get columns as sale, ret, purchase
 		select "productId","tranTypeId", 

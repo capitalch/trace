@@ -1,22 +1,27 @@
-import { AllErrors, Box, Typography, } from './redirect'
+import { AllErrors, Box, Paper, Typography, } from './redirect'
 import { Customer } from './customer/customer'
-import { Crown } from './crown'
+import { Crown } from './crown/crown'
 import { Payments } from './payments/payments'
 import { Items } from './items/items'
+import { useSalesNew } from './sales-new-hook'
 
 function SalesNew() {
+    useSalesNew()
     return (
-        <Box sx={{ display: 'flex', flexGrow: 1, '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
-            <Box className='vertical' sx={{ flexGrow: 1 }}>
+        <Box sx={{ '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
+            <Box className='vertical' sx={{ flex: 1 }} >
                 <Typography variant='subtitle1'>Sales</Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap-reverse', rowGap: 2, justifyContent: 'space-between' }}>
                     <Customer />
-                    <AllErrors />
                     <Crown />
                 </Box>
                 <Items />
-                <Payments />
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, columnGap: 1, }}>
+                    <Payments />
+                    <AllErrors />
+                </Box>
             </Box>
+           
         </Box>
     )
 }

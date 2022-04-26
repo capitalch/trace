@@ -1,4 +1,5 @@
-import { _, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { Typography } from '@mui/material'
+import { _, Box, CloseSharp, Container, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useSalesReport() {
     const [, setRefresh] = useState({})
@@ -179,12 +180,20 @@ function useSalesReport() {
                 width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
+            // {
+            //     headerName: 'Ref no',
+            //     headerClassName: 'header-class',
+            //     description: 'Ref no',
+            //     field: 'autoRefNo',
+            //     width: 165,
+            // },
             {
-                headerName: 'Ref no',
+                headerName: 'Ref no | Accounts',
                 headerClassName: 'header-class',
                 description: 'Ref no',
                 field: 'autoRefNo',
                 width: 165,
+                renderCell: (params: any) => <RefNoAccounts params={params} />
             },
             {
                 headerName: 'Pr code',
@@ -193,21 +202,22 @@ function useSalesReport() {
                 field: 'productCode',
                 width: 80,
             },
+
             {
-                headerName: 'Category',
+                headerName: 'Product',
                 headerClassName: 'header-class',
-                field: 'catName'
+                description: 'Product',
+                field: '1',
+                renderCell: (params: any) => <Product params={params} />,
+                width: 200,
             },
             {
-                headerName: 'Brand',
+                headerName: 'Details',
                 headerClassName: 'header-class',
-                field: 'brandName'
-            },
-            {
-                headerName: 'Label',
-                headerClassName: 'header-class',
-                field: 'label',
-                width: 120
+                description: 'Product details',
+                field: '',
+                renderCell: (params: any) => <ProductDetails params={params} />,
+                width: 300,
             },
             {
                 headerName: 'Qty',
@@ -421,6 +431,35 @@ function useSalesReport() {
         }, { count: 0, qty: 0, aggrSale: 0, amount: 0, grossProfit: 0 })
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
         setRefresh({})
+    }
+
+    function Product({ params }: any) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
+                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.catName}</Typography>}
+                {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+            </Box>
+        )
+    }
+
+    function ProductDetails({ params }: any) {
+        return (
+            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+        )
+    }
+
+    function RefNoAccounts({ params }: any) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight:'bold' }}>
+                    {''.concat((params.row.autoRefNo || ''), ', ')}&nbsp;
+                </Typography>
+                <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6),}}>
+                    {params.row.accounts || ''}
+                </Typography>
+            </Box>
+        )
     }
 
     function removeRow(params: any) {

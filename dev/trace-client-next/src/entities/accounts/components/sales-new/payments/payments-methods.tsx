@@ -1,4 +1,4 @@
-import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useIbuki, useState, useTheme, errorMessages } from '../redirect'
+import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData,InputLabel, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useIbuki, useState, useTheme, errorMessages } from '../redirect'
 
 function PaymentsMethods() {
     const [, setRefresh] = useState({})
@@ -11,11 +11,11 @@ function PaymentsMethods() {
 
     useEffect(() => {
         if (sales.paymentMethodsList.length === 0) {
-            sales.paymentMethodsList.push({})
-            setRefresh({})
+            handleAddPaymentMethod()
         }
         megaData.registerKeyWithMethod('render:paymentsMethods', setRefresh)
         megaData.registerKeyWithMethod('doClear:paymentsMethods', doClear)
+        megaData.registerKeyWithMethod('setAmountForPayment:paymentMethods', setAmountForPayment)
     }, [])
 
     useEffect(() => {
@@ -25,9 +25,9 @@ function PaymentsMethods() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' >
+        <Box className='vertical' sx={{mt:1,p:1, border:'1px solid lightGrey'}} >
             <Box sx={{ display: 'flex', alignItems: 'center', }}>
-                <Typography variant='body2'>Payment methods</Typography>
+                <Typography variant='body2' sx={{fontWeight:'bold'}}>Payment methods</Typography>
                 {/* Add button */}
                 <Button variant='outlined' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
             </Box>
@@ -36,15 +36,14 @@ function PaymentsMethods() {
     )
 
     function checkAllErrors() {
-
         setAllErrors()
         // emit('ALL-ERRORS-JUST-REFRESH', null)
 
-        function checkAllRows() {
-            for (const row of paymentMethodsList) {
-                row.isAccountCodeError = row.rowData.isLedgerSubledgerError
-            }
-        }
+        // function checkAllPaymentRows() {
+        //     for (const row of paymentMethodsList) {
+        //         row.isAccountCodeError = row.rowData.isLedgerSubledgerError
+        //     }
+        // }
 
         function setAllErrors() {
             allErrors.accountCodeError = paymentMethodsList.some((row: any) => row?.rowData?.isLedgerSubledgerError) ? errorMessages['accountCodeError'] : ''
@@ -57,7 +56,7 @@ function PaymentsMethods() {
     }
 
     function handleAddPaymentMethod() {
-        paymentMethodsList.push({})
+        paymentMethodsList.push({ rowData: { isLedgerSubledgerError: true } })
         setRefresh({})
     }
 
@@ -101,7 +100,7 @@ function PaymentsMethods() {
                             setRefresh({})
                         }}
                         variant='standard' />
-                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 1 }}>
+                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 'auto' }}>
                         <CloseSharp />
                     </IconButton>
                 </Box>)
@@ -111,16 +110,26 @@ function PaymentsMethods() {
 
         function handleDeleteRow(index: number) {
             if (index === 0) {
-                return
+                doClear()
+            } else {
+                paymentMethodsList.splice(index, 1)
+                megaData.executeMethodForKey('render:paymentsMethods', {})
             }
-            paymentMethodsList.splice(index, 1)
-            megaData.executeMethodForKey('render:paymentsMethods', {})
         }
 
         function handleOnChangeLedgerSubledger(index: number, item: any) {
             if ((index == 0) && (sales.paymentVariety === 'i')) { // for institution sales only
                 megaData.executeMethodForKey('getItems:populateInstitutionAddress', item.rowData.accId)
             }
+            // setRefresh({})
+            megaData.executeMethodForKey('render:paymentsMethods', {})
+        }
+    }
+
+    function setAmountForPayment() {
+        if (paymentMethodsList.length === 1) {
+            paymentMethodsList[0].amount = sales.summary.amount
+            setRefresh({})
         }
     }
 }

@@ -334,7 +334,6 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 columnGap: theme.spacing(1),
                 flexWrap: 'wrap',
                 marginTop: theme.spacing(1),
-                // fontSize: '0.8rem',
                 '& span': {
                     color: theme.palette.secondary.main,
                     fontWeight: 'normal'

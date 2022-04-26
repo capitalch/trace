@@ -14,7 +14,6 @@ function useStockSummaryReport() {
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
-        // origJsonData: {},
         setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
@@ -48,7 +47,6 @@ function useStockSummaryReport() {
     }, [])
 
     async function fetchData() {
-        // let count = 1
         emit('SHOW-LOADING-INDICATOR', true)
         pre.allRows = await execGenericView({
             isMultipleRows: true,
@@ -147,19 +145,20 @@ function useStockSummaryReport() {
                 width: 80,
             },
             {
-                headerName: 'Category',
+                headerName: 'Product',
                 headerClassName: 'header-class',
-                field: 'catName'
+                description: 'Product',
+                field: '1',
+                renderCell: (params: any) => <Product params={params} />,
+                width: 200,
             },
             {
-                headerName: 'Brand',
+                headerName: 'Details',
                 headerClassName: 'header-class',
-                field: 'brandName'
-            },
-            {
-                headerName: 'Label',
-                headerClassName: 'header-class',
-                field: 'label',
+                description: 'Product details',
+                field: '',
+                renderCell: (params: any) => <ProductDetails params={params} />,
+                width: 300,
             },
             {
                 headerName: 'Op Price',
@@ -342,6 +341,22 @@ function useStockSummaryReport() {
         }, {})
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
         setRefresh({})
+    }
+
+    function Product({ params }: any) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
+                <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>                
+                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+            </Box>
+        )
+    }
+
+    function ProductDetails({ params }: any) {
+        return (
+            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+        )
     }
 
     function removeRow(params: any) {

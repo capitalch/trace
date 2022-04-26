@@ -5,8 +5,10 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// const root:any = ReactDOM.createRoot(document.getElementById("root"));
+// const tempRoot:any = document.getElementById("root")
+// const root:any = ReactDOM.createRoot(tempRoot);
 // root.render(<App />)
+
 //Old React 17 way
 ReactDOM.render(
     <App />, document.getElementById('root')

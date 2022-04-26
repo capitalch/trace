@@ -31,7 +31,6 @@ function SalesReport() {
             ...provided,
             width: theme.spacing(18),
             fontSize: theme.spacing(1.7),
-            // height:theme.spacing(1.5)
         })
     }
 

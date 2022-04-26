@@ -1,4 +1,4 @@
-import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, MegaDataContext, NumberFormat, Radio, RadioGroup, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, InputLabel, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, manageEntitiesState, MegaDataContext, NativeSelect, NumberFormat, Radio, RadioGroup, Select, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function PaymentsVariety() {
     const [, setRefresh] = useState({})
@@ -9,6 +9,7 @@ function PaymentsVariety() {
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     const { getAutoSubledgers, getCashBankAccountsWithSubledgers, getdebtorCreditorAccountsWithSubledgers } = utils()
     const { execGenericView, keyGen } = utilMethods()
+    const { getFromBag } = manageEntitiesState()
 
     useEffect(() => {
         sales.filterMethodName = 'cashBank'
@@ -25,7 +26,7 @@ function PaymentsVariety() {
     })
     const pre = meta.current
     return (
-        <Box >
+        <Box sx={{ mt: 1, p: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1, border: '1px solid lightGrey' }}>
             <RadioGroup row>
                 <FormControlLabel
                     control={
@@ -64,12 +65,24 @@ function PaymentsVariety() {
                     label="Institution sales"
                 />
             </RadioGroup>
+            <InputLabel id='sale-1'>Sale A/c</InputLabel>
+            <Select labelId='sale-1' size='small' sx={{ minWidth: theme.spacing(25) }} native={true} value={sales.defaultSalesAccountId}>
+                {getSaleOptions()}
+            </Select>
             <BasicMaterialDialog parentMeta={meta} />
         </Box>
     )
 
     function doClear() {
         handleSalesVariety('r')
+    }
+
+    function getSaleOptions() {
+        const allAccounts = getFromBag('allAccounts')
+        const saleAccounts = allAccounts.filter((x: any) => (x.accClass === 'sale') && (['S', 'Y'].includes(x.accLeaf)))
+        const saleOptions = saleAccounts.map((x: any, index: number) => (<option key={index} value={x.id}>{x.accName}</option>))
+        sales.defaultSalesAccountId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
+        return (saleOptions)
     }
 
     function getContent(data: any[]) {
@@ -152,9 +165,6 @@ function PaymentsVariety() {
         const data = getdebtorCreditorAccountsWithSubledgers()
         pre.dialogConfig.content = () => getContent(data)
         showDialog()
-        // if( sales?.paymentMethodsList[0]?.rowData?.accId){ //A selecton is done from dialog box list  of accounts
-        //     console.log('a')
-        // }
     }
 
     function handleRetailCashBankSales() {

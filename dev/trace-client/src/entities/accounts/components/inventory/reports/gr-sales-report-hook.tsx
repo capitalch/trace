@@ -180,12 +180,20 @@ function useSalesReport() {
                 width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
+            // {
+            //     headerName: 'Ref no',
+            //     headerClassName: 'header-class',
+            //     description: 'Ref no',
+            //     field: 'autoRefNo',
+            //     width: 165,
+            // },
             {
-                headerName: 'Ref no',
+                headerName: 'Ref no | Accounts',
                 headerClassName: 'header-class',
                 description: 'Ref no',
                 field: 'autoRefNo',
                 width: 165,
+                renderCell: (params: any) => <RefNoAccounts params={params} />
             },
             {
                 headerName: 'Pr code',
@@ -430,7 +438,7 @@ function useSalesReport() {
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
                 {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.catName}</Typography>}
-                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+                {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
             </Box>
         )
     }
@@ -438,6 +446,19 @@ function useSalesReport() {
     function ProductDetails({ params }: any) {
         return (
             <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+        )
+    }
+
+    function RefNoAccounts({ params }: any) {
+        return (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight:'bold' }}>
+                    {''.concat((params.row.autoRefNo || ''), ', ')}&nbsp;
+                </Typography>
+                <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6),}}>
+                    {params.row.accounts || ''}
+                </Typography>
+            </Box>
         )
     }
 

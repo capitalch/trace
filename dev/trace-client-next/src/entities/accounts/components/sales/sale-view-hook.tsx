@@ -299,27 +299,14 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                         if (accObj?.isAutoSubledger) {
                             ad.saleVariety = 'a'
                             obj.ledgerFilterMethodName='autoSubledgers'
-                            // obj.ledgerAccounts = getMappedAccounts(
-                            //     arbitraryData.accounts['autoSubledgerAccounts']
-                            // )
                         } else if (
                             ['debtor', 'creditor'].includes(accObj?.accClass)
                         ) {
                             ad.saleVariety = 'i'
                             obj.ledgerFilterMethodName = 'debtorsCreditors'
-                            // obj.ledgerAccounts = getMappedAccounts(
-                            //     arbitraryData.accounts[
-                            //         'debtorCreditorAccountsWithLedgers'
-                            //     ]
-                            // )
                         } else {
                             ad.saleVariety = 'r'
                             obj.ledgerFilterMethodName = 'cashBank'
-                            // obj.ledgerAccounts = getMappedAccounts(
-                            //     arbitraryData.accounts[
-                            //         'cashBankAccountsWithSubledgers'
-                            //     ]
-                            // )
                         }
                         ad.footer.items.push(obj)
                     }

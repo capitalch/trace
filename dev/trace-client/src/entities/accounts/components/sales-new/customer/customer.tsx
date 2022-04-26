@@ -13,13 +13,13 @@ function Customer() {
     const billTo = sales?.billTo
     checkAllErrors()
 
-    return (        
-        <Box className='vertical' sx={{mr:1, display: 'flex', border: '1px solid lightBlue', p: 2, rowGap: 3,flexWrap: 'wrap', }}>
-            <Box sx={{ display: 'flex', columnGap: 2, mt: 1, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
-                <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
+    return (
+        <Box className='vertical' sx={{ mr: 1, display: 'flex', border: '1px solid lightBlue', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
+            <Box sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
+                <Typography variant='subtitle1' sx={{ mt: theme.spacing(-2), textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
                 {/* ref no */}
                 <Box className='vertical' sx={{ minWidth: theme.spacing(12), ml: 4 }}>
-                    <Typography variant='body2' sx={{mt:-3.2}}>Ref no</Typography>
+                    <Typography variant='body2' sx={{ mt: -2.0 }}>Ref no</Typography>
                     <Typography variant='body2'>{sales.autoRefNo || ''}</Typography>
                     {/* <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true} /> */}
                 </Box>
@@ -38,10 +38,10 @@ function Customer() {
                         onChange={(e: any) => handleTextChanged('userRefNo', e)} />
                 </Box>
                 {/* Gstin */}
-                <Box className='vertical' sx = {{maxWidth:theme.spacing(15)}}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(15) }}>
                     <Typography variant='body2'>Gstin no</Typography>
                     <TextField variant='standard' value={billTo.gstin || ''} autoComplete='off'
-                        error={Boolean(allErrors.gstinError)} 
+                        error={Boolean(allErrors.gstinError)}
                         onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
@@ -100,7 +100,7 @@ function Customer() {
                 {/* Customer details */}
                 <Box sx={{
                     display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
-                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(40),  maxWidth: theme.spacing(60)
+                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(40), maxWidth: theme.spacing(60)
                     , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'lightgrey'
                 }}>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id, ', ') : ''}</Typography>

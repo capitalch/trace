@@ -15,7 +15,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { useBankRecon, useStyles } from './bank-recon-hook'
 
 function BankRecon() {
-    const { doSortOnClearDateTranDateAndId, getXXGridParams,handleCellClicked, handleCloseDialog,
+    const { doSortOnClearDateTranDateAndId, getXXGridParams, handleCloseDialog,
         handleOnSelectBankClick, handleOpBalanceButtonClick, meta, setRefresh, submitBankRecon } = useBankRecon()
     const {
         emit,
@@ -124,7 +124,7 @@ function BankRecon() {
                 hideViewLimit={true}
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}
-                onCellClick={handleCellClicked}
+                // onCellClick={handleCellClicked}
                 sharedData={meta.current.sharedData}
                 subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}

@@ -12,7 +12,7 @@ function ItemsHeader() {
         megaData.registerKeyWithMethod('handleAddItem:itemsHeader', handleAddItem)
     }, [])
 
-    return (<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+    return (<Box sx={{ display: 'flex', flexWrap:'wrap', alignItems: 'center', justifyContent: 'space-between', mb: 0.5, '& .footer': { fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
         {/* Products label */}
         <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Items</Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 2, }}>

@@ -196,64 +196,6 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         meta.current.isMounted && setRefresh({})
     }
 
-    // function setAccounts() {
-    //     const allAccounts = getFromBag('allAccounts') || []
-    //     arbitraryData.accounts.all = allAccounts
-    //     const jouAccounts = allAccounts.filter(
-    //         (el: any) =>
-    //             [
-    //                 'branch',
-    //                 'capital',
-    //                 'other',
-    //                 'loan',
-    //                 'iexp',
-    //                 'dexp',
-    //                 'dincome',
-    //                 'iincome',
-    //                 'creditor',
-    //                 'debtor',
-    //             ].includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    //     arbitraryData.accounts.journal = jouAccounts
-
-    //     arbitraryData.accounts.cashBank = allAccounts.filter(
-    //         (el: any) =>
-    //             ['ecash', 'bank', 'card', 'cash'].includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    //     arbitraryData.accounts.paymentOther = allAccounts.filter(
-    //         (el: any) =>
-    //             [
-    //                 'debtor',
-    //                 'creditor',
-    //                 'dexp',
-    //                 'iexp',
-    //                 'purchase',
-    //                 'loan',
-    //                 'capital',
-    //                 'other',
-    //             ].includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    //     arbitraryData.accounts.receiptOther = allAccounts.filter(
-    //         (el: any) =>
-    //             [
-    //                 'debtor',
-    //                 'creditor',
-    //                 'dexp',
-    //                 'iexp',
-    //                 'loan',
-    //                 'other',
-    //                 'capital',
-    //                 'iincome',
-    //                 'dincome',
-    //                 'sale',
-    //             ].includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    // }
-
     return { arbitraryData, getTranTypeId, handleOnTabChange, meta }
 }
 

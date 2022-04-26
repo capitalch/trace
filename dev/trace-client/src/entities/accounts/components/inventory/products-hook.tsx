@@ -283,11 +283,6 @@ function useProducts() {
         }
     }
 
-    // function processRowUpdate(newRow: any) {
-    //     console.log(newRow)
-    //     newRow.isDataChanged = true
-    // }
-
     return { getXXGridParams, handleCellClicked, handleCloseDialog, handleSubmit, meta, }
 }
 

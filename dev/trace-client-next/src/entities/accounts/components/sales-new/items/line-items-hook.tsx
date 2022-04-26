@@ -19,6 +19,7 @@ function useLineItems() {
         }
     })
     const pre = meta.current
+    
     useEffect(() => {
         megaData.registerKeyWithMethod('render:lineItems', setRefresh)
         if (items.length === 0) {
@@ -27,7 +28,7 @@ function useLineItems() {
         const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
-        // fetchAllProducts()
+        fetchAllProducts()
         return () => {
             subs1.unsubscribe()
         }
