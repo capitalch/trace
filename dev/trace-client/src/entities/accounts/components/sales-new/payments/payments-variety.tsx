@@ -26,7 +26,7 @@ function PaymentsVariety() {
     })
     const pre = meta.current
     return (
-        <Box sx={{ mt: 1, p: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1, border: '1px solid lightGrey' }}>
+        <Box sx={{ mt: 1, p: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1,  }}>
             <RadioGroup row>
                 <FormControlLabel
                     control={
