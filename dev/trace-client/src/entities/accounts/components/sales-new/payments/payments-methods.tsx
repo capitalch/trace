@@ -84,6 +84,7 @@ function PaymentsMethods() {
                     <NumberFormat sx={{ maxWidth: theme.spacing(18) }}
                         allowNegative={false}
                         autoComplete='off'
+                        thousandSeparator={true}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -118,7 +119,7 @@ function PaymentsMethods() {
         }
 
         function handleOnChangeLedgerSubledger(index: number, item: any) {
-            if ((index == 0) && (sales.paymentVariety === 'i')) { // for institution sales only
+            if ((index === 0) && (sales.paymentVariety === 'i')) { // for institution sales only
                 megaData.executeMethodForKey('getItems:populateInstitutionAddress', item.rowData.accId)
             }
             // setRefresh({})

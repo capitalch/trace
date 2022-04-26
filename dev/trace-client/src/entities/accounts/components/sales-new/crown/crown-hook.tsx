@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { Box, Button, IMegaData, manageEntitiesState, MegaDataContext, salesMegaData, useContext, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { Box, Button, IMegaData, manageEntitiesState, MegaDataContext, salesMegaData, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, XXGrid } from '../redirect'
+import { SalesViewContent } from './sales-view-content'
 
 function useCrown() {
     const [, setRefresh] = useState({})
@@ -29,7 +29,7 @@ function useCrown() {
 
     function handleSalesViewDialog() {
         pre.showDialog = true
-        pre.dialogConfig.content = ViewContent 
+        pre.dialogConfig.content = SalesViewContent
         setRefresh({})
     }
 
@@ -178,11 +178,9 @@ function useCrown() {
         }
     }
 
-    function ViewContent() {
-        return (<Box>
-            Sales view
-        </Box>)
-    }
+    // function ViewContent() {
+
+    // }
 
     return ({ handleReset, handleSalesViewDialog, handleSubmit, meta })
 }

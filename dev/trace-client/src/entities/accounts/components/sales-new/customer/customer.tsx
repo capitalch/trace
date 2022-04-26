@@ -45,14 +45,14 @@ function Customer() {
                         onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(14), }}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(16), width: theme.spacing(16) }}>
                     <Typography variant='body2'>Remarks</Typography>
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
-            <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 2, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
                 {/* Customer search */}
-                <Box className='vertical' sx={{ maxWidth: theme.spacing(35) }}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(32) }}>
                     <Typography variant='body2'>Customer search</Typography>
                     <TextField
                         autoComplete='off'
@@ -61,7 +61,7 @@ function Customer() {
                             startAdornment: (
                                 <InputAdornment position='start' >
                                     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
-                                        <Typography variant='caption' sx={{ mt: 0, ml: 1.35, color: theme.palette.cyan.light }}>Or</Typography>
+                                        <Typography variant='caption' sx={{ mt: 0, ml: 1.35, color: theme.palette.secondary.light }}>Or</Typography>
                                         <Checkbox sx={{ mt: -2 }} size='small' checked={sales.isSearchTextOr || false} onClick={(e: any) => {
                                             sales.isSearchTextOr = e.target.checked
                                             setRefresh({})
@@ -118,7 +118,7 @@ function Customer() {
                     {/* New / edit */}
                     <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
-                    <Button size='small' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
+                    <Button size='small' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5),ml:1 }}>Clear</Button>
                 </Box>
             </Box>
             <Dialog
