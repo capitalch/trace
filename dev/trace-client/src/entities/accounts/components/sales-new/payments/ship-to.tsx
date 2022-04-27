@@ -9,7 +9,7 @@ function ShipTo() {
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',mt:1 }}>
-            <Typography variant='subtitle2' sx={{ fontWeight: 'bold' }}>Ship to</Typography>
+            <Typography variant='subtitle2' sx={{ fontWeight: 'bold', textDecoration:'underline' }}>Ship to</Typography>
             <Typography sx={{
                 border: '1px solid lightGrey', pl: 1,
                 borderColor: allErrors['shipToError'] ? theme.palette.error.light : 'lightgrey',

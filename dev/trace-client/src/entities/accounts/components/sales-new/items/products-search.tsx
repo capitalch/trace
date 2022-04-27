@@ -26,7 +26,7 @@ function ProductsSearch({ parentMeta }: any) {
     }, [])
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <SearchBox parentMeta={meta} />
+        <SearchBox parentMeta={meta} sx={{maxWidth:theme.spacing(80)}} />
         <DataGridPro
             columns={getColumns()}
             getRowClassName={getRowClassName}

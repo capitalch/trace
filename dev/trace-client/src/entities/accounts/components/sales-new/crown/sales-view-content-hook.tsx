@@ -129,19 +129,22 @@ function useSalesViewContent() {
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
             // console.log(JSON.stringify(ret))
-            setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
-            prepareArbitraryData(ret)
+            sales.rawSaleData = ret
+            // setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
+            prepareSalesData(ret)
             // arbitraryData.saleItemsRefresh()
-            emit('SALES-HOOK-CHANGE-TAB', 0)
+            // emit('SALES-HOOK-CHANGE-TAB', 0)
         }
 
-        function prepareArbitraryData(data: any) {
+        function prepareSalesData(data: any) {
             const res = data.jsonResult
             loadTranH(res)
             loadExtGstTranD(res)
             loadSalePurchaseDetails(res)
             loadTranD(res)
-            sales.salesCrownRefresh()
+            // sales.salesCrownRefresh()
+            megaData.executeMethodForKey('closeDialog:crown')
+            megaData.executeMethodForKey('render:salesNew', {})
 
             function loadExtGstTranD(res: any) {
                 const extGstTranD = res.extGstTranD
@@ -194,8 +197,9 @@ function useSalesViewContent() {
 
             function loadTranD(res: any) {
                 const tranD = res.tranD //an array of 2 or multiple items. If multipe payments received in footer then more than 2 rows
-                sales.saleVariety = 'r'
-                sales.footer.items = []
+                sales.payments.paymentVariety = 'r'
+                sales.payments.paymentMethodsList = []
+                // sales.footer.items = []
                 for (let item of tranD) {
                     const accObj: any = getAccountClassWithAutoSubledger(
                         item.accId
@@ -209,10 +213,10 @@ function useSalesViewContent() {
                         return
                     }
                     if (accObj?.accClass === 'sale') {
-                        sales.rowData.accId = item.accId
+                        sales.salesAccountId = item.accId
                         sales.summary.amount = item.amount
-                        sales.footer.amount = item.amount
-                        sales.rowData.id = isModify ? item.id : undefined
+                        // sales.footer.amount = item.amount
+                        sales.id = isModify ? item.id : undefined
                     } else {
                         const obj: any = {
                             accId: item.accId,
@@ -220,21 +224,21 @@ function useSalesViewContent() {
                             instrNo: item.instrNo,
                             remarks: item.remarks,
                             id: isModify ? item.id : undefined,
-                            allAccounts: sales.allAccounts,
+                            // allAccounts: sales.allAccounts,
                         }
                         if (accObj?.isAutoSubledger) {
-                            sales.saleVariety = 'a'
+                            sales.payments.paymentVariety = 'a'
                             obj.ledgerFilterMethodName = 'autoSubledgers'
                         } else if (
                             ['debtor', 'creditor'].includes(accObj?.accClass)
                         ) {
-                            sales.saleVariety = 'i'
+                            sales.payments.paymentVariety = 'i'
                             obj.ledgerFilterMethodName = 'debtorsCreditors'
                         } else {
-                            sales.saleVariety = 'r'
+                            sales.payments.paymentVariety = 'r'
                             obj.ledgerFilterMethodName = 'cashBank'
                         }
-                        sales.footer.items.push(obj)
+                        sales.payments.paymentMethodsList.push(obj)
                     }
                 }
             }

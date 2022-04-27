@@ -9,7 +9,6 @@ function SalesViewContent() {
     const { columns, gridActionMessages, queryId, queryArgs, specialColumns, summaryColNames } = getXXGridParams()
     return (<Box>
         <XXGrid
-            // autoFetchData={true}
             gridActionMessages={gridActionMessages}
             columns={columns}
             sqlQueryId={queryId}

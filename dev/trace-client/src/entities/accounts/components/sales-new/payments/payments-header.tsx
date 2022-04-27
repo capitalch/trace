@@ -20,7 +20,7 @@ function PaymentsHeader() {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', rowGap: 3, columnGap: 1 }}>
             <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Payments</Typography>
-            <Typography variant='body2' >{''.concat('Count: ', sales?.paymentMethodsList?.length || 0 + '')}</Typography>
+            <Typography variant='body2' >{''.concat('Count: ', sales?.payments?.paymentMethodsList?.length || 0 + '')}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Button sx={{ mr: 2 }} variant='outlined' size='small' onClick={doClear} color='secondary'>Clear all</Button>
                 <Typography variant='body2' sx={{ fontWeight: 'bold', ml: 2 }}>{''.concat('Amount:', ' ', (toDecimalFormat(getTotalAmount()) || 0 + ''))}</Typography>
@@ -35,7 +35,7 @@ function PaymentsHeader() {
     }
 
     function getTotalAmount() {
-        const paymentMethodsList: any = sales.paymentMethodsList
+        const paymentMethodsList: any = sales.payments.paymentMethodsList
         const total: any = paymentMethodsList.reduce((prev: any, current: any) =>
         ({
             amount: (prev.amount ?? 0) + (current.amount ?? 0)
