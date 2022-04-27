@@ -22,7 +22,7 @@ function PaymentsHeader() {
             <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Payments</Typography>
             <Typography variant='body2' >{''.concat('Count: ', sales?.paymentMethodsList?.length || 0 + '')}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Button sx={{ mr: 2 }} variant='outlined' size='small' onClick={doClear} color='secondary'>Clear all</Button>
+                <Button sx={{ mr: 2 }} variant='contained' size='small' onClick={doClear} color='warning'>Clear all</Button>
                 <Typography variant='body2' sx={{ fontWeight: 'bold', ml: 2 }}>{''.concat('Amount:', ' ', (toDecimalFormat(getTotalAmount()) || 0 + ''))}</Typography>
             </Box>
         </Box>

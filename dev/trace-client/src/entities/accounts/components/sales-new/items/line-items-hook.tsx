@@ -209,7 +209,7 @@ function useLineItems() {
                         value={item.serialNumbers || ''}
                     />
                     <Box sx={{ display: 'flex', ml: 'auto', mt: 2 }}>
-                        <Button onClick={handleClear} size='small' color='info' variant='contained'>Clear</Button>
+                        <Button onClick={handleClear} size='small' color='warning' variant='contained'>Clear</Button>
                         <Button onClick={handleOk} size='small' color='secondary' variant='contained' sx={{ ml: 2 }} >Ok</Button>
                     </Box>
                 </Box>)

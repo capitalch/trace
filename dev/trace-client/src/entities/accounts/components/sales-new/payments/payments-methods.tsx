@@ -25,11 +25,11 @@ function PaymentsMethods() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' sx={{mt:1,p:1, border:'1px solid lightGrey'}} >
+        <Box className='vertical' sx={{mt:1,p:1, pl:0, borderTop:'1px solid lightGrey'}} >
             <Box sx={{ display: 'flex', alignItems: 'center', }}>
-                <Typography variant='body2' sx={{fontWeight:'bold'}}>Payment methods</Typography>
+                <Typography variant='body2' sx={{fontWeight:'bold', textDecoration:'underline'}}>Payment methods</Typography>
                 {/* Add button */}
-                <Button variant='outlined' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
+                <Button variant='contained' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
             </Box>
             <Methods />
         </Box>
@@ -101,7 +101,7 @@ function PaymentsMethods() {
                             setRefresh({})
                         }}
                         variant='standard' />
-                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 'auto' }}>
+                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index, item)} sx={{ ml: 'auto' }}>
                         <CloseSharp />
                     </IconButton>
                 </Box>)
@@ -109,9 +109,10 @@ function PaymentsMethods() {
         })
         return (<Box className='vertical' sx={{ rowGap: 1 }}>{methods}</Box>)
 
-        function handleDeleteRow(index: number) {
+        function handleDeleteRow(index: number, item: any) {
             if (index === 0) {
-                doClear()
+                // doClear()
+                // item.instrNo = undefined
             } else {
                 paymentMethodsList.splice(index, 1)
                 megaData.executeMethodForKey('render:paymentsMethods', {})

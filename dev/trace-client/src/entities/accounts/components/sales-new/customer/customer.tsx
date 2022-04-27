@@ -116,9 +116,9 @@ function Customer() {
                 </Box>
                 <Box sx={{ display: 'flex', }}>
                     {/* New / edit */}
-                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
+                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='contained' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
-                    <Button size='small' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5),ml:1 }}>Clear</Button>
+                    <Button size='small' color='warning' onClick={handleCustomerClear} variant='contained' sx={{ height: theme.spacing(5),ml:1 }}>Clear</Button>
                 </Box>
             </Box>
             <Dialog
