@@ -4,8 +4,10 @@ import {
     CloseSharp, IconButton, Search, TextField, Typography, useEffect, useIbuki, useTheme
 } from '../inventory/redirect'
 
-function SearchBox({ parentMeta }: any) {
+function SearchBox({ parentMeta, sx }: any) {
     const pre = parentMeta.current
+    // sx = sx || {}
+    sx = { ...sx, ...{ mt: 1 } }
     const theme = useTheme()
     pre.debounceMessage = 'SEARCH-BOX-DEBOUNCE'
     const { debounceEmit, debounceFilterOn } = useIbuki()
@@ -26,14 +28,15 @@ function SearchBox({ parentMeta }: any) {
         inputRef={pre.searchTextRef}
         variant="standard"
         autoComplete='off'
-        sx={{mt:1}}
+        // sx={{mt:1}}
+        sx={{ ...sx }}
         value={pre.searchText || ''}
         onChange={handleOnChange}
         placeholder="Search…"
         InputProps={{
             startAdornment: <>
-                <Box sx={{display:'flex', flexDirection:'column'}}>
-                    <Typography variant='caption' sx={{mt:-1, ml: 1.55, color: theme.palette.cyan.light }}>Or</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant='caption' sx={{ mt: -1, ml: 1.55, color: theme.palette.cyan.light }}>Or</Typography>
                     <Checkbox sx={{ mt: -2 }} checked={pre.isSearchTextOr} onClick={handleOnClickCheckbox} size='small' />
                 </Box>
                 <Search fontSize="small" />
