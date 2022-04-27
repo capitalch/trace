@@ -18,6 +18,7 @@ function AllErrors() {
     useEffect(() => {
         sales.isAnyError = Object.keys(allErrors).some((key: string) => allErrors[key])
         megaData.executeMethodForKey('render:crown', {})
+        megaData.executeMethodForKey('render:debitsCredits',{})
     })
 
     setDebitsCreditsAndMismatchError()

@@ -14,7 +14,7 @@ function Customer() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' sx={{ mr: 1, display: 'flex', borderTop: '1px solid lightGrey', p: 2,pl:0, pr:0, rowGap: 2, flexWrap: 'wrap', }}>
+        <Box className='vertical' sx={{ mr: 1, display: 'flex', borderTop: '1px solid lightGrey', p: 2, pl: 0, pr: 0, rowGap: 2, flexWrap: 'wrap', }}>
             <Box sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1, columnGap: 1, width: theme.spacing(25) }}>
                     <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
@@ -95,15 +95,14 @@ function Customer() {
                         value={sales.searchText || ''}
                         variant='standard' />
                 </Box>
-                <Box sx={{ display: 'flex', }}>
-                    {/* New / edit */}
-                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
-                    {/* clear */}
-                    <Button size='small' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 1 }}>Clear</Button>
-                </Box>
+
 
                 {/* Customer details */}
-                <Typography sx={{ overflow: 'clip', fontSize: theme.spacing(1.7), fontWeight: 'bold', width: theme.spacing(40), maxWidth: theme.spacing(40), maxHeight: theme.spacing(8), height: theme.spacing(8) }}>{''.concat(
+                <Typography sx={{
+                    overflow: 'clip', fontSize: theme.spacing(1.7), fontWeight: 'bold', width: theme.spacing(40),
+                    maxWidth: theme.spacing(40), maxHeight: theme.spacing(8), height: theme.spacing(8),
+                    border: '2px solid white', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'white'
+                }}>{''.concat(
                     (billTo?.id ? 'id: ' + billTo.id : '')
                     , (billTo?.contactName ? ', ' + billTo.contactName : '')
                     , (billTo?.mobileNumber ? ', ' + billTo.mobileNumber : '')
@@ -128,6 +127,13 @@ function Customer() {
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
                 </Box> */}
+
+                <Box sx={{ display: 'flex', }}>
+                    {/* clear */}
+                    <Button size='small' color='warning' onClick={handleCustomerClear} variant='contained' sx={{ height: theme.spacing(5), }}>Clear</Button>
+                    {/* New / edit */}
+                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='contained' sx={{ height: theme.spacing(5), ml: 1 }}>New / Edit</Button>
+                </Box>
             </Box>
             <Dialog
                 open={pre.showDialog}

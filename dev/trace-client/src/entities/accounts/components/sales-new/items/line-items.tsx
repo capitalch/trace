@@ -252,7 +252,7 @@ function LineItems() {
                             : 'secondary'
                     }
                     showZero={true}>
-                    <Button color='secondary' size='medium' variant='outlined' onClick={() => handleSerialNo(item)}>Serial no</Button>
+                    <Button color='primary' size='medium' variant='contained' onClick={() => handleSerialNo(item)}>Serial no</Button>
                 </Badge>
 
                 {/* amount */}

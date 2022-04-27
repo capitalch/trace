@@ -26,7 +26,7 @@ function PaymentsMethods() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' sx={{mt:1, pt:1, pb:1, borderTop:'1px solid lightGrey', borderBottom: '1px solid lightGrey'}} >
+        <Box className='vertical' sx={{mt:1, pt:1, pb:1, borderTop:'1px solid lightGrey', }} >
             <Box sx={{ display: 'flex', }}>
                 <Typography variant='body2' sx={{fontWeight:'bold', textDecoration:'underline'}}>Payment methods</Typography>
                 {/* Add button */}
@@ -71,7 +71,7 @@ function PaymentsMethods() {
                 <Box key={index} sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', alignItems: 'center', rowGap: 2, }}>
                     {/* Select account */}
                     <Box className='vertical'>
-                        <Typography variant='caption'>Debit account</Typography>
+                        <Typography variant='body2'>Payment account</Typography>
                         {/* <TextField /> */}
                         <LedgerSubledger 
                             rowData={item.rowData}
