@@ -17,7 +17,7 @@ function ShipTo() {
                 maxWidth: theme.spacing(55), width: theme.spacing(30), overflow: 'hidden', color: theme.palette.common.black,
             }}>{getShipToAsString()}</Typography>
             <Box sx={{ display: 'flex' }}>
-                <Button sx={{ mr: 2 }} size='small' color='warning' variant='contained' onClick={handleClear}>Clear ship to</Button>
+                <Button sx={{ mr: 2 }} size='small' color='warning' variant='contained' onClick={handleClear}>Clear</Button>
                 <Button size='small' color='secondary' variant='contained' onClick={handleNewClicked} >New / Edit</Button>
             </Box>
             <BasicMaterialDialog parentMeta={meta} />

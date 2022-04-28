@@ -35,6 +35,7 @@ function AllErrors() {
         {allErrors.serialNumberError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.serialNumberError}</Typography> : ''}
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Payments</Typography>
         {allErrors.accountCodeError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.accountCodeError}</Typography> : ''}
+        <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Ship to</Typography>
         {allErrors.shipToError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.shipToError}</Typography> : ''}
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Others</Typography>
         {allErrors.debitCreditMismatchError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.debitCreditMismatchError}</Typography> : ''}

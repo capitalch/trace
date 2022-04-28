@@ -78,16 +78,17 @@ function CustomerSearch({ meta }: any) {
     }
 
     async function fetchData() {
-        let searchString
+        let searchString:string
         //split on non alphanumeric character
-        const arr = searchText.toLowerCase().split(/\W/).filter((x: any) => x) // filter used to remove empty elements
-
+        const arr = searchText.toLowerCase().split(/\W[^*]/).filter((x: any) => x) // filter used to remove empty elements
+        
         if (sales.isSearchTextOr) { // The checkbox
             searchString = arr.join('|')
         } else { //and arr elements for regex
             const tempArr = arr.map((x: any) => `(?=.*${x})`)
             searchString = tempArr.join('')
         }
+        // searchString = searchString.replaceAll('*', '\\*')
         emit('SHOW-LOADING-INDICATOR', true)
 
         // regex search at server. '|' is logical OR and '?=.*' is logical AND operator for regexp in postgresql

@@ -15,9 +15,9 @@ function LineItems() {
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
-                <div key={index}>
+                // <div key={index}>
                     <LineItem item={item} index={index} />
-                </div>
+                // </div>
             )
         }
         <BasicMaterialDialog parentMeta={meta} />
@@ -28,7 +28,7 @@ function LineItems() {
         const smallFontTextField = megaData.accounts.settings.smallFontTextField
 
         return (
-            <Box
+            <Box key={index}
                 onClick={(e: any) => {
                     if (sales.currentItemIndex === index) {
                         return

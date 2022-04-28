@@ -38,14 +38,6 @@ function PaymentsMethods() {
 
     function checkAllErrors() {
         setAllErrors()
-        // emit('ALL-ERRORS-JUST-REFRESH', null)
-
-        // function checkAllPaymentRows() {
-        //     for (const row of paymentMethodsList) {
-        //         row.isAccountCodeError = row.rowData.isLedgerSubledgerError
-        //     }
-        // }
-
         function setAllErrors() {
             allErrors.accountCodeError = paymentMethodsList.some((row: any) => row?.rowData?.isLedgerSubledgerError) ? errorMessages['accountCodeError'] : ''
         }

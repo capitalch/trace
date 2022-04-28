@@ -180,6 +180,11 @@ function useLineItems() {
         } else {
             items.splice(index, 1)
         }
+        if(items.length === 0){
+            sales.currentItemIndex = 0
+        } else {
+            sales.currentItemIndex = index - 1
+        }
         megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
     }
