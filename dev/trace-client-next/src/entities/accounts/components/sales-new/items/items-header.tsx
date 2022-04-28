@@ -22,7 +22,7 @@ function ItemsHeader() {
                         onChange={handleChangeIgst} />}
             />
             {/* Add */}
-            <Button size='small' variant='outlined' color='secondary' sx={{width: theme.spacing(12.5)}}
+            <Button size='small' variant='contained' color='secondary' sx={{width: theme.spacing(12.5)}}
                 onClick={() => handleAddItem()}
                 startIcon={<AddCircle sx={{ml:-3}} />} 
                 >Add</Button>

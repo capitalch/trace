@@ -29,7 +29,7 @@ function ItemsFooter() {
         emit('ALL-ERRORS-JUST-REFRESH', null)
     })
 
-    return (<Box sx={{ pt: 2, pb: 1, display: 'flex', rowGap: 3, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',  '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+    return (<Box sx={{ pt: 2, pb: 2, display: 'flex', rowGap: 3, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',  '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, rowGap: 3, }}>
             {/* Item search button */}

@@ -4,13 +4,16 @@ import { Crown } from './crown/crown'
 import { Payments } from './payments/payments'
 import { Items } from './items/items'
 import { useSalesNew } from './sales-new-hook'
-
+import { DebitsCredits } from './debits-credits'
 function SalesNew() {
     useSalesNew()
     return (
         <Box sx={{ '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Box className='vertical' sx={{ flex: 1 }} >
-                <Typography variant='subtitle1'>Sales</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant='subtitle1'>Sales</Typography>
+                    <DebitsCredits />
+                </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap-reverse', rowGap: 2, justifyContent: 'space-between' }}>
                     <Customer />
                     <Crown />
@@ -21,7 +24,7 @@ function SalesNew() {
                     <AllErrors />
                 </Box>
             </Box>
-           
+
         </Box>
     )
 }

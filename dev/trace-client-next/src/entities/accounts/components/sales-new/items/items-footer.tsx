@@ -29,7 +29,7 @@ function ItemsFooter() {
         emit('ALL-ERRORS-JUST-REFRESH', null)
     })
 
-    return (<Box sx={{ pt: .5, pb: .5, display: 'flex', rowGap: 3, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', m: .5, '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+    return (<Box sx={{ pt: 2, pb: 1, display: 'flex', rowGap: 3, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',  '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, rowGap: 3, }}>
             {/* Item search button */}
@@ -49,10 +49,10 @@ function ItemsFooter() {
             <Typography color={theme.palette.common.black} className='footer' >{''.concat('Igst: ', toDecimalFormat(sales.summary.igst))}</Typography>
 
             {/* clear */}
-            <Button size='small' color='secondary' variant='outlined' onClick={handleClear}>Clear</Button>
+            <Button size='small' color='warning' variant='contained' onClick={handleClear}>Clear</Button>
 
-            <Button size='small' variant='outlined' color='secondary' onClick={handleRoundOff}>Round off</Button>
-            <Button size='small' variant='outlined' color='secondary' onClick={handleBackCalculate}>Back cal</Button>
+            <Button size='small' variant='contained' color='info' onClick={handleRoundOff}>Round off</Button>
+            <Button size='small' variant='contained' color='info' onClick={handleBackCalculate}>Back cal</Button>
 
             {/* Back calculate */}
             <Box sx={{ display: 'flex', columnGap: 1 }}>

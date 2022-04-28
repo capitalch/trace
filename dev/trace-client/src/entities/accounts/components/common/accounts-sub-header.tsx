@@ -137,7 +137,7 @@ function AccountsSubHeader() {
                     }}
                     clickable={true}
                     avatar={<Avatar>S</Avatar>}
-                    label='Stock search'
+                    label='Search'
                     color="secondary"
                     onClick={handleStockSearch}
                 ></Chip>

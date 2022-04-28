@@ -16,6 +16,7 @@ function AccountsSubHeader() {
         handleSelectBu,
         handleSelectBranch,
         handleSelectFinYear,
+        handleStockSearch,
         meta,
         utilFunc,
     } = useAccountsSubHeader()
@@ -125,6 +126,21 @@ function AccountsSubHeader() {
                         spin
                     />
                 )}
+                {/* Stock search */}
+                <Chip
+                    size="medium"
+                    // disabled={isControlDisabled('branchChange')}
+                    className="chip-select"
+                    style={{
+                        maxWidth: exhibitLogic[currentMediaSize || 'md']()
+                            .maxWidth,
+                    }}
+                    clickable={true}
+                    avatar={<Avatar>S</Avatar>}
+                    label='Stock search'
+                    color="secondary"
+                    onClick={handleStockSearch}
+                ></Chip>
             </Box>
             <TraceDialog meta={meta} />
         </div>

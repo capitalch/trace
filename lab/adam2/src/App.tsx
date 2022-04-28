@@ -19,6 +19,7 @@ import {
 } from '@mui/material/colors'
 import { MegaDataContext } from './components/mega-data-context';
 import { AccSales } from './components/acc-sales'
+import { Comp1 } from './components/comp1';
 
 declare module '@mui/material/styles/' {
   interface Palette {
@@ -122,7 +123,8 @@ function App() {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <MegaDataContext.Provider value={megaData}>
-          <AccSales />
+          {/* <AccSales /> */}
+          <Comp1 />
         </MegaDataContext.Provider>
       </ThemeProvider>
     </StyledEngineProvider>

@@ -55,6 +55,7 @@ function useAccountsSubHeader() {
                 bu: buCode || 'Select',
                 fy: finYearObject?.finYearId || 'Select',
                 br: branchObject?.branchCode || 'Select',
+                // q: 'Stock query',
                 maxWidth: '22%',
                 fyMaxWidth: '22%',
             }
@@ -64,6 +65,7 @@ function useAccountsSubHeader() {
                 bu: buCode || 'Select',
                 fy: finYearObject?.finYearId || 'Select',
                 br: branchObject?.branchName || 'Select',
+                // q: 'Stock query',
                 maxWidth: '22%',
                 fyMaxWidth: '22%',
                 refreshCache: true,
@@ -81,6 +83,7 @@ function useAccountsSubHeader() {
                 bu: buCode || 'Select business unit',
                 fy: finYearRange || 'Select fin year',
                 br: branchObject?.branchName || 'Select branch',
+                // q: 'Stock query',
                 maxWidth: '12rem',
                 fyMaxWidth: '16rem',
                 refreshCache: true,
@@ -323,6 +326,10 @@ function useAccountsSubHeader() {
         }
     }
 
+    function handleStockSearch(){
+
+    }
+
     function utilFunc() {
         const dateFormat = getFromBag('dateFormat')
         async function changeFinYear(change: number) {
@@ -363,6 +370,7 @@ function useAccountsSubHeader() {
         handleSelectBu,
         handleSelectFinYear,
         meta,
+        handleStockSearch,
         utilFunc,
     }
 }

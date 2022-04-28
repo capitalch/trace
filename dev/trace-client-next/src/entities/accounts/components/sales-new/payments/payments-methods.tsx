@@ -1,3 +1,4 @@
+import { Autocomplete } from '@mui/material'
 import { _, Box, Button, CloseSharp, FormControlLabel, IconButton, IMegaData,InputLabel, LedgerSubledger, MegaDataContext, NumberFormat, PaymentsHeader, Radio, RadioGroup, PaymentsVariety, ShipTo, TextField, Typography, useContext, useEffect, useIbuki, useState, useTheme, errorMessages } from '../redirect'
 
 function PaymentsMethods() {
@@ -6,11 +7,11 @@ function PaymentsMethods() {
     const { emit, } = useIbuki()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const paymentMethodsList = sales.paymentMethodsList
+    const paymentMethodsList = sales.payments.paymentMethodsList
     const allErrors = sales.allErrors
 
     useEffect(() => {
-        if (sales.paymentMethodsList.length === 0) {
+        if (sales.payments.paymentMethodsList.length === 0) {
             handleAddPaymentMethod()
         }
         megaData.registerKeyWithMethod('render:paymentsMethods', setRefresh)
@@ -25,11 +26,11 @@ function PaymentsMethods() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' sx={{mt:1,p:1, border:'1px solid lightGrey'}} >
-            <Box sx={{ display: 'flex', alignItems: 'center', }}>
-                <Typography variant='body2' sx={{fontWeight:'bold'}}>Payment methods</Typography>
+        <Box className='vertical' sx={{mt:1, pt:1, pb:1, borderTop:'1px solid lightGrey', }} >
+            <Box sx={{ display: 'flex', }}>
+                <Typography variant='body2' sx={{fontWeight:'bold', textDecoration:'underline'}}>Payment methods</Typography>
                 {/* Add button */}
-                <Button variant='outlined' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
+                <Button variant='contained' size='small' color='secondary' sx={{ ml: 'auto' }} onClick={handleAddPaymentMethod}>Add</Button>
             </Box>
             <Methods />
         </Box>
@@ -70,20 +71,22 @@ function PaymentsMethods() {
                 <Box key={index} sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', alignItems: 'center', rowGap: 2, }}>
                     {/* Select account */}
                     <Box className='vertical'>
-                        <Typography variant='caption'>Debit account</Typography>
+                        <Typography variant='body2'>Payment account</Typography>
                         {/* <TextField /> */}
-                        <LedgerSubledger rowData={item.rowData}
+                        <LedgerSubledger 
+                            rowData={item.rowData}
                             ledgerFilterMethodName={(index === 0) ? sales.filterMethodName : 'cashBank'}
-                            onChange={() => handleOnChangeLedgerSubledger(index, item)}
+                            onChange={() => handleOnChangeLedgerSubledger(index, item)} 
                             showAutoSubledgerValues={false} />
                     </Box>
                     {/* Instr no  */}
                     <TextField label='Instr no' variant='standard' value={item.instrNo || ''} autoComplete='off'
                         sx={{ maxWidth: theme.spacing(15) }} onChange={(e: any) => { item.instrNo = e.target.value; setRefresh({}) }} />
                     {/* Amount */}
-                    <NumberFormat sx={{ maxWidth: theme.spacing(18) }}
+                    <NumberFormat sx={{ maxWidth: theme.spacing(15) }}
                         allowNegative={false}
                         autoComplete='off'
+                        thousandSeparator={true}
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={2}
@@ -100,7 +103,10 @@ function PaymentsMethods() {
                             setRefresh({})
                         }}
                         variant='standard' />
-                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index)} sx={{ ml: 'auto' }}>
+                        {/* Remarks */}
+                        <TextField label='Remarks' variant='standard' value={item.remarks || ''} autoComplete='off' 
+                            sx={{maxWidth: theme.spacing(18)}} onChange={(e: any) => { item.remarks = e.target.value; setRefresh({}) }} />
+                    <IconButton size='small' color='error' onClick={() => handleDeleteRow(index, item)} sx={{ ml: 'auto' }}>
                         <CloseSharp />
                     </IconButton>
                 </Box>)
@@ -108,9 +114,15 @@ function PaymentsMethods() {
         })
         return (<Box className='vertical' sx={{ rowGap: 1 }}>{methods}</Box>)
 
-        function handleDeleteRow(index: number) {
+        function handleDeleteRow(index: number, item: any) {
             if (index === 0) {
-                doClear()
+                item.remarks =undefined
+                item.instrNo = undefined
+                item.amount = 0
+                item.rowData = { isLedgerSubledgerError: true }
+                setRefresh({})
+                // doClear()
+                // item.instrNo = undefined
             } else {
                 paymentMethodsList.splice(index, 1)
                 megaData.executeMethodForKey('render:paymentsMethods', {})
@@ -118,7 +130,7 @@ function PaymentsMethods() {
         }
 
         function handleOnChangeLedgerSubledger(index: number, item: any) {
-            if ((index == 0) && (sales.paymentVariety === 'i')) { // for institution sales only
+            if ((index === 0) && (sales.paymentVariety === 'i')) { // for institution sales only
                 megaData.executeMethodForKey('getItems:populateInstitutionAddress', item.rowData.accId)
             }
             // setRefresh({})

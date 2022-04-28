@@ -116,6 +116,11 @@ function PaymentsMethods() {
 
         function handleDeleteRow(index: number, item: any) {
             if (index === 0) {
+                item.remarks =undefined
+                item.instrNo = undefined
+                item.amount = 0
+                item.rowData = { isLedgerSubledgerError: true }
+                setRefresh({})
                 // doClear()
                 // item.instrNo = undefined
             } else {

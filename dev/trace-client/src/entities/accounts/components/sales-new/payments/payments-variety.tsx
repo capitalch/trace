@@ -109,8 +109,8 @@ function PaymentsVariety() {
             ))
 
             function handleItemOnClick(item: any) {
-                sales.paymentMethodsList[0].rowData.accId = item.id
-                if (sales.paymentVariety === 'i') { // institution sales, address already there
+                sales.payments.paymentMethodsList[0].rowData.accId = item.id
+                if (sales.payments.paymentVariety === 'i') { // institution sales, address already there
                     populateInstitutionAddress(item.id)
                 }
                 pre.showDialog = false
@@ -184,10 +184,10 @@ function PaymentsVariety() {
         }
         Object.keys(sales.billTo).forEach((key: string) => delete sales.billTo[key]) // cleanup billTo
         megaData.executeMethodForKey('render:customer', {})
-        sales.paymentVariety = variety
+        sales.payments.paymentVariety = variety
         sales.filterMethodName = logic[variety]
-        sales.paymentMethodsList.length = 0
-        sales.paymentMethodsList.push({})
+        sales.payments.paymentMethodsList.length = 0
+        sales.payments.paymentMethodsList.push({})
         megaData.executeMethodForKey('render:paymentsMethods', {})
     }
 

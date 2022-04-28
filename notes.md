@@ -3,6 +3,8 @@
 ## Chitta done
 # npm install @mui/material @mui/x-data-grid-pro @types/node axios graphql primereact react-number-format sass socket.io-client graphql
 
+# npm install @types/node @types/react axios graphql react react-dom react-number-format react-select --chitta done
+
 ## Required reports
 1. Profitibality
 2. daily sales with profitability

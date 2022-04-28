@@ -26,7 +26,7 @@ function PaymentsVariety() {
     })
     const pre = meta.current
     return (
-        <Box sx={{ mt: 1, p: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1, border: '1px solid lightGrey' }}>
+        <Box sx={{ mt: 1, pt: 1,pb:1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1,  }}>
             <RadioGroup row>
                 <FormControlLabel
                     control={
@@ -35,7 +35,7 @@ function PaymentsVariety() {
                             onClick={handleRetailCashBankSales}
                             size="small"
                             color="secondary"
-                            checked={sales.paymentVariety === 'r'}
+                            checked={sales.payments.paymentVariety === 'r'}
                         />
                     }
                     label="Retail sales"
@@ -47,7 +47,7 @@ function PaymentsVariety() {
                             onClick={handleAutoSubledgerSales}
                             size="small"
                             color="secondary"
-                            checked={sales.paymentVariety === 'a'}
+                            checked={sales.payments.paymentVariety === 'a'}
                         />
                     }
                     label="Auto subledger sales"
@@ -59,14 +59,14 @@ function PaymentsVariety() {
                             onClick={handleInstitutionSales}
                             size="small"
                             color="secondary"
-                            checked={sales.paymentVariety === 'i'}
+                            checked={sales.payments.paymentVariety === 'i'}
                         />
                     }
                     label="Institution sales"
                 />
             </RadioGroup>
             <InputLabel id='sale-1'>Sale A/c</InputLabel>
-            <Select labelId='sale-1' size='small' sx={{ minWidth: theme.spacing(25) }} native={true} value={sales.defaultSalesAccountId}>
+            <Select labelId='sale-1' size='small' sx={{ minWidth: theme.spacing(25) }} native={true} value={sales.salesAccountId}>
                 {getSaleOptions()}
             </Select>
             <BasicMaterialDialog parentMeta={meta} />
@@ -81,7 +81,7 @@ function PaymentsVariety() {
         const allAccounts = getFromBag('allAccounts')
         const saleAccounts = allAccounts.filter((x: any) => (x.accClass === 'sale') && (['S', 'Y'].includes(x.accLeaf)))
         const saleOptions = saleAccounts.map((x: any, index: number) => (<option key={index} value={x.id}>{x.accName}</option>))
-        sales.defaultSalesAccountId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
+        sales.salesAccountId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
         return (saleOptions)
     }
 
@@ -109,8 +109,8 @@ function PaymentsVariety() {
             ))
 
             function handleItemOnClick(item: any) {
-                sales.paymentMethodsList[0].rowData.accId = item.id
-                if (sales.paymentVariety === 'i') { // institution sales, address already there
+                sales.payments.paymentMethodsList[0].rowData.accId = item.id
+                if (sales.payments.paymentVariety === 'i') { // institution sales, address already there
                     populateInstitutionAddress(item.id)
                 }
                 pre.showDialog = false
@@ -184,10 +184,10 @@ function PaymentsVariety() {
         }
         Object.keys(sales.billTo).forEach((key: string) => delete sales.billTo[key]) // cleanup billTo
         megaData.executeMethodForKey('render:customer', {})
-        sales.paymentVariety = variety
+        sales.payments.paymentVariety = variety
         sales.filterMethodName = logic[variety]
-        sales.paymentMethodsList.length = 0
-        sales.paymentMethodsList.push({})
+        sales.payments.paymentMethodsList.length = 0
+        sales.payments.paymentMethodsList.push({})
         megaData.executeMethodForKey('render:paymentsMethods', {})
     }
 

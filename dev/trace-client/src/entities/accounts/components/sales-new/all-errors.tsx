@@ -23,8 +23,8 @@ function AllErrors() {
 
     setDebitsCreditsAndMismatchError()
 
-    return (<Box sx={{ display: 'flex', flexDirection: 'column', mr: 0, mb: 1, pl: 2, pt: 0.5, pb: 0.5, pr: 2, borderTop: '1px solid lightGrey' }}>
-        <Typography color={theme.palette.error.light} fontWeight='bold' sx={{ mt: 1.5, textDecoration: 'underline' }}>All errors</Typography>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', pl: 2, ml:-1, pt:1,  pb: 0.5, pr: 2, maxWidth:theme.spacing(30) }}>
+        <Typography color={theme.palette.error.light} fontWeight='bold' sx={{ mt: 1, textDecoration: 'underline' }}>All errors</Typography>
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold' sx={{mt:1}}>Customer</Typography>
         {allErrors.dateError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.dateError}</Typography> : ''}
         {allErrors.gstinError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.gstinError}</Typography> : ''}

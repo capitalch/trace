@@ -14,14 +14,13 @@ function Customer() {
     checkAllErrors()
 
     return (
-        <Box className='vertical' sx={{ mr: 1, display: 'flex', border: '1px solid lightBlue', p: 2, rowGap: 3, flexWrap: 'wrap', }}>
+        <Box className='vertical' sx={{ mr: 1, display: 'flex', borderTop: '1px solid lightGrey', p: 2, pl: 0, pr: 0, rowGap: 2, flexWrap: 'wrap', }}>
             <Box sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
-                <Typography variant='subtitle1' sx={{ mt: theme.spacing(-2), textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
-                {/* ref no */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(12), ml: 4 }}>
-                    <Typography variant='body2' sx={{ mt: -2.0 }}>Ref no</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1, columnGap: 1, width: theme.spacing(25) }}>
+                    <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
+                    {/* ref no */}
                     <Typography variant='body2'>{sales.autoRefNo || ''}</Typography>
-                    {/* <TextField variant='standard' value={sales.autoRefNo || ''} autoComplete='off' disabled={true} /> */}
+
                 </Box>
                 {/* tran date */}
                 <Box className='vertical'>
@@ -45,14 +44,14 @@ function Customer() {
                         onChange={(e: any) => { billTo.gstin = e.target.value; setRefresh({}) }} />
                 </Box>
                 {/* Remarks */}
-                <Box className='vertical' sx={{ minWidth: theme.spacing(14), }}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(18), width: theme.spacing(18) }}>
                     <Typography variant='body2'>Remarks</Typography>
                     <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
-            <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 3, rowGap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 2, rowGap: 2, flexWrap: 'wrap', alignItems: 'flex-end' }}>
                 {/* Customer search */}
-                <Box className='vertical' sx={{ maxWidth: theme.spacing(35) }}>
+                <Box className='vertical' sx={{ maxWidth: theme.spacing(32) }}>
                     <Typography variant='body2'>Customer search</Typography>
                     <TextField
                         autoComplete='off'
@@ -61,7 +60,7 @@ function Customer() {
                             startAdornment: (
                                 <InputAdornment position='start' >
                                     <Box sx={{ display: 'flex', flexDirection: 'column', }}>
-                                        <Typography variant='caption' sx={{ mt: 0, ml: 1.35, color: theme.palette.cyan.light }}>Or</Typography>
+                                        <Typography variant='caption' sx={{ mt: 0, ml: 1.35, color: theme.palette.secondary.light }}>Or</Typography>
                                         <Checkbox sx={{ mt: -2 }} size='small' checked={sales.isSearchTextOr || false} onClick={(e: any) => {
                                             sales.isSearchTextOr = e.target.checked
                                             setRefresh({})
@@ -97,10 +96,24 @@ function Customer() {
                         variant='standard' />
                 </Box>
 
+
                 {/* Customer details */}
-                <Box sx={{
+                <Typography sx={{
+                    overflow: 'clip', fontSize: theme.spacing(1.7), fontWeight: 'bold', width: theme.spacing(40),
+                    maxWidth: theme.spacing(40), maxHeight: theme.spacing(8), height: theme.spacing(8),
+                    border: '2px solid white', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'white'
+                }}>{''.concat(
+                    (billTo?.id ? 'id: ' + billTo.id : '')
+                    , (billTo?.contactName ? ', ' + billTo.contactName : '')
+                    , (billTo?.mobileNumber ? ', ' + billTo.mobileNumber : '')
+                    , (billTo?.address1 ? ', ' + billTo.address1 : '')
+                    , (billTo?.address2 ? ', ' + billTo.address2 : '')
+                    , (billTo?.email ? ', ' + billTo.email : '')
+                    , (billTo?.pin ? ', ' + billTo.pin : '')
+                )}</Typography>
+                {/* <Box sx={{
                     display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
-                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, minWidth: theme.spacing(40), maxWidth: theme.spacing(60)
+                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, maxWidth: theme.spacing(40), width: theme.spacing(40)
                     , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'lightgrey'
                 }}>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id, ', ') : ''}</Typography>
@@ -113,12 +126,13 @@ function Customer() {
                     <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ', ') : ''}</Typography>
                     <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
-                </Box>
+                </Box> */}
+
                 <Box sx={{ display: 'flex', }}>
-                    {/* New / edit */}
-                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='outlined' sx={{ height: theme.spacing(5) }}>New / Edit</Button>
                     {/* clear */}
-                    <Button size='small' color='secondary' onClick={handleCustomerClear} variant='outlined' sx={{ height: theme.spacing(5), ml: 2 }}>Clear</Button>
+                    <Button size='small' color='warning' onClick={handleCustomerClear} variant='contained' sx={{ height: theme.spacing(5), }}>Clear</Button>
+                    {/* New / edit */}
+                    <Button size='small' color='secondary' onClick={handleNewEditCustomer} variant='contained' sx={{ height: theme.spacing(5), ml: 1 }}>New / Edit</Button>
                 </Box>
             </Box>
             <Dialog

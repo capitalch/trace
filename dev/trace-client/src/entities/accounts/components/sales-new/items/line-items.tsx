@@ -80,7 +80,7 @@ function LineItems() {
                 {/* Product details */}
                 <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>
                     <Typography sx={{
-                        fontSize: theme.spacing(1.6),
+                        fontSize: theme.spacing(1.8),
                         fontWeight: 'bold', overflow: 'hidden', color: theme.palette.common.black,
                     }} variant='body1'>{item.productDetails || ''}</Typography>
                 </Card>

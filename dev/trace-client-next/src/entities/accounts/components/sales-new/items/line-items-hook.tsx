@@ -19,7 +19,7 @@ function useLineItems() {
         }
     })
     const pre = meta.current
-    
+
     useEffect(() => {
         megaData.registerKeyWithMethod('render:lineItems', setRefresh)
         if (items.length === 0) {
@@ -71,6 +71,7 @@ function useLineItems() {
         item.hsn = undefined
         item.gstrate = 0.0
         item.qty = 1
+        item.price = 0.00
         item.priceGst = 0.0
         item.discount = 0.0
         item.amount = 0.0
@@ -173,11 +174,12 @@ function useLineItems() {
         }
     }
 
-    function handleDeleteRow(index: number) {
+    function handleDeleteRow(item: any, index: number) {
         if (items.length === 1) {
-            return
+            clearRow(item)
+        } else {
+            items.splice(index, 1)
         }
-        items.splice(index, 1)
         megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
     }
@@ -207,7 +209,7 @@ function useLineItems() {
                         value={item.serialNumbers || ''}
                     />
                     <Box sx={{ display: 'flex', ml: 'auto', mt: 2 }}>
-                        <Button onClick={handleClear} size='small' color='info' variant='contained'>Clear</Button>
+                        <Button onClick={handleClear} size='small' color='warning' variant='contained'>Clear</Button>
                         <Button onClick={handleOk} size='small' color='secondary' variant='contained' sx={{ ml: 2 }} >Ok</Button>
                     </Box>
                 </Box>)

@@ -45,7 +45,7 @@ function LineItems() {
                 {/* Index */}
                 <Box className='vertical' sx={{ width: theme.spacing(3) }}>
                     {/* Age */}
-                    <Badge badgeContent={item.age || 0} color='secondary' sx={{mb:1, ml:-14 }} showZero overlap='circular' anchorOrigin={{
+                    <Badge badgeContent={item.age || 0} color='secondary' sx={{ mb: 1, ml: -14 }} showZero overlap='circular' anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'right',
                     }}>
@@ -53,7 +53,7 @@ function LineItems() {
                     <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
                 </Box>
                 {/* Product code */}
-                <Box className='vertical' >                    
+                <Box className='vertical' >
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
                         allowNegative={false}
@@ -62,7 +62,8 @@ function LineItems() {
                         decimalScale={0}
                         fixedDecimalScale={true}
                         value={item.productCode || ''}
-                        variant='standard' size='small'
+                        variant='standard'
+                        size='small'
                         onChange={(e: any) => {
                             item.productCode = e.target.value
                             setRefresh({})
@@ -251,15 +252,15 @@ function LineItems() {
                             : 'secondary'
                     }
                     showZero={true}>
-                    <Button color='secondary' size='medium' variant='outlined' onClick={() => handleSerialNo(item)}>Serial no</Button>
+                    <Button color='primary' size='medium' variant='contained' onClick={() => handleSerialNo(item)}>Serial no</Button>
                 </Badge>
 
                 {/* amount */}
                 <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
-                <Box sx={{ ml: -6.5, mt: -8 }}>
+                <Box sx={{ ml: -6.5, mt: -8, mr: 0.5 }}>
                     {/* delete */}
                     <IconButton sx={{ position: 'relative', left: theme.spacing(1.5), }} size='small' color='error'
-                        onClick={() => handleDeleteRow(index)}>
+                        onClick={() => handleDeleteRow(item, index)}>
                         <CloseSharp />
                     </IconButton>
                 </Box>

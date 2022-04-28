@@ -22,8 +22,8 @@ function PaymentsHeader() {
             <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Payments</Typography>
             <Typography variant='body2' >{''.concat('Count: ', sales?.payments?.paymentMethodsList?.length || 0 + '')}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Button sx={{ mr: 2 }} variant='contained' size='small' onClick={doClear} color='warning'>Clear all</Button>
-                <Typography variant='body2' sx={{ fontWeight: 'bold', ml: 2 }}>{''.concat('Amount:', ' ', (toDecimalFormat(getTotalAmount()) || 0 + ''))}</Typography>
+                <Button sx={{ mr: 0 }} variant='contained' size='small' onClick={doClear} color='warning'>Clear all</Button>
+                <Typography variant='body2' sx={{ fontWeight: 'bold', ml: 1.5 }}>{''.concat('Amount:', ' ', (toDecimalFormat(getTotalAmount()) || 0 + ''))}</Typography>
             </Box>
         </Box>
     )

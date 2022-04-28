@@ -122,7 +122,7 @@ function useShipTo() {
                 />
             </Box>
             <Box sx={{ display: 'flex', }}>
-                <Button sx={{ ml: 'auto', }} color='secondary' variant='outlined' size='small' onClick={handleClear} >Clear</Button>
+                <Button sx={{ ml: 'auto', }} color='warning' variant='contained' size='small' onClick={handleClear} >Clear</Button>
                 <Button color='secondary' variant='contained' size='small' sx={{ ml: 2, mr: 5 }} onClick={handleOk} >Ok</Button>
             </Box>
         </Box>)
