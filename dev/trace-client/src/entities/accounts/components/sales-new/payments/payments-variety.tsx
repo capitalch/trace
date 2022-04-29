@@ -81,7 +81,7 @@ function PaymentsVariety() {
         const allAccounts = getFromBag('allAccounts')
         const saleAccounts = allAccounts.filter((x: any) => (x.accClass === 'sale') && (['S', 'Y'].includes(x.accLeaf)))
         const saleOptions = saleAccounts.map((x: any, index: number) => (<option key={index} value={x.id}>{x.accName}</option>))
-        sales.salesAccountId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
+        sales.salesAccount.accId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
         return (saleOptions)
     }
 

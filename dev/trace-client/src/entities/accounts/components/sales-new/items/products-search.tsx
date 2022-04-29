@@ -1,6 +1,6 @@
 import {
     _, Card, Big, Box, Button, DataGridPro, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
-    useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
+    useContext, useEffect, useGridApiRef, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
 } from '../redirect'
 
 function ProductsSearch({ parentMeta }: any) {
@@ -9,6 +9,7 @@ function ProductsSearch({ parentMeta }: any) {
     // const sales = megaData.accounts.sales
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
+    const apiRef = useGridApiRef()
     // const items = sales.items
 
     const meta: any = useRef({
@@ -22,12 +23,14 @@ function ProductsSearch({ parentMeta }: any) {
     useEffect(() => {
         pre.allRows = megaData.accounts.allProducts
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
+        apiRef.current.selectRow(7, true,true)
         setRefresh({})
     }, [])
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <SearchBox parentMeta={meta} sx={{maxWidth:theme.spacing(80)}} />
+        <SearchBox parentMeta={meta} sx={{ maxWidth: theme.spacing(80) }} />
         <DataGridPro
+            apiRef={apiRef}
             columns={getColumns()}
             getRowClassName={getRowClassName}
             rows={pre.filteredRows}
@@ -204,7 +207,7 @@ function ProductsSearch({ parentMeta }: any) {
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
                 {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.catName}</Typography>}
-                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.label}</Typography>}
+                {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.label}</Typography>}
             </Box>
         )
     }

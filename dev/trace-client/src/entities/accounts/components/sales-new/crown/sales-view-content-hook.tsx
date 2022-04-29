@@ -165,29 +165,32 @@ function useSalesViewContent() {
                 function incr() {
                     return numb++
                 }
-                sales.items = salePurchaseDetails.map((item: any) => ({
-                    id: isModify ? item.id : undefined,
-                    index: incr(),
-                    remarks: item.remarks,
-                    upcCode: item.upcCode,
-                    productCode: item.productCode,
-                    productDetails: item.label
-                        ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
-                        }, ${item.info || ''}`
-                        : '',
-                    productId: item.productId,
-                    hsn: item.hsn,
-                    gstRate: item.gstRate,
-                    cgst: item.cgst,
-                    sgst: item.sgst,
-                    igst: item.igst,
-                    qty: item.qty,
-                    priceGst: item.priceGst,
-                    price: item.price,
-                    discount: item.discount,
-                    amount: item.amount || 0,
-                    serialNumbers: item.serialNumbers || '',
-                }))
+                sales.items.length = 0
+                for(const item of salePurchaseDetails){
+                    sales.items.push({
+                        id: isModify ? item.id : undefined,
+                        index: incr(),
+                        remarks: item.remarks,
+                        upcCode: item.upcCode,
+                        productCode: item.productCode,
+                        productDetails: item.label
+                            ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
+                            }, ${item.info || ''}`
+                            : '',
+                        productId: item.productId,
+                        hsn: item.hsn,
+                        gstRate: item.gstRate,
+                        cgst: item.cgst,
+                        sgst: item.sgst,
+                        igst: item.igst,
+                        qty: item.qty,
+                        priceGst: item.priceGst,
+                        price: item.price,
+                        discount: item.discount,
+                        amount: item.amount || 0,
+                        serialNumbers: item.serialNumbers || '',
+                    })
+                }
                 sales.summary.qty = 0
                 sales.items.reduce((prev: any, item: any) => {
                     sales.summary.qty = prev.qty + item.qty
@@ -213,10 +216,11 @@ function useSalesViewContent() {
                         return
                     }
                     if (accObj?.accClass === 'sale') {
-                        sales.salesAccountId = item.accId
+                        sales.salesAccount.accId = item.accId
                         sales.summary.amount = item.amount
+                        sales.salesAccount.amount = item.amount
+                        sales.salesAccount.id = isModify ? item.id: undefined
                         // sales.footer.amount = item.amount
-                        sales.id = isModify ? item.id : undefined
                     } else {
                         const obj: any = {
                             // accId: item.accId,
