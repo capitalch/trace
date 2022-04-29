@@ -1,5 +1,4 @@
-import { clearScreenDown } from 'readline'
-import { _, Badge, Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _,Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -149,9 +148,7 @@ function useLineItems() {
             item.priceGst = result.salePriceGst || 0
             item.discount = result.saleDiscount || 0
             computeRow(item)
-
             setRefresh({})
-            // selectProduct(rowData, result)
         } catch (e: any) {
             console.log(e.message)
         }
@@ -159,15 +156,17 @@ function useLineItems() {
     }
 
     async function fetchAllProducts() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        megaData.accounts.allProducts = await execGenericView({
-            isMultipleRows: true,
-            args: { onDate: null, isAll: true, days: 0 },
-            sqlKey: 'get_products_info'
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-        setIdForDataGridRows(megaData.accounts.allProducts)
-        setRefresh({})
+        if (_.isEmpty(megaData.accounts.allProducts)) {
+            emit('SHOW-LOADING-INDICATOR', true)
+            megaData.accounts.allProducts = await execGenericView({
+                isMultipleRows: true,
+                args: { onDate: null, isAll: true, days: 0 },
+                sqlKey: 'get_products_info'
+            })
+            emit('SHOW-LOADING-INDICATOR', false)
+            setIdForDataGridRows(megaData.accounts.allProducts)
+            setRefresh({})
+        }
     }
 
     function getSlNoError(item: any) {
@@ -179,14 +178,14 @@ function useLineItems() {
         }
     }
 
-    function handleDeleteRow(e:any, item: any, index: number) {
+    function handleDeleteRow(e: any, item: any, index: number) {
         e.stopPropagation() // necessary to prevent the firing of Box click event. Box is the parent. Click event of the box is for setting focus
         if (items.length === 1) {
             clearRow(item)
         } else {
             items.splice(index, 1)
         }
-        if(items.length === 1){
+        if (items.length === 1) {
             sales.currentItemIndex = 0
         } else {
             sales.currentItemIndex = (items.length - 1)

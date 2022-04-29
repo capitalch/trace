@@ -1,11 +1,13 @@
 import {
     _, Card, Big, Box, Button, DataGridPro, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
-    useContext, useEffect, useGridApiRef, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
+    useContext, useEffect, useGridApiRef, useIbuki, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
 } from '../redirect'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
+    const { emit } = useIbuki()
+    const { execGenericView, setIdForDataGridRows } = utilMethods()
     // const sales = megaData.accounts.sales
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -16,21 +18,27 @@ function ProductsSearch({ parentMeta }: any) {
         allRows: [],
         filteredRows: [],
         setRefresh: setRefresh,
-        selectionModel: []
+        selectionModel: [],
+        // isFirstTimeSelection: false
     })
     const pre = meta.current
 
     useEffect(() => {
         pre.allRows = megaData.accounts.allProducts
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
-        apiRef.current.selectRow(7, true,true)
+        // pre.isFirstTimeSelection = true
+        // apiRef.current.selectRow(8, true, false)
         setRefresh({})
     }, [])
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <SearchBox parentMeta={meta} sx={{ maxWidth: theme.spacing(80) }} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <SearchBox parentMeta={meta} sx={{ maxWidth: theme.spacing(120), width: theme.spacing(50) }} />
+            <Button variant='contained' color='secondary' onClick={handleRefresh}>Refresh</Button>
+        </Box>
         <DataGridPro
             apiRef={apiRef}
+            // checkboxSelection={true}
             columns={getColumns()}
             getRowClassName={getRowClassName}
             rows={pre.filteredRows}
@@ -40,6 +48,10 @@ function ProductsSearch({ parentMeta }: any) {
             rowHeight={65}
             selectionModel={pre.selectionModel}
             onSelectionModelChange={(newModel: any) => {
+                // if(pre.isFirstTimeSelection){
+                //     pre.isFirstTimeSelection = false
+                //     return
+                // }
                 const products = megaData.accounts.allProducts
                 if (_.isEmpty(products)) {
                     return
@@ -200,6 +212,18 @@ function ProductsSearch({ parentMeta }: any) {
             ret = 'row-negative-clos'
         }
         return (ret)
+    }
+
+    async function handleRefresh() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        megaData.accounts.allProducts = await execGenericView({
+            isMultipleRows: true,
+            args: { onDate: null, isAll: true, days: 0 },
+            sqlKey: 'get_products_info'
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        setIdForDataGridRows(megaData.accounts.allProducts)
+        setRefresh({})
     }
 
     function Product({ params }: any) {

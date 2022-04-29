@@ -93,6 +93,7 @@ e. Multiple cash entries in receipt
 # 24-04-2022 - 29-04-2022
 1. Continued on new sales
 2. Bug fixed: clear row does not clear gst rate and sgst, igst, cgst
+3. Edit from view completed
 
 # 23-04-2022
 1. Reworked on Sales report for product details
