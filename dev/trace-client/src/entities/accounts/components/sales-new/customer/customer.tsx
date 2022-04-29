@@ -96,9 +96,8 @@ function Customer() {
                         variant='standard' />
                 </Box>
 
-
                 {/* Customer details */}
-                <Typography sx={{
+                <Typography sx={{ 
                     overflow: 'clip', fontSize: theme.spacing(1.8), fontWeight: 'bold', width: theme.spacing(40),
                     maxWidth: theme.spacing(40), maxHeight: theme.spacing(8), height: theme.spacing(8),
                     border: '2px solid white', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'white'

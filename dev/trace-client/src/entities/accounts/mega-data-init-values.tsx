@@ -8,6 +8,7 @@ const salesMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
     billTo: {},
+    currentItemIndex:0,
     commonRemarks: undefined,
     credits: 0,
     debits: 0,

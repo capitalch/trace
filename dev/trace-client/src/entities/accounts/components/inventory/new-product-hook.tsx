@@ -80,12 +80,12 @@ function useNewProduct(onClose: any, product: any = {}) {
                     gstRate: pre.gstRate,
                     // finYearId: finYearId,
                     // branchId: branchId,
-                    salePrice: extractAmount(pre.salePrice),
-                    salePriceGst: extractAmount(pre.salePriceGst),
-                    maxRetailPrice: extractAmount(pre.maxRetailPrice),
-                    dealerPrice: extractAmount(pre.dealerPrice),
-                    purPriceGst: extractAmount(pre.purPriceGst),
-                    purPrice: extractAmount(pre.purPrice),
+                    salePrice: extractAmount(pre.salePrice) || 0.00,
+                    salePriceGst: extractAmount(pre.salePriceGst) || 0.00,
+                    maxRetailPrice: extractAmount(pre.maxRetailPrice) || 0.00,
+                    dealerPrice: extractAmount(pre.dealerPrice) || 0.00,
+                    purPriceGst: extractAmount(pre.purPriceGst) || 0.00,
+                    purPrice: extractAmount(pre.purPrice) || 0.00,
                 }
             })
             ret && onClose()

@@ -157,7 +157,7 @@ function useShipTo() {
             allErrors.shipToError = undefined
         } else {
             const ok = shipTo.name && shipTo.address1 && shipTo.country && shipTo.state && shipTo.city && shipTo.pin
-                && isInvalidIndiaMobile(shipTo.mobile) && isInvalidEmail(shipTo.email)
+                && (!isInvalidIndiaMobile(shipTo.mobile)) && (!isInvalidEmail(shipTo.email))
             allErrors.shipToError = ok ? undefined : errorMessages.shipToError
         }
     }

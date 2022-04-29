@@ -11,12 +11,14 @@ function LineItems() {
     const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     checkAllErrors()
+    const pre = meta.current
+    // pre.productCodeRef = useRef({})
 
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
                 // <div key={index}>
-                    <LineItem item={item} index={index} />
+                <LineItem item={item} index={index} key={index} />
                 // </div>
             )
         }
@@ -28,7 +30,7 @@ function LineItems() {
         const smallFontTextField = megaData.accounts.settings.smallFontTextField
 
         return (
-            <Box key={index}
+            <Box
                 onClick={(e: any) => {
                     if (sales.currentItemIndex === index) {
                         return
@@ -56,6 +58,7 @@ function LineItems() {
                 <Box className='vertical' >
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+                        inputRef={pre.productCodeRef}
                         allowNegative={false}
                         autoComplete='off'
                         customInput={TextField}
@@ -73,6 +76,7 @@ function LineItems() {
                                 clearRow(item)
                             }
                         }}
+
                         onFocus={(e: any) => {
                             e.target.select()
                         }} />
@@ -260,7 +264,7 @@ function LineItems() {
                 <Box sx={{ ml: -6.5, mt: -8, mr: 0.5 }}>
                     {/* delete */}
                     <IconButton sx={{ position: 'relative', left: theme.spacing(1.5), }} size='small' color='error'
-                        onClick={() => handleDeleteRow(item, index)}>
+                        onClick={(e: any) => handleDeleteRow(e, item, index)}>
                         <CloseSharp />
                     </IconButton>
                 </Box>

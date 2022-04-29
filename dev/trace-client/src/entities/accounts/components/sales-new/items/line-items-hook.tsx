@@ -16,7 +16,8 @@ function useLineItems() {
         dialogConfig: {
             title: 'Serial numbers (Comma separated)',
             content: () => <></>
-        }
+        },
+        // productCodeRef:null
     })
     const pre = meta.current
 
@@ -69,7 +70,7 @@ function useLineItems() {
         item.productCode = undefined
         item.productDetails = undefined
         item.hsn = undefined
-        item.gstrate = 0.0
+        item.gstRate = 0.0
         item.qty = 1
         item.price = 0.00
         item.priceGst = 0.0
@@ -77,6 +78,10 @@ function useLineItems() {
         item.amount = 0.0
         item.serialNumbers = ''
         item.remarks = ''
+        item.sgst = 0.0
+        item.cgst = 0.0
+        item.igst = 0.0
+        megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
     function computeAllRows() {
@@ -174,16 +179,17 @@ function useLineItems() {
         }
     }
 
-    function handleDeleteRow(item: any, index: number) {
+    function handleDeleteRow(e:any, item: any, index: number) {
+        e.stopPropagation() // necessary to prevent the firing of Box click event. Box is the parent. Click event of the box is for setting focus
         if (items.length === 1) {
             clearRow(item)
         } else {
             items.splice(index, 1)
         }
-        if(items.length === 0){
+        if(items.length === 1){
             sales.currentItemIndex = 0
         } else {
-            sales.currentItemIndex = index - 1
+            sales.currentItemIndex = (items.length - 1)
         }
         megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
@@ -244,7 +250,7 @@ function useLineItems() {
         // populate current item with selectedProduct
         currentItem.id = selectedProduct.id1
         currentItem.productCode = selectedProduct.productCode
-        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info)
+        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info || '')
         currentItem.hsn = selectedProduct.hsn
         currentItem.gstRate = selectedProduct.gstRate
         currentItem.clos = selectedProduct.clos
