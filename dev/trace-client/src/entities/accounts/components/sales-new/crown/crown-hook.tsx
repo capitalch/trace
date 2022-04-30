@@ -6,8 +6,9 @@ function useCrown() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const { emit } = useIbuki()
-    const { getFromBag } = manageEntitiesState()
+    const { getFromBag, setInBag } = manageEntitiesState()
     const { genericUpdateMasterDetails, } = utilMethods()
+    const { execSaleInvoiceView } = utils()
 
     const meta: any = useRef({
         showDialog: false,
@@ -41,41 +42,42 @@ function useCrown() {
     }
 
     async function handleSubmit() {
-        // const ad = arbitraryData
-        // setInBag('rawSaleData', null)
+        setInBag('rawSaleData', null)
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        // let ret = await genericUpdateMasterDetails([header])
-        // if (ret.error) {
-        //     console.log(ret.error)
-        // } else {
-        //     const id = ret?.data?.accounts?.genericUpdateMasterDetails
-        // if (id) {
-        //     ret = await execSaleInvoiceView({
-        //         isMultipleRows: false,
-        //         sqlKey: 'getJson_sale_purchase_on_id',
-        //         args: {
-        //             id: id,
-        //         },
-        //     })
-        //     if (ret) {
-        //         setInBag('rawSaleData', ret)
-        //         ad.rawSaleData = ret
-        //         setRefresh({})
-        //     }
-        // }
-        // if (ad.shouldCloseParentOnSave) {
-        //     emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-        // } else if (ad.isViewBack) {
-        //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-        //     emit('SALES-HOOK-CHANGE-TAB', 3)
-        //     arbitraryData.saleViewHookFetchData()
-        // } else {
-        //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-        // }
-        // ad.isViewBack = false // no go back to view
-        // }
+        console.log(JSON.stringify(header))
+        let ret = await genericUpdateMasterDetails([header])
+        if (ret.error) {
+            console.log(ret.error)
+        } else {
+            const id = ret?.data?.accounts?.genericUpdateMasterDetails
+            if (id) {
+                ret = await execSaleInvoiceView({
+                    isMultipleRows: false,
+                    sqlKey: 'getJson_sale_purchase_on_id',
+                    args: {
+                        id: id,
+                    },
+                })
+                if (ret) {
+                    setInBag('rawSaleData', ret)
+                    sales.rawSaleData = ret
+                    setRefresh({})
+                }
+                handleReset()
+            }
+            // if (ad.shouldCloseParentOnSave) {
+            //     emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+            // } else if (ad.isViewBack) {
+            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+            //     emit('SALES-HOOK-CHANGE-TAB', 3)
+            //     arbitraryData.saleViewHookFetchData()
+            // } else {
+            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+            // }
+            // ad.isViewBack = false // no go back to view
+        }
 
         function extractHeader() {
             const finYearId = getFromBag('finYearObject')?.finYearId
@@ -118,15 +120,15 @@ function useCrown() {
             }
 
             const saleDataRow: any = {
-                // id: sales.rowData.id || undefined,
-                accId: sales.salesAccountId,
+                id: sales.salesAccount.id || undefined,
+                accId: sales.salesAccount.accId,
                 dc: sales.saleType === 'sal' ? 'C' : 'D',
                 amount: sales.summary.amount,
                 details: [],
             }
             saleTranD.data.push(saleDataRow)
 
-            for (let item of sales.paymentMethodsList) {
+            for (let item of sales.payments.paymentMethodsList) {
                 saleTranD.data.push({
                     accId: item.accId,
                     dc: sales.saleType === 'sal' ? 'D' : 'C',

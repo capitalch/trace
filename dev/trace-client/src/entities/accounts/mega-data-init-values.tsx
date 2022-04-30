@@ -15,9 +15,8 @@ const salesMegaData = () => ({
     salesAccount: {
         id: undefined,
         accId: undefined,
-        amount: 0,
+        // amount: 0,
     },
-    // salesAccountId: 0,
     gstin: undefined,
     id: undefined,
     isIgst: false,
@@ -27,8 +26,6 @@ const salesMegaData = () => ({
         paymentMethodsList: [],
         paymentVariety: 'r',
     },
-    // paymentMethodsList: [], // to be removed
-    // paymentVariety: 'r', // to be removed
     rawSaleData: undefined,
     saleType: 'sal',
     shipTo: {},

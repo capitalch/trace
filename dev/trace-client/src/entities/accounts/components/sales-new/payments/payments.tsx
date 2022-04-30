@@ -3,7 +3,7 @@ import { _, Box, PaymentsHeader, PaymentsMethods, PaymentsVariety, ShipTo, useTh
 function Payments() {
     const theme = useTheme()
     return (
-        <Box className='vertical' sx={{ pt: 2, pr: 3, pb: 2,  maxWidth: theme.spacing(110) }}>
+        <Box className='vertical' sx={{p:1, mt:.5, pt: 2, pr: 2, pb: 2, border:'1px solid lightGrey',  maxWidth: theme.spacing(110) }}>
             <PaymentsHeader />
             <PaymentsVariety />
             <PaymentsMethods />

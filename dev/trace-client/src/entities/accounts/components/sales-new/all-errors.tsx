@@ -18,14 +18,14 @@ function AllErrors() {
     useEffect(() => {
         sales.isAnyError = Object.keys(allErrors).some((key: string) => allErrors[key])
         megaData.executeMethodForKey('render:crown', {})
-        megaData.executeMethodForKey('render:debitsCredits',{})
+        megaData.executeMethodForKey('render:debitsCredits', {})
     })
 
     setDebitsCreditsAndMismatchError()
 
-    return (<Box sx={{ display: 'flex', flexDirection: 'column', pl: 2, ml:-1, pt:1,  pb: 0.5, pr: 2, maxWidth:theme.spacing(30) }}>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', border: '1px solid lightGrey', pl: 2, mt: .5, pt: 1, pb: 0.5, pr: 2, maxWidth: theme.spacing(30) }}>
         <Typography color={theme.palette.error.light} fontWeight='bold' sx={{ mt: 1, textDecoration: 'underline' }}>All errors</Typography>
-        <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold' sx={{mt:1}}>Customer</Typography>
+        <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold' sx={{ mt: 1 }}>Customer</Typography>
         {allErrors.dateError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.dateError}</Typography> : ''}
         {allErrors.gstinError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.gstinError}</Typography> : ''}
         {allErrors.customerError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.customerError}</Typography> : ''}

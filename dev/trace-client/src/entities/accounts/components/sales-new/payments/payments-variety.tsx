@@ -31,7 +31,7 @@ function PaymentsVariety() {
                 <FormControlLabel
                     control={
                         <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            disabled={!!sales.id} // in edit mode changeover is not allowed
                             onClick={handleRetailCashBankSales}
                             size="small"
                             color="secondary"
@@ -43,7 +43,7 @@ function PaymentsVariety() {
                 <FormControlLabel
                     control={
                         <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            disabled={!!sales.id} // in edit mode changeover is not allowed
                             onClick={handleAutoSubledgerSales}
                             size="small"
                             color="secondary"
@@ -55,7 +55,7 @@ function PaymentsVariety() {
                 <FormControlLabel
                     control={
                         <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            disabled={!!sales.id} // in edit mode changeover is not allowed
                             onClick={handleInstitutionSales}
                             size="small"
                             color="secondary"
@@ -81,7 +81,7 @@ function PaymentsVariety() {
         const allAccounts = getFromBag('allAccounts')
         const saleAccounts = allAccounts.filter((x: any) => (x.accClass === 'sale') && (['S', 'Y'].includes(x.accLeaf)))
         const saleOptions = saleAccounts.map((x: any, index: number) => (<option key={index} value={x.id}>{x.accName}</option>))
-        sales.salesAccount.accId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
+        sales.salesAccount.accId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0].id
         return (saleOptions)
     }
 

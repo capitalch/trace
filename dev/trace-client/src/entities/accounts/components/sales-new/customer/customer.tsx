@@ -12,9 +12,9 @@ function Customer() {
     const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
     checkAllErrors()
-
+    
     return (
-        <Box className='vertical' sx={{ mr: 1, display: 'flex', borderTop: '2px solid black', borderLeft:0,  p: 2, pl: 0, pr: 1, rowGap: 2, flexWrap: 'wrap', }}>
+        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, pl: 1, pr: 1, rowGap: 2, flexWrap: 'wrap', }}>
             <Box sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1, columnGap: 1, width: theme.spacing(25) }}>
                     <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
@@ -97,7 +97,7 @@ function Customer() {
                 </Box>
 
                 {/* Customer details */}
-                <Typography sx={{ 
+                <Typography sx={{
                     overflow: 'clip', fontSize: theme.spacing(1.8), fontWeight: 'bold', width: theme.spacing(40),
                     maxWidth: theme.spacing(40), maxHeight: theme.spacing(8), height: theme.spacing(8),
                     border: '2px solid white', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'white'
