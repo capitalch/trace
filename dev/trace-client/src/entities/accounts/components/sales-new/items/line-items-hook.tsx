@@ -1,4 +1,4 @@
-import { _,Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -28,7 +28,7 @@ function useLineItems() {
         const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
-        fetchAllProducts()
+        // fetchAllProducts()
         return () => {
             subs1.unsubscribe()
         }
@@ -155,19 +155,19 @@ function useLineItems() {
         emit('SHOW-LOADING-INDICATOR', false)
     }
 
-    async function fetchAllProducts() {
-        if (_.isEmpty(megaData.accounts.allProducts)) {
-            emit('SHOW-LOADING-INDICATOR', true)
-            megaData.accounts.allProducts = await execGenericView({
-                isMultipleRows: true,
-                args: { onDate: null, isAll: true, days: 0 },
-                sqlKey: 'get_products_info'
-            })
-            emit('SHOW-LOADING-INDICATOR', false)
-            setIdForDataGridRows(megaData.accounts.allProducts)
-            setRefresh({})
-        }
-    }
+    // async function fetchAllProducts() {
+    //     if (_.isEmpty(megaData.accounts.allProducts)) {
+    //         emit('SHOW-LOADING-INDICATOR', true)
+    //         megaData.accounts.allProducts = await execGenericView({
+    //             isMultipleRows: true,
+    //             args: { onDate: null, isAll: true, days: 0 },
+    //             sqlKey: 'get_products_info'
+    //         })
+    //         emit('SHOW-LOADING-INDICATOR', false)
+    //         setIdForDataGridRows(megaData.accounts.allProducts)
+    //         setRefresh({})
+    //     }
+    // }
 
     function getSlNoError(item: any) {
         const ok = (getCount() === item.qty) || (getCount() === 0)
@@ -184,6 +184,9 @@ function useLineItems() {
             clearRow(item)
         } else {
             items.splice(index, 1)
+            if (item.id) {
+                sales.deletedSalePurchaseIds.push(item.id)
+            }
         }
         if (items.length === 1) {
             sales.currentItemIndex = 0
@@ -247,7 +250,7 @@ function useLineItems() {
         const currentItem = items[currentItemIndex]
         const selectedProduct = megaData.accounts.selectedProduct
         // populate current item with selectedProduct
-        currentItem.id = selectedProduct.id1
+        currentItem.productId = selectedProduct.id1
         currentItem.productCode = selectedProduct.productCode
         currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info || '')
         currentItem.hsn = selectedProduct.hsn

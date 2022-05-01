@@ -1,4 +1,4 @@
-import { Box, errorMessages, IMegaData, MegaDataContext, Typography, useContext, useEffect, useIbuki, useState, useTheme } from './redirect'
+import { Box, errorMessages, IMegaData, MegaDataContext, Typography, useContext, useEffect, useIbuki, useState, useTheme } from '../redirect'
 function AllErrors() {
     const [, setRefresh] = useState({})
     const theme = useTheme()

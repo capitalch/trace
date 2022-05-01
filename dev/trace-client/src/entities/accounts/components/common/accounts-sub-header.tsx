@@ -16,17 +16,19 @@ function AccountsSubHeader() {
         handleSelectBu,
         handleSelectBranch,
         handleSelectFinYear,
-        handleStockSearch,
+        handleProductSearch,
         meta,
+        productsMeta,
         utilFunc,
     } = useAccountsSubHeader()
 
     const {
+        BasicMaterialDialog,
         emit,
         getCurrentMediaSize,
         initCode,
         isControlDisabled,
-        TraceDialog,
+        TraceDialog,        
     } = useSharedElements()
 
     const { execDataCache } = initCode()
@@ -129,7 +131,6 @@ function AccountsSubHeader() {
                 {/* Stock search */}
                 <Chip
                     size="medium"
-                    // disabled={isControlDisabled('branchChange')}
                     className="chip-select"
                     style={{
                         maxWidth: exhibitLogic[currentMediaSize || 'md']()
@@ -137,12 +138,13 @@ function AccountsSubHeader() {
                     }}
                     clickable={true}
                     avatar={<Avatar>S</Avatar>}
-                    label='Search'
+                    label='Sh'
                     color="secondary"
-                    onClick={handleStockSearch}
+                    onClick={handleProductSearch}
                 ></Chip>
             </Box>
             <TraceDialog meta={meta} />
+            <BasicMaterialDialog parentMeta={productsMeta} />
         </div>
     )
 }

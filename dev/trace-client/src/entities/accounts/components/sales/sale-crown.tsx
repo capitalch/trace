@@ -52,7 +52,6 @@ function SaleCrown({ saleType, drillDownEditAttributes }: any) {
                         Total debits:{' '}
                         {toDecimalFormat(arbitraryData.footer.amount)}
                     </Typography>
-
                     <Typography variant="subtitle1">
                         Total credits:{' '}
                         {toDecimalFormat(arbitraryData.summary.amount)}

@@ -7,6 +7,7 @@ import {
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { initCode } from '../../init-code'
+import { ProductsSearch } from '../sales-new/items/products-search'
 
 function useAccountsSubHeader() {
     const [, setRefresh] = useState({})
@@ -41,6 +42,16 @@ function useAccountsSubHeader() {
         },
     })
 
+    const productsMeta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            title: 'Search product',
+            content: () => <></>,
+            maxWidth: 'md',
+        },
+    })
+
+    const pro = productsMeta.current
     const buCode = getFromBag('buCode')
     const finYearObject = getFromBag('finYearObject') || undefined
     const branchObject = getFromBag('branchObject') // default is HEAD
@@ -326,8 +337,10 @@ function useAccountsSubHeader() {
         }
     }
 
-    function handleStockSearch(){
-
+    function handleProductSearch() {
+        pro.showDialog = true
+        pro.dialogConfig.content = () => <ProductsSearch parentMeta={productsMeta} />
+        setRefresh({})
     }
 
     function utilFunc() {
@@ -370,7 +383,8 @@ function useAccountsSubHeader() {
         handleSelectBu,
         handleSelectFinYear,
         meta,
-        handleStockSearch,
+        productsMeta,
+        handleProductSearch,
         utilFunc,
     }
 }

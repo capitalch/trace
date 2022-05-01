@@ -294,7 +294,7 @@ function useSaleView(arbitraryData: any, drillDownEditAttributes: any) {
                             instrNo: item.instrNo,
                             remarks: item.remarks,
                             id: isModify ? item.id : undefined,
-                            allAccounts: arbitraryData.allAccounts,
+                            // allAccounts: arbitraryData.allAccounts,
                         }
                         if (accObj?.isAutoSubledger) {
                             ad.saleVariety = 'a'

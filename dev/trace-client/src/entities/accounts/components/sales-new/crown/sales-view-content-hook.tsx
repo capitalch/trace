@@ -129,13 +129,14 @@ function useSalesViewContent() {
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
             // console.log(JSON.stringify(ret))
-            sales.rawSaleData = ret
-            // setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
+            // sales.rawSaleData = ret
+            setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
             prepareSalesData(ret)
             // arbitraryData.saleItemsRefresh()
             // emit('SALES-HOOK-CHANGE-TAB', 0)
         }
 
+        // populates the megaData.accounts.sales from database
         function prepareSalesData(data: any) {
             const res = data.jsonResult
             loadTranH(res)
@@ -153,7 +154,8 @@ function useSalesViewContent() {
                 sales.summary.sgst = extGstTranD.sgst
                 sales.summary.igst = extGstTranD.igst
                 sales.extGstTranDId = isModify ? extGstTranD.id : undefined
-                sales.summary.igst ? (sales.isIgst = true) : (sales.isIgst = false)
+                sales.isIgst = sales.summary.igst ? true: false
+                // sales.summary.igst ? (sales.isIgst = true) : (sales.isIgst = false)
             }
 
             function loadSalePurchaseDetails(res: any) {
@@ -202,12 +204,11 @@ function useSalesViewContent() {
                 const tranD = res.tranD //an array of 2 or multiple items. If multipe payments received in footer then more than 2 rows
                 sales.payments.paymentVariety = 'r'
                 sales.payments.paymentMethodsList = []
-                // sales.footer.items = []
                 for (let item of tranD) {
                     const accObj: any = getAccountClassWithAutoSubledger(
                         item.accId
                     )
-                    if (!accObj) {
+                    if (_.isEmpty(accObj)) {
                         emit('SHOW-MESSAGE', {
                             message: accountsMessages.warningToDoRefresh,
                             severity: 'warning',
@@ -218,8 +219,9 @@ function useSalesViewContent() {
                     if (accObj?.accClass === 'sale') {
                         sales.salesAccount.accId = item.accId
                         sales.summary.amount = item.amount
-                        sales.salesAccount.amount = item.amount
-                        sales.salesAccount.id = isModify ? item.id: undefined
+                        sales.summary.backCalculateAmount = item.amount
+                        // sales.salesAccount.amount = item.amount
+                        sales.salesAccount.id = isModify ? item.id: undefined // id from table TranD
                         // sales.footer.amount = item.amount
                     } else {
                         const obj: any = {
@@ -228,8 +230,7 @@ function useSalesViewContent() {
                             amount: item.amount,
                             instrNo: item.instrNo,
                             remarks: item.remarks,
-                            id: isModify ? item.id : undefined,
-                            // allAccounts: sales.allAccounts,
+                            id: isModify ? item.id : undefined, // id from table TranD
                         }
                         if (accObj?.isAutoSubledger) {
                             sales.payments.paymentVariety = 'a'

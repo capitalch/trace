@@ -434,7 +434,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     color: theme.palette.blue.main,
                     fontWeight: 'bold',
                     marginLeft: 'auto',
-                    '& ..preview-icon': {
+                    '& .preview-icon': {
                         color: theme.palette.orange.light,
                     },
                     '& .mail-icon': {

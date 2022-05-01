@@ -15,7 +15,6 @@ function ItemsFooter() {
             content: () => <></>,
             maxWidth: 'lg',
         },
-        // setRefresh: setRefresh
     })
     const pre = meta.current
 
@@ -132,6 +131,7 @@ function ItemsFooter() {
 
     function handleRoundOff() {
         sales.summary.backCalculateAmount = Math.round(sales.summary.amount)
+        // sales.summary.backCalculateAmount = Big(sales.summary.amount).round()
         handleBackCalculate()
     }
 }

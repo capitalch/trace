@@ -1,7 +1,7 @@
 import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
 import { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
-import {components as reactSelectComponents} from 'react-select'
+import { components as reactSelectComponents } from 'react-select'
 import ReactSelect from 'react-select'
 
 import {
@@ -65,6 +65,7 @@ function useSharedElements() {
     } = utilMethods()
     const { hotEmit, hotFilterOn, emit, filterOn, debounceEmit, debounceFilterOn } = useIbuki()
     const {
+        BasicMaterialDialog,
         TraceDialog,
         traceGlobalSearch,
         TraceFullWidthSubmitButton,
@@ -99,6 +100,7 @@ function useSharedElements() {
     } = utils()
     return {
         accountsMessages,
+        BasicMaterialDialog,
         BlobProvider,
         clearServerError,
         confirm,

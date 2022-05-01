@@ -12,21 +12,23 @@ const salesMegaData = () => ({
     commonRemarks: undefined,
     credits: 0,
     debits: 0,
+    deletedSalePurchaseIds: [],
+    extGstTranDId: undefined,
     salesAccount: {
-        id: undefined,
+        id: undefined, // id from table TranD for row which is for sales
         accId: undefined,
         // amount: 0,
     },
     gstin: undefined,
-    id: undefined,
+    id: undefined, // from table TranH
     isIgst: false,
-    items: [],
+    items: [], // id from salePurchaseDetails table
     payments: {
         deletedIds: [],
-        paymentMethodsList: [],
+        paymentMethodsList: [], // id from TranD table // object array of type: {id, amount, instrNo, remarks, rowData:{accId}, ledgerFilterMethodName, }
         paymentVariety: 'r',
     },
-    rawSaleData: undefined,
+    // rawSaleData: undefined,
     saleType: 'sal',
     shipTo: {},
     summary: {

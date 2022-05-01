@@ -1,3 +1,4 @@
+import { VariablesAreInputTypesRule } from 'graphql'
 import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, InputLabel, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, manageEntitiesState, MegaDataContext, NativeSelect, NumberFormat, Radio, RadioGroup, Select, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function PaymentsVariety() {
@@ -26,7 +27,7 @@ function PaymentsVariety() {
     })
     const pre = meta.current
     return (
-        <Box sx={{ mt: 1, pt: 1,pb:1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1,  }}>
+        <Box sx={{ mt: 1, pt: 1, pb: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1, }}>
             <RadioGroup row>
                 <FormControlLabel
                     control={
@@ -86,7 +87,6 @@ function PaymentsVariety() {
     }
 
     function getContent(data: any[]) {
-
         return (<List>
             {getItems()}
         </List>)
@@ -165,6 +165,7 @@ function PaymentsVariety() {
         const data = getdebtorCreditorAccountsWithSubledgers()
         pre.dialogConfig.content = () => getContent(data)
         showDialog()
+        setRefresh({})
     }
 
     function handleRetailCashBankSales() {
@@ -185,10 +186,10 @@ function PaymentsVariety() {
         Object.keys(sales.billTo).forEach((key: string) => delete sales.billTo[key]) // cleanup billTo
         megaData.executeMethodForKey('render:customer', {})
         sales.payments.paymentVariety = variety
-        sales.filterMethodName = logic[variety]
         sales.payments.paymentMethodsList.length = 0
-        sales.payments.paymentMethodsList.push({})
+        sales.payments.paymentMethodsList.push({ ledgerFilterMethodName: logic[variety],  })
         megaData.executeMethodForKey('render:paymentsMethods', {})
+        // setRefresh({})
     }
 
     function showDialog() {

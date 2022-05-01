@@ -62,7 +62,7 @@ function useCrown() {
                 })
                 if (ret) {
                     setInBag('rawSaleData', ret)
-                    sales.rawSaleData = ret
+                    // sales.rawSaleData = ret
                     setRefresh({})
                 }
                 handleReset()
@@ -130,7 +130,7 @@ function useCrown() {
 
             for (let item of sales.payments.paymentMethodsList) {
                 saleTranD.data.push({
-                    accId: item.accId,
+                    accId: item.rowData.accId,
                     dc: sales.saleType === 'sal' ? 'D' : 'C',
                     amount: item.amount,
                     remarks: item.remarks,
@@ -157,10 +157,10 @@ function useCrown() {
             const products = {
                 tableName: 'SalePurchaseDetails',
                 fkeyName: 'tranDetailsId',
-                // deletedIds:
-                //     ad?.deletedSalePurchaseIds.length > 0
-                //         ? [...ad.deletedSalePurchaseIds]
-                //         : undefined,
+                deletedIds:
+                    sales.deletedSalePurchaseIds.length > 0
+                        ? [...sales.deletedSalePurchaseIds]
+                        : undefined,
                 data: sales.items.map((item: any) => ({
                     id: item.id || undefined,
                     productId: item.productId,
