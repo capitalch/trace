@@ -28,7 +28,6 @@ function useLineItems() {
         const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
-        // fetchAllProducts()
         return () => {
             subs1.unsubscribe()
         }
@@ -154,20 +153,6 @@ function useLineItems() {
         }
         emit('SHOW-LOADING-INDICATOR', false)
     }
-
-    // async function fetchAllProducts() {
-    //     if (_.isEmpty(megaData.accounts.allProducts)) {
-    //         emit('SHOW-LOADING-INDICATOR', true)
-    //         megaData.accounts.allProducts = await execGenericView({
-    //             isMultipleRows: true,
-    //             args: { onDate: null, isAll: true, days: 0 },
-    //             sqlKey: 'get_products_info'
-    //         })
-    //         emit('SHOW-LOADING-INDICATOR', false)
-    //         setIdForDataGridRows(megaData.accounts.allProducts)
-    //         setRefresh({})
-    //     }
-    // }
 
     function getSlNoError(item: any) {
         const ok = (getCount() === item.qty) || (getCount() === 0)

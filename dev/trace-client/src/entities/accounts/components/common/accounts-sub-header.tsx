@@ -3,14 +3,15 @@ import { useAccountsSubHeader, useStyles } from './accounts-sub-header-hook'
 import {
     Avatar,
     Box, IconButton,
-    Chip,
+    Chip, useTheme
 } from '../../../../imports/gui-imports'
 import {
-    Add, FontAwesomeIcon, faSpinner, RemoveCircleOutline,
+    Add, FontAwesomeIcon, faSpinner, RemoveCircleOutline, Search,
     SyncSharp,
 } from '../../../../imports/icons-import'
 function AccountsSubHeader() {
     const classes = useStyles()
+    const theme = useTheme()
     const {
         exhibitLogic,
         handleSelectBu,
@@ -28,7 +29,7 @@ function AccountsSubHeader() {
         getCurrentMediaSize,
         initCode,
         isControlDisabled,
-        TraceDialog,        
+        TraceDialog,
     } = useSharedElements()
 
     const { execDataCache } = initCode()
@@ -129,7 +130,14 @@ function AccountsSubHeader() {
                     />
                 )}
                 {/* Stock search */}
-                <Chip
+                <IconButton
+                    size="medium"
+                    color='inherit'
+                    onClick={handleProductSearch}>
+                    <Search ></Search>
+                </IconButton>
+
+                {/* <Chip
                     size="medium"
                     className="chip-select"
                     style={{
@@ -141,7 +149,7 @@ function AccountsSubHeader() {
                     label='Sh'
                     color="secondary"
                     onClick={handleProductSearch}
-                ></Chip>
+                ></Chip> */}
             </Box>
             <TraceDialog meta={meta} />
             <BasicMaterialDialog parentMeta={productsMeta} />

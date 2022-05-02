@@ -47,7 +47,8 @@ function useAccountsSubHeader() {
         dialogConfig: {
             title: 'Search product',
             content: () => <></>,
-            maxWidth: 'md',
+            // maxWidth: 'md',
+            fullScreen: true,
         },
     })
 
