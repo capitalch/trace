@@ -48,6 +48,7 @@ function useCrown() {
         header.data[0].details = details
         console.log(JSON.stringify(header))
         let ret = await genericUpdateMasterDetails([header])
+        // let ret:any = {error:true}
         if (ret.error) {
             console.log(ret.error)
         } else {

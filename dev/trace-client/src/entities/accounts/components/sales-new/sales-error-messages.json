@@ -3,7 +3,7 @@
     "dateError":"Invalid or locked date",    
     "gstinError":"Invalid GSTIN",
 
-    "productCodeError":"Missing product code",
+    "productCodeError":"Product code error",
     "hsnError": "Missing HSN code",
     "serialNumberError": "Serial numbers mismatch with qty",
 
