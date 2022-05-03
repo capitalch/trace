@@ -16,10 +16,10 @@ function DebitsCreditsPreview() {
     const { handleBillPreview, handleClose, handleEmail, handleSms, meta } = useDebitsCreditsPreview()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     const unitInfo = getFromBag('unitInfo')
-    const rawSaleData = getFromBag('rawSaleData') || {}
+    // const rawSaleData = getFromBag('rawSaleData') || meta.current.rawSaleData || { }
 
     useEffect(() => {
-        megaData.registerKeyWithMethod('render:debitsCredits', setRefresh)
+        megaData.registerKeyWithMethod('render:debitsCreditsPreview', setRefresh)
     }, [])
 
     return (<Box sx={{ display: 'flex', alignItems: 'center', rowGap: 1, flexWrap: 'wrap' }}>
@@ -31,7 +31,8 @@ function DebitsCreditsPreview() {
 
         <Tooltip
             title="Preview" >
-            <IconButton sx={{ ml: 1, display: _.isEmpty(rawSaleData) ? 'none' : 'block' }}
+            {/* preview button is only visible when global / getFromBag('rawSaleData') has value. not on meta.rawSaleData which is activated when preview icon is clicked in view grid */}
+            <IconButton sx={{ ml: 1, display: _.isEmpty(getFromBag('rawSaleData')) ? 'none' : 'block' }}
                 size="small"
                 disabled={false}
                 onClick={handleBillPreview}>
@@ -78,7 +79,7 @@ function DebitsCreditsPreview() {
                 <PDFViewer showToolbar={true} width={840} height={600}>
                     <InvoiceA
                         unitInfo={unitInfo}
-                        rawSaleData={rawSaleData}
+                        rawSaleData={getFromBag('rawSaleData') || meta.current.rawSaleData || { }}
                     />
                 </PDFViewer>
             </DialogContent>

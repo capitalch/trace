@@ -1,4 +1,4 @@
-import { _, Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, Box, Button, errorMessages, IMegaData, manageEntitiesState, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -9,6 +9,8 @@ function useLineItems() {
     const allErrors = sales.allErrors
     const { execGenericView, setIdForDataGridRows } = utilMethods()
     const theme = useTheme()
+    const { getFromBag } = manageEntitiesState()
+    const isGstApplicable = !!(getFromBag('unitInfo')?.gstin)
     // const productCodeRef:any = useRef({})
     const meta: any = useRef({
         showDialog: false,
@@ -38,14 +40,15 @@ function useLineItems() {
     })
 
     function checkAllErrors() {
-        checkAllRows(); setAllErrors()
+        checkAllRows()
+        setAllErrors()
         // megaData.executeMethodForKey('render:allErrors', {})
         // emit('ALL-ERRORS-JUST-REFRESH', null)
 
         function checkAllRows() {
             for (const item of items) {
-                item.isErrorProductCode = !Boolean(item.productCode)
-                item.isErrorHsn = !Boolean(item.hsn)
+                item.isProductCodeError = !Boolean(item.productCode)
+                item.isHsnError = !Boolean(item.hsn)
                 const slNoLength = (item.serialNumbers || '')
                     .split(',')
                     .filter(Boolean).length
@@ -54,13 +57,19 @@ function useLineItems() {
                 } else {
                     item.isSerialNumberError = false
                 }
+                if (isGstApplicable) {
+                    item.isGstRateError = (item.gstRate === 0) ? true : false
+                } else {
+                    item.isGstRateError = (item.gstRate === 0) ? false : true
+                }
             }
         }
 
         function setAllErrors() {
-            allErrors.productCodeError = items.some((item: any) => (item.isErrorProductCode)) ? errorMessages['productCodeError'] : ''
-            allErrors.hsnError = items.some((item: any) => (item.isErrorHsn)) ? errorMessages['hsnError'] : ''
+            allErrors.productCodeError = items.some((item: any) => (item.isProductCodeError)) ? errorMessages['productCodeError'] : ''
+            allErrors.hsnError = items.some((item: any) => (item.isHsnError)) ? errorMessages['hsnError'] : ''
             allErrors.serialNumberError = items.some((item: any) => (item.isSerialNumberError)) ? errorMessages['serialNumberError'] : ''
+            allErrors.gstRateError = items.some((item: any) => (item.isGstRateError)) ? errorMessages['gstRateError'] : ''
         }
     }
 

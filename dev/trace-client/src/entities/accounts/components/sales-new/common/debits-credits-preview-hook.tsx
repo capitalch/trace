@@ -8,11 +8,12 @@ function useDebitsCreditsPreview() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const confirm = useConfirm()
-    const { getFromBag } = manageEntitiesState()
+    const { getFromBag, setInBag } = manageEntitiesState()
     const { sendEmail, sendSms } = utilMethods()
     const unitInfo = getFromBag('unitInfo')
 
     const meta = useRef({
+        rawSaleData: null,
         showDialog: false,
         dialogConfig: {
             title: '',
@@ -22,11 +23,26 @@ function useDebitsCreditsPreview() {
     })
     const pre = meta.current
 
+    useEffect(() => {
+        megaData.registerKeyWithMethod('handleBillPreviewFromSalesView:debitsCreditsPreview', handleBillPreviewFromSalesView)
+    }, [])
+
     function handleBillPreview() {
+        pre.rawSaleData = null
+        doBillPreview()
+    }
+
+    function doBillPreview() {
         const dialog = pre.dialogConfig
         dialog.title = 'Sale invoice'
         pre.showDialog = true
         setRefresh({})
+    }
+
+    function handleBillPreviewFromSalesView(rawSaleData: any) {
+        setInBag('rawSaleData', null)
+        pre.rawSaleData = rawSaleData
+        doBillPreview()
     }
 
     function handleClose() {
@@ -86,8 +102,8 @@ function useDebitsCreditsPreview() {
         }
         if (!mobileNumber) {
             confirm(options)
-                .then(() => {})
-                .catch(() => {})
+                .then(() => { })
+                .catch(() => { })
             return
         }
         const Doc = () => (
@@ -107,7 +123,7 @@ function useDebitsCreditsPreview() {
                     JSON.stringify({
                         data: base64Data,
                         id: id,
-                        sqlKey:'update_pdf_invoice',
+                        sqlKey: 'update_pdf_invoice',
                         mobileNumber: mobileNumber,
                         unitName: unitInfo?.shortName || 'Trace'
                     })

@@ -1,11 +1,11 @@
-import { Badge, Box, Button, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
+import { Badge, Box, Button, Card, Chip, CloseSharp, IconButton, IMegaData, manageEntitiesState, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext,useEffect, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { debounceEmit } = useIbuki()
+    const { debounceEmit, emit } = useIbuki()
     const items = sales.items
     const { extractAmount, toDecimalFormat } = utilMethods()
     const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
@@ -28,6 +28,11 @@ function LineItems() {
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
         const smallFontTextField = megaData.accounts.settings.smallFontTextField
+        setItemErrors()
+
+        useEffect(() => {
+            emit('ALL-ERRORS-JUST-REFRESH', null)
+        })
 
         return (
             <Box
@@ -63,6 +68,7 @@ function LineItems() {
                         autoComplete='off'
                         customInput={TextField}
                         decimalScale={0}
+                        error={item.productCodeError}
                         fixedDecimalScale={true}
                         value={item.productCode || ''}
                         variant='standard'
@@ -106,12 +112,15 @@ function LineItems() {
                             e.target.select()
                         }} />
                 </Box>
+
                 {/* Gst(%) */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Gst(%)</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(6) }}
                         allowNegative={false}
                         autoComplete='off'
+                        error={item.isGstRateError}
+                        // disabled={true}
                         // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
@@ -274,6 +283,10 @@ function LineItems() {
         function handleTextChanged(item: any, propName: string, e: any) {
             item[propName] = e.target.value
             setRefresh({})
+        }
+
+        function setItemErrors() {
+            item.productCodeError = item.productCode ? false : true
         }
     }
 }

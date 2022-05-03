@@ -10,5 +10,6 @@
     "accountCodeError":"Missing account code",
     "shipToError":"Validation error in ship to",
 
-    "debitCreditMismatchError":"Amount mismatch "
+    "debitCreditMismatchError":"Amount mismatch",
+    "gstRateError": "Gst rate cannot be zero"
 }

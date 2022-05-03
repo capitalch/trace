@@ -1,7 +1,8 @@
-import { Box, errorMessages, IMegaData, MegaDataContext, Typography, useContext, useEffect, useIbuki, useState, useTheme } from '../redirect'
+import { Box, errorMessages, IMegaData, manageEntitiesState, MegaDataContext, Typography, useContext, useEffect, useIbuki, useState, useTheme } from '../redirect'
 function AllErrors() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
+    // const { getFromBag } = manageEntitiesState()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const allErrors = sales.allErrors
@@ -18,10 +19,10 @@ function AllErrors() {
     useEffect(() => {
         sales.isAnyError = Object.keys(allErrors).some((key: string) => allErrors[key])
         megaData.executeMethodForKey('render:crown', {})
-        megaData.executeMethodForKey('render:debitsCredits', {})
+        megaData.executeMethodForKey('render:debitsCreditsPreview', {})
     })
 
-    setDebitsCreditsAndMismatchError()
+    setDebitsCreditsMismatchError()
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', border: '1px solid lightGrey', pl: 2, mt: .5, pt: 1, pb: 0.5, pr: 2, maxWidth: theme.spacing(30) }}>
         <Typography color={theme.palette.error.light} fontWeight='bold' sx={{ mt: 1, textDecoration: 'underline' }}>All errors</Typography>
@@ -41,7 +42,7 @@ function AllErrors() {
         {allErrors.debitCreditMismatchError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.debitCreditMismatchError}</Typography> : ''}
     </Box >)
 
-    function setDebitsCreditsAndMismatchError() {
+    function setDebitsCreditsMismatchError() {
         sales.credits = sales.summary.amount
         sales.debits = megaData.executeMethodForKey('getTotalAmount:paymentsHeader')
         if (sales.credits === sales.debits) {
@@ -50,6 +51,13 @@ function AllErrors() {
             allErrors.debitCreditMismatchError = errorMessages.debitCreditMismatchError
         }
     }
+
+    // function setGstError() {
+    //     const unitInfo = getFromBag('unitInfo')
+    //     if(unitInfo.gstin){
+
+    //     }
+    // }
 
     // function getErrorString() {
     //     return (Object.values(allErrors).filter((x: any) => x).join(', ').replace(/^,/, ''))

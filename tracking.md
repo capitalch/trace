@@ -90,6 +90,13 @@ e. Multiple cash entries in receipt
 19. Backup and restore strategy
 20. Upgrade database for all instances
 
+# 03-05-2022
+1. Security applied in edit / delete for sales
+
+# 02-05-2022
+1. Delete function implemented in Sales new
+2. Sales new print preview for each sale bill, in each row of grid
+
 # 30-04-2022 to 01-05-2022
 1. Simple sales completed and deployed
 

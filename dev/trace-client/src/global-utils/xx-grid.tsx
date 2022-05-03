@@ -15,6 +15,7 @@ import {
     CheckBoxOutlineBlankSharp,
     CheckBoxOutlined,
     DeleteForever,
+    Preview,
     Search,
     SyncSharp,
     Edit,
@@ -37,9 +38,12 @@ import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
 
 interface SpecialColumnOptions {
     isEdit?: boolean
+    isEditDisabled?:boolean
     isDelete?: boolean
+    isDeleteDisabled?: boolean
     isHide?: boolean
     isDrillDown?: boolean
+    isPrint?: boolean
     drillDownIbukiMessage?: any
     customColumn1?: any //CustomColumnOptions
 }
@@ -54,6 +58,7 @@ interface GridActionMessagesOptions {
     drillDownIbukiMessage?: any
     resetIbukiMessage?: any
     onDataFetchedIbukiMessage?: any
+    printIbukiMessage?: any
 }
 
 interface XXGridOptions {
@@ -580,6 +585,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             size="small"
                             color="secondary"
                             className="delete"
+                            disabled = {!!options.isDeleteDisabled}
                             onClick={() =>
                                 gridActionMessages.deleteIbukiMessage &&
                                 emit(
@@ -601,7 +607,8 @@ function XXGrid(gridOptions: XXGridOptions) {
                 headerName: 'E',
                 description: 'Edit',
                 disableColumnMenu: true,
-                disableExport: true, disablePrint: true,
+                disableExport: true, 
+                disablePrint: true,
                 disableReorder: true,
                 filterable: false,
                 hideSortIcons: true,
@@ -610,19 +617,28 @@ function XXGrid(gridOptions: XXGridOptions) {
                 field: '1',
                 renderCell: (params: GridCellParams) => {
                     return (
-                        <IconButton
-                            size="small"
-                            color="secondary"
-                            onClick={() => {
-                                gridActionMessages.editIbukiMessage &&
-                                    emit(
-                                        gridActionMessages.editIbukiMessage,
-                                        params
-                                    )
-                            }}
-                            aria-label="Edit">
-                            <Edit />
-                        </IconButton>
+                        <Box>
+                            {options.isPrint ? <Preview onClick={() => gridActionMessages.printIbukiMessage
+                                && emit(gridActionMessages.printIbukiMessage, params)} sx={{
+                                    ml: -1.1,
+                                    fontSize: '1.1rem',
+                                    cursor: 'pointer'
+                                }} /> : undefined}
+                            <IconButton
+                                size="small"
+                                color="secondary"
+                                disabled={options.isEditDisabled}
+                                onClick={() => {
+                                    gridActionMessages.editIbukiMessage &&
+                                        emit(
+                                            gridActionMessages.editIbukiMessage,
+                                            params
+                                        )
+                                }}
+                                aria-label="Edit">
+                                <Edit />
+                            </IconButton>
+                        </Box>
                     )
                 },
             }
