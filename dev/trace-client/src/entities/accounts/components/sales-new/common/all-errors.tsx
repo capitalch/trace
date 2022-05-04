@@ -32,10 +32,13 @@ function AllErrors() {
         {allErrors.customerError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.customerError}</Typography> : ''}
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Items</Typography>
         {allErrors.productCodeError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.productCodeError}</Typography> : ''}
+        {allErrors.productDetailsError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.productDetailsError}</Typography> : ''}
         {allErrors.hsnError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.hsnError}</Typography> : ''}
         {allErrors.serialNumberError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.serialNumberError}</Typography> : ''}
+        {allErrors.gstRateError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.gstRateError}</Typography> : ''}
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Payments</Typography>
         {allErrors.accountCodeError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.accountCodeError}</Typography> : ''}
+        {allErrors.paymentAmountError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.paymentAmountError}</Typography> : ''}
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Ship to</Typography>
         {allErrors.shipToError ? <Typography color='error' fontSize={theme.spacing(1.7)}>&nbsp;&nbsp;&nbsp;{errorMessages.shipToError}</Typography> : ''}
         <Typography color='black' fontSize={theme.spacing(1.9)} fontWeight='bold'>Others</Typography>

@@ -85,7 +85,7 @@ function useCrown() {
             const branchId = getFromBag('branchObject')?.branchId || 1
             const obj: any = {
                 tableName: 'TranH',
-                isAutoSubledger: sales.paymentVariety === 'a' ? true : false,
+                isAutoSubledger: sales.payments.paymentVariety === 'a' ? true : false,
                 data: [],
             }
             const item = {

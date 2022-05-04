@@ -110,6 +110,7 @@ function PaymentsVariety() {
 
             function handleItemOnClick(item: any) {
                 sales.payments.paymentMethodsList[0].rowData.accId = item.id
+                // sales.payments.paymentMethodsList[0].rowData.isAutoSubledger = true
                 if (sales.payments.paymentVariety === 'i') { // institution sales, address already there
                     populateInstitutionAddress(item.id)
                 }
@@ -187,7 +188,7 @@ function PaymentsVariety() {
         megaData.executeMethodForKey('render:customer', {})
         sales.payments.paymentVariety = variety
         sales.payments.paymentMethodsList.length = 0
-        sales.payments.paymentMethodsList.push({ ledgerFilterMethodName: logic[variety],  })
+        sales.payments.paymentMethodsList.push({ ledgerFilterMethodName: logic[variety], })
         megaData.executeMethodForKey('render:paymentsMethods', {})
         // setRefresh({})
     }
