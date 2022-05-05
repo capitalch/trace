@@ -100,3 +100,17 @@ ALTER TABLE IF EXISTS "CategoryM"
 -- 05-04-2022 Added a hsn column for root category and updated in all databases
 ALTER TABLE IF EXISTS "CategoryM"
 	ADD COLUMN IF NOT EXISTS "hsn" NUMERIC(8) NULL;
+
+-- 05-05-2022 create TagsM table for categories
+CREATE TABLE IF NOT EXISTS "TagsM"(
+	id integer NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+	"tagName" TEXT NOT NULL,
+	CONSTRAINT "TagsM_tagName_unique_key"
+		UNIQUE("tagName")
+);
+ALTER TABLE IF EXISTS "CategoryM"
+	DROP CONSTRAINT IF EXISTS "TagsM_CategoryM_fkey",
+ 	ADD CONSTRAINT "TagsM_CategoryM_fkey"
+ 		FOREIGN KEY("tagId") REFERENCES "TagsM" ("id")
+ 			ON DELETE SET NULL;
+
