@@ -5,13 +5,13 @@ import {
 import { useManageTags } from './categories-manage-tags-hook'
 
 function ManageTags() {
-    const { getColumns, getGridSx, handleAddTag, meta } = useManageTags()
+    const { getColumns, getGridSx, handleAddEditTag, meta } = useManageTags()
     const pre = meta.current
     const { BasicMaterialDialog } = useTraceMaterialComponents()
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1, columnGap: 2 }}>
-            <Button size='small' color='secondary' variant='contained' onClick={handleAddTag} sx={{ ml: 'auto' }}>Add</Button>
+            <Button size='small' color='secondary' variant='contained' onClick={handleAddEditTag} sx={{ ml: 'auto' }}>Add</Button>
             <DataGridPro
                 columns={getColumns()}
                 disableColumnMenu={true}

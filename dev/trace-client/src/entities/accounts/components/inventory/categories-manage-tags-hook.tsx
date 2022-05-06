@@ -1,5 +1,5 @@
 import {
-    Add, Box, Button, DeleteForever, Edit, Grid, IconButton, Link, PrimeColumn,
+    Add, Box, Button, DeleteForever, Edit, Grid, GridCellParams, IconButton, Link, PrimeColumn,
     Switch, SyncSharp, TextField, TreeTable, Typography, useRef, useState, useTheme, useEffect, useSharedElements, utils, utilMethods, useIbuki,
 } from './redirect'
 
@@ -7,8 +7,9 @@ function useManageTags() {
     const [, setRefresh] = useState({})
     const { emit } = useIbuki()
     const theme = useTheme()
-    const { execGenericView } = utilMethods()
+    const { execGenericView, genericUpdateMasterNoForm } = utilMethods()
     const meta = useRef({
+        id: undefined,
         allRows: [],
         filteredRows: [],
         showDialog: false,
@@ -20,6 +21,7 @@ function useManageTags() {
         }
     })
     const pre = meta.current
+
     useEffect(() => {
         fetchData()
     }, [])
@@ -29,7 +31,6 @@ function useManageTags() {
         const rows = await execGenericView({
             isMultipleRows: true,
             sqlKey: 'get_tags',
-            // args: {},
         }) || []
         setId(rows)
         pre.allRows = rows
@@ -57,6 +58,67 @@ function useManageTags() {
                 description: 'Index',
                 field: 'id',
                 width: 65,
+            },
+            {
+                headerName: 'E',
+                description: 'Edit',
+                disableColumnMenu: true,
+                disableExport: true,
+                disablePrint: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field: '1',
+                renderCell: (params: GridCellParams) => <IconButton
+                    size="small"
+                    color="secondary"
+                    // disabled={options.isEditDisabled}
+                    onClick={() => {
+                        pre.id = params.row.id1
+                        pre.tagName = params.row.tagName
+                        pre.showDialog = true
+                        pre.dialogConfig.content = ContentAddEditTag
+                        pre.dialogConfig.title = 'Add tag'
+                        setRefresh({})
+                        // gridActionMessages.editIbukiMessage &&
+                        //     emit(
+                        //         gridActionMessages.editIbukiMessage,
+                        //         params
+                        //     )
+                    }}
+                    aria-label="Edit">
+                    <Edit />
+                </IconButton>
+            },
+            {
+                headerName: 'D',
+                description: 'Delete',
+                disableColumnMenu: true,
+                disableExport: true,
+                disablePrint: true,
+                disableReorder: true,
+                filterable: false,
+                hideSortIcons: true,
+                resizable: false,
+                width: 20,
+                field: '2',
+                renderCell: (params: GridCellParams) => <IconButton
+                    size="small"
+                    color="error"
+                    // disabled={options.isEditDisabled}
+                    onClick={() => {
+                        
+                        // gridActionMessages.editIbukiMessage &&
+                        //     emit(
+                        //         gridActionMessages.editIbukiMessage,
+                        //         params
+                        //     )
+                    }}
+                    aria-label="Edit">
+                    <DeleteForever />
+                </IconButton>
             },
             {
                 headerName: 'Tag name',
@@ -106,34 +168,64 @@ function useManageTags() {
         )
     }
 
-    function handleAddTag() {
+    function handleAddEditTag() {
         pre.showDialog = true
-        pre.dialogConfig.content = ContentAddTag
+        pre.dialogConfig.content = ContentAddEditTag
         pre.dialogConfig.title = 'Add tag'
         setRefresh({})
 
-        function ContentAddTag() {
+        function ContentAddEditTag() {
             const [, setRefresh] = useState({})
-            return (<Box sx={{ display: 'flex', flexDirection: 'vertical' }}>
+            return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <TextField
                     onChange={(e: any) => {
                         pre.tagName = e.target.value
                         setRefresh({})
                     }}
                     autoComplete='off'
+                    error={!!!pre.tagName}
                     label='Tag name'
                     variant='standard'
                     value={pre.tagName || ''}
                 />
-                <Box sx={{ display: 'flex', columnGap: 1, ml:1 }}>
-                    <Button size='small' variant='contained' color='primary'>Cancel</Button>
-                    <Button size='small' variant='contained' color='secondary'>Save</Button>
+                <Box sx={{ display: 'flex', columnGap: 1, ml: 'auto', mt: 2 }}>
+                    <Button size='small' variant='contained' color='primary' onClick={handleCancel}>Cancel</Button>
+                    <Button disabled={!!!pre.tagName} size='small' variant='contained' color='secondary' onClick={handleSubmit}>Submit</Button>
                 </Box>
-
             </Box>)
         }
+
+        function handleCancel() {
+            pre.tagName = undefined
+            doClose()
+        }
+
+        function doClose() {
+            pre.showDialog = false
+            setRefresh({})
+        }
+
+        async function handleSubmit() {
+            try {
+                emit('SHOW-LOADING-INDICATOR', true)
+                const ret = await genericUpdateMasterNoForm({
+                    tableName: 'TagsM',
+                    data: {
+                        id: pre.id || undefined,
+                        tagName: pre.tagName || undefined
+                    }
+                })
+                ret && doClose()
+                emit('SHOW-LOADING-INDICATOR', false)
+                fetchData()
+            } catch (e: any) {
+                emit('SHOW-LOADING-INDICATOR', false)
+                console.log(e.message)
+            }
+        }
+
     }
 
-    return ({ getColumns, getGridSx, handleAddTag, meta })
+    return ({ getColumns, getGridSx, handleAddEditTag, meta })
 }
 export { useManageTags }
