@@ -14,6 +14,7 @@ export { utilMethods } from '../../../../global-utils/misc-utils'
 export { utils } from '../../utils'
 export { useStockSummaryReport } from './reports/gr-stock-summary-report-hook'
 export { StockSummaryReport } from './reports/gr-stock-summary-report'
+export { useTraceMaterialComponents } from '../../../../common/trace-material-components'
 export {
     DataGridPro,
     GridToolbarFilterButton,

@@ -6,7 +6,7 @@ import {
 
 function CategoriesMaster() {
     const [, setRefresh] = useState({})
-    const {handleHsnLeafCategories, meta, utilFunc } = useCategoriesMaster()
+    const { handleHsnLeafCategories, handleManageTags, meta, utilFunc } = useCategoriesMaster()
     const classes = useStyles()
 
     useEffect(() => {
@@ -86,8 +86,9 @@ function CategoriesMaster() {
                         </Grid>
                     </Grid>
                 </Typography>
-                <Box sx={{display:'flex', alignItems:'center', columnGap:4, rowGap:1, }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 4, rowGap: 1, }}>
                     <Button size='small' color='secondary' variant='contained' onClick={handleHsnLeafCategories}>HSN for leaf categories</Button>
+                    <Button size='small' color='primary' variant='contained' onClick={handleManageTags}>Manage tags</Button>
                     {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
                 </Box>
             </Box>

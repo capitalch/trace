@@ -60,7 +60,8 @@ function useSalesReport() {
             sqlKey: pre.sqlKey,
             args: {
                 startDate: pre.startDate,
-                endDate: pre.endDate
+                endDate: pre.endDate,
+                tagId:0
             },
         }) || []
         setId(rows)

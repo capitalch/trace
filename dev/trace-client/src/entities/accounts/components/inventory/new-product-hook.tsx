@@ -78,8 +78,6 @@ function useNewProduct(onClose: any, product: any = {}) {
                     label: pre.label,
                     upcCode: pre.upcCode,
                     gstRate: pre.gstRate,
-                    // finYearId: finYearId,
-                    // branchId: branchId,
                     salePrice: extractAmount(pre.salePrice) || 0.00,
                     salePriceGst: extractAmount(pre.salePriceGst) || 0.00,
                     maxRetailPrice: extractAmount(pre.maxRetailPrice) || 0.00,

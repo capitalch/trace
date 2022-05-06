@@ -1,7 +1,8 @@
-import { useRef, useState} from '../../../../imports/regular-imports'
+import { useRef, useState } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
-import {HsnLeafCategories} from './hsn-leaf-categories'
+import { HsnLeafCategories } from './hsn-leaf-categories'
+import { ManageTags } from './categories-manage-tags'
 
 function useCategoriesMaster() {
     const [, setRefresh] = useState({})
@@ -14,7 +15,7 @@ function useCategoriesMaster() {
         dialogConfig: {
             title: '',
             formId: '',
-            content: () => { },
+            content: () => <></>,
             actions: () => { },
             isSearchBox: false,
             searchBoxFilter: '',
@@ -37,6 +38,14 @@ function useCategoriesMaster() {
         setRefresh({})
     }
 
+    function handleManageTags() {
+        pre.showDialog = true
+        pre.dialogConfig.title = 'Manage tags'
+        pre.dialogConfig.content = ManageTags
+        pre.dialogConfig.isSearchBox = false
+        setRefresh({})
+    }
+
     function utilFunc() {
         function saveScrollPos() {
             const scrollPos = window.pageYOffset
@@ -50,7 +59,7 @@ function useCategoriesMaster() {
         return { saveScrollPos, applyScrollPos }
     }
 
-    return { handleHsnLeafCategories, meta, utilFunc }
+    return { handleHsnLeafCategories, handleManageTags, meta, utilFunc }
 }
 
 export { useCategoriesMaster }
