@@ -13,6 +13,7 @@
     "debitNoteDelete": "Do you want to delete this debit note?",
     "debitCreditErrorInOpBal": "There was error in opening balances of accounts. Sum of debits and credits do not match",
     "dateRangeAuditLockMessage": "Date range / Audit lock error",
+    "deleteEntry":"Do you want to delete this entry?",
     "emailBillSubject":"E-invoice from $sender",
     "emailBillBody":"Please find enclosed an e-invoice from $sender",
     "emailNotFound":"Email address not found. Please provide email address in the sale bill and save it. Thereafter try sending email",

@@ -1,5 +1,5 @@
 import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
-import { salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
+import { inventoryMegaData, salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
 import {
     Container,
     makeStyles,
@@ -89,10 +89,10 @@ function TraceMain({ open }: any) {
         const megaData: IMegaData // { accounts: any; keys: any; registerKeyWithMethod: KeyWithMethod; executeMethodForKey: KeyWithParams } 
             = {
             accounts: {
-                // allProducts: [],
                 common: {},
+                inventory: inventoryMegaData(),
                 sales: salesMegaData(),
-                settings: settingsMegaData()
+                settings: settingsMegaData(),
             },
 
             keysWithMethods: {},
@@ -111,13 +111,7 @@ function TraceMain({ open }: any) {
             }
 
         }
-
         meta.current.megaData = megaData
-        // initAccountsMegaData()
-        // function initAccountsMegaData() {
-        //     Object.assign(megaData.accounts.sales, salesMegaData())
-        //     Object.assign(megaData.accounts.settings, settingsMegaData)
-        // }
     }
 }
 

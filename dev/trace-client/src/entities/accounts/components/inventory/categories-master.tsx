@@ -1,14 +1,16 @@
 import { useCategoriesMaster, useStyles } from './categories-master-hook'
 import {
-    Add, Box, Button, DeleteForever, Edit, Grid, IconButton, Link, PrimeColumn,
-    Switch, SyncSharp, TreeTable, Typography, useState, useEffect, useSharedElements,
+    _, Add, Attachment, Box, Button, DeleteForever, Edit, Grid, IconButton, IMegaData, Link, MegaDataContext, PrimeColumn, ReactSelect,
+    Switch, SyncSharp, TreeTable, Typography, useContext, useState, useTheme, useEffect, useSharedElements,
 } from './redirect'
 
 function CategoriesMaster() {
     const [, setRefresh] = useState({})
     const { handleHsnLeafCategories, handleManageTags, meta, utilFunc } = useCategoriesMaster()
     const classes = useStyles()
-
+    const theme = useTheme()
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const category = megaData.accounts.inventory.category
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -19,6 +21,7 @@ function CategoriesMaster() {
     }, [])
 
     const {
+        BasicMaterialDialog,
         confirm,
         doValidateForm,
         emit,
@@ -92,7 +95,6 @@ function CategoriesMaster() {
                     {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
                 </Box>
             </Box>
-
             <TreeTable
                 className={classes.content}
                 value={meta.current.data}
@@ -159,7 +161,13 @@ function CategoriesMaster() {
                                         Change parent
                                     </Button>
                                 )}
-
+                                {/* Tag */}
+                                <Button
+                                    onClick={() => handleTag(node)}
+                                    startIcon={<Attachment />}
+                                    size='small' >
+                                    Tag
+                                </Button>
                                 <span> </span>
                                 {isDeleteAllowed && (
                                     <IconButton
@@ -560,6 +568,40 @@ function CategoriesMaster() {
     function handleOnCloseDialog() {
         meta.current.showDialog = false
         meta.current.isMounted && setRefresh({})
+    }
+
+    async function handleTag(node: any) {
+        const pre = meta.current
+        pre.showDialog = true
+        pre.dialogConfig.title = 'Attach / Detach tag'
+        pre.dialogConfig.content = () => <TagContent />
+        if (_.isEmpty(category.allTags)) {
+            await megaData.executeMethodForKey('fetchData:manageTags')
+            setRefresh({})
+        } else {
+            setRefresh({})
+        }
+
+
+        function TagContent() {
+            return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <ReactSelect
+                    menuPlacement='auto'
+                    placeholder="Select tag"
+                    options={[
+                        { label: 'All', value: 0 },
+                        { label: 'Domestic', value: 1 }
+                    ]}
+                    value={pre.selectedTag}
+                />
+                {/* Empty box to increase the height of dialog */}
+                <Box sx={{ height: theme.spacing(20) }}></Box>
+                <Box sx={{ display: 'flex', ml: 'auto' }}>
+                    <Button size='small' color='primary' variant='contained'>Cancel</Button>
+                    <Button size='small' color='secondary' variant='contained' sx={{ ml: 2 }}>Submit</Button>
+                </Box>
+            </Box>)
+        }
     }
 
     async function getData() {

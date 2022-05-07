@@ -1,11 +1,16 @@
-import { useRef, useState } from '../../../../imports/regular-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
-import { makeStyles, Theme, createStyles } from '../../../../imports/gui-imports'
+import {
+    Add, Box, Button, DataGridPro, DeleteForever, Edit, Grid, IconButton, IMegaData, Link, MegaDataContext, PrimeColumn,
+    Switch, SyncSharp, TreeTable, Typography, useContext, useRef, useState, useSharedElements, useTheme, useTraceMaterialComponents,
+} from './redirect'
+import { makeStyles, Theme, createStyles} from '../../../../imports/gui-imports'
 import { HsnLeafCategories } from './hsn-leaf-categories'
 import { ManageTags } from './categories-manage-tags'
 
 function useCategoriesMaster() {
     const [, setRefresh] = useState({})
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const category = megaData.accounts.inventory.category
+    const theme = useTheme()
     const meta: any = useRef({
         isMounted: false,
         allKeys: [],

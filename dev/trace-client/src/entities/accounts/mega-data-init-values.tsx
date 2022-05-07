@@ -1,5 +1,12 @@
 import moment from 'moment'
 const isoDateFormat = 'YYYY-MM-DD'
+
+const inventoryMegaData = () => ({
+    category: {
+        allTags: []
+    }
+})
+
 const settingsMegaData = () => ({
     smallFontTextField: { style: { fontSize: 14 } }
 })
@@ -38,4 +45,4 @@ const salesMegaData = () => ({
     userRefNo: undefined,
 })
 
-export { salesMegaData, settingsMegaData }
+export { inventoryMegaData, salesMegaData, settingsMegaData }

@@ -1,17 +1,21 @@
 import {
-    Add, Box, Button, DeleteForever, Edit, Grid, GridCellParams, IconButton, Link, PrimeColumn,
-    Switch, SyncSharp, TextField, TreeTable, Typography, useRef, useState, useTheme, useEffect, useSharedElements, utils, utilMethods, useIbuki,
+    accountsMessages, Add, Box, Button, DeleteForever, Edit, Grid, GridCellParams, IconButton, IMegaData, Link, MegaDataContext, PrimeColumn,
+    Switch, SyncSharp, TextField, TreeTable, Typography, useConfirm, useContext, useRef, useState, useTheme, useEffect, useSharedElements, utils, utilMethods, useIbuki,
 } from './redirect'
 
 function useManageTags() {
     const [, setRefresh] = useState({})
     const { emit } = useIbuki()
     const theme = useTheme()
-    const { execGenericView, genericUpdateMasterNoForm } = utilMethods()
+    const confirm = useConfirm()
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const category = megaData.accounts.inventory.category
+    // const allTags = category.allTags
+    const { execGenericView, genericUpdateMaster, genericUpdateMasterNoForm } = utilMethods()
     const meta = useRef({
         id: undefined,
-        allRows: [],
-        filteredRows: [],
+        // allRows: [],
+        // filteredRows: [],
         showDialog: false,
         tagName: undefined,
         dialogConfig: {
@@ -23,18 +27,17 @@ function useManageTags() {
     const pre = meta.current
 
     useEffect(() => {
+        megaData.registerKeyWithMethod('fetchData:manageTags', fetchData)
         fetchData()
     }, [])
 
     async function fetchData() {
         emit('SHOW-LOADING-INDICATOR', true)
-        const rows = await execGenericView({
+        category.allTags = await execGenericView({
             isMultipleRows: true,
             sqlKey: 'get_tags',
         }) || []
-        setId(rows)
-        pre.allRows = rows
-        pre.filteredRows = rows.map((x: any) => ({ ...x })) //its faster
+        setId(category.allTags)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
@@ -46,6 +49,56 @@ function useManageTags() {
             }
             function incr() {
                 return (count++)
+            }
+        }
+    }
+
+    function ContentAddEditTag() {
+        const [, setRefresh] = useState({})
+        return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <TextField
+                onChange={(e: any) => {
+                    pre.tagName = e.target.value
+                    setRefresh({})
+                }}
+                autoComplete='off'
+                error={!!!pre.tagName}
+                label='Tag name'
+                variant='standard'
+                value={pre.tagName || ''}
+            />
+            <Box sx={{ display: 'flex', columnGap: 1, ml: 'auto', mt: 2 }}>
+                <Button size='small' variant='contained' color='primary' onClick={handleCancel}>Cancel</Button>
+                <Button disabled={!!!pre.tagName} size='small' variant='contained' color='secondary' onClick={handleSubmit}>Submit</Button>
+            </Box>
+        </Box>)
+
+        function doClose() {
+            pre.showDialog = false
+            setRefresh({})
+        }
+
+        function handleCancel() {
+            pre.tagName = undefined
+            doClose()
+        }
+
+        async function handleSubmit() {
+            try {
+                emit('SHOW-LOADING-INDICATOR', true)
+                const ret = await genericUpdateMasterNoForm({
+                    tableName: 'TagsM',
+                    data: {
+                        id: pre.id || undefined,
+                        tagName: pre.tagName || undefined
+                    }
+                })
+                ret && doClose()
+                emit('SHOW-LOADING-INDICATOR', false)
+                fetchData()
+            } catch (e: any) {
+                emit('SHOW-LOADING-INDICATOR', false)
+                console.log(e.message)
             }
         }
     }
@@ -74,19 +127,13 @@ function useManageTags() {
                 renderCell: (params: GridCellParams) => <IconButton
                     size="small"
                     color="secondary"
-                    // disabled={options.isEditDisabled}
                     onClick={() => {
                         pre.id = params.row.id1
                         pre.tagName = params.row.tagName
                         pre.showDialog = true
                         pre.dialogConfig.content = ContentAddEditTag
-                        pre.dialogConfig.title = 'Add tag'
+                        pre.dialogConfig.title = 'Edit tag'
                         setRefresh({})
-                        // gridActionMessages.editIbukiMessage &&
-                        //     emit(
-                        //         gridActionMessages.editIbukiMessage,
-                        //         params
-                        //     )
                     }}
                     aria-label="Edit">
                     <Edit />
@@ -107,16 +154,7 @@ function useManageTags() {
                 renderCell: (params: GridCellParams) => <IconButton
                     size="small"
                     color="error"
-                    // disabled={options.isEditDisabled}
-                    onClick={() => {
-                        
-                        // gridActionMessages.editIbukiMessage &&
-                        //     emit(
-                        //         gridActionMessages.editIbukiMessage,
-                        //         params
-                        //     )
-                    }}
-                    aria-label="Edit">
+                    onClick={() => handleDeleteTag(params)}>
                     <DeleteForever />
                 </IconButton>
             },
@@ -168,64 +206,38 @@ function useManageTags() {
         )
     }
 
-    function handleAddEditTag() {
+    function handleAddTag() {
         pre.showDialog = true
+        pre.id = undefined
+        pre.tagName = undefined
         pre.dialogConfig.content = ContentAddEditTag
         pre.dialogConfig.title = 'Add tag'
         setRefresh({})
-
-        function ContentAddEditTag() {
-            const [, setRefresh] = useState({})
-            return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <TextField
-                    onChange={(e: any) => {
-                        pre.tagName = e.target.value
-                        setRefresh({})
-                    }}
-                    autoComplete='off'
-                    error={!!!pre.tagName}
-                    label='Tag name'
-                    variant='standard'
-                    value={pre.tagName || ''}
-                />
-                <Box sx={{ display: 'flex', columnGap: 1, ml: 'auto', mt: 2 }}>
-                    <Button size='small' variant='contained' color='primary' onClick={handleCancel}>Cancel</Button>
-                    <Button disabled={!!!pre.tagName} size='small' variant='contained' color='secondary' onClick={handleSubmit}>Submit</Button>
-                </Box>
-            </Box>)
-        }
-
-        function handleCancel() {
-            pre.tagName = undefined
-            doClose()
-        }
-
-        function doClose() {
-            pre.showDialog = false
-            setRefresh({})
-        }
-
-        async function handleSubmit() {
-            try {
-                emit('SHOW-LOADING-INDICATOR', true)
-                const ret = await genericUpdateMasterNoForm({
-                    tableName: 'TagsM',
-                    data: {
-                        id: pre.id || undefined,
-                        tagName: pre.tagName || undefined
-                    }
-                })
-                ret && doClose()
-                emit('SHOW-LOADING-INDICATOR', false)
-                fetchData()
-            } catch (e: any) {
-                emit('SHOW-LOADING-INDICATOR', false)
-                console.log(e.message)
-            }
-        }
-
     }
 
-    return ({ getColumns, getGridSx, handleAddEditTag, meta })
+    function handleDeleteTag(params: any) {
+        const id = params.row.id1
+        const options: any = {
+            description: accountsMessages.deleteEntry,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        confirm(options)
+            .then(async () => {
+                emit('SHOW-LOADING-INDICATOR', true)
+                await genericUpdateMaster({
+                    deletedIds: [id],
+                    tableName: 'TagsM',
+                })
+                fetchData()
+                emit('SHOW-LOADING-INDICATOR', false)
+                emit('SHOW-MESSAGE', {})
+            })
+            .catch(() => {
+                emit('SHOW-LOADING-INDICATOR', false)
+            })
+    }
+
+    return ({ getColumns, getGridSx, handleAddTag, meta })
 }
 export { useManageTags }

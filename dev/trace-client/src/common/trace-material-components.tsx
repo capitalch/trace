@@ -33,7 +33,8 @@ function useTraceMaterialComponents() {
             fullWidth={true}
             fullScreen= {pre.dialogConfig.fullScreen || false}
             maxWidth={pre.dialogConfig.maxWidth || 'xl'}
-            sx={pre.sx}
+            // sx={pre.sx}
+            sx={{minHeight:theme.spacing(40)}}
             open={pre.showDialog}
             onClose={(e, reason) => {
                 if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
@@ -69,6 +70,7 @@ function useTraceMaterialComponents() {
         onSubmit?: any
         materialDialogProps?: any
         onSearchBoxFilter?: any
+        sx?:any
     }
 
     // You can have className in materialDialogProps with double braces as {{className: 'classes.dialog'}}. Then this supplied class will supercede. There will not be any merging
