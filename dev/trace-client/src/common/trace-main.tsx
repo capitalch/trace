@@ -42,7 +42,7 @@ function TraceMain({ open }: any) {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        
+
         const launchMap: any = {
             accounts: <LaunchPadAccounts />,
             authentication: <LaunchPadAuthentication />,
@@ -106,8 +106,8 @@ function TraceMain({ open }: any) {
                     return
                 }
                 const method = this.keysWithMethods[key]
-                const ret = params ? method(params): method()
-                return(ret)
+                const ret = params ? method(params) : method()
+                return (ret)
             }
 
         }

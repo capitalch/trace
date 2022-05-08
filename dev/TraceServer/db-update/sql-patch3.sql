@@ -101,13 +101,15 @@ ALTER TABLE IF EXISTS "CategoryM"
 ALTER TABLE IF EXISTS "CategoryM"
 	ADD COLUMN IF NOT EXISTS "hsn" NUMERIC(8) NULL;
 
--- 05-05-2022 create TagsM table for categories
+-- 05-05-2022 create TagsM table for categories, Added in all databases
 CREATE TABLE IF NOT EXISTS "TagsM"(
 	id integer NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 	"tagName" TEXT NOT NULL,
 	CONSTRAINT "TagsM_tagName_unique_key"
 		UNIQUE("tagName")
 );
+ALTER TABLE IF EXISTS "CategoryM"
+	ADD COLUMN IF NOT EXISTS "tagId" integer NULL;
 ALTER TABLE IF EXISTS "CategoryM"
 	DROP CONSTRAINT IF EXISTS "TagsM_CategoryM_fkey",
  	ADD CONSTRAINT "TagsM_CategoryM_fkey"

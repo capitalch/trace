@@ -9,13 +9,9 @@ function useManageTags() {
     const theme = useTheme()
     const confirm = useConfirm()
     const megaData: IMegaData = useContext(MegaDataContext)
-    const category = megaData.accounts.inventory.category
-    // const allTags = category.allTags
     const { execGenericView, genericUpdateMaster, genericUpdateMasterNoForm } = utilMethods()
     const meta = useRef({
         id: undefined,
-        // allRows: [],
-        // filteredRows: [],
         showDialog: false,
         tagName: undefined,
         dialogConfig: {
@@ -27,30 +23,12 @@ function useManageTags() {
     const pre = meta.current
 
     useEffect(() => {
-        megaData.registerKeyWithMethod('fetchData:manageTags', fetchData)
+        megaData.registerKeyWithMethod('render:manageTags', setRefresh)
         fetchData()
     }, [])
 
     async function fetchData() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        category.allTags = await execGenericView({
-            isMultipleRows: true,
-            sqlKey: 'get_tags',
-        }) || []
-        setId(category.allTags)
-        emit('SHOW-LOADING-INDICATOR', false)
-        setRefresh({})
-
-        function setId(rows: any[]) {
-            let count = 1
-            for (const row of rows) {
-                row.id1 = row.id
-                row.id = incr()
-            }
-            function incr() {
-                return (count++)
-            }
-        }
+        await megaData.executeMethodForKey('fetchAllTags:categoriesMaster')
     }
 
     function ContentAddEditTag() {
@@ -75,6 +53,7 @@ function useManageTags() {
 
         function doClose() {
             pre.showDialog = false
+            megaData.executeMethodForKey('render:manageTags', {})
             setRefresh({})
         }
 
@@ -93,9 +72,10 @@ function useManageTags() {
                         tagName: pre.tagName || undefined
                     }
                 })
-                ret && doClose()
+
                 emit('SHOW-LOADING-INDICATOR', false)
-                fetchData()
+                await fetchData()
+                ret && doClose()
             } catch (e: any) {
                 emit('SHOW-LOADING-INDICATOR', false)
                 console.log(e.message)
@@ -175,33 +155,11 @@ function useManageTags() {
                 width: '100%',
                 fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(70),
-                // height: 'calc(100vh - 230px)',
-                // fontFamily: 'sans-serif',
-                // '& .footer-row-class': {
-                //     backgroundColor: theme.palette.grey[300]
-                // },
                 '& .header-class': {
                     fontWeight: 'bold',
                     color: 'green',
                     fontSize: theme.spacing(1.8),
                 },
-                // '& .grid-toolbar': {
-                //     width: '100%',
-                //     paddingBottom: theme.spacing(0.5),
-                //     borderBottom: '1px solid lightgrey',
-                //     display: 'flex',
-                //     flexDirection: 'column',
-                //     alignItems: 'start'
-                // },
-                // '& .row-sales-return': {
-                //     color: theme.palette.error.light
-                // },
-                // '& .row-loss': {
-                //     color: theme.palette.error.main
-                // },
-                // '& .row-jakar': {
-                //     color: 'dodgerBlue'
-                // }
             }
         )
     }
@@ -215,7 +173,7 @@ function useManageTags() {
         setRefresh({})
     }
 
-    function handleDeleteTag(params: any) {
+    async function handleDeleteTag(params: any) {
         const id = params.row.id1
         const options: any = {
             description: accountsMessages.deleteEntry,
@@ -229,7 +187,8 @@ function useManageTags() {
                     deletedIds: [id],
                     tableName: 'TagsM',
                 })
-                fetchData()
+                await fetchData()
+                setRefresh({})
                 emit('SHOW-LOADING-INDICATOR', false)
                 emit('SHOW-MESSAGE', {})
             })

@@ -1415,18 +1415,22 @@ allSqls = {
 
     'getJson_categories': '''
         with recursive cte as (
-            select c."id", c."catName", c."descr", c."parentId", c."isLeaf", 
-            ( select array_agg(id) from "CategoryM" m where c."id" = m."parentId") as "children",
-            "id"::text as "path"
-                from "CategoryM" c where "parentId" is null                  
+		select c."id", c."catName", c."descr", c."parentId", c."isLeaf", t."tagName", c."tagId",
+		( select array_agg(id) from "CategoryM" m where c."id" = m."parentId") as "children",
+		c."id"::text as "path"
+			from "CategoryM" c
+				left join "TagsM" t
+					on t.id = c."tagId"
+			where "parentId" is null                  
         union
-            select c."id", c."catName", c."descr", c."parentId", c."isLeaf", 
+            select c."id", c."catName", c."descr", c."parentId", c."isLeaf", t."tagName", c."tagId",
             ( select array_agg(id) from "CategoryM" m where c."id" = m."parentId") as "children",
             cte."path" || ',' || c."id"::text as "path"
-                from "CategoryM" c join
-                cte on cte."id" = c."parentId" ),
+                from "CategoryM" c 
+                    left join "TagsM" t
+                        on t.id = c."tagId"
+                    join cte on cte."id" = c."parentId" ),
             cte1 as (select * from cte order by "catName")
-            
             select json_build_object('categories', (select json_agg(row_to_json(a)) from cte1 a) ) as "jsonResult"
     ''',
 

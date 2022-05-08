@@ -2,9 +2,8 @@ import moment from 'moment'
 const isoDateFormat = 'YYYY-MM-DD'
 
 const inventoryMegaData = () => ({
-    category: {
-        allTags: []
-    }
+    allTags: [],
+    selectedReportName: undefined,
 })
 
 const settingsMegaData = () => ({
