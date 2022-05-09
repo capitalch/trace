@@ -1,3 +1,10 @@
+## React native
+1. check styles, buttons, textinput and other controls
+2. API calls, GraphQL
+3. Using 3rd party libraries
+4. Menu, navigation
+5. Ibuki
+
 ### To do in sales
                                                                                         1. Add + icon in add button
                                                                                         2. Gstin, date, other validations
@@ -12,29 +19,29 @@
                                                                                         10. saleVariety implementation
                                                                                         11. Ship to
 12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed
-13. Sales report to add auto subledger information
-12. Total error handling and show of submit
-13. Submit functionality
-14. View and drill through
-15. Page reset
-16. Total Debits / Credits
-17. New error window in open space
-18. Printing
+                                                                                        13. Sales report to add auto subledger information
+                                                                                        12. Total error handling and show of submit
+                                                                                        13. Submit functionality
+                                                                                        14. View and drill through
+                                                                                        15. Page reset
+                                                                                        16. Total Debits / Credits
+                                                                                        17. New error window in open space
+                                                                                        18. Printing
                                                                                         19. Product code change populate
 20. Discount manage
-21. Taking up the correct prices etc.
-22. Mapping the ui with megaData
+                                                                                        21. Taking up the correct prices etc.
+    22. Mapping the ui with megaData
                                                                                         23. receipts in 0.00 format
                                                                                         23. Address management with payment methods change
-24. Address mapping when institution sales selected
-25. validations
-26. Email and SMS
+                                                                                        24. Address mapping when institution sales selected
+                                                                                        25. validations
+                                                                                        26. Email and SMS
 27. Sale return
 
 
 ## Planning
 a. 
-a. Permissions of Export etc to manager
+                                                                                        a. Permissions of Export etc to manager
 b. Make product inactive
 c. Stock journal
 d. Purchase if change in last purchase price show alert
@@ -89,6 +96,9 @@ e. Multiple cash entries in receipt
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# 04-05-2022 to 09-05-2022
+1. Tags management in categories implemented
 
 # 03-05-2022
 1. Security applied in edit / delete for sales

@@ -886,11 +886,11 @@ allSqls = {
             from cte5 c5
                 join "ProductM" p
                     on p."id" = c5."productId"
-                join cte c  --"CategoryM" c
+                join "CategoryM" c
                     on c."id" = p."catId"
                 join "BrandM" b
                     on b.id = p."brandId"
-                left join cte8 c8
+                join cte8 c8
                     on c5."productId" = c8."productId"
             where "tranDate" between %(startDate)s and %(endDate)s
                 order by "tranDate", "salePurchaseDetailsId"
