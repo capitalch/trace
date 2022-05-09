@@ -427,7 +427,7 @@ function useSalesReport() {
             prev.qty = prev.qty + (rows[current - 1]?.qty || 0)
             prev.aggrSale = prev.aggrSale + (rows[current - 1]?.aggrSale || 0)
             prev.amount = prev.amount + (rows[current - 1]?.amount || 0)
-            prev.profit = prev.grossProfit + (rows[current - 1]?.grossProfit || 0)
+            prev.grossProfit = prev.grossProfit + (rows[current - 1]?.grossProfit || 0)
             return prev
         }, { count: 0, qty: 0, aggrSale: 0, amount: 0, grossProfit: 0 })
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj

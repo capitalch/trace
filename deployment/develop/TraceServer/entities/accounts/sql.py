@@ -766,11 +766,11 @@ allSqls = {
     "get_sale_report": '''
         with cte as ( --filter on tagId in CategoryM
             with recursive rec as (
-            select id, "parentId", "tagId", "isLeaf", "catName"
+            select id, "parentId", "isLeaf", "catName"
                 from "CategoryM"
                     where (("tagId" = %(tagId)s) or (%(tagId)s = 0))
             union
-            select c.id, c."parentId", rec."tagId", c."isLeaf", c."catName"
+            select c.id, c."parentId", c."isLeaf", c."catName"
                 from "CategoryM" c
                     join rec on
                         rec."id" = c."parentId"
@@ -886,11 +886,11 @@ allSqls = {
             from cte5 c5
                 join "ProductM" p
                     on p."id" = c5."productId"
-                join cte c  --"CategoryM" c
+                join cte c --"CategoryM" c
                     on c."id" = p."catId"
                 join "BrandM" b
                     on b.id = p."brandId"
-                left join cte8 c8
+                join cte8 c8
                     on c5."productId" = c8."productId"
             where "tranDate" between %(startDate)s and %(endDate)s
                 order by "tranDate", "salePurchaseDetailsId"

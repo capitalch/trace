@@ -71,13 +71,6 @@ function SalesReport() {
                         <GridToolbarColumnsButton color='secondary' />
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
-                        {/* Sync */}
-                        {/* <IconButton
-                            size="small"
-                            color="secondary"
-                            onClick={fetchData}>
-                            <SyncSharp fontSize='small'></SyncSharp>
-                        </IconButton> */}
                         {/* Sale period */}
                         <ReactSelect menuPlacement='auto' placeholder='Select Sale period'
                             styles={reactSelectStyles}
@@ -146,7 +139,7 @@ function SalesReport() {
                 <Box>{''.concat('Count(Selected)', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
                 <Box>{''.concat('Aggr(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.aggrSale || 0))}</Box>
                 <Box>{''.concat('Sale(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.amount || 0))}</Box>
-                <Box>{''.concat('GP(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.profit || 0))}</Box>
+                <Box>{''.concat('GP(Selected)', ' : ', toDecimalFormat(pre?.selectedRowsObject?.grossProfit || 0))}</Box>
                 <Box sx={{ display: 'flex', fontWeight: 'bold', ml: 'auto', flexWrap: 'wrap', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
                     <Box>{''.concat('Qty', ' : ', toDecimalFormat(pre?.totals?.qty || 0))}</Box>
                     <Box>{''.concat('Sale', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
