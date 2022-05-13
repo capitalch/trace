@@ -5,11 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Android",
-            "request": "launch",
-            "type": "reactnative",
+            "name": "Attach to packager",
             "cwd": "${workspaceFolder}",
-            "platform": "android"
+            "type": "reactnative",
+            "request": "attach"
         }
     ]
 }

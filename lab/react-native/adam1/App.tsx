@@ -8,9 +8,9 @@
  * @format
  */
 
-import React from 'react';
+import React from 'react'
 import {
-  ActivityIndicator,
+  Alert,
   Button,
   FlatList,
   SafeAreaView,
@@ -38,7 +38,11 @@ function App() {
     return (
       <TouchableOpacity
         key={item.id}>
-        <Text style={styles.listItem} >{item.name}</Text>
+        <Text style={styles.listItem}
+          onPress={() => {
+            console.log('abc')
+          }}
+        >{item.name}</Text>
       </TouchableOpacity>
     )
   }
@@ -55,18 +59,18 @@ function App() {
   }
 
   return (<SafeAreaView style={[styles.container]}>
-      <FlatList
-        style={{
-          borderTopColor:'blue',
-          // borderTopWidth:2,
-          borderBottomColor:'blue',
-          borderBottomWidth:2,
-        }}
-        data={data}
-        refreshing={true}
-        renderItem={renderItem}
-        ItemSeparatorComponent={SeperatorComponent}
-      ></FlatList>
+    <FlatList
+      style={{
+        borderTopColor: 'blue',
+        // borderTopWidth:2,
+        borderBottomColor: 'blue',
+        borderBottomWidth: 2,
+      }}
+      data={data}
+      refreshing={true}
+      renderItem={renderItem}
+      ItemSeparatorComponent={SeperatorComponent}
+    ></FlatList>
   </SafeAreaView>)
 }
 
