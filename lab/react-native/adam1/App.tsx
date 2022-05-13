@@ -19,6 +19,7 @@ import {
   StyleSheet,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -35,10 +36,10 @@ function App() {
 
   function renderItem({ item, index, separators }: any) {
     return (
-      <TouchableHighlight
+      <TouchableOpacity
         key={item.id}>
         <Text style={styles.listItem} >{item.name}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
     )
   }
 
@@ -53,13 +54,19 @@ function App() {
       />)
   }
 
-
   return (<SafeAreaView style={[styles.container]}>
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      ItemSeparatorComponent={SeperatorComponent}
-    ></FlatList>
+      <FlatList
+        style={{
+          borderTopColor:'blue',
+          // borderTopWidth:2,
+          borderBottomColor:'blue',
+          borderBottomWidth:2,
+        }}
+        data={data}
+        refreshing={true}
+        renderItem={renderItem}
+        ItemSeparatorComponent={SeperatorComponent}
+      ></FlatList>
   </SafeAreaView>)
 }
 
@@ -71,7 +78,7 @@ const styles = StyleSheet.create({
     // alignItems:'center',
   },
   listItem: {
-    padding:10,
+    padding: 10,
     // borderWidth:1,
     // borderColor:'grey'
   }
