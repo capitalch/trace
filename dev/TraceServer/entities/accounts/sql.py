@@ -209,8 +209,8 @@ allSqls = {
                                     "branchId" = %(branchId)s and "tranTypeId" = %(tranTypeId)s
         ),
         cte4 as (
-            select (select "branchCode" from cte2) || '\\' || (select "tranCode" from cte1) || '\\' || (select "lastNo" from cte3) ||
-            '\\' || (select %(finYearId)s)
+            select (select "branchCode" from cte2) || '//' || (select "tranCode" from cte1) || '//' || (select "lastNo" from cte3) ||
+            '//' || (select %(finYearId)s)
                 as "autoRefNo"
         )
 
