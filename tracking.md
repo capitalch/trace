@@ -1,51 +1,30 @@
 ## React native
-1. check styles, buttons, textinput and other controls
-2. API calls, GraphQL
-3. Using 3rd party libraries
-4. Menu, navigation
+1. AppBar
+2. Box menu
+3. FlatList with sublist
+4. Navigation
 5. Ibuki
+6. Paper library
 
 ### To do in sales
-                                                                                        1. Add + icon in add button
-                                                                                        2. Gstin, date, other validations
-                                                                                        2. cgst, sgst, igst group spacing
-                                                                                        3. Customer search
-                                                                                        4. New / edit button
-                                                                                        5. Product search
-                                                                                        6. Summary, calculations, amount etc.
-                                                                                        7. Serial no mechanism
-                                                                                        8. Population of product details
-                                                                                        9. Reset, roundoff, back cal buttons, Igst, Add button
-                                                                                        10. saleVariety implementation
-                                                                                        11. Ship to
-12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed
-                                                                                        13. Sales report to add auto subledger information
-                                                                                        12. Total error handling and show of submit
-                                                                                        13. Submit functionality
-                                                                                        14. View and drill through
-                                                                                        15. Page reset
-                                                                                        16. Total Debits / Credits
-                                                                                        17. New error window in open space
-                                                                                        18. Printing
-                                                                                        19. Product code change populate
-20. Discount manage
-                                                                                        21. Taking up the correct prices etc.
-    22. Mapping the ui with megaData
-                                                                                        23. receipts in 0.00 format
-                                                                                        23. Address management with payment methods change
-                                                                                        24. Address mapping when institution sales selected
-                                                                                        25. validations
-                                                                                        26. Email and SMS
-27. Sale return
-
+                                                                                        
+12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
+20. Discount manage in sales           
+27. Sale return new type
 
 ## Planning
 a. 
-                                                                                        a. Permissions of Export etc to manager
+                                                                                        
 b. Make product inactive
 c. Stock journal
 d. Purchase if change in last purchase price show alert
 e. Multiple cash entries in receipt
+f. xx-data-grid filter results
+g. Tag concept in stock summary
+h. To do list
+i. Gst rate in downloaded excel file
+j. salePurchaseDetails table jData has remarks etc. it should be null
+k. Server logging for modify and delete, time and log viewer
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 1. Include jData or serial no in sales report so that search on sl no may occur
 2. ledger report for inventory
@@ -96,6 +75,12 @@ e. Multiple cash entries in receipt
 18. Payment gateway for purchase of Trace
 19. Backup and restore strategy
 20. Upgrade database for all instances
+
+# QA
+1. Test on 10 lacs entries in TranH with Trial balance and BS
+
+# 10-06-2022 - 15-05-2022
+1. React native warm up
 
 # 04-05-2022 to 09-05-2022
 1. Tags management in categories implemented
@@ -945,3 +930,34 @@ nothing
 1. Edit / new is not retaining values bug fix
 2. When balance sheet is selected then click payroll, then click accounts. Error occurs.
 3. Client side change entity 'super-admin' to 'authentication'
+
+# Completed items
+                                                                                        1. Add + icon in add button
+                                                                                        2. Gstin, date, other validations
+                                                                                        2. cgst, sgst, igst group spacing
+                                                                                        3. Customer search
+                                                                                        4. New / edit button
+                                                                                        5. Product search
+                                                                                        6. Summary, calculations, amount etc.
+                                                                                        7. Serial no mechanism
+                                                                                        8. Population of product details
+                                                                                        9. Reset, roundoff, back cal buttons, Igst, Add button
+                                                                                        10. saleVariety implementation
+                                                                                        11. Ship to
+                                                                                        13. Sales report to add auto subledger information
+                                                                                        12. Total error handling and show of submit
+                                                                                        13. Submit functionality
+                                                                                        14. View and drill through
+                                                                                        15. Page reset
+                                                                                        16. Total Debits / Credits
+                                                                                        17. New error window in open space
+                                                                                        18. Printing
+                                                                                        19. Product code change populate
+                                                                                        21. Taking up the correct prices etc.
+                                                                                        22. Mapping the ui with megaData
+                                                                                        23. receipts in 0.00 format
+                                                                                        23. Address management with payment methods change
+                                                                                        24. Address mapping when institution sales selected
+                                                                                        25. validations
+                                                                                        26. Email and SMS
+                                                                                        a. Permissions of Export etc to manager

@@ -36,14 +36,15 @@ function App() {
 
   function renderItem({ item, index, separators }: any) {
     return (
-      <TouchableOpacity
+      <TouchableHighlight
+      onPress={() => {
+        console.log('abc')
+      }}
         key={item.id}>
         <Text style={styles.listItem}
-          onPress={() => {
-            console.log('abc')
-          }}
+          
         >{item.name}</Text>
-      </TouchableOpacity>
+      </TouchableHighlight>
     )
   }
 
@@ -62,7 +63,7 @@ function App() {
     <FlatList
       style={{
         borderTopColor: 'blue',
-        // borderTopWidth:2,
+        borderTopWidth: 2,
         borderBottomColor: 'blue',
         borderBottomWidth: 2,
       }}
