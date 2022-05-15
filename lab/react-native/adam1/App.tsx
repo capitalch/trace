@@ -11,7 +11,7 @@
 import React from 'react'
 import {
   Alert,
-  Button,
+  // Button,
   FlatList,
   SafeAreaView,
   ScrollView,
@@ -24,25 +24,27 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import { Button, useTheme } from 'react-native-paper'
+
+// import {
+//   Colors,
+//   DebugInstructions,
+//   Header,
+//   LearnMoreLinks,
+//   ReloadInstructions,
+// } from 'react-native/Libraries/NewAppScreen';
 
 function App() {
-
+  const { colors }= useTheme()
   function renderItem({ item, index, separators }: any) {
     return (
       <TouchableHighlight
-      onPress={() => {
-        console.log('abc')
-      }}
+        onPress={() => {
+          console.log('abc')
+        }}
         key={item.id}>
         <Text style={styles.listItem}
-          
+
         >{item.name}</Text>
       </TouchableHighlight>
     )
@@ -72,6 +74,7 @@ function App() {
       renderItem={renderItem}
       ItemSeparatorComponent={SeperatorComponent}
     ></FlatList>
+    <Button mode='contained' icon='folder-home'  color={colors.notification}  theme={{ roundness: 3 }} onPress={() => console.log('Button pressed')}>Click me</Button>
   </SafeAreaView>)
 }
 
