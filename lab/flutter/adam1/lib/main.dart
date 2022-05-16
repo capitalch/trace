@@ -2,7 +2,81 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(const MaterialApp(
+    home: SafeArea(
+      child: HelloWithCustomAppbar(),
+    ),
+  ));
+}
+
+class HelloWithCustomAppbar extends StatelessWidget {
+  const HelloWithCustomAppbar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MyScaffold();
+  }
+}
+
+class MyScaffold extends StatelessWidget {
+  const MyScaffold({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Column(
+        children: [
+          MyAppBar(),
+          AppBar(
+            backgroundColor: Colors.cyan,
+            title: Text('App bar'),
+            leading: const IconButton(
+              icon: Icon(Icons.ac_unit),
+              onPressed: null,
+            ),
+            actions:const [
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+            ],
+            centerTitle: true,
+          ),
+          const Expanded(
+              child: Center(
+            child: Text('Test'),
+          ))
+        ],
+      ),
+    );
+  }
+}
+
+class MyAppBar extends StatelessWidget {
+  const MyAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      color: Colors.amber[200],
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      // decoration: BoxDecoration(color: Colors.blue[300]),
+      child: Row(
+        children: const [
+          IconButton(onPressed: null, icon: Icon(Icons.menu)),
+          Expanded(
+            child: Text('Trace'),
+          ),
+          IconButton(onPressed: null, icon: Icon(Icons.search))
+        ],
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +91,7 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: const Text('My app bar'),
           ),
-          body: Center(
+          body: const Center(
             child: RandomWords(),
           )),
     ));
@@ -42,11 +116,12 @@ class _RandomWordsState extends State<RandomWords> {
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, i) {
-        if (i.isOdd)
+        if (i.isOdd) {
           return const Divider(
             thickness: 2.0,
             color: Colors.indigo,
           );
+        }
         final index = i ~/ 2;
         if (index >= _suggestions.length) {
           _suggestions.addAll(generateWordPairs().take(10));
