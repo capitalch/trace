@@ -79,6 +79,9 @@ k. Server logging for modify and delete, time and log viewer
 # QA
 1. Test on 10 lacs entries in TranH with Trial balance and BS
 
+# 16-05-2022
+1. Rejected react native and configured Flutter successfully at home and office
+
 # 10-06-2022 - 15-05-2022
 1. React native warm up
 

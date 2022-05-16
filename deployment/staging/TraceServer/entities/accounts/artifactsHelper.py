@@ -282,7 +282,7 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
                                                  'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)['lastNo']
             if lastNo == 0:
                 lastNo = 1
-            autoRefNo = f'{branchCode}\{tranCode}\{lastNo}\{finYearId}'
+            autoRefNo = f'{branchCode}/{tranCode}/{lastNo}/{finYearId}'
             valueDict["data"][0]["autoRefNo"] = autoRefNo
 
             # for sale with autosubledger insert transaction
