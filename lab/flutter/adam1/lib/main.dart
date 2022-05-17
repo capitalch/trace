@@ -24,19 +24,23 @@ class MyScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String myName = '';
     return Material(
       child: Column(
         children: [
-          MyAppBar(),
+          const MyAppBar(),
           AppBar(
             backgroundColor: Colors.cyan,
-            title: Text('App bar'),
+            title: const Text('App bar'),
             leading: const IconButton(
               icon: Icon(Icons.ac_unit),
               onPressed: null,
             ),
-            actions:const [
-              IconButton(onPressed: null, icon: Icon(Icons.account_box)),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                  },
+                  icon: Icon(Icons.add)),
               IconButton(onPressed: null, icon: Icon(Icons.account_box)),
               IconButton(onPressed: null, icon: Icon(Icons.account_box)),
               IconButton(onPressed: null, icon: Icon(Icons.account_box)),
@@ -49,7 +53,10 @@ class MyScaffold extends StatelessWidget {
           const Expanded(
               child: Center(
             child: Text('Test'),
-          ))
+          )),
+          MyConstWidget(myName: 'This is a boy'),
+          MyConstWidget(myName:'Kamal'),
+          const MyStateful()
         ],
       ),
     );
@@ -98,6 +105,51 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MyStateful extends StatefulWidget {
+  const MyStateful({Key? key}) : super(key: key);
+
+  @override
+  State<MyStateful> createState() => _MyStatefulState();
+}
+
+class _MyStatefulState extends State<MyStateful> {
+  int counter = 1;
+  @override
+  Widget build(BuildContext context) {
+    return
+      Row(
+        children:  [
+          TextButton(
+              onPressed: () {
+                print('ac');
+                setState(() {
+                  counter = counter + 1;
+                });
+              }
+          , child: const Text('My button')),
+          Text('Counter: $counter')
+        ],
+      );
+  }
+}
+
+class MyConstWidget extends StatelessWidget {
+  const MyConstWidget({Key? key, this.myName}) : super(key: key);
+
+  final String? myName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$myName');
+  }
+}
+
+
+
+
+
+
+
 class RandomWords extends StatefulWidget {
   const RandomWords({Key? key}) : super(key: key);
 
@@ -113,6 +165,7 @@ class _RandomWordsState extends State<RandomWords> {
   Widget build(BuildContext context) {
     // final wordPair = WordPair.random();
     // return Text(wordPair.asCamelCase);
+
     return ListView.builder(
       padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, i) {

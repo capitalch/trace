@@ -1,3 +1,12 @@
+## Flutter learning
+1. Navigation
+2. Provider and listner and notifier
+3. property get, set in a class
+                                                                                    4. const constructor
+5. Advanced widgets
+6. Understand theme
+7. Get good grip of layouts
+
 ## React native
 1. AppBar
 2. Box menu
