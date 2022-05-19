@@ -38,14 +38,15 @@ class ValueListenableBuilderCounter extends StatelessWidget {
                 ValueListenableBuilder(
                     valueListenable: myChangable,
                     builder: (context, value, child) {
-                      return Text('${value}');
-                    }),
+                      return Text('${myChangable.count}');
+                    },
+                    ),
                 const SizedBox(
                   width: 10.0,
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    myChangable.count = myChangable.count + 1;
+                    myChangable.incrementCount();
                   },
                   child: const Icon(Icons.add),
                 ),
@@ -58,7 +59,15 @@ class ValueListenableBuilderCounter extends StatelessWidget {
 
 class MyChangable extends ValueNotifier {
   MyChangable() : super(null);
-  int count = 0;
+  int _count = 0;
+  int get count {
+    return _count;
+  }
+
+  void incrementCount() {
+    _count = _count + 1;
+    notifyListeners();
+  }
 }
 
 // ValueListenableBuilder(
