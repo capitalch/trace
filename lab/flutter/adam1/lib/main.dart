@@ -4,98 +4,109 @@ import './widgets/hello_custom_app_bar.dart';
 import './widgets/dictionary-words.dart';
 import './widgets/provider-counter.dart';
 import './classes/counter.dart';
+import './widgets/value-listenable-builder-counter.dart';
 
 void main() {
-  runApp(
-    const MaterialApp(
-      home: SafeArea(top: false, child: HomePage()),
-    ),
-  );
+  runApp(const MyRootApp());
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MyRootApp extends StatelessWidget {
+  const MyRootApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return (
-        // MultiProvider(
-        // providers: [
-        ChangeNotifierProvider(
+    return (ChangeNotifierProvider(
+        create: (context) => Counter(),
+        child: const MaterialApp(home: MyHomePage())));
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return (ChangeNotifierProvider(
       create: (context) => Counter(),
-      child: Material(
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Home page'),
-          ),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                const DrawerHeader(child: Text('Drawer header')),
-                ListTile(
-                  title: const Text('Item 1'),
-                  onTap: () => Navigator.pop(context),
-                  dense: true,
-                ),
-                ListTile(
-                  title: const Text('Item 2'),
-                  onTap: () => Navigator.pop(context),
-                  dense: true,
-                ),
-                ListTile(
-                  title: const Text('Item 3'),
-                  onTap: () => Navigator.pop(context),
-                  dense: true,
-                ),
-                ListTile(
-                  title: const Text('Item 4'),
-                  onTap: () => Navigator.pop(context),
-                  dense: true,
-                ),
-              ],
+      child:
+          SafeArea(
+        child: Material(
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Home page'),
             ),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).backgroundColor),
-                        foregroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const HelloWithCustomAppbar()));
-                    },
-                    child: const Text('Example App Bar and hello')),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyApp()));
-                    },
-                    child: const Text('Listview of words')),
-                TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ProviderCounter()));
-                    },
-                    child: const Text('Sample provider pattern as counter')),
-                const ProviderCounter()
-              ],
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  const DrawerHeader(child: Text('Drawer header')),
+                  ListTile(
+                    title: const Text('Item 1'),
+                    onTap: () => Navigator.pop(context),
+                    dense: true,
+                  ),
+                  ListTile(
+                    title: const Text('Item 2'),
+                    onTap: () => Navigator.pop(context),
+                    dense: true,
+                  ),
+                  ListTile(
+                    title: const Text('Item 3'),
+                    onTap: () => Navigator.pop(context),
+                    dense: true,
+                  ),
+                  ListTile(
+                    title: const Text('Item 4'),
+                    onTap: () => Navigator.pop(context),
+                    dense: true,
+                  ),
+                ],
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).backgroundColor),
+                          foregroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary)),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const HelloWithCustomAppbar()));
+                      },
+                      child: const Text('Example App Bar and hello')),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyApp()));
+                      },
+                      child: const Text('Listview of words')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ProviderCounter()));
+                      },
+                      child: const Text('Sample provider pattern as counter')),
+                  TextButton(onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const ValueListenableBuilderCounter()));
+                  }, child: const Text('ValueListenableBuilder as counter'))
+                ],
+              ),
             ),
           ),
         ),
       ),
+      // )
     ));
   }
 }

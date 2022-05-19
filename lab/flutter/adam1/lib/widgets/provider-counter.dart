@@ -8,19 +8,24 @@ class ProviderCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int counter = 0;
-    return (Column(
-      children: [
-        Padding(
+    return (Scaffold(
+      appBar: AppBar(
+        title: const Text('Provider counter'),
+      ),
+      body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Text('Counter is: $counter'),
-        ),
-        FloatingActionButton(
-            onPressed: () {
-              Provider.of<Counter>(context, listen: false).incrCounter();
-            },
-            child: const Icon(Icons.add))
-      ],
+          child: Builder(builder: (BuildContext context) {
+            var pro = Provider.of<Counter>(
+              context,
+            );
+            return Text('${pro.count}');
+          })
+          ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Provider.of<Counter>(context, listen: false).incrCounter();
+          },
+          child: const Icon(Icons.add)),
     ));
   }
 }
