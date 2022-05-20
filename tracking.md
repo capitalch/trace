@@ -5,9 +5,14 @@
                                                                                     4. const constructor
                                                                                     5. Advanced widgets
                                                                                     6. Understand theme
-7. Get good grip of layouts and Sizing with no break
+                                                                                    7. Get good grip of layouts and Sizing with no break
                                                                                     9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
 10. Flutter inspector
+11. GraphQL
+                                                                                    12. Streams
+13. Splash and login
+14. Tables
+15. Deployment
 
 ## React native
 1. AppBar

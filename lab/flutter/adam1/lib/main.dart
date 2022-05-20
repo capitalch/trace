@@ -5,6 +5,7 @@ import './widgets/dictionary-words.dart';
 import './widgets/provider-counter.dart';
 import './classes/counter.dart';
 import './widgets/value-listenable-builder-counter.dart';
+import './widgets/stream-counter.dart';
 
 void main() {
   runApp(const MyRootApp());
@@ -108,18 +109,9 @@ class MyHomePage extends StatelessWidget {
                   TextButton(onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=>const ValueListenableBuilderCounter()));
                   }, child: const Text('ValueListenableBuilder as counter')),
-                  // AnimatedContainer(duration: const Duration(seconds: 2), height: 30, width: 120, curve: Curves.easeIn,
-                  // child: Material(
-                  //   color: Colors.indigo,
-                  //   child: InkWell(
-                  //     // child: Text('This is InkWell'),
-                  //   ),
-                  // ),
-                  // ),
-                  // InkWell(
-                  //   child: Text('This is Inkwell'),
-                  //   onTap: (){},
-                  // )
+                  TextButton(onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const StreamCounter()));
+                  }, child: Text('Streams counter'))
                 ],
               ),
             ),
