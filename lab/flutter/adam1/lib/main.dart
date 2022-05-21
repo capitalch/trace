@@ -17,15 +17,21 @@ class MyRootApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return (ChangeNotifierProvider(
         create: (context) => Counter(),
-        child: MaterialApp(home: MyHomePage(), theme: ThemeData(
-          brightness: Brightness.values[1],
-          primaryColor: Colors.yellow,
-          fontFamily: 'Lato',
-          textButtonTheme: TextButtonThemeData(style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.brown))),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.indigo))
-          )
-        ),)));
+        child: MaterialApp(
+          home: const MyHomePage(),
+          theme: ThemeData(
+              brightness: Brightness.values[1],
+              primaryColor: Colors.yellow,
+              fontFamily: 'Lato',
+              textButtonTheme: TextButtonThemeData(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all(Colors.brown))),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.indigo)))),
+        )));
   }
 }
 
@@ -35,8 +41,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return (ChangeNotifierProvider(
       create: (context) => Counter(),
-      child:
-          SafeArea(
+      child: SafeArea(
         child: Material(
           child: Scaffold(
             appBar: AppBar(
@@ -76,11 +81,6 @@ class MyHomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ElevatedButton(
-                      // style: ButtonStyle(
-                      //     backgroundColor: MaterialStateProperty.all(
-                      //         Theme.of(context).backgroundColor),
-                      //     foregroundColor: MaterialStateProperty.all(
-                      //         Theme.of(context).colorScheme.primary)),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -105,21 +105,15 @@ class MyHomePage extends StatelessWidget {
                                 builder: (context) => const ProviderCounter()));
                       },
                       child: const Text('Sample provider pattern as counter')),
-                  TextButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const ValueListenableBuilderCounter()));
-                  }, child: const Text('ValueListenableBuilder as counter')),
-                  // AnimatedContainer(duration: const Duration(seconds: 2), height: 30, width: 120, curve: Curves.easeIn,
-                  // child: Material(
-                  //   color: Colors.indigo,
-                  //   child: InkWell(
-                  //     // child: Text('This is InkWell'),
-                  //   ),
-                  // ),
-                  // ),
-                  // InkWell(
-                  //   child: Text('This is Inkwell'),
-                  //   onTap: (){},
-                  // )
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ValueListenableBuilderCounter()));
+                      },
+                      child: const Text('ValueListenableBuilder as counter')),
                 ],
               ),
             ),

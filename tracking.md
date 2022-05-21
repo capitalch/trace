@@ -9,6 +9,9 @@
                                                                                     9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
 10. Flutter inspector
 
+## Appearance
+#. Theme.of(context).textTheme.headline4
+
 ## React native
 1. AppBar
 2. Box menu
