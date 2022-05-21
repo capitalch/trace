@@ -5,6 +5,7 @@ import './widgets/dictionary-words.dart';
 import './widgets/provider-counter.dart';
 import './classes/counter.dart';
 import './widgets/value-listenable-builder-counter.dart';
+import './widgets/stream-counter.dart';
 
 void main() {
   runApp(const MyRootApp());
