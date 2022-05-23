@@ -1,4 +1,4 @@
 
 class Routes{
-  // static login =
+  static String login = 'login';
 }
