@@ -98,6 +98,12 @@ k. Server logging for modify and delete, time and log viewer
 # QA
 1. Test on 10 lacs entries in TranH with Trial balance and BS
 
+# 22-05-2022 - 23-05-2022
+1. Worked on Flutter mobile
+
+# 17-05-2022 - 21-05-2022
+1. Learnt and practised Flutter
+
 # 16-05-2022
 1. Rejected react native and configured Flutter successfully at home and office
 

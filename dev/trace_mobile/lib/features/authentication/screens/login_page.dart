@@ -37,18 +37,18 @@ class LoginPage extends StatelessWidget {
             ),
             Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: TextField(
                     obscureText: true,
                     controller: passwordController,
-                    decoration: InputDecoration(border: OutlineInputBorder(), labelText: 'Password'),
-                    style: TextStyle(fontSize: 22)
+                    decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Password'),
+                    style: const TextStyle(fontSize: 22)
                 )
             ),
             Container(
-                height: 50,
+                height: 60,
                 // padding: const EdgeInsets.only(top: 40),
-                margin: EdgeInsets.only(top:30),
+                margin: const EdgeInsets.only(top:50),
                 child: ElevatedButton(
                   child: const Text('Login'),
                   onPressed: () {
