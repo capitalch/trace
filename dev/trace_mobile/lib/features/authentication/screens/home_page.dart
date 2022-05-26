@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import '../../../common/routes.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,12 +20,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Trace', style: Theme.of(context).textTheme.headline5
-                        // TextStyle(
-                        //     color: Colors.indigo,
-                        //     fontWeight: FontWeight.w700,
-                        //     fontSize: 25)
-                        ),
+                    Text('Trace', style: Theme.of(context).textTheme.headline5),
                     Image.asset(
                       'assets/images/reports1.jpg',
                     ),
@@ -51,7 +47,7 @@ class HomePage extends StatelessWidget {
                             icon: const Icon(Icons.next_plan),
                             label: const Text('Next')),
                       ],
-                    )
+                    ),
                   ]),
             )));
   }

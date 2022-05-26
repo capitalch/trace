@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,18 +19,20 @@ class MyApp extends StatelessWidget {
     ValueNotifier<GraphQLClient> client = ValueNotifier(GraphQLClient(
         cache: GraphQLCache(store: InMemoryStore()), link: httpLink));
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MaterialApp(
-          home: GraphQLProvider(
-              client: client,
-              child: const MyHomePage(
-                title: 'GraphQL demo',
-              ))),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home:
+            // MaterialApp(
+            //     home:
+            GraphQLProvider(
+                client: client,
+                child: const MyHomePage(
+                  title: 'GraphQL demo',
+                )));
+    // home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    // );
   }
 }
 
@@ -51,13 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body:
-        // Center(child: ElevatedButton(onPressed: () async {
-        //   var url = Uri.parse('http://10.0.2.2:5000/test');
-        //   var response = await http.get(url);
-        //   print (response.body.toString());
-        // }, child: const Text('Do http'),),)
-        Query(
+        body: Query(
           options: QueryOptions(
             document: gql(query),
           ),
@@ -68,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
               return const Text('Success');
             }
           },
-        )
-    );
+        ));
   }
 }

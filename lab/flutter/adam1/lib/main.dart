@@ -19,14 +19,6 @@ class MyRootApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // final HttpLink link = HttpLink('http://localhost:5000/graphql');
-    // ValueNotifier<GraphQLClient> client = ValueNotifier(
-    //     GraphQLClient(
-    //         cache:GraphQLCache(store: InMemoryStore()),
-    //         link: link
-    //     )
-    // );
-
     return (
         MultiProvider(
           providers: [
@@ -48,24 +40,6 @@ class MyRootApp extends StatelessWidget {
                         MaterialStateProperty.all(Colors.indigo)))),
           ),
         )
-        // ChangeNotifierProvider(
-        //     create: (context) => Counter(),
-        //     child: MaterialApp(
-        //       home: const MyHomePage(),
-        //       theme: ThemeData(
-        //           brightness: Brightness.values[1],
-        //           primaryColor: Colors.yellow,
-        //           fontFamily: 'Lato',
-        //           textButtonTheme: TextButtonThemeData(
-        //               style: ButtonStyle(
-        //                   foregroundColor:
-        //                       MaterialStateProperty.all(Colors.brown))),
-        //           elevatedButtonTheme: ElevatedButtonThemeData(
-        //               style: ButtonStyle(
-        //                   backgroundColor:
-        //                       MaterialStateProperty.all(Colors.indigo)))),
-        //     )
-        // )
     );
   }
 }
