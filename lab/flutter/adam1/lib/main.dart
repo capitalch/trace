@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import './widgets/hello_custom_app_bar.dart';
 import './widgets/dictionary-words.dart';
@@ -6,6 +7,7 @@ import './widgets/provider-counter.dart';
 import './classes/counter.dart';
 import './widgets/value-listenable-builder-counter.dart';
 import './widgets/stream-counter.dart';
+import './widgets/graphql.dart';
 
 void main() {
   runApp(const MyRootApp());
@@ -16,23 +18,55 @@ class MyRootApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (ChangeNotifierProvider(
-        create: (context) => Counter(),
-        child: MaterialApp(
-          home: const MyHomePage(),
-          theme: ThemeData(
-              brightness: Brightness.values[1],
-              primaryColor: Colors.yellow,
-              fontFamily: 'Lato',
-              textButtonTheme: TextButtonThemeData(
-                  style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all(Colors.brown))),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all(Colors.indigo)))),
-        )));
+
+    // final HttpLink link = HttpLink('http://localhost:5000/graphql');
+    // ValueNotifier<GraphQLClient> client = ValueNotifier(
+    //     GraphQLClient(
+    //         cache:GraphQLCache(store: InMemoryStore()),
+    //         link: link
+    //     )
+    // );
+
+    return (
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => Counter()),
+          ],
+          child: MaterialApp(
+            home: const MyHomePage(),
+            theme: ThemeData(
+                brightness: Brightness.values[1],
+                primaryColor: Colors.yellow,
+                fontFamily: 'Lato',
+                textButtonTheme: TextButtonThemeData(
+                    style: ButtonStyle(
+                        foregroundColor:
+                        MaterialStateProperty.all(Colors.brown))),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.indigo)))),
+          ),
+        )
+        // ChangeNotifierProvider(
+        //     create: (context) => Counter(),
+        //     child: MaterialApp(
+        //       home: const MyHomePage(),
+        //       theme: ThemeData(
+        //           brightness: Brightness.values[1],
+        //           primaryColor: Colors.yellow,
+        //           fontFamily: 'Lato',
+        //           textButtonTheme: TextButtonThemeData(
+        //               style: ButtonStyle(
+        //                   foregroundColor:
+        //                       MaterialStateProperty.all(Colors.brown))),
+        //           elevatedButtonTheme: ElevatedButtonThemeData(
+        //               style: ButtonStyle(
+        //                   backgroundColor:
+        //                       MaterialStateProperty.all(Colors.indigo)))),
+        //     )
+        // )
+    );
   }
 }
 
@@ -115,6 +149,14 @@ class MyHomePage extends StatelessWidget {
                                     const ValueListenableBuilderCounter()));
                       },
                       child: const Text('ValueListenableBuilder as counter')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GraphQL()));
+                      },
+                      child: const Text('GraphQL'))
                 ],
               ),
             ),

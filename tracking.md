@@ -7,10 +7,10 @@
                                                                                     6. Understand theme
                                                                                     7. Get good grip of layouts and Sizing with no break
                                                                                     9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
-10. Flutter inspector
+                                                                                    10. Flutter inspector
 11. GraphQL
                                                                                     12. Streams
-13. Splash and login
+                                                                                    13. Splash and login
 14. Tables
 15. Deployment
 
@@ -67,6 +67,7 @@ k. Server logging for modify and delete, time and log viewer
 20. Notes, to do's, schemes
 
 ## Bugs
+*. When in login s,s is given for superadmin user. it fails. In TraceHeader submitDialog buCodeWithPermissions in empty hence it goes out. and nothing happens. In brief superadmin user is not working.
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
