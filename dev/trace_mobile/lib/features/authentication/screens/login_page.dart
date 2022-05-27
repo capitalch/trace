@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/common/graphql_service.dart';
+import 'package:trace_mobile/common/global_settings.dart';
+import 'package:trace_mobile/common/graphql/graphql_queries.dart';
+import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'dart:convert' show utf8, base64;
 import 'dart:convert';
+
+import 'package:trace_mobile/common/routes.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,9 +16,6 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
-    final HttpLink httpLink = HttpLink(
-      'http://10.0.2.2:5000/graphql',
-    );
 
     return SafeArea(
       child: Scaffold(
@@ -59,49 +60,57 @@ class LoginPage extends StatelessWidget {
                 // padding: const EdgeInsets.only(top: 40),
                 margin: const EdgeInsets.only(top: 50),
                 child: ElevatedButton(
-                  child: const Text('Login'),
-                  onPressed: () async {
-                    var service =
-                        Provider.of<TraceGraphQLClient>(context, listen: false);
-                    var creds = [
-                      nameController.value.text,
-                      ':',
-                      passwordController.value.text
-                    ];
-                    var credentials =
-                        base64.encode(utf8.encode(creds.join()));
-                    // AuthLink authLink = AuthLink(headerKey: '')
-                    // String login = '''query login {
-                    //  authentication {
-                    //  doLogin(credentials:"$base54Cred")
-                    // }}''';
-                    var result = await service.client
-                        .query(QueryOptions(document: gql(GraphQLQuery.login(credentials))));
-                    var login = result?.data?['authentication']['doLogin'];
-                    String? token = login?['token'];
-                    Object? buCodesWithPermissions = login?['buCodesWithPermissions'];
-                    // var login = entries?.elementAt(1);
-                    if(result.data != null){
-                      print(result.data);
-                    } else {
-                      print('Error');
-                    }
-                  },
-                )),
-            // Query(
-            //     options: QueryOptions(
-            //       document: gql(query),
-            //     ),
-            //     builder: (QueryResult result, {fetchMore, refetch}) {
-            //       if (result.data == null) {
-            //         return const Center(child: Text('Loading...'));
-            //       } else {
-            //         return const Text('Success');
-            //       }
-            //     })
+                    child: const Text('Login'),
+                    onPressed: () => onLoginPressed(
+                        context, nameController, passwordController))),
           ]),
         ),
       ),
     );
+  }
+
+  void onLoginPressed(context, nameController, passwordController) async {
+    var service = Provider.of<GraphQLService>(context, listen: false);
+    var creds = [nameController.value.text, ':', passwordController.value.text];
+    var credentials = base64.encode(utf8.encode(creds.join()));
+    var result = await service.client
+        .query(QueryOptions(document: gql(GraphQLQueries.login(credentials))));
+    var loginData = result?.data?['authentication']['doLogin'];
+    var globalSettings = Provider.of<GlobalSettings>(context,
+        listen: false); // global variable from provider
+
+    if (loginData == null) {
+      globalSettings.resetLoginData();
+      showSnackBar(context);
+      // Navigator.pop(context);
+      return;
+    }
+
+    List<dynamic>? buCodesWithPermissionsTemp =
+        loginData['buCodesWithPermissions'];
+    List<Map<String, dynamic>>? buCodesWithPermissions =
+        buCodesWithPermissionsTemp?.cast<Map<String, dynamic>>().toList();
+    Iterable? bues = buCodesWithPermissions?.map((e) => e['buCode']);
+    List<String>? buCodes = bues?.cast<String>()?.toList();
+    loginData['buCodes'] = buCodes;
+    loginData['buCodesWithPermissions'] = buCodesWithPermissions;
+
+    globalSettings.setLoginData(loginData);
+    Navigator.pushReplacementNamed(context, Routes.dashBoard);
+  }
+
+  void showSnackBar(context) {
+    final snackBar = SnackBar(
+      content: const Text('Invalid login'),
+      backgroundColor: Theme.of(context).errorColor,
+      action: SnackBarAction(
+        label: 'dismiss',
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

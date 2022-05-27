@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:trace_mobile/common/graphql_service.dart';
+import 'package:trace_mobile/common/global_settings.dart';
+import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'package:trace_mobile/features/authentication/screens/home_page.dart';
+import 'package:trace_mobile/features/dashboard/dashboard.dart';
 
 import 'features/authentication/screens/home_page.dart';
 import 'features/authentication/screens/login_page.dart';
@@ -28,7 +30,8 @@ class TraceApp extends StatelessWidget {
         // child:
         MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (context) {return TraceGraphQLClient();}),
+            ChangeNotifierProvider(create: (context) {return GraphQLService();}),
+            ChangeNotifierProvider(create: (context)=>GlobalSettings())
           ],
           child: MaterialApp(
             title: 'Trace',
@@ -37,7 +40,8 @@ class TraceApp extends StatelessWidget {
             routes: {
               'login': (BuildContext context) {
                 return const LoginPage();
-              }
+              },
+              'dashBoard': (BuildContext context) => const DashBoard()
             },
           ),
         ));
