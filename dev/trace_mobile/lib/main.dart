@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:trace_mobile/common/graphQL_service.dart';
+import 'package:trace_mobile/common/graphql_service.dart';
 import 'package:trace_mobile/features/authentication/screens/home_page.dart';
 
 import 'features/authentication/screens/home_page.dart';
@@ -22,9 +22,11 @@ class TraceApp extends StatelessWidget {
     // ValueNotifier<GraphQLClient> client = ValueNotifier(GraphQLClient(
     //     cache: GraphQLCache(store: InMemoryStore()), link: httpLink));
 
-    return (GraphQLProvider(
-        client: GraphQLService.client,
-        child: MultiProvider(
+    return (
+        // GraphQLProvider(
+        // client: GraphQLService.client,
+        // child:
+        MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) {return TraceGraphQLClient();}),
           ],
@@ -38,11 +40,11 @@ class TraceApp extends StatelessWidget {
               }
             },
           ),
-        )));
+        ));
   }
 
   ThemeData getThemeData() {
-    const _textStyle =
+    const textStyle =
         TextStyle(color: Colors.indigo, fontWeight: FontWeight.w600);
     return ThemeData(
         backgroundColor: Colors.grey.shade300,
@@ -58,8 +60,8 @@ class TraceApp extends StatelessWidget {
           )),
         )),
         textTheme: const TextTheme(
-            headline4: _textStyle,
-            headline5: _textStyle,
-            headline6: _textStyle));
+            headline4: textStyle,
+            headline5: textStyle,
+            headline6: textStyle));
   }
 }

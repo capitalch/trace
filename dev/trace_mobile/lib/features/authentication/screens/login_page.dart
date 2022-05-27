@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/common/graphQL_service.dart';
+import 'package:trace_mobile/common/graphql_service.dart';
+import 'dart:convert' show utf8, base64;
+import 'dart:convert';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,10 +15,7 @@ class LoginPage extends StatelessWidget {
     final HttpLink httpLink = HttpLink(
       'http://10.0.2.2:5000/graphql',
     );
-    String query = '''query login {
-       authentication {
-       doLogin(credentials:"s:s")
-      }}''';
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -62,13 +61,31 @@ class LoginPage extends StatelessWidget {
                 child: ElevatedButton(
                   child: const Text('Login'),
                   onPressed: () async {
-                    var service = Provider.of<TraceGraphQLClient>(context,listen: false);
-                    await service.client.query(QueryOptions(document: gql(query)));
-
-                    // GraphQLClient client = GraphQLService.clientToQuery;
-                    // await client.query(QueryOptions(document: gql(query)));
-                    // print(nameController.text);
-                    // print(passwordController.text);
+                    var service =
+                        Provider.of<TraceGraphQLClient>(context, listen: false);
+                    var creds = [
+                      nameController.value.text,
+                      ':',
+                      passwordController.value.text
+                    ];
+                    var credentials =
+                        base64.encode(utf8.encode(creds.join()));
+                    // AuthLink authLink = AuthLink(headerKey: '')
+                    // String login = '''query login {
+                    //  authentication {
+                    //  doLogin(credentials:"$base54Cred")
+                    // }}''';
+                    var result = await service.client
+                        .query(QueryOptions(document: gql(GraphQLQuery.login(credentials))));
+                    var login = result?.data?['authentication']['doLogin'];
+                    String? token = login?['token'];
+                    Object? buCodesWithPermissions = login?['buCodesWithPermissions'];
+                    // var login = entries?.elementAt(1);
+                    if(result.data != null){
+                      print(result.data);
+                    } else {
+                      print('Error');
+                    }
                   },
                 )),
             // Query(
