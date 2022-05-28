@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+// import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
+import 'package:trace_mobile/common/data_store.dart';
 import 'package:trace_mobile/common/global_settings.dart';
 import 'package:trace_mobile/common/graphql/graphql_queries.dart';
 import 'package:trace_mobile/common/graphql/graphql_service.dart';
@@ -10,7 +13,8 @@ import 'dart:convert';
 import 'package:trace_mobile/common/routes.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key);
+  // final LocalStorage localStorage = LocalStorage('trace');
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class LoginPage extends StatelessWidget {
                 )),
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(top: 40),
               child: Text(
                 'Login',
                 style: Theme.of(context).textTheme.headline5,
@@ -40,12 +44,12 @@ class LoginPage extends StatelessWidget {
             ),
             Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 20),
                 child: TextField(
                     controller: nameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                         border: OutlineInputBorder(), labelText: 'User name'),
-                    style: TextStyle(fontSize: 22))),
+                    style: const TextStyle(fontSize: 22))),
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 20),
@@ -94,8 +98,9 @@ class LoginPage extends StatelessWidget {
     List<String>? buCodes = bues?.cast<String>()?.toList();
     loginData['buCodes'] = buCodes;
     loginData['buCodesWithPermissions'] = buCodesWithPermissions;
-
+    // localStorage.setItem('loginData', loginData);
     globalSettings.setLoginData(loginData);
+    await DataStore.setLoginData('test');
     Navigator.pushReplacementNamed(context, Routes.dashBoard);
   }
 
@@ -103,13 +108,13 @@ class LoginPage extends StatelessWidget {
     final snackBar = SnackBar(
       content: const Text('Invalid login'),
       backgroundColor: Theme.of(context).errorColor,
+      duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: 'dismiss',
         onPressed: () {
           Navigator.pop(context);
         },
       ),
-
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

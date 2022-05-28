@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:trace_mobile/common/global_settings.dart';
@@ -9,20 +11,22 @@ import 'package:trace_mobile/features/dashboard/dashboard.dart';
 import 'features/authentication/screens/home_page.dart';
 import 'features/authentication/screens/login_page.dart';
 
-void main() {
-  runApp(TraceApp());
+void main() async {
+  runApp(const TraceApp());
+  await doInit();
+}
+
+doInit() async {
+  var data = await const FlutterSecureStorage().read(key: "loginData");
+  print(data);
 }
 
 class TraceApp extends StatelessWidget {
-  TraceApp({super.key});
+  const TraceApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
-    // final HttpLink httpLink = HttpLink(
-    //   'http://10.0.2.2:5000/graphql',
-    // );
-    // ValueNotifier<GraphQLClient> client = ValueNotifier(GraphQLClient(
-    //     cache: GraphQLCache(store: InMemoryStore()), link: httpLink));
 
     return (
         // GraphQLProvider(
@@ -36,10 +40,10 @@ class TraceApp extends StatelessWidget {
           child: MaterialApp(
             title: 'Trace',
             theme: getThemeData(),
-            home: const HomePage(),
+            home: HomePage(),
             routes: {
               'login': (BuildContext context) {
-                return const LoginPage();
+                return LoginPage();
               },
               'dashBoard': (BuildContext context) => const DashBoard()
             },

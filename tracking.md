@@ -17,14 +17,6 @@
 ## Appearance
 #. Theme.of(context).textTheme.headline4
 
-## React native
-1. AppBar
-2. Box menu
-3. FlatList with sublist
-4. Navigation
-5. Ibuki
-6. Paper library
-
 ### To do in sales
                                                                                         
 12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
@@ -99,7 +91,13 @@ k. Server logging for modify and delete, time and log viewer
 # QA
 1. Test on 10 lacs entries in TranH with Trial balance and BS
 
-# 22-05-2022 - 23-05-2022
+# Trace mobile
+1. snack bar
+2. local storage
+3. Demo and Next functions
+4. Dashboard research
+
+# 22-05-2022 - 27-05-2022
 1. Worked on Flutter mobile
 
 # 17-05-2022 - 21-05-2022

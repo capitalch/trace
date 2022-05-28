@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+// import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/global_settings.dart';
 import '../../../common/routes.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+  // final LocalStorage localStorage = LocalStorage('trace');
 
   @override
   Widget build(BuildContext context) {
+    // var loginData = localStorage.getItem('loginData');
     var theme = Theme.of(context);
-    doLogin() {
-      Navigator.pushNamed(context, 'login');
-    }
-
+    // doInit();
     return SafeArea(
         child: Material(
             color: Colors.grey[300],
@@ -47,7 +48,9 @@ class HomePage extends StatelessWidget {
                         // Next
                         ElevatedButton.icon(
                             onPressed: () {
-                              var globalSettings = Provider.of<GlobalSettings>(context, listen:false);
+                              var globalSettings = Provider.of<GlobalSettings>(
+                                  context,
+                                  listen: false);
 
                               // var token1 = globalSettings.getValue(propName: 'token');
                               print(globalSettings.token);
