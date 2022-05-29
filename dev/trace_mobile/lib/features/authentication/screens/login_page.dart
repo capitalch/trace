@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 // import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,7 @@ import 'dart:convert';
 import 'package:trace_mobile/common/routes.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
   // final LocalStorage localStorage = LocalStorage('trace');
 
   @override
@@ -36,7 +36,7 @@ class LoginPage extends StatelessWidget {
                 )),
             Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.only(top: 40),
+              padding: const EdgeInsets.only(top: 30),
               child: Text(
                 'Login',
                 style: Theme.of(context).textTheme.headline5,
@@ -74,14 +74,16 @@ class LoginPage extends StatelessWidget {
   }
 
   void onLoginPressed(context, nameController, passwordController) async {
-    var service = Provider.of<GraphQLService>(context, listen: false);
+    var globalSettings = Provider.of<GlobalSettings>(context, listen: false);
+    // var service = Provider.of<GraphQLService>(context, listen: false);
     var creds = [nameController.value.text, ':', passwordController.value.text];
     var credentials = base64.encode(utf8.encode(creds.join()));
-    var result = await service.client
-        .query(QueryOptions(document: gql(GraphQLQueries.login(credentials))));
+    var result = await globalSettings.graphQlLoginClient
+        ?.query(QueryOptions(document: gql(GraphQLQueries.login(credentials)), operationName: 'login'));
+    // var result = await service.client
+    //     .query(QueryOptions(document: gql(GraphQLQueries.login(credentials))));
     var loginData = result?.data?['authentication']['doLogin'];
-    var globalSettings = Provider.of<GlobalSettings>(context,
-        listen: false); // global variable from provider
+    // global variable from provider
 
     if (loginData == null) {
       globalSettings.resetLoginData();
@@ -95,12 +97,14 @@ class LoginPage extends StatelessWidget {
     List<Map<String, dynamic>>? buCodesWithPermissions =
         buCodesWithPermissionsTemp?.cast<Map<String, dynamic>>().toList();
     Iterable? bues = buCodesWithPermissions?.map((e) => e['buCode']);
-    List<String>? buCodes = bues?.cast<String>()?.toList();
+    List<dynamic>? buCodes = bues?.cast<dynamic>().toList();
     loginData['buCodes'] = buCodes;
-    loginData['buCodesWithPermissions'] = buCodesWithPermissions;
+    loginData['buCodesWithPermissions'] = buCodesWithPermissionsTemp;
     // localStorage.setItem('loginData', loginData);
     globalSettings.setLoginData(loginData);
-    await DataStore.setLoginData('test');
+    String jLoginData = globalSettings.getLoginDataAsJson();
+    // globalSettings.setLoginDataFromJson(j);
+    await DataStore.setLoginDataInSecuredStorage(jLoginData);
     Navigator.pushReplacementNamed(context, Routes.dashBoard);
   }
 

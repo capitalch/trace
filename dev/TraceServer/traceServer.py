@@ -89,32 +89,32 @@ def contextValue(request):
     payload = None
     # return # remove this line
     names = ['login', 'forgotPwd']
-    # try:
-    #     if (request.json is not None) and ('operationName' in request.json) and (request.json['operationName'] in names):
-    #         return  # for further processing
-    #     else:
-    #         # auth is like 'Bearer xxxxx'. the xxxxx is token. You need to take out the last word
-    #         auth = request.headers.get('AUTHORIZATION')
-    #         selectionCriteria = request.headers.get('SELECTION-CRITERIA')
+    try:
+        if (request.json is not None) and ('operationName' in request.json) and (request.json['operationName'] in names):
+            return  # for further processing
+        else:
+            # auth is like 'Bearer xxxxx'. the xxxxx is token. You need to take out the last word
+            auth = request.headers.get('AUTHORIZATION')
+            selectionCriteria = request.headers.get('SELECTION-CRITERIA')
 
-    #         if selectionCriteria is not None:
-    #             temp = selectionCriteria.split(':')
-    #             buCode = temp[0] if temp[0] != '' else None
-    #             finYearId = temp[1] if temp[1] != '' else None
-    #             branchId = temp[2] if temp[2] != '' else None
-    #         if (auth is None) or (auth == ''):
-    #             processError(util.getErrorMessage('requiredAuthCredentials'))
-    #         else:
-    #             token = auth.split(' ')[-1]  # get last word
-    #             secret = cfg.get('jwt').get('secret')
-    #             algorithm = cfg.get('jwt').get('algorithm')
-    #             payload = jwt.decode(token, secret, algorithm)
-    #             payload['buCode'] = buCode
-    #             payload['finYearId'] = finYearId
-    #             payload['branchId'] = branchId
-    #             return payload
-    # except (Exception) as error:
-    #     processError(util.getErrorMessage('authenticationFailue'))
+            if selectionCriteria is not None:
+                temp = selectionCriteria.split(':')
+                buCode = temp[0] if temp[0] != '' else None
+                finYearId = temp[1] if temp[1] != '' else None
+                branchId = temp[2] if temp[2] != '' else None
+            if (auth is None) or (auth == ''):
+                processError(util.getErrorMessage('requiredAuthCredentials'))
+            else:
+                token = auth.split(' ')[-1]  # get last word
+                secret = cfg.get('jwt').get('secret')
+                algorithm = cfg.get('jwt').get('algorithm')
+                payload = jwt.decode(token, secret, algorithm)
+                payload['buCode'] = buCode
+                payload['finYearId'] = finYearId
+                payload['branchId'] = branchId
+                return payload
+    except (Exception) as error:
+        processError(util.getErrorMessage('authenticationFailue'))
 
 # gets dbName from TraceEntry database against clientId and entityName
 
