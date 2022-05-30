@@ -19,13 +19,6 @@ class GlobalSettings extends ChangeNotifier {
   List<dynamic>? _buCodesWithPermissions;
 
   void _initGraphQLLoginClient() {
-    // String selectionCriteria = [
-    //   (lastUsedBuCode ?? ''),
-    //   ':',
-    //   Utils.getCurrentFinYearId(),
-    //   ':',
-    //   (lastUsedBranchId ?? '')
-    // ].join();
     _graphQLLoginClient = GraphQLClient(
         link: HttpLink(
           _serverUrl,
@@ -55,7 +48,21 @@ class GlobalSettings extends ChangeNotifier {
     DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
   }
 
-  void setDemoData() {
+  void setDemoLoginData() {
+    var demoLoginData = {
+      'buCodes': ['demoUnit1'],
+      "buCodesWithPermissions": [],
+      'clientId': 2,
+      'lastUsedBranchId': 1,
+      'lastUsedBuCode': 'demoUnit1',
+      'token':
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJkIiwidXNlclR5cGUiOiJhIiwiaWQiOjIsImNsaWVudElkIjoyfQ.rZd0cUhxNqIHrl8Pp2pylYm0DLZA5kPRP6xx61xgkNw',
+      'uid': 'd',
+      'userType': 'a',
+      // id: 2,
+      // entityNames: ['accounts'],
+    };
+    setLoginData(demoLoginData);
     _initGraphQLMainClient();
   }
 

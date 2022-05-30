@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/data_store.dart';
 import 'package:trace_mobile/common/global_settings.dart';
 import 'package:trace_mobile/common/graphql/graphql_queries.dart';
-import 'package:trace_mobile/common/graphql/graphql_service.dart';
+// import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'dart:convert' show utf8, base64;
 import 'dart:convert';
 
@@ -21,8 +21,10 @@ class LoginPage extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
-    return SafeArea(
-      child: Scaffold(
+    return 
+    // SafeArea(
+    //   child: 
+      Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         // appBar: AppBar(title: Text('Trace login'),),
         body: Padding(
@@ -49,7 +51,7 @@ class LoginPage extends StatelessWidget {
                     controller: nameController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), labelText: 'User name'),
-                    style: const TextStyle(fontSize: 22))),
+                    style: const TextStyle(fontSize: 20))),
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(top: 20),
@@ -58,9 +60,9 @@ class LoginPage extends StatelessWidget {
                     controller: passwordController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), labelText: 'Password'),
-                    style: const TextStyle(fontSize: 22))),
+                    style: const TextStyle(fontSize: 20))),
             Container(
-                height: 60,
+                height: 50,
                 // padding: const EdgeInsets.only(top: 40),
                 margin: const EdgeInsets.only(top: 50),
                 child: ElevatedButton(
@@ -69,8 +71,8 @@ class LoginPage extends StatelessWidget {
                         context, nameController, passwordController))),
           ]),
         ),
-      ),
-    );
+      );
+    // );
   }
 
   void onLoginPressed(context, nameController, passwordController) async {

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DashBoard extends StatelessWidget {
@@ -7,7 +7,49 @@ class DashBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Dash board'), automaticallyImplyLeading: false,),
+      appBar: AppBar(
+        // automaticallyImplyLeading: false,
+        title: const Text('Dash board'),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search_rounded),
+              iconSize: 28),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Text('Trace menu'),
+            ),
+            ListTile(
+              title: const Text('Reports'),
+              onTap: (() {
+                Navigator.pop(context);
+              }),
+            ),
+            ListTile(
+              title: const Text('Stock tally'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: const Text('Bank reconcillation'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        ),
+      ),
       body: const Center(child: Text('Dashboard')),
     );
   }

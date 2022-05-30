@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 // import 'package:graphql_flutter/graphql_flutter.dart';
@@ -48,7 +49,7 @@ class TraceApp extends StatelessWidget {
     const textStyle =
         TextStyle(color: Colors.indigo, fontWeight: FontWeight.w600);
     return ThemeData(
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: Colors.grey.shade200,
         primarySwatch: Colors.indigo,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
@@ -57,10 +58,12 @@ class TraceApp extends StatelessWidget {
           )),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(4.0),
           )),
         )),
         textTheme: const TextTheme(
-            headline4: textStyle, headline5: textStyle, headline6: textStyle));
+            headline4: textStyle,
+            headline5: textStyle,
+            headline6: textStyle));
   }
 }

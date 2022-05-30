@@ -118,6 +118,9 @@ k. Server logging for modify and delete, time and log viewer
     Health:
     BS:
     PL:
+8. AppBar: Action buttons with label: Todays sale, Jakar, log out
+9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
+10. Use complementry colors of indigo
 
 
 
