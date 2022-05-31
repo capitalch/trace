@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 // import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/common/data_store.dart';
-import 'package:trace_mobile/common/global_settings.dart';
-import 'package:trace_mobile/common/graphql/graphql_queries.dart';
+import 'package:trace_mobile/common/classes/data_store.dart';
+import 'package:trace_mobile/common/classes/global_settings.dart';
+import 'package:trace_mobile/common/classes/graphql_queries.dart';
 // import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'dart:convert' show utf8, base64;
 import 'dart:convert';
 
-import 'package:trace_mobile/common/routes.dart';
+import 'package:trace_mobile/common/classes/routes.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -22,11 +22,8 @@ class LoginPage extends StatelessWidget {
     TextEditingController passwordController = TextEditingController();
 
     return 
-    // SafeArea(
-    //   child: 
       Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        // appBar: AppBar(title: Text('Trace login'),),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
           child: ListView(children: <Widget>[
@@ -34,14 +31,14 @@ class LoginPage extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   'Trace',
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.indigo),
                 )),
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.only(top: 30),
               child: Text(
                 'Login',
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headline4?.copyWith(color:Colors.indigo),
               ),
             ),
             Container(

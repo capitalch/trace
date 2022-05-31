@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/common/global_settings.dart';
-import '../../../common/routes.dart';
+import 'package:trace_mobile/common/classes/global_settings.dart';
+import '../../../common/classes/routes.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,10 +16,11 @@ class HomePage extends StatelessWidget {
             body: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Trace', style: Theme.of(context).textTheme.headline4, ),
-                    Text('Accounting on cloud', style: Theme.of(context).textTheme.headline5,),
+                    const Text(''),
+                    Text('Trace', style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.indigo), ),
+                    Text('Accounting on cloud', style: Theme.of(context).textTheme.headline3?.copyWith(color:Colors.indigo),),
                     // Text('This line is in Lato font', style: GoogleFonts.lato(textStyle: Theme.of(context).textTheme.headline5),),
                     Image.asset(
                       'assets/images/reports1.jpg',

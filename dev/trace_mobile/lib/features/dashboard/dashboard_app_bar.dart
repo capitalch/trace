@@ -1,7 +1,9 @@
 // import 'package:flutter/cupertino.dart';
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trace_mobile/common/classes/global_settings.dart';
 
 class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
   const DashboardAppBar({Key? key}) : super(key: key);
@@ -12,12 +14,12 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-        actions: [],
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // Menu
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -30,64 +32,63 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
                   onTap: () {},
                 ),
                 const SizedBox(
-                  width: 10,
+                  width: 15,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
+                  padding: const EdgeInsets.only(bottom: 1),
                   child: Text(
                     'Dashboard',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(color: Colors.black, fontSize: 20),
+                    style: Theme.of(context).textTheme.headline5,
                   ),
                 )
               ],
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TextButton(
-                  child: Text(
-                    'Sales',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6
-                        ?.copyWith(fontWeight: FontWeight.normal, fontSize: 18),
-                  ),
-                  onPressed: () {},
-                ),
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Icon(
-                      Icons.more_vert,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  onTap: () {},
-                )
-              ],
-            ),
+            // Sales
             InkWell(
               child: Padding(
                 padding: const EdgeInsets.all(5),
-                child: Row(mainAxisSize: MainAxisSize.min, children: const [
-                  Icon(
-                    Icons.logout,
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  const Icon(
+                    Icons.point_of_sale_sharp,
                     size: 25,
-                    color: Colors.red,
+                    color: Colors.indigo,
                   ),
-                  Text(
-                    'Logout',
-                    style: TextStyle(color: Colors.red),
-                  )
+                  Text('Sales',
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          ?.copyWith(color: Colors.indigo))
                 ]),
               ),
               onTap: () {},
+            ),
+            // Logout
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  const Icon(
+                    Icons.logout,
+                    size: 25,
+                    color: Colors.orange,
+                  ),
+                  Text('Logout',
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          ?.copyWith(color: Colors.orange))
+                ]),
+              ),
+              onTap: () {
+                logout(context);
+              },
             )
           ],
         ));
   }
+}
+
+void logout(BuildContext context) {
+  Provider.of<GlobalSettings>(context, listen: false).resetLoginData();
+  Navigator.pop(context);
 }

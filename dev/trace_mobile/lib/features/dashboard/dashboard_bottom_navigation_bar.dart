@@ -10,22 +10,28 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       elevation: 10,
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard), label: 'Dashboard', backgroundColor: Colors.pink,),
+          icon: Icon(Icons.dashboard),
+          label: 'Dashboard',
+          backgroundColor: Colors.pink,
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.ac_unit),
-            label: 'Jakar',
-            // backgroundColor: Colors.amber
-            ),
+          icon: Icon(Icons.ac_unit),
+          label: 'Stock',
+          // backgroundColor: Colors.amber
+        ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.account_tree), label: 'Accounts', backgroundColor: Colors.cyan,),
+            icon: Icon(Icons.search_sharp), label: 'Product'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet), label: 'Reconcile'),
+          icon: Icon(Icons.account_tree),
+          label: 'Accounts',
+          backgroundColor: Colors.cyan,
+        ),
         BottomNavigationBarItem(
             icon: Icon(Icons.balance_sharp), label: 'Health'),
       ],
       onTap: (value) {
         if (value == 0) {
-          Navigator.pushNamed(context, 'jakar');
+          Navigator.pushNamed(context, 'stock');
         }
       },
       selectedItemColor: Colors.black,

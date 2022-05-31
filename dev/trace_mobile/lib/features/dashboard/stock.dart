@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
 
-class Jakar extends StatelessWidget {
-  const Jakar({Key? key}) : super(key: key);
+class Stock extends StatelessWidget {
+  const Stock({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:trace_mobile/common/data_store.dart';
-import 'package:trace_mobile/common/utils.dart';
+import 'package:trace_mobile/common/classes/data_store.dart';
+import 'package:trace_mobile/common/classes/utils.dart';
 
 class GlobalSettings extends ChangeNotifier {
   GlobalSettings() {
