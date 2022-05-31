@@ -8,6 +8,7 @@ import 'package:trace_mobile/common/global_settings.dart';
 // import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'package:trace_mobile/features/authentication/screens/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard.dart';
+import 'package:trace_mobile/features/dashboard/jakar.dart';
 
 // import 'features/authentication/screens/home_page.dart';
 import 'features/authentication/screens/login_page.dart';
@@ -35,11 +36,12 @@ class TraceApp extends StatelessWidget {
         title: 'Trace',
         theme: getThemeData(),
         home: const HomePage(),
-        routes: {
+        routes: {          
+          'dashBoard': (BuildContext context) => const DashBoard(),
+          'jakar':(BuildContext context) => const Jakar(),
           'login': (BuildContext context) {
             return const LoginPage();
           },
-          'dashBoard': (BuildContext context) => const DashBoard()
         },
       ),
     ));
@@ -49,8 +51,13 @@ class TraceApp extends StatelessWidget {
     const textStyle =
         TextStyle(color: Colors.indigo, fontWeight: FontWeight.w600);
     return ThemeData(
-        backgroundColor: Colors.grey.shade200,
-        primarySwatch: Colors.indigo,
+        backgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          titleTextStyle: TextStyle(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.black, size: 24.0),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
           textStyle: const MaterialStatePropertyAll(TextStyle(
@@ -61,9 +68,9 @@ class TraceApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(4.0),
           )),
         )),
+        primarySwatch: Colors.indigo,
+        scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
-            headline4: textStyle,
-            headline5: textStyle,
-            headline6: textStyle));
+            headline4: textStyle, headline5: textStyle, headline6: textStyle, ));
   }
 }

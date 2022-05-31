@@ -105,7 +105,7 @@ class GlobalSettings extends ChangeNotifier {
   }
 
   Future loadLoginDataFromSecuredStorage() async {
-    String jLoginData = await DataStore.getLoginDataFromSecuredStorage();
+    String? jLoginData = await DataStore.getLoginDataFromSecuredStorage();
     if (Utils.isValidJson(jLoginData)) {
       setLoginDataFromJson(jLoginData);
       notifyListeners();
