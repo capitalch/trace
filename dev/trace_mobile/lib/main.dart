@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 // import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'package:trace_mobile/features/authentication/screens/home_page.dart';
-import 'package:trace_mobile/features/dashboard/dashboard.dart';
+import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
 import 'package:trace_mobile/features/dashboard/stock.dart';
 
 // import 'features/authentication/screens/home_page.dart';
@@ -37,8 +37,8 @@ class TraceApp extends StatelessWidget {
         theme: getThemeData(),
         home: const HomePage(),
         routes: {
-          'dashBoard': (BuildContext context) => const DashBoard(),
-          'jakar': (BuildContext context) => const Stock(),
+          'dashBoard': (BuildContext context) => const DashBoardPage(),
+          'stock': (BuildContext context) => const Stock(),
           'login': (BuildContext context) {
             return const LoginPage();
           },

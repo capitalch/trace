@@ -11,6 +11,7 @@ class GlobalSettings extends ChangeNotifier {
     _initGraphQLLoginClient();
     _finYearId = Utils.getCurrentFinYearId();
   }
+
   int? _clientId, _finYearId, _lastUsedBranchId;
   GraphQLClient? _graphQLLoginClient, _graphQLMainClient;
   String? _lastUsedBuCode, _token, _uid, _userType;
@@ -42,49 +43,6 @@ class GlobalSettings extends ChangeNotifier {
         cache: GraphQLCache(store: InMemoryStore()));
   }
 
-  void resetLoginData() async {
-    _buCodes = _buCodesWithPermissions = _clientId =
-        _lastUsedBranchId = _lastUsedBuCode = _token = _uid = _userType = null;
-    DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
-  }
-
-  void setDemoLoginData() {
-    var demoLoginData = {
-      'buCodes': ['demoUnit1'],
-      "buCodesWithPermissions": [],
-      'clientId': 2,
-      'lastUsedBranchId': 1,
-      'lastUsedBuCode': 'demoUnit1',
-      'token':
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJkIiwidXNlclR5cGUiOiJhIiwiaWQiOjIsImNsaWVudElkIjoyfQ.rZd0cUhxNqIHrl8Pp2pylYm0DLZA5kPRP6xx61xgkNw',
-      'uid': 'd',
-      'userType': 'a',
-      // id: 2,
-      // entityNames: ['accounts'],
-    };
-    setLoginData(demoLoginData);
-    _initGraphQLMainClient();
-  }
-
-  void setLoginData(
-    dynamic loginData,
-  ) {
-    _buCodes = loginData['buCodes'];
-    _buCodesWithPermissions = loginData['buCodesWithPermissions'];
-    _clientId = loginData['clientId'];
-    _lastUsedBranchId = loginData['lastUsedBranchId'];
-    _lastUsedBuCode = loginData['lastUsedBuCode'];
-    _token = loginData['token'];
-    _uid = loginData['uid'];
-    _userType = loginData['userType'];
-    _initGraphQLMainClient();
-  }
-
-  void setLoginDataFromJson(loginDataJson) {
-    Map<String, dynamic> loginDataObject = json.decode(loginDataJson);
-    setLoginData(loginDataObject);
-  }
-
   String getLoginDataAsJson() {
     Map<String, dynamic> jsonObject = {
       'buCodes': _buCodes,
@@ -110,6 +68,49 @@ class GlobalSettings extends ChangeNotifier {
       setLoginDataFromJson(jLoginData);
       notifyListeners();
     }
+  }
+
+  void resetLoginData() async {
+    _buCodes = _buCodesWithPermissions = _clientId =
+        _lastUsedBranchId = _lastUsedBuCode = _token = _uid = _userType = null;
+    DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
+    notifyListeners();
+  }
+
+  void setDemoLoginData() {
+    var demoLoginData = {
+      'buCodes': ['demoUnit1'],
+      "buCodesWithPermissions": [],
+      'clientId': 2,
+      'lastUsedBranchId': 1,
+      'lastUsedBuCode': 'demoUnit1',
+      'token':
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJkIiwidXNlclR5cGUiOiJhIiwiaWQiOjIsImNsaWVudElkIjoyfQ.rZd0cUhxNqIHrl8Pp2pylYm0DLZA5kPRP6xx61xgkNw',
+      'uid': 'd',
+      'userType': 'a',
+      // id: 2,
+      // entityNames: ['accounts'],
+    };
+    setLoginData(demoLoginData, isNotifyListeners: false);
+    _initGraphQLMainClient();
+  }
+
+  void setLoginData(dynamic loginData, {bool isNotifyListeners = true}) {
+    _buCodes = loginData['buCodes'];
+    _buCodesWithPermissions = loginData['buCodesWithPermissions'];
+    _clientId = loginData['clientId'];
+    _lastUsedBranchId = loginData['lastUsedBranchId'];
+    _lastUsedBuCode = loginData['lastUsedBuCode'];
+    _token = loginData['token'];
+    _uid = loginData['uid'];
+    _userType = loginData['userType'];
+    _initGraphQLMainClient();
+    isNotifyListeners ? notifyListeners() : null;
+  }
+
+  void setLoginDataFromJson(loginDataJson) {
+    Map<String, dynamic> loginDataObject = json.decode(loginDataJson);
+    setLoginData(loginDataObject);
   }
 
   List<dynamic>? get buCodes => _buCodes;

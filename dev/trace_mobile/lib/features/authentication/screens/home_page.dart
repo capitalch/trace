@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var globalSettings = Provider.of<GlobalSettings>(context);
+    var globalSettings = Provider.of<GlobalSettings>(context, listen: false);
     return 
         Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
@@ -57,7 +57,7 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var globalSettings = Provider.of<GlobalSettings>(context);
+    var globalSettings = Provider.of<GlobalSettings>(context,listen: true);
     bool isUserLoggedIn = globalSettings.isUserLoggedIn();
     return ElevatedButton.icon(
         onPressed: isUserLoggedIn

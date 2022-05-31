@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trace_mobile/common/classes/routes.dart';
 
 class DashboardBottomNavigationBar extends StatelessWidget {
   const DashboardBottomNavigationBar({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       ],
       onTap: (value) {
         if (value == 0) {
-          Navigator.pushNamed(context, 'stock');
+          Navigator.pushNamed(context, Routes.stock);
         }
       },
       selectedItemColor: Colors.black,
