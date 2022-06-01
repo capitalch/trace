@@ -14,85 +14,81 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-        AppBar(
-            automaticallyImplyLeading: false,
-            bottom: const PreferredSize(
-              preferredSize: Size.fromHeight(10),
-              child:Subheader()
-            ),
-            // backgroundColor: Colors.amber,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
+    return AppBar(
+        automaticallyImplyLeading: false,
+        bottom: const PreferredSize(
+            preferredSize: Size.fromHeight(10), child: Subheader()),
+        // backgroundColor: Colors.amber,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Menu
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // Menu
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      child: const Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Icon(Icons.menu_sharp,
-                            size: 30, color: Colors.black),
-                      ),
-                      onTap: () {},
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 1),
-                      child: Text(
-                        'Dashboard',
-                        style: Theme.of(context).textTheme.headline5,
-                      ),
-                    )
-                  ],
-                ),
-                // Sales
                 InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      const Icon(
-                        Icons.point_of_sale_sharp,
-                        size: 25,
-                        color: Colors.indigo,
-                      ),
-                      Text('Sales',
-                          style: Theme.of(context)
-                              .textTheme
-                              .button
-                              ?.copyWith(color: Colors.indigo))
-                    ]),
+                  child: const Padding(
+                    padding: EdgeInsets.all(5),
+                    child:
+                        Icon(Icons.menu_sharp, size: 30, color: Colors.black),
                   ),
                   onTap: () {},
                 ),
-                // Logout
-                InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: Row(mainAxisSize: MainAxisSize.min, children: [
-                      const Icon(
-                        Icons.logout,
-                        size: 25,
-                        color: Colors.orange,
-                      ),
-                      Text('Logout',
-                          style: Theme.of(context)
-                              .textTheme
-                              .button
-                              ?.copyWith(color: Colors.orange))
-                    ]),
+                const SizedBox(
+                  width: 15,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 1),
+                  child: Text(
+                    'Dashboard',
+                    style: Theme.of(context).textTheme.headline5,
                   ),
-                  onTap: () {
-                    logout(context);
-                  },
                 )
               ],
-            ))
-            ;
+            ),
+            // Sales
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  const Icon(
+                    Icons.point_of_sale_sharp,
+                    size: 25,
+                    color: Colors.indigo,
+                  ),
+                  Text('Sales',
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          ?.copyWith(color: Colors.indigo))
+                ]),
+              ),
+              onTap: () {},
+            ),
+            // Logout
+            InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  const Icon(
+                    Icons.logout,
+                    size: 25,
+                    color: Colors.orange,
+                  ),
+                  Text('Logout',
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          ?.copyWith(color: Colors.orange))
+                ]),
+              ),
+              onTap: () {
+                logout(context);
+              },
+            )
+          ],
+        ));
   }
 }
 

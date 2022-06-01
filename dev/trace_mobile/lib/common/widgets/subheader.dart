@@ -14,35 +14,42 @@ class Subheader extends StatelessWidget {
         InkWell(
           child: Container(
               padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-              width: 150,
+              width: 166,
               child: PreferredSize(
                 preferredSize: const Size.fromWidth(200),
                 child: Text(
                   '${globalSettings.lastUsedBuCode}',
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.indigo),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      ?.copyWith(color: Colors.indigo),
                 ),
               )),
           onTap: () {},
         ),
         InkWell(
-          child: Container(padding: EdgeInsets.only(left: 3,top:3,bottom: 3,right:0), child: Icon(Icons.add_sharp),),
-          onTap: () {            
-          },
+          child: Container(
+            padding: EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 0),
+            child: Icon(Icons.add_sharp),
+          ),
+          onTap: () {},
         ),
-  
         InkWell(
           child: Container(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: Text('2022'),
           ),
-           onTap: () {},
+          onTap: () {},
         ),
         InkWell(
-          child: Container(padding: EdgeInsets.only(left: 3,top:3,bottom: 3,right:0), child: Icon(Icons.remove_sharp,),),
-          
-          onTap: () {            
-          },
+          child: Container(
+            padding: EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 0),
+            child: Icon(
+              Icons.remove_sharp,
+            ),
+          ),
+          onTap: () {},
         ),
       ]),
     );
