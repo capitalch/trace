@@ -21,54 +21,59 @@ class LoginPage extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
 
-    return 
-      Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ListView(children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                child: Text(
-                  'Trace',
-                  style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.indigo),
-                )),
-            Container(
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ListView(children: <Widget>[
+          Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.only(top: 30),
               child: Text(
-                'Login',
-                style: Theme.of(context).textTheme.headline4?.copyWith(color:Colors.indigo),
-              ),
+                'Trace',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    ?.copyWith(color: Colors.indigo),
+              )),
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(top: 30),
+            child: Text(
+              'Login',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  ?.copyWith(color: Colors.indigo),
             ),
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 20),
-                child: TextField(
-                    controller: nameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'User name'),
-                    style: const TextStyle(fontSize: 20))),
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(top: 20),
-                child: TextField(
-                    obscureText: true,
-                    controller: passwordController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Password'),
-                    style: const TextStyle(fontSize: 20))),
-            Container(
-                height: 50,
-                // padding: const EdgeInsets.only(top: 40),
-                margin: const EdgeInsets.only(top: 50),
-                child: ElevatedButton(
-                    child: const Text('Login'),
-                    onPressed: () => onLoginPressed(
-                        context, nameController, passwordController))),
-          ]),
-        ),
-      );
+          ),
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 20),
+              child: TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), labelText: 'User name'),
+                  style: const TextStyle(fontSize: 20))),
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 20),
+              child: TextField(
+                  obscureText: true,
+                  controller: passwordController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), labelText: 'Password'),
+                  style: const TextStyle(fontSize: 20))),
+          Container(
+              height: 50,
+              // padding: const EdgeInsets.only(top: 40),
+              margin: const EdgeInsets.only(top: 50),
+              child: ElevatedButton(
+                  child: const Text('Login'),
+                  onPressed: () => onLoginPressed(
+                      context, nameController, passwordController))),
+        ]),
+      ),
+    );
     // );
   }
 
@@ -77,10 +82,12 @@ class LoginPage extends StatelessWidget {
     // var service = Provider.of<GraphQLService>(context, listen: false);
     var creds = [nameController.value.text, ':', passwordController.value.text];
     var credentials = base64.encode(utf8.encode(creds.join()));
-    var result = await globalSettings.graphQlLoginClient
-        ?.query(QueryOptions(document: gql(GraphQLQueries.login(credentials)), operationName: 'login'));
-    // var result = await service.client
-    //     .query(QueryOptions(document: gql(GraphQLQueries.login(credentials))));
+    var result = await globalSettings.graphQlLoginClient?.query(QueryOptions(
+        document: GraphQLQueries.login(credentials), operationName: 'login'));
+
+// var result = await globalSettings.graphQlLoginClient
+//         ?.query(GraphQLQueries.getGraphQLQuery('login', credentials, 'login'));
+
     var loginData = result?.data?['authentication']['doLogin'];
     // global variable from provider
 
@@ -104,6 +111,17 @@ class LoginPage extends StatelessWidget {
     String jLoginData = globalSettings.getLoginDataAsJson();
     // globalSettings.setLoginDataFromJson(j);
     await DataStore.setLoginDataInSecuredStorage(jLoginData);
+
+    dynamic values = GenericViewValues(
+        sqlKey: 'getJson_finYears_branches_nowFinYearIdDates_generalSettings',
+        args: null,
+        isMultipleRows: false).toJson();
+    var result1 = await globalSettings.graphQLMainClient?.query(
+      QueryOptions(
+          document: GraphQLQueries.genericView(values, 'accounts'),
+          operationName: 'genericView'),
+    );
+    print(result1);
     Navigator.pushReplacementNamed(context, Routes.dashBoard);
   }
 
