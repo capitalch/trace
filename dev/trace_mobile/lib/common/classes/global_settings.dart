@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:trace_mobile/common/classes/data_store.dart';
@@ -10,12 +11,17 @@ class GlobalSettings extends ChangeNotifier {
     loadLoginDataFromSecuredStorage();
     _initGraphQLLoginClient();
     _finYearId = Utils.getCurrentFinYearId();
+    if(kReleaseMode){
+      _serverUrl = 'https://develop.cloudjiffy.net/graphql';
+    } else {
+      _serverUrl = 'http://10.0.2.2:5000/graphql';
+    }
   }
 
   int? _clientId, _finYearId, _lastUsedBranchId;
   GraphQLClient? _graphQLLoginClient, _graphQLMainClient;
   String? _lastUsedBuCode, _token, _uid, _userType;
-  final String _serverUrl = 'http://10.0.2.2:5000/graphql';
+  String _serverUrl = 'http://10.0.2.2:5000/graphql';
   List<dynamic>? _buCodes = [];
   List<dynamic>? _buCodesWithPermissions;
 
