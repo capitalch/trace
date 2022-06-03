@@ -13,7 +13,9 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(70);
 
   @override
-  Widget build(BuildContext context) {
+  
+  Widget build(BuildContext context) { 
+    var globalSettings = Provider.of<GlobalSettings>(context, listen: true);   
     return AppBar(
         automaticallyImplyLeading: false,
         bottom: const PreferredSize(
@@ -51,18 +53,29 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
             InkWell(
               child: Padding(
                 padding: const EdgeInsets.all(5),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  const Icon(
-                    Icons.point_of_sale_sharp,
-                    size: 25,
-                    color: Colors.indigo,
-                  ),
-                  Text('Sales',
-                      style: Theme.of(context)
-                          .textTheme
-                          .button
-                          ?.copyWith(color: Colors.indigo))
-                ]),
+                child: PreferredSize(
+                preferredSize: const Size.fromWidth(200),
+                child: Text(
+                  '${globalSettings.lastUsedBuCode}',
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      ?.copyWith(color: Colors.indigo),
+                ),
+              )
+                // Row(mainAxisSize: MainAxisSize.min, children: [
+                //   const Icon(
+                //     Icons.point_of_sale_sharp,
+                //     size: 25,
+                //     color: Colors.indigo,
+                //   ),
+                //   Text('Sales',
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .button
+                //           ?.copyWith(color: Colors.indigo))
+                // ]),
               ),
               onTap: () {},
             ),

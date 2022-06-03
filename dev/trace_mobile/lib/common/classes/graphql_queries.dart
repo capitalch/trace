@@ -1,16 +1,9 @@
 import 'dart:convert';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:trace_mobile/common/classes/graphql_queries.dart';
-import 'package:trace_mobile/common/classes/graphql_queries.dart';
+import 'package:trace_mobile/common/classes/global_settings.dart';
 
 class GraphQLQueries {
-  static var queries = {
-    'login': (String credentials) => '''query login {
-         authentication {
-         doLogin(credentials:"$credentials")
-        }}''',
-  };
 
   static login(String credentials) {
     return gql('''query login {
@@ -19,38 +12,42 @@ class GraphQLQueries {
         }}''');
   }
 
-  static genericView(dynamic value, String entityName) {
-    return gql('''
+  static Future<QueryResult<Object>>? genericView({
+    required String sqlKey,
+    bool isMultipleRows = false,
+    Map<String, dynamic>? args,
+    required GlobalSettings globalSettings,
+    String entityName = 'accounts',
+  }) {
+    String value = GQLGenericViewValue(
+      sqlKey: sqlKey,
+      isMultipleRows: isMultipleRows,
+      args: args,
+    ).toString();
+    var gq = gql('''
       query genericView {
         $entityName {
           genericView(value: "$value")
         }
       }
-''');
-  }
-
-  static dynamic getGraphQLQuery(
-      String queryName, dynamic queryArgs, String operationName) {
-    return (QueryOptions(
-        document: gql(queries['login']!(queryArgs)),
-        operationName: operationName));
+    ''');
+    return globalSettings.graphQLMainClient?.query(
+      QueryOptions(document: gq, operationName: 'genericView'),
+    );
   }
 }
 
-class GenericViewValues {
-  GenericViewValues(
-      {required this.sqlKey, this.isMultipleRows = false, this.args}) {}
+class GQLGenericViewValue {
+  GQLGenericViewValue(
+      {required this.sqlKey, this.isMultipleRows = false, this.args});
   final String sqlKey;
-  bool isMultipleRows;
-  dynamic args = [];
-
-  Map<String, dynamic> toJson() {
-    return {"sqlKey": sqlKey, "isMultipleRows": isMultipleRows, "args": args};
-  }
+  final bool isMultipleRows;
+  final Map<String, dynamic>? args;
 
   @override
   String toString() {
-    return json.encode(
+    String str = json.encode(
         {"sqlKey": sqlKey, "isMultipleRows": isMultipleRows, "args": args});
+    return Uri.encodeFull(str);
   }
 }

@@ -1476,6 +1476,18 @@ allSqls = {
             ) as "jsonResult"
         ''',
 
+    "getJson_datacache_mobile": '''
+        with cte1 as (
+		select id, "branchName", "branchCode"
+			from "BranchM")
+        select json_build_object(
+            'unitInfo', (select "jData" 
+            from "Settings"
+                where "key" = 'unitInfo'),
+            'allBranches', (select json_agg(row_to_json(a)) from cte1 a)
+        ) as "jsonResult"
+    ''',
+
     "getJson_debit_credit_note": '''
         select h."id", "tranDate", "remarks", h."jData", "posId", "autoRefNo", "userRefNo",
                 (

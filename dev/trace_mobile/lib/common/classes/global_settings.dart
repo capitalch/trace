@@ -10,25 +10,27 @@ class GlobalSettings extends ChangeNotifier {
     // constructor loads loginData from secured storage
     loadLoginDataFromSecuredStorage();
     _initGraphQLLoginClient();
-    _finYearId = Utils.getCurrentFinYearId();
-    if(kReleaseMode){
-      _serverUrl = 'https://develop.cloudjiffy.net/graphql';
+    finYearId = Utils.getCurrentFinYearId();
+    if (kReleaseMode) {
+      serverUrl = 'https://develop.cloudjiffy.net/graphql';
     } else {
-      _serverUrl = 'http://10.0.2.2:5000/graphql';
+      serverUrl = 'http://10.0.2.2:5000/graphql';
     }
   }
 
-  int? _clientId, _finYearId, _lastUsedBranchId;
-  GraphQLClient? _graphQLLoginClient, _graphQLMainClient;
-  String? _lastUsedBuCode, _token, _uid, _userType;
-  String _serverUrl = 'http://10.0.2.2:5000/graphql';
-  List<dynamic>? _buCodes = [];
-  List<dynamic>? _buCodesWithPermissions;
+  int? clientId, finYearId, lastUsedBranchId;
+  GraphQLClient? graphQLLoginClient, graphQLMainClient;
+  String? lastUsedBuCode, token, uid, userType;
+  String serverUrl = 'http://10.0.2.2:5000/graphql';
+  List<dynamic>? buCodes = [];
+  List<dynamic>? buCodesWithPermissions;
+  Map<String, String> unitInfo = {};
+  List<Map<String, dynamic>> allBranches = [];
 
   void _initGraphQLLoginClient() {
-    _graphQLLoginClient = GraphQLClient(
+    graphQLLoginClient = GraphQLClient(
         link: HttpLink(
-          _serverUrl,
+          serverUrl,
         ),
         cache: GraphQLCache(store: InMemoryStore()));
   }
@@ -41,9 +43,9 @@ class GlobalSettings extends ChangeNotifier {
       ':',
       (lastUsedBranchId ?? '1')
     ].join();
-    _graphQLMainClient = GraphQLClient(
-        link: HttpLink(_serverUrl, defaultHeaders: {
-          'authorization': (_token == null) ? '' : 'Bearer $_token',
+    graphQLMainClient = GraphQLClient(
+        link: HttpLink(serverUrl, defaultHeaders: {
+          'authorization': (token == null) ? '' : 'Bearer $token',
           'SELECTION-CRITERIA': selectionCriteria
         }),
         cache: GraphQLCache(store: InMemoryStore()));
@@ -51,20 +53,20 @@ class GlobalSettings extends ChangeNotifier {
 
   String getLoginDataAsJson() {
     Map<String, dynamic> jsonObject = {
-      'buCodes': _buCodes,
-      'buCodesWithPermissions': _buCodesWithPermissions,
-      'clientId': _clientId,
-      'lastUsedBranchId': _lastUsedBranchId,
-      'lastUsedBuCode': _lastUsedBuCode,
-      'token': _token,
-      'uid': _uid,
-      'userType': _userType,
+      'buCodes': buCodes,
+      'buCodesWithPermissions': buCodesWithPermissions,
+      'clientId': clientId,
+      'lastUsedBranchId': lastUsedBranchId,
+      'lastUsedBuCode': lastUsedBuCode,
+      'token': token,
+      'uid': uid,
+      'userType': userType,
     };
     return json.encode(jsonObject);
   }
 
   bool isUserLoggedIn() {
-    bool ret = (_token == null) || (_uid == null) || (_clientId == null);
+    bool ret = (token == null) || (uid == null) || (clientId == null);
     return (!ret);
   }
 
@@ -77,9 +79,9 @@ class GlobalSettings extends ChangeNotifier {
   }
 
   void resetLoginData() async {
-    _buCodes = _buCodesWithPermissions = _clientId =
-        _lastUsedBranchId = _lastUsedBuCode = _token = _uid = _userType = null;
-    DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
+    buCodes = buCodesWithPermissions = clientId =
+        lastUsedBranchId = lastUsedBuCode = token = uid = userType = null;
+    await DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
     notifyListeners();
   }
 
@@ -97,20 +99,22 @@ class GlobalSettings extends ChangeNotifier {
       // id: 2,
       // entityNames: ['accounts'],
     };
+    allBranches.add({'id': 1, 'branchName': 'Head office', 'branchCode': 'HD'});
     setLoginData(demoLoginData, isNotifyListeners: false);
     _initGraphQLMainClient();
   }
 
-  void setLoginData(dynamic loginData, {bool isNotifyListeners = true}) {
-    _buCodes = loginData['buCodes'];
-    _buCodesWithPermissions = loginData['buCodesWithPermissions'];
-    _clientId = loginData['clientId'];
-    _lastUsedBranchId = loginData['lastUsedBranchId'];
-    _lastUsedBuCode = loginData['lastUsedBuCode'];
-    _token = loginData['token'];
-    _uid = loginData['uid'];
-    _userType = loginData['userType'];
+  void setLoginData(dynamic loginData, {bool isNotifyListeners = true}) async {
+    buCodes = loginData['buCodes'];
+    buCodesWithPermissions = loginData['buCodesWithPermissions'];
+    clientId = loginData['clientId'];
+    lastUsedBranchId = loginData['lastUsedBranchId'];
+    lastUsedBuCode = loginData['lastUsedBuCode'];
+    token = loginData['token'];
+    uid = loginData['uid'];
+    userType = loginData['userType'];
     _initGraphQLMainClient();
+    await DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
     isNotifyListeners ? notifyListeners() : null;
   }
 
@@ -119,15 +123,9 @@ class GlobalSettings extends ChangeNotifier {
     setLoginData(loginDataObject);
   }
 
-  List<dynamic>? get buCodes => _buCodes;
-  List<dynamic>? get buCodesWithPermissions => _buCodesWithPermissions;
-  int? get clientId => _clientId;
-  int? get finYearId => _finYearId;
-  GraphQLClient? get graphQlLoginClient => _graphQLLoginClient;
-  GraphQLClient? get graphQLMainClient => _graphQLMainClient;
-  int? get lastUsedBranchId => _lastUsedBranchId;
-  String? get lastUsedBuCode => _lastUsedBuCode;
-  String? get token => _token;
-  String? get uid => _uid;
-  String? get userType => _userType;
+  void setUnitInfoAndBranches(dynamic ui, dynamic bchs) {
+    unitInfo = Map<String, String>.from(ui);
+    allBranches = List<Map<String, dynamic>>.from(bchs);
+    notifyListeners();
+  }
 }

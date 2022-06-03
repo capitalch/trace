@@ -7,27 +7,29 @@ class Subheader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var globalSettings = Provider.of<GlobalSettings>(context);
+    var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return Container(
       padding: const EdgeInsets.only(left: 15),
-      child: Row(children: [
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+        // buCode
         InkWell(
           child: Container(
-              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-              width: 166,
-              child: PreferredSize(
-                preferredSize: const Size.fromWidth(200),
-                child: Text(
-                  '${globalSettings.lastUsedBuCode}',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.copyWith(color: Colors.indigo),
-                ),
-              )),
+            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+            // width: 166,
+            child: Text(
+              '${globalSettings.unitInfo['unitName']}',
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  ?.copyWith(color: Colors.indigo),
+            ),
+          ),
           onTap: () {},
         ),
+        // add icon
         InkWell(
           child: Container(
             padding: EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 0),
@@ -35,6 +37,7 @@ class Subheader extends StatelessWidget {
           ),
           onTap: () {},
         ),
+        // Year
         InkWell(
           child: Container(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -43,6 +46,7 @@ class Subheader extends StatelessWidget {
           onTap: () {},
         ),
         InkWell(
+          // minus icon
           child: Container(
             padding: EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 0),
             child: Icon(

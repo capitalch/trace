@@ -1,6 +1,21 @@
 import 'dart:convert';
 
+import 'package:trace_mobile/common/classes/graphql_queries.dart';
+
 class Utils {
+
+  static void execDataCache(context, globalSettings) async {
+    var result = await GraphQLQueries.genericView(
+        sqlKey: 'getJson_datacache_mobile', globalSettings: globalSettings);
+  
+    Map<String, dynamic> jsonResult =
+        (result?.data?['accounts']?['genericView']?['jsonResult']);
+
+    globalSettings.setUnitInfoAndBranches(
+        jsonResult['unitInfo'], jsonResult['allBranches']);
+    
+  }
+
   static int getCurrentFinYearId() {
     int month = DateTime.now().month;
     int year = DateTime.now().year;

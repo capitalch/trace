@@ -11,6 +11,7 @@ import 'dart:convert' show utf8, base64;
 import 'dart:convert';
 
 import 'package:trace_mobile/common/classes/routes.dart';
+import 'package:trace_mobile/common/classes/utils.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -77,52 +78,51 @@ class LoginPage extends StatelessWidget {
     // );
   }
 
+  // void execDataCache(context, globalSettings) async {
+  //   var result = await GraphQLQueries.genericView(
+  //       sqlKey: 'getJson_datacache_mobile', globalSettings: globalSettings);
+
+  //   Map<String, dynamic> jsonResult =
+  //       (result?.data?['accounts']?['genericView']?['jsonResult']);
+
+  //   globalSettings.setUnitInfoAndBranches(
+  //       jsonResult['unitInfo'], jsonResult['allBranches']);
+  // }
+
   void onLoginPressed(context, nameController, passwordController) async {
-    var globalSettings = Provider.of<GlobalSettings>(context, listen: false);
-    // var service = Provider.of<GraphQLService>(context, listen: false);
-    var creds = [nameController.value.text, ':', passwordController.value.text];
-    var credentials = base64.encode(utf8.encode(creds.join()));
-    var result = await globalSettings.graphQlLoginClient?.query(QueryOptions(
-        document: GraphQLQueries.login(credentials), operationName: 'login'));
+    try {
+      var globalSettings = Provider.of<GlobalSettings>(context, listen: false);
+      var creds = [
+        nameController.value.text,
+        ':',
+        passwordController.value.text
+      ];
+      var credentials = base64.encode(utf8.encode(creds.join()));
+      var result = await globalSettings.graphQLLoginClient?.query(QueryOptions(
+          document: GraphQLQueries.login(credentials), operationName: 'login'));
 
-// var result = await globalSettings.graphQlLoginClient
-//         ?.query(GraphQLQueries.getGraphQLQuery('login', credentials, 'login'));
+      var loginData = result?.data?['authentication']['doLogin'];
+      if (loginData == null) {
+        globalSettings.resetLoginData();
+        showSnackBar(context);
+        return;
+      }
 
-    var loginData = result?.data?['authentication']['doLogin'];
-    // global variable from provider
-
-    if (loginData == null) {
-      globalSettings.resetLoginData();
-      showSnackBar(context);
-      // Navigator.pop(context);
-      return;
+      List<dynamic>? buCodesWithPermissionsTemp =
+          loginData['buCodesWithPermissions'];
+      List<Map<String, dynamic>>? buCodesWithPermissions =
+          buCodesWithPermissionsTemp?.cast<Map<String, dynamic>>().toList();
+      Iterable? bues = buCodesWithPermissions?.map((e) => e['buCode']);
+      List<dynamic>? buCodes = bues?.cast<dynamic>().toList();
+      loginData['buCodes'] = buCodes;
+      loginData['buCodesWithPermissions'] = buCodesWithPermissionsTemp;
+      globalSettings.setLoginData(loginData);
+      Navigator.pushReplacementNamed(context, Routes.dashBoard);
+      Utils.execDataCache(context, globalSettings);
+      // execDataCache(context, globalSettings);
+    } catch (error) {
+      // print(error);
     }
-
-    List<dynamic>? buCodesWithPermissionsTemp =
-        loginData['buCodesWithPermissions'];
-    List<Map<String, dynamic>>? buCodesWithPermissions =
-        buCodesWithPermissionsTemp?.cast<Map<String, dynamic>>().toList();
-    Iterable? bues = buCodesWithPermissions?.map((e) => e['buCode']);
-    List<dynamic>? buCodes = bues?.cast<dynamic>().toList();
-    loginData['buCodes'] = buCodes;
-    loginData['buCodesWithPermissions'] = buCodesWithPermissionsTemp;
-    // localStorage.setItem('loginData', loginData);
-    globalSettings.setLoginData(loginData);
-    String jLoginData = globalSettings.getLoginDataAsJson();
-    // globalSettings.setLoginDataFromJson(j);
-    await DataStore.setLoginDataInSecuredStorage(jLoginData);
-
-    dynamic values = GenericViewValues(
-        sqlKey: 'getJson_finYears_branches_nowFinYearIdDates_generalSettings',
-        args: null,
-        isMultipleRows: false).toJson();
-    var result1 = await globalSettings.graphQLMainClient?.query(
-      QueryOptions(
-          document: GraphQLQueries.genericView(values, 'accounts'),
-          operationName: 'genericView'),
-    );
-    print(result1);
-    Navigator.pushReplacementNamed(context, Routes.dashBoard);
   }
 
   void showSnackBar(context) {

@@ -14,6 +14,10 @@
 14. Tables
 15. Deployment
 
+## To do in mobile
+1. Remove sales from App bar and put Bu over there; click allows to change BU in alert box.
+2. Subheader shows company name, fy year range and branch. fy year and branch can change on alert box.
+
 ## Appearance
 #. Theme.of(context).textTheme.headline4
 
