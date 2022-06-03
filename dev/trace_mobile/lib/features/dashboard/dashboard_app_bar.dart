@@ -13,9 +13,8 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(70);
 
   @override
-  
-  Widget build(BuildContext context) { 
-    var globalSettings = Provider.of<GlobalSettings>(context, listen: true);   
+  Widget build(BuildContext context) {
+    var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return AppBar(
         automaticallyImplyLeading: false,
         bottom: const PreferredSize(
@@ -27,72 +26,64 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
           children: [
             // Menu
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
                   child: const Padding(
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsets.all(0),
                     child:
                         Icon(Icons.menu_sharp, size: 30, color: Colors.black),
                   ),
                   onTap: () {},
                 ),
-                const SizedBox(
-                  width: 15,
-                ),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 1),
+                  padding: const EdgeInsets.only(left: 5),
                   child: Text(
                     'Dashboard',
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                )
+                ),
               ],
             ),
-            // Sales
+            // Bu
             InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: PreferredSize(
-                preferredSize: const Size.fromWidth(200),
-                child: Text(
-                  '${globalSettings.lastUsedBuCode}',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      ?.copyWith(color: Colors.indigo),
-                ),
-              )
-                // Row(mainAxisSize: MainAxisSize.min, children: [
-                //   const Icon(
-                //     Icons.point_of_sale_sharp,
-                //     size: 25,
-                //     color: Colors.indigo,
-                //   ),
-                //   Text('Sales',
-                //       style: Theme.of(context)
-                //           .textTheme
-                //           .button
-                //           ?.copyWith(color: Colors.indigo))
-                // ]),
-              ),
-              onTap: () {},
+              child: Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 3),
+                  decoration: const BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: Colors.indigo,
+                  ))),
+                  child: SizedBox(
+                    width: 150,
+                    child: Text(
+                      '${globalSettings.lastUsedBuCode}',
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                            color: Colors.indigo,
+                            // decoration: TextDecoration.underline
+                          ),
+                    ),
+                  )),
+              onTap: () {
+                changeBuCode(context, globalSettings);
+              },
             ),
             // Logout
             InkWell(
               child: Padding(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(0),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   const Icon(
                     Icons.logout,
-                    size: 25,
+                    size: 15,
                     color: Colors.orange,
                   ),
                   Text('Logout',
                       style: Theme.of(context)
                           .textTheme
-                          .button
+                          .caption
                           ?.copyWith(color: Colors.orange))
                 ]),
               ),
@@ -109,3 +100,55 @@ void logout(BuildContext context) {
   Provider.of<GlobalSettings>(context, listen: false).resetLoginData();
   Navigator.pop(context);
 }
+
+changeBuCode(BuildContext context, GlobalSettings globalSettings) async {
+  var result = await showDialog(
+    barrierDismissible: false,
+    context: context,
+    
+    builder: (context) {
+      return (SimpleDialog(
+          title: const Text('Select a business unit'),
+          children: getBusinessUnitOptions(context, globalSettings)
+          
+          // [
+          //   SimpleDialogOption(
+          //     onPressed: () {
+          //       Navigator.pop(context, 1);
+          //     },
+          //     child: Text('Capital 1'),
+          //   )
+          // ],
+          ));
+    },
+  );
+  globalSettings.setLastUsedBuCode(result);
+}
+
+List<SimpleDialogOption>? getBusinessUnitOptions(
+    BuildContext context, GlobalSettings globalSettings) {
+  List<dynamic>? buCodes = globalSettings.buCodes;
+  var buCodesList = buCodes?.map((e) {
+    return SimpleDialogOption(
+      onPressed: () {
+        Navigator.pop(context, e.toString());
+      },
+      child: Text(e.toString()),
+    );
+  }).toList();
+
+  return buCodesList;
+}
+
+// Row(mainAxisSize: MainAxisSize.min, children: [
+//   const Icon(
+//     Icons.point_of_sale_sharp,
+//     size: 25,
+//     color: Colors.indigo,
+//   ),
+//   Text('Sales',
+//       style: Theme.of(context)
+//           .textTheme
+//           .button
+//           ?.copyWith(color: Colors.indigo))
+// ]),

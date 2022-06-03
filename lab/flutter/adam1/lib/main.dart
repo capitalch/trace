@@ -1,12 +1,12 @@
+import 'package:adam1/widgets/alert_demo.dart';
+import 'package:adam1/widgets/dialog_select_demo.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import './widgets/hello_custom_app_bar.dart';
 import './widgets/dictionary-words.dart';
 import './widgets/provider-counter.dart';
 import './classes/counter.dart';
 import './widgets/value-listenable-builder-counter.dart';
-import './widgets/stream-counter.dart';
 import './widgets/graphql.dart';
 
 void main() {
@@ -18,29 +18,25 @@ class MyRootApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return (
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => Counter()),
-          ],
-          child: MaterialApp(
-            home: const MyHomePage(),
-            theme: ThemeData(
-                brightness: Brightness.values[1],
-                primaryColor: Colors.yellow,
-                fontFamily: 'Lato',
-                textButtonTheme: TextButtonThemeData(
-                    style: ButtonStyle(
-                        foregroundColor:
-                        MaterialStateProperty.all(Colors.brown))),
-                elevatedButtonTheme: ElevatedButtonThemeData(
-                    style: ButtonStyle(
-                        backgroundColor:
+    return (MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Counter()),
+      ],
+      child: MaterialApp(
+        home: const MyHomePage(),
+        theme: ThemeData(
+            brightness: Brightness.values[1],
+            primaryColor: Colors.yellow,
+            fontFamily: 'Lato',
+            textButtonTheme: TextButtonThemeData(
+                style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(Colors.brown))),
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ButtonStyle(
+                    backgroundColor:
                         MaterialStateProperty.all(Colors.indigo)))),
-          ),
-        )
-    );
+      ),
+    ));
   }
 }
 
@@ -130,7 +126,19 @@ class MyHomePage extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => const GraphQL()));
                       },
-                      child: const Text('GraphQL'))
+                      child: const Text('GraphQL')),
+                  TextButton(onPressed: () {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AlertDemo()));
+                  }, child: const Text('Alert box')),
+                  TextButton(onPressed: () {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const DialogSelectDemo()));
+                  }, child: const Text('Dialog select box'))
                 ],
               ),
             ),

@@ -104,6 +104,11 @@ class GlobalSettings extends ChangeNotifier {
     _initGraphQLMainClient();
   }
 
+  void setLastUsedBuCode(String buCode) {
+    lastUsedBuCode = buCode;
+    notifyListeners();
+  }
+
   void setLoginData(dynamic loginData, {bool isNotifyListeners = true}) async {
     buCodes = loginData['buCodes'];
     buCodesWithPermissions = loginData['buCodesWithPermissions'];

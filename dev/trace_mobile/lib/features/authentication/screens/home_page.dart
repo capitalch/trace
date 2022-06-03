@@ -43,8 +43,7 @@ class HomePage extends StatelessWidget {
                       ElevatedButton.icon(
                           onPressed: () {
                             onDemoPressed(context, globalSettings);
-                            Navigator.pushNamed(
-                                context, Routes.dashBoard);
+                            Navigator.pushNamed(context, Routes.dashBoard);
                             // Navigator.pushNamed(context, Routes.dashBoard);
                           },
                           icon: const Icon(Icons.account_tree),
@@ -80,6 +79,7 @@ class NextButton extends StatelessWidget {
     return ElevatedButton.icon(
         onPressed: isUserLoggedIn
             ? () {
+                Utils.execDataCache(context, globalSettings);
                 Navigator.pushNamed(context, Routes.dashBoard);
               }
             : null,

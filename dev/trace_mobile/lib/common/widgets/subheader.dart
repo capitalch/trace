@@ -19,12 +19,12 @@ class Subheader extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
             // width: 166,
             child: Text(
-              '${globalSettings.unitInfo['unitName']}',
+              globalSettings.unitInfo['unitName'] ?? '',
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context)
                   .textTheme
                   .bodyText2
-                  ?.copyWith(color: Colors.indigo),
+                  // ?.copyWith(color: Colors.indigo),
             ),
           ),
           onTap: () {},
