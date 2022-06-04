@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
+import 'package:trace_mobile/common/classes/utils.dart';
 import 'package:trace_mobile/common/widgets/subheader.dart';
 
 class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -105,24 +106,27 @@ changeBuCode(BuildContext context, GlobalSettings globalSettings) async {
   var result = await showDialog(
     barrierDismissible: false,
     context: context,
-    
     builder: (context) {
       return (SimpleDialog(
-          title: const Text('Select a business unit'),
-          children: getBusinessUnitOptions(context, globalSettings)
-          
-          // [
-          //   SimpleDialogOption(
-          //     onPressed: () {
-          //       Navigator.pop(context, 1);
-          //     },
-          //     child: Text('Capital 1'),
-          //   )
-          // ],
-          ));
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Select a business unit'),
+              InkWell(
+                child: const Icon(Icons.close),
+                onTap: () {
+                  Navigator.pop(context, '0');
+                },
+              ),
+            ],
+          ),
+          children: getBusinessUnitOptions(context, globalSettings)));
     },
   );
-  globalSettings.setLastUsedBuCode(result);
+  if (result != '0') {
+    globalSettings.setLastUsedBuCode(result);
+    Utils.execDataCache(globalSettings);
+  }
 }
 
 List<SimpleDialogOption>? getBusinessUnitOptions(

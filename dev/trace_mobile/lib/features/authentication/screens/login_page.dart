@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
       loginData['buCodesWithPermissions'] = buCodesWithPermissionsTemp;
       globalSettings.setLoginData(loginData);
       Navigator.pushReplacementNamed(context, Routes.dashBoard);
-      Utils.execDataCache(context, globalSettings);
+      Utils.execDataCache(globalSettings);
       // execDataCache(context, globalSettings);
     } catch (error) {
       // print(error);

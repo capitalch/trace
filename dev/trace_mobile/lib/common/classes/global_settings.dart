@@ -18,7 +18,8 @@ class GlobalSettings extends ChangeNotifier {
     }
   }
 
-  int? clientId, finYearId, lastUsedBranchId;
+  // int userId = 0;
+  int? clientId, finYearId, lastUsedBranchId, userId;
   GraphQLClient? graphQLLoginClient, graphQLMainClient;
   String? lastUsedBuCode, token, uid, userType;
   String serverUrl = 'http://10.0.2.2:5000/graphql';
@@ -61,6 +62,7 @@ class GlobalSettings extends ChangeNotifier {
       'token': token,
       'uid': uid,
       'userType': userType,
+      'userId': userId
     };
     return json.encode(jsonObject);
   }
@@ -79,8 +81,8 @@ class GlobalSettings extends ChangeNotifier {
   }
 
   void resetLoginData() async {
-    buCodes = buCodesWithPermissions = clientId =
-        lastUsedBranchId = lastUsedBuCode = token = uid = userType = null;
+    buCodes = buCodesWithPermissions = clientId = lastUsedBranchId =
+        lastUsedBuCode = token = uid = userType = userId = null;
     await DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
     notifyListeners();
   }
@@ -96,7 +98,7 @@ class GlobalSettings extends ChangeNotifier {
           'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiJkIiwidXNlclR5cGUiOiJhIiwiaWQiOjIsImNsaWVudElkIjoyfQ.rZd0cUhxNqIHrl8Pp2pylYm0DLZA5kPRP6xx61xgkNw',
       'uid': 'd',
       'userType': 'a',
-      // id: 2,
+      "id": 2,
       // entityNames: ['accounts'],
     };
     allBranches.add({'id': 1, 'branchName': 'Head office', 'branchCode': 'HD'});
@@ -106,7 +108,7 @@ class GlobalSettings extends ChangeNotifier {
 
   void setLastUsedBuCode(String buCode) {
     lastUsedBuCode = buCode;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void setLoginData(dynamic loginData, {bool isNotifyListeners = true}) async {
@@ -118,6 +120,7 @@ class GlobalSettings extends ChangeNotifier {
     token = loginData['token'];
     uid = loginData['uid'];
     userType = loginData['userType'];
+    userId = loginData['id'];
     _initGraphQLMainClient();
     await DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
     isNotifyListeners ? notifyListeners() : null;

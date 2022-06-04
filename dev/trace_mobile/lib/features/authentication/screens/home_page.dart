@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
 
   onDemoPressed(BuildContext context, GlobalSettings globalSettings) async {
     globalSettings.setDemoLoginData();
-    Utils.execDataCache(context, globalSettings);
+    Utils.execDataCache(globalSettings);
   }
 }
 
@@ -79,7 +79,7 @@ class NextButton extends StatelessWidget {
     return ElevatedButton.icon(
         onPressed: isUserLoggedIn
             ? () {
-                Utils.execDataCache(context, globalSettings);
+                Utils.execDataCache(globalSettings);
                 Navigator.pushNamed(context, Routes.dashBoard);
               }
             : null,
