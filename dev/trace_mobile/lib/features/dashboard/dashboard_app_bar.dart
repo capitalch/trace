@@ -19,6 +19,7 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
     var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return AppBar(
         automaticallyImplyLeading: false,
+        // backgroundColor: Colors.grey.shade400,
         bottom: const PreferredSize(
             preferredSize: Size.fromHeight(10), child: DashboardSubheader()),
         // backgroundColor: Colors.amber,
@@ -33,9 +34,9 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
               children: [
                 InkWell(
                   child: const Padding(
-                    padding: EdgeInsets.all(0),
+                    padding: EdgeInsets.only(right: 5),
                     child:
-                        Icon(Icons.menu_sharp, size: 30, color: Colors.black),
+                        Icon(Icons.menu_sharp, size: 30, ),
                   ),
                   onTap: () {},
                 ),

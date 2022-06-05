@@ -273,6 +273,8 @@ def resolve_generic_view(parent, info, value):
     valueDict = demJson.decode(value)
     sqlKey = valueDict['sqlKey']
     sqlString = allSqls[sqlKey]
+    if(valueDict.get('args') is None):
+        valueDict['args'] = {}
     valueDict['args']['clientId'] = clientId
     if 'finYearId' not in valueDict['args']:
         valueDict['args']['finYearId'] = finYearId

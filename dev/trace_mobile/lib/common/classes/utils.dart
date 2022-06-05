@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 
@@ -41,5 +41,31 @@ class Utils {
       }
     }
     return (ret);
+  }
+
+  static void showAlert(
+      {required BuildContext context,
+      String title = 'Alert',
+      required String message}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return (AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title),
+              InkWell(
+                child: const Icon(Icons.close),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ),
+          content: Text(message),
+        ));
+      },
+    );
   }
 }

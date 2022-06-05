@@ -5,7 +5,8 @@ import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'dart:convert' show utf8, base64;
 import 'dart:convert';
-
+import 'package:http/http.dart';
+import 'package:trace_mobile/common/classes/messages.dart';
 import 'package:trace_mobile/common/classes/routes.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
 
@@ -46,6 +47,7 @@ class LoginPage extends StatelessWidget {
               alignment: Alignment.center,
               padding: const EdgeInsets.only(top: 20),
               child: TextField(
+                  autocorrect: false,
                   controller: nameController,
                   decoration: const InputDecoration(
                       border: OutlineInputBorder(), labelText: 'User name'),
@@ -57,7 +59,9 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   controller: passwordController,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: 'Password'),
+                    border: OutlineInputBorder(),
+                    labelText: 'Password',
+                  ),
                   style: const TextStyle(fontSize: 20))),
           Container(
               height: 50,
@@ -75,18 +79,33 @@ class LoginPage extends StatelessWidget {
   void onLoginPressed(context, nameController, passwordController) async {
     try {
       var globalSettings = Provider.of<GlobalSettings>(context, listen: false);
-      var creds = [
-        nameController.value.text,
-        ':',
-        passwordController.value.text
-      ];
+      String? uid = nameController.value.text;
+      String? pwd = passwordController.value.text;
+      if ((uid == null) || (uid.isEmpty) || (pwd == null) || (pwd.isEmpty)) {
+        Utils.showAlert(
+            context: context, message: Messages.errEmpty, title: 'Error');
+        return;
+      }
+      var creds = [uid, ':', pwd];
       var credentials = base64.encode(utf8.encode(creds.join()));
-      var result = await globalSettings.graphQLLoginClient?.query(QueryOptions(
-          document: GraphQLQueries.login(credentials), operationName: 'login'));
+
+      var result = await globalSettings.graphQLLoginClient
+          ?.query(QueryOptions(
+              document: GraphQLQueries.login(credentials),
+              operationName: 'login'))
+          .timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          throw Exception('Timeout error');
+        },
+      );
 
       var loginData = result?.data?['authentication']['doLogin'];
+
       if (loginData == null) {
         globalSettings.resetLoginData();
+        Utils.showAlert(
+            context: context, title: 'Error', message: Messages.errLogin);
         showSnackBar(context);
         return;
       }
@@ -103,7 +122,7 @@ class LoginPage extends StatelessWidget {
       Navigator.pushReplacementNamed(context, Routes.dashBoard);
       Utils.execDataCache(globalSettings);
     } catch (error) {
-      // print(error);
+      Utils.showAlert(context: context, message: Messages.errInternetLogin);
     }
   }
 

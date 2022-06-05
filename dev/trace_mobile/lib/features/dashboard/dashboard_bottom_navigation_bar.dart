@@ -11,9 +11,9 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       elevation: 10,
       items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.dashboard),
-          label: 'Dashboard',
-          backgroundColor: Colors.pink,
+          icon: Icon(Icons.point_of_sale_sharp),
+          label: 'Sales',
+          // backgroundColor: Colors.pink,
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.ac_unit),
@@ -21,11 +21,11 @@ class DashboardBottomNavigationBar extends StatelessWidget {
           // backgroundColor: Colors.amber
         ),
         BottomNavigationBarItem(
-            icon: Icon(Icons.search_sharp), label: 'Product'),
+            icon: Icon(Icons.search_sharp), label: 'Products'),
         BottomNavigationBarItem(
           icon: Icon(Icons.account_tree),
           label: 'Accounts',
-          backgroundColor: Colors.cyan,
+          // backgroundColor: Colors.cyan,
         ),
         BottomNavigationBarItem(
             icon: Icon(Icons.balance_sharp), label: 'Health'),
@@ -33,9 +33,11 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       onTap: (value) {
         if (value == 0) {
           Navigator.pushNamed(context, Routes.stock);
+        } else if (value == 2) {
+          Navigator.pushNamed(context, Routes.products);
         }
       },
-      selectedItemColor: Colors.black,
+      selectedItemColor: Colors.indigo.shade700,
       iconSize: 30,
       backgroundColor: theme.backgroundColor,
       type: BottomNavigationBarType.fixed,

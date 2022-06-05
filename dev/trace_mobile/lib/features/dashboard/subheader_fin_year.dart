@@ -11,7 +11,7 @@ class SubheaderFinYear extends StatelessWidget {
         Provider.of<GlobalSettings>(context, listen: true);
     var currentFinYearId = globalSettings.currentFinYearMap['finYearId'];
     return Container(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(0),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -21,7 +21,7 @@ class SubheaderFinYear extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Container(
                 padding:
-                    const EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 0),
+                    const EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 3),
                 child: const Icon(Icons.add_sharp, color: Colors.indigo,),
               ),
               onTap: () {
@@ -29,12 +29,12 @@ class SubheaderFinYear extends StatelessWidget {
               },
             ),
             // Year
-            Text('${currentFinYearId ?? "      "}'),
+            Text('${currentFinYearId ?? "    "}'),
             InkWell(
               // minus icon
               child: Container(
                 padding:
-                    const EdgeInsets.only(left: 0, top: 3, bottom: 3, right: 0),
+                    const EdgeInsets.only(left: 3, top: 3, bottom: 3, right: 3),
                 child: const Icon(
                   Icons.remove_sharp, color: Colors.indigo,
                 ),

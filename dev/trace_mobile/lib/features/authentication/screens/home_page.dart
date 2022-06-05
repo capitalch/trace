@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
                       ?.copyWith(color: Colors.indigo),
                 ),
                 Text(
-                  'Accounting on cloud',
+                  'Accounts on cloud',
                   style: Theme.of(context)
                       .textTheme
                       .headline3

@@ -11,9 +11,9 @@ class DashboardSubheader extends StatelessWidget {
   Widget build(BuildContext context) {
     var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return Container(
-      padding: const EdgeInsets.only(left: 15, top:0),
+      padding: const EdgeInsets.only(left: 15, top: 0),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        // buCode
+        // buCode name
         Container(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: SizedBox(
@@ -30,13 +30,17 @@ class DashboardSubheader extends StatelessWidget {
           // Branch
           child: Container(
             padding:
-                const EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 15),
-            child: Text(
+                const EdgeInsets.only(left: 0, top: 5, bottom: 5, right: 0),
+            child: 
+            SizedBox(width: 50, child:Text(
               globalSettings.currentBranchMap['branchCode'] ?? '',
-              style: const TextStyle(color: Colors.indigo),
-            ),
+              style: const TextStyle(color: Colors.indigo, overflow: TextOverflow.ellipsis),
+            ),)
+            
           ),
-          onTap: () {},
+          onTap: () {
+            changeBranch(context, globalSettings);
+          },
         ),
       ]),
     );
@@ -52,7 +56,7 @@ void changeBranch(BuildContext context, GlobalSettings globalSettings) async {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Select a business unit'),
+              const Text('Select a Branch'),
               InkWell(
                 child: const Icon(Icons.close),
                 onTap: () {
@@ -65,22 +69,22 @@ void changeBranch(BuildContext context, GlobalSettings globalSettings) async {
     },
   );
   if (result != '0') {
-    // globalSettings.setLastUsedBuCode(result);
+    globalSettings.setLastUsedBranch(result);
     Utils.execDataCache(globalSettings);
   }
 }
 
 List<SimpleDialogOption>? getBranchOptions(
     BuildContext context, GlobalSettings globalSettings) {
-  List<dynamic>? buCodes = globalSettings.buCodes;
-  var buCodesList = buCodes?.map((e) {
+  List<dynamic>? allBranches = globalSettings.allBranches;
+  var branchList = allBranches.map((e) {
     return SimpleDialogOption(
       onPressed: () {
-        Navigator.pop(context, e.toString());
+        Navigator.pop(context, e['branchId'].toString());
       },
-      child: Text(e.toString()),
+      child: Text(e['branchName']),
     );
   }).toList();
 
-  return buCodesList;
+  return branchList;
 }

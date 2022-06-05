@@ -6,6 +6,7 @@ import 'package:trace_mobile/common/classes/utils.dart';
 
 class GlobalSettings extends ChangeNotifier {
   static const webUrl = 'https://develop.cloudjiffy.net/graphql';
+  // static const localUrl = 'https://develop.cloudjiffy.net/graphql';
   static const localUrl = 'http://10.0.2.2:5000/graphql';
   GlobalSettings() {
     // constructor loads loginData from secured storage
@@ -132,6 +133,11 @@ class GlobalSettings extends ChangeNotifier {
     setLoginData(demoLoginData,
         isNotifyListeners: false, isSaveDataInSecuredStorage: false);
     // _initGraphQLMainClient();
+  }
+
+  void setLastUsedBranch(String branchId) {
+    lastUsedBranchId = int.parse(branchId);
+    setCurrentBranchMap(lastUsedBranchId);
   }
 
   void setLastUsedBuCode(String buCode) {
