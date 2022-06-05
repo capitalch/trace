@@ -4,8 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
+import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
-import 'package:trace_mobile/common/widgets/subheader.dart';
+import 'package:trace_mobile/features/dashboard/dashboard_subheader.dart';
 
 class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
   const DashboardAppBar({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
         automaticallyImplyLeading: false,
         bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(10), child: Subheader()),
+            preferredSize: Size.fromHeight(10), child: DashboardSubheader()),
         // backgroundColor: Colors.amber,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,11 +52,6 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
             InkWell(
               child: Container(
                   padding: const EdgeInsets.only(top: 5, bottom: 3),
-                  decoration: const BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(
-                    color: Colors.indigo,
-                  ))),
                   child: SizedBox(
                     width: 150,
                     child: Text(
@@ -74,7 +70,7 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
             // Logout
             InkWell(
               child: Padding(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.only(top: 3),
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   const Icon(
                     Icons.logout,
@@ -95,11 +91,6 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
           ],
         ));
   }
-}
-
-void logout(BuildContext context) {
-  Provider.of<GlobalSettings>(context, listen: false).resetLoginData();
-  Navigator.pop(context);
 }
 
 changeBuCode(BuildContext context, GlobalSettings globalSettings) async {
@@ -124,8 +115,20 @@ changeBuCode(BuildContext context, GlobalSettings globalSettings) async {
     },
   );
   if (result != '0') {
-    globalSettings.setLastUsedBuCode(result);
-    Utils.execDataCache(globalSettings);
+    // Save in database
+    var result1 = await GraphQLQueries.genericUpdateMaster(
+        globalSettings: globalSettings,
+        entityName: 'authentication',
+        tableName: 'TraceUser',
+        args: {
+          'id': globalSettings
+              .id, // id is used for update of the table, otherwise insert will happen
+          'lastUsedBuCode': result,
+        });
+    if ((result1?.data != null) && (result1?.exception == null)) { // success
+      globalSettings.setLastUsedBuCode(result);
+      Utils.execDataCache(globalSettings);
+    }
   }
 }
 
@@ -142,6 +145,11 @@ List<SimpleDialogOption>? getBusinessUnitOptions(
   }).toList();
 
   return buCodesList;
+}
+
+void logout(BuildContext context) {
+  Provider.of<GlobalSettings>(context, listen: false).resetLoginData();
+  Navigator.pop(context);
 }
 
 // Row(mainAxisSize: MainAxisSize.min, children: [

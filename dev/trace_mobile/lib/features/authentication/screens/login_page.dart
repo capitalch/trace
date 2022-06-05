@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-// import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/common/classes/data_store.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
-// import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'dart:convert' show utf8, base64;
 import 'dart:convert';
 
@@ -15,7 +11,6 @@ import 'package:trace_mobile/common/classes/utils.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
-  // final LocalStorage localStorage = LocalStorage('trace');
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +61,6 @@ class LoginPage extends StatelessWidget {
                   style: const TextStyle(fontSize: 20))),
           Container(
               height: 50,
-              // padding: const EdgeInsets.only(top: 40),
               margin: const EdgeInsets.only(top: 50),
               child: ElevatedButton(
                   child: const Text('Login'),
@@ -77,17 +71,6 @@ class LoginPage extends StatelessWidget {
     );
     // );
   }
-
-  // void execDataCache(context, globalSettings) async {
-  //   var result = await GraphQLQueries.genericView(
-  //       sqlKey: 'getJson_datacache_mobile', globalSettings: globalSettings);
-
-  //   Map<String, dynamic> jsonResult =
-  //       (result?.data?['accounts']?['genericView']?['jsonResult']);
-
-  //   globalSettings.setUnitInfoAndBranches(
-  //       jsonResult['unitInfo'], jsonResult['allBranches']);
-  // }
 
   void onLoginPressed(context, nameController, passwordController) async {
     try {
@@ -119,7 +102,6 @@ class LoginPage extends StatelessWidget {
       globalSettings.setLoginData(loginData);
       Navigator.pushReplacementNamed(context, Routes.dashBoard);
       Utils.execDataCache(globalSettings);
-      // execDataCache(context, globalSettings);
     } catch (error) {
       // print(error);
     }

@@ -1,48 +1,52 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:trace_mobile/common/classes/data_store.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
 
 class GlobalSettings extends ChangeNotifier {
+  static const webUrl = 'https://develop.cloudjiffy.net/graphql';
+  static const localUrl = 'http://10.0.2.2:5000/graphql';
   GlobalSettings() {
     // constructor loads loginData from secured storage
     loadLoginDataFromSecuredStorage();
     _initGraphQLLoginClient();
-    finYearId = Utils.getCurrentFinYearId();
-    if (kReleaseMode) {
-      serverUrl = 'https://develop.cloudjiffy.net/graphql';
-    } else {
-      serverUrl = 'http://10.0.2.2:5000/graphql';
-    }
   }
 
-  // int userId = 0;
-  int? clientId, finYearId, lastUsedBranchId, userId;
-  GraphQLClient? graphQLLoginClient, graphQLMainClient;
+  int? clientId, lastUsedBranchId, id; // id is actually userId
+  // ,
+  GraphQLClient? _graphQLLoginClient, graphQLMainClient;
   String? lastUsedBuCode, token, uid, userType;
-  String serverUrl = 'http://10.0.2.2:5000/graphql';
+  String serverUrl = kReleaseMode ? webUrl : localUrl;
   List<dynamic>? buCodes = [];
   List<dynamic>? buCodesWithPermissions;
   Map<String, String> unitInfo = {};
   List<Map<String, dynamic>> allBranches = [];
+  List<Map<String, dynamic>> allFinYears = [];
+  Map<String, dynamic> currentFinYearMap = {};
+  Map<String, dynamic> currentBranchMap = {};
+
+  GraphQLClient? get graphQLLoginClient {
+    _graphQLLoginClient?.resetStore();
+    return _graphQLLoginClient;
+  }
 
   void _initGraphQLLoginClient() {
-    graphQLLoginClient = GraphQLClient(
+    _graphQLLoginClient = GraphQLClient(
         link: HttpLink(
           serverUrl,
         ),
         cache: GraphQLCache(store: InMemoryStore()));
+    graphQLLoginClient?.resetStore();
   }
 
   void _initGraphQLMainClient() {
     String selectionCriteria = [
       (lastUsedBuCode ?? ''),
       ':',
-      Utils.getCurrentFinYearId(),
+      currentFinYearMap['finYearId'],
       ':',
-      (lastUsedBranchId ?? '1')
+      (getCurrentBranchId())
     ].join();
     graphQLMainClient = GraphQLClient(
         link: HttpLink(serverUrl, defaultHeaders: {
@@ -52,17 +56,31 @@ class GlobalSettings extends ChangeNotifier {
         cache: GraphQLCache(store: InMemoryStore()));
   }
 
+  void changeCurrentFinYear(int cnt) {
+    int currentFinYearId = currentFinYearMap['finYearId'];
+    currentFinYearId = currentFinYearId + cnt;
+    var el = allFinYears
+        .where((element) => element['finYearId'] == currentFinYearId);
+    el.isNotEmpty ? (currentFinYearMap = el.first) : null;
+    _initGraphQLMainClient(); // to update the selection criteria
+    notifyListeners();
+  }
+
+  int getCurrentBranchId() {
+    return currentBranchMap['branchId'] ?? 1;
+  }
+
   String getLoginDataAsJson() {
     Map<String, dynamic> jsonObject = {
       'buCodes': buCodes,
       'buCodesWithPermissions': buCodesWithPermissions,
       'clientId': clientId,
-      'lastUsedBranchId': lastUsedBranchId,
+      'lastUsedBranchId': getCurrentBranchId(),
       'lastUsedBuCode': lastUsedBuCode,
       'token': token,
       'uid': uid,
       'userType': userType,
-      'userId': userId
+      'id': id,
     };
     return json.encode(jsonObject);
   }
@@ -81,10 +99,19 @@ class GlobalSettings extends ChangeNotifier {
   }
 
   void resetLoginData() async {
-    buCodes = buCodesWithPermissions = clientId = lastUsedBranchId =
-        lastUsedBuCode = token = uid = userType = userId = null;
-    await DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
+    buCodes = buCodesWithPermissions =
+        clientId = lastUsedBuCode = token = uid = userType = id = null;
+    currentBranchMap = {};
+    currentFinYearMap = {};
+    await DataStore.saveLoginDataInSecuredStorage(getLoginDataAsJson());
     notifyListeners();
+  }
+
+  void setCurrentBranchMap(branchId) {
+    var el = allBranches.where((element) => element['branchId'] == branchId);
+    if (el.isNotEmpty) {
+      currentBranchMap = el.first;
+    }
   }
 
   void setDemoLoginData() {
@@ -102,27 +129,34 @@ class GlobalSettings extends ChangeNotifier {
       // entityNames: ['accounts'],
     };
     allBranches.add({'id': 1, 'branchName': 'Head office', 'branchCode': 'HD'});
-    setLoginData(demoLoginData, isNotifyListeners: false);
-    _initGraphQLMainClient();
+    setLoginData(demoLoginData,
+        isNotifyListeners: false, isSaveDataInSecuredStorage: false);
+    // _initGraphQLMainClient();
   }
 
   void setLastUsedBuCode(String buCode) {
     lastUsedBuCode = buCode;
+    _initGraphQLMainClient(); // selectionCriteria changes, hence it is necessary
     // notifyListeners();
   }
 
-  void setLoginData(dynamic loginData, {bool isNotifyListeners = true}) async {
+  void setLoginData(dynamic loginData,
+      {bool isNotifyListeners = true,
+      isSaveDataInSecuredStorage = true}) async {
     buCodes = loginData['buCodes'];
     buCodesWithPermissions = loginData['buCodesWithPermissions'];
     clientId = loginData['clientId'];
-    lastUsedBranchId = loginData['lastUsedBranchId'];
+    lastUsedBranchId = loginData['lastUsedBranchId'] ?? 1;
+    setCurrentBranchMap(loginData['lastUsedBranchId']);
     lastUsedBuCode = loginData['lastUsedBuCode'];
     token = loginData['token'];
     uid = loginData['uid'];
     userType = loginData['userType'];
-    userId = loginData['id'];
+    id = loginData['id'];
     _initGraphQLMainClient();
-    await DataStore.setLoginDataInSecuredStorage(getLoginDataAsJson());
+    if (isSaveDataInSecuredStorage) {
+      await DataStore.saveLoginDataInSecuredStorage(getLoginDataAsJson());
+    }
     isNotifyListeners ? notifyListeners() : null;
   }
 
@@ -131,9 +165,18 @@ class GlobalSettings extends ChangeNotifier {
     setLoginData(loginDataObject);
   }
 
-  void setUnitInfoAndBranches(dynamic ui, dynamic bchs) {
-    unitInfo = Map<String, String>.from(ui);
-    allBranches = List<Map<String, dynamic>>.from(bchs);
+  void setUnitInfoFinYearsBranches({
+    dynamic branches,
+    dynamic currentFinYearObject,
+    dynamic finYears,
+    dynamic uInfo,
+  }) {
+    unitInfo = Map<String, String>.from(
+        uInfo ?? {'unitName': 'Unit info is not provided'});
+    allBranches = List<Map<String, dynamic>>.from(branches);
+    allFinYears = List<Map<String, dynamic>>.from(finYears);
+    currentFinYearMap = Map<String, dynamic>.from(currentFinYearObject);
+    setCurrentBranchMap(lastUsedBranchId);
     notifyListeners();
   }
 }

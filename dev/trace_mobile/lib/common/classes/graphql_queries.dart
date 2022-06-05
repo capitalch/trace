@@ -4,12 +4,30 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 
 class GraphQLQueries {
-
   static login(String credentials) {
     return gql('''query login {
          authentication {
          doLogin(credentials:"$credentials")
         }}''');
+  }
+
+  static Future<QueryResult<Object>>? genericUpdateMaster({
+    String? sqlKey,
+    Map<String, dynamic>? args,
+    String? tableName,
+    required GlobalSettings globalSettings,
+    required String entityName,
+  }) {
+    String value = GQLGenericUpdateValue(sqlKey: sqlKey, args: args, tableName: tableName).toString();
+    var gq = gql('''
+        mutation genericUpdateMaster {
+          $entityName {
+            genericUpdateMaster(value: "$value")
+          }
+        }
+    ''');
+    return globalSettings.graphQLMainClient?.query(
+        QueryOptions(document: gq, operationName: 'genericUpdateMaster'));
   }
 
   static Future<QueryResult<Object>>? genericView({
@@ -48,6 +66,19 @@ class GQLGenericViewValue {
   String toString() {
     String str = json.encode(
         {"sqlKey": sqlKey, "isMultipleRows": isMultipleRows, "args": args});
+    return Uri.encodeFull(str);
+  }
+}
+
+class GQLGenericUpdateValue {
+  GQLGenericUpdateValue({this.sqlKey, this.args, this.tableName});
+  final String? sqlKey;
+  final Map<String, dynamic>? args;
+  final String? tableName;
+
+  @override
+  String toString() {
+    String str = json.encode({"sqlKey": sqlKey, "data": args, "tableName": tableName});
     return Uri.encodeFull(str);
   }
 }

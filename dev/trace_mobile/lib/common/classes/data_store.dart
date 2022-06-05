@@ -2,7 +2,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DataStore {
-  static setLoginDataInSecuredStorage(String loginDataJson) async {
+  static saveLoginDataInSecuredStorage(String loginDataJson) async {
     await const FlutterSecureStorage().write(key: 'loginData', value: loginDataJson);
   }
 

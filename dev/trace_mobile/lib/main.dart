@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-// import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
-// import 'package:trace_mobile/common/graphql/graphql_service.dart';
 import 'package:trace_mobile/features/authentication/screens/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
 import 'package:trace_mobile/features/dashboard/stock.dart';
-
-// import 'features/authentication/screens/home_page.dart';
 import 'features/authentication/screens/login_page.dart';
 
 void main() async {
