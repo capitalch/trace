@@ -59,14 +59,10 @@ class TraceApp extends StatelessWidget {
     return ThemeData(
         backgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.white,
           elevation: 0.0,
-          titleTextStyle: TextStyle(color: Colors.white),
-          iconTheme: IconThemeData(color: Colors.white, size: 24.0),
-          // backgroundColor: Colors.white,
-          // elevation: 0.0,
-          // titleTextStyle: TextStyle(color: Colors.black),
-          // iconTheme: IconThemeData(color: Colors.black, size: 24.0),
+          titleTextStyle: TextStyle(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.black, size: 24.0),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
@@ -84,27 +80,27 @@ class TraceApp extends StatelessWidget {
           headline1: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w600,
-              color: Colors.white),
+              color: Colors.black),
           headline2: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w600,
-              color: Colors.white),
+              color: Colors.black),
           headline3: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
-              color: Colors.white),
+              color: Colors.black),
           headline4: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w600,
-              color: Colors.white),
+              color: Colors.black),
           headline5: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Colors.white),
+              color: Colors.black),
           headline6: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
-              color: Colors.white),
+              color: Colors.black),
         ));
   }
 }

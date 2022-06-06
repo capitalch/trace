@@ -12,6 +12,8 @@ class DashboardSubheader extends StatelessWidget {
     var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return Container(
       padding: const EdgeInsets.only(left: 15, top: 0),
+      color: Colors.grey.shade100,
+      height: 30,
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         // buCode name
         Container(

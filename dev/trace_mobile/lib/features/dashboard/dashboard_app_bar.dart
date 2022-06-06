@@ -1,35 +1,29 @@
-// import 'package:flutter/cupertino.dart';
-// import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
-import 'package:trace_mobile/features/dashboard/dashboard_subheader.dart';
 
 class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
   const DashboardAppBar({Key? key}) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(40);
 
   @override
   Widget build(BuildContext context) {
     var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return AppBar(
         automaticallyImplyLeading: false,
-        // backgroundColor: Colors.grey.shade400,
-        bottom: const PreferredSize(
-            preferredSize: Size.fromHeight(10), child: DashboardSubheader()),
-        // backgroundColor: Colors.amber,
+        // bottom: const PreferredSize(
+        //     preferredSize: Size.fromHeight(10), child: DashboardSubheader()),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Menu
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(

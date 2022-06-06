@@ -1,5 +1,6 @@
 import 'package:adam1/widgets/alert_demo.dart';
 import 'package:adam1/widgets/dialog_select_demo.dart';
+import 'package:adam1/widgets/infinite_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './widgets/hello_custom_app_bar.dart';
@@ -138,7 +139,13 @@ class MyHomePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const DialogSelectDemo()));
-                  }, child: const Text('Dialog select box'))
+                  }, child: const Text('Dialog select box')),
+                  TextButton(onPressed: () {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const InfiniteScroll()));
+                  }, child: const Text('Infinite scroll'))
                 ],
               ),
             ),
