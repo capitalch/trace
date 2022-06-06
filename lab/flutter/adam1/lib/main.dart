@@ -1,6 +1,7 @@
 import 'package:adam1/widgets/alert_demo.dart';
 import 'package:adam1/widgets/dialog_select_demo.dart';
 import 'package:adam1/widgets/infinite_scroll.dart';
+import 'package:adam1/widgets/simple_listview_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './widgets/hello_custom_app_bar.dart';
@@ -145,7 +146,13 @@ class MyHomePage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const InfiniteScroll()));
-                  }, child: const Text('Infinite scroll'))
+                  }, child: const Text('Infinite scroll SingleChildScrollview')),
+                  TextButton(onPressed: () {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SimpleListviewBuilder()));
+                  }, child: const Text('Simple ListView builder')),
                 ],
               ),
             ),

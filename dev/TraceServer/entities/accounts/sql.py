@@ -1612,7 +1612,7 @@ allSqls = {
                 "AccM" a join "ExtBusinessContactsAccM" e
                     on a."id" = e."accId"
                 join cte2 c2
-                    on a."id" = c2."accId"
+                    on a."id" = c2."accId" limit 1
         ),
         cte4 as (
             select s."id", "productId", "qty", "price", "priceGst", "discount"

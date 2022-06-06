@@ -64,7 +64,8 @@ k. Server logging for modify and delete, time and log viewer
 
 ## Bugs
 *. When in login s,s is given for superadmin user. it fails. In TraceHeader submitDialog buCodeWithPermissions in empty hence it goes out. and nothing happens. In brief superadmin user is not working.
-*. Demo mode purchase entry edit is not being possible
+*. Demo mode purchase entry edit is not being possible: Rectified it temporarily by giving limit 1 in getJson_sale_purchase_on_id in cte6
+*. Provide useRef no in view of purchase and sale
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
