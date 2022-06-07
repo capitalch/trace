@@ -26,7 +26,7 @@ class GraphQLQueries {
           }
         }
     ''');
-    return globalSettings.graphQLMainClient?.query(
+    return globalSettings.getGraphQLMainClient()?.query(
         QueryOptions(document: gq, operationName: 'genericUpdateMaster'));
   }
 
@@ -49,7 +49,7 @@ class GraphQLQueries {
         }
       }
     ''');
-    return globalSettings.graphQLMainClient?.query(
+    return globalSettings.getGraphQLMainClient()?.query(
       QueryOptions(document: gq, operationName: 'genericView'),
     );
   }

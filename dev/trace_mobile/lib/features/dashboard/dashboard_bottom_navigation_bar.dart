@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:trace_mobile/common/classes/global_settings.dart';
+import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/common/classes/routes.dart';
 
 class DashboardBottomNavigationBar extends StatelessWidget {
@@ -34,7 +37,16 @@ class DashboardBottomNavigationBar extends StatelessWidget {
         if (value == 0) {
           Navigator.pushNamed(context, Routes.stock);
         } else if (value == 2) {
-          Navigator.pushNamed(context, Routes.products);
+          //products
+          GlobalSettings globalSettings = Provider.of<GlobalSettings>(context, listen:false);
+          var results = GraphQLQueries.genericView(
+              sqlKey: 'get_products_info',
+              globalSettings: globalSettings,
+              entityName: 'accounts',
+              isMultipleRows: true,
+              args: {'onDate': null, 'isAll': true, 'days': 0});
+          // print(results);
+          Navigator.pushNamed(context, Routes.products, arguments: results);
         }
       },
       selectedItemColor: Colors.indigo.shade700,

@@ -6,8 +6,8 @@ import 'package:trace_mobile/common/classes/utils.dart';
 
 class GlobalSettings extends ChangeNotifier {
   static const webUrl = 'https://develop.cloudjiffy.net/graphql';
-  // static const localUrl = 'https://develop.cloudjiffy.net/graphql';
-  static const localUrl = 'http://10.0.2.2:5000/graphql';
+  static const localUrl = 'https://develop.cloudjiffy.net/graphql';
+  // static const localUrl = 'http://10.0.2.2:5000/graphql';
   GlobalSettings() {
     // constructor loads loginData from secured storage
     loadLoginDataFromSecuredStorage();
@@ -16,7 +16,7 @@ class GlobalSettings extends ChangeNotifier {
 
   int? clientId, lastUsedBranchId, id; // id is actually userId
   // ,
-  GraphQLClient? _graphQLLoginClient, graphQLMainClient;
+  GraphQLClient? _graphQLLoginClient;// graphQLMainClient;
   String? lastUsedBuCode, token, uid, userType;
   String serverUrl = kReleaseMode ? webUrl : localUrl;
   List<dynamic>? buCodes = [];
@@ -41,7 +41,23 @@ class GlobalSettings extends ChangeNotifier {
     graphQLLoginClient?.resetStore();
   }
 
-  void _initGraphQLMainClient() {
+  // void _initGraphQLMainClient() {
+  //   String selectionCriteria = [
+  //     (lastUsedBuCode ?? ''),
+  //     ':',
+  //     currentFinYearMap['finYearId'],
+  //     ':',
+  //     (getCurrentBranchId())
+  //   ].join();
+  //   graphQLMainClient = GraphQLClient(
+  //       link: HttpLink(serverUrl, defaultHeaders: {
+  //         'authorization': (token == null) ? '' : 'Bearer $token',
+  //         'SELECTION-CRITERIA': selectionCriteria
+  //       }),
+  //       cache: GraphQLCache(store: InMemoryStore()));
+  // }
+
+  GraphQLClient getGraphQLMainClient() {
     String selectionCriteria = [
       (lastUsedBuCode ?? ''),
       ':',
@@ -49,12 +65,13 @@ class GlobalSettings extends ChangeNotifier {
       ':',
       (getCurrentBranchId())
     ].join();
-    graphQLMainClient = GraphQLClient(
+    GraphQLClient graphQLMainClient = GraphQLClient(
         link: HttpLink(serverUrl, defaultHeaders: {
           'authorization': (token == null) ? '' : 'Bearer $token',
           'SELECTION-CRITERIA': selectionCriteria
         }),
         cache: GraphQLCache(store: InMemoryStore()));
+    return graphQLMainClient;
   }
 
   void changeCurrentFinYear(int cnt) {
@@ -63,7 +80,7 @@ class GlobalSettings extends ChangeNotifier {
     var el = allFinYears
         .where((element) => element['finYearId'] == currentFinYearId);
     el.isNotEmpty ? (currentFinYearMap = el.first) : null;
-    _initGraphQLMainClient(); // to update the selection criteria
+    // _initGraphQLMainClient(); // to update the selection criteria
     notifyListeners();
   }
 
@@ -142,7 +159,7 @@ class GlobalSettings extends ChangeNotifier {
 
   void setLastUsedBuCode(String buCode) {
     lastUsedBuCode = buCode;
-    _initGraphQLMainClient(); // selectionCriteria changes, hence it is necessary
+    // _initGraphQLMainClient(); // selectionCriteria changes, hence it is necessary
     // notifyListeners();
   }
 
@@ -159,7 +176,7 @@ class GlobalSettings extends ChangeNotifier {
     uid = loginData['uid'];
     userType = loginData['userType'];
     id = loginData['id'];
-    _initGraphQLMainClient();
+    // _initGraphQLMainClient();
     if (isSaveDataInSecuredStorage) {
       await DataStore.saveLoginDataInSecuredStorage(getLoginDataAsJson());
     }
