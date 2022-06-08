@@ -210,7 +210,7 @@ class ListItem extends StatelessWidget {
             // shadowColor: Colors.green.shade200,
             child: Column(children: [
               Container(
-                padding: EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(top: 5),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -219,15 +219,15 @@ class ListItem extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 70),
                         child: Text(
                           'AGE: ${indexedItem.age.toStringAsFixed(0)}',
-                          style: TextStyle(fontWeight: FontWeight.w900),
+                          style: const TextStyle(fontWeight: FontWeight.w900),
                         ),
                       ),
                       Text('YTD: ${indexedItem.ytd.toStringAsFixed(0)}'),
                       Container(
-                        padding: EdgeInsets.only(right: 15),
+                        padding: const EdgeInsets.only(right: 15),
                         child: Text(
                           'MRP: ${indexedItem.mrp.toStringAsFixed(0)}',
-                          style: TextStyle(fontWeight: FontWeight.w900),
+                          style: const TextStyle(fontWeight: FontWeight.w900),
                         ),
                       )
                     ]),
@@ -268,12 +268,12 @@ class ListItem extends StatelessWidget {
                           : Colors.white)
                             ,
                       ))),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Container(
                 // color: Colors.grey.shade200,
-                padding: EdgeInsets.only(bottom: 5),
+                padding: const EdgeInsets.only(bottom: 5),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -282,15 +282,15 @@ class ListItem extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 70),
                         child: Text(
                           'PUR(GST): ${indexedItem.purGst.toStringAsFixed(0)}',
-                          style: TextStyle(fontWeight: FontWeight.w900),
+                          style: const TextStyle(fontWeight: FontWeight.w900),
                         ),
                       ),
                       // Text('Age: ${indexedItem.age.toStringAsFixed(0)}'),
                       Container(
-                        padding: EdgeInsets.only(right: 15),
+                        padding: const EdgeInsets.only(right: 15),
                         child: Text(
                           'SAL(GST): ${indexedItem.salGst.toStringAsFixed(0)}',
-                          style: TextStyle(fontWeight: FontWeight.w900),
+                          style: const TextStyle(fontWeight: FontWeight.w900),
                         ),
                       )
                     ]),
