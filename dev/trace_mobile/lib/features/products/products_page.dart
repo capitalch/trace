@@ -143,27 +143,42 @@ class ProductsList extends StatelessWidget {
 
 class IndexedItem {
   IndexedItem({
+    required this.age,
     required this.brandName,
     required this.catName,
     required this.clos,
     required this.info,
     required this.label,
+    required this.mrp,
+    required this.purGst,
+    required this.salGst,
+    required this.ytd,
   });
 
   factory IndexedItem.fromJson({required Map<String, dynamic> j}) {
     return IndexedItem(
+      age: double.parse((j['age'] ?? 0).toString()),
       brandName: j['brandName'],
       catName: j['catName'],
       clos: double.parse(j['clos'].toString()),
       info: j['info'],
       label: j['label'],
+      mrp: double.parse((j['maxRetailPrice'] ?? 0).toString()),
+      purGst: double.parse(j['lastPurchasePriceGst'].toString()),
+      salGst: double.parse(j['salePriceGst'].toString()),
+      ytd: double.parse((j['sale'] ?? 0).toString()),
     );
   }
+  final double age;
   final String brandName;
   final String catName;
   final double clos;
   final String? info;
   final String label;
+  final double mrp;
+  final double purGst;
+  final double salGst;
+  final double ytd;
 }
 
 class ListItem extends StatelessWidget {
@@ -187,35 +202,108 @@ class ListItem extends StatelessWidget {
     var subTitle = indexedItem.info;
     return Center(
         child: Card(
-      margin: const EdgeInsets.only(top: 5, bottom: 5),
-      elevation: 1,
-      // color: ((age ?? 0) >= 360) ? Colors.grey.shade100 : Colors.blue.shade100,
-      shadowColor: Colors.green.shade200,
-      child: Column(
-        children: [
-          ListTile(
-              leading: Text(
-                index.toString(),
-                style: theme.textTheme.subtitle1?.copyWith(color: Colors.brown),
+            // margin: const EdgeInsets.only(top: 5, bottom: 5),
+            elevation: 1,
+            color: ((indexedItem.age) >= 360)
+                ? Colors.pink.shade100
+                : Colors.grey.shade100,
+            // shadowColor: Colors.green.shade200,
+            child: Column(children: [
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 70),
+                        child: Text(
+                          'AGE: ${indexedItem.age.toStringAsFixed(0)}',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                      Text('YTD: ${indexedItem.ytd.toStringAsFixed(0)}'),
+                      Container(
+                        padding: EdgeInsets.only(right: 15),
+                        child: Text(
+                          'MRP: ${indexedItem.mrp.toStringAsFixed(0)}',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                      )
+                    ]),
               ),
-              title: Text(
-                title,
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: Colors.indigo,
-                  fontWeight: FontWeight.bold,
-                ),
+
+              ListTile(
+                  // contentPadding: EdgeInsets.all(5),
+                  leading: Text(
+                    index.toString(),
+                    style: theme.textTheme.subtitle1
+                        ?.copyWith(color: Colors.brown),
+                  ),
+                  title: Text(
+                    title,
+                    // style : TextStyle(color:Colors.blue.shade700, fontWeight: FontWeight.w900)
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: Colors.blue.shade700,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  subtitle: Text(
+                    subTitle ?? '',
+                    style: theme.textTheme.bodyText1,
+                  ),
+                  dense: true,
+                  trailing: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: (indexedItem.clos == 0)
+                          ? Colors.white
+                          : Colors.indigo.shade900,
+                      // foregroundColor: (indexedItem.clos == 0)
+                      //     ? Colors.black
+                      //     : Colors.white,
+                      child: Text(
+                        close.toStringAsFixed(0),
+                        style: theme.textTheme.subtitle2?.copyWith(color:  (indexedItem.clos == 0)
+                          ? Colors.black
+                          : Colors.white)
+                            ,
+                      ))),
+              SizedBox(
+                height: 5,
               ),
-              subtitle: Text(
-                subTitle ?? '',
-                style: theme.textTheme.bodyText1,
+              Container(
+                // color: Colors.grey.shade200,
+                padding: EdgeInsets.only(bottom: 5),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 70),
+                        child: Text(
+                          'PUR(GST): ${indexedItem.purGst.toStringAsFixed(0)}',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                      // Text('Age: ${indexedItem.age.toStringAsFixed(0)}'),
+                      Container(
+                        padding: EdgeInsets.only(right: 15),
+                        child: Text(
+                          'SAL(GST): ${indexedItem.salGst.toStringAsFixed(0)}',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                      )
+                    ]),
               ),
-              dense: true,
-              trailing: CircleAvatar( radius: 20,
-                  backgroundColor: Colors.indigo.shade700,
-                  foregroundColor: Colors.white,
-                  child: Text(close.toStringAsFixed(0), style: theme.textTheme.subtitle2?.copyWith(color: Colors.white),))),
-        ],
-      ),
-    ));
+              // SizedBox(
+              //   height: 5,
+              // ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //   Text('Age:'),
+              //   Text('YTD:')
+              // ],)
+            ])));
   }
 }
