@@ -146,16 +146,3 @@ void logout(BuildContext context) {
   Provider.of<GlobalSettings>(context, listen: false).resetLoginData();
   Navigator.pop(context);
 }
-
-// Row(mainAxisSize: MainAxisSize.min, children: [
-//   const Icon(
-//     Icons.point_of_sale_sharp,
-//     size: 25,
-//     color: Colors.indigo,
-//   ),
-//   Text('Sales',
-//       style: Theme.of(context)
-//           .textTheme
-//           .button
-//           ?.copyWith(color: Colors.indigo))
-// ]),

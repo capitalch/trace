@@ -69,16 +69,3 @@ class MyChangable extends ValueNotifier {
     notifyListeners();
   }
 }
-
-// ValueListenableBuilder(
-//     valueListenable: count,
-//     builder: (context, value, child) {
-//       return Text('$value');
-//     }),
-// const SizedBox(width: 10.0,),
-// FloatingActionButton(
-//   onPressed: () {
-//     count.value = count.value + 1;
-//   },
-//   child: const Icon(Icons.add),
-// ),

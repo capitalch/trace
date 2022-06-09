@@ -6,7 +6,7 @@ class ProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Future data passed from previous screen
-    Future<dynamic> args =
+    Future<dynamic> getAllProductsFuture =
         ModalRoute.of(context)!.settings.arguments as Future<dynamic>;
     var controller = TextEditingController();
     return Scaffold(
@@ -21,6 +21,7 @@ class ProductsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // back icon
                 InkWell(
                   child: const Icon(
                     Icons.chevron_left,
@@ -75,7 +76,7 @@ class ProductsPage extends StatelessWidget {
           ),
         ),
         body: FutureBuilder(
-          future: args,
+          future: getAllProductsFuture,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -95,7 +96,6 @@ class ProductsPage extends StatelessWidget {
                   );
                 } else if (snapshot.hasData) {
                   List<dynamic> dataList =
-                      // snapshot.data['data']['accounts']['genericView'];
                       snapshot.data.data?['accounts']?['genericView'] ?? [];
                   if (dataList.isEmpty) {
                     return Center(
@@ -123,21 +123,58 @@ class ProductsPage extends StatelessWidget {
   }
 }
 
+class SearchNotifier extends ValueNotifier<String> {
+  SearchNotifier(super.value);
+  String searchText = '';
+  void setSearchText(String val) {
+    searchText = val;
+    notifyListeners();
+  }
+}
+
 class ProductsList extends StatelessWidget {
   const ProductsList({Key? key, required this.dataList}) : super(key: key);
   final List<dynamic> dataList;
   @override
   Widget build(BuildContext context) {
-    // return SfDataGrid(source: DataGridSource(), columns: columns)
-    // title: Text(dataList[index]['label']),
-    return ListView.builder(
-      itemCount: dataList.length,
-      itemBuilder: (context, index) {
-        return ListItem(
-            indexedItem: IndexedItem.fromJson(j: dataList[index]),
-            index: index + 1);
-      },
-    );
+    // ValueNotifier<String> searchText = ValueNotifier('');
+    SearchNotifier search = SearchNotifier('');
+
+    return ValueListenableBuilder(
+        valueListenable: search,
+        builder: (context, value, child) {
+          List<dynamic> filteredList = dataList
+              .where((element) => element['brandName']
+                  .toString()
+                  .toLowerCase()
+                  .contains(search.searchText))
+              .toList();
+          return Column(
+            children: [
+              Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        search.setSearchText('nikon');
+                      },
+                      child: Text('Check search')),
+                  Text(search.searchText)
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    return ListItem(
+                        indexedItem:
+                            IndexedItem.fromJson(j: filteredList[index]),
+                        index: index + 1);
+                  },
+                ),
+              )
+            ],
+          );
+        });
   }
 }
 
@@ -193,9 +230,9 @@ class ListItem extends StatelessWidget {
     double close = indexedItem.clos;
 
     var title = [
-      indexedItem.catName,
-      ' ',
       indexedItem.brandName,
+      ' ',
+      indexedItem.catName,
       ' ',
       indexedItem.label
     ].join();
@@ -263,10 +300,10 @@ class ListItem extends StatelessWidget {
                       //     : Colors.white,
                       child: Text(
                         close.toStringAsFixed(0),
-                        style: theme.textTheme.subtitle2?.copyWith(color:  (indexedItem.clos == 0)
-                          ? Colors.black
-                          : Colors.white)
-                            ,
+                        style: theme.textTheme.subtitle2?.copyWith(
+                            color: (indexedItem.clos == 0)
+                                ? Colors.black
+                                : Colors.white),
                       ))),
               const SizedBox(
                 height: 5,

@@ -1,5 +1,6 @@
 import 'package:adam1/widgets/alert_demo.dart';
 import 'package:adam1/widgets/dialog_select_demo.dart';
+import 'package:adam1/widgets/ibuki_implement.dart';
 import 'package:adam1/widgets/infinite_scroll.dart';
 import 'package:adam1/widgets/simple_listview_builder.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +154,12 @@ class MyHomePage extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => const SimpleListviewBuilder()));
                   }, child: const Text('Simple ListView builder')),
+                  TextButton(onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const IbukiImplement()));
+                  }, child: const Text('Ibuki'))
                 ],
               ),
             ),
