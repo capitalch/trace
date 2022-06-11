@@ -1,9 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 
 class Utils {
+  static String currencySymbol(context) {
+    Locale local = Localizations.localeOf(context);
+    var format = NumberFormat.simpleCurrency(locale: local.toString());
+    return (format.currencySymbol);
+  }
+
   static void execDataCache(GlobalSettings globalSettings) async {
     var result = await GraphQLQueries.genericView(
         sqlKey: 'getJson_datacache_mobile',

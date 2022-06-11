@@ -75,7 +75,8 @@ function SearchBox({ parentMeta, sx }: any) {
     function requestSearch(searchValue: string) {
         if (searchValue) {
             //Excluded astrix from non word characters list
-            const arr = searchValue.toLowerCase().split(/\W[^*]/).filter(x => x) // filter used to remove empty elements
+            // const arr = searchValue.toLowcerCase().split(/\W[^*]/).filter(x => x) // filter used to remove empty elements
+            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x)
             // row values are concatenated and checked against each item in the arr (split of searchText on any char which is not alphanumeric)
             // if pre.isSearchTextOr then do logical OR for searchText arr else do logical end
             pre.filteredRows = pre.isSearchTextOr ?

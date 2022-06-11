@@ -1,14 +1,15 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
-import 'package:trace_mobile/features/authentication/screens/home_page.dart';
+import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
 import 'package:trace_mobile/features/dashboard/stock.dart';
 import 'package:trace_mobile/features/products/products_page.dart';
-import 'features/authentication/screens/login_page.dart';
+import 'package:trace_mobile/features/products/classes/products_search_state.dart';
+import 'package:trace_mobile/features/products/classes/products_summary_state.dart';
+import 'features/authentication/login_page.dart';
 
 void main() {
   FlutterError.onError = ((FlutterErrorDetails details) {
@@ -33,7 +34,13 @@ class TraceApp extends StatelessWidget {
         // ChangeNotifierProvider(create: (context) {
         //   return GraphQLService();
         // }),
-        ChangeNotifierProvider(create: (context) => GlobalSettings())
+        ChangeNotifierProvider(create: (context) => GlobalSettings()),
+        ChangeNotifierProvider(
+          create: (context) => ProductsSearchState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductsSummaryState(),
+        )
       ],
       child: MaterialApp(
         title: 'Trace',
@@ -47,7 +54,6 @@ class TraceApp extends StatelessWidget {
           'products': (BuildContext context) => const ProductsPage(),
           'sales': (BuildContext context) => const DashBoardPage(),
           'stock': (BuildContext context) => const Stock(),
-          
         },
       ),
     ));
@@ -78,29 +84,17 @@ class TraceApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
           headline1: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w600,
-              color: Colors.black),
+              fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
           headline2: TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w600,
-              color: Colors.black),
+              fontSize: 26, fontWeight: FontWeight.w600, color: Colors.black),
           headline3: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.black),
+              fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
           headline4: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w600,
-              color: Colors.black),
+              fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black),
           headline5: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: Colors.black),
+              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
           headline6: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.black),
+              fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black),
         ));
   }
 }
