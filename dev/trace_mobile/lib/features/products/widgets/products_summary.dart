@@ -33,12 +33,12 @@ class ProductsSummary extends StatelessWidget {
               ),
               const SizedBox(width: 15,),
               Text(
-                'Val: ${formatter.format(productsSummaryState.summarySum)}', //
+                'Value: ${formatter.format(productsSummaryState.summarySum)}', //
                 style: theme.textTheme.bodyText2//?.copyWith(color: Colors.white),
               ),
               const SizedBox(width: 15,),
               Text(
-                'Val(Gst): ${formatter.format(productsSummaryState.summarySumGst)}', //
+                'Value(Gst): ${formatter.format(productsSummaryState.summarySumGst)}', //
                 style: theme.textTheme.bodyText2//?.copyWith(color: Colors.white),
               )
             ],

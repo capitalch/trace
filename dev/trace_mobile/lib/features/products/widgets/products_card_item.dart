@@ -73,7 +73,7 @@ class ProductsCardItem extends StatelessWidget {
                       radius: 20,
                       backgroundColor: (indexedItem.clos == 0)
                           ? Colors.white
-                          : Colors.indigo.shade600,
+                          : Colors.grey.shade800,
                       child: Text(
                         close.toStringAsFixed(0),
                         style: theme.textTheme.subtitle2?.copyWith(

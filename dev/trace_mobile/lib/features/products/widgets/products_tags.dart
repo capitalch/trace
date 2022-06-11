@@ -7,10 +7,12 @@ class ProductsTags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     ProductsSearchState productsSearchState =
         Provider.of<ProductsSearchState>(context, listen: false);
     return Container(
-      height: 30,
+      height: 20,
+      color: Colors.grey.shade200,
       width: double.maxFinite,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -18,65 +20,38 @@ class ProductsTags extends StatelessWidget {
           const SizedBox(
             width: 15,
           ),
-          Chip(
-                deleteIcon: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 15,
-                ),
-                onDeleted: () {
-                  print('');
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  productsSearchState.searchFromTag = 'nikon';
                 },
-                materialTapTargetSize: MaterialTapTargetSize.padded,
-                label: 
-                Container(
-                  width: 100,
-                  height: 15,
-                  child: Text('chip'),
+                // focusColor: Colors.blue,
+                // radius: 10,
+                // highlightColor: Colors.blue,
+                child: Container(
+                  height: 20,
+                  // color: Colors.amber.shade700,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                  decoration: BoxDecoration( 
+                    color: Colors.grey.shade800,                   
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    'Nikon',
+                    style: theme.textTheme.labelMedium?.copyWith(fontSize: 14, color: Colors.white),
+                  ),
                 ),
               ),
-          InkWell(
-            child: 
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: Colors.blue.shade100,
-            //     borderRadius: const BorderRadius.only(
-            //         topRight: Radius.circular(30.0),
-            //         bottomRight: Radius.circular(30.0)),
-            //     border: Border.all(color: Color.fromRGBO(0, 0, 0, 0.0)),
-            //   ),
-            //   child: 
-              Chip(
-                deleteIcon: const Icon(
+              InkWell(
+                child: Icon(
                   Icons.close,
-                  color: Colors.white,
-                  size: 15,
+                  size: 18,
                 ),
-                onDeleted: () {
-                  print('');
-                },
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                label: Text('chip')
-                // Container(
-                //   width: 100,
-                //   height: 15,
-                //   child: Text('chip'),
-                // ),
-              ),
-            // ),
-
-            // const Chip(
-            //   padding: EdgeInsets.all(0),
-            //   labelPadding: EdgeInsets.symmetric(horizontal: 8,),
-            //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
-            //   label: Text(
-            //     'nikon',
-            //     style: TextStyle(color: Colors.lightBlue),
-            //   ),
-            // ),
-            onTap: () {
-              productsSearchState.searchFromTag = 'nikon';
-            },
+                onTap: () {},
+              )
+            ],
           )
         ]),
       ),
