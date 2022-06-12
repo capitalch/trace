@@ -1,8 +1,10 @@
-import { Box, ReactSelect, Typography, useTheme } from '../redirect'
+import { Box, IMegaData, MegaDataContext, ReactSelect, Typography, useContext, useTheme } from '../redirect'
 import { useInventoryReports } from './inventory-reports-hook'
 
 function InventoryReports() {
-    const { mega, meta, onReportSelected } = useInventoryReports()
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const selectedReportName = megaData.accounts.inventory.selectedReportName
+    const { meta, onReportSelected } = useInventoryReports()
     const pre = meta.current
     const theme = useTheme()
     // To reduce space between two items of drop down
@@ -11,43 +13,43 @@ function InventoryReports() {
             ...base,
             padding: '.4rem',
             paddingLeft: '0.8rem',
-            fontWeight:'bold'
-            // width: '60%'
+            fontWeight: 'bold'
         }),
         control: (provided: any) => ({
             ...provided,
-            // width: '60%'
         })
     }
+
+    pre.selectedReport = reportsJson.find((x:any)=>x.value === selectedReportName) || pre.selectedReport
     return (
         <Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', '& .react-select': { width: '60%' } }}>
-                <Typography variant='subtitle1'>{''.concat(mega.title, ' > ', mega.breadcumb)}</Typography>
+                <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.selectedReport.breadCrumb)}</Typography>
                 <ReactSelect className='react-select' menuPlacement='auto' placeholder='Select ...' styles={styles}
-                    options={reportsJson} value={mega.selectedReport} onChange={onReportSelected} />
+                    options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
             </Box>
             <Box sx={{ marginTop: theme.spacing(1) }}>
-                <mega.currentReportComponent />
+                <pre.reportComponent />
             </Box>
         </Box>
     )
 }
 export { InventoryReports }
 
-const reportsJson = [
+const reportsJson: any[] = [
     {
         label: 'Stock summary',
         value: 'stockSummaryReport',
-        breadcumb: 'Stock summary'
+        breadCrumb: 'Stock summary'
     },
     {
         label: 'Sales',
         value: 'salesReport',
-        breadcumb: 'Sales'
+        breadCrumb: 'Sales'
     },
     {
         label: 'Purchases',
         value: 'purchaseReport',
-        breadcumb: 'Purchases'
+        breadCrumb: 'Purchases'
     },
 ]

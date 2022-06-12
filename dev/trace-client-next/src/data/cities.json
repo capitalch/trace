@@ -27211,7 +27211,7 @@
   },
   {
     "id": "5443",
-    "name": "Darjiling",
+    "name": "Darjeeling",
     "state_id": "41"
   },
   {
@@ -27912,6 +27912,27 @@
   {
     "id": "5583",
     "name": "Kolkata",
+    "state_id": "41"
+  },
+
+  {
+    "id": "48357",
+    "name": "Birbhum",
+    "state_id": "41"
+  },
+  {
+    "id": "48358",
+    "name": "North Dinajpur",
+    "state_id": "41"
+  },
+  {
+    "id": "48359",
+    "name": "South Dinajpur",
+    "state_id": "41"
+  },
+  {
+    "id": "48360",
+    "name": "Shantiniketan",
     "state_id": "41"
   },
   {

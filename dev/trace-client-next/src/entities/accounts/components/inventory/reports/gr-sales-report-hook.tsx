@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import { _, Box, CloseSharp, Container, GridCellParams, IconButton, manageEntitiesState, moment, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Box, CloseSharp, Container, GridCellParams, IconButton, manageEntitiesState, moment, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useSalesReport() {
     const [, setRefresh] = useState({})
@@ -7,7 +7,7 @@ function useSalesReport() {
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, filterOn } = useIbuki()
     const theme = useTheme()
-    const multiData: any = useContext(MultiDataContext)
+    // const multiData: any = useContext(MultiDataContext)
     const { getFromBag } = manageEntitiesState()
     const finYearObject = getFromBag('finYearObject')
     const isoFormat = 'YYYY-MM-DD'
@@ -23,6 +23,7 @@ function useSalesReport() {
         searchText: '',
         searchTextRef: null,
         selectedOption: { label: 'Today', value: 'today' },
+        selectedTagOption: { label: 'All', value: 0 },
         setRefresh: setRefresh,
         sqlKey: 'get_sale_report',
         startDate: moment().format(isoFormat),
@@ -60,7 +61,8 @@ function useSalesReport() {
             sqlKey: pre.sqlKey,
             args: {
                 startDate: pre.startDate,
-                endDate: pre.endDate
+                endDate: pre.endDate,
+                tagId: pre.selectedTagOption.value
             },
         }) || []
         setId(rows)
@@ -137,6 +139,12 @@ function useSalesReport() {
         }
     }
 
+    async function handleSelectedTagOption(selectedTagOption: any) {
+        pre.selectedTagOption = selectedTagOption
+        await fetchData()
+        setRefresh({})
+    }
+
     function getColumns(): any[] {
         return ([
             {
@@ -180,13 +188,6 @@ function useSalesReport() {
                 width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
-            // {
-            //     headerName: 'Ref no',
-            //     headerClassName: 'header-class',
-            //     description: 'Ref no',
-            //     field: 'autoRefNo',
-            //     width: 165,
-            // },
             {
                 headerName: 'Ref no | Accounts',
                 headerClassName: 'header-class',
@@ -426,7 +427,7 @@ function useSalesReport() {
             prev.qty = prev.qty + (rows[current - 1]?.qty || 0)
             prev.aggrSale = prev.aggrSale + (rows[current - 1]?.aggrSale || 0)
             prev.amount = prev.amount + (rows[current - 1]?.amount || 0)
-            prev.profit = prev.grossProfit + (rows[current - 1]?.grossProfit || 0)
+            prev.grossProfit = prev.grossProfit + (rows[current - 1]?.grossProfit || 0)
             return prev
         }, { count: 0, qty: 0, aggrSale: 0, amount: 0, grossProfit: 0 })
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
@@ -452,10 +453,10 @@ function useSalesReport() {
     function RefNoAccounts({ params }: any) {
         return (
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight:'bold' }}>
-                    {''.concat((params.row.autoRefNo || ''), ', ')}&nbsp;
+                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight: 'bold' }}>
+                    {''.concat((params.row.autoRefNo || ''), params.row.autoRefNo ? ', ' : '')}&nbsp;
                 </Typography>
-                <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6),}}>
+                <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>
                     {params.row.accounts || ''}
                 </Typography>
             </Box>
@@ -464,6 +465,9 @@ function useSalesReport() {
 
     function removeRow(params: any) {
         const id = params.id
+        if(id ==='Total'){ // The row with totals cannot be removed
+            return
+        }
         const temp = [...pre.filteredRows]
         _.remove(temp, (x: any) => x.id === id)
         pre.filteredRows = temp
@@ -473,6 +477,6 @@ function useSalesReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, meta, multiData, onSelectModelChange })
+    return ({ fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange })
 }
 export { useSalesReport }

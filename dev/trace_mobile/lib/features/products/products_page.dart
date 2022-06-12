@@ -21,6 +21,7 @@ class ProductsPage extends StatelessWidget {
         body: Column(
           children: [
             const ProductsTags(),
+            const SizedBox(height: 10,),
             Expanded(
               child: FutureBuilder(
                 future: getAllProductsFuture,
@@ -70,6 +71,7 @@ class ProductsPage extends StatelessWidget {
                 },
               ),
             ),
+            const SizedBox(height: 10,),
             const ProductsSummary()
           ],
         ));

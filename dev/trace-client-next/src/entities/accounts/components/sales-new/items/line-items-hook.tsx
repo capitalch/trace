@@ -1,5 +1,4 @@
-import { clearScreenDown } from 'readline'
-import { _, Badge, Big, Box, Button, errorMessages, IMegaData, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, Box, Button, errorMessages, IMegaData, manageEntitiesState, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
 
 function useLineItems() {
     const [, setRefresh] = useState({})
@@ -10,13 +9,15 @@ function useLineItems() {
     const allErrors = sales.allErrors
     const { execGenericView, setIdForDataGridRows } = utilMethods()
     const theme = useTheme()
-    // const productCodeRef:any = useRef({})
+    const { getFromBag } = manageEntitiesState()
+    const isGstApplicable = !!(getFromBag('unitInfo')?.gstin)
+
     const meta: any = useRef({
         showDialog: false,
         dialogConfig: {
             title: 'Serial numbers (Comma separated)',
             content: () => <></>
-        }
+        },
     })
     const pre = meta.current
 
@@ -25,51 +26,58 @@ function useLineItems() {
         if (items.length === 0) {
             megaData.executeMethodForKey('handleAddItem:itemsHeader')
         }
-        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1200).subscribe(doSearchProductOnProductCode)
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1500).subscribe(doSearchProductOnProductCode)
         megaData.registerKeyWithMethod('computeAllRows:lineItems', computeAllRows)
         megaData.registerKeyWithMethod('setItemToSelectedProduct:lineItems', setItemToSelectedProduct)
-        fetchAllProducts()
         return () => {
             subs1.unsubscribe()
         }
     }, [])
 
-    useEffect(() => {
-        emit('ALL-ERRORS-JUST-REFRESH', null)
-    })
+    // useEffect(() => {
+    //     emit('ALL-ERRORS-JUST-REFRESH', null)
+    // })
 
     function checkAllErrors() {
-        checkAllRows(); setAllErrors()
-        // megaData.executeMethodForKey('render:allErrors', {})
-        // emit('ALL-ERRORS-JUST-REFRESH', null)
+        //     checkAllRows()
+        //     setAllErrors()
 
-        function checkAllRows() {
-            for (const item of items) {
-                item.isErrorProductCode = !Boolean(item.productCode)
-                item.isErrorHsn = !Boolean(item.hsn)
-                const slNoLength = (item.serialNumbers || '')
-                    .split(',')
-                    .filter(Boolean).length
-                if ((slNoLength > 0) && (slNoLength !== item.qty)) {
-                    item.isSerialNumberError = true
-                } else {
-                    item.isSerialNumberError = false
-                }
-            }
-        }
+        //     function checkAllRows() {
+        //         for (const item of items) {
+        //             item.isProductCodeError = !Boolean(item.productCode)
+        //             item.isHsnError = !Boolean(item.hsn)
+        //             const slNoLength = (item.serialNumbers || '')
+        //                 .split(',')
+        //                 .filter(Boolean).length
+        //             if ((slNoLength > 0) && (slNoLength !== item.qty)) {
+        //                 item.isSerialNumberError = true
+        //             } else {
+        //                 item.isSerialNumberError = false
+        //             }
+        //             if (isGstApplicable) {
+        //                 item.isGstRateError = (item.gstRate === 0) ? true : false
+        //                 item.isHsnError = (item.hsn === 0) ? true : false
+        //             } else {
+        //                 item.isGstRateError = (item.gstRate === 0) ? false : true
+        //             }
+        //         }
+        //     }
 
-        function setAllErrors() {
-            allErrors.productCodeError = items.some((item: any) => (item.isErrorProductCode)) ? errorMessages['productCodeError'] : ''
-            allErrors.hsnError = items.some((item: any) => (item.isErrorHsn)) ? errorMessages['hsnError'] : ''
-            allErrors.serialNumberError = items.some((item: any) => (item.isSerialNumberError)) ? errorMessages['serialNumberError'] : ''
-        }
+        //     function setAllErrors() {
+        //         allErrors.productCodeError = items.some((item: any) => (item.isProductCodeError)) ? errorMessages['productCodeError'] : ''
+        //         allErrors.hsnError = items.some((item: any) => (item.isHsnError)) ? errorMessages['hsnError'] : ''
+        //         allErrors.serialNumberError = items.some((item: any) => (item.isSerialNumberError)) ? errorMessages['serialNumberError'] : ''
+        //         allErrors.gstRateError = items.some((item: any) => (item.isGstRateError)) ? errorMessages['gstRateError'] : ''
+        //         allErrors.hsnError = items.some((item: any) => (item.isHsnError)) ? errorMessages['hsnError'] : ''
+        //     }
     }
 
     function clearRow(item: any) {
         item.productCode = undefined
+        item.productId = undefined
         item.productDetails = undefined
         item.hsn = undefined
-        item.gstrate = 0.0
+        item.gstRate = 0.0
         item.qty = 1
         item.price = 0.00
         item.priceGst = 0.0
@@ -77,14 +85,10 @@ function useLineItems() {
         item.amount = 0.0
         item.serialNumbers = ''
         item.remarks = ''
-    }
-
-    function computeAllRows() {
-        for (let lineItem of sales.items) {
-            computeRow(lineItem, false)
-        }
+        item.sgst = 0.0
+        item.cgst = 0.0
+        item.igst = 0.0
         megaData.executeMethodForKey('computeSummary:itemsFooter')
-        setRefresh({})
     }
 
     function computeRow(item: any, toComputeSummary = true) {
@@ -102,7 +106,6 @@ function useLineItems() {
             priceGst = price * (1 + gstRate / 100)
             item.priceGst = priceGst
         }
-
         if (discount === 0) {
             amount = priceGst * qty
             gst = (priceGst - price) * qty
@@ -125,9 +128,20 @@ function useLineItems() {
         toComputeSummary && megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
+    function computeAllRows() {
+        for (let lineItem of sales.items) {
+            computeRow(lineItem, false)
+        }
+        megaData.executeMethodForKey('computeSummary:itemsFooter')
+        setRefresh({})
+    }
+
     async function doSearchProductOnProductCode(d: any) {
-        const productCode = d.data.productCode
-        const item = d.data
+        const { item, setRefresh } = d.data
+        const productCode = item.productCode
+        if (!productCode) {
+            return
+        }
         emit('SHOW-LOADING-INDICATOR', true)
         try {
             const result: any = await execGenericView({
@@ -137,32 +151,22 @@ function useLineItems() {
                     productCode: productCode,
                 },
             })
-            item.id = result.id
-            item.productDetails = ''.concat(result.brandName, ' ', result.catName, ' ', result.label, ' ', result.info)
-            item.hsn = result.hsn
-            item.gstRate = result.gstRate
-            item.priceGst = result.salePriceGst || 0
-            item.discount = result.saleDiscount || 0
-            computeRow(item)
-
+            if (_.isEmpty(result)) {
+                clearRow(item)
+            } else {
+                item.productId = result.id
+                item.productDetails = ''.concat(result.brandName, ' ', result.catName, ' ', result.label, ' ', result.info)
+                item.hsn = result.hsn
+                item.gstRate = result.gstRate
+                item.priceGst = result.salePriceGst || 0
+                item.discount = result.saleDiscount || 0
+                computeRow(item)
+            }
             setRefresh({})
-            // selectProduct(rowData, result)
         } catch (e: any) {
             console.log(e.message)
         }
         emit('SHOW-LOADING-INDICATOR', false)
-    }
-
-    async function fetchAllProducts() {
-        emit('SHOW-LOADING-INDICATOR', true)
-        megaData.accounts.allProducts = await execGenericView({
-            isMultipleRows: true,
-            args: { onDate: null, isAll: true, days: 0 },
-            sqlKey: 'get_products_info'
-        })
-        emit('SHOW-LOADING-INDICATOR', false)
-        setIdForDataGridRows(megaData.accounts.allProducts)
-        setRefresh({})
     }
 
     function getSlNoError(item: any) {
@@ -174,11 +178,20 @@ function useLineItems() {
         }
     }
 
-    function handleDeleteRow(item: any, index: number) {
+    function handleDeleteRow(e: any, item: any, index: number) {
+        e.stopPropagation() // necessary to prevent the firing of Box click event. Box is the parent. Click event of the box is for setting focus
         if (items.length === 1) {
             clearRow(item)
         } else {
             items.splice(index, 1)
+            if (item.id) {
+                sales.deletedSalePurchaseIds.push(item.id)
+            }
+        }
+        if (items.length === 1) {
+            sales.currentItemIndex = 0
+        } else {
+            sales.currentItemIndex = (items.length - 1)
         }
         megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
@@ -237,9 +250,9 @@ function useLineItems() {
         const currentItem = items[currentItemIndex]
         const selectedProduct = megaData.accounts.selectedProduct
         // populate current item with selectedProduct
-        currentItem.id = selectedProduct.id1
+        currentItem.productId = selectedProduct.id1
         currentItem.productCode = selectedProduct.productCode
-        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info)
+        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info || '')
         currentItem.hsn = selectedProduct.hsn
         currentItem.gstRate = selectedProduct.gstRate
         currentItem.clos = selectedProduct.clos

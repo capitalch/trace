@@ -1,33 +1,46 @@
 import {
     _, Card, Big, Box, Button, DataGridPro, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
-    useContext, useEffect, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods
+    useContext, useEffect, useGridApiRef, useIbuki, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods, manageEntitiesState
 } from '../redirect'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
-    // const sales = megaData.accounts.sales
+    const { emit } = useIbuki()
+    const { execGenericView, setIdForDataGridRows } = utilMethods()
+    const { getFromBag, setInBag } = manageEntitiesState()
+    const allProducts = getFromBag('allProducts')
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
-    // const items = sales.items
+    const apiRef = useGridApiRef()
 
     const meta: any = useRef({
         allRows: [],
         filteredRows: [],
         setRefresh: setRefresh,
-        selectionModel: []
+        selectionModel: [],
+        // isFirstTimeSelection: false
     })
     const pre = meta.current
 
     useEffect(() => {
-        pre.allRows = megaData.accounts.allProducts
-        pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
-        setRefresh({})
+        if (_.isEmpty(allProducts)) {
+            fetchAllProducts()
+        } else {
+            pre.allRows = allProducts
+            pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
+            setRefresh({})
+        }
     }, [])
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <SearchBox parentMeta={meta} sx={{maxWidth:theme.spacing(80)}} />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', columnGap: 2 }}>
+            <SearchBox parentMeta={meta} sx={{ maxWidth: theme.spacing(120), width: theme.spacing(50) }} />
+            <Button variant='contained' color='secondary' onClick={fetchAllProducts}>Refresh</Button>
+        </Box>
         <DataGridPro
+            apiRef={apiRef}
+            // checkboxSelection={true}
             columns={getColumns()}
             getRowClassName={getRowClassName}
             rows={pre.filteredRows}
@@ -37,19 +50,36 @@ function ProductsSearch({ parentMeta }: any) {
             rowHeight={65}
             selectionModel={pre.selectionModel}
             onSelectionModelChange={(newModel: any) => {
-                const products = megaData.accounts.allProducts
+                const products = allProducts
                 if (_.isEmpty(products)) {
                     return
                 }
                 const index = newModel[0]
                 const selectedProduct = products[index - 1]
-                megaData.accounts.selectedProduct = selectedProduct
-                parentMeta.current.showDialog = false
-                megaData.executeMethodForKey('render:itemsFooter', {}) // calling setRefresh({}) of parent
-                megaData.executeMethodForKey('setItemToSelectedProduct:lineItems') // populates the selected product to current item
+                if (megaData?.accounts) {
+                    megaData.accounts.selectedProduct = selectedProduct
+                    parentMeta.current.showDialog = false
+                    megaData.executeMethodForKey('render:itemsFooter', {}) // calling setRefresh({}) of parent
+                    megaData.executeMethodForKey('setItemToSelectedProduct:lineItems') // populates the selected product to current item
+                }
             }}
         />
     </Box>)
+
+    async function fetchAllProducts() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        const products = await execGenericView({
+            isMultipleRows: true,
+            args: { onDate: null, isAll: true, days: 0 },
+            sqlKey: 'get_products_info'
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        setIdForDataGridRows(products)
+        pre.allRows = products
+        pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
+        setInBag('allProducts', products)
+        setRefresh({})
+    }
 
     function getColumns() {
         return ([
@@ -165,7 +195,7 @@ function ProductsSearch({ parentMeta }: any) {
                 border: '4px solid orange',
                 mt: 1.5,
                 p: 1, width: '100%',
-                fontSize: theme.spacing(1.7),
+                fontSize:  '.9rem', //theme.spacing(1.7),
                 // minHeight: theme.spacing(60),
                 minHeight: '70vh',
                 // height: 'calc(100vh - 230px)',
@@ -202,16 +232,16 @@ function ProductsSearch({ parentMeta }: any) {
     function Product({ params }: any) {
         return (
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                <Typography sx={{ fontSize: theme.spacing(1.6), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
-                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.catName}</Typography>}
-                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.6) }}>&nbsp;{params.row.label}</Typography>}
+                <Typography sx={{ fontSize: theme.spacing(1.8), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
+                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.8) }}>&nbsp;{params.row.catName}</Typography>}
+                {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.8) }}>&nbsp;{params.row.label}</Typography>}
             </Box>
         )
     }
 
     function ProductDetails({ params }: any) {
         return (
-            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.8), }}>{params.row.info}</Typography>
         )
     }
 }

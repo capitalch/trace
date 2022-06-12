@@ -1,3 +1,12 @@
+## upgrade trace-client-next
+npm install @emotion/react @emotion/styled @mui/icons-material @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/react @testing-library/user-event @types/jest @types/node big.js --force
+npm install graphql primereact react-select react-to-print sass
+npm install socket.io-client typescript
+
+npm install graphql@latest
+npm install @types/jest@latest @types/react@latest @types/react-dom@latest @types/react-table@latest
+npm install  react-scripts@latest react-error-overlay@latest
+All works.
 ## Flutter learning
                                                                                     1. Navigation and drawyer
                                                                                     2. Provider and listner and notifier
@@ -15,8 +24,8 @@
 15. Deployment
 
 ## To do in mobile
-1. Remove sales from App bar and put Bu over there; click allows to change BU in alert box.
-2. Subheader shows company name, fy year range and branch. fy year and branch can change on alert box.
+                                                                                    1. Remove sales from App bar and put Bu over there; click allows to change BU in alert box.
+                                                                                    2. Subheader shows company name, fy year range and branch. fy year and branch can change on alert box.
 
 ## Appearance
 #. Theme.of(context).textTheme.headline4
@@ -27,9 +36,7 @@
 20. Discount manage in sales           
 27. Sale return new type
 
-## Planning
-a. 
-                                                                                        
+## Planning                                                                             
 b. Make product inactive
 c. Stock journal
 d. Purchase if change in last purchase price show alert
@@ -41,6 +48,7 @@ i. Gst rate in downloaded excel file
 j. salePurchaseDetails table jData has remarks etc. it should be null
 k. Server logging for modify and delete, time and log viewer
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
+L. Bank reconcillation opening cheques
 1. Include jData or serial no in sales report so that search on sl no may occur
 2. ledger report for inventory
 3. Stock journal
@@ -98,24 +106,24 @@ k. Server logging for modify and delete, time and log viewer
 1. Test on 10 lacs entries in TranH with Trial balance and BS
 
 # Trace mobile
-1. Login should not allow blank values
+                                                                                                1. Login should not allow blank values
 2. Connection error to show when server not available
-3. When next button clicked then company name is not shown in dashboard app bar
+                                                                                                3. When next button clicked then company name is not shown in dashboard app bar
                                                                                                 1. snack bar
                                                                                                 2. local storage
                                                                                                 3. Demo and Next functions
-    4. Dashboard research
+                                                                                                4. Dashboard research
                                                                                                 4. Using token when query with server
-5. Research with horz and vert scrolls
-6. Server side implement executeSqlWithParamsArray
+                                                                                                5. Research with horz and vert scrolls
+                                                                                                6. Server side implement executeSqlWithParamsArray
 
 # Functionality
                                                                                                 1. After successful login, the login data is injected in globalSettings
                                                                                                 2. LogOut clears the loginData from globalSettings
                                                                                                 3. HomePage, Next button appears when login is already done, otherwise disabled
                                                                                                 4. login failure clears the login data
-5. Dashboard shows bucode, branch, fin year and plus minus settings. All settings to be there in global settings
-6. Can change these settings form dashboard
+                                                                                                5. Dashboard shows bucode, branch, fin year and plus minus settings. All settings to be there in global settings
+                                                                                                6. Can change these settings form dashboard
 7. Dashboard:
     Sales: today, yesterday, this month, last month, ytd
     Purchases: this month, last month, ytd
@@ -134,6 +142,8 @@ k. Server logging for modify and delete, time and log viewer
 
 
 
+# 18-05-2022 - 12-06-2022
+1. Delivered Products search screen
 
 # 22-05-2022 - 27-05-2022
 1. Worked on Flutter mobile

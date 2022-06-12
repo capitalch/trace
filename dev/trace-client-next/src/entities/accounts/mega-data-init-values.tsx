@@ -1,5 +1,11 @@
 import moment from 'moment'
 const isoDateFormat = 'YYYY-MM-DD'
+
+const inventoryMegaData = () => ({
+    allTags: [],
+    selectedReportName: undefined,
+})
+
 const settingsMegaData = () => ({
     smallFontTextField: { style: { fontSize: 14 } }
 })
@@ -8,22 +14,27 @@ const salesMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
     billTo: {},
+    currentItemIndex: 0,
     commonRemarks: undefined,
     credits: 0,
     debits: 0,
-    salesAccountId: 0,
+    deletedSalePurchaseIds: [],
+    extGstTranDId: undefined,
+    salesAccount: {
+        id: undefined, // id from table TranD for row which is for sales
+        accId: undefined,
+        // amount: 0,
+    },
     gstin: undefined,
-    id: undefined,
+    id: undefined, // from table TranH
     isIgst: false,
-    items: [],
+    items: [], // id from salePurchaseDetails table
     payments: {
         deletedIds: [],
-        paymentMethodsList: [],
+        paymentMethodsList: [], // id from TranD table // object array of type: {id, amount, instrNo, remarks, rowData:{accId}, ledgerFilterMethodName, }
         paymentVariety: 'r',
     },
-    // paymentMethodsList: [], // to be removed
-    // paymentVariety: 'r', // to be removed
-    rawSaleData: undefined,
+    // rawSaleData: undefined,
     saleType: 'sal',
     shipTo: {},
     summary: {
@@ -33,4 +44,4 @@ const salesMegaData = () => ({
     userRefNo: undefined,
 })
 
-export { salesMegaData, settingsMegaData }
+export { inventoryMegaData, salesMegaData, settingsMegaData }

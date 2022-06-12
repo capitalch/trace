@@ -68,7 +68,7 @@ function useCustomer() {
     }
 
     function handleCustomerSearch() {
-        if (sales.searchText) {
+        if (sales.searchText) {            
             pre.allRows = []
             pre.filteredRows = []
             pre.showDialog = true

@@ -5,7 +5,8 @@ function useShipTo() {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const shipTo = sales.shipTo
+    const { isInvalidEmail, isInvalidIndiaMobile, isInvalidIndiaPin } = utils()
+    // const shipTo = sales.shipTo
     const allErrors = sales.allErrors
     const { emit } = useIbuki()
     const meta: any = useRef({
@@ -13,11 +14,13 @@ function useShipTo() {
         dialogConfig: {
             title: 'New shipping details',
             content: () => <></>,
-            maxWidth: 'sm'
+            maxWidth: 'sm',
+            shipTo: {}
         }
     })
-    const pre = meta.current
-
+    const pre = meta.current    
+    pre.dialogConfig.shipTo = _.isEmpty(sales.shipTo) ? {} : {...sales.shipTo}
+    const shipTo = pre.dialogConfig.shipTo
     useEffect(() => {
         megaData.registerKeyWithMethod('closeDialog:shipTo', closeDialog)
         megaData.registerKeyWithMethod('handleClear:shipTo', handleClear)
@@ -27,7 +30,7 @@ function useShipTo() {
         emit('ALL-ERRORS-JUST-REFRESH', null)
     })
 
-    function ShippingDetails() {
+    function ShipToContent() {
         const [, setRefresh] = useState({})
         return (<Box >
             <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', rowGap: 2.2, justifyContent: 'space-around', p: 2 }}>
@@ -45,6 +48,9 @@ function useShipTo() {
                 {/* mobile */}
                 <TextField
                     autoComplete='new-password'
+                    error={isInvalidIndiaMobile(
+                        shipTo.mobile
+                    )}
                     label='Mobile'
                     type='tel'
                     variant='standard'
@@ -54,6 +60,7 @@ function useShipTo() {
                 {/* email */}
                 <TextField
                     autoComplete='new-password'
+                    error={isInvalidEmail(shipTo.email)}
                     label='Email'
                     variant='standard'
                     value={shipTo.email || ''}
@@ -106,7 +113,7 @@ function useShipTo() {
                 {/* pin */}
                 <TextField
                     autoComplete='new-password'
-                    error={!shipTo.pin}
+                    error={(!shipTo.pin) || (isInvalidIndiaPin(shipTo.pin))}
                     label='Pin'
                     variant='standard'
                     value={shipTo.pin || ''}
@@ -122,17 +129,20 @@ function useShipTo() {
                 />
             </Box>
             <Box sx={{ display: 'flex', }}>
-                <Button sx={{ ml: 'auto', }} color='warning' variant='contained' size='small' onClick={handleClear} >Clear</Button>
-                <Button color='secondary' variant='contained' size='small' sx={{ ml: 2, mr: 5 }} onClick={handleOk} >Ok</Button>
+                <Button sx={{ ml: 'auto', }} color='warning' variant='contained' size='small' onClick={handleShipToContentClear} >Clear</Button>
+                <Button color='secondary' variant='contained' size='small' disabled={isSubmitDisabled()} sx={{ ml: 2, mr: 5 }} onClick={handleOk} >Ok</Button>
             </Box>
         </Box>)
 
-        function handleClear() {
-            Object.keys(sales.shipTo).forEach((key: any) => delete sales.shipTo[key])
+        function handleShipToContentClear() {
+            Object.keys(shipTo).forEach((key: any) => delete shipTo[key])
+            sales.shipTo = { ...shipTo }
             setRefresh({})
+            megaData.executeMethodForKey('closeDialog:shipTo')
         }
 
         function handleOk() {
+            sales.shipTo = { ...shipTo }
             megaData.executeMethodForKey('closeDialog:shipTo')
         }
 
@@ -147,6 +157,7 @@ function useShipTo() {
             allErrors.shipToError = undefined
         } else {
             const ok = shipTo.name && shipTo.address1 && shipTo.country && shipTo.state && shipTo.city && shipTo.pin
+                && (!isInvalidIndiaMobile(shipTo.mobile)) && (!isInvalidEmail(shipTo.email))
             allErrors.shipToError = ok ? undefined : errorMessages.shipToError
         }
     }
@@ -157,7 +168,7 @@ function useShipTo() {
     }
 
     function getShipToAsString() {
-        return (Object.values(shipTo).filter((x: any) => x).join(', ').replace(/^,/, ''))
+        return (Object.values(sales.shipTo).filter((x: any) => x).join(', ').replace(/^,/, ''))
     }
 
     function handleClear() {
@@ -166,9 +177,23 @@ function useShipTo() {
     }
 
     function handleNewClicked() {
+        pre.dialogConfig.shipTo = _.isEmpty(sales.shipTo) ? {} : sales.shipTo
         pre.showDialog = true
-        pre.dialogConfig.content = ShippingDetails
+        pre.dialogConfig.content = ShipToContent
         setRefresh({})
+    }
+
+    function isSubmitDisabled() {
+        const ret =
+            isInvalidIndiaMobile(shipTo.mobile) ||
+            !shipTo.name ||
+            isInvalidEmail(shipTo.email) ||
+            !shipTo.address1 ||
+            !shipTo.country ||
+            !shipTo.state ||
+            !shipTo.city ||
+            isInvalidIndiaPin(shipTo.pin)
+        return (!!ret)
     }
 
 

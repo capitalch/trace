@@ -1,13 +1,14 @@
-import { _, accountsMessages, Box, Button, IMegaData, manageEntitiesState, MegaDataContext, moment, salesMegaData, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, XXGrid } from '../redirect'
+import { _, accountsMessages, Box, Button, IMegaData, manageEntitiesState, MegaDataContext, moment, salesMegaData, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, XXGrid } from '../redirect'
 
 function useSalesViewContent() {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
+    const confirm = useConfirm()
+    const { isControlDisabled, genericUpdateMaster, toDecimalFormat } = utilMethods()
     const { emit, filterOn } = useIbuki()
     const { getFromBag, setInBag, } = manageEntitiesState()
     const dateFormat = getFromBag('dateFormat')
-    const { toDecimalFormat } = utilMethods()
     const { isAllowedUpdate, execSaleInvoiceView, getAccountClassWithAutoSubledger } = utils()
 
     const meta: any = useRef({
@@ -24,9 +25,52 @@ function useSalesViewContent() {
                 loadSaleOnId(id1, true) // isModify; 2nd arg is true for no new entry in tables
             }
         })
-
-        return (() => { subs1.unsubscribe() })
+        const subs2 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe((d: any) => {
+            const options: any = {
+                description: accountsMessages.transactionDelete,
+                confirmationText: 'Yes',
+                cancellationText: 'No',
+            }
+            const { tranDate, clearDate, id1 } = d.data?.row
+            if (isAllowedUpdate({ tranDate, clearDate })) {
+                confirm(options)
+                    .then(async () => {
+                        const id = id1
+                        emit('SHOW-LOADING-INDICATOR', true)
+                        await genericUpdateMaster({
+                            deletedIds: [id],
+                            tableName: 'TranH',
+                        })
+                        emit('SHOW-LOADING-INDICATOR', false)
+                        emit('SHOW-MESSAGE', {})
+                        emit(gridActionMessages.fetchIbukiMessage, null)
+                    })
+                    .catch(() => { }) // important to have otherwise eror
+            }
+        })
+        const subs3 = filterOn(gridActionMessages.printIbukiMessage).subscribe((d: any) => {
+            const row = d.data?.row
+            doPrintPreview(row.id1)
+        })
+        return (() => {
+            subs1.unsubscribe()
+            subs2.unsubscribe()
+            subs3.unsubscribe()
+        })
     }, [])
+
+    async function doPrintPreview(id: number) {
+        emit('SHOW-LOADING-INDICATOR', true)
+        const ret = await execSaleInvoiceView({
+            isMultipleRows: false,
+            sqlKey: 'getJson_sale_purchase_on_id',
+            args: {
+                id: id,
+            },
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        megaData.executeMethodForKey('handleBillPreviewFromSalesView:debitsCreditsPreview', ret)
+    }
 
     function getXXGridParams() {
         const columns = [
@@ -99,12 +143,16 @@ function useSalesViewContent() {
         const summaryColNames: string[] = ['amount']
         const specialColumns = {
             isEdit: true,
+            isEditDisabled: isControlDisabled('salespurchases-simple-sales-edit'),
             isDelete: true,
+            isDeleteDisabled: isControlDisabled('salespurchases-simple-sales-delete'),
+            isPrint: true,
         }
         const gridActionMessages = {
             fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-SALES-DATA',
             editIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
             deleteIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
+            printIbukiMessage: 'SALE-VIEW-HOOK-XX-GRID-PRINT-CLICKED'
         }
         return {
             columns,
@@ -128,14 +176,11 @@ function useSalesViewContent() {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (ret) {
-            // console.log(JSON.stringify(ret))
-            sales.rawSaleData = ret
-            // setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
+            setInBag('rawSaleData', ret) // for printing in sale-crown.tsx
             prepareSalesData(ret)
-            // arbitraryData.saleItemsRefresh()
-            // emit('SALES-HOOK-CHANGE-TAB', 0)
         }
 
+        // populates the megaData.accounts.sales from database
         function prepareSalesData(data: any) {
             const res = data.jsonResult
             loadTranH(res)
@@ -153,7 +198,8 @@ function useSalesViewContent() {
                 sales.summary.sgst = extGstTranD.sgst
                 sales.summary.igst = extGstTranD.igst
                 sales.extGstTranDId = isModify ? extGstTranD.id : undefined
-                sales.summary.igst ? (sales.isIgst = true) : (sales.isIgst = false)
+                sales.isIgst = sales.summary.igst ? true : false
+                // sales.summary.igst ? (sales.isIgst = true) : (sales.isIgst = false)
             }
 
             function loadSalePurchaseDetails(res: any) {
@@ -165,29 +211,32 @@ function useSalesViewContent() {
                 function incr() {
                     return numb++
                 }
-                sales.items = salePurchaseDetails.map((item: any) => ({
-                    id: isModify ? item.id : undefined,
-                    index: incr(),
-                    remarks: item.remarks,
-                    upcCode: item.upcCode,
-                    productCode: item.productCode,
-                    productDetails: item.label
-                        ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
-                        }, ${item.info || ''}`
-                        : '',
-                    productId: item.productId,
-                    hsn: item.hsn,
-                    gstRate: item.gstRate,
-                    cgst: item.cgst,
-                    sgst: item.sgst,
-                    igst: item.igst,
-                    qty: item.qty,
-                    priceGst: item.priceGst,
-                    price: item.price,
-                    discount: item.discount,
-                    amount: item.amount || 0,
-                    serialNumbers: item.serialNumbers || '',
-                }))
+                sales.items.length = 0
+                for (const item of salePurchaseDetails) {
+                    sales.items.push({
+                        id: isModify ? item.id : undefined,
+                        index: incr(),
+                        remarks: item.remarks,
+                        upcCode: item.upcCode,
+                        productCode: item.productCode,
+                        productDetails: item.label
+                            ? `${item.catName || ''}, ${item.brandName || ''}, ${item.label || ''
+                            }, ${item.info || ''}`
+                            : '',
+                        productId: item.productId,
+                        hsn: item.hsn,
+                        gstRate: item.gstRate,
+                        cgst: item.cgst,
+                        sgst: item.sgst,
+                        igst: item.igst,
+                        qty: item.qty,
+                        priceGst: item.priceGst,
+                        price: item.price,
+                        discount: item.discount,
+                        amount: item.amount || 0,
+                        serialNumbers: item.serialNumbers || '',
+                    })
+                }
                 sales.summary.qty = 0
                 sales.items.reduce((prev: any, item: any) => {
                     sales.summary.qty = prev.qty + item.qty
@@ -199,12 +248,11 @@ function useSalesViewContent() {
                 const tranD = res.tranD //an array of 2 or multiple items. If multipe payments received in footer then more than 2 rows
                 sales.payments.paymentVariety = 'r'
                 sales.payments.paymentMethodsList = []
-                // sales.footer.items = []
                 for (let item of tranD) {
                     const accObj: any = getAccountClassWithAutoSubledger(
                         item.accId
                     )
-                    if (!accObj) {
+                    if (_.isEmpty(accObj)) {
                         emit('SHOW-MESSAGE', {
                             message: accountsMessages.warningToDoRefresh,
                             severity: 'warning',
@@ -213,19 +261,20 @@ function useSalesViewContent() {
                         return
                     }
                     if (accObj?.accClass === 'sale') {
-                        sales.salesAccountId = item.accId
+                        sales.salesAccount.accId = item.accId
                         sales.summary.amount = item.amount
+                        sales.summary.backCalculateAmount = item.amount
+                        // sales.salesAccount.amount = item.amount
+                        sales.salesAccount.id = isModify ? item.id : undefined // id from table TranD
                         // sales.footer.amount = item.amount
-                        sales.id = isModify ? item.id : undefined
                     } else {
                         const obj: any = {
                             // accId: item.accId,
-                            rowData:{accId: item.accId},
+                            rowData: { accId: item.accId },
                             amount: item.amount,
                             instrNo: item.instrNo,
                             remarks: item.remarks,
-                            id: isModify ? item.id : undefined,
-                            // allAccounts: sales.allAccounts,
+                            id: isModify ? item.id : undefined, // id from table TranD
                         }
                         if (accObj?.isAutoSubledger) {
                             sales.payments.paymentVariety = 'a'

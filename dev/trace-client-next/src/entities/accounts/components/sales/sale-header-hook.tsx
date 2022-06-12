@@ -164,13 +164,6 @@ function useSaleHeader(arbitraryData: any) {
         meta.current.isMounted && setRefresh({})
     }
 
-    // function setFooterRow(ledgerAccounts: any[]) {
-    //     if (arbitraryData?.footer?.items?.length > 0) {
-    //         arbitraryData.footer.items[0].ledgerAccounts =
-    //             getMappedAccounts(ledgerAccounts)
-    //     }
-    // }
-
     function setFirstFooterRow(methodName: string) {
         if (arbitraryData?.footer?.items?.length > 0) {
             arbitraryData.footer.items[0].ledgerFilterMethodName = methodName

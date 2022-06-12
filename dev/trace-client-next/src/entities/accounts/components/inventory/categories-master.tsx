@@ -1,17 +1,23 @@
 import { useCategoriesMaster, useStyles } from './categories-master-hook'
 import {
-    Add, Box, Button, DeleteForever, Edit, Grid, IconButton, Link, PrimeColumn,
-    Switch, SyncSharp, TreeTable, Typography, useState, useEffect, useSharedElements,
+    _, Add, Attachment, Box, Button, DeleteForever, Edit, Grid, IconButton, IMegaData, Link, MegaDataContext, PrimeColumn, ReactSelect,
+    Switch, SyncSharp, TreeTable, Typography, useContext, useState, useTheme, useEffect, useSharedElements, utils, utilMethods
 } from './redirect'
 
 function CategoriesMaster() {
     const [, setRefresh] = useState({})
-    const {handleHsnLeafCategories, meta, utilFunc } = useCategoriesMaster()
+    const { handleHsnLeafCategories, handleManageTags, meta, utilFunc } = useCategoriesMaster()
     const classes = useStyles()
-
+    const theme = useTheme()
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const inventory:any = megaData.accounts.inventory
+    const { execGenericView, genericUpdateMasterNoForm } = utilMethods()
+    // const { } = utils()
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
+        megaData.registerKeyWithMethod('fetchAllTags:categoriesMaster', fetchAllTags)
+        megaData.registerKeyWithMethod('render:categoriesMaster', setRefresh)
         getData()
         return () => {
             curr.isMounted = false
@@ -19,6 +25,7 @@ function CategoriesMaster() {
     }, [])
 
     const {
+        BasicMaterialDialog,
         confirm,
         doValidateForm,
         emit,
@@ -86,12 +93,12 @@ function CategoriesMaster() {
                         </Grid>
                     </Grid>
                 </Typography>
-                <Box sx={{display:'flex', alignItems:'center', columnGap:4, rowGap:1, }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', columnGap: 4, rowGap: 1, }}>
                     <Button size='small' color='secondary' variant='contained' onClick={handleHsnLeafCategories}>HSN for leaf categories</Button>
+                    <Button size='small' color='primary' variant='contained' onClick={handleManageTags}>Manage tags</Button>
                     {traceGlobalSearch({ meta: meta, isMediumSizeUp: true })}
                 </Box>
             </Box>
-
             <TreeTable
                 className={classes.content}
                 value={meta.current.data}
@@ -158,7 +165,13 @@ function CategoriesMaster() {
                                         Change parent
                                     </Button>
                                 )}
-
+                                {/* Tag */}
+                                <Button
+                                    onClick={() => handleTag(node)}
+                                    startIcon={<Attachment />}
+                                    size='small' >
+                                    Tag
+                                </Button>
                                 <span> </span>
                                 {isDeleteAllowed && (
                                     <IconButton
@@ -188,7 +201,9 @@ function CategoriesMaster() {
                     }}
                 />
 
-                <PrimeColumn field="descr" header="Description" />
+                <PrimeColumn field='tagName' header='Tag' style={{ width: '6rem' }} />
+
+                <PrimeColumn field="descr" header="Description" style={{ width: '10rem' }} />
 
                 <PrimeColumn
                     field="isLeaf"
@@ -211,6 +226,28 @@ function CategoriesMaster() {
             <TraceDialog meta={meta} />
         </div>
     )
+
+    async function fetchAllTags() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        inventory.allTags = await execGenericView({
+            isMultipleRows: true,
+            sqlKey: 'get_tags',
+        }) || []
+        setId(inventory.allTags)
+        emit('SHOW-LOADING-INDICATOR', false)
+        // setRefresh({})
+
+        function setId(rows: any[]) {
+            let count = 1
+            for (const row of rows) {
+                row.id1 = row.id
+                row.id = incr()
+            }
+            function incr() {
+                return (count++)
+            }
+        }
+    }
 
     function handleAddChild(node: any) {
         const pre = meta.current.dialogConfig
@@ -561,8 +598,76 @@ function CategoriesMaster() {
         meta.current.isMounted && setRefresh({})
     }
 
-    async function getData() {
-        emit('SHOW-LOADING-INDICATOR', true)
+    async function handleTag(node: any) {
+        const pre = meta.current
+        const selectedTagId = node.data.tagId
+        pre.showDialog = true
+        pre.dialogConfig.title = 'Attach / Detach tag'
+        pre.dialogConfig.content = () => <TagContent />
+        setRefresh({})
+
+        function TagContent() {
+            const [, setRefresh] = useState({})
+            useEffect(() => {
+                pre.options = inventory.allTags.map((x: any) => ({
+                    label: x.tagName,
+                    value: x.id1
+                }))
+                pre.selectedTag = pre.options.find((x: any) => (x.value === selectedTagId)) || { label: 'Nothing', value: null }
+                pre.options.unshift({ label: 'Nothing', value: null })
+                setRefresh({})
+            }, [])
+
+            return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <ReactSelect
+                    menuPlacement='auto'
+                    placeholder="Select tag"
+                    options={pre.options}
+                    value={pre.selectedTag}
+                    onChange={onTagChanged}
+                />
+                {/* Empty box to increase the height of dialog */}
+                <Box sx={{ height: theme.spacing(20) }}></Box>
+                <Box sx={{ display: 'flex', ml: 'auto' }}>
+                    <Button size='small' color='primary' onClick={handleCloseDialog} variant='contained'>Cancel</Button>
+                    <Button size='small' color='secondary' onClick={handleSubmit} variant='contained' sx={{ ml: 2 }}>Submit</Button>
+                </Box>
+            </Box>)
+
+            function handleCloseDialog() {
+                pre.showDialog = false
+                megaData.executeMethodForKey('render:categoriesMaster', {})
+            }
+
+            async function handleSubmit() {
+                try {
+                    emit('SHOW-LOADING-INDICATOR', true)
+                    await genericUpdateMasterNoForm({
+                        tableName: 'CategoryM',
+                        data: {
+                            id: node.data.id,
+                            tagId: pre.selectedTag.value
+                        }
+                    })
+                    getData(false, false)
+                    emit('SHOW-LOADING-INDICATOR', false)
+                    emit('SHOW-MESSAGE', {})
+                    handleCloseDialog()
+                } catch (e: any) {
+                    emit('SHOW-LOADING-INDICATOR', false)
+                    console.log(e.message)
+                }
+            }
+
+            function onTagChanged(selectedItem: any) {
+                pre.selectedTag = selectedItem
+                setRefresh({})
+            }
+        }
+    }
+
+    async function getData(showLoading: any = true, isFetchAllTags: any = true) {
+        showLoading && emit('SHOW-LOADING-INDICATOR', true)
         const q = queries['genericQueryBuilder']({
             // in shared artifacts
             queryName: 'allCategories',
@@ -571,10 +676,13 @@ function CategoriesMaster() {
         try {
             if (q) {
                 const result: any = await queryGraphql(q)
+                if (isFetchAllTags) {
+                    await fetchAllTags()
+                }
                 const pre = result.data.accounts.allCategories
                 meta.current.allKeys = pre.allKeys
                 meta.current.data = pre.categories
-                await processTree(meta.current.data) // experimental
+                await processTree(meta.current.data)
             }
         } catch (e: any) {
             emit('SHOW-MESSAGE', {
@@ -584,7 +692,7 @@ function CategoriesMaster() {
             })
             console.log(e.message)
         }
-        emit('SHOW-LOADING-INDICATOR', false)
+        showLoading && emit('SHOW-LOADING-INDICATOR', false)
         meta.current.isMounted && setRefresh({})
     }
 

@@ -6,9 +6,11 @@ import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
 import 'package:trace_mobile/features/dashboard/stock.dart';
+import 'package:trace_mobile/features/products/classes/products_tags_state.dart';
 import 'package:trace_mobile/features/products/products_page.dart';
 import 'package:trace_mobile/features/products/classes/products_search_state.dart';
 import 'package:trace_mobile/features/products/classes/products_summary_state.dart';
+import 'package:trace_mobile/features/sales/sales_page.dart';
 import 'features/authentication/login_page.dart';
 
 void main() {
@@ -40,6 +42,9 @@ class TraceApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProductsSummaryState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductsTagsState(),
         )
       ],
       child: MaterialApp(
@@ -52,7 +57,7 @@ class TraceApp extends StatelessWidget {
             return const LoginPage();
           },
           'products': (BuildContext context) => const ProductsPage(),
-          'sales': (BuildContext context) => const DashBoardPage(),
+          'sales': (BuildContext context) => const SalesPage(),
           'stock': (BuildContext context) => const Stock(),
         },
       ),

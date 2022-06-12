@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/ibuki.dart';
 import 'package:trace_mobile/features/products/classes/indexed_item.dart';
 import 'package:trace_mobile/features/products/classes/products_summary_state.dart';
+import 'package:trace_mobile/features/products/classes/products_tags_state.dart';
 import 'package:trace_mobile/features/products/widgets/products_card_item.dart';
 
 class ProductsList extends StatefulWidget {
@@ -25,6 +25,9 @@ class _ProductsListState extends State<ProductsList> {
     filteredList = [...widget.dataList];
     ProductsSummaryState productsSummaryState =
         Provider.of<ProductsSummaryState>(context, listen: false);
+    ProductsTagsState productsTagsState = Provider.of<ProductsTagsState>(
+        context,
+        listen: false); // To manage the tags
 
     subs =
         Ibuki.debounceFilterOn(IbukiKeys.productFilerKey, debouncePeriod: 1500)
@@ -51,6 +54,8 @@ class _ProductsListState extends State<ProductsList> {
       productsSummaryState.summaryClos = summaryClos;
       productsSummaryState.summarySumGst = summarySumGst;
       productsSummaryState.summarySum = summarySum;
+
+      productsTagsState.addTag(searchText);
       setState(() {});
     });
 

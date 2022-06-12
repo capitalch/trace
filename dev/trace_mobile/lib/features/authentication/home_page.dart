@@ -42,9 +42,9 @@ class HomePage extends StatelessWidget {
                       // Demo
                       ElevatedButton.icon(
                           onPressed: () {
-                            onDemoPressed(context, globalSettings);
-                            Navigator.pushNamed(context, Routes.dashBoard);
-                            // Navigator.pushNamed(context, Routes.dashBoard);
+                            globalSettings.setDemoLoginData();
+                            // onDemoPressed(context, globalSettings);
+                            Navigator.pushNamed(context, Routes.dashBoard, arguments: Utils.execDataCache(globalSettings));
                           },
                           icon: const Icon(Icons.account_tree),
                           label: const Text('Demo')),
@@ -63,10 +63,10 @@ class HomePage extends StatelessWidget {
         ));
   }
 
-  onDemoPressed(BuildContext context, GlobalSettings globalSettings) async {
-    globalSettings.setDemoLoginData();
-    Utils.execDataCache(globalSettings);
-  }
+  // onDemoPressed(BuildContext context, GlobalSettings globalSettings) async {
+  //   globalSettings.setDemoLoginData();
+  //   Utils.execDataCache(globalSettings);
+  // }
 }
 
 class NextButton extends StatelessWidget {
@@ -78,9 +78,9 @@ class NextButton extends StatelessWidget {
     bool isUserLoggedIn = globalSettings.isUserLoggedIn();
     return ElevatedButton.icon(
         onPressed: isUserLoggedIn
-            ? () {
-                Utils.execDataCache(globalSettings);
-                Navigator.pushNamed(context, Routes.dashBoard);
+            ? () {                
+                // Utils.execDataCache(globalSettings, );
+                Navigator.pushNamed(context, Routes.dashBoard,arguments: Utils.execDataCache(globalSettings));
               }
             : null,
         icon: const Icon(Icons.next_plan),

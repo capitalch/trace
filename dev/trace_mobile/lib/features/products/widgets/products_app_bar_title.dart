@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:trace_mobile/common/classes/data_store.dart';
 import 'package:trace_mobile/common/classes/ibuki.dart';
 import 'package:trace_mobile/features/products/classes/products_search_state.dart';
+import 'package:trace_mobile/features/products/classes/products_tags_state.dart';
 
 class ProductsAppBarTitle extends StatelessWidget {
   const ProductsAppBarTitle({Key? key}) : super(key: key);
@@ -10,6 +14,8 @@ class ProductsAppBarTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     ProductsSearchState productsSearchState =
         Provider.of<ProductsSearchState>(context, listen: true);
+    ProductsTagsState productsTagsState =
+        Provider.of<ProductsTagsState>(context, listen: false);
     var controller = TextEditingController();
     controller.value =
         TextEditingValue(text: productsSearchState.searchFromTag);
@@ -40,6 +46,10 @@ class ProductsAppBarTitle extends StatelessWidget {
             ),
             onTap: () {
               productsSearchState.searchFromTag = '';
+              List<String> tagsData = productsTagsState.productsTags;
+              String serializedData = json.encode(tagsData);
+              DataStore.saveDataInSecuredStorage(
+                  'productsTags', serializedData);
               Navigator.pop(context);
             },
           ),

@@ -1,3 +1,4 @@
+import { VariablesAreInputTypesRule } from 'graphql'
 import { _, Avatar, Box, Button, CloseSharp, FormControlLabel, IconButton, InputLabel, IMegaData, LedgerSubledger, List, ListItem, ListItemAvatar, ListItemText, manageEntitiesState, MegaDataContext, NativeSelect, NumberFormat, Radio, RadioGroup, Select, TextField, useIbuki, useTraceMaterialComponents, Typography, useContext, useEffect, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function PaymentsVariety() {
@@ -26,12 +27,12 @@ function PaymentsVariety() {
     })
     const pre = meta.current
     return (
-        <Box sx={{ mt: 1, pt: 1,pb:1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1,  }}>
+        <Box sx={{ mt: 1, pt: 1, pb: 1, display: 'flex', alignItems: 'center', flexWrap: 'wrap', columnGap: 1, rowGap: 1, }}>
             <RadioGroup row>
                 <FormControlLabel
                     control={
                         <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            disabled={!!sales.id} // in edit mode changeover is not allowed
                             onClick={handleRetailCashBankSales}
                             size="small"
                             color="secondary"
@@ -43,7 +44,7 @@ function PaymentsVariety() {
                 <FormControlLabel
                     control={
                         <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            disabled={!!sales.id} // in edit mode changeover is not allowed
                             onClick={handleAutoSubledgerSales}
                             size="small"
                             color="secondary"
@@ -55,7 +56,7 @@ function PaymentsVariety() {
                 <FormControlLabel
                     control={
                         <Radio
-                            // disabled={arbitraryData.id} // in edit mode changeover is not allowed
+                            disabled={!!sales.id} // in edit mode changeover is not allowed
                             onClick={handleInstitutionSales}
                             size="small"
                             color="secondary"
@@ -81,12 +82,11 @@ function PaymentsVariety() {
         const allAccounts = getFromBag('allAccounts')
         const saleAccounts = allAccounts.filter((x: any) => (x.accClass === 'sale') && (['S', 'Y'].includes(x.accLeaf)))
         const saleOptions = saleAccounts.map((x: any, index: number) => (<option key={index} value={x.id}>{x.accName}</option>))
-        sales.salesAccountId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0]
+        sales.salesAccount.accId = (_.isEmpty(saleAccounts) || (saleAccounts.length === 0)) ? 0 : saleAccounts[0].id
         return (saleOptions)
     }
 
     function getContent(data: any[]) {
-
         return (<List>
             {getItems()}
         </List>)
@@ -110,6 +110,7 @@ function PaymentsVariety() {
 
             function handleItemOnClick(item: any) {
                 sales.payments.paymentMethodsList[0].rowData.accId = item.id
+                // sales.payments.paymentMethodsList[0].rowData.isAutoSubledger = true
                 if (sales.payments.paymentVariety === 'i') { // institution sales, address already there
                     populateInstitutionAddress(item.id)
                 }
@@ -165,6 +166,7 @@ function PaymentsVariety() {
         const data = getdebtorCreditorAccountsWithSubledgers()
         pre.dialogConfig.content = () => getContent(data)
         showDialog()
+        setRefresh({})
     }
 
     function handleRetailCashBankSales() {
@@ -185,10 +187,10 @@ function PaymentsVariety() {
         Object.keys(sales.billTo).forEach((key: string) => delete sales.billTo[key]) // cleanup billTo
         megaData.executeMethodForKey('render:customer', {})
         sales.payments.paymentVariety = variety
-        sales.filterMethodName = logic[variety]
         sales.payments.paymentMethodsList.length = 0
-        sales.payments.paymentMethodsList.push({})
+        sales.payments.paymentMethodsList.push({ ledgerFilterMethodName: logic[variety], })
         megaData.executeMethodForKey('render:paymentsMethods', {})
+        // setRefresh({})
     }
 
     function showDialog() {

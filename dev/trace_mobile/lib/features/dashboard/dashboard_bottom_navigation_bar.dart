@@ -35,7 +35,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       ],
       onTap: (value) {
         if (value == 0) {
-          Navigator.pushNamed(context, Routes.stock);
+          Navigator.pushNamed(context, Routes.sales);
         } else if (value == 2) {
           //products
           GlobalSettings globalSettings = Provider.of<GlobalSettings>(context, listen:false);
@@ -45,7 +45,6 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               entityName: 'accounts',
               isMultipleRows: true,
               args: {'onDate': null, 'isAll': true, 'days': 0});
-          // print(results);
           Navigator.pushNamed(context, Routes.products, arguments: results);
         }
       },

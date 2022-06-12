@@ -1,23 +1,26 @@
-import { Badge, Box, Button, Card, Chip, CloseSharp, IconButton, IMegaData, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
+import { Badge, Box, Button, Card, Chip, CloseSharp, errorMessages, IconButton, IMegaData, manageEntitiesState, NumberFormat, TextField, useTraceMaterialComponents, Typography, useContext, MegaDataContext, useEffect, useRef, useState, useTheme, utilMethods, useIbuki, } from '../redirect'
 import { useLineItems } from './line-items-hook'
 
 function LineItems() {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    const { debounceEmit } = useIbuki()
+    const allErrors = sales.allErrors
+    const { debounceEmit, emit } = useIbuki()
     const items = sales.items
+    const { getFromBag } = manageEntitiesState()
+    const unitInfo = getFromBag('unitInfo')
+    const isGstApplicable = !!unitInfo?.gstin
     const { extractAmount, toDecimalFormat } = utilMethods()
     const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
-    checkAllErrors()
+    // checkAllErrors()
+    const pre = meta.current
 
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
         {
             items.map((item: any, index: number) =>
-                <div key={index}>
-                    <LineItem item={item} index={index} />
-                </div>
+                <LineItem item={item} index={index} key={index} />
             )
         }
         <BasicMaterialDialog parentMeta={meta} />
@@ -25,7 +28,13 @@ function LineItems() {
 
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
+
         const smallFontTextField = megaData.accounts.settings.smallFontTextField
+        checkAllErrors()
+
+        useEffect(() => {
+            emit('ALL-ERRORS-JUST-REFRESH', null)
+        })
 
         return (
             <Box
@@ -56,31 +65,37 @@ function LineItems() {
                 <Box className='vertical' >
                     <Typography variant='body2'>Product code</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+                        // inputRef={pre.productCodeRef}
                         allowNegative={false}
                         autoComplete='off'
                         customInput={TextField}
                         decimalScale={0}
+                        error={item.isProductCodeError}
                         fixedDecimalScale={true}
                         value={item.productCode || ''}
                         variant='standard'
                         size='small'
                         onChange={(e: any) => {
                             item.productCode = e.target.value
-                            setRefresh({})
                             if (item.productCode) {
-                                debounceEmit('DEBOUNCE-ON-CHANGE', item)
+                                debounceEmit('DEBOUNCE-ON-CHANGE', { item, setRefresh })
                             } else {
                                 clearRow(item)
+                                setRefresh({})
                             }
                         }}
+
                         onFocus={(e: any) => {
                             e.target.select()
                         }} />
                 </Box>
                 {/* Product details */}
-                <Card variant='outlined' sx={{ width: theme.spacing(22), height: theme.spacing(8), p: .5, pt: 0, border: '1px solid lightGrey' }}>
+                <Card variant='outlined' sx={{
+                    width: theme.spacing(22), height: theme.spacing(8),
+                    p: .5, pt: 0, border: '1px solid lightGrey', borderColor: item.isProductDetailsError ? 'red' : 'lightGrey'
+                }}>
                     <Typography sx={{
-                        fontSize: theme.spacing(1.6),
+                        fontSize: theme.spacing(1.8),
                         fontWeight: 'bold', overflow: 'hidden', color: theme.palette.common.black,
                     }} variant='body1'>{item.productDetails || ''}</Typography>
                 </Card>
@@ -94,6 +109,7 @@ function LineItems() {
                         className='right-aligned'
                         customInput={TextField}
                         decimalScale={0}
+                        error={item.isHsnError}
                         fixedDecimalScale={true}
                         value={item.hsn || 0}
                         variant='standard'
@@ -102,12 +118,15 @@ function LineItems() {
                             e.target.select()
                         }} />
                 </Box>
+
                 {/* Gst(%) */}
                 <Box className='vertical'>
                     <Typography sx={{ textAlign: 'right' }} variant='body2'>Gst(%)</Typography>
                     <NumberFormat sx={{ maxWidth: theme.spacing(6) }}
                         allowNegative={false}
                         autoComplete='off'
+                        error={item.isGstRateError}
+                        // disabled={true}
                         // InputProps={smallFontTextField}
                         className='right-aligned'
                         customInput={TextField}
@@ -252,7 +271,8 @@ function LineItems() {
                             : 'secondary'
                     }
                     showZero={true}>
-                    <Button color='primary' size='medium' variant='contained' onClick={() => handleSerialNo(item)}>Serial no</Button>
+                    <Button color='primary' size='medium' variant='contained' onClick={() =>
+                        handleSerialNo(item)}>Serial no</Button>
                 </Badge>
 
                 {/* amount */}
@@ -260,7 +280,7 @@ function LineItems() {
                 <Box sx={{ ml: -6.5, mt: -8, mr: 0.5 }}>
                     {/* delete */}
                     <IconButton sx={{ position: 'relative', left: theme.spacing(1.5), }} size='small' color='error'
-                        onClick={() => handleDeleteRow(item, index)}>
+                        onClick={(e: any) => handleDeleteRow(e, item, index)}>
                         <CloseSharp />
                     </IconButton>
                 </Box>
@@ -270,6 +290,25 @@ function LineItems() {
         function handleTextChanged(item: any, propName: string, e: any) {
             item[propName] = e.target.value
             setRefresh({})
+        }
+
+        function checkAllErrors() {
+            item.isProductCodeError = item.productCode ? false : true
+            allErrors.productCodeError = item.isProductCodeError ? errorMessages.productCodeError : ''
+
+            item.isProductDetailsError = item.productDetails ? false : true
+            allErrors.productDetailsError = item.isProductDetailsError ? errorMessages.productDetailsError : ''
+
+            if (isGstApplicable) {
+                item.isHsnError = item.hsn ? false : true
+                allErrors.hsnError = item.isHsnError ? errorMessages.hsnError : ''
+                item.isGstRateError = item.gstRate ? false : true
+            } else {
+                item.isHsnError = false
+                allErrors.hsnError = ''
+                item.isGstRateError = item.gstRate ? true : false
+            }
+            allErrors.gstRateError = item.isGstRateError ? errorMessages.gstRateError : ''
         }
     }
 }

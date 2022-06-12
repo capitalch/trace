@@ -15,8 +15,6 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
     var globalSettings = Provider.of<GlobalSettings>(context, listen: true);
     return AppBar(
         automaticallyImplyLeading: false,
-        // bottom: const PreferredSize(
-        //     preferredSize: Size.fromHeight(10), child: DashboardSubheader()),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,18 +1,18 @@
-import { AllErrors, Box, Paper, Typography, } from './redirect'
-import { Customer } from './customer/customer'
-import { Crown } from './crown/crown'
-import { Payments } from './payments/payments'
-import { Items } from './items/items'
+import { AllErrors, Box, Paper, Typography, } from '../redirect'
+import { Customer } from '../customer/customer'
+import { Crown } from '../crown/crown'
+import { Payments } from '../payments/payments'
+import { Items } from '../items/items'
 import { useSalesNew } from './sales-new-hook'
-import { DebitsCredits } from './debits-credits'
+import { DebitsCreditsPreview } from './debits-credits-preview'
 function SalesNew() {
     useSalesNew()
     return (
         <Box sx={{ '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Box className='vertical' sx={{ flex: 1 }} >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
                     <Typography variant='subtitle1'>Sales</Typography>
-                    <DebitsCredits />
+                    <DebitsCreditsPreview />
                 </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap-reverse', rowGap: 2, justifyContent: 'space-between' }}>
                     <Customer />
@@ -24,7 +24,6 @@ function SalesNew() {
                     <AllErrors />
                 </Box>
             </Box>
-
         </Box>
     )
 }

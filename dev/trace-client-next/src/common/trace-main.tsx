@@ -1,5 +1,5 @@
 import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
-import { salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
+import { inventoryMegaData, salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
 import {
     Container,
     makeStyles,
@@ -14,7 +14,9 @@ function TraceMain({ open }: any) {
     const {
         setCurrentComponent,
         getCurrentEntity,
+        setInBag,
     } = manageEntitiesState()
+
     const { filterOn } = useIbuki()
     const [, setRefresh] = useState({})
 
@@ -40,12 +42,14 @@ function TraceMain({ open }: any) {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        initMegaData() //inits the global object for accounts
+
         const launchMap: any = {
             accounts: <LaunchPadAccounts />,
             authentication: <LaunchPadAuthentication />,
         }
         const subs = filterOn('TRACE-MAIN:JUST-REFRESH').subscribe((d) => {
+            initMegaData() //inits the global object for accounts
+            setInBag('allProducts', []) // initialize allProducts
             const currentEntity = getCurrentEntity()
             if (d.data === 'reset') {
                 setCurrentComponent({})
@@ -82,35 +86,32 @@ function TraceMain({ open }: any) {
 
 
     function initMegaData() {
-
         const megaData: IMegaData // { accounts: any; keys: any; registerKeyWithMethod: KeyWithMethod; executeMethodForKey: KeyWithParams } 
             = {
             accounts: {
-                allProducts: [],
                 common: {},
+                inventory: inventoryMegaData(),
                 sales: salesMegaData(),
-                settings: settingsMegaData()
+                settings: settingsMegaData(),
             },
+
             keysWithMethods: {},
 
             registerKeyWithMethod: function (key: string, method: () => void) {
                 this.keysWithMethods[key] = method
             },
+
             executeMethodForKey: function (key: string, params?: any) {
                 if (!this.keysWithMethods[key]) {
                     return
                 }
                 const method = this.keysWithMethods[key]
-                const ret = params ? method(params): method()
-                return(ret)
+                const ret = params ? method(params) : method()
+                return (ret)
             }
+
         }
         meta.current.megaData = megaData
-        // initAccountsMegaData()
-        // function initAccountsMegaData() {
-        //     Object.assign(megaData.accounts.sales, salesMegaData())
-        //     Object.assign(megaData.accounts.settings, settingsMegaData)
-        // }
     }
 }
 

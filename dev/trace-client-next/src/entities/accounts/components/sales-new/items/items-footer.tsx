@@ -15,7 +15,6 @@ function ItemsFooter() {
             content: () => <></>,
             maxWidth: 'lg',
         },
-        // setRefresh: setRefresh
     })
     const pre = meta.current
 
@@ -29,7 +28,7 @@ function ItemsFooter() {
         emit('ALL-ERRORS-JUST-REFRESH', null)
     })
 
-    return (<Box sx={{ pt: 2, pb: 1, display: 'flex', rowGap: 3, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',  '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
+    return (<Box sx={{ pt: 1, pb: 0, display: 'flex', rowGap: 1, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between',  '& .footer': { mt: .1, fontWeight: 'bold', fontSize: theme.spacing(1.6) } }}>
 
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, rowGap: 3, }}>
             {/* Item search button */}
@@ -132,6 +131,7 @@ function ItemsFooter() {
 
     function handleRoundOff() {
         sales.summary.backCalculateAmount = Math.round(sales.summary.amount)
+        // sales.summary.backCalculateAmount = Big(sales.summary.amount).round()
         handleBackCalculate()
     }
 }

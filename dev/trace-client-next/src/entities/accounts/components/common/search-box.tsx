@@ -6,7 +6,6 @@ import {
 
 function SearchBox({ parentMeta, sx }: any) {
     const pre = parentMeta.current
-    // sx = sx || {}
     sx = { ...sx, ...{ mt: 1 } }
     const theme = useTheme()
     pre.debounceMessage = 'SEARCH-BOX-DEBOUNCE'
@@ -28,7 +27,6 @@ function SearchBox({ parentMeta, sx }: any) {
         inputRef={pre.searchTextRef}
         variant="standard"
         autoComplete='off'
-        // sx={{mt:1}}
         sx={{ ...sx }}
         value={pre.searchText || ''}
         onChange={handleOnChange}
@@ -76,7 +74,9 @@ function SearchBox({ parentMeta, sx }: any) {
 
     function requestSearch(searchValue: string) {
         if (searchValue) {
-            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x) // filter used to remove empty elements
+            //Excluded astrix from non word characters list
+            // const arr = searchValue.toLowcerCase().split(/\W[^*]/).filter(x => x) // filter used to remove empty elements
+            const arr = searchValue.toLowerCase().split(/\W/).filter(x => x)
             // row values are concatenated and checked against each item in the arr (split of searchText on any char which is not alphanumeric)
             // if pre.isSearchTextOr then do logical OR for searchText arr else do logical end
             pre.filteredRows = pre.isSearchTextOr ?

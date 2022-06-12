@@ -5,7 +5,6 @@ import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'dart:convert' show utf8, base64;
 import 'dart:convert';
-import 'package:http/http.dart';
 import 'package:trace_mobile/common/classes/messages.dart';
 import 'package:trace_mobile/common/classes/routes.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
@@ -119,8 +118,8 @@ class LoginPage extends StatelessWidget {
       loginData['buCodes'] = buCodes;
       loginData['buCodesWithPermissions'] = buCodesWithPermissionsTemp;
       globalSettings.setLoginData(loginData);
-      Navigator.pushReplacementNamed(context, Routes.dashBoard);
-      Utils.execDataCache(globalSettings);
+      Navigator.pushReplacementNamed(context, Routes.dashBoard, arguments: Utils.execDataCache(globalSettings));
+      // Utils.execDataCache(globalSettings);
     } catch (error) {
       Utils.showAlert(context: context, message: Messages.errInternetLogin);
     }

@@ -3,25 +3,28 @@ import { useAccountsSubHeader, useStyles } from './accounts-sub-header-hook'
 import {
     Avatar,
     Box, IconButton,
-    Chip,
+    Chip, useTheme
 } from '../../../../imports/gui-imports'
 import {
-    Add, FontAwesomeIcon, faSpinner, RemoveCircleOutline,
+    Add, FontAwesomeIcon, faSpinner, RemoveCircleOutline, Search,
     SyncSharp,
 } from '../../../../imports/icons-import'
 function AccountsSubHeader() {
     const classes = useStyles()
+    const theme = useTheme()
     const {
         exhibitLogic,
         handleSelectBu,
         handleSelectBranch,
         handleSelectFinYear,
-        handleStockSearch,
+        handleProductSearch,
         meta,
+        productsMeta,
         utilFunc,
     } = useAccountsSubHeader()
 
     const {
+        BasicMaterialDialog,
         emit,
         getCurrentMediaSize,
         initCode,
@@ -127,9 +130,15 @@ function AccountsSubHeader() {
                     />
                 )}
                 {/* Stock search */}
-                <Chip
+                <IconButton
                     size="medium"
-                    // disabled={isControlDisabled('branchChange')}
+                    color='inherit'
+                    onClick={handleProductSearch}>
+                    <Search ></Search>
+                </IconButton>
+
+                {/* <Chip
+                    size="medium"
                     className="chip-select"
                     style={{
                         maxWidth: exhibitLogic[currentMediaSize || 'md']()
@@ -137,12 +146,13 @@ function AccountsSubHeader() {
                     }}
                     clickable={true}
                     avatar={<Avatar>S</Avatar>}
-                    label='Stock search'
+                    label='Sh'
                     color="secondary"
-                    onClick={handleStockSearch}
-                ></Chip>
+                    onClick={handleProductSearch}
+                ></Chip> */}
             </Box>
             <TraceDialog meta={meta} />
+            <BasicMaterialDialog parentMeta={productsMeta} />
         </div>
     )
 }

@@ -33,6 +33,14 @@
          "isActive": false
       },
       {
+         "hierarchy":"salespurchases-simple-sales-delete",
+         "isActive": false
+      },
+      {
+         "hierarchy":"salespurchases-simple-sales-edit",
+         "isActive": false
+      },      
+      {
          "hierarchy":"salespurchases-sales-return",
          "isActive": false
       },

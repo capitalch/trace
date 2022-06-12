@@ -1,3 +1,5 @@
+// import TagIcon from '@mui/icons-material'
+// export { Attachment } from '@mui/icons-material'
 export {
     AccountBalance,
     AccountTree,
@@ -10,6 +12,8 @@ export {
     ArrowDropDownSharp,
     AssignmentReturn,
     AssignmentReturned,
+    Attachment,
+    // AttachmentSharp as AttachmentSharpIcon,
     Build,
     Cached,
     Check,
@@ -23,7 +27,7 @@ export {
     ChevronRight,
     Contacts,
     CloseSharp,
-    
+
     DeleteTwoTone,
     DeleteForever,
     DeleteOutline,
@@ -53,7 +57,7 @@ export {
     Info,
     LastPage,
     LibraryBooks,
-    Link,    
+    Link,
     ListAlt,
     Money,
     MonetizationOn,
@@ -78,13 +82,14 @@ export {
     Sms as SmsIcon,
     SupervisorAccount,
     SyncSharp,
+
     Toc,
     Tune,
     AccountCircleSharp,
     SecuritySharp,
     VerifiedUserSharp,
     ExitToAppSharp,
-    
+
     SystemUpdate,
     ViewColumn,
     ViewList,
@@ -95,3 +100,4 @@ export {
 } from '@mui/icons-material'
 export { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export { faSpinner } from '@fortawesome/free-solid-svg-icons'
+// export { TagIcon }

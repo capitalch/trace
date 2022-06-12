@@ -15,8 +15,7 @@ class GlobalSettings extends ChangeNotifier {
   }
 
   int? clientId, lastUsedBranchId, id; // id is actually userId
-  // ,
-  GraphQLClient? _graphQLLoginClient;// graphQLMainClient;
+  GraphQLClient? _graphQLLoginClient;
   String? lastUsedBuCode, token, uid, userType;
   String serverUrl = kReleaseMode ? webUrl : localUrl;
   List<dynamic>? buCodes = [];
@@ -41,22 +40,6 @@ class GlobalSettings extends ChangeNotifier {
     graphQLLoginClient?.resetStore();
   }
 
-  // void _initGraphQLMainClient() {
-  //   String selectionCriteria = [
-  //     (lastUsedBuCode ?? ''),
-  //     ':',
-  //     currentFinYearMap['finYearId'],
-  //     ':',
-  //     (getCurrentBranchId())
-  //   ].join();
-  //   graphQLMainClient = GraphQLClient(
-  //       link: HttpLink(serverUrl, defaultHeaders: {
-  //         'authorization': (token == null) ? '' : 'Bearer $token',
-  //         'SELECTION-CRITERIA': selectionCriteria
-  //       }),
-  //       cache: GraphQLCache(store: InMemoryStore()));
-  // }
-
   GraphQLClient getGraphQLMainClient() {
     String selectionCriteria = [
       (lastUsedBuCode ?? ''),
@@ -80,7 +63,6 @@ class GlobalSettings extends ChangeNotifier {
     var el = allFinYears
         .where((element) => element['finYearId'] == currentFinYearId);
     el.isNotEmpty ? (currentFinYearMap = el.first) : null;
-    // _initGraphQLMainClient(); // to update the selection criteria
     notifyListeners();
   }
 
@@ -144,12 +126,10 @@ class GlobalSettings extends ChangeNotifier {
       'uid': 'd',
       'userType': 'a',
       "id": 2,
-      // entityNames: ['accounts'],
     };
     allBranches.add({'id': 1, 'branchName': 'Head office', 'branchCode': 'HD'});
     setLoginData(demoLoginData,
         isNotifyListeners: false, isSaveDataInSecuredStorage: false);
-    // _initGraphQLMainClient();
   }
 
   void setLastUsedBranch(String branchId) {
@@ -159,8 +139,6 @@ class GlobalSettings extends ChangeNotifier {
 
   void setLastUsedBuCode(String buCode) {
     lastUsedBuCode = buCode;
-    // _initGraphQLMainClient(); // selectionCriteria changes, hence it is necessary
-    // notifyListeners();
   }
 
   void setLoginData(dynamic loginData,
@@ -176,7 +154,6 @@ class GlobalSettings extends ChangeNotifier {
     uid = loginData['uid'];
     userType = loginData['userType'];
     id = loginData['id'];
-    // _initGraphQLMainClient();
     if (isSaveDataInSecuredStorage) {
       await DataStore.saveLoginDataInSecuredStorage(getLoginDataAsJson());
     }
@@ -200,6 +177,6 @@ class GlobalSettings extends ChangeNotifier {
     allFinYears = List<Map<String, dynamic>>.from(finYears);
     currentFinYearMap = Map<String, dynamic>.from(currentFinYearObject);
     setCurrentBranchMap(lastUsedBranchId);
-    notifyListeners();
+    // notifyListeners();
   }
 }
