@@ -89,8 +89,8 @@ getTagsDataFromStore(BuildContext context) async {
   ProductsTagsState productsTagsState =
       Provider.of<ProductsTagsState>(context, listen: false);
   if (productsTagsState.productsTags.isEmpty) {
-    String tags = await DataStore.getDataFromSecuredStorage('productsTags');
-    if (tags != '') {
+    String? tags = await DataStore.getDataFromSecuredStorage('productsTags');
+    if ((tags != null) && (tags != '')) {
       List<dynamic> tagsList = json.decode(tags);
       if (tagsList.isNotEmpty) {
         productsTagsState.productsTags = List<String>.from(tagsList);

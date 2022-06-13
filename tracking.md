@@ -7,6 +7,12 @@ npm install graphql@latest
 npm install @types/jest@latest @types/react@latest @types/react-dom@latest @types/react-table@latest
 npm install  react-scripts@latest react-error-overlay@latest
 All works.
+
+## Logic for sales report
+1. AppBar: has tags such as today, yesterday, 1 day before, 2 days before, this month, last month, ytd, April, ...
+2. A provider changeProvideSales: Stores tagname, startDate, endDate. Issues notifyListeners
+3. Body and summary widgets are consumers
+4. implement futurebuilder in body
 ## Flutter learning
                                                                                     1. Navigation and drawyer
                                                                                     2. Provider and listner and notifier
