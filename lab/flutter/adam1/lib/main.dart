@@ -1,4 +1,5 @@
 import 'package:adam1/widgets/alert_demo.dart';
+import 'package:adam1/widgets/date_time_examples.dart';
 import 'package:adam1/widgets/dialog_select_demo.dart';
 import 'package:adam1/widgets/ibuki_implement.dart';
 import 'package:adam1/widgets/infinite_scroll.dart';
@@ -159,7 +160,13 @@ class MyHomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const IbukiImplement()));
-                  }, child: const Text('Ibuki'))
+                  }, child: const Text('Ibuki')),
+                  TextButton(onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DateTimeExamples()));
+                  }, child: const Text('Date time'))
                 ],
               ),
             ),

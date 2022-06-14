@@ -11,7 +11,9 @@ class Utils {
     return (format.currencySymbol);
   }
 
-  static execDataCache(GlobalSettings globalSettings, ) async {
+  static execDataCache(
+    GlobalSettings globalSettings,
+  ) async {
     var result = await GraphQLQueries.genericView(
         sqlKey: 'getJson_datacache_mobile',
         globalSettings: globalSettings,
@@ -74,5 +76,13 @@ class Utils {
         ));
       },
     );
+  }
+
+  static String toIsoDateString(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  static String toLocalDateString(DateTime date) {
+    return DateFormat('dd-MM-yyyy').format(date);
   }
 }

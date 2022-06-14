@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:trace_mobile/common/classes/utils.dart';
+
 class SalesQueryProps {
-  late String _startDate, _endDate, _labelName, _salesQueryKey;
+  late String _labelName, _salesQueryKey;
+  late DateTime _startDate, _endDate;
 
   SalesQueryProps(
       // this._startDate, this._endDate, this._labelName, this._queryKey
@@ -13,11 +17,11 @@ class SalesQueryProps {
     _salesQueryKey = salesQueryKey;
   }
 
-  String get startDate {
+  DateTime get startDate {
     return _startDate;
   }
 
-  String get endDate {
+  DateTime get endDate {
     return _endDate;
   }
 
@@ -38,25 +42,22 @@ class SalesQueryProps {
   }
 }
 
-class PropsList {
-  final List<Map<String, String>> _queryPropsList = [
+class QueryProps {
+  final List<Map<String, dynamic>> _queryPropsList = [
     {
       'salesQueryKey': 'today',
-      'startDate': DateTime.now().toIso8601String(),
-      'endDate': DateTime.now().toIso8601String(),
+      'startDate': DateTime.now(),
+      'endDate': DateTime.now(),
       'title': "Sale of today",
       'labelName': 'Today'
     },
     {
       'salesQueryKey': 'yesterday',
-      'startDate':
-          DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
-      'endDate':
-          DateTime.now().subtract(const Duration(days: 1)).toIso8601String(),
+      'startDate': DateTime.now().subtract(const Duration(days: 1)),
+      'endDate': DateTime.now().subtract(const Duration(days: 1)),
       'title': "Sale of yesterday",
       'labelName': 'Yesterday'
     },
-    
   ];
 
   List<SalesQueryProps> getSalesQueryPropsList() {
