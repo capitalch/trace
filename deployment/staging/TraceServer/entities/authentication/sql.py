@@ -121,6 +121,10 @@ allSqls = {
                     order by "id" DESC limit (%(no)s)
     ''',
 
+    # 'get_branches_mobile':'''
+
+    # ''',
+
     'get_clientEntityId': '''
         select "id"
             from "ClientEntityX"

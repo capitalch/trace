@@ -68,7 +68,6 @@ def getSql(sqlObject, data, fkeyValue):
                 'tableName'), sqlObject.get('fkeyName'), fkeyValue)
     return(sql, valuesTuple)
 
-
 def processData(sqlObject, cursor, data, fkeyValue, buCode='public'):
     details = None
     id = None

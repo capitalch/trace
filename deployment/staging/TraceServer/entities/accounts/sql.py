@@ -1476,6 +1476,29 @@ allSqls = {
             ) as "jsonResult"
         ''',
 
+    "getJson_datacache_mobile": '''
+        with cte1 as (
+		select id as "branchId", "branchName", "branchCode"
+			from "BranchM"),
+		cte2 as (
+		select "id" as "finYearId", "startDate", "endDate"
+			from "FinYearM"
+				order by "startDate" DESC),
+		cte3 as (
+			select "id" as "finYearId", "startDate", "endDate"
+				from "FinYearM"
+					--where %(nowDate)s between "startDate" and "endDate"
+					where '2022-05-01' between "startDate" and "endDate")
+        select json_build_object(			
+            'branches', (select json_agg(row_to_json(a)) from cte1 a)
+			, 'finYears', (select json_agg(row_to_json(b)) from cte2 b)
+			, 'nowFinYearIdDates', (select row_to_json(c) from cte3 c)
+            , 'unitInfo', (select "jData" 
+            from "Settings"
+                where "key" = 'unitInfo'
+        )) as "jsonResult"
+    ''',
+
     "getJson_debit_credit_note": '''
         select h."id", "tranDate", "remarks", h."jData", "posId", "autoRefNo", "userRefNo",
                 (

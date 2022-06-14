@@ -96,7 +96,7 @@ def contextValue(request):
             # auth is like 'Bearer xxxxx'. the xxxxx is token. You need to take out the last word
             auth = request.headers.get('AUTHORIZATION')
             selectionCriteria = request.headers.get('SELECTION-CRITERIA')
-            # print('selectionCriteria:', selectionCriteria)
+
             if selectionCriteria is not None:
                 temp = selectionCriteria.split(':')
                 buCode = temp[0] if temp[0] != '' else None

@@ -4,9 +4,10 @@ npm install graphql primereact react-select react-to-print sass
 npm install socket.io-client typescript
 
 npm install graphql@latest
-npm install @types/jest@latest @types/react@latest @types/react-dom@latest @types/react-table@latest
+npm install @types/jest@latest @types/react-dom@latest
+## following does not work
 npm install  react-scripts@latest react-error-overlay@latest
-All works.
+npm install react@latest react-dom@latest
 
 ## Logic for sales report
 1. AppBar: has tags such as today, yesterday, 1 day before, 2 days before, this month, last month, ytd, April, ...
