@@ -32,7 +32,9 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
                       size: 30,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Scaffold.of(context).openDrawer();
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 5),

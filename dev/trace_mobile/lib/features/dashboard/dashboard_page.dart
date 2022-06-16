@@ -17,7 +17,10 @@ class DashBoardPage extends StatelessWidget {
           Widget widget;
           if (snapshot.connectionState == ConnectionState.waiting) {
             widget = Center(
-              child: Text('Loading...', style: Theme.of(context).textTheme.headline5,),
+              child: Text(
+                'Loading...',
+                style: Theme.of(context).textTheme.headline5,
+              ),
             );
           } else {
             if (snapshot.hasError) {
@@ -28,8 +31,83 @@ class DashBoardPage extends StatelessWidget {
                 ),
               );
             } else {
+              var theme = Theme.of(context).textTheme;
               widget = Scaffold(
                 appBar: const DashboardAppBar(),
+                drawer: Drawer(
+                  backgroundColor: Colors.grey,
+                  // width: 250,
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    children: [
+                      SizedBox(
+                        height: 90,
+                        child: DrawerHeader(
+                            child: Text(
+                          'Trace menu',
+                          style: theme.headline3?.copyWith(color: Colors.brown.shade800, fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: ListTile(
+                          dense: true,
+                          tileColor: Colors.grey.shade300,
+                          title: Text(
+                            'Bank reconcillation',
+                            style: theme.subtitle1,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: ListTile(
+                          dense: true,
+                          tileColor: Colors.grey.shade300,
+                          title: Text(
+                            'Stock orders',
+                            style: theme.subtitle1,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: ListTile(
+                          dense: true,
+                          tileColor: Colors.grey.shade300,
+                          title: Text(
+                            'Stock tally',
+                            style: theme.subtitle1,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: ListTile(
+                          dense: true,
+                          tileColor: Colors.grey.shade300,
+                          title: Text(
+                            'Accounts ledger',
+                            style: theme.subtitle1,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: const [DashboardSubheader()],

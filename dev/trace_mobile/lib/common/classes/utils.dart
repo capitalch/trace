@@ -38,28 +38,13 @@ class Utils {
     return (year);
   }
 
-  // static DateTime getEndDateOfCurrentMonth() {
-  //   var now = DateTime.now();
-  //   var ret = DateTime.utc(now.year, now.month + 1,
-  //       0); // 0 day of next month gives last day of this month
-  //   return ret;
-  // }
-
-  // static DateTime getStartDateOfCurrentMonth() {
-  //   var now = DateTime.now();
-  //   var ret = DateTime.utc(now.year, now.month, 1);
-  //   return ret;
-  // }
-
   static DateTime getEndDateOfMonth({int diffMonth = 0}) {
-    // diffMonth = diffMonth ?? 0;
     var now = DateTime.now();
     var ret = DateTime.utc(now.year, now.month + diffMonth + 1, 0);
     return ret;
   }
 
   static DateTime getStartDateOfMonth({int diffMonth = 0}) {
-    // diffMonth = diffMonth ?? 0;
     var now = DateTime.now();
     var ret = DateTime.utc(now.year, now.month + diffMonth, 1);
     return ret;

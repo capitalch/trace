@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 import 'package:trace_mobile/features/sales/classes/sales_query_props.dart';
 import 'package:trace_mobile/features/sales/classes/sales_state.dart';
 
