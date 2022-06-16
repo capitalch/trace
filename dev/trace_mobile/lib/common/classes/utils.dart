@@ -51,17 +51,17 @@ class Utils {
   //   return ret;
   // }
 
-  static DateTime getEndDateOfMonth({int? monthNo}) {
-    monthNo = monthNo ?? DateTime.now().month;
+  static DateTime getEndDateOfMonth({int diffMonth = 0}) {
+    // diffMonth = diffMonth ?? 0;
     var now = DateTime.now();
-    var ret = DateTime.utc(now.year, now.month + monthNo + 1, 0);
+    var ret = DateTime.utc(now.year, now.month + diffMonth + 1, 0);
     return ret;
   }
 
-  static DateTime getStartDateOfMonth({int? monthNo}) {
-    monthNo = monthNo ?? DateTime.now().month;
+  static DateTime getStartDateOfMonth({int diffMonth = 0}) {
+    // diffMonth = diffMonth ?? 0;
     var now = DateTime.now();
-    var ret = DateTime.utc(now.year, now.month + monthNo, 1);
+    var ret = DateTime.utc(now.year, now.month + diffMonth, 1);
     return ret;
   }
 

@@ -1,3 +1,5 @@
+## upgrade trace-client
+@mui all libraries at Chitta
 ## upgrade trace-client-next
 npm install @emotion/react @emotion/styled @mui/icons-material @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/react @testing-library/user-event @types/jest @types/node big.js --force
 npm install graphql primereact react-select react-to-print sass

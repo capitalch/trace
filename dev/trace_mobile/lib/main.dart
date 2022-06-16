@@ -12,6 +12,7 @@ import 'package:trace_mobile/features/products/classes/products_search_state.dar
 import 'package:trace_mobile/features/products/classes/products_summary_state.dart';
 import 'package:trace_mobile/features/sales/classes/sales_state.dart';
 import 'package:trace_mobile/features/sales/sales_page.dart';
+import 'package:trace_mobile/features/vouchers/vouchers_page.dart';
 import 'features/authentication/login_page.dart';
 
 void main() {
@@ -60,7 +61,7 @@ class TraceApp extends StatelessWidget {
           },
           'products': (BuildContext context) => const ProductsPage(),
           'sales': (BuildContext context) => const SalesPage(),
-          'stock': (BuildContext context) => const Stock(),
+          'vouchers': (BuildContext context) => const VouchersPage(),
         },
       ),
     ));

@@ -5,9 +5,9 @@ class ProductsSummaryState extends ChangeNotifier {
   double _summaryClos = 0,
       _summarySumGst = 0,
       _summarySum = 0,
-      _summaryJakarQty = 0,
-      _summaryJakarValue = 0,
-      _summaryJakarValueGst = 0;
+      _summaryAge360Qty = 0,
+      _summaryAge360Value = 0,
+      _summaryAge360ValueGst = 0;
 
   int get summaryCount => _summaryCount;
 
@@ -37,21 +37,21 @@ class ProductsSummaryState extends ChangeNotifier {
     notifyListeners();
   }
 
-  double get summaryJakarQty => _summaryJakarQty;
-  set summaryJakarQty(double val) {
-    _summaryJakarQty = val;
+  double get summaryAge360Qty => _summaryAge360Qty;
+  set summaryAge360Qty(double val) {
+    _summaryAge360Qty = val;
     notifyListeners();
   }
 
-  double get summaryJakarValue => _summaryJakarValue;
-  set summaryJakarValue(double val) {
-    _summaryJakarValue = val;
+  double get summaryAge360Value => _summaryAge360Value;
+  set summaryAge360Value(double val) {
+    _summaryAge360Value = val;
     notifyListeners();
   }
 
-  double get summaryJakarValueGst => _summaryJakarValueGst;
-  set summaryJakarValueGst(double val) {
-    _summaryJakarValueGst = val;
+  double get summaryAge360ValueGst => _summaryAge360ValueGst;
+  set summaryAge360ValueGst(double val) {
+    _summaryAge360ValueGst = val;
     notifyListeners();
   }
 }

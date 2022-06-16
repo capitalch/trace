@@ -41,10 +41,19 @@ class SalesReportSummary extends StatelessWidget {
                 Text('Aggr: ${formatter.format(value['aggr'] ?? 0)}',
                     style: theme),
                 const SizedBox(width: 15),
-                Text('Jakar sale: ${formatter.format(value['jakarSale'] ?? 0)}',
+                Text(
+                    'Age360 sale: ${formatter.format(value['age360Sale'] ?? 0)}',
                     style: theme),
                 const SizedBox(width: 15),
-                Text('Jakar qty: ${formatter.format(value['jakarQty'] ?? 0)}',
+                Text(
+                    'Age360 GP: ${formatter.format(value['age360GrossProfit'] ?? 0)}',
+                    style: theme),
+                const SizedBox(width: 15),
+                Text(
+                    'Age360 aggr: ${formatter.format(value['age360Aggr'] ?? 0)}',
+                    style: theme),
+                const SizedBox(width: 15),
+                Text('Age360 qty: ${formatter.format(value['age360Qty'] ?? 0)}',
                     style: theme),
               ]),
             ));

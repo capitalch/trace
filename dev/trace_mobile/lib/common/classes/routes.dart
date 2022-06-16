@@ -3,5 +3,6 @@ class Routes {
   static String login = 'login';
   static String products = 'products';
   static String sales = 'sales';
-  static String stock = 'stock';
+  static String vouchers = 'vouchers';
+  // static String stock = 'stock';
 }

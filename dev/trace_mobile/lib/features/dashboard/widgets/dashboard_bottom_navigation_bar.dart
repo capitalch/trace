@@ -20,7 +20,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.ac_unit),
-          label: 'Stock',
+          label: 'Vouchers',
           // backgroundColor: Colors.amber
         ),
         BottomNavigationBarItem(
@@ -36,9 +36,15 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       onTap: (value) {
         if (value == 0) {
           Navigator.pushNamed(context, Routes.sales);
+        } else if (value == 1) {
+          Navigator.pushNamed(
+            context,
+            Routes.vouchers,
+          );
         } else if (value == 2) {
           //products
-          GlobalSettings globalSettings = Provider.of<GlobalSettings>(context, listen:false);
+          GlobalSettings globalSettings =
+              Provider.of<GlobalSettings>(context, listen: false);
           var results = GraphQLQueries.genericView(
               sqlKey: 'get_products_info',
               globalSettings: globalSettings,

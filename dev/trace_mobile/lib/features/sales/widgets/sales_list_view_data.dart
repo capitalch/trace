@@ -26,8 +26,10 @@ class SalesListViewData extends StatelessWidget {
         qty = 0,
         sale = 0,
         aggr = 0,
-        jakarQty = 0,
-        jakarSale = 0,
+        age360Qty = 0,
+        age360Sale = 0,
+        age360Aggr = 0,
+        age360GrossProfit = 0,
         grossProfit = 0;
 
     for (var item in dataList) {
@@ -35,9 +37,12 @@ class SalesListViewData extends StatelessWidget {
       qty = qty + indexedItem.qty;
       sale = sale + indexedItem.amount;
       aggr = aggr + indexedItem.aggrSale;
-      jakarQty = jakarQty + ((indexedItem.age >= 360) ? indexedItem.qty : 0);
-      jakarSale =
-          jakarSale + ((indexedItem.age >= 360) ? indexedItem.amount : 0);
+      age360Qty = age360Qty + ((indexedItem.age >= 360) ? indexedItem.qty : 0);
+      age360Sale =
+          age360Sale + ((indexedItem.age >= 360) ? indexedItem.amount : 0);
+      age360Aggr = age360Aggr + ((indexedItem.age >= 360) ? indexedItem.aggrSale : 0);
+      age360GrossProfit = age360GrossProfit + ((indexedItem.age >= 360) ? indexedItem.grossProfit : 0);
+
       grossProfit = grossProfit + indexedItem.grossProfit;
     }
     // Future.delayed is used to run the code as Future.
@@ -48,8 +53,10 @@ class SalesListViewData extends StatelessWidget {
         'qty': qty,
         'sale': sale,
         'aggr': aggr,
-        'jakarQty': jakarQty,
-        'jakarSale': jakarSale,
+        'age360Qty': age360Qty,
+        'age360Sale': age360Sale,
+        'age360Aggr': age360Aggr,
+        'age360GrossProfit': age360GrossProfit,
         'grossProfit': grossProfit,
       };
     });

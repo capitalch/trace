@@ -4,12 +4,7 @@ class SalesQueryProps {
   late String _labelName, _salesQueryKey;
   late DateTime _startDate, _endDate;
 
-  SalesQueryProps(
-      // this._startDate, this._endDate, this._labelName, this._queryKey
-      {startDate,
-      endDate,
-      labelName,
-      salesQueryKey}) {
+  SalesQueryProps({startDate, endDate, labelName, salesQueryKey}) {
     _startDate = startDate;
     _endDate = endDate;
     _labelName = labelName;
@@ -80,10 +75,24 @@ class QueryProps {
     },
     {
       'salesQueryKey': 'minusOneMonth',
-      'startDate': Utils.getStartDateOfMonth(monthNo: -1),
-      'endDate': Utils.getEndDateOfMonth(monthNo: -1),
+      'startDate': Utils.getStartDateOfMonth(diffMonth: -1),
+      'endDate': Utils.getEndDateOfMonth(diffMonth: -1),
       'title': "(-1) month",
       'labelName': '(-1) month'
+    },
+    {
+      'salesQueryKey': 'minusTwoMonths',
+      'startDate': Utils.getStartDateOfMonth(diffMonth: -2),
+      'endDate': Utils.getEndDateOfMonth(diffMonth: -2),
+      'title': "(-2) month",
+      'labelName': '(-2) month'
+    },
+    {
+      'salesQueryKey': 'minusThreeMonth',
+      'startDate': Utils.getStartDateOfMonth(diffMonth: -3),
+      'endDate': Utils.getEndDateOfMonth(diffMonth: -3),
+      'title': "(-3) month",
+      'labelName': '(-3) month'
     },
   ];
 

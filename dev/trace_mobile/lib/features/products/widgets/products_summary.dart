@@ -84,7 +84,7 @@ class ProductsSummary extends StatelessWidget {
                 width: 15,
               ),
               Text(
-                'Jakar qty: ${formatter.format(productsSummaryState.summaryJakarQty)}', //
+                'Age360 qty: ${formatter.format(productsSummaryState.summaryAge360Qty)}', //
                 style: theme.textTheme.bodyText2
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -92,7 +92,7 @@ class ProductsSummary extends StatelessWidget {
                 width: 15,
               ),
               Text(
-                'Jakar value: ${formatter.format(productsSummaryState.summaryJakarValue)}', //
+                'Age360 value: ${formatter.format(productsSummaryState.summaryAge360Value)}', //
                 style: theme.textTheme.bodyText2
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
@@ -100,7 +100,7 @@ class ProductsSummary extends StatelessWidget {
                 width: 15,
               ),
               Text(
-                'Jakar value(Gst): ${formatter.format(productsSummaryState.summaryJakarValueGst)}', //
+                'Age360 value(Gst): ${formatter.format(productsSummaryState.summaryAge360ValueGst)}', //
                 style: theme.textTheme.bodyText2
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),

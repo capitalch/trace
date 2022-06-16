@@ -46,27 +46,27 @@ class _ProductsListState extends State<ProductsList> {
       double summaryClos = 0,
           summarySumGst = 0,
           summarySum = 0,
-          summaryJakarQty = 0,
-          summaryJakarValue = 0,
-          summaryJakarValueGst = 0;
+          summaryAge360Qty = 0,
+          summaryAge360Value = 0,
+          summaryAge360ValueGst = 0;
       for (var ele in filteredList) {
         IndexedItem item = IndexedItem.fromJson(j: ele);
         summaryClos = summaryClos + item.clos;
         summarySumGst = summarySumGst + (item.clos * item.purGst);
         summarySum = summarySum + (item.clos * item.pur);
         if (item.age >= 360) {
-          summaryJakarQty = summaryJakarQty + item.clos;
-          summaryJakarValue = summaryJakarValue + (item.clos * item.pur);
-          summaryJakarValueGst = summaryJakarValueGst + (item.clos * item.purGst);
+          summaryAge360Qty = summaryAge360Qty + item.clos;
+          summaryAge360Value = summaryAge360Value + (item.clos * item.pur);
+          summaryAge360ValueGst = summaryAge360ValueGst + (item.clos * item.purGst);
         }
       }
       productsSummaryState.summaryCount = filteredList.length;
       productsSummaryState.summaryClos = summaryClos;
       productsSummaryState.summarySumGst = summarySumGst;
       productsSummaryState.summarySum = summarySum;
-      productsSummaryState.summaryJakarQty = summaryJakarQty;
-      productsSummaryState.summaryJakarValue = summaryJakarValue;
-      productsSummaryState.summaryJakarValueGst = summaryJakarValueGst;
+      productsSummaryState.summaryAge360Qty = summaryAge360Qty;
+      productsSummaryState.summaryAge360Value = summaryAge360Value;
+      productsSummaryState.summaryAge360ValueGst = summaryAge360ValueGst;
 
       productsTagsState.addTag(searchText);
       setState(() {});

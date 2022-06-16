@@ -44,6 +44,7 @@ class SalesReportBody extends StatelessWidget {
                   List<dynamic> dataList =
                       snapshot.data?.data?['accounts']?['genericView'] ?? [];
                   if (dataList.isEmpty) {
+                    setEmptyDataState(context);
                     widget = Center(
                       child: Text(
                         'No data',
@@ -56,6 +57,7 @@ class SalesReportBody extends StatelessWidget {
                     );
                   }
                 } else {
+                  setEmptyDataState(context);
                   widget = const Text('No data');
                 }
               }
@@ -66,5 +68,21 @@ class SalesReportBody extends StatelessWidget {
             },
           );
         });
+  }
+
+  setEmptyDataState(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      context.read<SalesState>().summaryMap = {
+        'rows': 0,
+        'qty': 0,
+        'sale': 0,
+        'aggr': 0,
+        'age360Qty': 0,
+        'age360Sale': 0,
+        'age360Aggr': 0,
+        'age360GrossProfit': 0,
+        'grossProfit': 0,
+      };
+    });
   }
 }
