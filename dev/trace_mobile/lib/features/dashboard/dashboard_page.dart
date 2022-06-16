@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:trace_mobile/features/dashboard/dashboard_app_bar.dart';
-import 'package:trace_mobile/features/dashboard/dashboard_bottom_navigation_bar.dart';
-import 'package:trace_mobile/features/dashboard/dashboard_subheader.dart';
+import 'package:trace_mobile/features/dashboard/widgets/dashboard_app_bar.dart';
+import 'package:trace_mobile/features/dashboard/widgets/dashboard_bottom_navigation_bar.dart';
+import 'package:trace_mobile/features/dashboard/widgets/dashboard_subheader.dart';
 
 class DashBoardPage extends StatelessWidget {
   const DashBoardPage({Key? key}) : super(key: key);

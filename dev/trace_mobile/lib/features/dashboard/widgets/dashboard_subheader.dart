@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
-import 'package:trace_mobile/features/dashboard/subheader_fin_year.dart';
+import 'package:trace_mobile/features/dashboard/widgets/subheader_fin_year.dart';
 
 class DashboardSubheader extends StatelessWidget {
   const DashboardSubheader({Key? key}) : super(key: key);

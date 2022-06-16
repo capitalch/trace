@@ -90,6 +90,10 @@ class GlobalSettings extends ChangeNotifier {
     return (!ret);
   }
 
+  void justNotifyListeners() {
+    notifyListeners();
+  }
+
   Future loadLoginDataFromSecuredStorage() async {
     String? jLoginData = await DataStore.getLoginDataFromSecuredStorage();
     if (Utils.isValidJson(jLoginData)) {
@@ -139,6 +143,7 @@ class GlobalSettings extends ChangeNotifier {
 
   void setLastUsedBuCode(String buCode) {
     lastUsedBuCode = buCode;
+    // notifyListeners();
   }
 
   void setLoginData(dynamic loginData,

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
 
 class SalesQueryProps {
@@ -52,11 +51,39 @@ class QueryProps {
       'labelName': 'Today'
     },
     {
-      'salesQueryKey': 'yesterday',
+      'salesQueryKey': 'minusOneDay',
       'startDate': DateTime.now().subtract(const Duration(days: 1)),
       'endDate': DateTime.now().subtract(const Duration(days: 1)),
-      'title': "Sale of yesterday",
-      'labelName': 'Yesterday'
+      'title': "Sale of (-1) day",
+      'labelName': '(-1) day'
+    },
+    {
+      'salesQueryKey': 'minusTwoDay',
+      'startDate': DateTime.now().subtract(const Duration(days: 2)),
+      'endDate': DateTime.now().subtract(const Duration(days: 2)),
+      'title': "Sale of (-2) day",
+      'labelName': '(-2) day'
+    },
+    {
+      'salesQueryKey': 'minusThreeDay',
+      'startDate': DateTime.now().subtract(const Duration(days: 3)),
+      'endDate': DateTime.now().subtract(const Duration(days: 3)),
+      'title': "Sale of (-2) day",
+      'labelName': '(-3) day'
+    },
+    {
+      'salesQueryKey': 'thisMonth',
+      'startDate': Utils.getStartDateOfMonth(),
+      'endDate': Utils.getEndDateOfMonth(),
+      'title': "This month",
+      'labelName': 'This month'
+    },
+    {
+      'salesQueryKey': 'minusOneMonth',
+      'startDate': Utils.getStartDateOfMonth(monthNo: -1),
+      'endDate': Utils.getEndDateOfMonth(monthNo: -1),
+      'title': "(-1) month",
+      'labelName': '(-1) month'
     },
   ];
 

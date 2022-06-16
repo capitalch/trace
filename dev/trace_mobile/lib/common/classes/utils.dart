@@ -38,6 +38,33 @@ class Utils {
     return (year);
   }
 
+  // static DateTime getEndDateOfCurrentMonth() {
+  //   var now = DateTime.now();
+  //   var ret = DateTime.utc(now.year, now.month + 1,
+  //       0); // 0 day of next month gives last day of this month
+  //   return ret;
+  // }
+
+  // static DateTime getStartDateOfCurrentMonth() {
+  //   var now = DateTime.now();
+  //   var ret = DateTime.utc(now.year, now.month, 1);
+  //   return ret;
+  // }
+
+  static DateTime getEndDateOfMonth({int? monthNo}) {
+    monthNo = monthNo ?? DateTime.now().month;
+    var now = DateTime.now();
+    var ret = DateTime.utc(now.year, now.month + monthNo + 1, 0);
+    return ret;
+  }
+
+  static DateTime getStartDateOfMonth({int? monthNo}) {
+    monthNo = monthNo ?? DateTime.now().month;
+    var now = DateTime.now();
+    var ret = DateTime.utc(now.year, now.month + monthNo, 1);
+    return ret;
+  }
+
   static bool isValidJson(String? j) {
     bool ret = true;
     if (j == null) {

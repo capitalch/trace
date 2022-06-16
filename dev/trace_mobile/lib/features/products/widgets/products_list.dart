@@ -43,17 +43,30 @@ class _ProductsListState extends State<ProductsList> {
           },
         );
       }).toList();
-      double summaryClos = 0, summarySumGst = 0, summarySum = 0;
+      double summaryClos = 0,
+          summarySumGst = 0,
+          summarySum = 0,
+          summaryJakarQty = 0,
+          summaryJakarValue = 0,
+          summaryJakarValueGst = 0;
       for (var ele in filteredList) {
         IndexedItem item = IndexedItem.fromJson(j: ele);
         summaryClos = summaryClos + item.clos;
         summarySumGst = summarySumGst + (item.clos * item.purGst);
         summarySum = summarySum + (item.clos * item.pur);
+        if (item.age >= 360) {
+          summaryJakarQty = summaryJakarQty + item.clos;
+          summaryJakarValue = summaryJakarValue + (item.clos * item.pur);
+          summaryJakarValueGst = summaryJakarValueGst + (item.clos * item.purGst);
+        }
       }
       productsSummaryState.summaryCount = filteredList.length;
       productsSummaryState.summaryClos = summaryClos;
       productsSummaryState.summarySumGst = summarySumGst;
       productsSummaryState.summarySum = summarySum;
+      productsSummaryState.summaryJakarQty = summaryJakarQty;
+      productsSummaryState.summaryJakarValue = summaryJakarValue;
+      productsSummaryState.summaryJakarValueGst = summaryJakarValueGst;
 
       productsTagsState.addTag(searchText);
       setState(() {});

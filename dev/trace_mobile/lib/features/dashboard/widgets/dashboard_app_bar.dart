@@ -27,8 +27,10 @@ class DashboardAppBar extends StatelessWidget with PreferredSizeWidget {
                 InkWell(
                   child: const Padding(
                     padding: EdgeInsets.only(right: 5),
-                    child:
-                        Icon(Icons.menu_sharp, size: 30, ),
+                    child: Icon(
+                      Icons.menu_sharp,
+                      size: 30,
+                    ),
                   ),
                   onTap: () {},
                 ),
@@ -118,9 +120,11 @@ changeBuCode(BuildContext context, GlobalSettings globalSettings) async {
               .id, // id is used for update of the table, otherwise insert will happen
           'lastUsedBuCode': result,
         });
-    if ((result1?.data != null) && (result1?.exception == null)) { // success
+    if ((result1?.data != null) && (result1?.exception == null)) {
+      // success
       globalSettings.setLastUsedBuCode(result);
-      Utils.execDataCache(globalSettings);
+      await Utils.execDataCache(globalSettings);
+      globalSettings.justNotifyListeners();
     }
   }
 }

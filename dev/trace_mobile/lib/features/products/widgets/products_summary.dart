@@ -41,7 +41,6 @@ class ProductsSummary extends StatelessWidget {
                           entityName: 'accounts',
                           isMultipleRows: true,
                           args: {'onDate': null, 'isAll': true, 'days': 0});
-                      // print(results);
                       Navigator.pushNamed(context, Routes.products,
                           arguments: results);
                     },
@@ -80,7 +79,31 @@ class ProductsSummary extends StatelessWidget {
                 'Value(Gst): ${formatter.format(productsSummaryState.summarySumGst)}', //
                 style: theme.textTheme.bodyText2
                     ?.copyWith(fontWeight: FontWeight.bold),
-              )
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                'Jakar qty: ${formatter.format(productsSummaryState.summaryJakarQty)}', //
+                style: theme.textTheme.bodyText2
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                'Jakar value: ${formatter.format(productsSummaryState.summaryJakarValue)}', //
+                style: theme.textTheme.bodyText2
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                'Jakar value(Gst): ${formatter.format(productsSummaryState.summaryJakarValueGst)}', //
+                style: theme.textTheme.bodyText2
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ));
