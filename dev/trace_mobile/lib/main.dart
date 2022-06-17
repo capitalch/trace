@@ -12,6 +12,7 @@ import 'package:trace_mobile/features/products/classes/products_search_state.dar
 import 'package:trace_mobile/features/products/classes/products_summary_state.dart';
 import 'package:trace_mobile/features/sales/classes/sales_state.dart';
 import 'package:trace_mobile/features/sales/sales_page.dart';
+import 'package:trace_mobile/features/vouchers/classes/vouchers_state.dart';
 import 'package:trace_mobile/features/vouchers/vouchers_page.dart';
 import 'features/authentication/login_page.dart';
 
@@ -48,7 +49,12 @@ class TraceApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProductsTagsState(),
         ),
-        ChangeNotifierProvider(create: (context) => SalesState(),)
+        ChangeNotifierProvider(
+          create: (context) => SalesState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => VouchersState(),
+        )
       ],
       child: MaterialApp(
         title: 'Trace',
