@@ -53,12 +53,12 @@ class SalesAppBar extends StatelessWidget {
               // salesState.salesQueryKey = props.salesQueryKey;
               context.read<SalesState>().salesQueryKey = props.salesQueryKey;
             },
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
             child: Ink(
                 height: 30,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.amber.shade200,
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.amber.shade100,
                 ),
                 padding: const EdgeInsets.only(top: 8, left: 10, right: 10),
                 child: Text(

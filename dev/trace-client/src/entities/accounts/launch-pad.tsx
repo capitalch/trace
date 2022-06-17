@@ -165,11 +165,6 @@ function LaunchPad() {
         )}:${buCode}:${finYearId}:${branchId}`
         return room
     }
-
-    // function initAccountsMegaData() {
-    //     Object.assign(megaData.accounts.sales, salesMegaData)
-    //     Object.assign(megaData.accounts.settings, settingsMegaData)
-    // }
 }
 
 export { LaunchPad }

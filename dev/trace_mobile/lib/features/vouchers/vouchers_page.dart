@@ -20,36 +20,35 @@ class VouchersAppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: double.maxFinite,
       height: 40,
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            InkWell(
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.chevron_left,
-                    size: 30,
-                    color: Colors.indigo,
-                  ),
-                  Text(
-                    'Vouchers',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ],
+      child: SingleChildScrollView(
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              InkWell(
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.chevron_left,
+                      size: 30,
+                      color: Colors.indigo,
+                    ),
+                    Text(
+                      'Vouchers',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
               ),
-              onTap: () {
-                // productsSearchState.searchFromTag = '';
-                // List<String> tagsData = productsTagsState.productsTags;
-                // String serializedData = json.encode(tagsData);
-                // DataStore.saveDataInSecuredStorage(
-                //     'productsTags', serializedData);
-                Navigator.pop(context);
-              },
-            ),
-          ]),
+              const SizedBox(width: 5),
+              
+            ]),
+      ),
     );
   }
 }

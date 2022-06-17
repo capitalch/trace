@@ -11,11 +11,11 @@ npm install @types/jest@latest @types/react-dom@latest
 npm install  react-scripts@latest react-error-overlay@latest
 npm install react@latest react-dom@latest
 
-## Logic for sales report
-1. AppBar: has tags such as today, yesterday, 1 day before, 2 days before, this month, last month, ytd, April, ...
-2. A provider changeProvideSales: Stores tagname, startDate, endDate. Issues notifyListeners
-3. Body and summary widgets are consumers
-4. implement futurebuilder in body
+## Logic for vouchers
+1. App bar to show 100, 1000, 5000 10000, all
+2. body
+3. summary
+
 ## Flutter learning
                                                                                     1. Navigation and drawyer
                                                                                     2. Provider and listner and notifier
