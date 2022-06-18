@@ -28,8 +28,10 @@ class SalesCardListItem extends StatelessWidget {
       'Sale type: ',
       indexedItem.saleType,
       ' Accounts: ',
-      indexedItem.accounts
-    ].join();
+      indexedItem.accounts,
+      ' ',
+      DateFormat('hh:mm:ss a').format(DateTime.parse(indexedItem.timestamp).toLocal())
+    ].join(); 
     var formatter = NumberFormat('#,##,000');
     return Center(
         child: Card(

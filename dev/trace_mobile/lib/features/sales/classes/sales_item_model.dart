@@ -19,6 +19,7 @@ class SalesItemModel {
     required this.saleType,
     required this.sgst,
     required this.stock,
+    required this.timestamp,
   });
 
   factory SalesItemModel.fromJson({required Map<String, dynamic> j}) {
@@ -42,6 +43,7 @@ class SalesItemModel {
       saleType: j['saleType'],
       sgst: double.parse((j['sgst'] ?? 0).toString()),
       stock: double.parse((j['stock'] ?? 0).toString()),
+      timestamp:j['timestamp'] ?? '',
     );
   }
   final String accounts;
@@ -63,4 +65,5 @@ class SalesItemModel {
   final String saleType;
   final double sgst;
   final double stock;
+  final String timestamp;
 }

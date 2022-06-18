@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
@@ -126,7 +127,7 @@ class VouchersBody extends StatelessWidget {
           future: vouchersFuture,
           builder: (context, snapshot) {
             var messageTheme = Theme.of(context).textTheme.headline6;
-            var widget = const Text('');
+            dynamic widget = const Text('');
             if (snapshot.connectionState == ConnectionState.waiting) {
               widget = Text('Loading...', style: messageTheme);
             } else if (snapshot.hasData) {
@@ -140,7 +141,8 @@ class VouchersBody extends StatelessWidget {
                   return VouchersDataModel.fromJson(j: e);
                 })).toList();
 
-                widget = Text('Has data', style: messageTheme);
+                widget =
+                    VouchersListViewData(vouchersDataListModel: dataListModel);
               }
             } else {
               widget = Text('No data', style: messageTheme);
@@ -152,6 +154,62 @@ class VouchersBody extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class VouchersListViewData extends StatelessWidget {
+  const VouchersListViewData({Key? key, required this.vouchersDataListModel})
+      : super(key: key);
+
+  final List<VouchersDataModel> vouchersDataListModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: vouchersDataListModel.length,
+      itemBuilder: (context, index) {
+        return VouchersCardListItem(
+          itemModel: vouchersDataListModel[index],
+        );
+      },
+    );
+  }
+}
+
+class VouchersCardListItem extends StatelessWidget {
+  const VouchersCardListItem({Key? key, required this.itemModel})
+      : super(key: key);
+
+  final VouchersDataModel itemModel;
+
+  @override
+  Widget build(BuildContext context) {
+    var formatter = NumberFormat('#,##,000');
+    var dateFormatter = DateFormat('dd/MM/yyyy');
+    return Center(
+      child: Card(
+        elevation: 1,
+        child: Column(children: [
+          Container(
+              padding:
+                  const EdgeInsets.only(top: 15, bottom: 15, left: 5, right: 5),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 75,
+                    child: Text(dateFormatter
+                        .format(DateTime.parse(itemModel.tranDate))),
+                  ),
+                  SizedBox(width: 5,),
+                  Expanded(child: Text(itemModel.autoRefNo)),
+                  SizedBox(width: 100, child: Text(formatter.format(itemModel.debit))),
+                  SizedBox(width: 5,),
+                  SizedBox(width: 100,   child: Text(formatter.format(itemModel.credit)))
+                ],
+              ))
+        ]),
+      ),
     );
   }
 }

@@ -42,7 +42,6 @@ class SalesListViewData extends StatelessWidget {
           age360Sale + ((indexedItem.age >= 360) ? indexedItem.amount : 0);
       age360Aggr = age360Aggr + ((indexedItem.age >= 360) ? indexedItem.aggrSale : 0);
       age360GrossProfit = age360GrossProfit + ((indexedItem.age >= 360) ? indexedItem.grossProfit : 0);
-
       grossProfit = grossProfit + indexedItem.grossProfit;
     }
     // Future.delayed is used to run the code as Future.
