@@ -132,6 +132,7 @@ allSqls = {
             , CASE WHEN "dc" = 'C' THEN "amount" ELSE 0.00 END as "credit"
             , d."instrNo", d."lineRefNo", d."remarks" as "lineRemarks"
             , h."tags"
+            , h."timestamp"
             from "TranD" d
                 join "TranH" h
                     on h."id" = d."tranHeaderId"

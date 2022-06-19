@@ -1,9 +1,11 @@
+import 'package:adam1/widgets/adam_expansion_tile.dart';
 import 'package:adam1/widgets/alert_demo.dart';
 import 'package:adam1/widgets/date_time_examples.dart';
 import 'package:adam1/widgets/dialog_select_demo.dart';
 import 'package:adam1/widgets/ibuki_implement.dart';
 import 'package:adam1/widgets/infinite_scroll.dart';
 import 'package:adam1/widgets/simple_listview_builder.dart';
+import 'package:adam1/widgets/simple_tree_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './widgets/hello_custom_app_bar.dart';
@@ -166,7 +168,19 @@ class MyHomePage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => const DateTimeExamples()));
-                  }, child: const Text('Date time'))
+                  }, child: const Text('Date time')),
+                  TextButton(onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SimpleTreeView()));
+                  }, child: const Text('Simple tree view')),
+                  TextButton(onPressed: (){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AdamExpansionTile()));
+                  }, child: const Text('Expansion tile'))
                 ],
               ),
             ),
