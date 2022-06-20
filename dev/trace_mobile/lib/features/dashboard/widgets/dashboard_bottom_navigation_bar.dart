@@ -52,6 +52,8 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               isMultipleRows: true,
               args: {'onDate': null, 'isAll': true, 'days': 0});
           Navigator.pushNamed(context, Routes.products, arguments: results);
+        } else if (value == 3) {
+          Navigator.pushNamed(context, Routes.accounts);
         }
       },
       selectedItemColor: Colors.indigo.shade700,

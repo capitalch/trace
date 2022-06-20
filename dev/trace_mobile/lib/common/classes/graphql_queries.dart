@@ -53,6 +53,19 @@ class GraphQLQueries {
       QueryOptions(document: gq, operationName: 'genericView'),
     );
   }
+
+  static Future<QueryResult<Object>>? trialBalance({required GlobalSettings globalSettings}) {
+    var gq = gql('''
+      query trialBalance {
+        accounts {
+          trialBalance()
+        }
+      }
+    ''');
+    return globalSettings.getGraphQLMainClient().query(
+      QueryOptions(document: gq, operationName: 'trialBalance'),
+    );
+  }
 }
 
 class GQLGenericViewValue {

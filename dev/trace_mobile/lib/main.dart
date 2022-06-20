@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
+import 'package:trace_mobile/features/accounts/accounts_page.dart';
+import 'package:trace_mobile/features/accounts/widgets/trial_balance.dart';
 import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
 import 'package:trace_mobile/features/dashboard/stock.dart';
@@ -61,12 +63,14 @@ class TraceApp extends StatelessWidget {
         theme: getThemeData(),
         home: const HomePage(),
         routes: {
+          'accounts': (BuildContext context) => const AccountsPage(),
           'dashboard': (BuildContext context) => const DashBoardPage(),
           'login': (BuildContext context) {
             return const LoginPage();
           },
           'products': (BuildContext context) => const ProductsPage(),
           'sales': (BuildContext context) => const SalesPage(),
+          'trialBalance':(BuildContext context) => const TrialBalance(),
           'vouchers': (BuildContext context) => const VouchersPage(),
         },
       ),
