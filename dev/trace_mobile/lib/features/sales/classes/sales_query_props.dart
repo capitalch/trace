@@ -81,7 +81,7 @@ class QueryProps {
       'labelName': '(-1) month'
     },
     {
-      'salesQueryKey': 'minusTwoMonths',
+      'salesQueryKey': 'minusTwoMonth',
       'startDate': Utils.getStartDateOfMonth(diffMonth: -2),
       'endDate': Utils.getEndDateOfMonth(diffMonth: -2),
       'title': "(-2) month",

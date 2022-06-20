@@ -14,10 +14,12 @@ class SalesReportBody extends StatelessWidget {
   Widget build(BuildContext context) {
     GlobalSettings globalSettings =
         Provider.of<GlobalSettings>(context, listen: false);
+    context.read<SalesState>().init();
     return Selector<SalesState, String>(
         selector: (p0, p1) => p1.salesQueryKey,
         builder: (context, value, child) {
           String queryKey = value == '' ? 'today' : value;
+          // String queryKey = 'today';
           var props = QueryProps()
               .getSalesQueryPropsList()
               .firstWhere((element) => element.salesQueryKey == queryKey);

@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/features/accounts/accounts_page.dart';
-import 'package:trace_mobile/features/accounts/widgets/trial_balance.dart';
+import 'package:trace_mobile/features/accounts/widgets/accounts_trial_balance.dart';
 import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
-import 'package:trace_mobile/features/dashboard/stock.dart';
 import 'package:trace_mobile/features/products/classes/products_tags_state.dart';
 import 'package:trace_mobile/features/products/products_page.dart';
 import 'package:trace_mobile/features/products/classes/products_search_state.dart';
@@ -70,7 +69,7 @@ class TraceApp extends StatelessWidget {
           },
           'products': (BuildContext context) => const ProductsPage(),
           'sales': (BuildContext context) => const SalesPage(),
-          'trialBalance':(BuildContext context) => const TrialBalance(),
+          'trialBalance':(BuildContext context) => const AccountsTrialBalance(),
           'vouchers': (BuildContext context) => const VouchersPage(),
         },
       ),

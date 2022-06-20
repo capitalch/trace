@@ -5,6 +5,10 @@ class SalesState with ChangeNotifier {
   Map<String, double> _summaryMap = {};
 
   String get salesQueryKey => _salesQueryKey;
+  
+  init() {
+    _salesQueryKey = 'today';
+  }
 
   set salesQueryKey(String val) {
     _salesQueryKey = val;
