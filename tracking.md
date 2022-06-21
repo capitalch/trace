@@ -133,6 +133,11 @@ L. Bank reconcillation opening cheques
                                                                                                 4. login failure clears the login data
                                                                                                 5. Dashboard shows bucode, branch, fin year and plus minus settings. All settings to be there in global settings
                                                                                                 6. Can change these settings form dashboard
+#. Trial balance: show asset, liability, expense, income in title
+#. Show header
+#. Show footer
+#. Transfer Vouchers to all transactions and rename all
+#. Reorganize bottom in dashboard
 7. Dashboard:
     Sales: today, yesterday, this month, last month, ytd
     Purchases: this month, last month, ytd
