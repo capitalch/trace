@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_data_model.dart';
+import 'package:trace_mobile/features/accounts/widgets/custom_expansion_tile.dart';
 
 class AccountsTrialBalance extends StatelessWidget {
   const AccountsTrialBalance({Key? key}) : super(key: key);
@@ -66,16 +67,6 @@ class TrialBalanceBody extends StatelessWidget {
             widget = ListView(
               children: getChildListOfWidgets(context, dataList),
             );
-
-            // Column(
-            //   children: getChildListOfWidgets(context, dataList),
-            // );
-            // List<TrialBalanceNode> trialBalanceNodeList = dataList.map((item) {
-            //   var trialBalanceData = TrialBalanceData.fromJson(j: item['data']);
-            //   return TrialBalanceNode(data: trialBalanceData, children: null);
-            // }).toList();
-            // widget = TrialBalanceBodyLayout(
-            //     trialBalanceNodeList: trialBalanceNodeList);
           }
         } else {
           widget = Text('No data', style: messageTheme);
@@ -97,16 +88,24 @@ class TrialBalanceBody extends StatelessWidget {
     var theme = Theme.of(context).textTheme;
     for (dynamic child in childList) {
       TrialBalanceData data = TrialBalanceData.fromJson(j: child['data']);
-      Widget childWidget = ExpansionTile(
-        // collapsedBackgroundColor: Colors.amber.shade100,
-        backgroundColor: Colors.indigo.shade100,
+      Widget childWidget = CustomExpansionTile(
+        maintainState: true,
+        collapsedIconColor: Colors.amber.shade700,
+        // textColor: Colors.blue.shade700,
+        // collapsedTextColor: Colors.red,
+        // tilePadding: const EdgeInsets.only(left: 15),
+        // trailing: const Icon(Icons.ac_unit),
+        // initiallyExpanded: true,
+        // expandedAlignment: Alignment.centerRight,
+        backgroundColor: Colors.amber.shade100,
         // collapsedBackgroundColor: Colors.grey.shade100,
-        childrenPadding: const EdgeInsets.only(left: 30),
+        childrenPadding: const EdgeInsets.only(left: 15),
         title: Text(
           data.accName,
-          style: theme.labelLarge,
+          style: theme.subtitle1?.copyWith(fontWeight: FontWeight.bold, color: child['children'] ==null ? Colors.blue: Colors.black),
         ),
         subtitle: SingleChildScrollView(
+            padding: const EdgeInsets.only(top: 10),
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
@@ -122,6 +121,7 @@ class TrialBalanceBody extends StatelessWidget {
         children: (child['children'] == null)
             ? [const SizedBox.shrink()]
             : getChildListOfWidgets(context, child['children']),
+        hasChildren: (child['children'] == null) ? false: true,
       );
       childListOfWidgets.add(childWidget);
     }
@@ -132,7 +132,7 @@ class TrialBalanceBody extends StatelessWidget {
     NumberFormat formatter = NumberFormat('###,###.00');
     var theme = Theme.of(context).textTheme;
     var formattedAmountWidget = Text(formatter.format(amount),
-        style: theme.labelMedium?.copyWith(fontWeight: FontWeight.bold));
+        style: theme.bodyText1?.copyWith(fontWeight: FontWeight.bold));
     var drcrWidget = const Text('');
     if (drcr != null) {
       drcrWidget = (drcr == 'D')
@@ -146,8 +146,9 @@ class TrialBalanceBody extends StatelessWidget {
             );
     }
     return Container(
-        width: 110,
-        color: Colors.grey.shade100,
+        padding: const EdgeInsets.only(top: 5),
+        width: 120,
+        // color: Colors.grey.shade100,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
