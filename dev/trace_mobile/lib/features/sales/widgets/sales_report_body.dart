@@ -6,6 +6,7 @@ import 'package:trace_mobile/common/classes/utils.dart';
 import 'package:trace_mobile/features/sales/classes/sales_query_props.dart';
 import 'package:trace_mobile/features/sales/classes/sales_state.dart';
 import 'package:trace_mobile/features/sales/widgets/sales_list_view_data.dart';
+import 'package:tuple/tuple.dart';
 
 class SalesReportBody extends StatelessWidget {
   const SalesReportBody({Key? key}) : super(key: key);
@@ -15,10 +16,12 @@ class SalesReportBody extends StatelessWidget {
     GlobalSettings globalSettings =
         Provider.of<GlobalSettings>(context, listen: false);
     context.read<SalesState>().init();
-    return Selector<SalesState, String>(
-        selector: (p0, p1) => p1.salesQueryKey,
+
+    // Used Tuple package for depending on multiple values for selector. notifyToggle state is used for rebuikding unconditionally when refresh inkwell is clicked
+    return Selector<SalesState, Tuple2<String, bool>>(
+        selector: (p0, p1) => Tuple2(p1.salesQueryKey, p1.notifyToggle),
         builder: (context, value, child) {
-          String queryKey = value == '' ? 'today' : value;
+          String queryKey = value.item1 == '' ? 'today' : value.item1;
           var props = QueryProps()
               .getSalesQueryPropsList()
               .firstWhere((element) => element.salesQueryKey == queryKey);

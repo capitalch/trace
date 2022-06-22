@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 class SalesState with ChangeNotifier {
   String _salesQueryKey = '';
   Map<String, double> _summaryMap = {};
+  bool notifyToggle = false;
 
   String get salesQueryKey => _salesQueryKey;
 
@@ -16,6 +17,7 @@ class SalesState with ChangeNotifier {
   }
 
   notify() {
+    notifyToggle = !notifyToggle;
     notifyListeners();
   }
 

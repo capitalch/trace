@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/features/accounts/accounts_page.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_state.dart';
+import 'package:trace_mobile/features/accounts/widgets/accounts_bs_pl.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_trial_balance.dart';
 import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
@@ -67,6 +68,7 @@ class TraceApp extends StatelessWidget {
         home: const HomePage(),
         routes: {
           'accounts': (BuildContext context) => const AccountsPage(),
+          'bspl':(BuildContext context) => const AccountsBsPl() ,
           'dashboard': (BuildContext context) => const DashBoardPage(),
           'login': (BuildContext context) {
             return const LoginPage();

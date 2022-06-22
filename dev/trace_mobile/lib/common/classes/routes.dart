@@ -1,5 +1,6 @@
 class Routes {
   static String accounts = 'accounts';
+  static String bspl = 'bspl';
   static String dashBoard = 'dashboard';
   static String login = 'login';
   static String products = 'products';

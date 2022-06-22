@@ -47,6 +47,8 @@ class AccountsTrialBalance extends StatelessWidget {
             ),
             TrialBalanceFooter()
           ],
-        ));
+        ),
+        );
+        
   }
 }
