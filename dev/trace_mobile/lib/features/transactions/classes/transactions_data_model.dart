@@ -1,10 +1,10 @@
-class VouchersDataModel {
+class TransactionsDataModel {
   final int id, index, tranTypeId;
   final String accName, autoRefNo, timestamp, tranDate, tranType;
   final String? instrNo, lineRefNo, lineRemarks, remarks, tags, userRefNo;
   final double credit, debit;
 
-  VouchersDataModel({
+  TransactionsDataModel({
     required this.accName,
     required this.autoRefNo,
     required this.credit,
@@ -23,8 +23,8 @@ class VouchersDataModel {
     required this.userRefNo,
   });
 
-  factory VouchersDataModel.fromJson({required Map<String, dynamic> j}) {
-    return VouchersDataModel(
+  factory TransactionsDataModel.fromJson({required Map<String, dynamic> j}) {
+    return TransactionsDataModel(
         accName: j['accName'],
         autoRefNo: j['autoRefNo'],
         credit: j['credit'],

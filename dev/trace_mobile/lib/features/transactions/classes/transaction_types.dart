@@ -1,4 +1,4 @@
-const Map<int, String> vouchersTranTypesMap = {
+const Map<int, String> transactionTypesMap = {
   1: 'Journal',
   2: 'Payment',
   3: 'Receipt',

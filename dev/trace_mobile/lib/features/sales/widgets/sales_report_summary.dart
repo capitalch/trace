@@ -20,10 +20,23 @@ class SalesReportSummary extends StatelessWidget {
             width: double.infinity,
             height: 25,
             color: Colors.grey.shade300,
-            padding: const EdgeInsets.only(left: 15, top: 2, bottom: 5),
+            padding: const EdgeInsets.only(left: 5, top: 2, bottom: 5),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(children: [
+                Material(
+                  child: InkWell(
+                      splashColor: Theme.of(context).primaryColorLight,
+                      onTap: () {
+                        context.read<SalesState>().notify();
+                      },
+                      child: Ink(
+                        color: Colors.grey.shade300,
+                        padding: const EdgeInsets.only(right: 10),
+                        child: const Icon(Icons.sync,
+                            size: 20, color: Colors.lightBlue),
+                      )),
+                ),
                 Text(
                   'Rows: ${formatter.format(value['rows'] ?? 0)}',
                   style: theme,

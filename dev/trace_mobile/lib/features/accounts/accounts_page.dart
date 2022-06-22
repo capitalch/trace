@@ -39,42 +39,39 @@ class AccountsPage extends StatelessWidget {
             ),
           )),
       body: ListView(children: [
-        Padding(
-          padding: const EdgeInsets.all(3),
-          child: ListTile(
-            tileColor: Colors.grey.shade200,
-            // horizontalTitleGap: 5,
-            title: Text(
-              'All transactions',
-              style: themeStyle.subtitle1,
-            ),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(3),
-          child: ListTile(
-            tileColor: Colors.grey.shade200,
-            // horizontalTitleGap: 5,
-            title: Text(
-              'General ledger',
-              style: themeStyle.subtitle1,
-            ),
-            onTap: () {},
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(3),
-          child: ListTile(
-            tileColor: Colors.grey.shade200,
-            // horizontalTitleGap: 5,
-            title: Text(
-              'Bank reconcillation',
-              style: themeStyle.subtitle1,
-            ),
-            onTap: () {},
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(3),
+        //   child: ListTile(
+        //     tileColor: Colors.grey.shade200,
+        //     title: Text(
+        //       'All transactions',
+        //       style: themeStyle.subtitle1,
+        //     ),
+        //     onTap: () {},
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(3),
+        //   child: ListTile(
+        //     tileColor: Colors.grey.shade200,
+        //     title: Text(
+        //       'General ledger',
+        //       style: themeStyle.subtitle1,
+        //     ),
+        //     onTap: () {},
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(3),
+        //   child: ListTile(
+        //     tileColor: Colors.grey.shade200,
+        //     title: Text(
+        //       'Bank reconcillation',
+        //       style: themeStyle.subtitle1,
+        //     ),
+        //     onTap: () {},
+        //   ),
+        // ),
         Padding(
           padding: const EdgeInsets.all(3),
           child: ListTile(

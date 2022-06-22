@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/features/vouchers/classes/vouchers_state.dart';
+import 'package:trace_mobile/features/transactions/classes/transactions_state.dart';
 
-class VouchersHeader extends StatelessWidget{
-  const VouchersHeader({Key? key}) : super(key: key);
+class TransactionsHeader extends StatelessWidget{
+  const TransactionsHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<VouchersState>(
+    return Consumer<TransactionsState>(
       builder: (context, value, child) {
         return Container(
           color: Colors.grey.shade200,
           width: double.maxFinite,
           alignment: Alignment.center,
           child: Text(
-            'Vouchers last ${value.queryKey} rows',
+            'Transactions last ${value.queryKey} rows',
             style: Theme.of(context)
                 .textTheme
                 .subtitle1

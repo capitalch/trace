@@ -5,6 +5,6 @@ class Routes {
   static String products = 'products';
   static String sales = 'sales';
   static String trialBalance = 'trialBalance';
-  static String vouchers = 'vouchers';
+  static String transactions = 'transactions';
   // static String stock = 'stock';
 }

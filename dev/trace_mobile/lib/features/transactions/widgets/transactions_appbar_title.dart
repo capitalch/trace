@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trace_mobile/features/vouchers/classes/vouchers_state.dart';
+import 'package:trace_mobile/features/transactions/classes/transactions_state.dart';
 
-class VouchersAppBarTitle extends StatelessWidget {
-  const VouchersAppBarTitle({Key? key}) : super(key: key);
+class TransactionsAppBarTitle extends StatelessWidget {
+  const TransactionsAppBarTitle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class VouchersAppBarTitle extends StatelessWidget {
                       color: Colors.indigo,
                     ),
                     Text(
-                      'Vouchers',
+                      'Transactions',
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ],
@@ -42,9 +42,9 @@ class VouchersAppBarTitle extends StatelessWidget {
   }
 
   List<Widget> getLabelsLayout(BuildContext context) { 
-    var vouchersStateMap = context.read<VouchersState>().vouchersStateMap;
-    var getVouchersState = context.read<VouchersState>().getVouchersState;
-    var keys = vouchersStateMap.keys.toList();
+    var transactionsStateMap = context.read<TransactionsState>().transactionsStateMap;
+    var getTransactionsState = context.read<TransactionsState>().getTransactionsState;
+    var keys = transactionsStateMap.keys.toList();
     var labelsLayout = keys.map(
       (String key) {
         return Material(
@@ -53,7 +53,7 @@ class VouchersAppBarTitle extends StatelessWidget {
             child: InkWell(
               splashColor: Theme.of(context).primaryColorLight,
               onTap: () {
-                context.read<VouchersState>().setQueryKey(key);
+                context.read<TransactionsState>().setQueryKey(key);
               },
               borderRadius: BorderRadius.circular(15),
               child: Ink(
@@ -66,7 +66,7 @@ class VouchersAppBarTitle extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Center(
                     child: Text(
-                      getVouchersState(key)!.label,
+                      getTransactionsState(key)!.label,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white),
                     ),
                   )),

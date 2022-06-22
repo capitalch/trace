@@ -14,8 +14,8 @@ import 'package:trace_mobile/features/products/classes/products_search_state.dar
 import 'package:trace_mobile/features/products/classes/products_summary_state.dart';
 import 'package:trace_mobile/features/sales/classes/sales_state.dart';
 import 'package:trace_mobile/features/sales/sales_page.dart';
-import 'package:trace_mobile/features/vouchers/classes/vouchers_state.dart';
-import 'package:trace_mobile/features/vouchers/vouchers_page.dart';
+import 'package:trace_mobile/features/transactions/classes/transactions_state.dart';
+import 'package:trace_mobile/features/transactions/transactions_page.dart';
 import 'features/authentication/login_page.dart';
 
 void main() {
@@ -55,7 +55,7 @@ class TraceApp extends StatelessWidget {
           create: (context) => SalesState(),
         ),
         ChangeNotifierProvider(
-          create: (context) => VouchersState(),
+          create: (context) => TransactionsState(),
         ),
         ChangeNotifierProvider(
           create: (context) => AccountsTrialBalanceState(),
@@ -73,9 +73,9 @@ class TraceApp extends StatelessWidget {
           },
           'products': (BuildContext context) => const ProductsPage(),
           'sales': (BuildContext context) => const SalesPage(),
+          'transactions': (BuildContext context) => const TransactionsPage(),
           'trialBalance': (BuildContext context) =>
               const AccountsTrialBalance(),
-          'vouchers': (BuildContext context) => const VouchersPage(),
         },
       ),
     ));

@@ -3,24 +3,22 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
-import 'package:trace_mobile/features/vouchers/classes/vouchers_data_model.dart';
-import 'package:trace_mobile/features/vouchers/classes/vouchers_state.dart';
-import 'package:trace_mobile/features/vouchers/classes/vouchers_tran_types.dart';
+import 'package:trace_mobile/features/transactions/classes/transactions_data_model.dart';
+import 'package:trace_mobile/features/transactions/classes/transactions_state.dart';
+import 'package:trace_mobile/features/transactions/classes/transaction_types.dart';
 
-class VouchersBody extends StatelessWidget {
-  const VouchersBody({Key? key}) : super(key: key);
+class TransactionsBody extends StatelessWidget {
+  const TransactionsBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var globalSettings = context.read<GlobalSettings>();
-    var vouchersState = context.read<VouchersState>();
-    return Selector<VouchersState, String>(
+    var transactionsState = context.read<TransactionsState>();
+    return Selector<TransactionsState, String>(
       selector: (p0, p1) => p1.queryKey,
       builder: (context, value, child) {
-        // var vouchersStateKey = value; //.queryKey;
-        var no = vouchersState.getVouchersState(value)!.queryCount;
-        // value.getVouchersState(vouchersStateKey)!.queryCount;
-        var vouchersFuture = GraphQLQueries.genericView(
+        var no = transactionsState.getTransactionsState(value)!.queryCount;
+        var transactionsFuture = GraphQLQueries.genericView(
             globalSettings: globalSettings,
             isMultipleRows: true,
             sqlKey: 'get_allTransactions',
@@ -29,7 +27,7 @@ class VouchersBody extends StatelessWidget {
               'no': no,
             });
         return FutureBuilder(
-          future: vouchersFuture,
+          future: transactionsFuture,
           builder: (context, snapshot) {
             var messageTheme = Theme.of(context).textTheme.headline6;
             dynamic widget = const Text('');
@@ -41,23 +39,23 @@ class VouchersBody extends StatelessWidget {
               if (dataList.isEmpty) {
                 widget = Text('No data', style: messageTheme);
               } else {
-                List<VouchersDataModel> dataListModel = dataList.map(((e) {
-                  e['tranType'] = vouchersTranTypesMap[e['tranTypeId']];
-                  return VouchersDataModel.fromJson(j: e);
+                List<TransactionsDataModel> dataListModel = dataList.map(((e) {
+                  e['tranType'] = transactionTypesMap[e['tranTypeId']];
+                  return TransactionsDataModel.fromJson(j: e);
                 })).toList();
-                vouchersState.initSummary();
+                transactionsState.initSummary();
                 for (var element in dataListModel) {
-                  vouchersState.debits =
-                      vouchersState.debits + element.debit.toInt();
-                  vouchersState.credits =
-                      vouchersState.credits + element.credit.toInt();
+                  transactionsState.debits =
+                      transactionsState.debits + element.debit.toInt();
+                  transactionsState.credits =
+                      transactionsState.credits + element.credit.toInt();
                 }
                 Future.delayed(Duration.zero, (() {
-                  vouchersState.setRowCount(dataList.length);
+                  transactionsState.setRowCount(dataList.length);
                 }));
 
                 widget =
-                    VouchersListViewData(vouchersDataListModel: dataListModel);
+                    TransactionsListViewData(transactionsDataListModel: dataListModel);
               }
             } else {
               widget = Text('No data', style: messageTheme);
@@ -73,30 +71,30 @@ class VouchersBody extends StatelessWidget {
   }
 }
 
-class VouchersListViewData extends StatelessWidget {
-  const VouchersListViewData({Key? key, required this.vouchersDataListModel})
+class TransactionsListViewData extends StatelessWidget {
+  const TransactionsListViewData({Key? key, required this.transactionsDataListModel})
       : super(key: key);
 
-  final List<VouchersDataModel> vouchersDataListModel;
+  final List<TransactionsDataModel> transactionsDataListModel;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: vouchersDataListModel.length,
+      itemCount: transactionsDataListModel.length,
       itemBuilder: (context, index) {
-        return VouchersCardListItem(
-          itemModel: vouchersDataListModel[index],
+        return TransactionsCardListItem(
+          itemModel: transactionsDataListModel[index],
         );
       },
     );
   }
 }
 
-class VouchersCardListItem extends StatelessWidget {
-  const VouchersCardListItem({Key? key, required this.itemModel})
+class TransactionsCardListItem extends StatelessWidget {
+  const TransactionsCardListItem({Key? key, required this.itemModel})
       : super(key: key);
 
-  final VouchersDataModel itemModel;
+  final TransactionsDataModel itemModel;
 
   @override
   Widget build(BuildContext context) {

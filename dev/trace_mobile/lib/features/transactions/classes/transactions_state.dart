@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class VouchersState with ChangeNotifier {
+class TransactionsState with ChangeNotifier {
   String queryKey = '100';
   int rowCount = 0, debits = 0, credits = 0;
 
@@ -17,28 +17,28 @@ class VouchersState with ChangeNotifier {
     credits = 0;
   }
 
-  Map<String, VouchersStateModel> vouchersStateMap = {
-    '100': VouchersStateModel(
+  Map<String, TransactionsStateModel> transactionsStateMap = {
+    '100': TransactionsStateModel(
         label: 'Last 100', title: 'Last 100 rows', queryCount: 100),
-    '1000': VouchersStateModel(
+    '1000': TransactionsStateModel(
         label: 'Last 1000', title: 'Last 1000 rows', queryCount: 1000),
-    '5000': VouchersStateModel(
+    '5000': TransactionsStateModel(
         label: 'Last 5000', title: 'Last 1000 rows', queryCount: 5000),
-    '10000': VouchersStateModel(
+    '10000': TransactionsStateModel(
         label: 'Last 10000', title: 'Last 10000 rows', queryCount: 10000),
     'all':
-        VouchersStateModel(label: 'All', title: 'All rows', queryCount: null),
+        TransactionsStateModel(label: 'All', title: 'All rows', queryCount: null),
   };
 
-  VouchersStateModel? getVouchersState(String voucherStateKey) {
-    return vouchersStateMap[voucherStateKey];
+  TransactionsStateModel? getTransactionsState(String transactionStateKey) {
+    return transactionsStateMap[transactionStateKey];
   }
 
-  List<String> getAlllVoucherLabels() {
-    return vouchersStateMap.keys.map((var key) {
-      return vouchersStateMap[key]!.label;
-    }).toList();
-  }
+  // List<String> getAllTransactionLabels() {
+  //   return transactionsStateMap.keys.map((var key) {
+  //     return transactionsStateMap[key]!.label;
+  //   }).toList();
+  // }
 
   setQueryKey(String val) {
     queryKey = val;
@@ -51,11 +51,11 @@ class VouchersState with ChangeNotifier {
   }
 }
 
-class VouchersStateModel {
+class TransactionsStateModel {
   final String title;
   final String label;
   final int? queryCount;
 
-  VouchersStateModel(
+  TransactionsStateModel(
       {required this.label, required this.title, required this.queryCount});
 }

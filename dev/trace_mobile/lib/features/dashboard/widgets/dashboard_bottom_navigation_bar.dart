@@ -20,7 +20,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.ac_unit),
-          label: 'Vouchers',
+          label: 'Transactions',
           // backgroundColor: Colors.amber
         ),
         BottomNavigationBarItem(
@@ -39,7 +39,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
         } else if (value == 1) {
           Navigator.pushNamed(
             context,
-            Routes.vouchers,
+            Routes.transactions,
           );
         } else if (value == 2) {
           //products

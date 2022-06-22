@@ -19,7 +19,6 @@ class SalesReportBody extends StatelessWidget {
         selector: (p0, p1) => p1.salesQueryKey,
         builder: (context, value, child) {
           String queryKey = value == '' ? 'today' : value;
-          // String queryKey = 'today';
           var props = QueryProps()
               .getSalesQueryPropsList()
               .firstWhere((element) => element.salesQueryKey == queryKey);
