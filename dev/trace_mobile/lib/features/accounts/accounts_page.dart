@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trace_mobile/common/classes/routes.dart';
+import 'package:trace_mobile/common/widgets/bu_code_branch_header.dart';
 
 class AccountsPage extends StatelessWidget {
   const AccountsPage({Key? key}) : super(key: key);
@@ -10,27 +11,32 @@ class AccountsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Row(
-            children: [
-              InkWell(
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.chevron_left,
-                      size: 30,
-                      color: Colors.indigo,
-                    ),
-                    Text(
-                      'Accounts',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ],
+          title: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                InkWell(
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.chevron_left,
+                        size: 30,
+                        color: Colors.indigo,
+                      ),
+                      Text(
+                        'Accounts',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+                const SizedBox(width: 5,),
+                const BuCodeBranchCodeHeader()
+              ],
+            ),
           )),
       body: ListView(children: [
         Padding(

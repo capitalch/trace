@@ -7,6 +7,7 @@ class TrialBalanceNode {
 
 class TrialBalanceData {
   final String accName;
+  final String accType;
   final double opening;
   final String openingDC;
   final double debit;
@@ -16,6 +17,7 @@ class TrialBalanceData {
 
   TrialBalanceData(
       {required this.accName,
+      required this.accType,
       required this.opening,
       required this.openingDC,
       required this.debit,
@@ -26,11 +28,19 @@ class TrialBalanceData {
   factory TrialBalanceData.fromJson({j}) {
     return TrialBalanceData(
         accName: j['accName'],
-        opening:  double.parse(j['opening'].toString()),
+        accType: j['accType'],
+        opening: double.parse(j['opening'].toString()),
         openingDC: j['opening_dc'],
         debit: double.parse(j['debit'].toString()),
         credit: double.parse(j['credit'].toString()),
         closing: double.parse(j['closing'].toString()),
         closingDC: j['closing_dc']);
   }
+
+  Map<String, String> accTypeMap = {
+    'A': 'Asset',
+    'E': 'Expense',
+    'I': 'Income',
+    'L': 'Liability'
+  };
 }
