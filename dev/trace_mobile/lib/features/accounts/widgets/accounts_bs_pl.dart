@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/common/widgets/bu_code_branch_header.dart';
+import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_data_model.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_state.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_data_model.dart';
 import 'package:trace_mobile/features/accounts/widgets/custom_expansion_tile.dart';
@@ -84,6 +86,8 @@ class BsplHeader extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () {
                     bsplState.isSelectedLeftLabel = true;
+                    bsplState.currentAccType =
+                        (bsplState.bsplType == 'bs') ? AccTypes.L : AccTypes.E;
                   },
                   child: Text(bsplState.leftLabel)),
             ),
@@ -97,6 +101,8 @@ class BsplHeader extends StatelessWidget {
               child: ElevatedButton(
                   onPressed: () {
                     bsplState.isSelectedLeftLabel = false;
+                    bsplState.currentAccType =
+                        (bsplState.bsplType == 'bs') ? AccTypes.A : AccTypes.I;
                   },
                   child: Text(bsplState.rightLabel)),
             )
@@ -129,6 +135,7 @@ class BsplBody extends StatelessWidget {
     return FutureBuilder(
       future: bsplFuture,
       builder: (context, snapshot) {
+        var bsplState = context.read<AccountsBsplState>();
         var messageTheme = Theme.of(context).textTheme.headline6;
         dynamic widget = const Text('');
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -142,8 +149,18 @@ class BsplBody extends StatelessWidget {
           if (dataList.isEmpty) {
             widget = Text('No data', style: messageTheme);
           } else {
-            widget = ListView(
-              children: getChildListOfWidgets(context, dataList),
+            widget = Selector<AccountsBsplState, AccTypes>(
+              selector: (p0, p1) => p1.currentAccType,
+              builder: (context, value, child) {
+                var dataListOnAccType = dataList
+                    .where((element) =>
+                        BsplData.fromJson(j: element['data']).accType ==
+                        value.name)
+                    .toList();
+                return ListView(
+                  children: getChildListOfWidgets(context, dataListOnAccType),
+                );
+              },
             );
 
             // double opening = 0, debits = 0, credits = 0, closing = 0;
@@ -189,49 +206,29 @@ class BsplBody extends StatelessWidget {
 
   getChildListOfWidgets(BuildContext context, List<dynamic> childList) {
     List<Widget> childListOfWidgets = [];
+    NumberFormat formatter = NumberFormat('###,###.00');
     var theme = Theme.of(context).textTheme;
     for (dynamic child in childList) {
-      TrialBalanceData data = TrialBalanceData.fromJson(j: child['data']);
+      BsplData data = BsplData.fromJson(j: child['data']);
       Widget childWidget = CustomExpansionTile(
         maintainState: true,
         collapsedIconColor: Colors.amber.shade700,
         backgroundColor: Colors.amber.shade100,
         childrenPadding: const EdgeInsets.only(left: 15),
-        title: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                data.accName,
-                style: theme.subtitle1?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color:
-                        child['children'] == null ? Colors.blue : Colors.black),
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                data.accTypeMap[data.accType] ?? '',
-                style: theme.bodyText1?.copyWith(color: Colors.grey.shade700),
-              )
-            ],
+        title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Expanded(
+            child: Text(
+              data.accName,
+              style: theme.subtitle1?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color:
+                      child['children'] == null ? Colors.blue : Colors.black),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-        ),
-        subtitle: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                FormattedNumber(amount: data.opening, drcr: data.openingDC),
-                const SizedBox(width: 5),
-                FormattedNumber(amount: data.debit, drcr: null),
-                const SizedBox(width: 5),
-                FormattedNumber(amount: data.credit, drcr: null),
-                const SizedBox(width: 5),
-                FormattedNumber(amount: data.closing, drcr: data.closingDC),
-              ],
-            )),
+          Text(formatter.format(data.amount))
+        ]),
         children: (child['children'] == null)
             ? [const SizedBox.shrink()]
             : getChildListOfWidgets(context, child['children']),
@@ -242,8 +239,6 @@ class BsplBody extends StatelessWidget {
     return childListOfWidgets;
   }
 }
-
-
 
 class BsplFooter extends StatelessWidget {
   const BsplFooter({Key? key}) : super(key: key);

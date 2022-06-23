@@ -5,18 +5,22 @@ class AccountsBsplState with ChangeNotifier {
   String leftLabel = '';
   String rightLabel = '';
   bool _isSelectedLeftLabel = true;
-  AccType _currentItem = AccType.none;
+  AccTypes _currentAccType = AccTypes.none;
+
+  String get bsplType {
+    return _bsplType;
+  }
 
   set bsplType(String val) {
     _bsplType = val;
     if (val == 'bs') {
       leftLabel = 'Liabilities';
       rightLabel = 'Assets';
-      _currentItem = AccType.L;
+      _currentAccType = AccTypes.L;
     } else {
       leftLabel = 'Expenses';
       rightLabel = 'Income';
-      _currentItem = AccType.A;
+      _currentAccType = AccTypes.E;
     }
   }
 
@@ -24,12 +28,12 @@ class AccountsBsplState with ChangeNotifier {
     return _bsplType;
   }
 
-  AccType get currentItem {
-    return _currentItem;
+  AccTypes get currentAccType {
+    return _currentAccType;
   }
 
-  set currentItem(AccType val) {
-    _currentItem = val;
+  set currentAccType(AccTypes val) {
+    _currentAccType = val;
     notifyListeners();
   }
 
@@ -48,4 +52,4 @@ class AccountsBsplState with ChangeNotifier {
   }
 }
 
-enum AccType { none, L, A, E, I }
+enum AccTypes { none, L, A, E, I }
