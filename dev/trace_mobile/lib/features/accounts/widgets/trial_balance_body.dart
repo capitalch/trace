@@ -23,7 +23,7 @@ class TrialBalanceBody extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           widget = Text('Loading...', style: messageTheme);
         } else if (snapshot.hasData) {
-          widget = Text('Has data', style: messageTheme);
+          // widget = Text('Has data', style: messageTheme);
 
           List<dynamic> dataList = snapshot.data?.data?['accounts']
                   ?['trialBalance']?['trialBal'] ??

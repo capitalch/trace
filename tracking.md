@@ -80,6 +80,7 @@ L. Bank reconcillation opening cheques
 20. Notes, to do's, schemes
 
 ## Bugs
+*. When voucher is very long sometimes it part reaches the server. The server does not have debit credit checking. Also client should have robust check of debit credit. In Netwoven it happened that client automatically tripled the credit entries in payments and it reached the server and saved.
 *. When in login s,s is given for superadmin user. it fails. In TraceHeader submitDialog buCodeWithPermissions in empty hence it goes out. and nothing happens. In brief superadmin user is not working.
 *. Demo mode purchase entry edit is not being possible: Rectified it temporarily by giving limit 1 in getJson_sale_purchase_on_id in cte6
 *. Provide useRef no in view of purchase and sale
