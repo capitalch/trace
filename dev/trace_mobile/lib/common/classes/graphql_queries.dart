@@ -66,6 +66,19 @@ class GraphQLQueries {
       QueryOptions(document: gq, operationName: 'trialBalance'),
     );
   }
+
+  static Future<QueryResult<Object>>? balanceSheetProfitLoss({required GlobalSettings globalSettings}) {
+    var gq = gql('''
+      query balanceSheetProfitLoss {
+        accounts {
+          balanceSheetProfitLoss()
+        }
+      }
+    ''');
+    return globalSettings.getGraphQLMainClient().query(
+      QueryOptions(document: gq, operationName: 'balanceSheetProfitLoss'),
+    );
+  }
 }
 
 class GQLGenericViewValue {

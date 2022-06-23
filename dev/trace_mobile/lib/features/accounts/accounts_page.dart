@@ -105,12 +105,13 @@ class AccountsPage extends StatelessWidget {
           padding: const EdgeInsets.all(3),
           child: ListTile(
             tileColor: Colors.grey.shade200,
-            // horizontalTitleGap: 5,
             title: Text(
               'Profit and loss account',
               style: themeStyle.subtitle1,
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, Routes.bspl, arguments: 'pl');
+            },
           ),
         ),
       ]),

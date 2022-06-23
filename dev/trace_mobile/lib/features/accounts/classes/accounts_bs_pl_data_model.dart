@@ -1,3 +1,4 @@
-class AccountsBsPlDataModel{
+class AccountsBsplDataModel {
+  
 
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/features/accounts/accounts_page.dart';
+import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_state.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_state.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_bs_pl.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_trial_balance.dart';
@@ -60,6 +61,9 @@ class TraceApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => AccountsTrialBalanceState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AccountsBsplState(),
         )
       ],
       child: MaterialApp(
