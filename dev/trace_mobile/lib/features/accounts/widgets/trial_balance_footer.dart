@@ -21,7 +21,9 @@ class TrialBalanceFooter extends StatelessWidget {
             padding:
                 const EdgeInsets.only(left: 15, top: 5, bottom: 5, right: 15),
             scrollDirection: Axis.horizontal,
-            child: Row(children: [
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
               Row(
                 children: [
                   Text(formatter.format(value.opening)),

@@ -6,9 +6,7 @@ import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/common/widgets/bu_code_branch_header.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_data_model.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_state.dart';
-import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_data_model.dart';
 import 'package:trace_mobile/features/accounts/widgets/custom_expansion_tile.dart';
-import 'package:trace_mobile/features/accounts/widgets/trial_balance_body.dart';
 
 class AccountsBsPl extends StatelessWidget {
   const AccountsBsPl({Key? key}) : super(key: key);
@@ -114,16 +112,6 @@ class BsplHeader extends StatelessWidget {
   }
 }
 
-class BsplSubHeader extends StatelessWidget {
-  const BsplSubHeader({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var bsplState = context.read<AccountsBsplState>();
-    return Container();
-  }
-}
-
 class BsplBody extends StatelessWidget {
   const BsplBody({Key? key}) : super(key: key);
 
@@ -136,7 +124,6 @@ class BsplBody extends StatelessWidget {
     return FutureBuilder(
       future: bsplFuture,
       builder: (context, snapshot) {
-        var bsplState = context.read<AccountsBsplState>();
         var messageTheme = Theme.of(context).textTheme.headline6;
         dynamic widget = const Text('');
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -182,16 +169,17 @@ class BsplBody extends StatelessWidget {
             });
           }
           List<dynamic> aggregates = bsplAll?['aggregates'] ?? [];
-          setAggregateStateForProfitLoss(
-              context: context,
-              aggregates: aggregates,
-              profitOrLoss: profitOrLoss);
+
           if (dataList.isEmpty) {
             widget = Text('No data', style: messageTheme);
           } else {
             widget = Selector<AccountsBsplState, AccTypes>(
               selector: (p0, p1) => p1.currentAccType,
               builder: (context, value, child) {
+                setAggregateStateForProfitLoss(
+                    context: context,
+                    aggregates: aggregates,
+                    profitOrLoss: profitOrLoss);
                 var dataListOnAccType = dataList
                     .where((element) =>
                         BsplData.fromJson(j: element['data']).accType ==
@@ -256,7 +244,7 @@ class BsplBody extends StatelessWidget {
     var bsplState = context.read<AccountsBsplState>();
     double aggregate = 0;
     if (bsplState.currentAccType == AccTypes.L) {
-      double aggr = aggregates
+      double aggr = -aggregates
           .firstWhere((element) => element['accType'] == 'L')['amount'];
       aggregate = (profitOrLoss >= 0) ? aggr + profitOrLoss : aggr;
     } else if (bsplState.currentAccType == AccTypes.A) {
@@ -268,7 +256,7 @@ class BsplBody extends StatelessWidget {
           .firstWhere((element) => element['accType'] == 'E')['amount'];
       aggregate = (profitOrLoss >= 0) ? aggr + profitOrLoss : aggr;
     } else if (bsplState.currentAccType == AccTypes.I) {
-      double aggr = aggregates
+      double aggr = -aggregates
           .firstWhere((element) => element['accType'] == 'I')['amount'];
       aggregate = (profitOrLoss >= 0) ? aggr : aggr - profitOrLoss;
     }

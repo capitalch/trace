@@ -51,8 +51,8 @@ class TrialBalanceBody extends StatelessWidget {
             String closingDC = (closing >= 0) ? 'Dr' : 'Cr';
             opening = opening.abs();
             closing = closing.abs();
-            var temp = context.read<AccountsTrialBalanceState>();
-            temp.summary = Summary(
+            var trialBalanceState = context.read<AccountsTrialBalanceState>();
+            trialBalanceState.summary = Summary(
                 opening: opening,
                 closing: closing,
                 debits: debits,
@@ -61,7 +61,7 @@ class TrialBalanceBody extends StatelessWidget {
                 closingDC: closingDC);
 
             Future.delayed(Duration.zero, () {
-              temp.notify();
+              trialBalanceState.notify();
             });
           }
         } else {
@@ -83,42 +83,66 @@ class TrialBalanceBody extends StatelessWidget {
         maintainState: true,
         collapsedIconColor: Colors.amber.shade700,
         backgroundColor: Colors.amber.shade100,
-        childrenPadding: const EdgeInsets.only(left: 15),
-        title: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                data.accName,
-                style: theme.subtitle1?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color:
-                        child['children'] == null ? Colors.blue : Colors.black),
-                overflow: TextOverflow.ellipsis,
+        childrenPadding: const EdgeInsets.only(left: 5),
+        title: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.only(top: 10),
+            child: Container(
+              constraints: BoxConstraints(
+                  minWidth: MediaQuery.of(context).size.width - 80),                  
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(children: [
+                    // Expanded(child:
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 250),
+                      // width: double.infinity,
+                      child: Text(
+                        data.accName,
+                        style: theme.subtitle1?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: child['children'] == null
+                                ? Colors.blue
+                                : Colors.black),
+                        // overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    // ),
+
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      data.accType, // data.accTypeMap[data.accType] ?? '',
+                      style: theme.subtitle1
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ]),
+                  // Spacer(flex: 1),
+                  // Text('ABCD')
+                  FormattedNumber(amount: data.closing, drcr: data.closingDC)
+                ],
               ),
-              Text(
-                data.accTypeMap[data.accType] ?? '',
-                style: theme.bodyText1?.copyWith(color: Colors.grey.shade700),
-              )
-            ],
-          ),
-        ),
+            )),
         subtitle: SingleChildScrollView(
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                FormattedNumber(amount: data.opening, drcr: data.openingDC),
-                const SizedBox(width: 5),
-                FormattedNumber(amount: data.debit, drcr: null),
-                const SizedBox(width: 5),
-                FormattedNumber(amount: data.credit, drcr: null),
-                const SizedBox(width: 5),
-                FormattedNumber(amount: data.closing, drcr: data.closingDC),
-              ],
-            )),
+            child: Container(
+                // color: Colors.grey.shade500,
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                width: double.maxFinite,
+                child: Row(
+                  children: [
+                    FormattedNumber(amount: data.opening, drcr: data.openingDC),
+                    const SizedBox(width: 5),
+                    FormattedNumber(amount: data.debit, drcr: null),
+                    const SizedBox(width: 5),
+                    FormattedNumber(amount: data.credit, drcr: null),
+                    const SizedBox(width: 5),
+                    FormattedNumber(amount: data.closing, drcr: data.closingDC),
+                  ],
+                ))),
         children: (child['children'] == null)
             ? [const SizedBox.shrink()]
             : getChildListOfWidgets(context, child['children']),
@@ -141,7 +165,7 @@ class FormattedNumber extends StatelessWidget {
     NumberFormat formatter = NumberFormat('###,###.00');
     var theme = Theme.of(context).textTheme;
     var formattedAmountWidget = Text(formatter.format(amount),
-        style: theme.bodyText1?.copyWith(fontWeight: FontWeight.bold));
+        style: theme.bodyText1); //?.copyWith(fontWeight: FontWeight.bold));
     var drcrWidget = const Text('');
     if (drcr != null) {
       drcrWidget = (drcr == 'D')
@@ -154,8 +178,8 @@ class FormattedNumber extends StatelessWidget {
               style: theme.labelMedium?.copyWith(color: Colors.red),
             );
     }
-    return Container(
-        padding: const EdgeInsets.only(top: 5),
+    return SizedBox(
+        // padding: const EdgeInsets.only(top: 5),
         width: 120,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
