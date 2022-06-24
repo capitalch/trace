@@ -1,11 +1,21 @@
 import 'package:flutter/cupertino.dart';
 
 class AccountsBsplState with ChangeNotifier {
+  double _aggregate = 0;
   String _bsplType = '';
   String leftLabel = '';
   String rightLabel = '';
   bool _isSelectedLeftLabel = true;
   AccTypes _currentAccType = AccTypes.none;
+
+  double get aggregate {
+    return _aggregate;
+  }
+
+  set aggregate(double aggr) {
+    _aggregate = aggr;
+    notifyListeners();
+  }
 
   String get bsplType {
     return _bsplType;
@@ -24,10 +34,6 @@ class AccountsBsplState with ChangeNotifier {
     }
   }
 
-  get bsPlType {
-    return _bsplType;
-  }
-
   AccTypes get currentAccType {
     return _currentAccType;
   }
@@ -41,14 +47,13 @@ class AccountsBsplState with ChangeNotifier {
     _isSelectedLeftLabel = true;
   }
 
-  set isSelectedLeftLabel(bool val) {
-    _isSelectedLeftLabel = val;
-
-    notifyListeners();
-  }
-
   bool get isSelectedLeftLabel {
     return _isSelectedLeftLabel;
+  }
+
+  set isSelectedLeftLabel(bool val) {
+    _isSelectedLeftLabel = val;
+    notifyListeners();
   }
 }
 

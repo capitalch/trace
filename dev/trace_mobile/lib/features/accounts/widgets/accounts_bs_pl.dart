@@ -54,7 +54,8 @@ class AccountsBsPl extends StatelessWidget {
         BsplHeader(),
         Expanded(
           child: BsplBody(),
-        )
+        ),
+        BsplFooter()
       ]),
     );
   }
@@ -145,7 +146,46 @@ class BsplBody extends StatelessWidget {
               snapshot.data?.data?['accounts']?['balanceSheetProfitLoss'];
           List<dynamic> dataList = bsplAll?['balanceSheetProfitLoss'] ?? [];
           double profitOrLoss = bsplAll?['profitOrLoss'] ?? 0;
+          if (profitOrLoss >= 0) {
+            dataList.add({
+              'data': {
+                'accName': 'Profit for the year',
+                'accType': 'L',
+                'amount': -profitOrLoss
+              },
+              'children': null
+            });
+            dataList.add({
+              'data': {
+                'accName': 'Profit for the year',
+                'accType': 'E',
+                'amount': profitOrLoss
+              },
+              'children': null
+            });
+          } else {
+            dataList.add({
+              'data': {
+                'accName': 'Loss for the year',
+                'accType': 'A',
+                'amount': profitOrLoss.abs()
+              },
+              'children': null
+            });
+            dataList.add({
+              'data': {
+                'accName': 'Loss for the year',
+                'accType': 'I',
+                'amount': profitOrLoss
+              },
+              'children': null
+            });
+          }
           List<dynamic> aggregates = bsplAll?['aggregates'] ?? [];
+          setAggregateStateForProfitLoss(
+              context: context,
+              aggregates: aggregates,
+              profitOrLoss: profitOrLoss);
           if (dataList.isEmpty) {
             widget = Text('No data', style: messageTheme);
           } else {
@@ -162,37 +202,6 @@ class BsplBody extends StatelessWidget {
                 );
               },
             );
-
-            // double opening = 0, debits = 0, credits = 0, closing = 0;
-            // for (var item in dataList) {
-            //   var data = item['data'];
-            //   var openingRow = (data['opening_dc'] == 'D')
-            //       ? data['opening']
-            //       : -data['opening'];
-            //   var closingRow = (data['closing_dc'] == 'D')
-            //       ? data['closing']
-            //       : -data['closing'];
-            //   opening = opening + openingRow;
-            //   closing = closing + closingRow;
-            //   debits = debits + data['debit'];
-            //   credits = credits + data['credit'];
-            // }
-            // String openingDC = (opening >= 0) ? 'Dr' : 'Cr';
-            // String closingDC = (closing >= 0) ? 'Dr' : 'Cr';
-            // opening = opening.abs();
-            // closing = closing.abs();
-            // var temp = context.read<AccountsTrialBalanceState>();
-            // temp.summary = Summary(
-            //     opening: opening,
-            //     closing: closing,
-            //     debits: debits,
-            //     credits: credits,
-            //     openingDC: openingDC,
-            //     closingDC: closingDC);
-
-            // Future.delayed(Duration.zero, () {
-            //   temp.notify();
-            // });
           }
         } else {
           widget = Text('No data', style: messageTheme);
@@ -227,7 +236,8 @@ class BsplBody extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          Text(formatter.format(data.amount))
+          Text(formatter
+              .format('LI'.contains(data.accType) ? -data.amount : data.amount))
         ]),
         children: (child['children'] == null)
             ? [const SizedBox.shrink()]
@@ -238,6 +248,34 @@ class BsplBody extends StatelessWidget {
     }
     return childListOfWidgets;
   }
+
+  setAggregateStateForProfitLoss(
+      {required BuildContext context,
+      required List<dynamic> aggregates,
+      required double profitOrLoss}) {
+    var bsplState = context.read<AccountsBsplState>();
+    double aggregate = 0;
+    if (bsplState.currentAccType == AccTypes.L) {
+      double aggr = aggregates
+          .firstWhere((element) => element['accType'] == 'L')['amount'];
+      aggregate = (profitOrLoss >= 0) ? aggr + profitOrLoss : aggr;
+    } else if (bsplState.currentAccType == AccTypes.A) {
+      double aggr = aggregates
+          .firstWhere((element) => element['accType'] == 'A')['amount'];
+      aggregate = (profitOrLoss >= 0) ? aggr : aggr - profitOrLoss;
+    } else if (bsplState.currentAccType == AccTypes.E) {
+      double aggr = aggregates
+          .firstWhere((element) => element['accType'] == 'E')['amount'];
+      aggregate = (profitOrLoss >= 0) ? aggr + profitOrLoss : aggr;
+    } else if (bsplState.currentAccType == AccTypes.I) {
+      double aggr = aggregates
+          .firstWhere((element) => element['accType'] == 'I')['amount'];
+      aggregate = (profitOrLoss >= 0) ? aggr : aggr - profitOrLoss;
+    }
+    Future.delayed(Duration.zero, (() {
+      bsplState.aggregate = aggregate;
+    }));
+  }
 }
 
 class BsplFooter extends StatelessWidget {
@@ -245,6 +283,29 @@ class BsplFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    var theme = Theme.of(context).textTheme;
+    var formatter = NumberFormat('###,###.00');
+    var bsplState = context.read<AccountsBsplState>();
+    return Selector<AccountsBsplState, double>(
+      selector: (p0, p1) => p1.aggregate,
+      builder: (context, value, child) {
+        return Container(
+            width: double.maxFinite,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            color: Colors.grey.shade300,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total',
+                  style: theme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Text(formatter.format(bsplState.aggregate),
+                    style:
+                        theme.subtitle1?.copyWith(fontWeight: FontWeight.bold))
+              ],
+            ));
+      },
+    );
   }
 }
