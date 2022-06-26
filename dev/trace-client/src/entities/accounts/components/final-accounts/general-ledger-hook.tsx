@@ -29,16 +29,6 @@ function useGeneralLedger(getArtifacts: any) {
                 ...item,
             })
         )
-        // curr.ledgerAccounts = curr.allAccounts
-        //     .filter((el: any) => el.accLeaf === 'Y' || el.accLeaf === 'L')
-        //     .map((el: any) => {
-        //         return {
-        //             label: el.accName,
-        //             value: el.id,
-        //             accLeaf: el.accLeaf,
-        //             subledgers: el.accLeaf === 'L' ? [] : null,
-        //         }
-        //     })
         const subs1 = filterOn('ROOT-WINDOW-REFRESH').subscribe(() => {
             emit(
                 getArtifacts().gridActionMessages.fetchIbukiMessage,
@@ -57,7 +47,6 @@ function useGeneralLedger(getArtifacts: any) {
         allAccounts: [],
         data: [],
         dateFormat: getFromBag('dateFormat'),
-        // ledgerAccounts: [],
         isDailySummary: false,
         isMounted: false,
         isReverseOrder: false,

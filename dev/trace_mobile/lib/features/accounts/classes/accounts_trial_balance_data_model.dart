@@ -6,6 +6,7 @@ class TrialBalanceNode {
 }
 
 class TrialBalanceData {
+  final int accId;
   final String accName;
   final String accType;
   final double opening;
@@ -16,7 +17,8 @@ class TrialBalanceData {
   final String closingDC;
 
   TrialBalanceData(
-      {required this.accName,
+      {required this.accId,
+      required this.accName,
       required this.accType,
       required this.opening,
       required this.openingDC,
@@ -27,6 +29,7 @@ class TrialBalanceData {
 
   factory TrialBalanceData.fromJson({j}) {
     return TrialBalanceData(
+        accId: j['id'],
         accName: j['accName'],
         accType: j['accType'],
         opening: double.parse(j['opening'].toString()),

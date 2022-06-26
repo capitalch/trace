@@ -263,7 +263,7 @@ function useNewEditContact(arbitraryData: any) {
                     }}
                     onBlur={handleOnBlurMobileNumber}
                     value={billTo.mobileNumber || ''}>
-                    {() => (
+                    {/* {() => (
                         <TextField
                             autoComplete='off'
                             label="Mobile"
@@ -275,7 +275,7 @@ function useNewEditContact(arbitraryData: any) {
                             // autoFocus={true}
                             className="short-text-field"
                         />
-                    )}
+                    )} */}
                 </InputMask>
 
                 {/* Contact name */}
@@ -401,7 +401,7 @@ function useNewEditContact(arbitraryData: any) {
                         setRefresh({})
                     }}
                     value={billTo.pin || ''}>
-                    {() => (
+                    {/* {() => (
                         <TextField
                             autoComplete='off'
                             variant="standard"
@@ -409,7 +409,7 @@ function useNewEditContact(arbitraryData: any) {
                             error={isInvalidIndiaPin(arbitraryData.billTo.pin)}
                             className="short-text-field"
                         />
-                    )}
+                    )} */}
                 </InputMask>
                 {/* State code */}
                 <InputMask
@@ -420,7 +420,7 @@ function useNewEditContact(arbitraryData: any) {
                         setRefresh({})
                     }}
                     value={billTo.stateCode || ''}>
-                    {() => (
+                    {/* {() => (
                         <TextField
                             autoComplete='off'
                             label="State code"
@@ -428,7 +428,7 @@ function useNewEditContact(arbitraryData: any) {
                             error={isInvalidStateCode(billTo?.stateCode)}
                             className="short-text-field"
                         />
-                    )}
+                    )} */}
                 </InputMask>
 
                 {/* Gstin */}

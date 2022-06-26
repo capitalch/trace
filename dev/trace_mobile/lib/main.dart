@@ -6,7 +6,8 @@ import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/features/accounts/accounts_page.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_state.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_state.dart';
-import 'package:trace_mobile/features/accounts/widgets/accounts_bs_pl.dart';
+import 'package:trace_mobile/features/accounts/widgets/accounts_general_ledger.dart';
+import 'package:trace_mobile/features/accounts/widgets/accounts_bspl.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_trial_balance.dart';
 import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
@@ -74,6 +75,7 @@ class TraceApp extends StatelessWidget {
           'accounts': (BuildContext context) => const AccountsPage(),
           'bspl':(BuildContext context) => const AccountsBsPl() ,
           'dashboard': (BuildContext context) => const DashBoardPage(),
+          'generalLedger':(BuildContext context) => const AccountsGeneralLedger(),
           'login': (BuildContext context) {
             return const LoginPage();
           },
@@ -122,7 +124,9 @@ class TraceApp extends StatelessWidget {
           headline5: TextStyle(
               fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
           headline6: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+          subtitle1: TextStyle(fontWeight: FontWeight.bold),
+          subtitle2: TextStyle(fontWeight: FontWeight.bold)
         ));
   }
 }

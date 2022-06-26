@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
+import 'package:trace_mobile/common/classes/routes.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_data_model.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_state.dart';
 import 'package:trace_mobile/features/accounts/widgets/custom_expansion_tile.dart';
@@ -89,38 +90,28 @@ class TrialBalanceBody extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10),
             child: Container(
               constraints: BoxConstraints(
-                  minWidth: MediaQuery.of(context).size.width - 80),                  
+                  minWidth: MediaQuery.of(context).size.width - 80),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(children: [
-                    // Expanded(child:
                     Container(
-                      constraints: const BoxConstraints(maxWidth: 250),
-                      // width: double.infinity,
-                      child: Text(
-                        data.accName,
-                        style: theme.subtitle1?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: child['children'] == null
-                                ? Colors.blue
-                                : Colors.black),
-                        // overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    // ),
-
+                        constraints: const BoxConstraints(maxWidth: 250),
+                        child: TextOrButtonWidget(
+                          hasChildren: child['children'] != null,
+                          accId: data.accId,
+                          label: data.accName,
+                        )
+                        ),
                     const SizedBox(
                       width: 10,
                     ),
                     Text(
-                      data.accType, // data.accTypeMap[data.accType] ?? '',
+                      data.accType,
                       style: theme.subtitle1
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ]),
-                  // Spacer(flex: 1),
-                  // Text('ABCD')
                   FormattedNumber(amount: data.closing, drcr: data.closingDC)
                 ],
               ),
@@ -129,7 +120,6 @@ class TrialBalanceBody extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             scrollDirection: Axis.horizontal,
             child: Container(
-                // color: Colors.grey.shade500,
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 width: double.maxFinite,
                 child: Row(
@@ -189,5 +179,41 @@ class FormattedNumber extends StatelessWidget {
             drcrWidget
           ],
         ));
+  }
+}
+
+class TextOrButtonWidget extends StatelessWidget {
+  const TextOrButtonWidget(
+      {Key? key,
+      required this.hasChildren,
+      required this.accId,
+      required this.label})
+      : super(key: key);
+  final bool hasChildren;
+  final int accId;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context).textTheme;
+    if (hasChildren) {
+      return Text(
+        label,
+        style: theme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+      );
+    } else {
+      return TextButton(
+        style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(5),
+            textStyle: const TextStyle(decoration: TextDecoration.underline)),
+        onPressed: () {
+          Navigator.pushNamed(context, Routes.generalLedger,
+              arguments: {'accId': accId, 'accName': label});
+        },
+        child: Text(label,
+            style: theme.subtitle1
+                ?.copyWith(fontWeight: FontWeight.bold, color: Colors.blue)),
+      );
+    }
   }
 }

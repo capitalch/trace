@@ -6,6 +6,7 @@ import {
     StyleSheet,
     PDFViewer,
 } from '@react-pdf/renderer'
+import InputMask from 'react-input-mask'
 
 const styles = StyleSheet.create({
     page: {
@@ -24,9 +25,12 @@ const MyPage: any = Page
 
 function AppMain() {
     return (
-        <PDFViewer>
-            <PdfDocument />
-        </PDFViewer>
+        <div>
+            <PDFViewer>
+                <PdfDocument />
+            </PDFViewer>
+            <InputMask mask='99-99'></InputMask>
+        </div>
     )
 }
 export { AppMain }

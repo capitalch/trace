@@ -37,7 +37,7 @@ function NewEditCustomer({ parentMeta }: any) {
                     }}
                     onBlur={handleOnBlurMobileNumber}
                     value={billTo.mobileNumber || ''}>
-                    {() => (
+                    {/* {() => (
                         <TextField
                             autoFocus={true}
                             sx={{ flex: 1 }}
@@ -48,7 +48,7 @@ function NewEditCustomer({ parentMeta }: any) {
                                 billTo.mobileNumber
                             )}
                         />
-                    )}
+                    )} */}
                 </InputMask>
                 {/* Other mobile number */}
                 <TextField
@@ -172,7 +172,7 @@ function NewEditCustomer({ parentMeta }: any) {
                         setRefresh({})
                     }}
                     value={billTo.pin || ''}>
-                    {() => (
+                    {/* {() => (
                         <TextField
                             autoComplete='off'
                             variant="standard"
@@ -180,7 +180,7 @@ function NewEditCustomer({ parentMeta }: any) {
                             sx={{ flex: 0.2 }}
                             error={isInvalidIndiaPin(billTo.pin)}
                         />
-                    )}
+                    )} */}
                 </InputMask>
                 {/* State code */}
                 <InputMask
@@ -191,14 +191,14 @@ function NewEditCustomer({ parentMeta }: any) {
                         setRefresh({})
                     }}
                     value={billTo.stateCode || ''}>
-                    {() => (
+                    {/* {() => (
                         <TextField
                             sx={{ flex: 0.2 }}
                             autoComplete='off'
                             label="State code"
                             variant="standard"
                             error={isInvalidStateCode(billTo?.stateCode)} />
-                    )}
+                    )} */}
                 </InputMask>
             </Box>
             <Box className='horiz'>
