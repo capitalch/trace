@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
+import 'package:trace_mobile/common/classes/utils.dart';
 import 'package:trace_mobile/common/widgets/bu_code_branch_header.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_general_ledger_data_model.dart';
 
 class AccountsGeneralLedger extends StatelessWidget {
   const AccountsGeneralLedger({Key? key}) : super(key: key);
-  // final int accId;
-  // final String accName;
+
   @override
   Widget build(BuildContext context) {
     dynamic args = ModalRoute.of(context)!.settings.arguments;
@@ -100,43 +100,9 @@ class GeneralLedgerBody extends StatelessWidget {
           if (jsonResult == null) {
             widget = Text('No data', style: messageTheme);
           } else {
-            widget = const Text('Has data');
-            GeneralLedgerModel generalLedger = GeneralLedgerModel.fromJson(j: jsonResult);
-            print(generalLedger);
-            // widget = ListView(
-            //   children: getChildListOfWidgets(context, dataList),
-            // );
-
-            // double opening = 0, debits = 0, credits = 0, closing = 0;
-            // for (var item in dataList) {
-            //   var data = item['data'];
-            //   var openingRow = (data['opening_dc'] == 'D')
-            //       ? data['opening']
-            //       : -data['opening'];
-            //   var closingRow = (data['closing_dc'] == 'D')
-            //       ? data['closing']
-            //       : -data['closing'];
-            //   opening = opening + openingRow;
-            //   closing = closing + closingRow;
-            //   debits = debits + data['debit'];
-            //   credits = credits + data['credit'];
-            // }
-            // String openingDC = (opening >= 0) ? 'Dr' : 'Cr';
-            // String closingDC = (closing >= 0) ? 'Dr' : 'Cr';
-            // opening = opening.abs();
-            // closing = closing.abs();
-            // var trialBalanceState = context.read<AccountsTrialBalanceState>();
-            // trialBalanceState.summary = Summary(
-            //     opening: opening,
-            //     closing: closing,
-            //     debits: debits,
-            //     credits: credits,
-            //     openingDC: openingDC,
-            //     closingDC: closingDC);
-
-            // Future.delayed(Duration.zero, () {
-            //   trialBalanceState.notify();
-            // });
+            GeneralLedgerModel generalLedger =
+                GeneralLedgerModel.fromJson(j: jsonResult);
+            widget = GeneralLedgerBodyItems(generalLedger: generalLedger);
           }
         } else {
           widget = Text('No data', style: messageTheme);
@@ -145,6 +111,80 @@ class GeneralLedgerBody extends StatelessWidget {
           child: widget,
         );
       },
+    );
+  }
+}
+
+class GeneralLedgerBodyItems extends StatelessWidget {
+  const GeneralLedgerBodyItems({Key? key, required this.generalLedger})
+      : super(key: key);
+  final GeneralLedgerModel generalLedger;
+  @override
+  Widget build(BuildContext context) {
+    double opBalance = generalLedger.opBalance;
+    double debits = generalLedger.sum.debits;
+    double credits = generalLedger.sum.credits;
+    double closBalance = opBalance + debits - credits;
+    int index = 0;
+    List<TransactionModel> transactions = generalLedger.transactions;
+    return ListView(
+      children: [
+        ListTile(
+          title: const Text('Opening balance'),
+          trailing: Text(opBalance.toString()),
+        ),
+        ...transactions.map((
+          e,
+        ) =>
+            GeneralLedgerBodyItem(transaction: e, index: ++index)),
+      ],
+    );
+  }
+}
+
+class GeneralLedgerBodyItem extends StatelessWidget {
+  const GeneralLedgerBodyItem(
+      {Key? key, required this.transaction, required this.index})
+      : super(key: key);
+  final TransactionModel transaction;
+  final int index;
+  @override
+  Widget build(BuildContext context) {
+    var tranDate =
+        Utils.toLocalDateString(DateTime.parse(transaction.tranDate));
+    return Center(
+      child:
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+          //   child:
+          Card(
+              color: Colors.grey.shade100,
+              elevation: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Column(children: [
+                  Row(
+                    children: [
+                      Text(tranDate),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(transaction.autoRefNo),
+                      const Spacer(),
+                      Text((transaction.debit == 0
+                              ? transaction.credit
+                              : transaction.debit)
+                          .toString())
+                    ],
+                  ),
+                  const SizedBox(height: 5,),
+                  ListTile(leading: Text(index.toString()),dense: true,
+                  title: Text(transaction.otherAccounts),
+                  ),
+                  // Text(index.toString())
+                ]),
+              )),
+      // ),
     );
   }
 }

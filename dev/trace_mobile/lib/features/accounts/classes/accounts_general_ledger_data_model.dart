@@ -1,7 +1,7 @@
 class GeneralLedgerModel {
   final double opBalance;
   final SumModel sum;
-  final List<dynamic> transactions;
+  final List<TransactionModel> transactions;
   GeneralLedgerModel(
       {required this.opBalance, required this.sum, required this.transactions});
 
