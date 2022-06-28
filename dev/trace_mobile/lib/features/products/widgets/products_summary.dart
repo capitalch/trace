@@ -31,7 +31,8 @@ class ProductsSummary extends StatelessWidget {
                 child: InkWell(
                     splashColor: Theme.of(context).primaryColorLight,
                     onTap: () {
-                      productsSearchState.searchFromTag = ''; // reset the searchText
+                      productsSearchState.searchFromTag =
+                          ''; // reset the searchText
                       Navigator.pop(context);
                       GlobalSettings globalSettings =
                           Provider.of<GlobalSettings>(context, listen: false);
@@ -52,58 +53,70 @@ class ProductsSummary extends StatelessWidget {
                     )),
               ),
               Text(
-                'Rows: ${formatter.format(productsSummaryState.summaryCount)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
+                  'Rows: ${formatter.format(productsSummaryState.summaryCount)}', //
+                  style: theme.textTheme.bodyText2),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                'Qty: ${formatter.format(productsSummaryState.summaryClos)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
+                  'Qty: ${formatter.format(productsSummaryState.summaryClos)}', //
+                  style: theme.textTheme.bodyText2),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                'Value: ${formatter.format(productsSummaryState.summarySum)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
+                  'Value: ${formatter.format(productsSummaryState.summarySum)}', //
+                  style: theme.textTheme.bodyText2),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                'Value(Gst): ${formatter.format(productsSummaryState.summarySumGst)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
+                  'Value(Gst): ${formatter.format(productsSummaryState.summarySumGst)}', //
+                  style: theme.textTheme.bodyText2),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                'Age360 qty: ${formatter.format(productsSummaryState.summaryAge360Qty)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
+                  'Age360 qty: ${formatter.format(productsSummaryState.summaryAge360Qty)}', //
+                  style: theme.textTheme.bodyText2),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                'Age360 value: ${formatter.format(productsSummaryState.summaryAge360Value)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
+                  'Age360 value: ${formatter.format(productsSummaryState.summaryAge360Value)}', //
+                  style: theme.textTheme.bodyText2),
               const SizedBox(
                 width: 15,
               ),
               Text(
                 'Age360 value(Gst): ${formatter.format(productsSummaryState.summaryAge360ValueGst)}', //
-                style: theme.textTheme.bodyText2
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.bodyText2,
               ),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                  'Op qty: ${formatter.format(productsSummaryState.summaryOpQty)}'),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                  'Op value: ${formatter.format(productsSummaryState.summaryOpValue)}'),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                  'Op value(Gst): ${formatter.format(productsSummaryState.summaryOpValueGst)}'),
+              const SizedBox(
+                width: 15,
+              ),
+              Text(
+                  'Diff value: ${formatter.format(productsSummaryState.summaryDiffValue)}'),
+                  const SizedBox(
+                width: 15,
+              ),
+              Text(
+                  'Diff value(Gst): ${formatter.format(productsSummaryState.summaryDiffValueGst)}'),
             ],
           ),
         ));

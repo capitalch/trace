@@ -73,9 +73,10 @@ class TraceApp extends StatelessWidget {
         home: const HomePage(),
         routes: {
           'accounts': (BuildContext context) => const AccountsPage(),
-          'bspl':(BuildContext context) => const AccountsBsPl() ,
+          'bspl': (BuildContext context) => const AccountsBsPl(),
           'dashboard': (BuildContext context) => const DashBoardPage(),
-          'generalLedger':(BuildContext context) => const AccountsGeneralLedger(),
+          'generalLedger': (BuildContext context) =>
+              const AccountsGeneralLedger(),
           'login': (BuildContext context) {
             return const LoginPage();
           },
@@ -113,20 +114,21 @@ class TraceApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
-          headline1: TextStyle(
-              fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
-          headline2: TextStyle(
-              fontSize: 26, fontWeight: FontWeight.w600, color: Colors.black),
-          headline3: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
-          headline4: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black),
-          headline5: TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
-          headline6: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
-          subtitle1: TextStyle(fontWeight: FontWeight.bold),
-          subtitle2: TextStyle(fontWeight: FontWeight.bold)
-        ));
+            headline1: TextStyle(
+                fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
+            headline2: TextStyle(
+                fontSize: 26, fontWeight: FontWeight.w600, color: Colors.black),
+            headline3: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.w600, color: Colors.black),
+            headline4: TextStyle(
+                fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black),
+            headline5: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+            headline6: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+            subtitle1: TextStyle(fontWeight: FontWeight.bold),
+            subtitle2: TextStyle(fontWeight: FontWeight.bold),
+            bodyText1: TextStyle(fontWeight: FontWeight.bold),
+            bodyText2: TextStyle(fontWeight: FontWeight.bold)));
   }
 }

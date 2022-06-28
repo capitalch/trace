@@ -250,7 +250,7 @@ allSqls = {
 
                 select "id", "accName","accType", "parentId", "accLeaf", "amount", 
                     (select array_agg(id) from cteTemp where "parentId" = a."id") as children 
-                from cteTemp as a
+                from cteTemp as a order by "accName"
         ), cte2 as (
             with cte as
                 (select "accType", SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end) as "amount"
@@ -664,7 +664,7 @@ allSqls = {
         ), cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
             select coalesce(c4."productId", c5."productId") as "productId"
                 , coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice","lastPurchaseDate"
-                , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos", "sale"
+                , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos", "sale", "op", "openingPrice"
                 from cte4 c4
                     full join cte5 c5
                         on c4."productId" = c5."productId"
@@ -673,7 +673,8 @@ allSqls = {
             select p."id", "productCode", "catName", "brandName", "label", coalesce("clos"::numeric(10,2),0) "clos", (coalesce("lastPurchasePrice",0) * (1 + "gstRate"/ 100)) "lastPurchasePriceGst", 
                     "lastPurchaseDate", (date_part('day',CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp)) as "age"
 					, "catId", "brandId", coalesce(p."hsn", c."hsn") hsn, "info", "unitId", "upcCode", "gstRate"
-					, "salePrice", "salePriceGst", "maxRetailPrice", coalesce("lastPurchasePrice",0) "lastPurchasePrice", "sale", "saleDiscount"
+					, "salePrice", "salePriceGst", "maxRetailPrice", coalesce("lastPurchasePrice",0) "lastPurchasePrice", "sale", "saleDiscount",coalesce("op",0) as "op"
+					, coalesce("openingPrice",0) as "openingPrice", (coalesce("openingPrice",0) * (1 + "gstRate"/ 100)) "openingPriceGst"
                 from cte6 c6
                     right join "ProductM" p
                         on p."id" = c6."productId"
@@ -684,7 +685,7 @@ allSqls = {
                 where p."isActive"
             order by "brandName", "catName",  "label", "info"
         ) select "id", "productCode", "catName", "brandName", "label", "clos", "lastPurchasePriceGst", CASE WHEN "clos" > 0 THEN "age" ELSE 0 END "age"
-		, "hsn", "info", "upcCode", "gstRate", "salePrice", "salePriceGst", "maxRetailPrice", "sale", "saleDiscount", "lastPurchasePrice" from cte7
+		, "hsn", "info", "upcCode", "gstRate", "salePrice", "salePriceGst", "maxRetailPrice", "sale", "saleDiscount", "lastPurchasePrice", "op", "openingPrice", "openingPriceGst" from cte7
     ''',
 
     "get_purchase_report": '''
@@ -1071,7 +1072,7 @@ allSqls = {
                     on a."id" = b."accId"
                         where  
                             "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-                            order by "accName"
+                            order by "accType", "accName"
             ),
         cte2 as (
             select "id", "accName", "accType", "parentId", "accLeaf"
@@ -1081,7 +1082,7 @@ allSqls = {
                 from cte
                     group by "id", "accName", "accType", "parentId", "accLeaf"
                         --order by "id"
-                        order by "accName"
+                        order by "accType", "accName"
             ) select 
                 "id", "accName", "accType", "parentId", "accLeaf"
                 , ABS("opening") as "opening"
@@ -1092,7 +1093,7 @@ allSqls = {
                 , ABS("opening" + "debit" - "credit") as "closing"
                 , CASE WHEN ("opening" + "debit" - "credit") < 0 THEN 'C' ELSE 'D' END as "closing_dc"
             from cte2 a
-                order by "accName"
+                order by "accType", "accName"
     ''',
 
     "get_unitInfo": '''

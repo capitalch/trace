@@ -7,6 +7,9 @@ class IndexedItem {
     required this.info,
     required this.label,
     required this.mrp,
+    required this.op,
+    required this.openingPrice,
+    required this.openingPriceGst,
     required this.pur,
     required this.purGst,
     required this.salGst,
@@ -22,6 +25,9 @@ class IndexedItem {
       info: j['info'],
       label: j['label'],
       mrp: double.parse((j['maxRetailPrice'] ?? 0).toString()),
+      op: double.parse(j['op'].toString()),
+      openingPrice: double.parse(j['openingPrice'].toString()),
+      openingPriceGst: double.parse(j['openingPriceGst'].toString()),
       pur: double.parse(j['lastPurchasePrice'].toString()),
       purGst: double.parse(j['lastPurchasePriceGst'].toString()),
       salGst: double.parse(j['salePriceGst'].toString()),
@@ -35,6 +41,9 @@ class IndexedItem {
   final String? info;
   final String label;
   final double mrp;
+  final double op;
+  final double openingPrice;
+  final double openingPriceGst;
   final double pur;
   final double purGst;
   final double salGst;
