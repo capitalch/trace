@@ -228,17 +228,21 @@ allSqls = {
 						join "TranH" h
 							on h."id" = t."tranHeaderId"
 					where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                    --order by m."accName"
                 union all
                     select m."id", m."accName", m."accType", m."parentId", m."accLeaf", CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end as "amount"
                         from "AccOpBal" p
                             join "AccM" m
                                 on p."accId" = m."id"
                     where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                    --order by m."accName"
                 union all
                     select a.id,a."accName", a."accType", a."parentId", a."accLeaf", ( cte."amount") as "amount"
                         from "AccM" a join cte on
-                            cte."parentId" = a.id),
-
+                            cte."parentId" = a.id
+                            --order by a."accName"
+                            ),
+                        
                 cteTemp as (select id, "accName", "accType", "parentId","accLeaf", sum(amount ) as "amount"
                     from cte 
                         group by id, "accName", "accType", "parentId", "accLeaf"
@@ -1067,6 +1071,7 @@ allSqls = {
                     on a."id" = b."accId"
                         where  
                             "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                            order by "accName"
             ),
         cte2 as (
             select "id", "accName", "accType", "parentId", "accLeaf"
@@ -1075,7 +1080,8 @@ allSqls = {
                 , SUM("credit") as "credit"
                 from cte
                     group by "id", "accName", "accType", "parentId", "accLeaf"
-                        order by "id"
+                        --order by "id"
+                        order by "accName"
             ) select 
                 "id", "accName", "accType", "parentId", "accLeaf"
                 , ABS("opening") as "opening"
@@ -1085,7 +1091,8 @@ allSqls = {
                 , (select ARRAY_AGG("id") from cte2 where "parentId" = a."id") as "children"
                 , ABS("opening" + "debit" - "credit") as "closing"
                 , CASE WHEN ("opening" + "debit" - "credit") < 0 THEN 'C' ELSE 'D' END as "closing_dc"
-            from cte2 a 
+            from cte2 a
+                order by "accName"
     ''',
 
     "get_unitInfo": '''

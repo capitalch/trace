@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/features/sales/classes/sales_item_model.dart';
 import 'package:trace_mobile/features/sales/classes/sales_state.dart';
@@ -11,13 +11,19 @@ class SalesListViewData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     resolveSalesSummary(context, dataList);
-    return ListView.builder(
-      itemCount: dataList.length,
-      itemBuilder: (context, index) {
-        return SalesCardListItem(
-            index: index + 1,
-            indexedItem: SalesItemModel.fromJson(j: dataList[index]));
+    var salesState = context.read<SalesState>();
+    return RefreshIndicator(
+      onRefresh: () {
+        return Future.delayed(Duration.zero, salesState.notify());
       },
+      child: ListView.builder(
+        itemCount: dataList.length,
+        itemBuilder: (context, index) {
+          return SalesCardListItem(
+              index: index + 1,
+              indexedItem: SalesItemModel.fromJson(j: dataList[index]));
+        },
+      ),
     );
   }
 
@@ -40,8 +46,10 @@ class SalesListViewData extends StatelessWidget {
       age360Qty = age360Qty + ((indexedItem.age >= 360) ? indexedItem.qty : 0);
       age360Sale =
           age360Sale + ((indexedItem.age >= 360) ? indexedItem.amount : 0);
-      age360Aggr = age360Aggr + ((indexedItem.age >= 360) ? indexedItem.aggrSale : 0);
-      age360GrossProfit = age360GrossProfit + ((indexedItem.age >= 360) ? indexedItem.grossProfit : 0);
+      age360Aggr =
+          age360Aggr + ((indexedItem.age >= 360) ? indexedItem.aggrSale : 0);
+      age360GrossProfit = age360GrossProfit +
+          ((indexedItem.age >= 360) ? indexedItem.grossProfit : 0);
       grossProfit = grossProfit + indexedItem.grossProfit;
     }
     // Future.delayed is used to run the code as Future.

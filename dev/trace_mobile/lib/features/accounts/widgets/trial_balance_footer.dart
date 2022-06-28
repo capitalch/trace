@@ -33,14 +33,14 @@ class TrialBalanceFooter extends StatelessWidget {
                   Text(value.openingDC)
                 ],
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 15),
               Text(formatter.format(value.debits)),
               const SizedBox(
-                width: 10,
+                width: 15,
               ),
               Text(formatter.format(value.credits)),
               const SizedBox(
-                width: 10,
+                width: 15,
               ),
               Row(
                 children: [

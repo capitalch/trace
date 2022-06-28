@@ -79,42 +79,46 @@ class TrialBalanceBody extends StatelessWidget {
     List<Widget> childListOfWidgets = [];
     var theme = Theme.of(context).textTheme;
     for (dynamic child in childList) {
+      bool hasChildren = child['children'] != null;
       TrialBalanceData data = TrialBalanceData.fromJson(j: child['data']);
       Widget childWidget = CustomExpansionTile(
+        onTap: () {
+          hasChildren
+              ? null
+              : Navigator.pushNamed(context, Routes.generalLedger,
+                  arguments: {'accId': data.accId, 'accName': data.accName});
+        },
         maintainState: true,
         collapsedIconColor: Colors.amber.shade700,
         backgroundColor: Colors.amber.shade100,
         childrenPadding: const EdgeInsets.only(left: 5),
-        title: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(top: 10),
-            child: Container(
-              constraints: BoxConstraints(
-                  minWidth: MediaQuery.of(context).size.width - 80),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(children: [
-                    Container(
-                        constraints: const BoxConstraints(maxWidth: 250),
-                        child: TextOrButtonWidget(
-                          hasChildren: child['children'] != null,
-                          accId: data.accId,
-                          label: data.accName,
-                        )
-                        ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+        title: Container(
+            alignment: Alignment.centerLeft,
+            width: double.maxFinite,
+            padding: const EdgeInsets.only(top: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                    child: TextOrButtonWidget(
+                  hasChildren: hasChildren,
+                  accId: data.accId,
+                  label: data.accName,
+                )),
+                Row(
+                  children: [
                     Text(
                       data.accType,
                       style: theme.subtitle1
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                  ]),
-                  FormattedNumber(amount: data.closing, drcr: data.closingDC)
-                ],
-              ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FormattedNumber(amount: data.closing, drcr: data.closingDC)
+                  ],
+                )
+              ],
             )),
         subtitle: SingleChildScrollView(
             padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -122,6 +126,7 @@ class TrialBalanceBody extends StatelessWidget {
             child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 width: double.maxFinite,
+                alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
                     FormattedNumber(amount: data.opening, drcr: data.openingDC),
@@ -199,21 +204,28 @@ class TextOrButtonWidget extends StatelessWidget {
     if (hasChildren) {
       return Text(
         label,
-        style: theme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+        style: theme.subtitle1,
       );
     } else {
-      return TextButton(
-        style: TextButton.styleFrom(
-            padding: const EdgeInsets.all(5),
-            textStyle: const TextStyle(decoration: TextDecoration.underline)),
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.generalLedger,
-              arguments: {'accId': accId, 'accName': label});
-        },
-        child: Text(label,
-            style: theme.subtitle1
-                ?.copyWith(fontWeight: FontWeight.bold, color: Colors.blue)),
+      return Text(
+        label,
+        style: theme.subtitle1?.copyWith(color: Colors.blue),
       );
     }
   }
 }
+
+// return TextButton(
+//   style: TextButton.styleFrom(
+//       // padding: const EdgeInsets.all(5),
+//       textStyle: const TextStyle(decoration: TextDecoration.underline)),
+//   onPressed: () {
+//     // Navigator.pushNamed(context, Routes.generalLedger,
+//     //     arguments: {'accId': accId, 'accName': label});
+//   },
+//   child: Container(
+//       alignment: Alignment.centerLeft,
+//       child: Text(label,
+//           style: theme.subtitle1?.copyWith(
+//               fontWeight: FontWeight.bold, color: Colors.blue))),
+// );

@@ -70,6 +70,7 @@ class CustomExpansionTile extends StatefulWidget {
     this.iconColor,
     this.collapsedIconColor,
     this.controlAffinity,
+    this.onTap,
   })  : assert(initiallyExpanded != null),
         assert(maintainState != null),
         assert(
@@ -260,6 +261,7 @@ class CustomExpansionTile extends StatefulWidget {
   /// By default, the value of `controlAffinity` is [ListTileControlAffinity.platform],
   /// which means that the expansion arrow icon will appear on the tile's trailing edge.
   final ListTileControlAffinity? controlAffinity;
+  final Function? onTap;
 
   @override
   State<CustomExpansionTile> createState() => _CustomExpansionTileState();
@@ -332,6 +334,9 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
       PageStorage.of(context)?.writeState(context, _isExpanded);
     });
     widget.onExpansionChanged?.call(_isExpanded);
+    if (widget.onTap != null) {
+      widget.onTap!();
+    }
   }
 
   // Platform or null affinity defaults to trailing.
