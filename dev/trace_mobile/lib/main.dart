@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/features/accounts/accounts_page.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_state.dart';
+import 'package:trace_mobile/features/accounts/classes/accounts_general_ledger_state.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_trial_balance_state.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_general_ledger.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_bspl.dart';
 import 'package:trace_mobile/features/accounts/widgets/accounts_trial_balance.dart';
 import 'package:trace_mobile/features/authentication/home_page.dart';
 import 'package:trace_mobile/features/dashboard/dashboard_page.dart';
+import 'package:trace_mobile/features/health/business_health.dart';
 import 'package:trace_mobile/features/products/classes/products_tags_state.dart';
 import 'package:trace_mobile/features/products/products_page.dart';
 import 'package:trace_mobile/features/products/classes/products_search_state.dart';
@@ -65,7 +67,10 @@ class TraceApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => AccountsBsplState(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AccountsGeneralLedgerState(),
+        ),
       ],
       child: MaterialApp(
         title: 'Trace',
@@ -74,6 +79,7 @@ class TraceApp extends StatelessWidget {
         routes: {
           'accounts': (BuildContext context) => const AccountsPage(),
           'bspl': (BuildContext context) => const AccountsBsPl(),
+          'businessHealth': (BuildContext context) => const BusinessHealth(),
           'dashboard': (BuildContext context) => const DashBoardPage(),
           'generalLedger': (BuildContext context) =>
               const AccountsGeneralLedger(),

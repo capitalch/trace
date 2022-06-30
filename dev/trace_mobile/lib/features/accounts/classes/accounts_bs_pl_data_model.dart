@@ -6,11 +6,13 @@ class BsplNode {
 }
 
 class BsplData {
+  final int accId;
   final String accName;
   final String accType;
   final double amount;
 
   BsplData({
+    required this.accId,
     required this.accName,
     required this.accType,
     required this.amount,
@@ -18,6 +20,9 @@ class BsplData {
 
   factory BsplData.fromJson({j}) {
     return BsplData(
-        accName: j['accName'], accType: j['accType'], amount: j['amount']);
+        accId: j['id'],
+        accName: j['accName'],
+        accType: j['accType'],
+        amount: j['amount']);
   }
 }

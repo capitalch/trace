@@ -84,6 +84,7 @@ L. Bank reconcillation opening cheques
 *. When in login s,s is given for superadmin user. it fails. In TraceHeader submitDialog buCodeWithPermissions in empty hence it goes out. and nothing happens. In brief superadmin user is not working.
 *. Demo mode purchase entry edit is not being possible: Rectified it temporarily by giving limit 1 in getJson_sale_purchase_on_id in cte6
 *. Provide useRef no in view of purchase and sale
+*. When in general ledger, change buCode. Then error
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
@@ -134,11 +135,20 @@ L. Bank reconcillation opening cheques
                                                                                                 4. login failure clears the login data
                                                                                                 5. Dashboard shows bucode, branch, fin year and plus minus settings. All settings to be there in global settings
                                                                                                 6. Can change these settings form dashboard
-#. Trial balance: show asset, liability, expense, income in title
-#. Show header
-#. Show footer
-#. Transfer Vouchers to all transactions and rename all
-#. Reorganize bottom in dashboard
+                                                                                                #. Trial balance: show asset, liability, expense, income in title
+                                                                                                #. Show header
+                                                                                                #. Show footer
+                                                                                                #. Transfer Vouchers to all transactions and rename all
+                                                                                                #. Reorganize bottom in dashboard
+1. Trial balance search
+                                                                                                2. General ledger opening and closing balance
+3. Pull refresh in all screens like that of sales
+4. Business health
+4. BS and PL when click on profit or loss there is error
+
+5. Bank recon
+6. Orders
+7. Stock Tally
 7. Dashboard:
     Sales: today, yesterday, this month, last month, ytd
     Purchases: this month, last month, ytd
@@ -151,11 +161,16 @@ L. Bank reconcillation opening cheques
     BS:
     PL:
 
-9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
-10. Use complementry colors of indigo
-11. https://www.javatpoint.com/
+                                                                                9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
 
+# 30-06-2022
+1. General ledger
+2. Footer general ledger
+3. Separation of widgets general ledger
+4. Navigation from BSPL to general ledger
 
+# 13-06-2022 to 29-06-2022
+1. Completed trial balance, PL, Sales, Transactons
 
 # 18-05-2022 - 12-06-2022
 1. Delivered Products search screen

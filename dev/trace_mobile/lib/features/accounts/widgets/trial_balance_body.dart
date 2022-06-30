@@ -214,18 +214,3 @@ class TextOrButtonWidget extends StatelessWidget {
     }
   }
 }
-
-// return TextButton(
-//   style: TextButton.styleFrom(
-//       // padding: const EdgeInsets.all(5),
-//       textStyle: const TextStyle(decoration: TextDecoration.underline)),
-//   onPressed: () {
-//     // Navigator.pushNamed(context, Routes.generalLedger,
-//     //     arguments: {'accId': accId, 'accName': label});
-//   },
-//   child: Container(
-//       alignment: Alignment.centerLeft,
-//       child: Text(label,
-//           style: theme.subtitle1?.copyWith(
-//               fontWeight: FontWeight.bold, color: Colors.blue))),
-// );

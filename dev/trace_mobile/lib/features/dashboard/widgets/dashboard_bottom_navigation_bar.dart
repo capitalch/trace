@@ -54,6 +54,8 @@ class DashboardBottomNavigationBar extends StatelessWidget {
           Navigator.pushNamed(context, Routes.products, arguments: results);
         } else if (value == 3) {
           Navigator.pushNamed(context, Routes.accounts);
+        } else if (value == 4) {
+          Navigator.pushNamed(context, Routes.businessHealth);
         }
       },
       selectedItemColor: Colors.indigo.shade700,

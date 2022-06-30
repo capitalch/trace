@@ -64,7 +64,7 @@ allSqls = {
             , "accName"
             , t."remarks" as "lineRemarks"
             , "lineRefNo"
-            , "instrNo"
+            , (select string_agg("instrNo",',') from "TranD" t1 where h.id = t1."tranHeaderId") as "instrNo"
             , h."id" --as "headerId"
             from "AccM" a
                 join "TranD" as t
@@ -326,6 +326,19 @@ allSqls = {
     'get_businessContact_for_contactName': '''
     select * from "ExtBusinessContactsAccM"
         where LOWER("contactName") like '%%' || LOWER(%(companyName)s) || '%%'
+    ''',
+
+    'get_business_health':'''
+        with cte1 as(
+            select SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end) as "profitLoss"
+                from "AccM" a
+                    join "TranD" t
+                        on a."id" = t."accId"                                
+                    join "TranH" h
+                        on h."id" = t."tranHeaderId"				 				
+                 where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                    and "accType" in ('A','L')
+	    ) select * from cte1
     ''',
 
     'get_cash_bank': '''

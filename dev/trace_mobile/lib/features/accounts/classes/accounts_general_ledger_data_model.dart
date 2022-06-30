@@ -1,13 +1,29 @@
 class GeneralLedgerModel {
   final double opBalance;
+  final String opBalanceDC;
   final SumModel sum;
   final List<TransactionModel> transactions;
   GeneralLedgerModel(
-      {required this.opBalance, required this.sum, required this.transactions});
+      {required this.opBalance,
+      required this.opBalanceDC,
+      required this.sum,
+      required this.transactions});
 
   factory GeneralLedgerModel.fromJson({j}) {
+    var opBal = 0.0;
+    String opBalDC = 'D';
+    if (j['opBalance'] != null) {
+      if (j['opBalance']['dc'] == 'D') {
+        opBal = j['opBalance']['debit'];
+        opBalDC = 'D';
+      } else {
+        opBal = j['opBalance']['credit'];
+        opBalDC = 'C';
+      }
+    }
     return GeneralLedgerModel(
-        opBalance: j['opBalance'] ?? 0,
+        opBalance: opBal,
+        opBalanceDC: opBalDC,
         sum: SumModel(
           debits: j['sum'][0]['debit'],
           credits: j['sum'][0]['credit'],

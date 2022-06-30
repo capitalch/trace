@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
+import 'package:trace_mobile/common/classes/routes.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_data_model.dart';
 import 'package:trace_mobile/features/accounts/classes/accounts_bs_pl_state.dart';
 import 'package:trace_mobile/features/accounts/widgets/custom_expansion_tile.dart';
@@ -32,6 +33,7 @@ class BsplBody extends StatelessWidget {
           if (profitOrLoss >= 0) {
             dataList.add({
               'data': {
+                'id': 0,
                 'accName': 'Profit for the year',
                 'accType': 'L',
                 'amount': -profitOrLoss
@@ -40,6 +42,7 @@ class BsplBody extends StatelessWidget {
             });
             dataList.add({
               'data': {
+                'id': 0,
                 'accName': 'Profit for the year',
                 'accType': 'E',
                 'amount': profitOrLoss
@@ -49,6 +52,7 @@ class BsplBody extends StatelessWidget {
           } else {
             dataList.add({
               'data': {
+                'id': 0,
                 'accName': 'Loss for the year',
                 'accType': 'A',
                 'amount': profitOrLoss.abs()
@@ -57,6 +61,7 @@ class BsplBody extends StatelessWidget {
             });
             dataList.add({
               'data': {
+                'id': 0,
                 'accName': 'Loss for the year',
                 'accType': 'I',
                 'amount': profitOrLoss
@@ -102,8 +107,15 @@ class BsplBody extends StatelessWidget {
     NumberFormat formatter = NumberFormat('###,###.00');
     var theme = Theme.of(context).textTheme;
     for (dynamic child in childList) {
+      bool hasChildren = child['children'] != null;
       BsplData data = BsplData.fromJson(j: child['data']);
       Widget childWidget = CustomExpansionTile(
+        onTap: () {
+          hasChildren
+              ? null
+              : Navigator.pushNamed(context, Routes.generalLedger,
+                  arguments: {'accId': data.accId, 'accName': data.accName});
+        },
         maintainState: true,
         collapsedIconColor: Colors.amber.shade700,
         backgroundColor: Colors.amber.shade100,
@@ -121,7 +133,7 @@ class BsplBody extends StatelessWidget {
             ),
           ),
           Text(formatter
-              .format('LI'.contains(data.accType) ? -data.amount : data.amount))
+              .format(('LI'.contains(data.accType) && data.amount !=0) ? -data.amount : data.amount))
         ]),
         children: (child['children'] == null)
             ? [const SizedBox.shrink()]

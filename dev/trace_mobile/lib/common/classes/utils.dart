@@ -97,4 +97,9 @@ class Utils {
   static String toLocalDateString(DateTime date) {
     return DateFormat('dd-MM-yyyy').format(date);
   }
+
+  static String toFormattedNumber(double val) {
+    NumberFormat formatter = NumberFormat('###,###.00');
+    return formatter.format(val);
+  }
 }
