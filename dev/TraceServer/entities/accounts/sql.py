@@ -329,16 +329,90 @@ allSqls = {
     ''',
 
     'get_business_health':'''
-        with cte1 as(
-            select SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end) as "profitLoss"
-                from "AccM" a
-                    join "TranD" t
-                        on a."id" = t."accId"                                
-                    join "TranH" h
-                        on h."id" = t."tranHeaderId"				 				
-                 where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-                    and "accType" in ('A','L')
-	    ) select * from cte1
+    with cte0 as( --base cte used many times in next
+        select "productId", "tranTypeId", "qty", "price", "tranDate"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+            --where "branchId" = 1 and "finYearId" = 2022
+            where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+	), cte1 as ( -- opening balance
+		select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
+			from "ProductOpBal" p 
+		--where "branchId" = 1 and "finYearId" = 2022
+		where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+	), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
+            select "productId","tranTypeId", 
+                SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
+                , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
+                , SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
+                , SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
+                , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
+                , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
+                from cte0
+            group by "productId", "tranTypeId" order by "productId", "tranTypeId"
+    ), cte3 as ( -- sum columns group by productId
+            select "productId"
+            , coalesce(SUM("sale"),0) as "sale"
+            , coalesce(SUM("purchase"),0) as "purchase"
+            , coalesce(SUM("saleRet"),0) as "saleRet"
+            , coalesce(SUM("purchaseRet"),0) as "purchaseRet"
+            , MAX("lastSaleDate") as "lastSaleDate"
+            , MAX("lastPurchaseDate") as "lastPurchaseDate"
+            from cte2
+                group by "productId"
+    ), cte4 as ( -- join opening balance (cte1) with latest result set
+            select coalesce(c1."productId",c3."productId")  as "productId"
+            , coalesce(c1.qty,0) as "op"
+            , coalesce("sale",0) as "sale"
+            , coalesce("purchase",0) as "purchase"
+            , coalesce("saleRet", 0) as "saleRet"
+            , coalesce("purchaseRet", 0) as "purchaseRet"
+            , coalesce(c3."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
+            , "openingPrice", "lastSaleDate"
+                from cte1 c1
+                    full join cte3 c3
+                        on c1."productId" = c3."productId"
+    ), cte5 as ( -- get last purchase price for transacted products
+        select DISTINCT ON("productId") "productId", "price" as "lastPurchasePrice"
+            from cte0
+                where "tranTypeId" = 5
+                    order by "productId", "tranDate" DESC
+    ), cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
+        select coalesce(c4."productId", c5."productId") as "productId"
+            , coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice","lastPurchaseDate"
+            , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos", "sale", "op", "openingPrice"
+            from cte4 c4
+                full join cte5 c5
+                    on c4."productId" = c5."productId"
+    ), cte7 as ( -- get openingValue, openingValueWithGst, closingValue, closingValueWithGst
+        select SUM("op" * "openingPrice") as "openingValue"
+        , SUM("op" * "openingPrice" *(1 + "gstRate"/100)) as "openingValueWithGst"
+        , SUM("clos" * "lastPurchasePrice") as "closingValue"
+        , SUM("clos" * "lastPurchasePrice" * (1+ "gstRate"/100)) as "closingValueWithGst"			
+        from cte6 c6 
+            join "ProductM" p
+                on p."id" = c6."productId"
+    ), cte8 as ( -- get profitLoss from balance sheet (bs)
+        select round(SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end),0) as "profitLoss"
+            from "AccM" a
+                join "TranD" t
+                    on a."id" = t."accId"                                
+                join "TranH" h
+                    on h."id" = t."tranHeaderId"				 				
+            where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+            --where "branchId" = 1 and "finYearId" = 2022
+                and "accType" in ('A','L')
+    ), cte9 as ( -- find diff and diffGst for stock value
+        select round(("closingValue" - "openingValue"),0) as "diff"
+            , round(("closingValueWithGst" - "openingValueWithGst"),0) as "diffGst"
+            from cte7
+    ) select json_build_object(
+        'stockDiff', (select row_to_json(a) from cte9 a),
+        'profitLoss', (select "profitLoss" from cte8 b)
+		) as "jsonResult"
     ''',
 
     'get_cash_bank': '''
@@ -365,16 +439,6 @@ allSqls = {
         select * from "Contacts"
 	        where "mobileNumber" = %(mobileNumber)s limit 1
     ''',
-
-    # 'get_contact_on_mobile_email_contactName1': '''
-    #     select * from "Contacts"
-    #         where "mobileNumber" = %(searchString)s
-    #             or "otherMobileNumber" like '%%' || %(searchString)s || '%%'
-    #             or LOWER("email") like '%%' || LOWER(%(searchString)s) || '%%'
-    #             or LOWER("contactName") like  '%%' || LOWER(%(searchString)s) || '%%'
-    #             order by "contactName"
-    #             limit 100
-    # ''',
 
     'get_contact_on_mobile_email_contactName': '''
         select * from "Contacts"

@@ -168,6 +168,7 @@ L. Bank reconcillation opening cheques
 2. Footer general ledger
 3. Separation of widgets general ledger
 4. Navigation from BSPL to general ledger
+5. Business health
 
 # 13-06-2022 to 29-06-2022
 1. Completed trial balance, PL, Sales, Transactons
