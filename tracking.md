@@ -85,6 +85,7 @@ L. Bank reconcillation opening cheques
 *. Demo mode purchase entry edit is not being possible: Rectified it temporarily by giving limit 1 in getJson_sale_purchase_on_id in cte6
 *. Provide useRef no in view of purchase and sale
 *. When in general ledger, change buCode. Then error
+*. Purchase entry, same user ref no entry give alert
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
