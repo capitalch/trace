@@ -11,10 +11,6 @@ npm install @types/jest@latest @types/react-dom@latest
 npm install  react-scripts@latest react-error-overlay@latest
 npm install react@latest react-dom@latest
 
-## Logic for vouchers
-1. App bar to show 100, 1000, 5000 10000, all
-2. body
-3. summary
 
 ## Flutter learning
                                                                                     1. Navigation and drawyer
@@ -26,18 +22,10 @@ npm install react@latest react-dom@latest
                                                                                     7. Get good grip of layouts and Sizing with no break
                                                                                     9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
                                                                                     10. Flutter inspector
-11. GraphQL
+                                                                                    11. GraphQL
                                                                                     12. Streams
                                                                                     13. Splash and login
-14. Tables
-15. Deployment
-
-## To do in mobile
-                                                                                    1. Remove sales from App bar and put Bu over there; click allows to change BU in alert box.
-                                                                                    2. Subheader shows company name, fy year range and branch. fy year and branch can change on alert box.
-
-## Appearance
-#. Theme.of(context).textTheme.headline4
+                                                                                    15. Deployment
 
 ### To do in sales
                                                                                         
@@ -119,7 +107,7 @@ L. Bank reconcillation opening cheques
 
 # Trace mobile
                                                                                                 1. Login should not allow blank values
-2. Connection error to show when server not available
+
                                                                                                 3. When next button clicked then company name is not shown in dashboard app bar
                                                                                                 1. snack bar
                                                                                                 2. local storage
@@ -163,6 +151,8 @@ L. Bank reconcillation opening cheques
     PL:
 
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
+8. Business health:
+    Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
 # 30-06-2022
 1. General ledger
@@ -1037,34 +1027,3 @@ nothing
 1. Edit / new is not retaining values bug fix
 2. When balance sheet is selected then click payroll, then click accounts. Error occurs.
 3. Client side change entity 'super-admin' to 'authentication'
-
-# Completed items
-                                                                                        1. Add + icon in add button
-                                                                                        2. Gstin, date, other validations
-                                                                                        2. cgst, sgst, igst group spacing
-                                                                                        3. Customer search
-                                                                                        4. New / edit button
-                                                                                        5. Product search
-                                                                                        6. Summary, calculations, amount etc.
-                                                                                        7. Serial no mechanism
-                                                                                        8. Population of product details
-                                                                                        9. Reset, roundoff, back cal buttons, Igst, Add button
-                                                                                        10. saleVariety implementation
-                                                                                        11. Ship to
-                                                                                        13. Sales report to add auto subledger information
-                                                                                        12. Total error handling and show of submit
-                                                                                        13. Submit functionality
-                                                                                        14. View and drill through
-                                                                                        15. Page reset
-                                                                                        16. Total Debits / Credits
-                                                                                        17. New error window in open space
-                                                                                        18. Printing
-                                                                                        19. Product code change populate
-                                                                                        21. Taking up the correct prices etc.
-                                                                                        22. Mapping the ui with megaData
-                                                                                        23. receipts in 0.00 format
-                                                                                        23. Address management with payment methods change
-                                                                                        24. Address mapping when institution sales selected
-                                                                                        25. validations
-                                                                                        26. Email and SMS
-                                                                                        a. Permissions of Export etc to manager
