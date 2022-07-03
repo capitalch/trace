@@ -329,20 +329,20 @@ allSqls = {
     ''',
 
     'get_business_health':'''
-    with cte0 as( --base cte used many times in next
+    --with branch as ( values (1)), finyearid as (values (2022)),
+    with branch as (values (%(branchId)s::int)), finyearid as (values (%(finYearId)s::int)),
+	cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate"
             from "TranH" h
                 join "TranD" d
                     on h."id" = d."tranHeaderId"
                 join "SalePurchaseDetails" s
                     on d."id" = s."tranDetailsId"
-            --where "branchId" = 1 and "finYearId" = 2022
-            where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+            where "branchId" = (table branch) and "finYearId" = (table finYearid)
 	), cte1 as ( -- opening balance
 		select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
-			from "ProductOpBal" p 
-		--where "branchId" = 1 and "finYearId" = 2022
-		where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
+			from "ProductOpBal" p
+		where "branchId" = (table branch) and "finYearId" = (table finYearid)
 	), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
             select "productId","tranTypeId", 
                 SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
@@ -388,10 +388,10 @@ allSqls = {
                 full join cte5 c5
                     on c4."productId" = c5."productId"
     ), cte7 as ( -- get openingValue, openingValueWithGst, closingValue, closingValueWithGst
-        select SUM("op" * "openingPrice") as "openingValue"
-        , SUM("op" * "openingPrice" *(1 + "gstRate"/100)) as "openingValueWithGst"
-        , SUM("clos" * "lastPurchasePrice") as "closingValue"
-        , SUM("clos" * "lastPurchasePrice" * (1+ "gstRate"/100)) as "closingValueWithGst"			
+        select ROUND(SUM("op" * "openingPrice"),0) as "openingValue"
+        , ROUND(SUM("op" * "openingPrice" *(1 + "gstRate"/100)),0) as "openingValueWithGst"
+        , ROUND(SUM("clos" * "lastPurchasePrice"),0) as "closingValue"
+        , ROUND(SUM("clos" * "lastPurchasePrice" * (1+ "gstRate"/100)),0) as "closingValueWithGst"			
         from cte6 c6 
             join "ProductM" p
                 on p."id" = c6."productId"
@@ -402,16 +402,73 @@ allSqls = {
                     on a."id" = t."accId"                                
                 join "TranH" h
                     on h."id" = t."tranHeaderId"				 				
-            where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-            --where "branchId" = 1 and "finYearId" = 2022
+			where "branchId" = (table branch) and "finYearId" = (table finYearid)
                 and "accType" in ('A','L')
     ), cte9 as ( -- find diff and diffGst for stock value
         select round(("closingValue" - "openingValue"),0) as "diff"
             , round(("closingValueWithGst" - "openingValueWithGst"),0) as "diffGst"
             from cte7
-    ) select json_build_object(
+    ), cte10 as ( -- get trial balance
+	
+				with recursive cte as (
+					select * from cte1
+						union all
+					select a."id", a."accName", a."accType", a."parentId", a."accLeaf", a."isPrimary"
+					, c."opening"
+					, c."sign"
+					, c."opening_dc"
+					, c."debit", c."credit"
+						from cte c
+							join "AccM" a
+								on c."parentId" = a."id"
+					),
+					cte1 as (
+						select a."id", "accName", "accType", "parentId", "accLeaf", a."isPrimary"
+							, 0.00 as "opening"
+							, 1 as "sign"
+							, '' as "opening_dc"
+							, CASE WHEN t."dc" = 'D' THEN t."amount" else 0.00 END as "debit"
+							, CASE WHEN t."dc" = 'C' THEN t."amount" else 0.00 END as "credit"
+						from "AccM" a
+							join "TranD" t
+								on t."accId" = a."id"
+							join "TranH" h
+								on h."id" = t."tranHeaderId"
+									where "branchId" = (table branch) and "finYearId" = (table finYearid)
+							union all
+						select a."id", "accName", "accType", "parentId", "accLeaf", a."isPrimary"
+							, "amount" as "opening"
+							, CASE WHEN "dc" = 'D' THEN 1 ELSE -1 END as "sign"
+							, "dc" as "opening_dc"
+							, 0 as "debit"
+							, 0 as "credit"
+						from "AccM" a
+							join "AccOpBal" b
+								on a."id" = b."accId"
+									where "branchId" = (table branch) and "finYearId" = (table finYearid)
+										order by "accType", "accName"
+						),
+					cte2 as (
+						select "id", "accName", "accType", "parentId", "accLeaf", "isPrimary"
+							, SUM("opening" * "sign") as "opening"
+							, SUM("debit") as "debit"
+							, SUM("credit") as "credit"
+							from cte
+								group by "id", "accName", "accType", "parentId", "accLeaf", "isPrimary"
+									order by "accType", "accName"
+						) select 
+							"id", "parentId"
+							, "accName"
+							, ROUND(("opening" + "debit" - "credit"),0) as "closing"
+						from cte2 a
+							where "isPrimary"
+								order by id
+		
+	) select json_build_object(
         'stockDiff', (select row_to_json(a) from cte9 a),
-        'profitLoss', (select "profitLoss" from cte8 b)
+        'profitLoss', (select "profitLoss" from cte8 b),
+		'openingClosingStock', (select row_to_json(c) from cte7 c),
+		'trialBalance', (select json_agg(row_to_json(d)) from cte10 d)
 		) as "jsonResult"
     ''',
 
@@ -1111,6 +1168,8 @@ allSqls = {
             ''',
 
     "get_trialBalance": '''
+        --with branch as (values (%(branchId)s)), finyearid as (values (%(finYearId)s))
+        --with branch as (values (1), finyearid as (values (2022)
         with recursive cte as (
         select * from cte1
             union all
@@ -1122,7 +1181,7 @@ allSqls = {
             from cte c
                 join "AccM" a
                     on c."parentId" = a."id"
-        ),
+        ),branch as (values (%(branchId)s::int)), finyearid as (values (%(finYearId)s::int)),
         cte1 as (
             select a."id", "accName", "accType", "parentId", "accLeaf"
                 , 0.00 as "opening"
@@ -1135,8 +1194,8 @@ allSqls = {
                     on t."accId" = a."id"
                 join "TranH" h
                     on h."id" = t."tranHeaderId"
-                        where  
-                            h."finYearId" =  %(finYearId)s and h."branchId" = %(branchId)s
+                        where "branchId" = (table branch) and "finYearId" = (table finYearid)
+                        --where  h."finYearId" =  %(finYearId)s and h."branchId" = %(branchId)s
                 union all
             select a."id", "accName", "accType", "parentId", "accLeaf"
                 , "amount" as "opening"
@@ -1147,8 +1206,8 @@ allSqls = {
             from "AccM" a
                 join "AccOpBal" b
                     on a."id" = b."accId"
-                        where  
-                            "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                        where "branchId" = (table branch) and "finYearId" = (table finYearid)
+                        --where  "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
                             order by "accType", "accName"
             ),
         cte2 as (

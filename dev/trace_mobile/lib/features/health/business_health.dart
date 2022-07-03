@@ -59,7 +59,7 @@ class BusinessHealthBody extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           widget = Text('Loading...', style: messageTheme);
         } else if (snapshot.hasData) {
-          Map<String, dynamic> jsonResult =
+          Map<String, dynamic>? jsonResult =
               snapshot.data?.data?['accounts']?['genericView']?['jsonResult'];
           if (jsonResult == null) {
             widget = Text('No data', style: messageTheme);
@@ -88,46 +88,237 @@ class BusinessHealthBodyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
+    Map<int, dynamic>? trialBalanceMap =
+        getTrialBalanceMap(businessHealth.trialBalance);
     return Container(
-      height: 300,
+      // height: 300,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(children: [
+        //Sundry creditors,id: 9
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Profit or loss as per balance sheet:',
+              trialBalanceMap![9]['accName'],
               style: theme.bodyText1,
             ),
-            Text(Utils.toFormattedNumber(businessHealth.profitLoss.toDouble()))
+            Text(Utils.toFormattedNumberInLaks(
+                -double.parse(trialBalanceMap[9]['closing'].toString())))
           ],
         ),
+
+        // Sundry debtors id: 22
         const SizedBox(
           height: 15,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Difference in stock with Gst:'),
-            Text(Utils.toFormattedNumber(
-                businessHealth.stockDiff.diffGst.toDouble()))
+            Text(
+              trialBalanceMap[22]['accName'],
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                double.parse(trialBalanceMap[22]['closing'].toString())))
           ],
         ),
+
+        // Bank accounts id: 16
         const SizedBox(
-          height: 20,
+          height: 15,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Net amount:',
+              trialBalanceMap[16]['accName'],
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                double.parse(trialBalanceMap[16]['closing'].toString())))
+          ],
+        ),
+
+        // cash in hand id: 17
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              trialBalanceMap[17]['accName'],
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                double.parse(trialBalanceMap[17]['closing'].toString())))
+          ],
+        ),
+
+        // Purchases id: 26
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              trialBalanceMap[26]['accName'],
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                double.parse(trialBalanceMap[26]['closing'].toString())))
+          ],
+        ),
+
+        // Sales id: 30
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              trialBalanceMap[30]['accName'],
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                -double.parse(trialBalanceMap[30]['closing'].toString())))
+          ],
+        ),
+
+        //opening stock
+        const SizedBox(
+          height: 30,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Opening stock:',
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                businessHealth.openingClosingStock.openingValue.toDouble()))
+          ],
+        ),
+        // Opening stock gst
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Opening stock(Gst):',
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(businessHealth
+                .openingClosingStock.openingValueWithGst
+                .toDouble()))
+          ],
+        ),
+        // Closing stock
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Closing stock:',
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                businessHealth.openingClosingStock.closingValue.toDouble()))
+          ],
+        ),
+        // Closing stock gst
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Closing stock(Gst):',
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(businessHealth
+                .openingClosingStock.closingValueWithGst
+                .toDouble()))
+          ],
+        ),
+        // Profit or loss
+        const SizedBox(
+          height: 45,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '(a) Profit or loss as per balance sheet:',
+              style: theme.bodyText1,
+            ),
+            Text(Utils.toFormattedNumberInLaks(
+                businessHealth.profitLoss.toDouble()))
+          ],
+        ),
+        //diff stock
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('Difference in stock:'),
+            Text(Utils.toFormattedNumberInLaks(
+                businessHealth.stockDiff.diff.toDouble()))
+          ],
+        ),
+        //diff stock gst
+        const SizedBox(
+          height: 15,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text('(b) Difference in stock(Gst):'),
+            Text(Utils.toFormattedNumberInLaks(
+                businessHealth.stockDiff.diffGst.toDouble()))
+          ],
+        ),
+        //Final
+        const SizedBox(
+          height: 45,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Net amount (a + b):',
               style: theme.headline6,
             ),
-            Text(Utils.toFormattedNumber(businessHealth.profitLoss.toDouble() +
-                businessHealth.stockDiff.diffGst.toDouble()), style: theme.headline6,)
+            Text(
+              Utils.toFormattedNumberInLaks(
+                  businessHealth.profitLoss.toDouble() +
+                      businessHealth.stockDiff.diffGst.toDouble()),
+              style: theme.headline6,
+            )
           ],
         )
       ]),
     );
+  }
+
+  getTrialBalanceMap(List<dynamic> trialBalanceList) {
+    Map<int, dynamic> map = {};
+    for (var item in trialBalanceList) {
+      map[item['id']] = {
+        'accName': item['accName'],
+        'closing': item['closing']
+      };
+    }
+    return map;
   }
 }

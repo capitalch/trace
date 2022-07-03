@@ -102,4 +102,10 @@ class Utils {
     NumberFormat formatter = NumberFormat('###,###.00');
     return formatter.format(val);
   }
+
+  static String toFormattedNumberInLaks(double val) {
+    double newVal = double.parse((val / 100000).toStringAsFixed(3));
+    NumberFormat formatter = NumberFormat('#,##,##.00');
+    return '${formatter.format(newVal)} L';
+  }
 }
