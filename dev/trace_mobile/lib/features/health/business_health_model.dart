@@ -13,11 +13,11 @@ class BusinessHealthModel {
 
   factory BusinessHealthModel.fromJson({required Map<String, dynamic> j}) {
     return BusinessHealthModel(
-        profitLoss: j['profitLoss'],
+        profitLoss: j['profitLoss'] ?? 0,
         stockDiff: StockDiffModel.fromJson(j: j['stockDiff']),
         openingClosingStock:
             OpeningClosingStockModel.fromJson(j: j['openingClosingStock']),
-        trialBalance: j['trialBalance']);
+        trialBalance: j['trialBalance'] ?? []);
   }
 }
 

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:trace_mobile/common/classes/global_settings.dart';
 import 'package:trace_mobile/common/classes/graphql_queries.dart';
 import 'package:trace_mobile/common/classes/utils.dart';
+import 'package:trace_mobile/common/widgets/bu_code_branch_header.dart';
 import 'package:trace_mobile/features/health/business_health_model.dart';
 
 class BusinessHealth extends StatelessWidget {
@@ -12,29 +13,36 @@ class BusinessHealth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Row(
-            children: [
-              InkWell(
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.chevron_left,
-                      size: 30,
-                      color: Colors.indigo,
-                    ),
-                    Text(
-                      'Business health',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ],
+        automaticallyImplyLeading: false,
+        title: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                InkWell(
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.chevron_left,
+                        size: 30,
+                        color: Colors.indigo,
+                      ),
+                      Text(
+                        'Business health',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          )),
+                const SizedBox(
+                  width: 10,
+                ),
+                const BuCodeBranchCodeHeader()
+              ],
+            )),
+      ),
       body: const BusinessHealthBody(),
     );
   }
@@ -88,7 +96,7 @@ class BusinessHealthBodyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context).textTheme;
-    Map<int, dynamic>? trialBalanceMap =
+    Map<int, dynamic> trialBalanceMap =
         getTrialBalanceMap(businessHealth.trialBalance);
     return Container(
       // height: 300,
@@ -99,11 +107,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap![9]?['accName'] ?? '',
+              getAccName(trialBalanceMap, 9, 'accName'),
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                -double.parse(trialBalanceMap[9]['closing']!.toString())))
+                -getClosing(trialBalanceMap, 9, 'closing').toDouble()))
           ],
         ),
 
@@ -115,11 +123,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[22]?['accName'] ?? '',
+              getAccName(trialBalanceMap, 22, 'accName'),
               style: theme.bodyText1,
             ),
-            Text(Utils.toFormattedNumberInLaks(double.parse(
-                (trialBalanceMap[22]?['closing'] ?? 0).toString())))
+            Text(Utils.toFormattedNumberInLaks(
+                getClosing(trialBalanceMap, 22, 'closing').toDouble()))
           ],
         ),
 
@@ -131,11 +139,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[16]['accName'] ?? '',
+              getAccName(trialBalanceMap, 16, 'accName'),
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[16]['closing']!.toString())))
+                getClosing(trialBalanceMap, 16, 'closing').toDouble()))
           ],
         ),
 
@@ -147,11 +155,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[17]['accName'] ?? '',
+              getAccName(trialBalanceMap, 17, 'accName'),
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[17]['closing']!.toString())))
+                getClosing(trialBalanceMap, 17, 'closing').toDouble()))
           ],
         ),
 
@@ -163,11 +171,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[26]['accName'] ?? '',
+              getAccName(trialBalanceMap, 26, 'accName'),
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[26]['closing']!.toString())))
+                getClosing(trialBalanceMap, 26, 'closing').toDouble()))
           ],
         ),
 
@@ -179,11 +187,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[30]['accName'] ?? '',
+              getAccName(trialBalanceMap, 30, 'accName'),
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                -double.parse(trialBalanceMap[30]['closing']!.toString())))
+                -getClosing(trialBalanceMap, 30, 'closing').toDouble()))
           ],
         ),
 
@@ -296,7 +304,7 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Net amount (a + b):',
+              'Business index (a + b):',
               style: theme.headline6,
             ),
             Text(
@@ -309,6 +317,22 @@ class BusinessHealthBodyContent extends StatelessWidget {
         )
       ]),
     );
+  }
+
+  String getAccName(Map<int, dynamic> map, int id, String item) {
+    String accName = '';
+    if (map.containsKey(id)) {
+      accName = map[id]['accName'];
+    }
+    return accName;
+  }
+
+  int getClosing(Map<int, dynamic> map, int id, String item) {
+    int closing = 0;
+    if (map.containsKey(id)) {
+      closing = map[id]['closing'];
+    }
+    return closing;
   }
 
   getTrialBalanceMap(List<dynamic> trialBalanceList) {

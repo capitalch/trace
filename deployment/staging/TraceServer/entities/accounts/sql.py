@@ -668,7 +668,7 @@ allSqls = {
             select p."id", "productCode", "catName", "brandName", "label", coalesce("clos"::numeric(10,2),0) "clos", (coalesce("lastPurchasePrice",0) * (1 + "gstRate"/ 100)) "lastPurchasePriceGst", 
                     "lastPurchaseDate", (date_part('day',CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp)) as "age"
 					, "catId", "brandId", coalesce(p."hsn", c."hsn") hsn, "info", "unitId", "upcCode", "gstRate"
-					, "salePrice", "salePriceGst", "maxRetailPrice", coalesce("lastPurchasePrice",0) "lastPurPrice", "sale", "saleDiscount"
+					, "salePrice", "salePriceGst", "maxRetailPrice", coalesce("lastPurchasePrice",0) "lastPurchasePrice", "sale", "saleDiscount"
                 from cte6 c6
                     right join "ProductM" p
                         on p."id" = c6."productId"
@@ -679,7 +679,7 @@ allSqls = {
                 where p."isActive"
             order by "brandName", "catName",  "label", "info"
         ) select "id", "productCode", "catName", "brandName", "label", "clos", "lastPurchasePriceGst", CASE WHEN "clos" > 0 THEN "age" ELSE 0 END "age"
-		, "hsn", "info", "upcCode", "gstRate", "salePrice", "salePriceGst", "maxRetailPrice", "sale", "saleDiscount" from cte7
+		, "hsn", "info", "upcCode", "gstRate", "salePrice", "salePriceGst", "maxRetailPrice", "sale", "saleDiscount", "lastPurchasePrice" from cte7
     ''',
 
     "get_purchase_report": '''
@@ -1612,7 +1612,7 @@ allSqls = {
                 "AccM" a join "ExtBusinessContactsAccM" e
                     on a."id" = e."accId"
                 join cte2 c2
-                    on a."id" = c2."accId"
+                    on a."id" = c2."accId" limit 1
         ),
         cte4 as (
             select s."id", "productId", "qty", "price", "priceGst", "discount"

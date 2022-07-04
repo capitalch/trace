@@ -152,11 +152,11 @@ L. Bank reconcillation opening cheques
     PL:
 
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
-8. Business health:
-    Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+                                                                                8. Business health:
+                                                                                    Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
 # 01-07-2022 04-07-2022
-1. Business health refinement
+1. Business health refinement and completion
 
 # 30-06-2022
 1. General ledger
