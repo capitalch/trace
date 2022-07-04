@@ -99,11 +99,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap![9]['accName'],
+              trialBalanceMap![9]?['accName'] ?? '',
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                -double.parse(trialBalanceMap[9]['closing'].toString())))
+                -double.parse(trialBalanceMap[9]['closing']!.toString())))
           ],
         ),
 
@@ -115,11 +115,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[22]['accName'],
+              trialBalanceMap[22]?['accName'] ?? '',
               style: theme.bodyText1,
             ),
-            Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[22]['closing'].toString())))
+            Text(Utils.toFormattedNumberInLaks(double.parse(
+                (trialBalanceMap[22]?['closing'] ?? 0).toString())))
           ],
         ),
 
@@ -131,11 +131,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[16]['accName'],
+              trialBalanceMap[16]['accName'] ?? '',
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[16]['closing'].toString())))
+                double.parse(trialBalanceMap[16]['closing']!.toString())))
           ],
         ),
 
@@ -147,11 +147,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[17]['accName'],
+              trialBalanceMap[17]['accName'] ?? '',
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[17]['closing'].toString())))
+                double.parse(trialBalanceMap[17]['closing']!.toString())))
           ],
         ),
 
@@ -163,11 +163,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[26]['accName'],
+              trialBalanceMap[26]['accName'] ?? '',
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                double.parse(trialBalanceMap[26]['closing'].toString())))
+                double.parse(trialBalanceMap[26]['closing']!.toString())))
           ],
         ),
 
@@ -179,11 +179,11 @@ class BusinessHealthBodyContent extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              trialBalanceMap[30]['accName'],
+              trialBalanceMap[30]['accName'] ?? '',
               style: theme.bodyText1,
             ),
             Text(Utils.toFormattedNumberInLaks(
-                -double.parse(trialBalanceMap[30]['closing'].toString())))
+                -double.parse(trialBalanceMap[30]['closing']!.toString())))
           ],
         ),
 

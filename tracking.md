@@ -1,15 +1,16 @@
 ## upgrade trace-client
-@mui all libraries at Chitta
-## upgrade trace-client-next
-npm install @emotion/react @emotion/styled @mui/icons-material @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/react @testing-library/user-event @types/jest @types/node big.js --force
-npm install graphql primereact react-select react-to-print sass
-npm install socket.io-client typescript
 
-npm install graphql@latest
-npm install @types/jest@latest @types/react-dom@latest
-## following does not work
-npm install  react-scripts@latest react-error-overlay@latest
-npm install react@latest react-dom@latest
+## upgrade trace-client-next at chitta
+@fortawesome/react-fontawesome @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/user-event @types/big.js @types/jest @types/node
+npm install clsx react-select sass typescript
+npm install @fortawesome/react-fontawesome@latest @types/node@latest
+Till this point everything works fine
+
+npm install @types/react@latest react@latest react-dom@latest
+Input-mask error in some places
+Some typescript any error. After many changes it worked.
+Finally worked but react-scripts @5.x did not work even with craco
+
 
 
 ## Flutter learning
@@ -132,7 +133,7 @@ L. Bank reconcillation opening cheques
 1. Trial balance search
                                                                                                 2. General ledger opening and closing balance
 3. Pull refresh in all screens like that of sales
-4. Business health
+                                                                    4. Business health
 4. BS and PL when click on profit or loss there is error
 
 5. Bank recon
@@ -153,6 +154,9 @@ L. Bank reconcillation opening cheques
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
 8. Business health:
     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+
+# 01-07-2022 04-07-2022
+1. Business health refinement
 
 # 30-06-2022
 1. General ledger

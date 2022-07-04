@@ -33,7 +33,7 @@ function AccountsSubHeader() {
     } = useSharedElements()
 
     const { execDataCache } = initCode()
-    const currentMediaSize: string = getCurrentMediaSize()
+    const currentMediaSize: any = getCurrentMediaSize()
 
     return (
         <div className={classes.content}>

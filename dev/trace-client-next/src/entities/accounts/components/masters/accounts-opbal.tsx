@@ -95,7 +95,7 @@ function AccountsOpBal() {
         },
         xl: () => mediaLogic['lg'](),
     }
-    const currentMediaSize = getCurrentMediaSize()
+    const currentMediaSize:any = getCurrentMediaSize()
     currentMediaSize && mediaLogic[currentMediaSize]()
 
     async function getData() {

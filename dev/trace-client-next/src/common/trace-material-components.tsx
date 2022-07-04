@@ -36,7 +36,7 @@ function useTraceMaterialComponents() {
             // sx={pre.sx}
             sx={{minHeight:theme.spacing(40)}}
             open={pre.showDialog}
-            onClose={(e, reason) => {
+            onClose={(e:any, reason:any) => {
                 if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
                     handleClose()
                 }
@@ -85,7 +85,7 @@ function useTraceMaterialComponents() {
                 {...options.materialDialogProps}
                 open={options.meta.current.showDialog}
                 // onClose={options.onClose || handleClose}
-                onClose={(e, reason) => {
+                onClose={(e:any, reason:any) => {
                     if (!['escapeKeyDown', 'backdropClick'].includes(reason)) {
                         options.onClose || handleClose()
                     }

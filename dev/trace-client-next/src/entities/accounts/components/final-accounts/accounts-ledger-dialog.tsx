@@ -78,7 +78,7 @@ function AccountsLedgerDialog() {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
+        const subs = filterOn('SHOW-LEDGER').subscribe(async (d:any) => {
             curr.showDialog = true
             curr.accId = d.data
             curr.accName = getAccountName(d.data)

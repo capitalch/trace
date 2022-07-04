@@ -105,7 +105,7 @@ class Utils {
 
   static String toFormattedNumberInLaks(double val) {
     double newVal = double.parse((val / 100000).toStringAsFixed(3));
-    NumberFormat formatter = NumberFormat('#,##,##.00');
+    NumberFormat formatter = NumberFormat('#,##,#0.00');
     return '${formatter.format(newVal)} L';
   }
 }

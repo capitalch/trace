@@ -1,6 +1,7 @@
 #  npm uninstall react-idle-timer
 # vasyErp
-##
+## craco
+https://dev.to/przpiw/react-pdf-rendering-4g7b
 
 ## Required reports
 1. Profitibality

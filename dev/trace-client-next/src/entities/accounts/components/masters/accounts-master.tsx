@@ -149,7 +149,7 @@ function AccountsMaster() {
         xl: () => mediaLogic['lg'](),
     }
 
-    const currentMediaSize = getCurrentMediaSize()
+    const currentMediaSize:any = getCurrentMediaSize()
     currentMediaSize && mediaLogic[currentMediaSize]()
 
     return (

@@ -35,10 +35,10 @@ class OpeningClosingStockModel {
 
   factory OpeningClosingStockModel.fromJson({required Map<String, dynamic> j}) {
     return OpeningClosingStockModel(
-        openingValue: j['openingValue'],
-        openingValueWithGst: j['openingValueWithGst'],
-        closingValue: j['closingValue'],
-        closingValueWithGst: j['closingValueWithGst']);
+        openingValue: j['openingValue'] ?? 0,
+        openingValueWithGst: j['openingValueWithGst'] ?? 0,
+        closingValue: j['closingValue'] ?? 0,
+        closingValueWithGst: j['closingValueWithGst'] ?? 0);
   }
 }
 
