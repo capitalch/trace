@@ -1,6 +1,6 @@
 ## upgrade trace-client
 
-## upgrade trace-client-next at chitta
+## upgraded trace-client at chitta. Needs to be done at Kush
 @fortawesome/react-fontawesome @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/user-event @types/big.js @types/jest @types/node
 npm install clsx react-select sass typescript
 npm install @fortawesome/react-fontawesome@latest @types/node@latest

@@ -7,11 +7,11 @@ function useTraceGlobal() {
     // const mdEquals = useMediaQuery(theme.breakpoints.only('md'), { noSsr: true })
     // const lgEquals = useMediaQuery(theme.breakpoints.only('lg'), { noSsr: true })
     // const xlEquals = useMediaQuery(theme.breakpoints.only('xl'), { noSsr: true })
-    const isMediumSizeUp = true // useMediaQuery(theme.breakpoints.up('md'), { noSsr: true })
+    const isMediumSizeUp = true //useMediaQuery(theme.breakpoints.up('md'), { noSsr: true })
     const isMediumSizeDown = false // useMediaQuery(theme.breakpoints.down('md'), { noSsr: true })
 
     function getCurrentMediaSize() {
-        // let ret = 'xs'
+        let ret = 'xl'
         // if (smEquals)
         //     ret = 'sm'
         // else if (mdEquals)
@@ -20,7 +20,7 @@ function useTraceGlobal() {
         //     ret = 'lg'
         // else if (xlEquals)
         //     ret = 'xl'
-        // return ret
+        return ret
     }
 
     function getFromGlobalBag(propName: string) {

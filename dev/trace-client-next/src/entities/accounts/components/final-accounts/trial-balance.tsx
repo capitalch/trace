@@ -51,7 +51,7 @@ function TrialBalance() {
     const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
         useTraceGlobal()
 
-    const currentMediaSize: any = getCurrentMediaSize()
+    const currentMediaSize: string = getCurrentMediaSize()
 
     // The library Big.js is used to escape the javascript Floating Poing precision errors
     function getFooter(data: any[]) {

@@ -1,4 +1,24 @@
-import { _, accountsMessages, Box, Button, cities, countries, IMegaData, InputMask, MegaDataContext, ReactSelect, states, TextField, useConfirm, useContext, useEffect, useState, utils, utilMethods } from '../redirect'
+import { ReactNode } from 'react'
+import {
+    _,
+    accountsMessages,
+    Box,
+    Button,
+    cities,
+    countries,
+    IMegaData,
+    InputMask,
+    MegaDataContext,
+    ReactSelect,
+    states,
+    TextField,
+    useConfirm,
+    useContext,
+    useEffect,
+    useState,
+    utils,
+    utilMethods,
+} from '../redirect'
 
 function NewEditCustomer({ parentMeta }: any) {
     const [, setRefresh] = useState({})
@@ -7,8 +27,15 @@ function NewEditCustomer({ parentMeta }: any) {
     const billTo = sales.billTo
     const pre = parentMeta.current
     const confirm = useConfirm()
-    const { execGenericView, } = utilMethods()
-    const { isImproperDate, isInvalidEmail, isInvalidGstin, isInvalidIndiaMobile, isInvalidIndiaPin, isInvalidStateCode } = utils()
+    const { execGenericView } = utilMethods()
+    const {
+        isImproperDate,
+        isInvalidEmail,
+        isInvalidGstin,
+        isInvalidIndiaMobile,
+        isInvalidIndiaPin,
+        isInvalidStateCode,
+    } = utils()
     const styles = {
         option: (base: any) => ({
             ...base,
@@ -23,8 +50,32 @@ function NewEditCustomer({ parentMeta }: any) {
     }, [])
 
     return (
-        <Box sx={{ display: 'flex', rowGap: 4, flexDirection: 'column', '& .horiz': { display: 'flex', flexWrap: 'wrap', columnGap: 4 }, '& .select-country': { flex: 1, border: getCountryStateCityBorder(billTo?.selectedCountryOption?.label) }, '& .select-state': { flex: 1, border: getCountryStateCityBorder(billTo?.selectedStateOption?.label) }, '& .select-city': { flex: 0.53, border: getCountryStateCityBorder(billTo?.selectedCityOption?.label) } }}>
-            <Box className='horiz'>
+        <Box
+            sx={{
+                display: 'flex',
+                rowGap: 4,
+                flexDirection: 'column',
+                '& .horiz': { display: 'flex', flexWrap: 'wrap', columnGap: 4 },
+                '& .select-country': {
+                    flex: 1,
+                    border: getCountryStateCityBorder(
+                        billTo?.selectedCountryOption?.label
+                    ),
+                },
+                '& .select-state': {
+                    flex: 1,
+                    border: getCountryStateCityBorder(
+                        billTo?.selectedStateOption?.label
+                    ),
+                },
+                '& .select-city': {
+                    flex: 0.53,
+                    border: getCountryStateCityBorder(
+                        billTo?.selectedCityOption?.label
+                    ),
+                },
+            }}>
+            <Box className="horiz">
                 {/* Mobile number */}
                 <InputMask
                     mask="99-999-99999"
@@ -37,34 +88,34 @@ function NewEditCustomer({ parentMeta }: any) {
                     }}
                     onBlur={handleOnBlurMobileNumber}
                     value={billTo.mobileNumber || ''}>
-                    {/* {() => (
+                    {() => (
                         <TextField
                             autoFocus={true}
                             sx={{ flex: 1 }}
-                            autoComplete='off'
+                            autoComplete="off"
                             label="Mobile"
                             variant="standard"
-                            error={isInvalidIndiaMobile(
-                                billTo.mobileNumber
-                            )}
+                            error={isInvalidIndiaMobile(billTo.mobileNumber)}
                         />
-                    )} */}
+                    )}
                 </InputMask>
                 {/* Other mobile number */}
                 <TextField
-                    autoComplete='off'
+                    autoComplete="off"
                     sx={{ flex: 1 }}
                     label="Other mobile numbers"
                     variant="standard"
                     value={billTo.otherMobileNumber || ''}
-                    onChange={(e: any) => handleTextChanged('otherMobileNumber', e)}
+                    onChange={(e: any) =>
+                        handleTextChanged('otherMobileNumber', e)
+                    }
                 />
             </Box>
-            <Box className='horiz'>
+            <Box className="horiz">
                 {/* Contact name */}
                 <TextField
                     sx={{ flex: 1 }}
-                    autoComplete='off'
+                    autoComplete="off"
                     label="Contact name"
                     variant="standard"
                     error={!billTo.contactName}
@@ -74,17 +125,17 @@ function NewEditCustomer({ parentMeta }: any) {
                 {/* Land phone  */}
                 <TextField
                     sx={{ flex: 1 }}
-                    autoComplete='off'
+                    autoComplete="off"
                     label="Land phone"
                     variant="standard"
                     value={billTo.landPhone || ''}
                     onChange={(e: any) => handleTextChanged('landPhone', e)}
                 />
             </Box>
-            <Box className='horiz'>
+            <Box className="horiz">
                 {/* Email */}
                 <TextField
-                    autoComplete='off'
+                    autoComplete="off"
                     sx={{ flex: 1 }}
                     label="Email"
                     variant="standard"
@@ -94,7 +145,7 @@ function NewEditCustomer({ parentMeta }: any) {
                 />
                 {/* Gstin */}
                 <TextField
-                    autoComplete='off'
+                    autoComplete="off"
                     sx={{ flex: 1 }}
                     label="Gstin"
                     variant="standard"
@@ -104,10 +155,10 @@ function NewEditCustomer({ parentMeta }: any) {
                     onChange={(e: any) => handleTextChanged('gstin', e)}
                 />
             </Box>
-            <Box className='horiz'>
+            <Box className="horiz">
                 {/* Address1 */}
                 <TextField
-                    autoComplete='off'
+                    autoComplete="off"
                     sx={{ flex: 1 }}
                     label="Address1"
                     variant="standard"
@@ -118,7 +169,7 @@ function NewEditCustomer({ parentMeta }: any) {
                 />
                 {/* Address2 */}
                 <TextField
-                    autoComplete='off'
+                    autoComplete="off"
                     sx={{ flex: 1 }}
                     label="Address2"
                     variant="standard"
@@ -127,7 +178,7 @@ function NewEditCustomer({ parentMeta }: any) {
                     onChange={(e: any) => handleTextChanged('address2', e)}
                 />
             </Box>
-            <Box className='horiz'>
+            <Box className="horiz">
                 {/* Countries */}
                 <ReactSelect
                     menuPlacement="auto"
@@ -151,7 +202,7 @@ function NewEditCustomer({ parentMeta }: any) {
                     className="select-state"
                     value={billTo.selectedStateOption}></ReactSelect>
             </Box>
-            <Box className='horiz' sx={{ alignItems: 'center' }}>
+            <Box className="horiz" sx={{ alignItems: 'center' }}>
                 {/* Cities */}
                 <ReactSelect
                     maxMenuHeight={150}
@@ -172,15 +223,15 @@ function NewEditCustomer({ parentMeta }: any) {
                         setRefresh({})
                     }}
                     value={billTo.pin || ''}>
-                    {/* {() => (
+                    {() => (
                         <TextField
-                            autoComplete='off'
+                            autoComplete="off"
                             variant="standard"
                             label="Pin"
                             sx={{ flex: 0.2 }}
                             error={isInvalidIndiaPin(billTo.pin)}
                         />
-                    )} */}
+                    )}
                 </InputMask>
                 {/* State code */}
                 <InputMask
@@ -191,17 +242,18 @@ function NewEditCustomer({ parentMeta }: any) {
                         setRefresh({})
                     }}
                     value={billTo.stateCode || ''}>
-                    {/* {() => (
+                    {() => (
                         <TextField
                             sx={{ flex: 0.2 }}
-                            autoComplete='off'
+                            autoComplete="off"
                             label="State code"
                             variant="standard"
-                            error={isInvalidStateCode(billTo?.stateCode)} />
-                    )} */}
+                            error={isInvalidStateCode(billTo?.stateCode)}
+                        />
+                    )}
                 </InputMask>
             </Box>
-            <Box className='horiz'>
+            <Box className="horiz">
                 {/* Date of birth */}
                 <TextField
                     label="Date of birth"
@@ -218,11 +270,13 @@ function NewEditCustomer({ parentMeta }: any) {
                     type="date"
                     error={isImproperDate(billTo.anniversaryDate)}
                     value={billTo.anniversaryDate || ''}
-                    onChange={(e: any) => handleTextChanged('anniversaryDate', e)}
+                    onChange={(e: any) =>
+                        handleTextChanged('anniversaryDate', e)
+                    }
                 />
                 {/* Description */}
                 <TextField
-                    autoComplete='off'
+                    autoComplete="off"
                     label="Description"
                     variant="standard"
                     className="text-field"
@@ -240,11 +294,11 @@ function NewEditCustomer({ parentMeta }: any) {
                 onClick={handleSubmit}>
                 Submit
             </Button>
-
-        </Box >)
+        </Box>
+    )
 
     function getCountryStateCityBorder(option: any) {
-        return (option ? '' : '3px solid red')
+        return option ? '' : '3px solid red'
     }
 
     function handleCityChange(e: any) {
@@ -279,7 +333,10 @@ function NewEditCustomer({ parentMeta }: any) {
 
     async function handleOnBlurMobileNumber(e: any) {
         const mobileNumber = e.target.value.replace(/[^0-9]/g, '')
-        if ((!isInvalidIndiaMobile(mobileNumber)) && (billTo.isMobileNumberChanged)) {
+        if (
+            !isInvalidIndiaMobile(mobileNumber) &&
+            billTo.isMobileNumberChanged
+        ) {
             await setContactFromMobile()
         }
 
@@ -287,23 +344,32 @@ function NewEditCustomer({ parentMeta }: any) {
             const ret = await execGenericView({
                 isMultipleRows: false,
                 sqlKey: 'get_contact_for_mobile',
-                args: { mobileNumber: mobileNumber }
+                args: { mobileNumber: mobileNumber },
             })
             const options: any = {
                 description: accountsMessages.contactExists,
                 confirmationText: 'Yes',
                 cancellationText: 'No',
-                confirmationButtonProps: { autoFocus: true, variant: 'contained', color: 'secondary' },
-                cancellationButtonProps: { variant: 'contained', color: 'secondary' },
+                confirmationButtonProps: {
+                    autoFocus: true,
+                    variant: 'contained',
+                    color: 'secondary',
+                },
+                cancellationButtonProps: {
+                    variant: 'contained',
+                    color: 'secondary',
+                },
                 titleProps: { color: 'dodgerBlue' },
-                title: "Notification !!!"
+                title: 'Notification !!!',
             }
             if (!_.isEmpty(ret)) {
-                confirm(options).then(() => {
-                    sales.billTo = ret
-                    billTo.contactSelectedFlag = true
-                    handleCloseDialog()
-                }).catch(() => { })
+                confirm(options)
+                    .then(() => {
+                        sales.billTo = ret
+                        billTo.contactSelectedFlag = true
+                        handleCloseDialog()
+                    })
+                    .catch(() => {})
             }
         }
     }
@@ -331,7 +397,7 @@ function NewEditCustomer({ parentMeta }: any) {
         const ret = await execGenericView({
             isMultipleRows: false,
             sqlKey: 'insert_or_update_contact',
-            args: { ...item }
+            args: { ...item },
         })
         billTo.id = billTo.id || ret?.id || undefined // To take care when ret = false, or the save fails
         if (ret) {
@@ -362,9 +428,12 @@ function NewEditCustomer({ parentMeta }: any) {
     }
 
     function setOptions() {
-        billTo.country = billTo?.selectedCountryOption?.label || billTo.country || 'India'
-        billTo.state = billTo.selectedStateOption?.label || billTo.state || 'West Bengal'
-        billTo.city = billTo.selectedCityOption?.label || billTo.city || 'Kolkata'
+        billTo.country =
+            billTo?.selectedCountryOption?.label || billTo.country || 'India'
+        billTo.state =
+            billTo.selectedStateOption?.label || billTo.state || 'West Bengal'
+        billTo.city =
+            billTo.selectedCityOption?.label || billTo.city || 'Kolkata'
         billTo.countryOptions = getCountries()
         billTo.selectedCountryOption = billTo.countryOptions.find(
             (x: any) => x.label === billTo.country
@@ -374,9 +443,12 @@ function NewEditCustomer({ parentMeta }: any) {
         billTo.selectedStateOption = billTo.stateOptions.find(
             (x: any) => x.label === billTo.state
         )
-        billTo.stateCode = billTo.stateCode || billTo?.selectedStateOption?.stateCode
+        billTo.stateCode =
+            billTo.stateCode || billTo?.selectedStateOption?.stateCode
         setCityOptions()
-        billTo.selectedCityOption = billTo.cityOptions.find((x: any) => x.label === billTo.city)
+        billTo.selectedCityOption = billTo.cityOptions.find(
+            (x: any) => x.label === billTo.city
+        )
 
         !billTo.dateOfBirth && (billTo.dateOfBirth = '1900-01-01')
         !billTo.anniversaryDate && (billTo.anniversaryDate = '1900-01-01')

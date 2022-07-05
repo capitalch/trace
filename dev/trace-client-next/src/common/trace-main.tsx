@@ -32,11 +32,11 @@ function TraceMain({ open }: any) {
     // submenu bar has a fixed height of 48 pix or theme.spacing(6). theme.spacing(1) = 8px.
     // So header and subheader together changes height between 112 px and 96 px which is theme.spacing(14) and theme.spacing(12)
     // accordingly marginTop is to be adjusted. Little approximation is done below
-    // if (getCurrentMediaSize() === 'xs') {
+    if (getCurrentMediaSize() === 'xs') {
         meta.current.marginTop = 12.5
-    // } else {
-    //     meta.current.marginTop = 14.5
-    // }
+    } else {
+        meta.current.marginTop = 14.5
+    }
 
     const classes = useStyles({ meta: meta })
     useEffect(() => {
@@ -47,7 +47,7 @@ function TraceMain({ open }: any) {
             accounts: <LaunchPadAccounts />,
             authentication: <LaunchPadAuthentication />,
         }
-        const subs = filterOn('TRACE-MAIN:JUST-REFRESH').subscribe((d:any) => {
+        const subs = filterOn('TRACE-MAIN:JUST-REFRESH').subscribe((d) => {
             initMegaData() //inits the global object for accounts
             setInBag('allProducts', []) // initialize allProducts
             const currentEntity = getCurrentEntity()
