@@ -222,6 +222,8 @@ function LedgerSubledger({
                         'iincome',
                         'creditor',
                         'debtor',
+                        'sale',
+                        'purchase'
                     ].includes(el.accClass) &&
                     (el.accLeaf === 'Y' || el.accLeaf === 'L'))
             return (getMappedAccounts(jou) || [])
@@ -258,7 +260,6 @@ function LedgerSubledger({
                         'capital',
                         'iincome',
                         'dincome',
-                        'sale',
                     ].includes(el.accClass) &&
                     (el.accLeaf === 'Y' || el.accLeaf === 'L')
             )

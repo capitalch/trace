@@ -29,8 +29,6 @@ function ActionBlock({
         accountsMessages,
         emit,
         filterOn,
-        // getFromBag,
-        // getMappedAccounts,
         toDecimalFormat,
     } = useSharedElements()
 

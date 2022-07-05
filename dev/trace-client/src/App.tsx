@@ -58,6 +58,7 @@ declare module '@mui/material/styles/' {
 }
 
 const App: React.FC = () => {
+
     const theme = createTheme({
         // typography: {
         //     h6: {
@@ -65,7 +66,7 @@ const App: React.FC = () => {
         //         fontSize:'1rem'
         //     },
         // },
-        
+
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
@@ -128,11 +129,11 @@ const App: React.FC = () => {
             <ThemeProvider theme={theme}>
                 {/* Global context for all modules */}
                 {/* <MegaContext.Provider value={{ accounts: {}, authentication: {} }}>  */}
-                    <ConfirmProvider>
-                        {' '}
-                        {/* confirm dialog box all over the application */}
-                        <AppMain></AppMain>
-                    </ConfirmProvider>
+                <ConfirmProvider>
+                    {' '}
+                    {/* confirm dialog box all over the application */}
+                    <AppMain></AppMain>
+                </ConfirmProvider>
                 {/* </MegaContext.Provider> */}
             </ThemeProvider>
         </StyledEngineProvider>
