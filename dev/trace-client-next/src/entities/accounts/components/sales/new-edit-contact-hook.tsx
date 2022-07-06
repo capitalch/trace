@@ -60,8 +60,8 @@ function useNewEditContact(arbitraryData: any) {
         isMobileNumberChanged: false,
         dialogConfig: {
             title: '',
-            content: () => {},
-            actions: () => {},
+            content: () => { },
+            actions: () => { },
         },
     })
     const pre = meta.current
@@ -102,7 +102,7 @@ function useNewEditContact(arbitraryData: any) {
 
     async function handleOnBlurMobileNumber(e: any) {
         const mobileNumber = e.target.value.replace(/[^0-9]/g, '')
-        if (!isInvalidIndiaMobile(mobileNumber) && pre.isMobileNumberChanged) {
+        if ((!isInvalidIndiaMobile(mobileNumber)) && (pre.isMobileNumberChanged)) {
             await setContactFromMobile()
         }
 
@@ -110,32 +110,23 @@ function useNewEditContact(arbitraryData: any) {
             const ret = await execGenericView({
                 isMultipleRows: false,
                 sqlKey: 'get_contact_for_mobile',
-                args: { mobileNumber: mobileNumber },
+                args: { mobileNumber: mobileNumber }
             })
             const options: any = {
                 description: accountsMessages.contactExists,
                 confirmationText: 'Yes',
                 cancellationText: 'No',
-                confirmationButtonProps: {
-                    autoFocus: true,
-                    variant: 'contained',
-                    color: 'secondary',
-                },
-                cancellationButtonProps: {
-                    variant: 'contained',
-                    color: 'secondary',
-                },
+                confirmationButtonProps: { autoFocus: true, variant: 'contained', color: 'secondary' },
+                cancellationButtonProps: { variant: 'contained', color: 'secondary' },
                 titleProps: { color: 'dodgerBlue' },
-                title: 'Notification !!!',
+                title: "Notification !!!"
             }
             if (!_.isEmpty(ret)) {
-                confirm(options)
-                    .then(() => {
-                        arbitraryData.billTo = ret
-                        pre.contactSelectedFlag = true
-                        emit('BILL-TO-CLOSE-DIALOG', null)
-                    })
-                    .catch(() => {})
+                confirm(options).then(() => {
+                    arbitraryData.billTo = ret
+                    pre.contactSelectedFlag = true
+                    emit('BILL-TO-CLOSE-DIALOG', null)
+                }).catch(() => { })
             }
         }
     }
@@ -167,9 +158,9 @@ function useNewEditContact(arbitraryData: any) {
         const ret = await execGenericView({
             isMultipleRows: false,
             sqlKey: 'insert_or_update_contact',
-            args: { ...item },
+            args: { ...item }
         })
-        // obj.data.push(item)
+        // obj.data.push(item)        
         // const ret = await genericUpdateMasterNoForm({
         //     data: item,
         //     tableName: 'Contacts',
@@ -227,12 +218,9 @@ function useNewEditContact(arbitraryData: any) {
     }
 
     function setOptions() {
-        billTo.country =
-            billTo?.selectedCountryOption?.label || billTo.country || 'India'
-        billTo.state =
-            billTo.selectedStateOption?.label || billTo.state || 'West Bengal'
-        billTo.city =
-            billTo.selectedCityOption?.label || billTo.city || 'Kolkata'
+        billTo.country = billTo?.selectedCountryOption?.label || billTo.country || 'India'
+        billTo.state = billTo.selectedStateOption?.label || billTo.state || 'West Bengal'
+        billTo.city = billTo.selectedCityOption?.label || billTo.city || 'Kolkata'
         billTo.countryOptions = getCountries()
         billTo.selectedCountryOption = billTo.countryOptions.find(
             (x: any) => x.label === billTo.country
@@ -242,12 +230,9 @@ function useNewEditContact(arbitraryData: any) {
         billTo.selectedStateOption = billTo.stateOptions.find(
             (x: any) => x.label === billTo.state
         )
-        billTo.stateCode =
-            billTo.stateCode || billTo?.selectedStateOption?.stateCode
+        billTo.stateCode = billTo.stateCode || billTo?.selectedStateOption?.stateCode
         setCityOptions()
-        billTo.selectedCityOption = billTo.cityOptions.find(
-            (x: any) => x.label === billTo.city
-        )
+        billTo.selectedCityOption = billTo.cityOptions.find((x: any) => x.label === billTo.city)
 
         !billTo.dateOfBirth && (billTo.dateOfBirth = '1900-01-01')
         !billTo.anniversaryDate && (billTo.anniversaryDate = '1900-01-01')
@@ -280,7 +265,7 @@ function useNewEditContact(arbitraryData: any) {
                     value={billTo.mobileNumber || ''}>
                     {() => (
                         <TextField
-                            autoComplete="off"
+                            autoComplete='off'
                             label="Mobile"
                             variant="standard"
                             inputRef={pre.mobileNumberTextRef}
@@ -295,7 +280,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Contact name */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Contact name"
                     variant="standard"
                     className="text-field"
@@ -309,7 +294,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Other mobile number */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Other mobile numbers"
                     variant="standard"
                     className="text-field"
@@ -322,7 +307,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Land phone  */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Land phone"
                     variant="standard"
                     className="text-field"
@@ -335,7 +320,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Email */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Email"
                     variant="standard"
                     className="text-field"
@@ -349,7 +334,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Address1 */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Address1"
                     variant="standard"
                     className="text-field"
@@ -363,7 +348,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Address2 */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Address2"
                     variant="standard"
                     className="text-field"
@@ -416,13 +401,15 @@ function useNewEditContact(arbitraryData: any) {
                         setRefresh({})
                     }}
                     value={billTo.pin || ''}>
-                    <TextField
-                        autoComplete="off"
-                        variant="standard"
-                        label="Pin"
-                        error={isInvalidIndiaPin(arbitraryData.billTo.pin)}
-                        className="short-text-field"
-                    />
+                    {() => (
+                        <TextField
+                            autoComplete='off'
+                            variant="standard"
+                            label="Pin"
+                            error={isInvalidIndiaPin(arbitraryData.billTo.pin)}
+                            className="short-text-field"
+                        />
+                    )}
                 </InputMask>
                 {/* State code */}
                 <InputMask
@@ -433,20 +420,20 @@ function useNewEditContact(arbitraryData: any) {
                         setRefresh({})
                     }}
                     value={billTo.stateCode || ''}>
-                    {/* {() => ( */}
-                    <TextField
-                        autoComplete="off"
-                        label="State code"
-                        variant="standard"
-                        error={isInvalidStateCode(billTo?.stateCode)}
-                        className="short-text-field"
-                    />
-                    {/* )} */}
+                    {() => (
+                        <TextField
+                            autoComplete='off'
+                            label="State code"
+                            variant="standard"
+                            error={isInvalidStateCode(billTo?.stateCode)}
+                            className="short-text-field"
+                        />
+                    )}
                 </InputMask>
 
                 {/* Gstin */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Gstin"
                     variant="standard"
                     className="text-field"
@@ -488,7 +475,7 @@ function useNewEditContact(arbitraryData: any) {
 
                 {/* Description */}
                 <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     label="Description"
                     variant="standard"
                     className="text-field"

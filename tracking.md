@@ -1,17 +1,14 @@
 ## upgrade trace-client
 
-## upgraded trace-client at chitta. Needs to be done at Kush
+## upgraded trace-client at chitta, kush.
 @fortawesome/react-fontawesome @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/user-event @types/big.js @types/jest @types/node
 npm install clsx react-select sass typescript
 npm install @fortawesome/react-fontawesome@latest @types/node@latest
 Till this point everything works fine
-
-npm install @types/react@latest react@latest react-dom@latest
-Input-mask error in some places
-Some typescript any error. After many changes it worked.
-Finally worked but react-scripts @5.x did not work even with craco
-
-
+Observations:
+1. react-scripts 5 does not work so react-scripts 4.x is applied
+2. React 18: problem with useMediaQuery with react-pdf. could not solve. useMediaQuery is to be removed in this case from traceGlobal
+3. Process not defined errror: install react-error-overlay ver 6.0.9 at the end in devdependencies
 
 ## Flutter learning
                                                                                     1. Navigation and drawyer

@@ -1,17 +1,23 @@
 import React from 'react';
-// import ReactDOM from 'react-dom'; //-old
-import ReactDOM from 'react-dom/client'
+import ReactDOM from 'react-dom'; //-old
+// import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const tempRoot:any = document.getElementById("root")
-const root:any = ReactDOM.createRoot(tempRoot);
-root.render(<App />)
+// const root = ReactDOM.createRoot(
+//   document.getElementById('root') as HTMLElement
+// );
 
 //Old React 17 way
-// ReactDOM.render(
-//     <App />, document.getElementById('root')
+ReactDOM.render(
+  <App />, document.getElementById('root')
+);
+
+// root.render(
+//   // <React.StrictMode>
+//     <App />
+//   // </React.StrictMode>
 // );
 
 // If you want to start measuring performance in your app, pass a function

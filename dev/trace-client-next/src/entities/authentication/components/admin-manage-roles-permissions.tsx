@@ -109,23 +109,23 @@ function AdminManageRolesPermissions({
         },
     ]
 
-    const handleCellClick = useCallback((params:any) => {
+    const handleCellClick = useCallback((params) => {
         apiRef.current.setCellMode(params.row.id, 'isActive', 'edit')
     }, [])
 
-    const handleCellFocusOut = useCallback((params:any, event:any) => {
+    const handleCellFocusOut = useCallback((params, event) => {
         if (params.cellMode === 'edit' && event) {
             event.defaultMuiPrevented = true
         }
     }, [])
 
-    const handleCellKeyDown = useCallback((params:any, event:any) => {
+    const handleCellKeyDown = useCallback((params, event) => {
         if (['Escape', 'Delete', 'Backspace', 'Enter'].includes(event.key)) {
             event.defaultMuiPrevented = true
         }
     }, [])
 
-    const handleDoubleCellClick = useCallback((params:any, event:any) => {
+    const handleDoubleCellClick = useCallback((params, event) => {
         event.defaultMuiPrevented = true
     }, [])
 

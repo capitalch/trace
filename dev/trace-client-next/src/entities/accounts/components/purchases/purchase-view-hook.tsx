@@ -171,6 +171,12 @@ function usePurchaseView(
                 width: 200,
             },
             {
+                headerName: 'User ref no',
+                description: 'User ref no',
+                field: 'userRefNo',
+                width: 200,
+            },
+            {
                 headerName: 'Account',
                 field: 'accounts',
                 width: 200,
