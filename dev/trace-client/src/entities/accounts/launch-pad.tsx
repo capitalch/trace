@@ -11,6 +11,7 @@ import {
     GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales,SalesNew, Taxation,
     TrialBalance, Voucher, OpeningStock, InventoryReports
 } from './components/common/redirect'
+import { StockJournal } from './components/inventory/stock-journal/stock-journal'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
@@ -30,7 +31,7 @@ function LaunchPad() {
         mainHeading: '',
     })
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
-    const megaData = useContext(MegaDataContext)
+    // const megaData = useContext(MegaDataContext)
     meta.current.mainHeading = getUnitHeading()
     
     
@@ -135,7 +136,8 @@ function LaunchPad() {
             trialBalance: TrialBalance,
             vouchers: Voucher,
             openingStock: OpeningStock,
-            inventoryReports: InventoryReports
+            inventoryReports: InventoryReports,
+            stockJournal: StockJournal
         }
         let ret: any = <></>
 

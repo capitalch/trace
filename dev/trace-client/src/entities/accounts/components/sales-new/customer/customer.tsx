@@ -1,5 +1,5 @@
 import { useCustomer } from './customer-hook'
-import { accountsMessages, Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme, utils, } from '../redirect'
+import { Box, Button, Checkbox, CloseSharp, Dialog, DialogContent, DialogTitle, IconButton, InputAdornment, moment, Search, TextField, Tooltip, Typography, MegaDataContext, useContext, useState, useTheme, utils, } from '../redirect'
 
 function Customer() {
     const [, setRefresh] = useState({})
@@ -9,7 +9,7 @@ function Customer() {
     const allErrors = sales.allErrors
     const { checkAllErrors, handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta } = useCustomer()
     const pre = meta.current
-    const isoDateFormat = 'YYYY-MM-DD'
+    // const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
     checkAllErrors()
     

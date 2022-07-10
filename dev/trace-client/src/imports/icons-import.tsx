@@ -14,6 +14,7 @@ export {
     AssignmentReturned,
     Attachment,
     // AttachmentSharp as AttachmentSharpIcon,
+    AutoGraph,
     Build,
     Cached,
     Check,

@@ -21,31 +21,33 @@ import { Brands } from '../inventory/brands'
 import { Products } from '../inventory/products'
 import { OpeningStock } from '../inventory/opening-stock'
 import { InventoryReports } from '../inventory/reports/inventory-reports'
+import { StockJournal } from '../inventory/stock-journal/stock-journal'
 
 const customComponents = {
-    accountsMaster: AccountsMaster,
-    accountsOpBal: AccountsOpBal,
-    balanceSheet: BalanceSheetProfitLoss,
-    bankRecon: BankRecon,
-    brands: Brands,
-    branches: Branches,
-    categoriesMaster: CategoriesMaster,
-    commonUtilities: CommonUtilities,
-    creditNotes: CreditNotes,
-    debitNotes: DebitNotes,
-    financialYears: FinancialYears,
-    genericDialoges: GenericDialoges,
-    genericExports: GenericExports,
-    genericReports: GenericReports,
-    generalLedger: GeneralLedger,
-    products: Products,
-    profitLoss: BalanceSheetProfitLoss,
-    purchases: Purchases,
-    sales: Sales,
-    taxation: Taxation,
-    trialBalance: TrialBalance,
-    vouchers: Voucher,
-    openingStock: OpeningStock,
-    inventoryReports: InventoryReports
+    // accountsMaster: AccountsMaster,
+    // accountsOpBal: AccountsOpBal,
+    // balanceSheet: BalanceSheetProfitLoss,
+    // bankRecon: BankRecon,
+    // brands: Brands,
+    // branches: Branches,
+    // categoriesMaster: CategoriesMaster,
+    // commonUtilities: CommonUtilities,
+    // creditNotes: CreditNotes,
+    // debitNotes: DebitNotes,
+    // financialYears: FinancialYears,
+    // genericDialoges: GenericDialoges,
+    // genericExports: GenericExports,
+    // genericReports: GenericReports,
+    // generalLedger: GeneralLedger,
+    // products: Products,
+    // profitLoss: BalanceSheetProfitLoss,
+    // purchases: Purchases,
+    // sales: Sales,
+    // taxation: Taxation,
+    // trialBalance: TrialBalance,
+    // vouchers: Voucher,
+    // openingStock: OpeningStock,
+    // inventoryReports: InventoryReports,
+    // stockJournal: StockJournal
 }
 export { customComponents }
