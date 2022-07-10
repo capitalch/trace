@@ -10,89 +10,56 @@ Observations:
 2. React 18: problem with useMediaQuery with react-pdf. could not solve. useMediaQuery is to be removed in this case from traceGlobal
 3. Process not defined errror: install react-error-overlay ver 6.0.9 at the end in devdependencies
 
-## Flutter learning
-                                                                                    1. Navigation and drawyer
-                                                                                    2. Provider and listner and notifier
-                                                                                    3. property get, set in a class
-                                                                                    4. const constructor
-                                                                                    5. Advanced widgets
-                                                                                    6. Understand theme
-                                                                                    7. Get good grip of layouts and Sizing with no break
-                                                                                    9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
-                                                                                    10. Flutter inspector
-                                                                                    11. GraphQL
-                                                                                    12. Streams
-                                                                                    13. Splash and login
-                                                                                    15. Deployment
-
-### To do in sales
-                                                                                        
-12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
-20. Discount manage in sales           
+## Top proiorities
+1. Make product inactive
+2. Stock journal
+2. Bank reconcillation opening cheques
+3. New purchase
+3. ASSETS allow gst
+4. Purchase if change in last purchase price show alert
+4. Purchase entry, same user ref no entry give alert
+5. Alert if duplicate invoice no
+6. Multiple cash entries in receipt
+7. salePurchaseDetails table jData has remarks etc. it should be null
+8. Scanned invoice save
+9. server logging
+10. Quick reports: Stock summary, daily sales, Jakar, orders, health, Dashboard reports
+11. ledger report for inventory
+12. Debit credit notes printing
+13. PDF print, BS, PL and TB. Export of PL, BL and TB should be lowest and highest levels, in PDF print
+14. Sale bill SMS HTML
+12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed            
 27. Sale return new type
 
 ## Planning                                                                             
-b. Make product inactive
-c. Stock journal
-d. Purchase if change in last purchase price show alert
-e. Multiple cash entries in receipt
 f. xx-data-grid filter results
-g. Tag concept in stock summary
 h. To do list
-i. Gst rate in downloaded excel file
-j. salePurchaseDetails table jData has remarks etc. it should be null
-k. Server logging for modify and delete, time and log viewer
-0. Quick reports: Stock summary, daily sales, Jakar, orders, health
-L. Bank reconcillation opening cheques
 1. Include jData or serial no in sales report so that search on sl no may occur
-2. ledger report for inventory
-3. Stock journal
-4. Dashboard reports: Sales, Products
-5. SMS as html also
 6. Meaningful server messages
-7. Purchase invoice scanned pdf save
-8. Debit credit notes printing
-9. PDF print, BS, PL and TB. Export of PL, BL and TB should be lowest and highest levels, in PDF print
 10. Edit from bank recon
-11. Fix Accounts master, new contact twice
 12. Show category hierarchy in products and stock and sales reports
 13. Remember last product sale price and purchase price and pop them at purchase and sale entry time
-14. Debit credit notes printing
 15. Accounts address entry, do it modal and make email address optional
-16. Journal, When ASSET GST is not allowed. Make it allowed for assets also
 17. Voucher copy and paste
 18. Bill wise payment
 19. Automate orders mechanism
 20. Notes, to do's, schemes
+21. Left menu to make consise and more accomodating
+22. Footer Trace version copyright
+23. Approval of transactions
 
 ## Bugs
 *. When voucher is very long sometimes it part reaches the server. The server does not have debit credit checking. Also client should have robust check of debit credit. In Netwoven it happened that client automatically tripled the credit entries in payments and it reached the server and saved.
 *. When in login s,s is given for superadmin user. it fails. In TraceHeader submitDialog buCodeWithPermissions in empty hence it goes out. and nothing happens. In brief superadmin user is not working.
 *. Demo mode purchase entry edit is not being possible: Rectified it temporarily by giving limit 1 in getJson_sale_purchase_on_id in cte6
-*. Provide useRef no in view of purchase and sale
 *. When in general ledger, change buCode. Then error
-*. Purchase entry, same user ref no entry give alert
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
-5. Swapan reported selected count, totals etc not correct in vouchers
 6. Deletion in product not working
- 
-# Priority
-1.0 Data grid change font size control
-2.0 Provision to input product price. At present cannot input product price
-3. Headings and labels uniform font and naming
-4. Left menu to make consige and more accomodating
-5. Remove material-table from authentication/generic-crud; its using old version of material-ui
-6. Accounts master, when edited, data is not refreshed after save
-7. Provide a way to come out of app in mobile. Presently there is no way
-8. Footer Trace version copyright
-9. Universally make it responsive
-10. Purchase invoice upload and search on metadata. Click will show invoice in PDF
-11. First page reporting charts
-12. Analysis reports
-13. Approval of transactions
-14. Server logs, client logs
+
+# Long term Priority
+
 15. Mechanism to connect to local or any other database on cloud
 16. Provide a writeup on how GST is taken care in Trace, Documentation
 17. Database backup and restore strategy

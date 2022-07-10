@@ -6,6 +6,21 @@ tracebusiness.com
 ## craco
 https://dev.to/przpiw/react-pdf-rendering-4g7b
 
+## Flutter learning
+                                                                                    1. Navigation and drawyer
+                                                                                    2. Provider and listner and notifier
+                                                                                    3. property get, set in a class
+                                                                                    4. const constructor
+                                                                                    5. Advanced widgets
+                                                                                    6. Understand theme
+                                                                                    7. Get good grip of layouts and Sizing with no break
+                                                                                    9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
+                                                                                    10. Flutter inspector
+                                                                                    11. GraphQL
+                                                                                    12. Streams
+                                                                                    13. Splash and login
+                                                                                    15. Deployment
+
 ## Required reports
 1. Profitibality
 2. daily sales with profitability
