@@ -9,9 +9,6 @@ function StockJournal() {
             <StockJournalHeader />
             <StockJournalCrown />
         </Box>
-
-
-
     </Box>)
 }
 
