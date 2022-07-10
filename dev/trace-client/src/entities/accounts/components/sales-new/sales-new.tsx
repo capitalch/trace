@@ -1,10 +1,10 @@
-import { AllErrors, Box, Paper, Typography, } from '../redirect'
-import { Customer } from '../customer/customer'
-import { Crown } from '../crown/crown'
-import { Payments } from '../payments/payments'
-import { Items } from '../items/items'
+import { AllErrors, Box, Paper, Typography, } from './redirect'
+import { Customer } from './customer/customer'
+import { Crown } from './crown/crown'
+import { Payments } from './payments/payments'
+import { Items } from './items/items'
 import { useSalesNew } from './sales-new-hook'
-import { DebitsCreditsPreview } from './debits-credits-preview'
+import { DebitsCreditsPreview } from './common/debits-credits-preview'
 function SalesNew() {
     useSalesNew()
     return (

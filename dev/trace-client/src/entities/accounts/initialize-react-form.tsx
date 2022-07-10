@@ -7,7 +7,7 @@ import setLevelValidators from './artifacts/set-level-validators'
 import { manageEntitiesState } from '../../global-utils/esm'
 import { usingIbuki } from '../../global-utils/ibuki'
 import { sharedArtifacts } from '../../shared-artifacts/shared-artifacts-map'
-import { customComponents } from './components/common/custom-components-map'
+// import { customComponents } from './components/common/custom-components-map'
 import { initCode } from './init-code'
 
 const { getCurrentEntity } = manageEntitiesState()
@@ -18,7 +18,7 @@ initialize({
     entityName: getCurrentEntity()
     , usingIbuki: usingIbuki
     , sharedArtifacts: sharedArtifacts
-    , customComponents: customComponents
+    // , customComponents: customComponents
     , customControls: customControls
     , setLevelValidators: setLevelValidators
     , formLevelValidators: formLevelValidators

@@ -1,4 +1,5 @@
-## upgrade trace-client
+## upgrade trace-client kush
+npm install @mui/x-data-grid-pro @types/big.js @types/node big.js clsx moment primereact
 
 ## upgraded trace-client at chitta, kush.
 @fortawesome/react-fontawesome @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/user-event @types/big.js @types/jest @types/node
@@ -10,26 +11,29 @@ Observations:
 2. React 18: problem with useMediaQuery with react-pdf. could not solve. useMediaQuery is to be removed in this case from traceGlobal
 3. Process not defined errror: install react-error-overlay ver 6.0.9 at the end in devdependencies
 
-## Flutter learning
-                                                                                    1. Navigation and drawyer
-                                                                                    2. Provider and listner and notifier
-                                                                                    3. property get, set in a class
-                                                                                    4. const constructor
-                                                                                    5. Advanced widgets
-                                                                                    6. Understand theme
-                                                                                    7. Get good grip of layouts and Sizing with no break
-                                                                                    9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
-                                                                                    10. Flutter inspector
-                                                                                    11. GraphQL
-                                                                                    12. Streams
-                                                                                    13. Splash and login
-                                                                                    15. Deployment
 
-### To do in sales
+
+### Plan (new)
+Stock journals                          : 3 days: 14/07/2022
+Stock transaction reports               : 2 days: 16/07/2022
+Server side implement debit = credit    : 2 days: 18/07/2022
+Make product inactive                   : 2 days: 20/07/2022
+Purchase new-town                       : 7 daya: 27/07/2022
+Dashboard reports                       : 7 days: 04/08/2022
+Stock orders                            : 7 days: 11/08/2022
+Invoice wise payments                   : 3 days: 14/08/2022
+PDF storage of invoice                  : 14 days 02/09/2022
+
+
+
+### Plan(modify)
+Stock report pdf all details to exist   : 1 day: 15/08/2022
+Vouchers to allow GST for assets also   : 1 day: 16/08/2022
+Purchase entry, same user ref no entry  : 1 day: 17/08/2022
+give alert
+Meaningful server side error            : 1 day: 18/08/2022
                                                                                         
-12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
-20. Discount manage in sales           
-27. Sale return new type
+
 
 ## Planning                                                                             
 b. Make product inactive
@@ -43,7 +47,11 @@ i. Gst rate in downloaded excel file
 j. salePurchaseDetails table jData has remarks etc. it should be null
 k. Server logging for modify and delete, time and log viewer
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
-L. Bank reconcillation opening cheques
+
+
+12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
+20. Discount manage in sales           
+27. Sale return new type
 1. Include jData or serial no in sales report so that search on sl no may occur
 2. ledger report for inventory
 3. Stock journal
@@ -59,7 +67,7 @@ L. Bank reconcillation opening cheques
 13. Remember last product sale price and purchase price and pop them at purchase and sale entry time
 14. Debit credit notes printing
 15. Accounts address entry, do it modal and make email address optional
-16. Journal, When ASSET GST is not allowed. Make it allowed for assets also
+16. 
 17. Voucher copy and paste
 18. Bill wise payment
 19. Automate orders mechanism
@@ -151,6 +159,9 @@ L. Bank reconcillation opening cheques
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+
+# 05-07-2022 - 08-07-2022
+OFF
 
 # 01-07-2022 04-07-2022
 1. Business health refinement and completion
@@ -1028,3 +1039,19 @@ nothing
 1. Edit / new is not retaining values bug fix
 2. When balance sheet is selected then click payroll, then click accounts. Error occurs.
 3. Client side change entity 'super-admin' to 'authentication'
+
+
+## Flutter learning
+                                                                                    1. Navigation and drawyer
+                                                                                    2. Provider and listner and notifier
+                                                                                    3. property get, set in a class
+                                                                                    4. const constructor
+                                                                                    5. Advanced widgets
+                                                                                    6. Understand theme
+                                                                                    7. Get good grip of layouts and Sizing with no break
+                                                                                    9. Checked Expanded, SizedBox,Padding, ValueListenableBuilder, FloatingActionButton, Card, Badge, Spacer, ListView, BottomNavigaotorBar, InkWell,
+                                                                                    10. Flutter inspector
+                                                                                    11. GraphQL
+                                                                                    12. Streams
+                                                                                    13. Splash and login
+                                                                                    15. Deployment

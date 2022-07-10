@@ -1,5 +1,5 @@
 import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
-import { inventoryMegaData, salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
+import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData } from '../entities/accounts/components/common/mega-data-init-values'
 import {
     Container,
     makeStyles,
@@ -93,6 +93,7 @@ function TraceMain({ open }: any) {
                 inventory: inventoryMegaData(),
                 sales: salesMegaData(),
                 settings: settingsMegaData(),
+                stockJournal: stockJournalMegaData()
             },
 
             keysWithMethods: {},

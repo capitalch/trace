@@ -6,10 +6,6 @@ const inventoryMegaData = () => ({
     selectedReportName: undefined,
 })
 
-const settingsMegaData = () => ({
-    smallFontTextField: { style: { fontSize: 14 } }
-})
-
 const salesMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
@@ -44,4 +40,16 @@ const salesMegaData = () => ({
     userRefNo: undefined,
 })
 
-export { inventoryMegaData, salesMegaData, settingsMegaData }
+const settingsMegaData = () => ({
+    smallFontTextField: { style: { fontSize: 14 } }
+})
+
+const stockJournalMegaData = () => ({
+    allErrors: {},
+    autoRefNo: undefined,
+    remarks: undefined,
+    tranDate: moment().format(isoDateFormat),
+    userRefNo: undefined,
+})
+
+export { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData }
