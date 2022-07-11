@@ -132,6 +132,8 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+# 09-07-2022 - 10-07-2022
+1. Export of reports missed product info, now fixed
 
 # 05-07-2022 - 08-07-2022
 OFF

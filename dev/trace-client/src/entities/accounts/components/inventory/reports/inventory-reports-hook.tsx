@@ -1,4 +1,5 @@
 import { _, IMegaData, MegaDataContext, PurchaseReport, SalesReport, StockSummaryReport, useContext, useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
+import { ProductsListReport } from './gr-products-list-report'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
@@ -33,7 +34,6 @@ function useInventoryReports() {
         }) || []
         setId(inventory.allTags)
         emit('SHOW-LOADING-INDICATOR', false)
-        // setRefresh({})
 
         function setId(rows: any[]) {
             let count = 1
@@ -55,9 +55,10 @@ function useInventoryReports() {
 
         function getReportFromsMap(rName: string) {
             const map: any = {
-                stockSummaryReport: StockSummaryReport,
-                salesReport: SalesReport,
+                productsListReport: ProductsListReport,
                 purchaseReport: PurchaseReport,
+                salesReport: SalesReport,
+                stockSummaryReport: StockSummaryReport,
             }
             return (map[rName] || (() => <></>))
         }

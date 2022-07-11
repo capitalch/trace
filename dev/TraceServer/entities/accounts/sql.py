@@ -822,6 +822,17 @@ allSqls = {
 		, "hsn", "info", "upcCode", "gstRate", "salePrice", "salePriceGst", "maxRetailPrice", "sale", "saleDiscount", "lastPurchasePrice", "op", "openingPrice", "openingPriceGst" from cte7
     ''',
 
+    "get_products_list": '''
+        select p.id,"catName", "brandName", "label", "info", "maxRetailPrice"
+            from
+                "ProductM" p
+                    join "CategoryM" c
+                        on c.id = p."catId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+            where p."isActive"
+    ''',
+
     "get_purchase_report": '''
         select "autoRefNo", "userRefNo", "tranDate", s."productId", "productCode", "catName", "brandName","label", "tranTypeId", "price", "discount", s."gstRate"
 			, s."id" as "salePurchaseDetailsId"
