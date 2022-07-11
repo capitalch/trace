@@ -4,12 +4,12 @@ function StockJournalHeader() {
     const theme = useTheme()
     const megaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
-    return <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 4, rowGap: 2, alignItems: 'center', border: '1px solid lightGrey', p:2,   }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', rowGap: 2, columnGap: 2 }}>
-            <Typography variant='subtitle1' >Ref no</Typography>
+    return <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: 4, rowGap: 2,  border: '1px solid lightGrey', p:2,   }}>
+        <Box  sx={{ display: 'flex', flexDirection: 'column'  }}>
+            <Typography variant='body2' >Ref no</Typography>
             {/* ref no */}
-            <Typography variant='body2' sx={{ fontWeight: 'bold', 
-            position:'relative', bottom:8 }}>STJ/11/2222</Typography>
+            <Typography variant='body2' sx={{ fontWeight: 'bold', mt:3,
+             }}>STJ/11/2222</Typography>
         </Box>
         {/* tran date */}
         <Box className='vertical'>

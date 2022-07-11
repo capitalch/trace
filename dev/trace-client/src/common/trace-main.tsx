@@ -1,5 +1,5 @@
 import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
-import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData } from '../entities/accounts/components/common/mega-data-init-values'
+import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData } from '../entities/accounts/components/common/init-mega-data-context-values'
 import {
     Container,
     makeStyles,

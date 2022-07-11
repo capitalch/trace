@@ -34,22 +34,33 @@ const salesMegaData = () => ({
     saleType: 'sal',
     shipTo: {},
     summary: {
-        qty: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, backCalculateAmount: 0,
+        qty: 0,
+        cgst: 0,
+        sgst: 0,
+        igst: 0,
+        amount: 0,
+        backCalculateAmount: 0,
     },
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
 })
 
 const settingsMegaData = () => ({
-    smallFontTextField: { style: { fontSize: 14 } }
+    smallFontTextField: { style: { fontSize: 14 } },
 })
 
 const stockJournalMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
+    items: [{}],
     remarks: undefined,
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
 })
 
-export { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData }
+export {
+    inventoryMegaData,
+    salesMegaData,
+    settingsMegaData,
+    stockJournalMegaData,
+}

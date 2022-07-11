@@ -51,7 +51,7 @@ export { ShipTo } from './payments/ship-to'
 export { PaymentsHeader } from './payments/payments-header'
 export { PaymentsMethods } from './payments/payments-methods'
 export { AllErrors } from './common/all-errors'
-export { salesMegaData } from '../common/mega-data-init-values'
+export { salesMegaData } from '../common/init-mega-data-context-values'
 export { manageEntitiesState } from '../../../../imports/trace-imports'
 export { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
 

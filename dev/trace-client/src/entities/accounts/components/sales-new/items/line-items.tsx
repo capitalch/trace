@@ -29,7 +29,7 @@ function LineItems() {
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
 
-        const smallFontTextField = megaData.accounts.settings.smallFontTextField
+        // const smallFontTextField = megaData.accounts.settings.smallFontTextField
         checkAllErrors()
 
         useEffect(() => {
