@@ -1,10 +1,27 @@
-import { _, Box, CloseSharp, GridCellParams, IconButton, moment, Typography, MultiDataContext, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import {
+    _,
+    Box,
+    CloseSharp,
+    GridCellParams,
+    IconButton,
+    moment,
+    Typography,
+    MultiDataContext,
+    useContext,
+    useEffect,
+    useIbuki,
+    useRef,
+    useState,
+    useTheme,
+    utils,
+    utilMethods,
+} from '../redirect'
 
 function useProductsListReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
-    const { debounceFilterOn, emit, } = useIbuki()
+    const { debounceFilterOn, emit } = useIbuki()
     const theme = useTheme()
 
     const meta: any = useRef({
@@ -12,9 +29,10 @@ function useProductsListReport() {
         filteredRows: [],
         searchText: '',
         searchTextRef: null,
+        setRefresh: setRefresh,
         sqlKey: 'get_products_list',
         subTitle: '',
-        title: 'Products list'
+        title: 'Products list',
     })
     const pre = meta.current
     useEffect(() => {
@@ -36,12 +54,13 @@ function useProductsListReport() {
         // })
     }, [])
 
-    async function fetchData(){
+    async function fetchData() {
         emit('SHOW-LOADING-INDICATOR', true)
-        pre.allRows = await execGenericView({
-            isMultipleRows: true,
-            sqlKey: pre.sqlKey
-        }) || []
+        pre.allRows =
+            (await execGenericView({
+                isMultipleRows: true,
+                sqlKey: pre.sqlKey,
+            })) || []
         setIndex(pre.allRows)
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
         emit('SHOW-LOADING-INDICATOR', false)
@@ -53,13 +72,13 @@ function useProductsListReport() {
                 row.index = incr()
             }
             function incr() {
-                return (count++)
+                return count++
             }
         }
     }
 
     function getColumns(): any[] {
-        return ([
+        return [
             {
                 headerName: 'H',
                 description: 'Hide',
@@ -74,16 +93,15 @@ function useProductsListReport() {
                 renderCell: (params: GridCellParams) => {
                     return (
                         <IconButton
-                            title='Hide this row'
+                            title="Hide this row"
                             size="small"
                             color="primary"
                             // onClick={() => removeRow(params)}
                             aria-label="hide">
-                            <CloseSharp fontSize='small' />
+                            <CloseSharp fontSize="small" />
                         </IconButton>
                     )
                 },
-
             },
             {
                 headerName: '#',
@@ -92,9 +110,80 @@ function useProductsListReport() {
                 field: 'index',
                 width: 60,
             },
-        ])
+            {
+                headerName: 'Category',
+                headerClassName: 'header-class',
+                description: 'Category',
+                field: 'catName',
+                width: 120,
+            },
+            {
+                headerName: 'Brand',
+                headerClassName: 'header-class',
+                description: 'Brand',
+                field: 'brandName',
+                width: 120,
+            },
+            {
+                headerName: 'Label',
+                headerClassName: 'header-class',
+                description: 'Label',
+                field: 'label',
+                width: 200,
+            },
+            {
+                headerName: 'Details',
+                headerClassName: 'header-class',
+                description: 'Details',
+                field: 'info',
+                width: 300,
+                renderCell: (params: any) => <ProductDetails params={params} />,
+                flex:1,
+            },
+            {
+                headerName: 'MRP',
+                headerClassName: 'header-class',
+                description: 'MRP',
+                field: 'maxRetailPrice',
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+        ]
     }
 
-    return { getColumns, meta }
+    function getGridSx() {
+        return {
+            p: 1,
+            width: '100%',
+            fontSize: theme.spacing(1.7),
+            minHeight: theme.spacing(80),
+            height: 'calc(100vh - 230px)',
+            fontFamily: 'Helvetica',
+            '& .footer-row-class': {
+                backgroundColor: theme.palette.grey[300],
+            },
+            '& .header-class': {
+                fontWeight: 'bold',
+                color: 'green',
+                fontSize: theme.spacing(1.8),
+            },
+            '& .grid-toolbar': {
+                width: '100%',
+                borderBottom: '1px solid lightgrey',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'start',
+            },
+        }
+    }
+
+    function ProductDetails({ params }: any) {
+        return (
+            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+        )
+    }
+
+    return {fetchData, getColumns, getGridSx, meta }
 }
 export { useProductsListReport }
