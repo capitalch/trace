@@ -144,6 +144,23 @@ function useProductsListReport() {
                 flex:1,
             },
             {
+                headerName: 'Stock',
+                headerClassName: 'header-class',
+                description: 'Stock',
+                field: 'clos',
+                type: 'number',
+                width: 80,
+            },
+            {
+                headerName: 'Sale price',
+                headerClassName: 'header-class',
+                description: 'Sale price',
+                field: 'salePriceGst',
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
                 headerName: 'MRP',
                 headerClassName: 'header-class',
                 description: 'MRP',
