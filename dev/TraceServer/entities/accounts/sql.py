@@ -831,6 +831,7 @@ allSqls = {
                     join "BrandM" b
                         on b."id" = p."brandId"
             where p."isActive"
+                order by "catName", "brandName", "label", "info"
     ''',
 
     "get_purchase_report": '''

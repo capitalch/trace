@@ -23,7 +23,7 @@ function useProductsListReport() {
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit } = useIbuki()
     const theme = useTheme()
-
+    
     const meta: any = useRef({
         allRows: [],
         filteredRows: [],
@@ -35,6 +35,7 @@ function useProductsListReport() {
         title: 'Products list',
     })
     const pre = meta.current
+    reIndex(pre.filteredRows)
     useEffect(() => {
         if (pre.isSearchTextEdited && pre.searchTextRef.current) {
             pre.searchTextRef.current.focus()
@@ -42,16 +43,17 @@ function useProductsListReport() {
     })
 
     useEffect(() => {
-        // pre.subTitle = getGridReportSubTitle()
-        fetchData()
-        // const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
-        //     const requestSearch = d.data[0]
-        //     const searchText = d.data[1]
-        //     requestSearch(searchText)
-        // })
-        // return (() => {
-        //     subs1.unsubscribe()
-        // })
+        pre.subTitle = getGridReportSubTitle()
+        fetchData()        
+        const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
+            const requestSearch = d.data[0]
+            const searchText = d.data[1]
+            requestSearch(searchText)
+            // reIndex(pre.filteredRows)
+        })
+        return (() => {
+            subs1.unsubscribe()
+        })
     }, [])
 
     async function fetchData() {
@@ -61,20 +63,21 @@ function useProductsListReport() {
                 isMultipleRows: true,
                 sqlKey: pre.sqlKey,
             })) || []
-        setIndex(pre.allRows)
+        // setIndex(pre.allRows)
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
+        // reIndex(pre.filteredRows)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
-        function setIndex(rows: any[]) {
-            let count = 1
-            for (const row of rows) {
-                row.index = incr()
-            }
-            function incr() {
-                return count++
-            }
-        }
+        // function setIndex(rows: any[]) {
+        //     let count = 1
+        //     for (const row of rows) {
+        //         row.index = incr()
+        //     }
+        //     function incr() {
+        //         return count++
+        //     }
+        // }
     }
 
     function getColumns(): any[] {
@@ -96,7 +99,7 @@ function useProductsListReport() {
                             title="Hide this row"
                             size="small"
                             color="primary"
-                            // onClick={() => removeRow(params)}
+                            onClick={() => removeRow(params)}
                             aria-label="hide">
                             <CloseSharp fontSize="small" />
                         </IconButton>
@@ -129,7 +132,7 @@ function useProductsListReport() {
                 headerClassName: 'header-class',
                 description: 'Label',
                 field: 'label',
-                width: 200,
+                width: 250,
             },
             {
                 headerName: 'Details',
@@ -182,6 +185,24 @@ function useProductsListReport() {
         return (
             <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
         )
+    }
+
+    function reIndex(rows: any[]) {
+        let count = 1
+        for (const row of rows) {
+            row.index = incr()
+        }
+        function incr() {
+            return count++
+        }
+    }
+
+    function removeRow(params: any) {
+        const id = params.id
+        const temp = [...pre.filteredRows]
+        _.remove(temp, (x: any) => x.id === id)
+        pre.filteredRows = temp
+        setRefresh({})
     }
 
     return {fetchData, getColumns, getGridSx, meta }
