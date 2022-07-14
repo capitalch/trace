@@ -16,16 +16,20 @@ Observations:
 Correct validation errors in items of sales-new
 Add items
 Focus item
-Error management header
-Error management line item
-itemchanged events to update data in header
-itemchanged event for items
+                                                                                                        Error management header
+                                                                                                        Error management line item
+                                                                                                        itemchanged events to update data in header
+                                                                                                        itemchanged event for items
 Item search
+                                                                                                        populate on product code
 Reset button
 View functionality
 Submit functionality
 Overall look and feel
+Complete footer
 Add Destination (Production)
+Clear button
+Delete row functionality
 
 ### Plan (new)
 Stock journals                          : 3 days: 14/07/2022
@@ -67,7 +71,7 @@ k. Server logging for modify and delete, time and log viewer
 12. Show category hierarchy in products and stock and sales reports
 13. Remember last product sale price and purchase price and pop them at purchase and sale entry time
 15. Accounts address entry, do it modal and make email address optional
-16. 
+16. In printing of money receipt original bill no not coming. Autosubledger no is coming. Discuss with swapan
 17. Voucher copy and paste
 18. Bill wise payment
 19. Automate orders mechanism

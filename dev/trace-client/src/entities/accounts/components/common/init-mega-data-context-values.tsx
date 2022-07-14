@@ -53,10 +53,14 @@ const stockJournalMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
     currentItemIndex: 0,
-    credits:0,
-    debits:0,
+    credits: 0,
+    debits: 0,
     items: [{}],
     remarks: undefined,
+    summary: {
+        count: 0,
+        qty: 0,
+    },
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
 })

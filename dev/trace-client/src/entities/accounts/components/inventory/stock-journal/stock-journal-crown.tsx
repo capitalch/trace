@@ -1,6 +1,5 @@
 import { Box, Button, Typography, useTheme } from '../redirect'
 function StockJournalCrown() {
-    const sales = {}
     const theme = useTheme()
     return (
         <Box sx={{ mt: 0, mb: 0, display: 'flex', flexDirection: 'column', ml: 'auto' }}>
