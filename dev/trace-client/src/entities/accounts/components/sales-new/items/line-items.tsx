@@ -14,7 +14,7 @@ function LineItems() {
     const { extractAmount, toDecimalFormat } = utilMethods()
     const { checkAllErrors, clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
-    // checkAllErrors()
+
     const pre = meta.current
 
     return (<Box className='vertical' sx={{ rowGap: 1 }}>
@@ -28,10 +28,8 @@ function LineItems() {
 
     function LineItem({ item, index, }: any) {
         const [, setRefresh] = useState({})
-
         // const smallFontTextField = megaData.accounts.settings.smallFontTextField
         checkAllErrors()
-
         useEffect(() => {
             emit('ALL-ERRORS-JUST-REFRESH', null)
         })

@@ -12,6 +12,20 @@ Observations:
 3. Process not defined errror: install react-error-overlay ver 6.0.9 at the end in devdependencies
 
 
+## Stock Journal
+Correct validation errors in items of sales-new
+Add items
+Focus item
+Error management header
+Error management line item
+itemchanged events to update data in header
+itemchanged event for items
+Item search
+Reset button
+View functionality
+Submit functionality
+Overall look and feel
+Add Destination (Production)
 
 ### Plan (new)
 Stock journals                          : 3 days: 14/07/2022
@@ -132,6 +146,9 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+# 11-07-2022 - 12-07-2022
+1. Products list report
+
 # 09-07-2022 - 10-07-2022
 1. Export of reports missed product info, now fixed
 

@@ -52,6 +52,9 @@ const settingsMegaData = () => ({
 const stockJournalMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
+    currentItemIndex: 0,
+    credits:0,
+    debits:0,
     items: [{}],
     remarks: undefined,
     tranDate: moment().format(isoDateFormat),

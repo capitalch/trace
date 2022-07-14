@@ -3,7 +3,8 @@ import countries from '../../../../data/countries.json'
 import states from '../../../../data/states.json'
 import cities from '../../../../data/cities.json'
 import accountsMessages from '../../json/accounts-messages.json'
-import errorMessages from './sales-error-messages.json'
+// import errorMessages from './sales-error-messages.json'
+import errorMessages from '../../json/accounts-messages.json'
 export {
     Avatar,
     Badge,
