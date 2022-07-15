@@ -14,7 +14,7 @@ function StockJournal() {
                 '& .right-aligned': { '& input': { textAlign: 'end' } },
             }}
             className="vertical">
-            <Typography variant="subtitle1">Stock journal</Typography>
+            <Typography variant="subtitle1" >Stock journal</Typography>
             <Box
                 sx={{
                     display: 'flex',

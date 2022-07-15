@@ -25,8 +25,9 @@ function StockJournalHeader() {
                 flexWrap: 'wrap',
                 columnGap: 4,
                 rowGap: 2,
-                border: '1px solid lightGrey',
                 p: 2,
+                borderTop:'1px solid lightGrey',
+                // border: '1px solid lightGrey',
             }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="body2">Ref no</Typography>
@@ -37,7 +38,7 @@ function StockJournalHeader() {
                     sx={{
                         fontWeight: 'bold',
                         mt: 2,
-                        width: theme.spacing(10.5),
+                        width: theme.spacing(10),
                     }}>
                     {stockJournal.autoRefNo}
                 </Typography>
@@ -60,12 +61,12 @@ function StockJournalHeader() {
             </Box>
 
             {/* User ref no */}
-            <Box className="vertical" sx={{ maxWidth: theme.spacing(12) }}>
+            <Box className="vertical" sx={{ maxWidth: theme.spacing(17) }}>
                 <Typography variant="body2">User ref no</Typography>
                 <TextField
                     variant="standard"
                     value={stockJournal.userRefNo || ''}
-                    sx={{ maxWidth: theme.spacing(20) }}
+                    sx={{ maxWidth: theme.spacing(24) }}
                     autoComplete="off"
                     onChange={(e: any) => handleTextChanged('userRefNo', e)}
                 />

@@ -14,8 +14,9 @@ Observations:
 
 ## Stock Journal
 Correct validation errors in items of sales-new
-Add items
-Focus item
+Correct focus error for sales-new
+                                                                                                        Add items
+                                                                                                        Focus item
                                                                                                         Error management header
                                                                                                         Error management line item
                                                                                                         itemchanged events to update data in header
@@ -26,10 +27,10 @@ Reset button
 View functionality
 Submit functionality
 Overall look and feel
-Complete footer
+
 Add Destination (Production)
-Clear button
-Delete row functionality
+Clear button in footer
+                                                                                                        Delete row functionality
 
 ### Plan (new)
 Stock journals                          : 3 days: 14/07/2022
@@ -41,6 +42,9 @@ Dashboard reports                       : 7 days: 04/08/2022
 Stock orders                            : 7 days: 11/08/2022
 Invoice wise payments                   : 3 days: 14/08/2022
 PDF storage of invoice                  : 14 days 02/09/2022
+Clean up client SizedBox                : 1 day 03/09/2022
+Clean up link-server                    : 2 days 05/09/2022
+
 
 
 

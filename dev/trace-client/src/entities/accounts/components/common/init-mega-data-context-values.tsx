@@ -55,7 +55,8 @@ const stockJournalMegaData = () => ({
     currentItemIndex: 0,
     credits: 0,
     debits: 0,
-    items: [{}],
+    items: [{qty:1}],
+    qty: 1,
     remarks: undefined,
     summary: {
         count: 0,
