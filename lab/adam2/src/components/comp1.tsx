@@ -1,11 +1,11 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
 function Comp1() {
     const [, setRefresh] = useState({})
     const meta: any = useRef({
-        data: ''
+        data: '',
     })
     const pre = meta.current
 
@@ -13,27 +13,42 @@ function Comp1() {
         // loadData()
     }, [])
 
-    return (
-        <Suspense fallback='Loading'>
-            <Box>
-                <Comp11 />
-            </Box>
-        </Suspense>
-    )
-
-    async function loadData() {
-        const ret = await axios.get('https://gorest.co.in/public/v2/users')
-        pre.data = ret.data[0].email
-        setRefresh({})
+    const keysWithMethods: any = {} // {prop:String, value:any}
+    const registerKeyWithMethod = function (key: string, method: Function) {
+        keysWithMethods[key] = method
     }
 
-    function Comp11() {
-        const ret: any = axios.get('https://gorest.co.in/public/v2/users').then((data: any) => data).catch((e: any) => { throw e })
-        return (
-            <Typography>{ret?.data[0]?.email || ''}</Typography>
-        )
+    const executeMethodForKey: any = function executeMethodForKey(
+        key: string,
+        ...params: any
+    ) {
+        keysWithMethods[key](...params)
+    }
+
+    return (
+        <Box>
+            <Box>
+                <Button onClick={register}>Register</Button>
+                <Button
+                    onClick={() => {
+                        executeMethodForKey('key1', 'abcd',false)
+                    }}>
+                    Execute
+                </Button>
+            </Box>
+        </Box>
+    )
+
+    function register() {
+        registerKeyWithMethod('key1', func1)
+    }
+
+    function func1(arg1: string, arg2: boolean=true) {
+        console.log(arg1, ' ', arg2)
     }
 }
 export { Comp1 }
 
-{/* <Typography>{pre.data}</Typography> */ }
+{
+    /* <Typography>{pre.data}</Typography> */
+}

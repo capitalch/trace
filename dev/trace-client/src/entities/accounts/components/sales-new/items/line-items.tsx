@@ -6,14 +6,7 @@ function LineItems() {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
-    // const allErrors = sales.allErrors
-    // const { debounceEmit, emit } = useIbuki()
     const items = sales.items
-    // const { getFromBag } = manageEntitiesState()
-    // const unitInfo = getFromBag('unitInfo')
-    // const isGstApplicable = !!unitInfo?.gstin
-    // const { extractAmount, toDecimalFormat } = utilMethods()
-    // const { clearRow, computeRow, getSlNoError, handleDeleteRow, handleSerialNo, meta, setPrice, setPriceGst } = useLineItems()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
 
     const meta: any = useRef({
@@ -46,8 +39,7 @@ function LineItems() {
 
     function computeAllRows() {
         for (let lineItem of sales.items) {
-            // computeRow(lineItem, false)
-            megaData.executeMethodForKey('computeRow:lineItem', lineItem)
+            megaData.executeMethodForKey('computeRow:lineItem', lineItem, false)
         }
         megaData.executeMethodForKey('computeSummary:itemsFooter')
         setRefresh({})
@@ -116,7 +108,6 @@ function LineItems() {
         currentItem.priceGst = selectedProduct.salePriceGst || selectedProduct.maxRetailPrice || 0
         currentItem.discount = selectedProduct.saleDiscount || 0
         currentItem.age = selectedProduct.age
-        // computeRow(currentItem)
         megaData.executeMethodForKey('computeRow:lineItem', currentItem)
         setRefresh({})
     }

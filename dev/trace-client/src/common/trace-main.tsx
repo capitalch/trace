@@ -86,7 +86,7 @@ function TraceMain({ open }: any) {
 
 
     function initMegaData() {
-        const megaData: IMegaData // { accounts: any; keys: any; registerKeyWithMethod: KeyWithMethod; executeMethodForKey: KeyWithParams } 
+        const megaData: IMegaData 
             = {
             accounts: {
                 common: {},
@@ -102,12 +102,12 @@ function TraceMain({ open }: any) {
                 this.keysWithMethods[key] = method
             },
 
-            executeMethodForKey: function (key: string, params?: any) {
+            executeMethodForKey: function (key: string, ...params:any) {
                 if (!this.keysWithMethods[key]) {
                     return
                 }
                 const method = this.keysWithMethods[key]
-                const ret = params ? method(params) : method()
+                const ret = _.isEmpty(params) ? method() : method(...params)
                 return (ret)
             }
 
