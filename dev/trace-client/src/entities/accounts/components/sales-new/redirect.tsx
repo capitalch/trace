@@ -33,7 +33,7 @@ export { ItemsHeader } from './items/items-header'
 export { LineItems } from './items/line-items'
 export { ItemsFooter } from './items/items-footer'
 export { useTraceMaterialComponents } from '../../../../common/trace-material-components'
-export { ProductsSearch } from './items/products-search'
+export { ProductsSearch } from '../common/products-search'
 export {
     DataGridPro,
     GridToolbarFilterButton,

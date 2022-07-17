@@ -1,16 +1,11 @@
-import { _, Big, Box, Button, errorMessages, IMegaData, manageEntitiesState, MegaDataContext, TextareaAutosize, Typography, useContext, useEffect, useIbuki, useRef, useTheme, useState, useTraceMaterialComponents, utilMethods } from '../redirect'
+import { _, Big, IMegaData, MegaDataContext, useContext, useEffect, useIbuki, useRef, utilMethods } from '../redirect'
 
 function useLineItem() {
-    const [, setRefresh] = useState({})
     const { emit, debounceFilterOn } = useIbuki()
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const items = sales.items
-    const allErrors = sales.allErrors
-    const { execGenericView, setIdForDataGridRows } = utilMethods()
-    const theme = useTheme()
-    const { getFromBag } = manageEntitiesState()
-    const isGstApplicable = !!(getFromBag('unitInfo')?.gstin)
+    const { execGenericView, } = utilMethods()
 
     const meta: any = useRef({
         showDialog: false,
@@ -19,7 +14,6 @@ function useLineItem() {
             content: () => <></>
         },
     })
-    const pre = meta.current
 
     useEffect(() => {
         megaData.registerKeyWithMethod('computeRow:lineItem', computeRow)
@@ -48,7 +42,7 @@ function useLineItem() {
         megaData.executeMethodForKey('computeSummary:itemsFooter')
     }
 
-    function computeRow(item: any, toComputeSummary:boolean =true) {
+    function computeRow(item: any, toComputeSummary: boolean = true) {
         const gstRate = item.gstRate || 0.0
         let priceGst = item.priceGst
         let price = item.price
@@ -109,7 +103,7 @@ function useLineItem() {
                 item.gstRate = result.gstRate
                 item.priceGst = result.salePriceGst || 0
                 item.discount = result.saleDiscount || 0
-                computeRow(item )
+                computeRow(item)
             }
             setRefresh({})
         } catch (e: any) {
@@ -161,7 +155,7 @@ function useLineItem() {
     }
 
     return ({
-        clearRow,computeRow, getSlNoError, handleDeleteRow, meta, setPrice, setPriceGst
+        clearRow, computeRow, getSlNoError, handleDeleteRow, meta, setPrice, setPriceGst
     })
 }
 

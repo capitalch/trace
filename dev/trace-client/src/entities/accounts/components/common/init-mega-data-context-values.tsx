@@ -52,16 +52,32 @@ const settingsMegaData = () => ({
 const stockJournalMegaData = () => ({
     allErrors: {},
     autoRefNo: undefined,
-    currentItemIndex: 0,
-    credits: 0,
-    debits: 0,
-    items: [{qty:1}],
-    qty: 1,
-    remarks: undefined,
-    summary: {
-        count: 0,
-        qty: 0,
+    id: undefined,
+    inputSection: {
+        allErrors: {},
+        currentItemIndex: 0,
+        items: [{ qty: 1 }],
+        // qty: 1,
+        // remarks: undefined,
+        summary: {
+            count: 1,
+            qty: 1,
+        },
+        title: 'Source (Consumption / input / credit)'
     },
+    outputSection: {
+        allErrors: {},
+        currentItemIndex: 0,
+        items: [{ qty: 1 }],
+        // qty: 1,
+        // remarks: undefined,
+        summary: {
+            count: 1,
+            qty: 1,
+        },
+        title: 'Destination (Production / output / debit)'
+    },
+    remarks:undefined,
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
 })

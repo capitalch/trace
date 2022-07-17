@@ -7,7 +7,7 @@ import {
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { initCode } from '../../init-code'
-import { ProductsSearch } from '../sales-new/items/products-search'
+import { ProductsSearch } from './products-search'
 
 function useAccountsSubHeader() {
     const [, setRefresh] = useState({})

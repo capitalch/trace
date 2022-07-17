@@ -1,10 +1,12 @@
 import {
     accountsMessages,
     Box,
+    IMegaData,
     MegaDataContext,
     TextField,
     Typography,
     useContext,
+    useEffect,
     useState,
     useTheme,
     utils,
@@ -13,11 +15,16 @@ import {
 function StockJournalHeader() {
     const [, setRefresh] = useState({})
     const theme = useTheme()
-    const megaData = useContext(MegaDataContext)
+    const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
     const allErrors = stockJournal.allErrors
     const { isInvalidDate } = utils()
     checkAllErrors()
+
+    useEffect(() => {
+        megaData.executeMethodForKey('render:stockJournalCrown', {})
+    })
+
     return (
         <Box
             sx={{
@@ -26,8 +33,7 @@ function StockJournalHeader() {
                 columnGap: 4,
                 rowGap: 2,
                 p: 2,
-                borderTop:'1px solid lightGrey',
-                // border: '1px solid lightGrey',
+                borderTop: '1px solid lightGrey',
             }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="body2">Ref no</Typography>
@@ -71,7 +77,7 @@ function StockJournalHeader() {
                     onChange={(e: any) => handleTextChanged('userRefNo', e)}
                 />
             </Box>
-            
+
             {/* Remarks */}
             <Box
                 className="vertical"
@@ -89,6 +95,7 @@ function StockJournalHeader() {
 
     function checkAllErrors() {
         dateError()
+
         function dateError() {
             const ret =
                 isInvalidDate(stockJournal.tranDate) || !stockJournal.tranDate

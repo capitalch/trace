@@ -1,4 +1,6 @@
 import accountsMessages from '../../json/accounts-messages.json'
+import { manageEntitiesState } from '../../../../imports/trace-imports'
+import { utilMethods } from '../../../../global-utils/misc-utils'
 export {
     Box,
     Button,
@@ -53,7 +55,7 @@ export {
 } from '../../../../imports/regular-imports'
 export { accountsMessages }
 export { useSharedElements } from '../common/shared-elements-hook'
-export { utilMethods } from '../../../../global-utils/misc-utils'
+export { utilMethods } //from '../../../../global-utils/misc-utils'
 export { utils } from '../../utils'
 export { useStockSummaryReport } from './reports/gr-stock-summary-report-hook'
 export { StockSummaryReport } from './reports/gr-stock-summary-report'
@@ -77,9 +79,15 @@ export { useIbuki } from '../../../../global-utils/ibuki'
 export { MultiDataContext } from '../common/multi-data-bridge'
 export { SalesReport } from './reports/gr-sales-report'
 export {
-    manageEntitiesState,
+    // manageEntitiesState,
     MegaDataContext,
     type IMegaData,
 } from '../../../../imports/trace-imports'
 export { useInventoryUtils } from './inventory-utils-hook'
 export { PurchaseReport } from './reports/gr-purchase-report'
+export { stockJournalMegaData } from '../common/init-mega-data-context-values'
+export { manageEntitiesState }
+export const { getFromBag, setInBag } = manageEntitiesState()
+// export { getFromBag, setInBag }
+export const {genericUpdateMasterDetails} = utilMethods()
+

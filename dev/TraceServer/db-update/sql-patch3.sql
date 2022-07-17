@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS "StockJournal"
     "lineRefNo" text COLLATE pg_catalog."default",
     "timestamp" timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "jData" jsonb,
-	"branchId" smallint not null DEFAULT 1,
+	-- "branchId" smallint not null DEFAULT 1,
     CONSTRAINT "StockJournal_pkey" PRIMARY KEY (id),
     CONSTRAINT "ProductM_StockJournal_fkey" FOREIGN KEY ("productId")
         REFERENCES "ProductM" (id) MATCH SIMPLE
@@ -137,11 +137,11 @@ CREATE TABLE IF NOT EXISTS "StockJournal"
     CONSTRAINT "TranH_StockJournal_fkey" FOREIGN KEY ("tranHeaderId")
         REFERENCES "TranH" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
-        ON DELETE CASCADE,
-	CONSTRAINT "BranchM_StockJournal_fkey" FOREIGN KEY ("branchId")
-        REFERENCES "BranchM" (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE RESTRICT
+        ON DELETE CASCADE
+	-- ,CONSTRAINT "BranchM_StockJournal_fkey" FOREIGN KEY ("branchId")
+    --     REFERENCES "BranchM" (id) MATCH SIMPLE
+    --     ON UPDATE NO ACTION
+    --     ON DELETE RESTRICT
 );
 INSERT INTO "TranTypeM" ("id", "tranType", "tranCode")
 	SELECT 11, 'Stock journal', 'STJ'

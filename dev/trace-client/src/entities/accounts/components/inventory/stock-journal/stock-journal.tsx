@@ -2,6 +2,7 @@ import { Box, Typography } from '../redirect'
 import { StockJournalCrown } from './stock-journal-crown'
 import { StockJournalHeader } from './stock-journal-header'
 import { StockJournalDetails } from './stock-journal-details'
+import { StockJournalTotals } from './stock-journal-totals'
 function StockJournal() {
     return (
         <Box
@@ -14,7 +15,10 @@ function StockJournal() {
                 '& .right-aligned': { '& input': { textAlign: 'end' } },
             }}
             className="vertical">
-            <Typography variant="subtitle1" >Stock journal</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="subtitle1" >Stock journal</Typography>
+                <StockJournalTotals />
+            </Box>
             <Box
                 sx={{
                     display: 'flex',

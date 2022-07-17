@@ -33,7 +33,6 @@ function ItemsHeader() {
         sales.isIgst = e.target.checked
         setRefresh({})
         megaData.executeMethodForKey('computeAllRows:lineItems')
-        // sales.computeAllRows()
     }
 
     function handleAddItem() {

@@ -13,24 +13,29 @@ Observations:
 
 
 ## Stock Journal
-Correct validation errors in items of sales-new
-Correct focus error for sales-new
+                                                                                                        Correct validation errors in items of sales-new
+                                                                                                        Correct focus error for sales-new
                                                                                                         Add items
                                                                                                         Focus item
                                                                                                         Error management header
                                                                                                         Error management line item
                                                                                                         itemchanged events to update data in header
                                                                                                         itemchanged event for items
-Item search
+                                                                                                        Item search
                                                                                                         populate on product code
-Reset button
-View functionality
-Submit functionality
-Overall look and feel
-
-Add Destination (Production)
-Clear button in footer
+                                                                                                        Error handling
+                                                                                                        Reset button
+                                                                                                        Overall look and feel
+                                                                                                        Header summary total input qty, output qty
+                                                                                                        Add Destination (Production)
+                                                                                                        Clear button in footer with functionality
                                                                                                         Delete row functionality
+View functionality
+Delete functionality
+                                                                                                        Submit functionality
+Serial number
+Print
+
 
 ### Plan (new)
 Stock journals                          : 3 days: 14/07/2022
@@ -65,7 +70,7 @@ j. salePurchaseDetails table jData has remarks etc. it should be null
 k. Server logging for modify and delete, time and log viewer
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
 
-
+11. Service+ to Trace import: Gstin No not coming
 12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
 20. Discount manage in sales           
 27. Sale return new type
@@ -154,6 +159,14 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+
+# 15-07-2022 - 16-07-2022
+1. Corrected validation errors in items of sales-new
+2. Corrected focus error for sales-new
+
+# 13-07-2022 - 14-07-2022
+1. Stock journal
+
 # 11-07-2022 - 12-07-2022
 1. Products list report
 

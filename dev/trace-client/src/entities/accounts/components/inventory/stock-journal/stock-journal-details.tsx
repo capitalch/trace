@@ -1,26 +1,5 @@
-import {
-    _,
-    AddCircle,
-    Box,
-    Button,
-    Card,
-    CloseSharp,
-    IconButton,
-    IMegaData,
-    MegaDataContext,
-    NumberFormat,
-    TextField,
-    Typography,
-    useContext,
-    useEffect,
-    useIbuki,
-    useRef,
-    useState,
-    useTheme,
-    useTraceMaterialComponents,
-    utilMethods,
-} from '../redirect'
-
+import { _, AddCircle, Box, Button, Card, CloseSharp, IconButton, IMegaData, MegaDataContext, NumberFormat, TextField, Typography, useContext, useEffect, useIbuki, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods, } from '../redirect'
+import { ProductsSearch } from '../../common/products-search'
 function StockJournalDetails() {
     return (
         <Box
@@ -30,17 +9,17 @@ function StockJournalDetails() {
                 columnGap: 2,
                 mt: 1,
                 flexWrap: 'wrap',
+                justifyContent: 'space-between'
             }}>
-            <StockJournalItems type="source" />
-            {/* <StockJournalItem type="destination" /> */}
+            <StockJournalItems section="inputSection" />
+            <StockJournalItems section="outputSection" />
         </Box>
     )
 }
 
 export { StockJournalDetails }
 
-function StockJournalItems({ type }: any) {
-    const theme = useTheme()
+function StockJournalItems({ section }: any) {
     return (
         <Box
             sx={{
@@ -51,16 +30,18 @@ function StockJournalItems({ type }: any) {
                 columnGap: 2,
                 border: '1px solid lightGrey',
             }}>
-            <StockJournalItemsHeader type={type} />
-            <StockJournalLineItems />
-            <StockJournalItemsFooter />
+            <StockJournalItemsHeader section={section} />
+            <StockJournalLineItems section={section} />
+            <StockJournalItemsFooter section={section} />
         </Box>
     )
 }
 
-function StockJournalItemsHeader({ type }: any) {
+function StockJournalItemsHeader({ section }: any) {
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
+    const stockJournal = megaData.accounts.stockJournal[section]
+
     return (
         <Box
             sx={{
@@ -71,9 +52,7 @@ function StockJournalItemsHeader({ type }: any) {
             <Typography
                 variant="body1"
                 sx={{ fontWeight: 'bold', textDecoration: 'underline' }}>
-                {type === 'source'
-                    ? 'Source (Consumption / input)'
-                    : 'Destination (Production / output)'}
+                {stockJournal?.title || ''}
             </Typography>
 
             {/* Add */}
@@ -82,10 +61,11 @@ function StockJournalItemsHeader({ type }: any) {
                 variant="contained"
                 color="secondary"
                 sx={{ width: theme.spacing(12.5) }}
-                onClick={() =>
+                onClick={() => {
                     megaData.executeMethodForKey(
-                        'handleAddItem:stockJournalLineItems'
+                        `handleAddItem:stockJournalLineItems:${section}`
                     )
+                }
                 }
                 startIcon={<AddCircle sx={{ ml: -3 }} />}>
                 Add
@@ -94,51 +74,61 @@ function StockJournalItemsHeader({ type }: any) {
     )
 }
 
-function StockJournalLineItems() {
+function StockJournalLineItems({ section }: any) {
     const [, setRefresh] = useState({})
-    const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
-    const stockJournal = megaData.accounts.stockJournal
+    const stockJournal: any = megaData.accounts.stockJournal[section]
     const items: any[] = stockJournal.items
-    const allErrors = stockJournal.allErrors
+    // const allErrors = stockJournal.allErrors
 
     useEffect(() => {
         megaData.registerKeyWithMethod(
-            'handleAddItem:stockJournalLineItems',
+            `handleAddItem:stockJournalLineItems:${section}`,
             handleAddItem
         )
         megaData.registerKeyWithMethod(
-            'render:stockJournalLineItems',
+            `render:stockJournalLineItems:${section}`,
             setRefresh
         )
+        megaData.registerKeyWithMethod(`setItemToSelectedProduct:stockJournalLineItems:${section}`, setItemToSelectedProduct)
         stockJournal.currentItemIndex = 0
     }, [])
 
     return (
         <Box className="vertical" sx={{ rowGap: 1 }}>
             {items.map((item: any, index: number) => (
-                <StockJournalLineItem item={item} index={index} key={index} />
+                <StockJournalLineItem section={section} item={item} index={index} key={index} />
             ))}
         </Box>
     )
 
     function handleAddItem() {
+        console.log(section)
         items.push({ qty: 1 })
         stockJournal.currentItemIndex = items.length - 1
         setRefresh({})
-        // megaData.executeMethodForKey('render:stockJournalLineItems',{})
-        megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter')
+        megaData.executeMethodForKey(`computeSummary:stockJournalItemsFooter:${section}`)
     }
 
+    function setItemToSelectedProduct() {
+        const currentItemIndex = stockJournal.currentItemIndex
+        const currentItem = items[currentItemIndex]
+        const selectedProduct = megaData.accounts.selectedProduct
+        // populate current item with selectedProduct
+        currentItem.productId = selectedProduct.id1
+        currentItem.productCode = selectedProduct.productCode
+        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info || '')
+        setRefresh({})
+    }
 }
 
-function StockJournalLineItem({ item, index }: any) {
+function StockJournalLineItem({ section, item, index }: any) {
     const theme = useTheme()
     const [, setRefresh] = useState({})
     const { debounceEmit, debounceFilterOn, emit } = useIbuki()
 
     const megaData: IMegaData = useContext(MegaDataContext)
-    const stockJournal = megaData.accounts.stockJournal
+    const stockJournal = megaData.accounts.stockJournal[section]
     const items: any[] = stockJournal.items
     const allErrors = stockJournal.allErrors
 
@@ -154,13 +144,17 @@ function StockJournalLineItem({ item, index }: any) {
         }
     }, [])
 
+    useEffect(() => {
+        megaData.executeMethodForKey('render:stockJournalCrown', {})
+    })
+
     return (
         <Box
-            onClick={(e: any) => {                
+            onClick={(e: any) => {
                 if (stockJournal.currentItemIndex !== index) {
                     stockJournal.currentItemIndex = index
                     megaData.executeMethodForKey(
-                        'render:stockJournalLineItems',
+                        `render:stockJournalLineItems:${section}`,
                         {}
                     )
                 }
@@ -198,7 +192,6 @@ function StockJournalLineItem({ item, index }: any) {
                 <Typography variant="body2">Product code</Typography>
                 <NumberFormat
                     sx={{ maxWidth: theme.spacing(10) }}
-                    // inputRef={pre.productCodeRef}
                     allowNegative={false}
                     autoComplete="off"
                     customInput={TextField}
@@ -263,34 +256,32 @@ function StockJournalLineItem({ item, index }: any) {
                     className="right-aligned"
                     customInput={TextField}
                     decimalScale={2}
-                    // error={item.isQtyError}
                     fixedDecimalScale={true}
                     value={item.qty || 1.0}
                     onFocus={(e: any) => {
                         e.target.select()
                     }}
-                    
-                    // onClick={(e: any) => {
-                    //     e.stopPropagation()
-                    //     if(stockJournal.currentItemIndex !== index){
-                    //         stockJournal.currentItemIndex = index
-                    //         megaData.executeMethodForKey(
-                    //             'render:stockJournalLineItems',
-                    //             {}
-                    //         )
-                    //         e.target.focus()
-                    //     }
-                        
-                    // }}
                     onValueChange={(value) => {
                         const { floatValue } = value
                         item.qty = floatValue
                         setRefresh({})
                         megaData.executeMethodForKey(
-                            'computeSummary:stockJournalItemsFooter'
+                            `computeSummary:stockJournalItemsFooter:${section}`
                         )
                     }}
                     thousandSeparator={true}
+                    variant="standard"
+                />
+            </Box>
+
+            {/* ref no */}
+            <Box className="vertical">
+                <Typography variant="body2">Ref no</Typography>
+                <TextField
+                    sx={{ maxWidth: theme.spacing(10) }}
+                    autoComplete="off"
+                    onChange={(e: any) => (item.refNo = e.target.value)}
+                    value={item.refNo || undefined}
                     variant="standard"
                 />
             </Box>
@@ -299,13 +290,10 @@ function StockJournalLineItem({ item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(40) }}
+                    sx={{ maxWidth: theme.spacing(35) }}
                     autoComplete="off"
                     onChange={(e: any) => (item.remarks = e.target.value)}
                     value={item.remarks || undefined}
-                    // onFocus={(e: any) => {
-                    //     e.target.select()
-                    // }}
                     variant="standard"
                 />
             </Box>
@@ -391,38 +379,46 @@ function StockJournalLineItem({ item, index }: any) {
             }
         }
         stockJournal.currentItemIndex = items.length - 1
-        megaData.executeMethodForKey('render:stockJournalLineItems', {})
+        megaData.executeMethodForKey(`render:stockJournalLineItems:${section}`, {})
         megaData.executeMethodForKey(
-            'computeSummary:stockJournalItemsFooter'
+            `computeSummary:stockJournalItemsFooter:${section}`
         )
     }
 }
 
-function StockJournalItemsFooter() {
+function StockJournalItemsFooter({ section }: any) {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
-    const stockJournal = megaData.accounts.stockJournal
+    const stockJournal = megaData.accounts.stockJournal[section]
     const items: any[] = stockJournal.items
-    const { emit } = useIbuki()
     const { toDecimalFormat } = utilMethods()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
+
     const meta: any = useRef({
-        showDialog: false,
         dialogConfig: {
             content: () => <></>,
             maxWidth: 'lg',
         },
+        renderCallbackKey: `render:stockJournalItemsFooter:${section}`,
+        setItemToSelectedProductCallbackKey: `setItemToSelectedProduct:stockJournalLineItems:${section}`,
+        showDialog: false,
     })
+
     const pre = meta.current
 
     useEffect(() => {
         megaData.registerKeyWithMethod(
-            'computeSummary:stockJournalItemsFooter',
+            `computeSummary:stockJournalItemsFooter:${section}`,
             computeSummary
         )
+        megaData.registerKeyWithMethod(`render:stockJournalItemsFooter:${section}`, setRefresh)
         computeSummary()
     }, [])
+
+    useEffect(() => {
+        megaData.executeMethodForKey('render: StockJournalTotals', {})
+    })
 
     return (
         <Box
@@ -454,8 +450,7 @@ function StockJournalItemsFooter() {
                     size="small"
                     variant="contained"
                     color="secondary"
-                    // onClick={handleItemSearch}
-                >
+                    onClick={handleItemSearch}>
                     Item search
                 </Button>
                 {/* Count */}
@@ -482,6 +477,7 @@ function StockJournalItemsFooter() {
                 onClick={handleClear}>
                 Clear
             </Button>
+            <BasicMaterialDialog parentMeta={meta} />
         </Box>
     )
 
@@ -502,7 +498,14 @@ function StockJournalItemsFooter() {
         items.length = 0
         items.push({ qty: 1 })
         stockJournal.currentItemIndex = 0
-        megaData.executeMethodForKey('render:stockJournalLineItems', {})
+        megaData.executeMethodForKey(`render:stockJournalLineItems:${section}`, {})
+        setRefresh({})
+    }
+
+    function handleItemSearch() {
+        pre.dialogConfig.title = 'Search from all products'
+        pre.dialogConfig.content = () => <ProductsSearch parentMeta={meta} />
+        pre.showDialog = true
         setRefresh({})
     }
 }

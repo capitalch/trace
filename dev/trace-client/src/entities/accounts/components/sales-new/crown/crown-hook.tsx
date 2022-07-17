@@ -46,9 +46,8 @@ function useCrown() {
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        console.log(JSON.stringify(header))
+        // console.log(JSON.stringify(header))
         let ret = await genericUpdateMasterDetails([header])
-        // let ret:any = {error:true}
         if (ret.error) {
             console.log(ret.error)
         } else {
@@ -63,21 +62,10 @@ function useCrown() {
                 })
                 if (ret) {
                     setInBag('rawSaleData', ret)
-                    // sales.rawSaleData = ret
                     setRefresh({})
                 }
                 handleReset()
             }
-            // if (ad.shouldCloseParentOnSave) {
-            //     emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-            // } else if (ad.isViewBack) {
-            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-            //     emit('SALES-HOOK-CHANGE-TAB', 3)
-            //     arbitraryData.saleViewHookFetchData()
-            // } else {
-            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-            // }
-            // ad.isViewBack = false // no go back to view
         }
 
         function extractHeader() {
