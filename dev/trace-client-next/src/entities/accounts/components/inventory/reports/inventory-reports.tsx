@@ -38,9 +38,14 @@ export { InventoryReports }
 
 const reportsJson: any[] = [
     {
-        label: 'Stock summary',
-        value: 'stockSummaryReport',
-        breadCrumb: 'Stock summary'
+        label: 'Products list',
+        value: 'productsListReport',
+        breadCrumb: 'Products list'
+    },
+    {
+        label: 'Purchases',
+        value: 'purchaseReport',
+        breadCrumb: 'Purchases'
     },
     {
         label: 'Sales',
@@ -48,8 +53,10 @@ const reportsJson: any[] = [
         breadCrumb: 'Sales'
     },
     {
-        label: 'Purchases',
-        value: 'purchaseReport',
-        breadCrumb: 'Purchases'
+        label: 'Stock summary',
+        value: 'stockSummaryReport',
+        breadCrumb: 'Stock summary'
     },
+    
+    
 ]

@@ -1,5 +1,5 @@
 import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
-import { inventoryMegaData, salesMegaData, settingsMegaData } from '../entities/accounts/mega-data-init-values'
+import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData } from '../entities/accounts/components/common/init-mega-data-context-values'
 import {
     Container,
     makeStyles,
@@ -86,13 +86,14 @@ function TraceMain({ open }: any) {
 
 
     function initMegaData() {
-        const megaData: IMegaData // { accounts: any; keys: any; registerKeyWithMethod: KeyWithMethod; executeMethodForKey: KeyWithParams } 
+        const megaData: IMegaData 
             = {
             accounts: {
                 common: {},
                 inventory: inventoryMegaData(),
                 sales: salesMegaData(),
                 settings: settingsMegaData(),
+                stockJournal: stockJournalMegaData()
             },
 
             keysWithMethods: {},
@@ -101,12 +102,12 @@ function TraceMain({ open }: any) {
                 this.keysWithMethods[key] = method
             },
 
-            executeMethodForKey: function (key: string, params?: any) {
+            executeMethodForKey: function (key: string, ...params:any) {
                 if (!this.keysWithMethods[key]) {
                     return
                 }
                 const method = this.keysWithMethods[key]
-                const ret = params ? method(params) : method()
+                const ret = _.isEmpty(params) ? method() : method(...params)
                 return (ret)
             }
 

@@ -144,19 +144,21 @@ function useStockSummaryReport() {
                 field: 'productCode',
                 width: 80,
             },
+            // valueGetter is provided so that the data is available in csv export
             {
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
                 renderCell: (params: any) => <Product params={params} />,
+                valueGetter: (params:any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
                 width: 200,
             },
             {
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
-                field: '',
+                field: 'info',
                 renderCell: (params: any) => <ProductDetails params={params} />,
                 width: 300,
             },
@@ -265,7 +267,6 @@ function useStockSummaryReport() {
     function getGridSx() {
         return (
             {
-                // border: '4px solid orange',
                 p: 1, width: '100%',
                 fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(80),

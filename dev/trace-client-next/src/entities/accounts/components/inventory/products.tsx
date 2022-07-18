@@ -3,7 +3,7 @@ import { NewProduct } from './new-product'
 import { useProducts, useStyles } from './products-hook'
 
 function Products() {
-    const { getXXGridParams,handleCellClicked, handleCloseDialog, handleSubmit, meta, } = useProducts()
+    const { getXXGridParams, handleCloseDialog, handleSubmit, meta, } = useProducts()
     const classes = useStyles()
     const { getGridReportSubTitle, XXGrid } = useSharedElements()
     const pre = meta.current
@@ -31,8 +31,6 @@ function Products() {
                 autoFetchData={true}
                 columns={columns}
                 className="xx-grid"
-                onCellClick={handleCellClicked}
-                // processRowUpdate={processRowUpdate}
                 sharedData={pre.sharedData}
                 sqlQueryId={queryId}
                 sqlQueryArgs={queryArgs}
@@ -42,7 +40,7 @@ function Products() {
                 summaryColNames={summaryColNames}
                 toShowAddButton={true}
                 viewLimit="1000"
-            // xGridProps={{ onCellClick: handleCellClicked }}
+            
             />
             <Dialog
                 open={pre.showDialog}

@@ -1,4 +1,4 @@
-import { clsx, useEffect, useRef, useState } from './imports/regular-imports'
+import { clsx, useEffect, useState } from './imports/regular-imports'
 import 'fontsource-roboto'
 import { createStyles, makeStyles, Theme } from './imports/gui-imports'
 import { Box, AppBar } from './imports/gui-imports'

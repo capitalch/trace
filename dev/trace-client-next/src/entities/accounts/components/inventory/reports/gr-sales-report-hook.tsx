@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material'
-import { _, Box, CloseSharp, Container, GridCellParams, IconButton, manageEntitiesState, moment, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Box, CloseSharp, GridCellParams, IconButton, manageEntitiesState, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useSalesReport() {
     const [, setRefresh] = useState({})
@@ -7,11 +7,10 @@ function useSalesReport() {
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, filterOn } = useIbuki()
     const theme = useTheme()
-    // const multiData: any = useContext(MultiDataContext)
     const { getFromBag } = manageEntitiesState()
     const finYearObject = getFromBag('finYearObject')
     const isoFormat = 'YYYY-MM-DD'
-    const dateFormat = getFromBag('dateFormat')
+    // const dateFormat = getFromBag('dateFormat')
 
     const meta: any = useRef({
         allRows: [],
@@ -203,20 +202,20 @@ function useSalesReport() {
                 field: 'productCode',
                 width: 80,
             },
-
             {
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
                 renderCell: (params: any) => <Product params={params} />,
+                valueGetter: (params:any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
                 width: 200,
             },
             {
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
-                field: '',
+                field: 'info',
                 renderCell: (params: any) => <ProductDetails params={params} />,
                 width: 300,
             },

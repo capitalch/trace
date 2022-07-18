@@ -73,7 +73,6 @@ function useGeneralLedger(getArtifacts: any) {
         meta.current.showLedgerDialog = true
         setRefresh({})
     }
-
     return {handleLedgerDialogClose,handleLedgerPreview, meta }
 }
 

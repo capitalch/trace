@@ -1,5 +1,5 @@
-## upgrade trace-client kush
-npm install @mui/x-data-grid-pro @types/big.js @types/node big.js clsx moment primereact
+## upgrade trace-client chitta, need to do in Kush
+npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact
 
 ## upgraded trace-client at chitta, kush.
 @fortawesome/react-fontawesome @mui/material @mui/styles @mui/x-data-grid-pro @react-pdf/renderer @testing-library/user-event @types/big.js @types/jest @types/node
@@ -11,6 +11,11 @@ Observations:
 2. React 18: problem with useMediaQuery with react-pdf. could not solve. useMediaQuery is to be removed in this case from traceGlobal
 3. Process not defined errror: install react-error-overlay ver 6.0.9 at the end in devdependencies
 
+# Attempt on 18-07-2022
+create-react-app
+code transfer
+libs install
+worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
 
 ## Stock Journal
                                                                                                         Correct validation errors in items of sales-new
@@ -35,6 +40,7 @@ Delete functionality
                                                                                                         Submit functionality
 Serial number
 Print
+Modify associated query
 
 
 ### Plan (new)

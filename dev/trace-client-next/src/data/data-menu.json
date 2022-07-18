@@ -271,6 +271,12 @@
                             "hierarchy":"inventory-reports",
                             "label": "Reports",
                             "componentName": "inventoryReports"
+                        },
+                        {
+                            "name": "stockJournalSubMenu",
+                            "hierarchy":"inventory-stock-journal",
+                            "label": "Stock journal",
+                            "componentName": "stockJournal"
                         }
                     ]
                 }

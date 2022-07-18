@@ -1,7 +1,7 @@
 import {
-    _, Card, Big, Box, Button, DataGridPro, IMegaData, MegaDataContext, NumberFormat, SearchBox, TextField, Typography,
-    useContext, useEffect, useGridApiRef, useIbuki, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods, manageEntitiesState
-} from '../redirect'
+    _, Box, Button, DataGridPro, IMegaData, MegaDataContext, SearchBox, Typography,
+    useContext, useEffect, useGridApiRef, useIbuki, useRef, useState, useTheme, utilMethods, manageEntitiesState
+} from '../sales-new/redirect'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
@@ -19,7 +19,6 @@ function ProductsSearch({ parentMeta }: any) {
         filteredRows: [],
         setRefresh: setRefresh,
         selectionModel: [],
-        // isFirstTimeSelection: false
     })
     const pre = meta.current
 
@@ -40,7 +39,6 @@ function ProductsSearch({ parentMeta }: any) {
         </Box>
         <DataGridPro
             apiRef={apiRef}
-            // checkboxSelection={true}
             columns={getColumns()}
             getRowClassName={getRowClassName}
             rows={pre.filteredRows}
@@ -58,9 +56,11 @@ function ProductsSearch({ parentMeta }: any) {
                 const selectedProduct = products[index - 1]
                 if (megaData?.accounts) {
                     megaData.accounts.selectedProduct = selectedProduct
+                    const renderCallbackKey = parentMeta.current.renderCallbackKey || 'render:itemsFooter'
+                    const setItemToSelectedProductCallbackKey = parentMeta.current.setItemToSelectedProductCallbackKey || 'setItemToSelectedProduct:lineItems'
                     parentMeta.current.showDialog = false
-                    megaData.executeMethodForKey('render:itemsFooter', {}) // calling setRefresh({}) of parent
-                    megaData.executeMethodForKey('setItemToSelectedProduct:lineItems') // populates the selected product to current item
+                    megaData.executeMethodForKey(renderCallbackKey, {}) // calling setRefresh({}) of parent
+                    megaData.executeMethodForKey(setItemToSelectedProductCallbackKey) // populates the selected product to current item
                 }
             }}
         />
@@ -195,7 +195,7 @@ function ProductsSearch({ parentMeta }: any) {
                 border: '4px solid orange',
                 mt: 1.5,
                 p: 1, width: '100%',
-                fontSize:  '.9rem', //theme.spacing(1.7),
+                fontSize: '.9rem', //theme.spacing(1.7),
                 // minHeight: theme.spacing(60),
                 minHeight: '70vh',
                 // height: 'calc(100vh - 230px)',

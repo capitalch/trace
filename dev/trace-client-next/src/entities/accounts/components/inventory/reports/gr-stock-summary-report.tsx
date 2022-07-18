@@ -39,16 +39,9 @@ function StockSummaryReport() {
                 Toolbar: CustomToolbar,
                 Footer: CustomFooter,
             }}
-            componentsProps={{
-                row: {
-                    // onMouseOver: handleOnMouseOver, 
-                    // onMouseEnter: handleOnMouseEnter
-                }
-            }}
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
-            // isRowSelectable={(e:any)=>false}
             onSelectionModelChange={onSelectModelChange}
             rowHeight={70}
             rows={pre.filteredRows}
@@ -89,8 +82,7 @@ function StockSummaryReport() {
                                 title="Clear"
                                 aria-label="Clear"
                                 size="small"
-                                onClick={() => {
-                                    // multiData.generic.stockOnDate = moment().format('YYYY-MM-DD')
+                                onClick={() => {                                    
                                     pre.stockDate = moment().format('YYYY-MM-DD')
                                     fetchData()
                                 }}>
@@ -102,12 +94,10 @@ function StockSummaryReport() {
                                 type="date"
                                 InputLabelProps={{ shrink: true }}
                                 onChange={(e: any) => {
-                                    // multiData.generic.stockOnDate = e.target.value
                                     pre.stockDate = e.target.value
                                     setRefresh({})
                                 }}
-                                onFocus={(e: any) => e.target.select()}
-                                // value={multiData.generic.stockOnDate || ''}
+                                onFocus={(e: any) => e.target.select()}                                
                                 value={pre.stockDate || ''}
                             />
                             {/* Sync */}

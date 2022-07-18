@@ -8,6 +8,7 @@ import {
     ListAlt,
     Forum,
     AccountBalanceWallet,
+    AutoGraph,
     SettingsCell,
     Tune,
     Info,
@@ -93,6 +94,7 @@ const iconMap: any = {
     productsSubMenu: <LibraryBooks />,
     openingStockSubMenu: <AccountBalanceWallet />,
     inventoryReportsSubMenu: <ListAlt />,
+    stockJournalSubMenu: <AutoGraph />,
 
     //Admin menu
     artifacts: <CheckCircle></CheckCircle>,
