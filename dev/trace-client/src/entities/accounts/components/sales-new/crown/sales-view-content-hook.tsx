@@ -187,7 +187,6 @@ function useSalesViewContent() {
             loadExtGstTranD(res)
             loadSalePurchaseDetails(res)
             loadTranD(res)
-            // sales.salesCrownRefresh()
             megaData.executeMethodForKey('closeDialog:crown')
             megaData.executeMethodForKey('render:salesNew', {})
 
@@ -264,12 +263,9 @@ function useSalesViewContent() {
                         sales.salesAccount.accId = item.accId
                         sales.summary.amount = item.amount
                         sales.summary.backCalculateAmount = item.amount
-                        // sales.salesAccount.amount = item.amount
                         sales.salesAccount.id = isModify ? item.id : undefined // id from table TranD
-                        // sales.footer.amount = item.amount
                     } else {
                         const obj: any = {
-                            // accId: item.accId,
                             rowData: { accId: item.accId },
                             amount: item.amount,
                             instrNo: item.instrNo,

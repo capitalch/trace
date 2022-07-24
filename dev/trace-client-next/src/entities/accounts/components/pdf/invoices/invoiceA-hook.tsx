@@ -1,17 +1,17 @@
 import { useSharedElements } from '../../common/shared-elements-hook'
 function useInvoiceA() {
     const {
-        Document,
-        Page,
-        StyleSheet,
+        MDocument,
+        MPage,
+        MStyleSheet,
         toDecimalFormat,
-        Text,
-        View,
+        MText,
+        MView,
     } = useSharedElements()
 
     function InvoicePdf({ invoiceData }: any) {
         // console.log(JSON.stringify(invoiceData))
-        const gStyles = StyleSheet.create({
+        const gStyles = MStyleSheet.create({
             page: {
                 flexDirection: 'column',
                 paddingLeft: 30,
@@ -57,20 +57,20 @@ function useInvoiceA() {
         })
 
         return (
-            <Document>
-                <Page size="A4" style={gStyles.page}>
+            <MDocument>
+                <MPage size="A4" style={gStyles.page}>
                     <HeaderBlock invoiceData={invoiceData} />
                     <SubHeaderBlock invoiceData={invoiceData} />
                     <ItemsTable invoiceData={invoiceData} />
                     <SummaryBlock invoiceData={invoiceData} />
                     <Footer invoiceData={invoiceData} />
                     <PageNo />
-                </Page>
-            </Document>
+                </MPage>
+            </MDocument>
         )
 
         function HeaderBlock({ invoiceData }: any) {
-            const styles = StyleSheet.create({
+            const styles = MStyleSheet.create({
                 headerBlock: {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -81,14 +81,14 @@ function useInvoiceA() {
                 },
             })
             return (
-                <View style={styles.headerBlock} fixed={true}>
+                <MView style={styles.headerBlock} fixed={true}>
                     <HeaderCompany invoiceData={invoiceData} />
                     <HeaderInvoice invoiceData={invoiceData} />
-                </View>
+                </MView>
             )
 
             function HeaderCompany({ invoiceData }: any) {
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     headerCompany: {
                         flexDirection: 'column',
                         marginTop: 8,
@@ -109,10 +109,10 @@ function useInvoiceA() {
                 })
                 const ci = invoiceData.companyInfo
                 return (
-                    <View style={styles.headerCompany} fixed={true}>
-                        <Text style={styles.companyName}>{ci.name}</Text>
-                        <Text style={styles.gstin}>GSTIN {ci.gstin}</Text>
-                        <Text style={styles.address}>
+                    <MView style={styles.headerCompany} fixed={true}>
+                        <MText style={styles.companyName}>{ci.name}</MText>
+                        <MText style={styles.gstin}>GSTIN {ci.gstin}</MText>
+                        <MText style={styles.address}>
                             {''.concat(
                                 ci.address1 || '',
                                 ' ',
@@ -126,21 +126,21 @@ function useInvoiceA() {
                                 ' Web: ',
                                 ci.web || ''
                             )}
-                        </Text>
-                        <Text style={styles.address}>
+                        </MText>
+                        <MText style={styles.address}>
                             {''.concat(
                                 ci.stateName || '',
                                 ' ',
                                 'State code: ',
                                 ci.stateCode || ''
                             )}
-                        </Text>
-                    </View>
+                        </MText>
+                    </MView>
                 )
             }
 
             function HeaderInvoice({ invoiceData }: any) {
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     taxInvoice: {
                         fontWeight: 'bold',
                         fontSize: 12,
@@ -165,37 +165,37 @@ function useInvoiceA() {
                 })
                 const ii = invoiceData.invoiceInfo
                 return (
-                    <View style={styles.headerInvoice}>
-                        <View
+                    <MView style={styles.headerInvoice}>
+                        <MView
                             style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                             }}>
-                            <Text style={styles.taxInvoice}>
+                            <MText style={styles.taxInvoice}>
                                 {invoiceData.invoiceInfo.title}
-                            </Text>
-                            <Text style={styles.buyersCopy}>
+                            </MText>
+                            <MText style={styles.buyersCopy}>
                                 {invoiceData.invoiceInfo.titleRight}
-                            </Text>
-                        </View>
+                            </MText>
+                        </MView>
 
-                        <Text style={styles.invoiceNo}>
+                        <MText style={styles.invoiceNo}>
                             Invoice #: {ii.invoiceNo}
-                        </Text>
-                        <Text style={gStyles.normal}>
+                        </MText>
+                        <MText style={gStyles.normal}>
                             Date: {ii.invoiceDate}
-                        </Text>
-                        <Text style={gStyles.normal}>
+                        </MText>
+                        <MText style={gStyles.normal}>
                             {''.concat('Type: ', ii.type)}
-                        </Text>
-                    </View>
+                        </MText>
+                    </MView>
                 )
             }
         }
 
         function SubHeaderBlock({ invoiceData }: any) {
-            const styles = StyleSheet.create({
+            const styles = MStyleSheet.create({
                 SubHeaderBlock: {
                     flexDirection: 'row',
                     justifyContent: 'space-between',
@@ -218,18 +218,18 @@ function useInvoiceA() {
             const ib = invoiceData.billTo
             const is = invoiceData.shipTo
             return (
-                <View style={styles.SubHeaderBlock}>
-                    <View style={styles.customerDetailsCont}>
-                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}>
+                <MView style={styles.SubHeaderBlock}>
+                    <MView style={styles.customerDetailsCont}>
+                        <MText style={{ fontSize: 10, fontWeight: 'bold' }}>
                             Customer Details
-                        </Text>
-                        <Text style={styles.bold}>
+                        </MText>
+                        <MText style={styles.bold}>
                             {ib.name || ''}
-                        </Text>
-                        <Text style={styles.bold}>
+                        </MText>
+                        <MText style={styles.bold}>
                             {''.concat('GSTIN ', ib.gstin || '')}
-                        </Text>
-                        <Text style={gStyles.normal}>
+                        </MText>
+                        <MText style={gStyles.normal}>
                             {''.concat(
                                 ib.address1 || '',
                                 ' ',
@@ -241,19 +241,19 @@ function useInvoiceA() {
                                 ' email:',
                                 ib.email || ''
                             )}
-                        </Text>
-                        <Text style={gStyles.bold}>
+                        </MText>
+                        <MText style={gStyles.bold}>
                             {''.concat(
                                 'Place of supply:',
                                 ib?.stateName || '',
                                 ' State Code: ',
                                 ib?.stateCode || ''
                             )}
-                        </Text>
-                    </View>
-                    <View style={styles.shippingAddressCont}>
-                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}> Shipping Address</Text>
-                        <Text style={gStyles.normal}>
+                        </MText>
+                    </MView>
+                    <MView style={styles.shippingAddressCont}>
+                        <MText style={{ fontSize: 10, fontWeight: 'bold' }}> Shipping Address</MText>
+                        <MText style={gStyles.normal}>
                             {''.concat(
                                 is.name ? is.name + ', ' : '',
                                 is.address1 ? ' ' + is.address1 : '',
@@ -264,23 +264,23 @@ function useInvoiceA() {
                                 is.state ? ' State:' + is.state : '',
                                 is.country ? ' Country: ' + is.country : ''
                             )}
-                        </Text>
-                    </View>
-                </View>
+                        </MText>
+                    </MView>
+                </MView>
             )
         }
 
         function ItemsTable({ invoiceData }: any) {
             return (
-                <View>
+                <MView>
                     <TableHeader />
                     <TableItems />
                     <TableFooter />
-                </View>
+                </MView>
             )
 
             function TableHeader() {
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     header: {
                         paddingTop: 3,
                         flexDirection: 'row',
@@ -289,61 +289,61 @@ function useInvoiceA() {
                     },
                 })
                 return (
-                    <View style={[styles.header, { borderBottom: 1 }]} fixed>
-                        <Text style={[gStyles.bold, { width: 20 }]}>#</Text>
-                        <Text style={[gStyles.bold, { width: 200 }]}>
+                    <MView style={[styles.header, { borderBottom: 1 }]} fixed>
+                        <MText style={[gStyles.bold, { width: 20 }]}>#</MText>
+                        <MText style={[gStyles.bold, { width: 200 }]}>
                             Items
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 30, textAlign: 'right' },
                             ]}>
                             Qty
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 60, textAlign: 'right' },
                             ]}>
                             Rate
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 40, textAlign: 'right' },
                             ]}>
                             Disc
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 80, textAlign: 'right' },
                             ]}>
                             Aggregate
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 60, textAlign: 'right' },
                             ]}>
                             Tax amount &nbsp;
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 6, textAlign: 'right' },
                             ]}>
                             (%)
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 90, textAlign: 'right' },
                             ]}>
                             Amount
-                        </Text>
-                    </View>
+                        </MText>
+                    </MView>
                 )
             }
 
@@ -352,71 +352,71 @@ function useInvoiceA() {
                 let counter = 0
                 const rows = ii.map((x: any, index: number) => {
                     return (
-                        <View
+                        <MView
                             style={{
                                 flexDirection: 'row',
                                 paddingBottom: 5,                               
                             }}
                             key={keyGen()}>
-                            <Text style={[gStyles.normal, { width: 20 }]}>
+                            <MText style={[gStyles.normal, { width: 20 }]}>
                                 {index + 1}
-                            </Text>
-                            <Text style={[gStyles.normal, { width: 200 }]}>
+                            </MText>
+                            <MText style={[gStyles.normal, { width: 200 }]}>
                                 {x.desc}
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 30, textAlign: 'right' },
                                 ]}>
                                 {x.qty}
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 60, textAlign: 'right' },
                                 ]}>
                                 {x.price}
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 40, textAlign: 'right' },
                                 ]}>
                                 {x.discount}
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 80, textAlign: 'right' },
                                 ]}>
                                 {x.aggr}
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 60, textAlign: 'right' },
                                 ]}>
                                 {x.gst} &nbsp;
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 6, textAlign: 'right' },
                                 ]}>
                                 {''.concat('(', x.gstRate, ')')}
-                            </Text>
-                            <Text
+                            </MText>
+                            <MText
                                 style={[
                                     gStyles.normal,
                                     { width: 90, textAlign: 'right' },
                                 ]}>
                                 {x.amount}
-                            </Text>
-                        </View>
+                            </MText>
+                        </MView>
                     )
                 })
-                return <View style={{ flexDirection: 'column',  borderBottom:1, }}>{rows}</View>
+                return <MView style={{ flexDirection: 'column',  borderBottom:1, }}>{rows}</MView>
 
                 function keyGen() {
                     return ++counter
@@ -425,7 +425,7 @@ function useInvoiceA() {
 
             function TableFooter() {
                 const s = invoiceData.summary
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     footer: {
                         paddingTop: 2,
                         flexDirection: 'row',
@@ -434,59 +434,59 @@ function useInvoiceA() {
                     },
                 })
                 return (
-                    <View style={[styles.footer]} fixed>
-                        <Text style={[gStyles.bold, { width: 20 }]}></Text>
-                        <Text style={[gStyles.bold, { width: 200 }]}>
+                    <MView style={[styles.footer]} fixed>
+                        <MText style={[gStyles.bold, { width: 20 }]}></MText>
+                        <MText style={[gStyles.bold, { width: 200 }]}>
                             Total
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 30, textAlign: 'right' },
                             ]}>
                             {s.qty}
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 60, textAlign: 'right' },
                             ]}>
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 40, textAlign: 'right' },
                             ]}>
                             {s.discount}
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 80, textAlign: 'right' },
                             ]}>
                             {s.aggr}
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 60, textAlign: 'right' },
                             ]}>
                             {s.taxAmount} &nbsp;
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 6, textAlign: 'right' },
                             ]}>
-                        </Text>
-                        <Text
+                        </MText>
+                        <MText
                             style={[
                                 gStyles.bold,
                                 { width: 90, textAlign: 'right' },
                             ]}>
                             {s.amount}
-                        </Text>
-                    </View>
+                        </MText>
+                    </MView>
                     // </View>
                 )
             }
@@ -497,7 +497,7 @@ function useInvoiceA() {
             const r = invoiceData.receipts
 
             function Summary() {
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     summary: {
                         flexDirection: 'column',
                         fontSize: 9,
@@ -514,41 +514,41 @@ function useInvoiceA() {
                     },
                 })
                 return (
-                    <View style={styles.summary}>
-                        <View
+                    <MView style={styles.summary}>
+                        <MView
                             style={{
                                 fontWeight: 'bold',
                                 flexDirection: 'row',
                             }}>
-                            <Text style={styles.label}>Aggregate amount:</Text>
-                            <Text style={styles.value}>{s.aggr}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.label}>Cgst:</Text>
-                            <Text style={styles.value}>{s.cgst}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.label}>Sgst:</Text>
-                            <Text style={styles.value}>{s.sgst}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.label}>Igst:</Text>
-                            <Text style={styles.value}>{s.igst}</Text>
-                        </View>
-                        <View
+                            <MText style={styles.label}>Aggregate amount:</MText>
+                            <MText style={styles.value}>{s.aggr}</MText>
+                        </MView>
+                        <MView style={{ flexDirection: 'row' }}>
+                            <MText style={styles.label}>Cgst:</MText>
+                            <MText style={styles.value}>{s.cgst}</MText>
+                        </MView>
+                        <MView style={{ flexDirection: 'row' }}>
+                            <MText style={styles.label}>Sgst:</MText>
+                            <MText style={styles.value}>{s.sgst}</MText>
+                        </MView>
+                        <MView style={{ flexDirection: 'row' }}>
+                            <MText style={styles.label}>Igst:</MText>
+                            <MText style={styles.value}>{s.igst}</MText>
+                        </MView>
+                        <MView
                             style={{
                                 fontWeight: 'bold',
                                 flexDirection: 'row',
                             }}>
-                            <Text style={styles.label}>Total amount:</Text>
-                            <Text style={styles.value}>{s.amount}</Text>
-                        </View>
-                    </View>
+                            <MText style={styles.label}>Total amount:</MText>
+                            <MText style={styles.value}>{s.amount}</MText>
+                        </MView>
+                    </MView>
                 )
             }
 
             function ReceiptsTable() {
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     header: {
                         flexDirection: 'row',
                         fontWeight: 'bold',
@@ -564,15 +564,15 @@ function useInvoiceA() {
                 })
                 function Header() {
                     return (
-                        <View style={styles.header}>
-                            <Text style={{ width: 10 }}>#</Text>
-                            <Text style={{ width: 60 }}>Type</Text>
-                            <Text style={{ width: 60 }}>Instrument</Text>
-                            <Text style={{ width: 60 }}>Remarks</Text>
-                            <Text style={{ width: 40, textAlign: 'right' }}>
+                        <MView style={styles.header}>
+                            <MText style={{ width: 10 }}>#</MText>
+                            <MText style={{ width: 60 }}>Type</MText>
+                            <MText style={{ width: 60 }}>Instrument</MText>
+                            <MText style={{ width: 60 }}>Remarks</MText>
+                            <MText style={{ width: 40, textAlign: 'right' }}>
                                 Amount
-                            </Text>
-                        </View>
+                            </MText>
+                        </MView>
                     )
                 }
 
@@ -580,21 +580,21 @@ function useInvoiceA() {
                     let counter = 0
                     const rows = r.map((x: any, index: number) => {
                         return (
-                            <View style={styles.receiptItems} key={keyGen()}>
-                                <Text style={{ width: 10 }}>{index + 1}</Text>
-                                <Text style={{ width: 60 }}>{x.type}</Text>
-                                <Text style={{ width: 60 }}>
+                            <MView style={styles.receiptItems} key={keyGen()}>
+                                <MText style={{ width: 10 }}>{index + 1}</MText>
+                                <MText style={{ width: 60 }}>{x.type}</MText>
+                                <MText style={{ width: 60 }}>
                                     {x.instrument}
-                                </Text>
-                                <Text style={{ width: 60 }}>{x.remarks}</Text>
-                                <Text style={{ width: 40, textAlign: 'right' }}>
+                                </MText>
+                                <MText style={{ width: 60 }}>{x.remarks}</MText>
+                                <MText style={{ width: 40, textAlign: 'right' }}>
                                     {x.amount}
-                                </Text>
-                            </View>
+                                </MText>
+                            </MView>
                         )
                     })
                     return (
-                        <View style={{ flexDirection: 'column' }}>{rows}</View>
+                        <MView style={{ flexDirection: 'column' }}>{rows}</MView>
                     )
                     function keyGen() {
                         return ++counter
@@ -602,60 +602,60 @@ function useInvoiceA() {
                 }
 
                 return (
-                    <View>
-                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}>
+                    <MView>
+                        <MText style={{ fontSize: 10, fontWeight: 'bold' }}>
                             Receipts
-                        </Text>
+                        </MText>
                         <Header />
                         <ReceiptItems />
-                    </View>
+                    </MView>
                 )
             }
 
             function Signatory() {
-                const styles = StyleSheet.create({
+                const styles = MStyleSheet.create({
                     signatoryItem: {
                         fontSize: 8,
                         fontWeight: 'bold',
                     },
                 })
                 return (
-                    <View
+                    <MView
                         style={{
                             flexDirection: 'column',
                             justifyContent: 'flex-end',
                         }}>
-                        <Text></Text>
-                        <Text></Text>
-                        <Text style={styles.signatoryItem}>
+                        <MText></MText>
+                        <MText></MText>
+                        <MText style={styles.signatoryItem}>
                             Authorised signatory
-                        </Text>
-                        <Text style={[styles.signatoryItem, { fontSize: 7 }]}>
+                        </MText>
+                        <MText style={[styles.signatoryItem, { fontSize: 7 }]}>
                             Computer generated invoice{' '}
-                        </Text>
-                        <Text style={[styles.signatoryItem, { fontSize: 7 }]}>
+                        </MText>
+                        <MText style={[styles.signatoryItem, { fontSize: 7 }]}>
                             (No signature required)
-                        </Text>
-                    </View>
+                        </MText>
+                    </MView>
                 )
             }
 
             return (
-                <View style={gStyles.summaryBlock}>
+                <MView style={gStyles.summaryBlock}>
                     <ReceiptsTable />
                     <Signatory />
                     <Summary />
-                </View>
+                </MView>
             )
         }
 
         function Footer({ invoiceData }: any) {
             return (
-                <View style={[gStyles.footer]}>
-                    <Text style={{ fontSize: 10, flexWrap:'wrap', width:'72%' }}>
+                <MView style={[gStyles.footer]}>
+                    <MText style={{ fontSize: 10, flexWrap:'wrap', width:'72%' }}>
                         {invoiceData?.summary?.amountInWords || ''}
-                    </Text>
-                    <Text
+                    </MText>
+                    <MText
                         style={{
                             fontSize: 10,
                             fontWeight: 'bold',
@@ -663,19 +663,19 @@ function useInvoiceA() {
                         }}>
                         Amount payable:{' '}
                         {toDecimalFormat(invoiceData?.summary?.amount || 0)}
-                    </Text>
-                </View>
+                    </MText>
+                </MView>
             )
         }
 
         function PageNo() {
             return (
-                <Text
+                <MText
                     style={gStyles.pageNumber}
                     render={({ pageNumber, totalPages }: any) =>
                         `${pageNumber} / ${totalPages}`
                     }
-                    fixed></Text>
+                    fixed></MText>
             )
         }
     }

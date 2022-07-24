@@ -166,6 +166,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             processRowUpdate={processRowUpdate}
             rows={meta.current.filteredRows}
             rowHeight={rowHeight}
+            getRowHeight={()=>'auto'}
             disableColumnMenu={true}
             components={{
                 Toolbar: CustomGridToolbar,

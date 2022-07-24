@@ -1,4 +1,4 @@
-## upgrade trace-client chitta, need to do in Kush
+## upgrade trace-client chitta and kush
 npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact
 
 ## upgraded trace-client at chitta, kush.
@@ -10,6 +10,14 @@ Observations:
 1. react-scripts 5 does not work so react-scripts 4.x is applied
 2. React 18: problem with useMediaQuery with react-pdf. could not solve. useMediaQuery is to be removed in this case from traceGlobal
 3. Process not defined errror: install react-error-overlay ver 6.0.9 at the end in devdependencies
+
+# Attempt on 23-07-2022
+create-react-app
+only using react-pdf and media-query worked fine
+
+"@types/react": "^17.0.44", for react-input-mask to work correctly
+Failed with pdf error with mediaQuery. I think maybe it'll work if created from scratch
+Also @mui/styles library expected React 17.x.x version. Finally only @react-pdf/renderer did not work correctly, it gave mediaquery error
 
 # Attempt on 18-07-2022
 create-react-app
@@ -35,12 +43,14 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         Add Destination (Production)
                                                                                                         Clear button in footer with functionality
                                                                                                         Delete row functionality
-View functionality
-Delete functionality
+                                                                                                        View functionality
+Edit functionality
+Delete stock journal as whole
+Delete items in edit mode
                                                                                                         Submit functionality
 Serial number
 Print
-Modify associated query
+Reflect effect of stock journal in associated queries for stock and sales etc.
 
 
 ### Plan (new)

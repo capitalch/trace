@@ -46,7 +46,7 @@ function useCrown() {
         const header = extractHeader()
         const details = extractDetails()
         header.data[0].details = details
-        // console.log(JSON.stringify(header))
+        
         let ret = await genericUpdateMasterDetails([header])
         if (ret.error) {
             console.log(ret.error)

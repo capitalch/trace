@@ -1112,19 +1112,26 @@ allSqls = {
 			or "info" ILIKE ANY(array[someArgs])
     ''',
 
-    # "get_stock_op_bal": '''
-    #     select a."id", "catName", "catId", "brandName", "brandId", "productId" ,"label", "info", "qty", "openingPrice", "lastPurchaseDate"
-    #         from "ProductOpBal" a
-    #             join "ProductM" p
-    #                 on p."id" = a."productId"
-    #             join "CategoryM" c
-    #                 on c."id" = p."catId"
-    #             join "BrandM" b
-    #                 on b."id" = p."brandId"
-    #     where "finYearId" = %(finYearId)s
-    #         and "branchId" = %(branchId)s
-    #     order by a."id" DESC
-    # ''',
+    "get_stock_journal_view":'''
+        select h."id" as "id1", "tranDate", "autoRefNo", "userRefNo", h."remarks"
+        , CASE when "dc"='D' then "qty" else 0 end as "debits"
+        , CASE when "dc"='C' then "qty" else 0 end as "credits"
+        , "productCode","brandName", "label", "catName", "info"
+        , "dc","lineRefNo", "lineRemarks"
+            from "TranH" h
+                join "StockJournal" s
+                    on h."id" = s."tranHeaderId"
+				join "ProductM" p
+					on p."id" = s."productId"
+				join "CategoryM" c
+					on c."id" = p."catId"
+				join "BrandM" b
+					on b."id" = p."brandId"
+        where "tranTypeId" = 11 
+        and "finYearId" = %(finYearId)s
+        and "branchId" = %(branchId)s
+        order by "tranDate" DESC LIMIT %(no)s
+    ''',
 
     "get_stock_summary": '''
         with cte0 as( --base cte used many times in next

@@ -3,9 +3,9 @@ import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaDat
 import {
     Container,
     makeStyles,
-    createStyles,
+    createStyles, useTheme
 } from '../imports/gui-imports'
-import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
+import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal,  } from '../imports/trace-imports'
 import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
 import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
 import { IMegaData } from './mega-data-context'
@@ -25,7 +25,7 @@ function TraceMain({ open }: any) {
         marginTop: 0,
         launchPad: null,
     })
-
+    const theme = useTheme()
     const { getCurrentMediaSize } = useTraceGlobal()
 
     // xs is 600px. If viewport is less than xs then material-ui automatically reduces the header (AppBar) height to 48 pix or theme.spacing(6) otherwise it is 64 pix or theme.spacing(8).
@@ -72,7 +72,7 @@ function TraceMain({ open }: any) {
     }
 
     return (
-        <Container
+        <Container sx={{mt:theme.spacing(15)}}
             className={clsx(classes.content, {
                 [classes.contentShift]: open,
             })}>

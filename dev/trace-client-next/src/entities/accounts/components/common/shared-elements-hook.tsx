@@ -1,6 +1,7 @@
 import { makeStyles, Theme, createStyles, } from '../../../../imports/gui-imports'
 import { useConfirm } from '../../../../imports/regular-imports'
 import { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
+import { Document as MDocument, BlobProvider as MBlobProvider, Line as MLine, Page as MPage, pdf as mpdf, PDFViewer as MPDFViewer, StyleSheet as MStyleSheet, Svg as MSvg, Text as MText, usePDF as musePDF, View as MView, } from '@react-pdf/renderer'
 import { components as reactSelectComponents } from 'react-select'
 import ReactSelect from 'react-select'
 
@@ -195,9 +196,20 @@ function useSharedElements() {
         usePDF,
         View,
         XXGrid,
+        MDocument,
+        MBlobProvider,
+        MLine,
+        MPage,
+        mpdf,
+        MPDFViewer,
+        MStyleSheet,
+        MSvg,
+        MText,
+        musePDF,
+        MView
     }
 }
-
+// import { Document as _Document, BlobProvider as _BlobProvider, Line as _Line, Page as _Page, pdf as _pdf, PDFViewer as _PDFViewer, StyleSheet as _StyleSheet, Svg as _Svg, Text as _Text, usePDF as _usePDF, View as _View, } from '@react-pdf/renderer'
 export { useSharedElements }
 
 const useStyles: any = makeStyles((theme: Theme) =>

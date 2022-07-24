@@ -65,8 +65,7 @@ function StockJournalItemsHeader({ section }: any) {
                     megaData.executeMethodForKey(
                         `handleAddItem:stockJournalLineItems:${section}`
                     )
-                }
-                }
+                }}
                 startIcon={<AddCircle sx={{ ml: -3 }} />}>
                 Add
             </Button>
@@ -79,7 +78,6 @@ function StockJournalLineItems({ section }: any) {
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal: any = megaData.accounts.stockJournal[section]
     const items: any[] = stockJournal.items
-    // const allErrors = stockJournal.allErrors
 
     useEffect(() => {
         megaData.registerKeyWithMethod(
@@ -103,7 +101,7 @@ function StockJournalLineItems({ section }: any) {
     )
 
     function handleAddItem() {
-        console.log(section)
+        // console.log(section)
         items.push({ qty: 1 })
         stockJournal.currentItemIndex = items.length - 1
         setRefresh({})

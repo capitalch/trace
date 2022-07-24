@@ -57,8 +57,6 @@ const stockJournalMegaData = () => ({
         allErrors: {},
         currentItemIndex: 0,
         items: [{ qty: 1 }],
-        // qty: 1,
-        // remarks: undefined,
         summary: {
             count: 1,
             qty: 1,
@@ -69,8 +67,6 @@ const stockJournalMegaData = () => ({
         allErrors: {},
         currentItemIndex: 0,
         items: [{ qty: 1 }],
-        // qty: 1,
-        // remarks: undefined,
         summary: {
             count: 1,
             qty: 1,

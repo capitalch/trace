@@ -1,12 +1,22 @@
 import {
-    Box, Button, genericUpdateMasterDetails, getFromBag, IMegaData, manageEntitiesState, MegaDataContext, setInBag, stockJournalMegaData, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, XXGrid
+    genericUpdateMasterDetails, getFromBag, IMegaData, MegaDataContext, stockJournalMegaData, useContext, useIbuki, useRef, useState,
 } from '../redirect'
+import { StockJournalViewContent } from './stock-journal-view-content'
 
 function useStockJournalCrown() {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
     const { emit } = useIbuki()
+
+    const meta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            title: 'View stock journal',
+            content: () => <></>,
+        }
+    })
+    const pre = meta.current
 
     function handleReset() {
         megaData.accounts.stockJournal = stockJournalMegaData()
@@ -18,11 +28,11 @@ function useStockJournalCrown() {
 
         console.log(headerWithDetails)
         const ret = await genericUpdateMasterDetails([headerWithDetails])
-        if(ret.error){
+        if (ret.error) {
             console.log(ret.error)
         } else {
             const id = ret?.data?.accounts?.genericUpdateMasterDetails
-            console.log('id for TranH:',id)
+            console.log('id for TranH:', id)
             handleReset()
         }
 
@@ -47,7 +57,7 @@ function useStockJournalCrown() {
                 tranTypeId: 11,
                 details: [],
             }
-            
+
             item.details.push(extractDetails())
             obj.data.push(item)
             return obj
@@ -82,10 +92,15 @@ function useStockJournalCrown() {
                 return (obj)
             }
         }
-
     }
 
-    return { handleReset, handleSubmit }
+    function handleViewStockJournalDialog() {
+        pre.showDialog = true
+        pre.dialogConfig.content = StockJournalViewContent
+        setRefresh({})
+    }
+
+    return { handleReset, handleSubmit, handleViewStockJournalDialog, meta }
 }
 
 export { useStockJournalCrown }

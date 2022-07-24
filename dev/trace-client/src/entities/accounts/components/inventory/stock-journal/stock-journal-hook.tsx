@@ -1,5 +1,0 @@
-
-function useStockJournal() {
-
-}
-export { useStockJournal }
