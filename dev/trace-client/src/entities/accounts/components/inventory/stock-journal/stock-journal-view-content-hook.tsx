@@ -1,62 +1,88 @@
 import {
     Box,
-    genericUpdateMasterDetails, getFromBag, IMegaData, manageEntitiesState, MegaDataContext, moment, stockJournalMegaData, Typography, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods
+    genericUpdateMasterDetails,
+    getFromBag,
+    IMegaData,
+    manageEntitiesState,
+    MegaDataContext,
+    moment,
+    stockJournalMegaData,
+    Typography,
+    useConfirm,
+    useContext,
+    useEffect,
+    useIbuki,
+    useRef,
+    useState,
+    useTheme,
+    utils,
+    utilMethods,
 } from '../redirect'
 
 function useStockJournalViewContent() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
     const confirm = useConfirm()
-    const { isControlDisabled, genericUpdateMaster, toDecimalFormat } = utilMethods()
+    const { isControlDisabled, genericUpdateMaster, toDecimalFormat } =
+        utilMethods()
     const { emit, filterOn } = useIbuki()
-    const { getFromBag, setInBag, } = manageEntitiesState()
+    const { getFromBag, setInBag } = manageEntitiesState()
     const dateFormat = getFromBag('dateFormat')
-    const { isAllowedUpdate, execSaleInvoiceView, getAccountClassWithAutoSubledger } = utils()
+    const {
+        isAllowedUpdate,
+        execSaleInvoiceView,
+        getAccountClassWithAutoSubledger,
+    } = utils()
     const theme = useTheme()
 
     useEffect(() => {
         const { gridActionMessages } = getXXGridParams()
         emit(gridActionMessages.fetchIbukiMessage, null)
-        const subs1 = filterOn(gridActionMessages.editIbukiMessage).subscribe((d: any) => {
-            const { tranDate, clearDate, id1 } = d.data?.row
-            if (isAllowedUpdate({ tranDate, clearDate })) {
-                // loadSaleOnId(id1, true) // isModify; 2nd arg is true for no new entry in tables
+        const subs1 = filterOn(gridActionMessages.editIbukiMessage).subscribe(
+            (d: any) => {
+                const { tranDate, clearDate, id1 } = d.data?.row
+                if (isAllowedUpdate({ tranDate, clearDate })) {
+                    // loadSaleOnId(id1, true) // isModify; 2nd arg is true for no new entry in tables
+                }
             }
-        })
-        const subs2 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe((d: any) => {
-            const options: any = {
-                // description: accountsMessages.transactionDelete,
-                confirmationText: 'Yes',
-                cancellationText: 'No',
-            }
-            const { tranDate, clearDate, id1 } = d.data?.row
-            if (isAllowedUpdate({ tranDate, clearDate })) {
-                confirm(options)
-                    .then(async () => {
-                        const id = id1
-                        emit('SHOW-LOADING-INDICATOR', true)
-                        await genericUpdateMaster({
-                            deletedIds: [id],
-                            tableName: 'TranH',
+        )
+        const subs2 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe(
+            (d: any) => {
+                const options: any = {
+                    // description: accountsMessages.transactionDelete,
+                    confirmationText: 'Yes',
+                    cancellationText: 'No',
+                }
+                const { tranDate, clearDate, id1 } = d.data?.row
+                if (isAllowedUpdate({ tranDate, clearDate })) {
+                    confirm(options)
+                        .then(async () => {
+                            const id = id1
+                            emit('SHOW-LOADING-INDICATOR', true)
+                            await genericUpdateMaster({
+                                deletedIds: [id],
+                                tableName: 'TranH',
+                            })
+                            emit('SHOW-LOADING-INDICATOR', false)
+                            emit('SHOW-MESSAGE', {})
+                            emit(gridActionMessages.fetchIbukiMessage, null)
                         })
-                        emit('SHOW-LOADING-INDICATOR', false)
-                        emit('SHOW-MESSAGE', {})
-                        emit(gridActionMessages.fetchIbukiMessage, null)
-                    })
-                    .catch(() => { }) // important to have otherwise eror
+                        .catch(() => {}) // important to have otherwise eror
+                }
             }
-        })
-        const subs3 = filterOn(gridActionMessages.printIbukiMessage).subscribe((d: any) => {
-            const row = d.data?.row
-            // doPrintPreview(row.id1)
-        })
-        return (() => {
+        )
+        const subs3 = filterOn(gridActionMessages.printIbukiMessage).subscribe(
+            (d: any) => {
+                const row = d.data?.row
+                // doPrintPreview(row.id1)
+            }
+        )
+        return () => {
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
-        })
+        }
     }, [])
-
 
     function getXXGridParams() {
         const columns = [
@@ -108,21 +134,38 @@ function useStockJournalViewContent() {
                 // field: '1',
                 width: 250,
                 // renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params: any) => `Pr code:${params.row.productCode} ${params.row.catName} ${params.row.brandName} ${params.row.label} ${params.row.info ?? ''}`
+                valueGetter: (params: any) =>
+                    `Pr code:${params.row.productCode} ${params.row.catName} ${
+                        params.row.brandName
+                    } ${params.row.label} ${params.row.info ?? ''}`,
             },
             {
-                headerName: 'Debits',
-                description: 'Debits',
-                field: 'debits',
-                type: 'number',
-                
-                width: 70,
-            },
-            {
-                headerName: 'Credits',
+                headerName: 'Credits (Input)',
                 description: 'Credits',
                 field: 'credits',
                 type: 'number',
+                valueGetter: (params: any) => params.row.credits || '',
+                renderHeader: (params: any) => (
+                    <Box sx={{display:'flex', flexDirection:'column', mt:.5,mb:.5}}>
+                        
+                        <Typography variant='body2'>Input</Typography>
+                        <Typography variant='body2'>(Credits)</Typography>
+                    </Box>
+                ),
+                width: 75,
+            },
+            {
+                headerName: 'Output',
+                description: 'Debits',
+                field: 'debits',
+                type: 'number',
+                valueGetter: (params: any) => params.row.debits || '',
+                renderHeader: (params: any) => (
+                    <Box sx={{display:'flex', flexDirection:'column', mt:.5,mb:.5}}>
+                        <Typography variant='body2'>Output</Typography>
+                        <Typography variant='body2'>(Debits)</Typography>
+                    </Box>
+                ),
                 width: 70,
             },
             {
@@ -145,16 +188,21 @@ function useStockJournalViewContent() {
         const summaryColNames: string[] = ['debits', 'credits']
         const specialColumns = {
             isEdit: true,
-            isEditDisabled: isControlDisabled('salespurchases-simple-sales-edit'),
+            isEditDisabled: isControlDisabled(
+                'salespurchases-simple-sales-edit'
+            ),
             isDelete: true,
-            isDeleteDisabled: isControlDisabled('salespurchases-simple-sales-delete'),
+            isDeleteDisabled: isControlDisabled(
+                'salespurchases-simple-sales-delete'
+            ),
             isPrint: true,
         }
         const gridActionMessages = {
             fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-STOCK-JOURNAL-DATA',
             editIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
-            printIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-PRINT-CLICKED'
+            deleteIbukiMessage:
+                'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
+            printIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-PRINT-CLICKED',
         }
 
         // function Product({ params }: any) {
