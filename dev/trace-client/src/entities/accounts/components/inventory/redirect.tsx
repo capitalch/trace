@@ -2,6 +2,7 @@ import accountsMessages from '../../json/accounts-messages.json'
 import { manageEntitiesState } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
 export {
+    Badge,
     Box,
     Button,
     Card,
@@ -22,6 +23,7 @@ export {
     RadioGroup,
     Radio,
     Switch,
+    TextareaAutosize,
     TextField,
     Tooltip,
     Typography,

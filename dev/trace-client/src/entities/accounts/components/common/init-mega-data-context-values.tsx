@@ -56,6 +56,7 @@ const stockJournalMegaData = () => ({
     inputSection: {
         allErrors: {},
         currentItemIndex: 0,
+        deletedIds:[],
         items: [{ qty: 1 }],
         summary: {
             count: 1,
@@ -66,6 +67,7 @@ const stockJournalMegaData = () => ({
     outputSection: {
         allErrors: {},
         currentItemIndex: 0,
+        deletedIds:[],
         items: [{ qty: 1 }],
         summary: {
             count: 1,

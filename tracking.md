@@ -46,10 +46,11 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         View functionality
                                                                                                         Edit functionality
                                                                                                         Delete stock journal as whole
-Delete items in edit mode
+                                                                                                        Delete items in edit mode
                                                                                                         Submit functionality
-Serial number
-Print
+Serial number, show serial numbers in view, and treat it during edit
+Print pdf using PDFMake
+Security and permissions
 Reflect effect of stock journal in associated queries for stock and sales etc.
 
 
@@ -85,7 +86,7 @@ i. Gst rate in downloaded excel file
 j. salePurchaseDetails table jData has remarks etc. it should be null
 k. Server logging for modify and delete, time and log viewer
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
-
+0. 
 11. Service+ to Trace import: Gstin No not coming
 12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
 20. Discount manage in sales           
@@ -111,6 +112,8 @@ k. Server logging for modify and delete, time and log viewer
 *. When in login s,s is given for superadmin user. it fails. In TraceHeader submitDialog buCodeWithPermissions in empty hence it goes out. and nothing happens. In brief superadmin user is not working.
 *. Demo mode purchase entry edit is not being possible: Rectified it temporarily by giving limit 1 in getJson_sale_purchase_on_id in cte6
 *. When in general ledger, change buCode. Then error
+*. At sales when stock negative show notification
+*. At sales when high profit, then show notification
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price

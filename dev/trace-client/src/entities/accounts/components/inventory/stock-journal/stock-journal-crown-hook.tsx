@@ -85,10 +85,13 @@ function useStockJournalCrown() {
             return obj
 
             function extractDetails() {
+                const inputSectionDeletedIds = stockJournal.inputSection.deletedIds || []
+                const outputSectionDeletedIds = stockJournal.outputSection.deletedIds || []
+                const allDdeletedIds = [...inputSectionDeletedIds, ...outputSectionDeletedIds]
                 const obj: any = {
                     tableName: 'StockJournal',
                     fkeyName: 'tranHeaderId',
-                    //deletedIds:[],
+                    deletedIds: allDdeletedIds.length === 0 ? undefined : allDdeletedIds,
                     // data:[]
                 }
                 const data: any[] = []
@@ -100,6 +103,9 @@ function useStockJournalCrown() {
                         lineRemarks: item.lineRemarks,
                         lineRefNo: item.lineRefNo,
                         dc: 'C',
+                        jData: JSON.stringify({
+                            serialNumbers: item.serialNumbers
+                        }),
                     })
                 }
                 for (const item of stockJournal['outputSection'].items) {

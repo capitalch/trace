@@ -1,6 +1,7 @@
 import {
     _,
     AddCircle,
+    Badge,
     Box,
     Button,
     Card,
@@ -9,6 +10,7 @@ import {
     IMegaData,
     MegaDataContext,
     NumberFormat,
+    TextareaAutosize,
     TextField,
     Typography,
     useContext,
@@ -21,6 +23,7 @@ import {
     utilMethods,
 } from '../redirect'
 import { ProductsSearch } from '../../common/products-search'
+import { InputMask } from '../../sales-new/redirect'
 function StockJournalDetails() {
     return (
         <Box
@@ -96,9 +99,22 @@ function StockJournalItemsHeader({ section }: any) {
 
 function StockJournalLineItems({ section }: any) {
     const [, setRefresh] = useState({})
+    const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
-    const stockJournal: any = megaData.accounts.stockJournal[section]
-    const items: any[] = stockJournal.items
+    let stockJournal: any = megaData.accounts.stockJournal[section]
+    let items: any[] = stockJournal.items
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
+
+    const meta: any = useRef({
+        dialogConfig: {
+            title: 'Serial numbers (Comma separated)',
+            content: () => <></>
+        },
+        // renderCallbackKey: 'render:itemsFooter',
+        // setItemToSelectedProductCallbackKey: 'setItemToSelectedProduct:lineItems',
+        showDialog: false,
+    })
+    const pre = meta.current
 
     useEffect(() => {
         megaData.registerKeyWithMethod(
@@ -113,6 +129,7 @@ function StockJournalLineItems({ section }: any) {
             `setItemToSelectedProduct:stockJournalLineItems:${section}`,
             setItemToSelectedProduct
         )
+        megaData.registerKeyWithMethod(`handleSerialNo:stockJournalLineItems:${section}`, handleSerialNo)
         stockJournal.currentItemIndex = 0
     }, [])
 
@@ -126,17 +143,67 @@ function StockJournalLineItems({ section }: any) {
                     key={index}
                 />
             ))}
+            <BasicMaterialDialog parentMeta={meta} />
         </Box>
     )
 
     function handleAddItem() {
-        // console.log(section)
+        stockJournal = megaData.accounts.stockJournal[section]
+        items = stockJournal.items
         items.push({ qty: 1 })
         stockJournal.currentItemIndex = items.length - 1
         setRefresh({})
         megaData.executeMethodForKey(
             `computeSummary:stockJournalItemsFooter:${section}`
         )
+    }
+
+    function handleSerialNo({ item }: any) {
+        pre.showDialog = true
+        pre.dialogConfig.maxWidth = 'sm'
+        pre.dialogConfig.content = () => <Content />
+        item.serialNumbers = item.serialNumbers ?? ''
+        item.serialNumerCount = item?.serialNumbers.split(',').filter(Boolean).length
+        setRefresh({})
+
+        function Content() {
+            const [, setRefresh] = useState({})
+            return (
+                <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                    <Typography variant='subtitle2' color='black' sx={{ fontWeight: 'bold', ml: 'auto', }}>{item.serialNumerCount + ' items'}</Typography>
+                    <TextareaAutosize
+                        autoFocus={true}
+                        style={{ color: 'black', fontSize: theme.spacing(2.0), fontWeight: 'bold', fontFamily: 'helvetica' }}
+                        className="serial-number"
+                        minRows={5}
+                        onChange={(e: any) => {
+                            item.serialNumbers = e.target.value
+                            processCount()
+                        }}
+                        value={item.serialNumbers || ''}
+                    />
+                    <Box sx={{ display: 'flex', ml: 'auto', mt: 2 }}>
+                        <Button onClick={handleClear} size='small' color='warning' variant='contained'>Clear</Button>
+                        <Button onClick={handleOk} size='small' color='secondary' variant='contained' sx={{ ml: 2 }} >Ok</Button>
+                    </Box>
+                </Box>)
+
+            function handleClear() {
+                item.serialNumbers = ''
+                processCount()
+            }
+
+            function handleOk() {
+                pre.showDialog = false
+                // setRefresh({})
+                megaData.executeMethodForKey(`render:stockJournalLineItems:${section}`, {})
+            }
+
+            function processCount() {
+                item.serialNumerCount = item?.serialNumbers.split(',').filter(Boolean).length
+                setRefresh({})
+            }
+        }
     }
 
     function setItemToSelectedProduct() {
@@ -197,7 +264,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             }}
             sx={{
                 display: 'flex',
-                alignItems: 'center',
+                // alignItems: 'center',
                 rowGap: 2,
                 columnGap: 2,
                 border: '1px solid lightGrey',
@@ -338,9 +405,24 @@ function StockJournalLineItem({ section, item, index }: any) {
                     value={item.lineRemarks || ''}
                     variant="standard"
                 />
+                <Badge badgeContent={
+                    (item.serialNumbers || '')
+                        .split(',')
+                        .filter(Boolean).length
+                }
+                    color={
+                        getSlNoError(item)
+                            ? 'error'
+                            : 'info'
+                    }
+                    showZero={true} sx={{ position: 'relative', top: theme.spacing(1.5), right:theme.spacing(1) }} >
+                    <Button color='info' sx={{ height: theme.spacing(1), position: 'relative', }}
+                        onClick={() => megaData.executeMethodForKey(`handleSerialNo:stockJournalLineItems:${section}`, { item })}
+                    >Serial no</Button>
+                </Badge>
             </Box>
 
-            <Box sx={{ ml: -6.5, mt: -4, mr: 0.5 }}>
+            <Box sx={{ ml: -6.5, mt: -1, mr: 0.5 }}>
                 {/* delete */}
                 <IconButton
                     sx={{ position: 'relative', left: theme.spacing(1.5) }}
@@ -369,7 +451,9 @@ function StockJournalLineItem({ section, item, index }: any) {
         item.productCode = undefined
         item.productId = undefined
         item.productDetails = undefined
-        item.remarks = undefined
+        item.lineRemarks = undefined
+        item.lineRefNo = undefined
+        item.serialNumbers = undefined
         item.qty = 1
     }
 
@@ -410,6 +494,15 @@ function StockJournalLineItem({ section, item, index }: any) {
         emit('SHOW-LOADING-INDICATOR', false)
     }
 
+    function getSlNoError(item: any) {
+        const ok = (getCount() === item.qty) || (getCount() === 0)
+        return !ok
+
+        function getCount() {
+            return item.serialNumbers ? item.serialNumbers.split(',').filter(Boolean).length : 0
+        }
+    }
+
     function handleDeleteRow(e: any, item: any, index: number) {
         e.stopPropagation() // necessary to prevent the firing of Box click event. Box is the parent. Click event of the box is for setting focus
         if (items.length === 1) {
@@ -417,7 +510,7 @@ function StockJournalLineItem({ section, item, index }: any) {
         } else {
             items.splice(index, 1)
             if (item.id) {
-                // sales.deletedSalePurchaseIds.push(item.id)
+                stockJournal.deletedIds.push(item.id)
             }
         }
         stockJournal.currentItemIndex = items.length - 1

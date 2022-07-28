@@ -2,8 +2,6 @@ import {
     accountsMessages,
     Box,
     execGenericView,
-    genericUpdateMasterDetails,
-    getFromBag,
     IMegaData,
     manageEntitiesState,
     MegaDataContext,
@@ -14,28 +12,21 @@ import {
     useContext,
     useEffect,
     useIbuki,
-    useRef,
-    useState,
-    useTheme,
     utils,
     utilMethods,
 } from '../redirect'
 
 function useStockJournalViewContent() {
     const megaData: IMegaData = useContext(MegaDataContext)
-    // const stockJournal:any = megaData.accounts.stockJournal
     const confirm = useConfirm()
-    const { isControlDisabled, genericUpdateMaster, toDecimalFormat } =
+    const { isControlDisabled, genericUpdateMaster, } =
         utilMethods()
     const { emit, filterOn } = useIbuki()
-    const { getFromBag, setInBag } = manageEntitiesState()
+    const { getFromBag, } = manageEntitiesState()
     const dateFormat = getFromBag('dateFormat')
     const {
         isAllowedUpdate,
-        execSaleInvoiceView,
-        getAccountClassWithAutoSubledger,
     } = utils()
-    const theme = useTheme()
 
     useEffect(() => {
         const { gridActionMessages } = getXXGridParams()
@@ -69,7 +60,7 @@ function useStockJournalViewContent() {
                             emit('SHOW-MESSAGE', {})
                             emit(gridActionMessages.fetchIbukiMessage, null)
                         })
-                        .catch(() => {}) // important to have otherwise eror
+                        .catch(() => { }) // important to have otherwise eror
                 }
             }
         )
@@ -137,8 +128,7 @@ function useStockJournalViewContent() {
                 width: 250,
                 // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) =>
-                    `Pr code:${params.row.productCode} ${params.row.catName} ${
-                        params.row.brandName
+                    `Pr code:${params.row.productCode} ${params.row.catName} ${params.row.brandName
                     } ${params.row.label} ${params.row.info ?? ''}`,
             },
             {
@@ -252,7 +242,7 @@ function useStockJournalViewContent() {
             loadTranH(res)
             loadStockJournal(res)
             megaData.executeMethodForKey('closeDialog:stockJournalCrown')
-            megaData.executeMethodForKey('render:stockJournal')
+            megaData.executeMethodForKey('render:stockJournal',{})
             megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:inputSection')
             megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:outputSection')
 
