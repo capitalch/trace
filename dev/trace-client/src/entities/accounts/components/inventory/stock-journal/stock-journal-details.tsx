@@ -1,4 +1,25 @@
-import { _, AddCircle, Box, Button, Card, CloseSharp, IconButton, IMegaData, MegaDataContext, NumberFormat, TextField, Typography, useContext, useEffect, useIbuki, useRef, useState, useTheme, useTraceMaterialComponents, utilMethods, } from '../redirect'
+import {
+    _,
+    AddCircle,
+    Box,
+    Button,
+    Card,
+    CloseSharp,
+    IconButton,
+    IMegaData,
+    MegaDataContext,
+    NumberFormat,
+    TextField,
+    Typography,
+    useContext,
+    useEffect,
+    useIbuki,
+    useRef,
+    useState,
+    useTheme,
+    useTraceMaterialComponents,
+    utilMethods,
+} from '../redirect'
 import { ProductsSearch } from '../../common/products-search'
 function StockJournalDetails() {
     return (
@@ -9,7 +30,7 @@ function StockJournalDetails() {
                 columnGap: 2,
                 mt: 1,
                 flexWrap: 'wrap',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
             }}>
             <StockJournalItems section="inputSection" />
             <StockJournalItems section="outputSection" />
@@ -88,14 +109,22 @@ function StockJournalLineItems({ section }: any) {
             `render:stockJournalLineItems:${section}`,
             setRefresh
         )
-        megaData.registerKeyWithMethod(`setItemToSelectedProduct:stockJournalLineItems:${section}`, setItemToSelectedProduct)
+        megaData.registerKeyWithMethod(
+            `setItemToSelectedProduct:stockJournalLineItems:${section}`,
+            setItemToSelectedProduct
+        )
         stockJournal.currentItemIndex = 0
     }, [])
 
     return (
         <Box className="vertical" sx={{ rowGap: 1 }}>
             {items.map((item: any, index: number) => (
-                <StockJournalLineItem section={section} item={item} index={index} key={index} />
+                <StockJournalLineItem
+                    section={section}
+                    item={item}
+                    index={index}
+                    key={index}
+                />
             ))}
         </Box>
     )
@@ -105,7 +134,9 @@ function StockJournalLineItems({ section }: any) {
         items.push({ qty: 1 })
         stockJournal.currentItemIndex = items.length - 1
         setRefresh({})
-        megaData.executeMethodForKey(`computeSummary:stockJournalItemsFooter:${section}`)
+        megaData.executeMethodForKey(
+            `computeSummary:stockJournalItemsFooter:${section}`
+        )
     }
 
     function setItemToSelectedProduct() {
@@ -115,7 +146,15 @@ function StockJournalLineItems({ section }: any) {
         // populate current item with selectedProduct
         currentItem.productId = selectedProduct.id1
         currentItem.productCode = selectedProduct.productCode
-        currentItem.productDetails = ''.concat(selectedProduct.brandName, ' ', selectedProduct.catName, ' ', selectedProduct.label, ' ', selectedProduct.info || '')
+        currentItem.productDetails = ''.concat(
+            selectedProduct.brandName,
+            ' ',
+            selectedProduct.catName,
+            ' ',
+            selectedProduct.label,
+            ' ',
+            selectedProduct.info || ''
+        )
         setRefresh({})
     }
 }
@@ -133,10 +172,9 @@ function StockJournalLineItem({ section, item, index }: any) {
     checkAllErrors()
 
     useEffect(() => {
-        const subs1 = debounceFilterOn(
-            'DEBOUNCE-ON-CHANGE',
-            1500
-        ).subscribe(doSearchProductOnProductCode)
+        const subs1 = debounceFilterOn('DEBOUNCE-ON-CHANGE', 1500).subscribe(
+            doSearchProductOnProductCode
+        )
         return () => {
             subs1.unsubscribe()
         }
@@ -278,8 +316,11 @@ function StockJournalLineItem({ section, item, index }: any) {
                 <TextField
                     sx={{ maxWidth: theme.spacing(10) }}
                     autoComplete="off"
-                    onChange={(e: any) => (item.refNo = e.target.value)}
-                    value={item.refNo || undefined}
+                    onChange={(e: any) => {
+                        item.lineRefNo = e.target.value
+                        setRefresh({})
+                    }}
+                    value={item.lineRefNo || ''}
                     variant="standard"
                 />
             </Box>
@@ -288,10 +329,13 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(35) }}
+                    sx={{ maxWidth: theme.spacing(15) }}
                     autoComplete="off"
-                    onChange={(e: any) => (item.remarks = e.target.value)}
-                    value={item.remarks || undefined}
+                    onChange={(e: any) => {
+                        item.lineRemarks = e.target.value
+                        setRefresh({})
+                    }}
+                    value={item.lineRemarks || ''}
                     variant="standard"
                 />
             </Box>
@@ -377,7 +421,10 @@ function StockJournalLineItem({ section, item, index }: any) {
             }
         }
         stockJournal.currentItemIndex = items.length - 1
-        megaData.executeMethodForKey(`render:stockJournalLineItems:${section}`, {})
+        megaData.executeMethodForKey(
+            `render:stockJournalLineItems:${section}`,
+            {}
+        )
         megaData.executeMethodForKey(
             `computeSummary:stockJournalItemsFooter:${section}`
         )
@@ -388,7 +435,7 @@ function StockJournalItemsFooter({ section }: any) {
     const [, setRefresh] = useState({})
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
-    const stockJournal = megaData.accounts.stockJournal[section]
+    let stockJournal = megaData.accounts.stockJournal[section]
     const items: any[] = stockJournal.items
     const { toDecimalFormat } = utilMethods()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
@@ -410,7 +457,10 @@ function StockJournalItemsFooter({ section }: any) {
             `computeSummary:stockJournalItemsFooter:${section}`,
             computeSummary
         )
-        megaData.registerKeyWithMethod(`render:stockJournalItemsFooter:${section}`, setRefresh)
+        megaData.registerKeyWithMethod(
+            `render:stockJournalItemsFooter:${section}`,
+            setRefresh
+        )
         computeSummary()
     }, [])
 
@@ -480,6 +530,7 @@ function StockJournalItemsFooter({ section }: any) {
     )
 
     function computeSummary() {
+        stockJournal = megaData.accounts.stockJournal[section]
         const items: any[] = stockJournal.items
         const total = items.reduce(
             (prev: any, curr: any) => {
@@ -496,7 +547,10 @@ function StockJournalItemsFooter({ section }: any) {
         items.length = 0
         items.push({ qty: 1 })
         stockJournal.currentItemIndex = 0
-        megaData.executeMethodForKey(`render:stockJournalLineItems:${section}`, {})
+        megaData.executeMethodForKey(
+            `render:stockJournalLineItems:${section}`,
+            {}
+        )
         setRefresh({})
     }
 

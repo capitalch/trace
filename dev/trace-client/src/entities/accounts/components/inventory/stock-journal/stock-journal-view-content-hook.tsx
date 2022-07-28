@@ -1,5 +1,7 @@
 import {
+    accountsMessages,
     Box,
+    execGenericView,
     genericUpdateMasterDetails,
     getFromBag,
     IMegaData,
@@ -21,7 +23,7 @@ import {
 
 function useStockJournalViewContent() {
     const megaData: IMegaData = useContext(MegaDataContext)
-    const stockJournal = megaData.accounts.stockJournal
+    // const stockJournal:any = megaData.accounts.stockJournal
     const confirm = useConfirm()
     const { isControlDisabled, genericUpdateMaster, toDecimalFormat } =
         utilMethods()
@@ -42,14 +44,14 @@ function useStockJournalViewContent() {
             (d: any) => {
                 const { tranDate, clearDate, id1 } = d.data?.row
                 if (isAllowedUpdate({ tranDate, clearDate })) {
-                    // loadSaleOnId(id1, true) // isModify; 2nd arg is true for no new entry in tables
+                    loadStockJournalOnId(id1) // isModify; 2nd arg is true for no new entry in tables
                 }
             }
         )
         const subs2 = filterOn(gridActionMessages.deleteIbukiMessage).subscribe(
             (d: any) => {
                 const options: any = {
-                    // description: accountsMessages.transactionDelete,
+                    description: accountsMessages.transactionDelete,
                     confirmationText: 'Yes',
                     cancellationText: 'No',
                 }
@@ -131,7 +133,7 @@ function useStockJournalViewContent() {
             {
                 headerName: 'Product',
                 description: 'Product details',
-                // field: '1',
+                field: '',
                 width: 250,
                 // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) =>
@@ -146,10 +148,15 @@ function useStockJournalViewContent() {
                 type: 'number',
                 valueGetter: (params: any) => params.row.credits || '',
                 renderHeader: (params: any) => (
-                    <Box sx={{display:'flex', flexDirection:'column', mt:.5,mb:.5}}>
-                        
-                        <Typography variant='body2'>Input</Typography>
-                        <Typography variant='body2'>(Credits)</Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mt: 0.5,
+                            mb: 0.5,
+                        }}>
+                        <Typography variant="body2">Input</Typography>
+                        <Typography variant="body2">(Credits)</Typography>
                     </Box>
                 ),
                 width: 75,
@@ -161,9 +168,15 @@ function useStockJournalViewContent() {
                 type: 'number',
                 valueGetter: (params: any) => params.row.debits || '',
                 renderHeader: (params: any) => (
-                    <Box sx={{display:'flex', flexDirection:'column', mt:.5,mb:.5}}>
-                        <Typography variant='body2'>Output</Typography>
-                        <Typography variant='body2'>(Debits)</Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mt: 0.5,
+                            mb: 0.5,
+                        }}>
+                        <Typography variant="body2">Output</Typography>
+                        <Typography variant="body2">(Debits)</Typography>
                     </Box>
                 ),
                 width: 70,
@@ -205,21 +218,6 @@ function useStockJournalViewContent() {
             printIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-PRINT-CLICKED',
         }
 
-        // function Product({ params }: any) {
-        //     return (
-        //         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-        //             <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>{params.row.brandName}</Typography>
-        //             {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.catName}</Typography>}
-        //             {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
-        //         </Box>
-        //     )
-        // }
-
-        // function ProductDetails({ params }: any) {
-        //     return (
-        //         <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
-        //     )
-        // }
         return {
             columns,
             gridActionMessages,
@@ -229,6 +227,114 @@ function useStockJournalViewContent() {
             specialColumns,
         }
     }
+
+    async function loadStockJournalOnId(id: number) {
+        emit('SHOW-LOADING-INDICATOR', true)
+        const ret = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'getJson_stock_journal_on_id',
+            args: {
+                id: id,
+            },
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+
+        if (ret) {
+            megaData.accounts.stockJournal = stockJournalMegaData()
+            const stockJournal = megaData.accounts.stockJournal
+            stockJournal.selectedStockJournalRawData = ret
+            stockJournal.selectedStockJournalId = id
+            prepareStockJournalData(ret, stockJournal)
+        }
+        // populate megaData.acounts.stockJournal from database
+        function prepareStockJournalData(data: any, stockJournal: any) {
+            const res = data?.jsonResult
+            loadTranH(res)
+            loadStockJournal(res)
+            megaData.executeMethodForKey('closeDialog:stockJournalCrown')
+            megaData.executeMethodForKey('render:stockJournal')
+            megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:inputSection')
+            megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:outputSection')
+
+            function loadTranH(res: any) {
+                const tranH = res.tranH
+                stockJournal.autoRefNo = tranH.autoRefNo
+                stockJournal.id = tranH.id
+                stockJournal.remarks = tranH.remarks
+                stockJournal.tranDate = tranH.tranDate
+                stockJournal.userRefNo = tranH.userRefNo
+            }
+
+            function loadStockJournal(res: any) {
+                const sj: any[] = res?.stockJournal
+                const stockJournalInputs: any[] = sj.filter(
+                    (el: any) => el.dc === 'C'
+                )
+                stockJournal.inputSection.items = []
+                stockJournalInputs.forEach((el: any, ind: number) => {
+                    stockJournal.inputSection.items.push({})
+                    stockJournal.inputSection.items[ind].id = el.id
+                    stockJournal.inputSection.items[ind].productId =
+                        el.productId
+                    stockJournal.inputSection.items[ind].productCode =
+                        el.productCode
+                    stockJournal.inputSection.items[ind].label = el.label
+                    stockJournal.inputSection.items[ind].catName = el.catName
+                    stockJournal.inputSection.items[ind].info = el.info
+                    stockJournal.inputSection.items[ind].qty = el.qty
+                    stockJournal.inputSection.items[ind].serialNumbers =
+                        el.serialNumbers
+                    stockJournal.inputSection.items[ind].lineRefNo =
+                        el.lineRefNo
+                    stockJournal.inputSection.items[ind].lineRemarks =
+                        el.lineRemarks
+                    stockJournal.inputSection.items[ind].productDetails =
+                        ''.concat(
+                            el.brandName,
+                            ' ',
+                            el.catName,
+                            ' ',
+                            el.label,
+                            ' ',
+                            el.info
+                        )
+                })
+                const stockJournaloutputs: any[] = sj.filter(
+                    (el: any) => el.dc === 'D'
+                )
+                stockJournal.outputSection.items = []
+                stockJournaloutputs.forEach((el: any, ind: number) => {
+                    stockJournal.outputSection.items.push({})
+                    stockJournal.outputSection.items[ind].id = el.id
+                    stockJournal.outputSection.items[ind].productId =
+                        el.productId
+                    stockJournal.outputSection.items[ind].productCode =
+                        el.productCode
+                    stockJournal.outputSection.items[ind].label = el.label
+                    stockJournal.outputSection.items[ind].catName = el.catName
+                    stockJournal.outputSection.items[ind].info = el.info
+                    stockJournal.outputSection.items[ind].qty = el.qty
+                    stockJournal.outputSection.items[ind].serialNumbers =
+                        el.serialNumbers
+                    stockJournal.outputSection.items[ind].lineRefNo =
+                        el.lineRefNo
+                    stockJournal.outputSection.items[ind].lineRemarks =
+                        el.lineRemarks
+                    stockJournal.outputSection.items[ind].productDetails =
+                        ''.concat(
+                            el.brandName,
+                            ' ',
+                            el.catName,
+                            ' ',
+                            el.label,
+                            ' ',
+                            el.info
+                        )
+                })
+            }
+        }
+    }
+
     return { getXXGridParams }
 }
 

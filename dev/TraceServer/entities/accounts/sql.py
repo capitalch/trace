@@ -1113,7 +1113,7 @@ allSqls = {
     ''',
 
     "get_stock_journal_view":'''
-        select h."id" as "id1", "tranDate", "autoRefNo", "userRefNo", h."remarks"
+        select h."id" , "tranDate", "autoRefNo", "userRefNo", h."remarks"
         , CASE when "dc"='D' then "qty" else 0 end as "debits"
         , CASE when "dc"='C' then "qty" else 0 end as "credits"
         , "productCode","brandName", "label", "catName", "info"
@@ -1130,7 +1130,7 @@ allSqls = {
         where "tranTypeId" = 11 
         and "finYearId" = %(finYearId)s
         and "branchId" = %(branchId)s
-        order by "tranDate" DESC LIMIT %(no)s
+        order by "tranDate" DESC, "id" DESC LIMIT %(no)s
     ''',
 
     "get_stock_summary": '''
@@ -1910,6 +1910,33 @@ allSqls = {
                         or "upcCode" ILIKE '%%' || %(arg)s || '%%')
                     group by h."id", h."remarks", c.*
                     order by "tranDate" DESC
+    ''',
+
+    "getJson_stock_journal_on_id":'''
+        with cte1 as (
+            select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "tranTypeId"
+                from "TranH"
+                    where "id" = %(id)s
+        ), cte2 as (
+			select s."id","productId", "productCode","brandName", "label", "catName", "info", qty
+                , "lineRefNo", "lineRemarks"
+				, s."jData"->>'serialNumbers' as "serialNumbers"
+				, "dc","lineRefNo", "lineRemarks"
+					from cte1 c1
+						join "StockJournal" s
+							on c1."id" = s."tranHeaderId"
+						join "ProductM" p
+							on p."id" = s."productId"
+						join "CategoryM" c
+							on c."id" = p."catId"
+						join "BrandM" b
+							on b."id" = p."brandId"
+					order by s."id"
+		)
+		select json_build_object(
+			'tranH', (SELECT row_to_json(a) from cte1 a),
+			'stockJournal', (select json_agg(row_to_json(b)) from cte2 b)
+		) as "jsonResult"
     ''',
 
     "getJson_tranHeader_details": '''

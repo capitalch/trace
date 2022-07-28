@@ -44,8 +44,8 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         Clear button in footer with functionality
                                                                                                         Delete row functionality
                                                                                                         View functionality
-Edit functionality
-Delete stock journal as whole
+                                                                                                        Edit functionality
+                                                                                                        Delete stock journal as whole
 Delete items in edit mode
                                                                                                         Submit functionality
 Serial number

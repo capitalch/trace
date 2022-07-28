@@ -1,5 +1,14 @@
 import {
-    genericUpdateMasterDetails, getFromBag, IMegaData, MegaDataContext, stockJournalMegaData, useContext, useIbuki, useRef, useState,
+    genericUpdateMasterDetails,
+    getFromBag,
+    IMegaData,
+    MegaDataContext,
+    stockJournalMegaData,
+    useContext,
+    useEffect,
+    useIbuki,
+    useRef,
+    useState,
 } from '../redirect'
 import { StockJournalViewContent } from './stock-journal-view-content'
 
@@ -14,9 +23,22 @@ function useStockJournalCrown() {
         dialogConfig: {
             title: 'View stock journal',
             content: () => <></>,
-        }
+        },
     })
     const pre = meta.current
+
+    useEffect(() => {
+        megaData.registerKeyWithMethod('render:stockJournalCrown', setRefresh)
+        megaData.registerKeyWithMethod(
+            'closeDialog:stockJournalCrown',
+            closeDialog
+        )
+    }, [])
+
+    function closeDialog() {
+        pre.showDialog = false
+        setRefresh({})
+    }
 
     function handleReset() {
         megaData.accounts.stockJournal = stockJournalMegaData()
@@ -72,24 +94,26 @@ function useStockJournalCrown() {
                 const data: any[] = []
                 for (const item of stockJournal['inputSection'].items) {
                     data.push({
+                        id: item.id || undefined,
                         productId: item.productId,
                         qty: item.qty,
-                        lineRemarks: item.remarks,
-                        lineRefNo: item.refNo,
-                        dc: 'C'
+                        lineRemarks: item.lineRemarks,
+                        lineRefNo: item.lineRefNo,
+                        dc: 'C',
                     })
                 }
                 for (const item of stockJournal['outputSection'].items) {
                     data.push({
+                        id: item.id || undefined,
                         productId: item.productId,
                         qty: item.qty,
-                        lineRemarks: item.remarks,
-                        lineRefNo: item.refNo,
-                        dc: 'D'
+                        lineRemarks: item.lineRemarks,
+                        lineRefNo: item.lineRefNo,
+                        dc: 'D',
                     })
                 }
                 obj.data = [...data]
-                return (obj)
+                return obj
             }
         }
     }

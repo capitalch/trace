@@ -9,10 +9,6 @@ function StockJournalCrown() {
     const stockJournal = megaData.accounts.stockJournal
     const { BasicMaterialDialog } = useTraceMaterialComponents()
 
-    useEffect(() => {
-        megaData.registerKeyWithMethod('render:stockJournalCrown', setRefresh)
-    }, [])
-
     return (
         <Box sx={{ mt: 0, mb: 0, display: 'flex', flexDirection: 'column', ml: 'auto' }}>
             <Box sx={{ display: 'flex', columnGap: .5, rowGap: 1, }}>

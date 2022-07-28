@@ -89,5 +89,5 @@ export { stockJournalMegaData } from '../common/init-mega-data-context-values'
 export { manageEntitiesState }
 export const { getFromBag, setInBag } = manageEntitiesState()
 // export { getFromBag, setInBag }
-export const {genericUpdateMasterDetails} = utilMethods()
+export const {execGenericView, genericUpdateMasterDetails} = utilMethods()
 

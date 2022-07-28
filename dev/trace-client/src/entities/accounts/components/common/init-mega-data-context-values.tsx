@@ -61,7 +61,7 @@ const stockJournalMegaData = () => ({
             count: 1,
             qty: 1,
         },
-        title: 'Source (Consumption / input / credit)'
+        title: 'Source (Consumption / input / credit)',
     },
     outputSection: {
         allErrors: {},
@@ -71,9 +71,11 @@ const stockJournalMegaData = () => ({
             count: 1,
             qty: 1,
         },
-        title: 'Destination (Production / output / debit)'
+        title: 'Destination (Production / output / debit)',
     },
-    remarks:undefined,
+    remarks: undefined,
+    selectedStockJournalId: undefined,
+    selectedStockJournalRawData: undefined,
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
 })
