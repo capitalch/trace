@@ -182,7 +182,12 @@ function useStockJournalViewContent() {
                 description: 'Line remarks',
                 field: 'lineRemarks',
                 width: 200,
-            },
+            },{
+                headerName: 'Serial numbers',
+                description: 'Serial numbers',
+                field: 'serialNumbers',
+                width: 200,
+            }
         ]
         const queryId = 'get_stock_journal_view'
         const queryArgs = {

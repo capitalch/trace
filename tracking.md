@@ -48,10 +48,11 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         Delete stock journal as whole
                                                                                                         Delete items in edit mode
                                                                                                         Submit functionality
-Serial number, show serial numbers in view, and treat it during edit
+                                                                                                        Serial number, show serial numbers in view, and treat it during edit
 Print pdf using PDFMake
 Security and permissions
-Reflect effect of stock journal in associated queries for stock and sales etc.
+Reflect effect of stock journal in associated queries for stock and sales etc
+QA
 
 
 ### Plan (new)

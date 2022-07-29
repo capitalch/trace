@@ -1117,7 +1117,7 @@ allSqls = {
         , CASE when "dc"='D' then "qty" else 0 end as "debits"
         , CASE when "dc"='C' then "qty" else 0 end as "credits"
         , "productCode","brandName", "label", "catName", "info"
-        , "dc","lineRefNo", "lineRemarks"
+        , "dc","lineRefNo", "lineRemarks", s."jData"->>'serialNumbers' as "serialNumbers"
             from "TranH" h
                 join "StockJournal" s
                     on h."id" = s."tranHeaderId"

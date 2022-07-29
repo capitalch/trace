@@ -116,6 +116,9 @@ function useStockJournalCrown() {
                         lineRemarks: item.lineRemarks,
                         lineRefNo: item.lineRefNo,
                         dc: 'D',
+                        jData: JSON.stringify({
+                            serialNumbers: item.serialNumbers
+                        }),
                     })
                 }
                 obj.data = [...data]
