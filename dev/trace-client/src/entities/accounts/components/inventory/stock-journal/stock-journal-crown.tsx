@@ -1,9 +1,10 @@
-import { Box, Button, IMegaData, MegaDataContext, useContext, useEffect, useState, useTheme, useTraceMaterialComponents } from '../redirect'
+import { Box, Button, IMegaData, MegaDataContext, useContext, useEffect, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
 import { useStockJournalCrown } from './stock-journal-crown-hook'
 
 function StockJournalCrown() {
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const theme = useTheme()
+    const { isControlDisabled } = utilMethods()
     const { handleReset, handleSubmit, handleViewStockJournalDialog, meta } = useStockJournalCrown()
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
@@ -21,7 +22,7 @@ function StockJournalCrown() {
                 <Button variant='contained'
                     onClick={handleSubmit}
                     size='large' sx={{ height: theme.spacing(5), }}
-                    disabled={isAnyError()}
+                    disabled={isAnyError() || isControlDisabled('inventory-stock-journal-submit')}
                     color='success'>Submit</Button>
             </Box>
             <BasicMaterialDialog parentMeta={meta} />

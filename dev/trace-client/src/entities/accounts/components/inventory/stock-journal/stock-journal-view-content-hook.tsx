@@ -197,11 +197,11 @@ function useStockJournalViewContent() {
         const specialColumns = {
             isEdit: true,
             isEditDisabled: isControlDisabled(
-                'salespurchases-simple-sales-edit'
+                'inventory-stock-journal-edit'
             ),
             isDelete: true,
             isDeleteDisabled: isControlDisabled(
-                'salespurchases-simple-sales-delete'
+                'inventory-stock-journal-delete'
             ),
             isPrint: true,
         }

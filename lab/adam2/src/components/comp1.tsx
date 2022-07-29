@@ -1,54 +1,25 @@
-import { Box, Button, Typography } from '@mui/material'
-import { Suspense, useEffect, useRef, useState } from 'react'
-import axios from 'axios'
+import { PDFDocument, PDFText, PDFTable, PDFTableRow, PDFTableColumn, PDFColumns, PDFColumn } from 'react-pdfmake';
 
 function Comp1() {
-    const [, setRefresh] = useState({})
-    const meta: any = useRef({
-        data: '',
-    })
-    const pre = meta.current
-
-    useEffect(() => {
-        // loadData()
-    }, [])
-
-    const keysWithMethods: any = {} // {prop:String, value:any}
-    const registerKeyWithMethod = function (key: string, method: Function) {
-        keysWithMethods[key] = method
-    }
-
-    const executeMethodForKey: any = function executeMethodForKey(
-        key: string,
-        ...params: any
-    ) {
-        keysWithMethods[key](...params)
-    }
-
     return (
-        <Box>
-            <Box>
-                <Button onClick={register}>Register</Button>
-                <Button
-                    onClick={() => {
-                        executeMethodForKey('key1', 'abcd',false)
-                    }}>
-                    Execute
-                </Button>
-            </Box>
-        </Box>
+        <div>
+            Test
+            <PDFDocument
+                pageSize='A5'
+                pageOrientation="portrait">
+                <PDFText>Headers</PDFText>
+                You can declare how many rows should be treated as a header. Headers are automatically
+                repeated on the following pages
+                <PDFText color="gray" italics>
+                    Headers
+                </PDFText>
+                <PDFColumns columnGap={10}>
+                    <PDFColumn width="*">Hi</PDFColumn>
+                    <PDFColumn width="auto">Hi</PDFColumn>
+                </PDFColumns>
+            </PDFDocument>
+        </div>
     )
-
-    function register() {
-        registerKeyWithMethod('key1', func1)
-    }
-
-    function func1(arg1: string, arg2: boolean=true) {
-        console.log(arg1, ' ', arg2)
-    }
 }
+
 export { Comp1 }
-
-{
-    /* <Typography>{pre.data}</Typography> */
-}
