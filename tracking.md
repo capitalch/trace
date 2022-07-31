@@ -54,6 +54,20 @@ Print pdf using PDFMake
 Reflect effect of stock journal in associated queries for stock and sales etc
                                                                                                         QA
 
+## PDF Print framework
+Express send PDF
+Show pdf at client side
+Create HTML from template + JSON
+Create PDF from html
+Send json and template name from client and get pdf in return
+Set size considerations
+Create pdf for sales
+Create PDF for vouchers and others
+Create PDF for Stock Journal
+Deploy solution to LinkServer
+Deploy solution to Trace system
+Cleanup Trace
+Upgrade Trace to React 18
 
 ### Plan (new)
 Stock journals                          : 3 days: 14/07/2022

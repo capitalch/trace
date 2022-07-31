@@ -10,7 +10,6 @@ function useInvoiceA() {
     } = useSharedElements()
 
     function InvoicePdf({ invoiceData }: any) {
-        // console.log(JSON.stringify(invoiceData))
         const gStyles = StyleSheet.create({
             page: {
                 flexDirection: 'column',
