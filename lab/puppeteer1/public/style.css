@@ -1,13 +1,19 @@
 li {
-    font-size: 2rem;
-    width: 300px;
-    margin: 4px;
-    padding: 4px;
-    list-style: none;
-}
+  font-size: 2rem;
+  width: 300px;
+  margin: 4px;
+  padding: 4px;
+  list-style: none; }
+
 .midlaner {
-    background-color: #eeeeee;
-}
+  background-color: #eeeeee; }
+
 .toplaner {
-    background-color: #ffea00;
-}
+  background-color: #ffea00; }
+
+.my-class1 {
+  color: red; }
+
+body {
+  padding-top: 20px;
+  padding-left: 30px; }
