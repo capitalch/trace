@@ -7,7 +7,8 @@ const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.json())
 
 app.use(cors())
 // app.engine(
@@ -55,7 +56,7 @@ app.get('/pdf1', async (req, res) => {
                 await page.setContent(html, { waitUntil: 'networkidle0' })
                 const buff = await page.pdf({
                     format: 'a4',
-                    margin: { left: '30px', top: '50px' },
+                    margin: { left: '30px', top: '50px' }
                 })
                 res.end(buff)
                 await page.close()
@@ -83,12 +84,15 @@ app.post('/pdf1', async (req, res) => {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    await page.setContent(html, { waitUntil: 'networkidle0' })
+    await page.setContent(template1, { waitUntil: 'networkidle0' })
     const buff = await page.pdf({
         format: 'a4',
-        margin: { left: '30px', top: '50px' },
+        margin: { left: '30px', top: '50px' }
     })
-    res.end(buff)
+    // const arrayBuffer = Buffer.from(buff).buffer
+    const myBuff =  Buffer.from(buff)
+    res.setHeader( "Content-Type", "application/pdf")
+    res.end(myBuff)
     await page.close()
     // ejs.renderFile(
     //     './views/home.ejs',

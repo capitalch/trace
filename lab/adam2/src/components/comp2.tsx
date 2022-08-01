@@ -1,6 +1,6 @@
 function Comp2(){
     return(<div>
-        <span>This is from react</span>
+        <span style={{color:'red'}}>This is from react</span>
         <span>Sushant Agrawal</span>
     </div>)
 }
