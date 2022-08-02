@@ -77,40 +77,18 @@ app.get('/pdf1', async (req, res) => {
 })
 
 app.post('/pdf1', async (req, res) => {
-    const template = fs.readFileSync('./views/home.ejs', 'utf-8')
-    const template1 = req.body['template']
-    const html = ejs.render(template1, { name: 'Sushant' })
-
+    const template = req.body['template']
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
 
-    await page.setContent(template1, { waitUntil: 'networkidle0' })
+    await page.setContent(template, { waitUntil: 'networkidle0' })
     const buff = await page.pdf({
         format: 'a4',
         margin: { left: '30px', top: '50px' }
     })
-    // const arrayBuffer = Buffer.from(buff).buffer
-    const myBuff =  Buffer.from(buff)
-    res.setHeader( "Content-Type", "application/pdf")
-    res.end(myBuff)
+    res.json(buff)
     await page.close()
-    // ejs.renderFile(
-    //     './views/home.ejs',
-    //     { name: 'Sushant1' },
-    //     async (err, html) => {
-    //         if (err) {
-    //             console.log(err)
-    //         } else {
-    //             const browser = await puppeteer.launch()
-    //             const page = await browser.newPage()
-
-    //             await page.setContent(html,{ waitUntil: 'networkidle0' })
-    //             const buff = await page.pdf({ format: 'a4', margin:{left:'30px', top:'50px'} })
-    //             res.end(buff)
-    //             await page.close()
-    //         }
-    //     }
-    // )
+    await browser.close()
 })
 
 const server = app.listen(8081, () => {
