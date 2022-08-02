@@ -35,15 +35,18 @@ function Comp1() {
         const htmlString = reactDomServer.renderToString(<Comp2 />)
         const options: any = await axios({
             method: 'post',
-            url: 'http://localhost:8081/pdf1',            
+            url: 'http://localhost:8081/pdf1',
             data: {
                 template: htmlString,
             },
         })
         const buff = options.data.data
-        const bbb = Buffer.from(buff)
-        const base64 = bbb.toString('base64')
+        const buffer = Buffer.from(buff)
 
+        // const blob: any = new Blob([buffer], { type: 'application/pdf' })
+        // pre.objectUrl = URL.createObjectURL(blob)
+
+        const base64 = buffer.toString('base64')
         pre.objectUrl = 'data:application/pdf;base64, ' + base64
 
         setrefresh({})

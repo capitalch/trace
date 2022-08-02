@@ -1,5 +1,6 @@
 import {
     accountsMessages,
+    axios,
     Box,
     execGenericView,
     IMegaData,
@@ -7,16 +8,20 @@ import {
     MegaDataContext,
     moment,
     stockJournalMegaData,
+    reactDomServer,
     Typography,
     useConfirm,
     useContext,
     useEffect,
     useIbuki,
+    useRef,
+    useState,
     utils,
     utilMethods,
 } from '../redirect'
 
 function useStockJournalViewContent() {
+    const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const confirm = useConfirm()
     const { isControlDisabled, genericUpdateMaster, } =
@@ -27,6 +32,15 @@ function useStockJournalViewContent() {
     const {
         isAllowedUpdate,
     } = utils()
+
+    const meta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            title: 'Stock journal print preview',
+            content: () => <></>,
+        },
+    })
+    const pre = meta.current
 
     useEffect(() => {
         const { gridActionMessages } = getXXGridParams()
@@ -67,7 +81,7 @@ function useStockJournalViewContent() {
         const subs3 = filterOn(gridActionMessages.printIbukiMessage).subscribe(
             (d: any) => {
                 const row = d.data?.row
-                // doPrintPreview(row.id1)
+                doPrintPreview(row.id1)
             }
         )
         return () => {
@@ -76,6 +90,52 @@ function useStockJournalViewContent() {
             subs3.unsubscribe()
         }
     }, [])
+
+    async function doPrintPreview(id: number) {
+        pre.showDialog = true
+        pre.dialogConfig.content = await (() => getContent())()
+        setRefresh({})
+
+        function Content() {
+            return (<div>
+                <span style={{ color: 'red' }}>This is from react</span>
+                <span>Sushant Agrawal</span>
+            </div>)
+        }
+
+        async function getContent() {
+
+            const htmlString = reactDomServer.renderToString(<Content />)
+            const options: any = await axios({
+                method: 'post',
+                url: 'http://localhost:8081/pdf1',
+                data: {
+                    template: htmlString,
+                },
+            })
+            const buff = options.data.data
+            const buffer = Buffer.from(buff)
+
+            const base64 = buffer.toString('base64')
+            pre.objectUrl = 'data:application/pdf;base64, ' + base64
+
+            return (<div>
+                {pre.objectUrl && (
+                    <object
+                        data={pre.objectUrl}
+                        type="application/pdf"
+                        width="100%"
+                        height="800">
+                        <p>
+                            Alternative text - include a link{' '}
+                            <a href="http://localhost:8081/pdf">to the PDF!</a>
+                        </p>
+                    </object>
+                )}
+
+            </div>)
+        }
+    }
 
     function getXXGridParams() {
         const columns = [
@@ -182,7 +242,7 @@ function useStockJournalViewContent() {
                 description: 'Line remarks',
                 field: 'lineRemarks',
                 width: 200,
-            },{
+            }, {
                 headerName: 'Serial numbers',
                 description: 'Serial numbers',
                 field: 'serialNumbers',
@@ -247,7 +307,7 @@ function useStockJournalViewContent() {
             loadTranH(res)
             loadStockJournal(res)
             megaData.executeMethodForKey('closeDialog:stockJournalCrown')
-            megaData.executeMethodForKey('render:stockJournal',{})
+            megaData.executeMethodForKey('render:stockJournal', {})
             megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:inputSection')
             megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:outputSection')
 
@@ -330,7 +390,7 @@ function useStockJournalViewContent() {
         }
     }
 
-    return { getXXGridParams }
+    return { getXXGridParams, meta }
 }
 
 export { useStockJournalViewContent }
