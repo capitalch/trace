@@ -11,6 +11,7 @@ import { StockJournalCrown } from './stock-journal-crown'
 import { StockJournalHeader } from './stock-journal-header'
 import { StockJournalDetails } from './stock-journal-details'
 import { StockJournalTotals } from './stock-journal-totals'
+import { StockJournalPdf } from './stock-journal-pdf'
 
 function StockJournal() {
     const [, setRefresh] = useState({})
@@ -44,8 +45,8 @@ function StockJournal() {
                 <StockJournalHeader />
                 <StockJournalCrown />
             </Box>
-            {/* <Typography>Test</Typography> */}
             <StockJournalDetails />
+            <StockJournalPdf />
         </Box>
     )
 }

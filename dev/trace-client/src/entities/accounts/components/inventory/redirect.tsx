@@ -1,10 +1,11 @@
 import accountsMessages from '../../json/accounts-messages.json'
 import { manageEntitiesState } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
-import reactDomServer from 'react-dom/server'
+// import reactDomServer from 'react-dom/server'
 import axios from 'axios'
 
-export { axios, reactDomServer }
+export { axios }
+export { renderToStaticMarkup, renderToString } from 'react-dom/server'
 export {
     Badge,
     Box,
@@ -96,4 +97,3 @@ export { manageEntitiesState }
 export const { getFromBag, setInBag } = manageEntitiesState()
 // export { getFromBag, setInBag }
 export const { execGenericView, genericUpdateMasterDetails } = utilMethods()
-

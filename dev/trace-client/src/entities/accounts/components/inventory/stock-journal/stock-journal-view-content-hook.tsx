@@ -7,8 +7,9 @@ import {
     manageEntitiesState,
     MegaDataContext,
     moment,
+    renderToStaticMarkup,
+    renderToString,
     stockJournalMegaData,
-    reactDomServer,
     Typography,
     useConfirm,
     useContext,
@@ -19,21 +20,20 @@ import {
     utils,
     utilMethods,
 } from '../redirect'
+import { StockJournalPdf } from './stock-journal-pdf'
 
 function useStockJournalViewContent() {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const confirm = useConfirm()
-    const { isControlDisabled, genericUpdateMaster, } =
-        utilMethods()
+    const { isControlDisabled, genericUpdateMaster } = utilMethods()
     const { emit, filterOn } = useIbuki()
-    const { getFromBag, } = manageEntitiesState()
+    const { getFromBag } = manageEntitiesState()
     const dateFormat = getFromBag('dateFormat')
-    const {
-        isAllowedUpdate,
-    } = utils()
+    const { isAllowedUpdate } = utils()
 
     const meta: any = useRef({
+        setRefresh: setRefresh,
         showDialog: false,
         dialogConfig: {
             title: 'Stock journal print preview',
@@ -74,7 +74,7 @@ function useStockJournalViewContent() {
                             emit('SHOW-MESSAGE', {})
                             emit(gridActionMessages.fetchIbukiMessage, null)
                         })
-                        .catch(() => { }) // important to have otherwise eror
+                        .catch(() => {}) // important to have otherwise eror
                 }
             }
         )
@@ -91,50 +91,137 @@ function useStockJournalViewContent() {
         }
     }, [])
 
-    async function doPrintPreview(id: number) {
-        pre.showDialog = true
-        pre.dialogConfig.content = await (() => getContent())()
-        setRefresh({})
+    function Content1({ unitInfo }: any) {
+        const classes = {
+            hrClass: {
+                border: 'solid 1px black',
+                width: '100%',
+            },
+        }
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        fontSize: '14px',
+                    }}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            maxWidth: '40%',
+                        }}>
+                        <span style={{ fontWeight: 'bold' }}>
+                            {unitInfo.unitName +
+                                'jkjdf dfksf lakalkdasdasldasd lklkqwklk klklll abcd'}
+                        </span>
+                        <span>{unitInfo.address1}</span>
+                        <span>{unitInfo.address2}</span>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontWeight: 'bold' }}>
+                            {unitInfo.unitName}
+                        </span>
+                        <span>{unitInfo.address1}</span>
+                        <span>{unitInfo.address2}</span>
+                    </div>
+                </div>
+                <hr style={classes.hrClass}></hr>
+            </div>
+        )
+    }
 
-        function Content() {
-            return (<div>
-                <span style={{ color: 'red' }}>This is from react</span>
-                <span>Sushant Agrawal</span>
-            </div>)
+    function Content2({ unitInfo }: any) {
+        const classes = {
+            hrClass: {
+                border: 'solid 1px black',
+                width: '100%',
+            },
         }
 
-        async function getContent() {
+        return (
+            <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                <Box
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        fontSize: '14px',
+                    }}>
+                    <Box
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            maxWidth: '40%',
+                        }}>
+                        <span style={{ fontWeight: 'bold' }}>
+                            {unitInfo.unitName +
+                                'jkjdf dfksf lakalkdasdasldasd lklkqwklk klklll abcd'}
+                        </span>
+                        <span>{unitInfo.address1}</span>
+                        <span>{unitInfo.address2}</span>
+                    </Box>
+                    <Box style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontWeight: 'bold' }}>
+                            {unitInfo.unitName}
+                        </span>
+                        <span>{unitInfo.address1}</span>
+                        <span>{unitInfo.address2}</span>
+                    </Box>
+                </Box>
+                <hr style={classes.hrClass}></hr>
+            </Box>
+        )
+    }
 
-            const htmlString = reactDomServer.renderToString(<Content />)
-            const options: any = await axios({
-                method: 'post',
-                url: 'http://localhost:8081/pdf1',
-                data: {
-                    template: htmlString,
-                },
-            })
-            const buff = options.data.data
-            const buffer = Buffer.from(buff)
+    async function doPrintPreview(id: number) {
+        const unitInfo = getFromBag('unitInfo')
+        // const htmlString = renderToStaticMarkup(<StockJournalPdf props={megaData}/>)
+        showPdf(<StockJournalPdf mData={megaData} />)
+        // showHtml(unitInfo)
+    }
 
-            const base64 = buffer.toString('base64')
-            pre.objectUrl = 'data:application/pdf;base64, ' + base64
+    function showHtml(content: any) {
+        pre.showDialog = true
+        pre.dialogConfig.content = () => content // <Content1 unitInfo={unitInfo} />
+        pre.setRefresh({})
+    }
 
-            return (<div>
-                {pre.objectUrl && (
+    // Transfer this function to global utils
+    async function showPdf(content: any) {
+        // const htmlString = renderToString(content)
+        const htmlString = renderToStaticMarkup(content)
+        emit('SHOW-LOADING-INDICATOR', true)
+        const options: any = await axios({
+            method: 'post',
+            url: 'http://localhost:8081/pdf1',
+            data: {
+                template: htmlString,
+            },
+        })
+
+        const buff = options.data.data
+        const buffer = Buffer.from(buff)
+
+        const base64 = buffer.toString('base64')
+        pre.objectUrl = 'data:application/pdf;base64, ' + base64
+        emit('SHOW-LOADING-INDICATOR', false)
+        pre.showDialog = true
+        pre.dialogConfig.content = () => (
+            <div>
+                {
                     <object
                         data={pre.objectUrl}
                         type="application/pdf"
                         width="100%"
-                        height="800">
-                        <p>
-                            Alternative text - include a link{' '}
-                            <a href="http://localhost:8081/pdf">to the PDF!</a>
-                        </p>
+                        height="700">
+                        <p>Failed</p>
                     </object>
-                )}
-
-            </div>)
-        }
+                }
+            </div>
+        )
+        pre.setRefresh({})
     }
 
     function getXXGridParams() {
@@ -188,7 +275,8 @@ function useStockJournalViewContent() {
                 width: 250,
                 // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) =>
-                    `Pr code:${params.row.productCode} ${params.row.catName} ${params.row.brandName
+                    `Pr code:${params.row.productCode} ${params.row.catName} ${
+                        params.row.brandName
                     } ${params.row.label} ${params.row.info ?? ''}`,
             },
             {
@@ -242,12 +330,13 @@ function useStockJournalViewContent() {
                 description: 'Line remarks',
                 field: 'lineRemarks',
                 width: 200,
-            }, {
+            },
+            {
                 headerName: 'Serial numbers',
                 description: 'Serial numbers',
                 field: 'serialNumbers',
                 width: 200,
-            }
+            },
         ]
         const queryId = 'get_stock_journal_view'
         const queryArgs = {
@@ -256,9 +345,7 @@ function useStockJournalViewContent() {
         const summaryColNames: string[] = ['debits', 'credits']
         const specialColumns = {
             isEdit: true,
-            isEditDisabled: isControlDisabled(
-                'inventory-stock-journal-edit'
-            ),
+            isEditDisabled: isControlDisabled('inventory-stock-journal-edit'),
             isDelete: true,
             isDeleteDisabled: isControlDisabled(
                 'inventory-stock-journal-delete'
@@ -297,7 +384,7 @@ function useStockJournalViewContent() {
         if (ret) {
             megaData.accounts.stockJournal = stockJournalMegaData()
             const stockJournal = megaData.accounts.stockJournal
-            stockJournal.selectedStockJournalRawData = ret
+            stockJournal.selectedStockJournalRawData = ret?.jsonResult
             stockJournal.selectedStockJournalId = id
             prepareStockJournalData(ret, stockJournal)
         }
@@ -308,8 +395,12 @@ function useStockJournalViewContent() {
             loadStockJournal(res)
             megaData.executeMethodForKey('closeDialog:stockJournalCrown')
             megaData.executeMethodForKey('render:stockJournal', {})
-            megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:inputSection')
-            megaData.executeMethodForKey('computeSummary:stockJournalItemsFooter:outputSection')
+            megaData.executeMethodForKey(
+                'computeSummary:stockJournalItemsFooter:inputSection'
+            )
+            megaData.executeMethodForKey(
+                'computeSummary:stockJournalItemsFooter:outputSection'
+            )
 
             function loadTranH(res: any) {
                 const tranH = res.tranH

@@ -84,7 +84,7 @@ app.post('/pdf1', async (req, res) => {
     await page.setContent(template, { waitUntil: 'networkidle0' })
     const buff = await page.pdf({
         format: 'a4',
-        margin: { left: '30px', top: '50px' }
+        margin: { left: '30px', top: '50px', bottom:'50px', right: '30px' }
     })
     res.json(buff)
     await page.close()
