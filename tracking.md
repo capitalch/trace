@@ -49,10 +49,13 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         Delete items in edit mode
                                                                                                         Submit functionality
                                                                                                         Serial number, show serial numbers in view, and treat it during edit
-Print pdf using PDFMake
                                                                                                         Security and permissions
 Reflect effect of stock journal in associated queries for stock and sales etc
                                                                                                         QA
+                                                                                                        PDF print
+Globalize PDF print methos
+Apply new PDF print to sales
+Apply PDF print to vouchers
 
 ## PDF Print framework
 Express send PDF
@@ -106,6 +109,7 @@ k. Server logging for modify and delete, time and log viewer
 12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
 20. Discount manage in sales           
 27. Sale return new type
+28. Trial balance, BS PL drill down at monthly level
 1. Include jData or serial no in sales report so that search on sl no may occur
 6. Meaningful server messages
 10. Edit from bank recon
@@ -194,6 +198,14 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+
+# 
+
+# 01-09-2022 - 03-08-2022
+New print PDF framework using Puppeteer and Node.js
+
+# 17-07-2022 - 31-07-2022
+Stock Journalcontinue
 
 # 15-07-2022 - 16-07-2022
 1. Corrected validation errors in items of sales-new

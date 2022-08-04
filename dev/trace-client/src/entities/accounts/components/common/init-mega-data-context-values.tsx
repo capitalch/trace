@@ -62,7 +62,7 @@ const stockJournalMegaData = () => ({
             count: 1,
             qty: 1,
         },
-        title: 'Source (Consumption / input / credit)',
+        title: 'Source (Consumption / input / credits)',
     },
     outputSection: {
         allErrors: {},
@@ -73,7 +73,7 @@ const stockJournalMegaData = () => ({
             count: 1,
             qty: 1,
         },
-        title: 'Destination (Production / output / debit)',
+        title: 'Destination (Production / output / debits)',
     },
     remarks: undefined,
     selectedStockJournalId: undefined,

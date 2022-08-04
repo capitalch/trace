@@ -49,7 +49,7 @@ function useStockJournalViewContent() {
             (d: any) => {
                 const { tranDate, clearDate, id1 } = d.data?.row
                 if (isAllowedUpdate({ tranDate, clearDate })) {
-                    loadStockJournalOnId(id1) // isModify; 2nd arg is true for no new entry in tables
+                    populateStockJournalOnId(id1) // isModify; 2nd arg is true for no new entry in tables
                 }
             }
         )
@@ -74,7 +74,7 @@ function useStockJournalViewContent() {
                             emit('SHOW-MESSAGE', {})
                             emit(gridActionMessages.fetchIbukiMessage, null)
                         })
-                        .catch(() => {}) // important to have otherwise eror
+                        .catch(() => { }) // important to have otherwise eror
                 }
             }
         )
@@ -91,101 +91,14 @@ function useStockJournalViewContent() {
         }
     }, [])
 
-    function Content1({ unitInfo }: any) {
-        const classes = {
-            hrClass: {
-                border: 'solid 1px black',
-                width: '100%',
-            },
-        }
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        fontSize: '14px',
-                    }}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            maxWidth: '40%',
-                        }}>
-                        <span style={{ fontWeight: 'bold' }}>
-                            {unitInfo.unitName +
-                                'jkjdf dfksf lakalkdasdasldasd lklkqwklk klklll abcd'}
-                        </span>
-                        <span>{unitInfo.address1}</span>
-                        <span>{unitInfo.address2}</span>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontWeight: 'bold' }}>
-                            {unitInfo.unitName}
-                        </span>
-                        <span>{unitInfo.address1}</span>
-                        <span>{unitInfo.address2}</span>
-                    </div>
-                </div>
-                <hr style={classes.hrClass}></hr>
-            </div>
-        )
-    }
-
-    function Content2({ unitInfo }: any) {
-        const classes = {
-            hrClass: {
-                border: 'solid 1px black',
-                width: '100%',
-            },
-        }
-
-        return (
-            <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                <Box
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        fontSize: '14px',
-                    }}>
-                    <Box
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            maxWidth: '40%',
-                        }}>
-                        <span style={{ fontWeight: 'bold' }}>
-                            {unitInfo.unitName +
-                                'jkjdf dfksf lakalkdasdasldasd lklkqwklk klklll abcd'}
-                        </span>
-                        <span>{unitInfo.address1}</span>
-                        <span>{unitInfo.address2}</span>
-                    </Box>
-                    <Box style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontWeight: 'bold' }}>
-                            {unitInfo.unitName}
-                        </span>
-                        <span>{unitInfo.address1}</span>
-                        <span>{unitInfo.address2}</span>
-                    </Box>
-                </Box>
-                <hr style={classes.hrClass}></hr>
-            </Box>
-        )
-    }
-
     async function doPrintPreview(id: number) {
-        const unitInfo = getFromBag('unitInfo')
-        // const htmlString = renderToStaticMarkup(<StockJournalPdf props={megaData}/>)
+        const ret = await fetchStockJournalOnId(id)
+        if (ret) {
+            const stockJournal = megaData.accounts.stockJournal
+            stockJournal.selectedStockJournalRawData = ret?.jsonResult
+            stockJournal.selectedStockJournalId = id
+        }
         showPdf(<StockJournalPdf mData={megaData} />)
-        // showHtml(unitInfo)
-    }
-
-    function showHtml(content: any) {
-        pre.showDialog = true
-        pre.dialogConfig.content = () => content // <Content1 unitInfo={unitInfo} />
-        pre.setRefresh({})
     }
 
     // Transfer this function to global utils
@@ -224,153 +137,7 @@ function useStockJournalViewContent() {
         pre.setRefresh({})
     }
 
-    function getXXGridParams() {
-        const columns = [
-            {
-                headerName: '#',
-                description: 'Index',
-                field: 'id',
-                // type: 'number',
-                width: 60,
-                disableColumnMenu: true,
-            },
-            {
-                headerName: 'Id',
-                description: 'Id',
-                field: 'id1',
-                // type: 'number',
-                width: 90,
-            },
-            {
-                headerName: 'Date',
-                description: 'Date',
-                field: 'tranDate',
-                width: 100,
-                type: 'date',
-                valueFormatter: (params: any) =>
-                    moment(params.value).format(dateFormat),
-            },
-            {
-                headerName: 'Ref no',
-                description: 'Ref no',
-                field: 'autoRefNo',
-                width: 130,
-            },
-            {
-                headerName: 'User ref no',
-                description: 'User ref no',
-                field: 'userRefNo',
-                width: 150,
-            },
-            {
-                headerName: 'Common remarks',
-                description: 'Common remarks',
-                field: 'remarks',
-                width: 200,
-            },
-            {
-                headerName: 'Product',
-                description: 'Product details',
-                field: '',
-                width: 250,
-                // renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params: any) =>
-                    `Pr code:${params.row.productCode} ${params.row.catName} ${
-                        params.row.brandName
-                    } ${params.row.label} ${params.row.info ?? ''}`,
-            },
-            {
-                headerName: 'Credits (Input)',
-                description: 'Credits',
-                field: 'credits',
-                type: 'number',
-                valueGetter: (params: any) => params.row.credits || '',
-                renderHeader: (params: any) => (
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            mt: 0.5,
-                            mb: 0.5,
-                        }}>
-                        <Typography variant="body2">Input</Typography>
-                        <Typography variant="body2">(Credits)</Typography>
-                    </Box>
-                ),
-                width: 75,
-            },
-            {
-                headerName: 'Output',
-                description: 'Debits',
-                field: 'debits',
-                type: 'number',
-                valueGetter: (params: any) => params.row.debits || '',
-                renderHeader: (params: any) => (
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            mt: 0.5,
-                            mb: 0.5,
-                        }}>
-                        <Typography variant="body2">Output</Typography>
-                        <Typography variant="body2">(Debits)</Typography>
-                    </Box>
-                ),
-                width: 70,
-            },
-            {
-                headerName: 'Line ref no',
-                description: 'Line ref no',
-                field: 'lineRefNo',
-                width: 200,
-            },
-            {
-                headerName: 'Line remarks',
-                description: 'Line remarks',
-                field: 'lineRemarks',
-                width: 200,
-            },
-            {
-                headerName: 'Serial numbers',
-                description: 'Serial numbers',
-                field: 'serialNumbers',
-                width: 200,
-            },
-        ]
-        const queryId = 'get_stock_journal_view'
-        const queryArgs = {
-            no: 100,
-        }
-        const summaryColNames: string[] = ['debits', 'credits']
-        const specialColumns = {
-            isEdit: true,
-            isEditDisabled: isControlDisabled('inventory-stock-journal-edit'),
-            isDelete: true,
-            isDeleteDisabled: isControlDisabled(
-                'inventory-stock-journal-delete'
-            ),
-            isPrint: true,
-        }
-        const gridActionMessages = {
-            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-STOCK-JOURNAL-DATA',
-            editIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
-            deleteIbukiMessage:
-                'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
-            printIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-PRINT-CLICKED',
-        }
-
-        return {
-            columns,
-            gridActionMessages,
-            queryId,
-            queryArgs,
-            summaryColNames,
-            specialColumns,
-        }
-    }
-
-    async function loadStockJournalOnId(id: number) {
+    async function fetchStockJournalOnId(id: number) {
         emit('SHOW-LOADING-INDICATOR', true)
         const ret = await execGenericView({
             isMultipleRows: false,
@@ -380,7 +147,11 @@ function useStockJournalViewContent() {
             },
         })
         emit('SHOW-LOADING-INDICATOR', false)
+        return (ret)
+    }
 
+    async function populateStockJournalOnId(id: number) {
+        const ret = await fetchStockJournalOnId(id)
         if (ret) {
             megaData.accounts.stockJournal = stockJournalMegaData()
             const stockJournal = megaData.accounts.stockJournal
@@ -478,6 +249,151 @@ function useStockJournalViewContent() {
                         )
                 })
             }
+        }
+    }
+
+    function getXXGridParams() {
+        const columns = [
+            {
+                headerName: '#',
+                description: 'Index',
+                field: 'id',
+                // type: 'number',
+                width: 60,
+                disableColumnMenu: true,
+            },
+            {
+                headerName: 'Id',
+                description: 'Id',
+                field: 'id1',
+                // type: 'number',
+                width: 90,
+            },
+            {
+                headerName: 'Date',
+                description: 'Date',
+                field: 'tranDate',
+                width: 100,
+                type: 'date',
+                valueFormatter: (params: any) =>
+                    moment(params.value).format(dateFormat),
+            },
+            {
+                headerName: 'Ref no',
+                description: 'Ref no',
+                field: 'autoRefNo',
+                width: 130,
+            },
+            {
+                headerName: 'User ref no',
+                description: 'User ref no',
+                field: 'userRefNo',
+                width: 150,
+            },
+            {
+                headerName: 'Common remarks',
+                description: 'Common remarks',
+                field: 'remarks',
+                width: 200,
+            },
+            {
+                headerName: 'Product',
+                description: 'Product details',
+                field: '',
+                width: 250,
+                // renderCell: (params: any) => <Product params={params} />,
+                valueGetter: (params: any) =>
+                    `Pr code:${params.row.productCode} ${params.row.catName} ${params.row.brandName
+                    } ${params.row.label} ${params.row.info ?? ''}`,
+            },
+            {
+                headerName: 'Credits (Input)',
+                description: 'Credits',
+                field: 'credits',
+                type: 'number',
+                valueGetter: (params: any) => params.row.credits || '',
+                renderHeader: (params: any) => (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mt: 0.5,
+                            mb: 0.5,
+                        }}>
+                        <Typography variant="body2">Input</Typography>
+                        <Typography variant="body2">(Credits)</Typography>
+                    </Box>
+                ),
+                width: 75,
+            },
+            {
+                headerName: 'Output',
+                description: 'Debits',
+                field: 'debits',
+                type: 'number',
+                valueGetter: (params: any) => params.row.debits || '',
+                renderHeader: (params: any) => (
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            mt: 0.5,
+                            mb: 0.5,
+                        }}>
+                        <Typography variant="body2">Output</Typography>
+                        <Typography variant="body2">(Debits)</Typography>
+                    </Box>
+                ),
+                width: 70,
+            },
+            {
+                headerName: 'Line ref no',
+                description: 'Line ref no',
+                field: 'lineRefNo',
+                width: 200,
+            },
+            {
+                headerName: 'Line remarks',
+                description: 'Line remarks',
+                field: 'lineRemarks',
+                width: 200,
+            },
+            {
+                headerName: 'Serial numbers',
+                description: 'Serial numbers',
+                field: 'serialNumbers',
+                width: 200,
+            },
+        ]
+        const queryId = 'get_stock_journal_view'
+        const queryArgs = {
+            no: 100,
+        }
+        const summaryColNames: string[] = ['debits', 'credits']
+        const specialColumns = {
+            isEdit: true,
+            isEditDisabled: isControlDisabled('inventory-stock-journal-edit'),
+            isDelete: true,
+            isDeleteDisabled: isControlDisabled(
+                'inventory-stock-journal-delete'
+            ),
+            isPrint: true,
+        }
+        const gridActionMessages = {
+            fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-STOCK-JOURNAL-DATA',
+            editIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-EDIT-CLICKED',
+            deleteIbukiMessage:
+                'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-DELETE-CLICKED',
+            printIbukiMessage: 'STOCK-JOURNAL-VIEW-HOOK-XX-GRID-PRINT-CLICKED',
+        }
+
+        return {
+            columns,
+            gridActionMessages,
+            queryId,
+            queryArgs,
+            summaryColNames,
+            specialColumns,
         }
     }
 
