@@ -53,22 +53,21 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
 Reflect effect of stock journal in associated queries for stock and sales etc
                                                                                                         QA
                                                                                                         PDF print
-Globalize PDF print methos
-Apply new PDF print to sales
-Apply PDF print to vouchers
+Globalize PDF print methods
+Print for last stock journal saved
 
 ## PDF Print framework
-Express send PDF
-Show pdf at client side
-Create HTML from template + JSON
-Create PDF from html
-Send json and template name from client and get pdf in return
-Set size considerations
+                                                                                                        Express send PDF
+                                                                                                        Show pdf at client side
+                                                                                                        Create PDF from html
+                                                                                                        Send html from client and get pdf in return
+Globalize PDF print methods
+Set custom height considerations
 Create pdf for sales
 Create PDF for vouchers and others
-Create PDF for Stock Journal
+                                                                                                        Create PDF for Stock Journal
 Deploy solution to LinkServer
-Deploy solution to Trace system
+Deploy solution to Trace server
 Cleanup Trace
 Upgrade Trace to React 18
 
@@ -124,6 +123,7 @@ k. Server logging for modify and delete, time and log viewer
 21. Left menu to make consise and more accomodating
 22. Footer Trace version copyright
 23. Approval of transactions
+24. Server side printing cleanup and convert to puppeteer
 
 ## Bugs
 *. Sale billl to creditor, print is not having address
@@ -133,6 +133,7 @@ k. Server logging for modify and delete, time and log viewer
 *. When in general ledger, change buCode. Then error
 *. At sales when stock negative show notification
 *. At sales when high profit, then show notification
+*. When logged in as super admin, cannot delete the demo user Kamalika Roy as demo user
 1. While purchase entry, if hsn is missed in beginning and at last hsn is given then submit button is not activated
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
@@ -199,7 +200,9 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
-# 
+# 04-08-2022
+1. Resolved bug with Super admin
+2. Completed print Stock Journal
 
 # 01-09-2022 - 03-08-2022
 New print PDF framework using Puppeteer and Node.js

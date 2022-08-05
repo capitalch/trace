@@ -267,9 +267,9 @@ function utilMethods() {
         const control = permissions.find(
             (item: any) => item.hierarchy === hierarchy
         )
-        //For admin users all controls are visible
+        //For admin users and super admin users all controls are visible
         let enabled = false
-        if (logindata.userType === 'a') {
+        if (['s','a'].includes(logindata.userType)) {
             enabled = true
         } else {
             if (control) {

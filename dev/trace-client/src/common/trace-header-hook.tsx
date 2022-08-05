@@ -33,7 +33,7 @@ import {
     ReactForm,
     useIbuki,
     useTraceMaterialComponents,
-    utilMethods
+    utilMethods,
 } from '../imports/trace-imports'
 import '../entities/authentication/initialize-react-form'
 import messages from '../entities/authentication/messages.json'
@@ -183,7 +183,7 @@ function useTraceHeader() {
                     onClick={(e: any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', superAdminMenuJson)
-                        emit('LOAD-MAIN-COMPONENT', '')
+                        // emit('LOAD-MAIN-COMPONENT', '')
                         meta.current.isMounted && setRefresh({})
                     }}>
                     <ListItemAvatar>
@@ -201,7 +201,7 @@ function useTraceHeader() {
                     onClick={(e: any) => {
                         meta.current.showDialog = false
                         emit('TOP-MENU-ITEM-CLICKED', adminMenuJson)
-                        emit('LOAD-MAIN-COMPONENT', '')
+                        // emit('LOAD-MAIN-COMPONENT', '')
                         meta.current.isMounted && setRefresh({})
                     }}>
                     <ListItemAvatar>
@@ -355,14 +355,15 @@ function useTraceHeader() {
             const uid: string = login && login.uid
             const buCodesWithPermissions = login && login.buCodesWithPermissions
             let buCodes, permissions
-            if (_.isEmpty(buCodesWithPermissions)) {
-                return
-            } else {
+            if (!_.isEmpty(buCodesWithPermissions)) {
                 buCodes = buCodesWithPermissions.map((x: any) => x.buCode)
                 const lastUsedBuCode = login?.lastUsedBuCode
                 // set permissions for last used bu code
-                if(lastUsedBuCode){
-                    permissions = buCodesWithPermissions.find((x:any)=>x.buCode === lastUsedBuCode)?.permissions || []
+                if (lastUsedBuCode) {
+                    permissions =
+                        buCodesWithPermissions.find(
+                            (x: any) => x.buCode === lastUsedBuCode
+                        )?.permissions || []
                 }
                 // permissions = buCodesWithPermissions.map((x: any) => x.permissions)
             }
@@ -406,7 +407,11 @@ function useTraceHeader() {
             if (q) {
                 try {
                     const result = await mutateGraphql(q)
-                    if (!_.isEmpty(result?.data?.authentication?.genericUpdateMaster)) {
+                    if (
+                        !_.isEmpty(
+                            result?.data?.authentication?.genericUpdateMaster
+                        )
+                    ) {
                         logout()
                         closeDialog()
                     }
@@ -651,7 +656,8 @@ const superAdminMenuJson: any = {
                 {
                     name: 'associateUsersWithClientsAndEntities',
                     label: 'Associate admin users with clients and entities',
-                    componentName: 'superAdminAssociateAdminUsersWithClientsAndEntities',
+                    componentName:
+                        'superAdminAssociateAdminUsersWithClientsAndEntities',
                     // args: {
                     //     loadComponent: 'associateAdminUserWithClientAndEntity',
                     // },
@@ -681,7 +687,7 @@ const adminMenuJson: any = {
                 {
                     name: 'manageRoles',
                     label: 'Manage roles',
-                    componentName: 'adminManageRoles'
+                    componentName: 'adminManageRoles',
                     // componentName: 'genericCRUD',
                     // args: {
                     //     loadComponent: 'manageRoles',
