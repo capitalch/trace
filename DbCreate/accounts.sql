@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3
--- Dumped by pg_dump version 12.10
+-- Dumped by pg_dump version 12.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -273,7 +273,9 @@ CREATE TABLE public."CategoryM" (
     "parentId" integer,
     "isLeaf" boolean DEFAULT false NOT NULL,
     descr text,
-    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    hsn numeric(8,0),
+    "tagId" integer
 );
 
 
@@ -808,6 +810,106 @@ CREATE TABLE public."Settings" (
 
 ALTER TABLE public."Settings" OWNER TO webadmin;
 
+--
+-- Name: StockJournal; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."StockJournal" (
+    id integer NOT NULL,
+    "tranHeaderId" integer NOT NULL,
+    "productId" integer NOT NULL,
+    qty integer DEFAULT 0 NOT NULL,
+    dc character(1) DEFAULT 'D'::bpchar NOT NULL,
+    "lineRemarks" text,
+    "lineRefNo" text,
+    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "jData" jsonb
+);
+
+
+ALTER TABLE public."StockJournal" OWNER TO webadmin;
+
+--
+-- Name: StockJournal_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE public."StockJournal" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."StockJournal_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: TagsM; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."TagsM" (
+    id integer NOT NULL,
+    "tagName" text NOT NULL
+);
+
+
+ALTER TABLE public."TagsM" OWNER TO webadmin;
+
+--
+-- Name: TagsM_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE public."TagsM" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."TagsM_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: Test; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."Test" (
+    id integer NOT NULL,
+    "accName" text NOT NULL,
+    amount numeric DEFAULT 0 NOT NULL,
+    "parentId" integer,
+    "jData" jsonb
+);
+
+
+ALTER TABLE public."Test" OWNER TO webadmin;
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+CREATE SEQUENCE public."Test_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Test_id_seq" OWNER TO webadmin;
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
+--
+
+ALTER SEQUENCE public."Test_id_seq" OWNED BY public."Test".id;
+
+
+--
+-- Name: TranD; Type: TABLE; Schema: public; Owner: webadmin
+--
+
 CREATE TABLE public."TranD" (
     id integer NOT NULL,
     "accId" integer NOT NULL,
@@ -919,17 +1021,6 @@ CREATE TABLE public."UnitM" (
 ALTER TABLE public."UnitM" OWNER TO webadmin;
 
 --
--- Name: profitorloss; Type: TABLE; Schema: public; Owner: webadmin
---
-
-CREATE TABLE public.profitorloss (
-    "coalesce" numeric
-);
-
-
-ALTER TABLE public.profitorloss OWNER TO webadmin;
-
---
 -- Name: AccM id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
@@ -1019,6 +1110,14 @@ ALTER TABLE ONLY public."PosM" ALTER COLUMN id SET DEFAULT nextval('public."PosM
 
 ALTER TABLE ONLY public."ProductM" ALTER COLUMN id SET DEFAULT nextval('public."ProductM_id_seq"'::regclass);
 
+
+--
+-- Name: Test id; Type: DEFAULT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Test" ALTER COLUMN id SET DEFAULT nextval('public."Test_id_seq"'::regclass);
+
+
 --
 -- Name: TranCounter id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
@@ -1098,10 +1197,6 @@ INSERT INTO public."AccM" VALUES (22, 'SundryDebtors', 'Sundry Debtors', 'A', 15
 INSERT INTO public."AccM" VALUES (3, 'CapitalSubgroup', 'Capital Account Subgroup', 'L', 2, 'N', true, 2, '2021-03-25 09:52:36.002381+00');
 
 --
--- Data for Name: AutoSubledgerCounter; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
---
 -- Data for Name: BranchM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 INSERT INTO public."BranchM" VALUES (1, 'head office', NULL, NULL, 'head', '2021-03-25 09:55:23.321624+00');
@@ -1126,30 +1221,18 @@ INSERT INTO public."FinYearM" VALUES ('2018-04-01', '2019-03-31', 2018);
 INSERT INTO public."FinYearM" VALUES ('2019-04-01', '2020-03-31', 2019);
 INSERT INTO public."FinYearM" VALUES ('2021-04-01', '2022-03-31', 2021);
 INSERT INTO public."FinYearM" VALUES ('2002-04-01', '2003-03-31', 2002);
-INSERT INTO public."FinYearM" VALUES ('2022-04-02', '2023-03-30', 2022);
-INSERT INTO public."FinYearM" VALUES ('2023-04-01', '2024-03-30', 2023);
+INSERT INTO public."FinYearM" VALUES ('2022-04-01', '2023-03-31', 2022);
+INSERT INTO public."FinYearM" VALUES ('2023-04-01', '2024-03-31', 2023);
 INSERT INTO public."FinYearM" VALUES ('2024-04-01', '2025-03-31', 2024);
 INSERT INTO public."FinYearM" VALUES ('2020-04-01', '2021-03-31', 2020);
 INSERT INTO public."FinYearM" VALUES ('2025-04-01', '2026-03-31', 2025);
 INSERT INTO public."FinYearM" VALUES ('2026-04-01', '2027-03-31', 2026);
-
 
 --
 -- Data for Name: GodownM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
 INSERT INTO public."GodownM" VALUES (1, 'main', NULL, NULL, '2021-03-25 09:58:55.45763+00');
-
-
---
--- Data for Name: Notes; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
-
-
---
--- Data for Name: PosM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
 
 INSERT INTO public."PosM" VALUES (1, 'sample1', NULL, NULL, 1);
 
@@ -1171,7 +1254,7 @@ INSERT INTO public."TranTypeM" VALUES (7, 'Debit note', 'DRN');
 INSERT INTO public."TranTypeM" VALUES (8, 'Credit note', 'CRN');
 INSERT INTO public."TranTypeM" VALUES (9, 'Sale return', 'SRT');
 INSERT INTO public."TranTypeM" VALUES (10, 'Purchase return', 'PRT');
-
+INSERT INTO public."TranTypeM" VALUES (11, 'Stock journal', 'STJ');
 
 --
 -- Data for Name: UnitM; Type: TABLE DATA; Schema: public; Owner: webadmin
@@ -1180,89 +1263,88 @@ INSERT INTO public."TranTypeM" VALUES (10, 'Purchase return', 'PRT');
 INSERT INTO public."UnitM" VALUES (1, 'piece', NULL, 'Pc');
 INSERT INTO public."UnitM" VALUES (2, 'kilogram', NULL, 'Kg');
 
-
 --
 -- Name: AccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccM_id_seq"', 307, true);
+SELECT pg_catalog.setval('public."AccM_id_seq"', 30, true);
 
 
 --
 -- Name: AccOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 724, true);
+-- SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 727, true);
 
 
 --
 -- Name: AutoSubledgerCounter_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 2, true);
+-- SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 3, true);
 
 
 --
 -- Name: BranchM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BranchM_id_seq"', 4, true);
+SELECT pg_catalog.setval('public."BranchM_id_seq"', 2, true);
 
 
 --
 -- Name: BrandM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BrandM_id_seq"', 15, true);
+-- SELECT pg_catalog.setval('public."BrandM_id_seq"', 26, true);
 
 
 --
 -- Name: Category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Category_id_seq"', 61, true);
+-- SELECT pg_catalog.setval('public."Category_id_seq"', 79, true);
 
 
 --
 -- Name: Contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."Contacts_id_seq"', 258, true);
+-- SELECT pg_catalog.setval('public."Contacts_id_seq"', 296, true);
 
 
 --
 -- Name: ExtBankOpBalAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 3, true);
+-- SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 4, true);
 
 
 --
 -- Name: ExtBankReconTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 137, true);
+-- SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 162, true);
 
 
 --
 -- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 15, true);
+-- SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 15, true);
 
 
 --
 -- Name: ExtGstTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 9801, true);
+-- SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 10058, true);
 
 
 --
 -- Name: ExtMiscAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 1, true);
+-- SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 2, true);
 
 
 --
@@ -1276,7 +1358,7 @@ SELECT pg_catalog.setval('public."GodownM_id_seq"', 1, false);
 -- Name: LastTranNumber_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 22, true);
+-- SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 28, true);
 
 
 --
@@ -1290,35 +1372,56 @@ SELECT pg_catalog.setval('public."PosM_id_seq"', 1, true);
 -- Name: ProductM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ProductM_id_seq"', 68, true);
+-- SELECT pg_catalog.setval('public."ProductM_id_seq"', 222, true);
 
 
 --
 -- Name: ProductOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 19, true);
+-- SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 32, true);
 
 
 --
 -- Name: SalePurchaseDetails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 9720, true);
+-- SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 10226, true);
+
+
+--
+-- Name: StockJournal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+-- SELECT pg_catalog.setval('public."StockJournal_id_seq"', 42, true);
+
+
+--
+-- Name: TagsM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+-- SELECT pg_catalog.setval('public."TagsM_id_seq"', 10, true);
+
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+-- SELECT pg_catalog.setval('public."Test_id_seq"', 39, true);
 
 
 --
 -- Name: TranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranD_id_seq"', 20278, true);
+-- SELECT pg_catalog.setval('public."TranD_id_seq"', 20863, true);
 
 
 --
 -- Name: TranH_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."TranH_id_seq"', 10188, true);
+-- SELECT pg_catalog.setval('public."TranH_id_seq"', 10485, true);
 
 
 --
@@ -1402,19 +1505,19 @@ ALTER TABLE ONLY public."BrandM"
 
 
 --
+-- Name: CategoryM CategoryM_catName_parentId_unique_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."CategoryM"
+    ADD CONSTRAINT "CategoryM_catName_parentId_unique_key" UNIQUE ("catName", "parentId");
+
+
+--
 -- Name: CategoryM Category_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
 ALTER TABLE ONLY public."CategoryM"
     ADD CONSTRAINT "Category_pkey" PRIMARY KEY (id);
-
-
---
--- Name: Contacts Contacts_contactName_pin_address1_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."Contacts"
-    ADD CONSTRAINT "Contacts_contactName_pin_address1_key" UNIQUE ("contactName", pin, address1);
 
 
 --
@@ -1560,6 +1663,39 @@ ALTER TABLE ONLY public."SalePurchaseDetails"
 ALTER TABLE ONLY public."Settings"
     ADD CONSTRAINT "Settings_pkey" PRIMARY KEY (id);
 
+
+--
+-- Name: StockJournal StockJournal_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."StockJournal"
+    ADD CONSTRAINT "StockJournal_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: TagsM TagsM_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."TagsM"
+    ADD CONSTRAINT "TagsM_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: TagsM TagsM_tagName_unique_key; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."TagsM"
+    ADD CONSTRAINT "TagsM_tagName_unique_key" UNIQUE ("tagName");
+
+
+--
+-- Name: Test Test_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Test"
+    ADD CONSTRAINT "Test_pkey" PRIMARY KEY (id);
+
+
 --
 -- Name: TranD TranD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
@@ -1614,14 +1750,6 @@ ALTER TABLE ONLY public."BrandM"
 
 ALTER TABLE ONLY public."ProductM"
     ADD CONSTRAINT "catId_brandId_label_unique_key" UNIQUE ("brandId", "catId", label);
-
-
---
--- Name: CategoryM catName; Type: CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public."CategoryM"
-    ADD CONSTRAINT "catName" UNIQUE ("catName");
 
 
 --
@@ -1819,6 +1947,14 @@ ALTER TABLE ONLY public."AutoSubledgerCounter"
 
 
 --
+-- Name: StockJournal ProductM_StockJournal_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."StockJournal"
+    ADD CONSTRAINT "ProductM_StockJournal_fkey" FOREIGN KEY ("productId") REFERENCES public."ProductM"(id) ON DELETE RESTRICT;
+
+
+--
 -- Name: SalePurchaseDetails SalePurchaseDetails_productId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -1832,6 +1968,14 @@ ALTER TABLE ONLY public."SalePurchaseDetails"
 
 ALTER TABLE ONLY public."SalePurchaseDetails"
     ADD CONSTRAINT "SalePurchaseDetails_tranDetailsId_fkey" FOREIGN KEY ("tranDetailsId") REFERENCES public."TranD"(id) ON DELETE CASCADE;
+
+
+--
+-- Name: StockJournal TranH_StockJournal_fkey; Type: FK CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."StockJournal"
+    ADD CONSTRAINT "TranH_StockJournal_fkey" FOREIGN KEY ("tranHeaderId") REFERENCES public."TranH"(id) ON DELETE CASCADE;
 
 
 --

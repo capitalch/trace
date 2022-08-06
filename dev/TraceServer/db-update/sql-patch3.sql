@@ -138,10 +138,6 @@ CREATE TABLE IF NOT EXISTS "StockJournal"
         REFERENCES "TranH" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
-	-- ,CONSTRAINT "BranchM_StockJournal_fkey" FOREIGN KEY ("branchId")
-    --     REFERENCES "BranchM" (id) MATCH SIMPLE
-    --     ON UPDATE NO ACTION
-    --     ON DELETE RESTRICT
 );
 INSERT INTO "TranTypeM" ("id", "tranType", "tranCode")
 	SELECT 11, 'Stock journal', 'STJ'
