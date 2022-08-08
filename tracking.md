@@ -109,6 +109,13 @@ k. Server logging for modify and delete, time and log viewer
 20. Discount manage in sales           
 27. Sale return new type
 28. Trial balance, BS PL drill down at monthly level
+29. ledger wise branch account creation. Group will be common
+30. Auto refresh in several places in data entry not working
+31. In non gst if HSN is not given bug appears
+32. When no error then All errors should ashow blank
+33. Accounts address bug remains
+34. Sale bill in print preview the address does not appear in PDF for institutional sales
+35. Sometimes email sending of invoice not going in sales bill
 1. Include jData or serial no in sales report so that search on sl no may occur
 6. Meaningful server messages
 10. Edit from bank recon
