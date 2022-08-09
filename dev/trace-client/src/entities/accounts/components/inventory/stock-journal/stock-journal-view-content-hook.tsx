@@ -261,11 +261,18 @@ function useStockJournalViewContent() {
                 // type: 'number',
                 width: 60,
                 disableColumnMenu: true,
-            },
+            },           
             {
                 headerName: 'Id',
                 description: 'Id',
                 field: 'id1',
+                // type: 'number',
+                width: 90,
+            },
+            {
+                headerName: 'Pr. code',
+                description: 'Product code',
+                field: 'productCode',
                 // type: 'number',
                 width: 90,
             },
@@ -291,19 +298,13 @@ function useStockJournalViewContent() {
                 width: 150,
             },
             {
-                headerName: 'Common remarks',
-                description: 'Common remarks',
-                field: 'remarks',
-                width: 200,
-            },
-            {
                 headerName: 'Product',
                 description: 'Product details',
                 field: '',
-                width: 250,
+                width: 200,
                 // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) =>
-                    `Pr code:${params.row.productCode} ${params.row.catName} ${params.row.brandName
+                    `${params.row.catName} ${params.row.brandName
                     } ${params.row.label} ${params.row.info ?? ''}`,
             },
             {
@@ -345,6 +346,12 @@ function useStockJournalViewContent() {
                     </Box>
                 ),
                 width: 70,
+            },           
+            {
+                headerName: 'Common remarks',
+                description: 'Common remarks',
+                field: 'remarks',
+                width: 200,
             },
             {
                 headerName: 'Line ref no',
