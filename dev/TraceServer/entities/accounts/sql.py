@@ -937,6 +937,7 @@ allSqls = {
             select h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
                 d."amount" , string_agg("label", ' ,') as "labels", 
                 string_agg(s."jData"->>'serialNumbers', ' ,') as "serialNumbers",
+                string_agg("productCode", ' ,') as "productCodes",
                 SUM(s."qty" * (s."price" - s."discount")) as "aggr", SUM(s."cgst") as "cgst",
                 SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
                 from "TranH" h			
@@ -1133,7 +1134,7 @@ allSqls = {
         order by "tranDate" DESC, "id" DESC LIMIT %(no)s
     ''',
 
-    "get_stock_summary":'''
+    "get_stock_summary1":'''
     with cte0 as( --base cte used many times in next
 	select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
 		from "TranH" h
@@ -1228,7 +1229,7 @@ allSqls = {
         ) select * from cte7
     ''',
 
-    "get_stock_summary1": '''
+    "get_stock_summary": '''
         with cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate"
             from "TranH" h

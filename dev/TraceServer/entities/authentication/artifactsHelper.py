@@ -119,7 +119,7 @@ def createOrUpdateUserHelper(value):
     uid = valueDict['data']['uid']
     pwd = util.getRandomPassword()
     tHash = util.getPasswordHash(pwd)
-    # valueDict['data']['uid'] = uid
+
     valueDict['data']['hash'] = tHash
     userEmail = valueDict['data']['userEmail']
     isActive = valueDict['data'].get('isActive', False)
@@ -261,6 +261,9 @@ def loginHelper(credentials):
         sqlString = allSqls['get_user_hash']
         result = execSql(DB_NAME, sqlString, {
                          'uidOrEmail': uidOrEmail}, isMultipleRows=False)
+        # to be removed
+        # result = {'hash':'$2b$12$cEmC4W6eYTULzS78UUnAdOfEuy2BnLOUT5wpD99P6jeObKnRMFa2u' , 'id': 1}
+        #
         print('get_user_hash', result)
         if (result is None) or (result.get('id') is None):
             if isSuperAdmin(uidOrEmail, pwd):
