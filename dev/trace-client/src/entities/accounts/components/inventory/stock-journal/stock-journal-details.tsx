@@ -207,6 +207,8 @@ function StockJournalLineItems({ section }: any) {
     }
 
     function setItemToSelectedProduct() {
+        stockJournal = megaData.accounts.stockJournal[section]
+        items = stockJournal.items
         const currentItemIndex = stockJournal.currentItemIndex
         const currentItem = items[currentItemIndex]
         const selectedProduct = megaData.accounts.selectedProduct

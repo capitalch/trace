@@ -156,6 +156,14 @@ function useProductsListReport() {
                 width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
+            {
+                headerName: 'Sale',
+                headerClassName: 'header-class',
+                description: 'Sale',
+                field: 'sale',
+                type: 'number',
+                width: 70,
+            },
         ]
     }
 

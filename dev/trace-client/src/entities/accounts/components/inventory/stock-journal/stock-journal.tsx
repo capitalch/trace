@@ -46,7 +46,7 @@ function StockJournal() {
                 <StockJournalCrown />
             </Box>
             <StockJournalDetails />
-            <StockJournalPdf />
+            {/* <StockJournalPdf /> */}
         </Box>
     )
 }

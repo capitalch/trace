@@ -53,7 +53,7 @@ https://tempail.com/en/
 pyinstaller --onefile --hidden-import "babel.numbers" --noconsole ExportService.py
 create installer from innosetup
 
-## all schemas
+## all schemas of capital
 demounit1
 capitalchowringhee
 capitalelectronics
@@ -66,6 +66,21 @@ sushantagrawal
 sushantagrawalhuf
 
 netwoven
+
+## All schemas of Bika
+akansha
+brijdhara
+dineshgoyal
+dineshgoyalhuf
+eragon
+fastspeed
+goelfoodproducts
+hilltop
+rashmigoyal
+shubhrekha
+speedfast
+ujesh
+yatharthgoyal
 
 ## Testing strategy
 1. Delete all orphan entries in TranH table

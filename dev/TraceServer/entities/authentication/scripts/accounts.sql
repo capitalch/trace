@@ -1288,7 +1288,7 @@ SELECT pg_catalog.setval('public."AccM_id_seq"', 30, true);
 -- Name: BranchM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BranchM_id_seq"', 2, true);
+SELECT pg_catalog.setval('public."BranchM_id_seq"', 1, true);
 
 
 --
