@@ -7,8 +7,6 @@ import {
     manageEntitiesState,
     MegaDataContext,
     moment,
-    renderToStaticMarkup,
-    renderToString,
     stockJournalMegaData,
     Typography,
     useConfirm,
@@ -74,14 +72,18 @@ function useStockJournalViewContent() {
                             emit('SHOW-MESSAGE', {})
                             emit(gridActionMessages.fetchIbukiMessage, null)
                         })
-                        .catch(() => { }) // important to have otherwise eror
+                        .catch(() => {}) // important to have otherwise eror
                 }
             }
         )
         const subs3 = filterOn(gridActionMessages.printIbukiMessage).subscribe(
             (d: any) => {
                 const row = d.data?.row
-                doPrintPreview(row.id1)
+                megaData.executeMethodForKey(
+                    'doPrintPreview:useStockJournalTotals',
+                    row.id1
+                )
+                // doPrintPreview(row.id1)
             }
         )
         return () => {
@@ -91,51 +93,51 @@ function useStockJournalViewContent() {
         }
     }, [])
 
-    async function doPrintPreview(id: number) {
-        const ret = await fetchStockJournalOnId(id)
-        if (ret) {
-            const stockJournal = megaData.accounts.stockJournal
-            stockJournal.selectedStockJournalRawData = ret?.jsonResult
-            stockJournal.selectedStockJournalId = id
-        }
-        showPdf(<StockJournalPdf mData={megaData} />)
-    }
+    // async function doPrintPreview(id: number) {
+    //     const ret = await fetchStockJournalOnId(id)
+    //     if (ret) {
+    //         const stockJournal = megaData.accounts.stockJournal
+    //         stockJournal.selectedStockJournalRawData = ret?.jsonResult
+    //         stockJournal.selectedStockJournalId = id
+    //     }
+    //     showPdf(<StockJournalPdf mData={megaData} />)
+    // }
 
     // Transfer this function to global utils
-    async function showPdf(content: any) {
-        // const htmlString = renderToString(content)
-        const htmlString = renderToStaticMarkup(content)
-        emit('SHOW-LOADING-INDICATOR', true)
-        const options: any = await axios({
-            method: 'post',
-            url: 'http://localhost:8081/pdf1',
-            data: {
-                template: htmlString,
-            },
-        })
+    // async function showPdf(content: any) {
+    //     // const htmlString = renderToString(content)
+    //     const htmlString = renderToStaticMarkup(content)
+    //     emit('SHOW-LOADING-INDICATOR', true)
+    //     const options: any = await axios({
+    //         method: 'post',
+    //         url: 'http://localhost:8081/pdf1',
+    //         data: {
+    //             template: htmlString,
+    //         },
+    //     })
 
-        const buff = options.data.data
-        const buffer = Buffer.from(buff)
+    //     const buff = options.data.data
+    //     const buffer = Buffer.from(buff)
 
-        const base64 = buffer.toString('base64')
-        pre.objectUrl = 'data:application/pdf;base64, ' + base64
-        emit('SHOW-LOADING-INDICATOR', false)
-        pre.showDialog = true
-        pre.dialogConfig.content = () => (
-            <div>
-                {
-                    <object
-                        data={pre.objectUrl}
-                        type="application/pdf"
-                        width="100%"
-                        height="700">
-                        <p>Failed</p>
-                    </object>
-                }
-            </div>
-        )
-        pre.setRefresh({})
-    }
+    //     const base64 = buffer.toString('base64')
+    //     pre.objectUrl = 'data:application/pdf;base64, ' + base64
+    //     emit('SHOW-LOADING-INDICATOR', false)
+    //     pre.showDialog = true
+    //     pre.dialogConfig.content = () => (
+    //         <div>
+    //             {
+    //                 <object
+    //                     data={pre.objectUrl}
+    //                     type="application/pdf"
+    //                     width="100%"
+    //                     height="700">
+    //                     <p>Failed</p>
+    //                 </object>
+    //             }
+    //         </div>
+    //     )
+    //     pre.setRefresh({})
+    // }
 
     async function fetchStockJournalOnId(id: number) {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -147,11 +149,12 @@ function useStockJournalViewContent() {
             },
         })
         emit('SHOW-LOADING-INDICATOR', false)
-        return (ret)
+        return ret
     }
 
     async function populateStockJournalOnId(id: number) {
         const ret = await fetchStockJournalOnId(id)
+        // const ret:any = await megaData.executeMethodForKey('fetchStockJournalOnId:useStockJournalTotals',id)
         if (ret) {
             megaData.accounts.stockJournal = stockJournalMegaData()
             const stockJournal = megaData.accounts.stockJournal
@@ -261,7 +264,7 @@ function useStockJournalViewContent() {
                 // type: 'number',
                 width: 60,
                 disableColumnMenu: true,
-            },           
+            },
             {
                 headerName: 'Id',
                 description: 'Id',
@@ -304,8 +307,9 @@ function useStockJournalViewContent() {
                 width: 200,
                 // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) =>
-                    `${params.row.catName} ${params.row.brandName
-                    } ${params.row.label} ${params.row.info ?? ''}`,
+                    `${params.row.catName} ${params.row.brandName} ${
+                        params.row.label
+                    } ${params.row.info ?? ''}`,
             },
             {
                 headerName: 'Credits (Input)',
@@ -346,7 +350,7 @@ function useStockJournalViewContent() {
                     </Box>
                 ),
                 width: 70,
-            },           
+            },
             {
                 headerName: 'Common remarks',
                 description: 'Common remarks',

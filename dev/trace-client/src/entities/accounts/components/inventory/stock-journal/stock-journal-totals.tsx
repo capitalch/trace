@@ -1,22 +1,63 @@
-import { Box, IMegaData, MegaDataContext, Typography, useContext, useEffect, useState, useTheme, utilMethods } from '../redirect'
+import {
+    _,
+    Box,
+    getFromBag,
+    IconButton,
+    IMegaData,
+    MegaDataContext,
+    Preview,
+    Tooltip,
+    Typography,
+    useContext,
+    useEffect,
+    useState,
+    useTraceMaterialComponents,
+    useTheme,
+    utilMethods,
+} from '../redirect'
+import { useStockJournalTotals } from './stock-journal-totals-hook'
 function StockJournalTotals() {
-    const [, setRefresh] = useState({})
     const { toDecimalFormat } = utilMethods()
-    const theme = useTheme()
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
+    const { doPrintPreview, meta } = useStockJournalTotals()
 
-    useEffect(() => {
-        megaData.registerKeyWithMethod('render: StockJournalTotals', setRefresh)
-    }, [])
-
-    return (<Box sx={{ display: 'flex', fontWeight: 'bold' }}>
-        <Typography variant='body2' >Input qty: </Typography>
-        <Typography variant='body2' sx={{ fontWeight: 'bold' }}>{toDecimalFormat(stockJournal?.inputSection?.summary?.qty || 0.00)}  </Typography>
-        &nbsp;&nbsp;
-        <Typography variant='body2' >Output qty: </Typography>
-        <Typography variant='body2' sx={{ fontWeight: 'bold' }}>{toDecimalFormat(stockJournal?.outputSection?.summary?.qty || 0.00)}  </Typography>
-    </Box>)
+return (
+        <Box sx={{ display: 'flex', fontWeight: 'bold', alignItems:'center' }}>
+            <Typography variant="body2">Input qty: </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {toDecimalFormat(
+                    stockJournal?.inputSection?.summary?.qty || 0.0
+                )}{' '}
+            </Typography>
+            &nbsp;&nbsp;
+            <Typography variant="body2">Output qty: </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                {toDecimalFormat(
+                    stockJournal?.outputSection?.summary?.qty || 0.0
+                )}{' '}
+            </Typography>
+            <Tooltip title="Preview">
+                {/* preview button is only visible when global / getFromBag('rawSaleData') has value. not on meta.rawSaleData which is activated when preview icon is clicked in view grid */}
+                {  <IconButton
+                    sx={{
+                        ml: 1,
+                        display: stockJournal.selectedStockJournalId
+                            ? 'block'
+                            : 'none',
+                    }}
+                    size="small"
+                    disabled={false}
+                    onClick={() =>
+                        doPrintPreview(stockJournal.selectedStockJournalId)
+                    }>
+                    <Preview className="preview-icon" />
+                </IconButton>}
+            </Tooltip>
+            <BasicMaterialDialog parentMeta={meta} />
+        </Box>
+    )
 }
 
 export { StockJournalTotals }

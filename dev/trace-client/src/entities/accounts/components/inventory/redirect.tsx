@@ -44,6 +44,7 @@ export {
     Edit,
     Link,
     ListAlt,
+    Preview,
     Search,
     SyncSharp,
 } from '../../../../imports/icons-import'

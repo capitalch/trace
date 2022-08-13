@@ -560,7 +560,7 @@ function StockJournalItemsFooter({ section }: any) {
     }, [])
 
     useEffect(() => {
-        megaData.executeMethodForKey('render: StockJournalTotals', {})
+        megaData.executeMethodForKey('render:stockJournalTotals', {})
     })
 
     return (

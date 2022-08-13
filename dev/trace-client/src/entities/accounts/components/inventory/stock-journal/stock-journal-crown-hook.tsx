@@ -42,7 +42,8 @@ function useStockJournalCrown() {
 
     function handleReset() {
         megaData.accounts.stockJournal = stockJournalMegaData()
-        emit('TRACE-MAIN:JUST-REFRESH', null)
+        megaData.executeMethodForKey('render:stockJournal',{})
+        // emit('TRACE-MAIN:JUST-REFRESH', null)
     }
 
     async function handleSubmit() {
@@ -55,7 +56,10 @@ function useStockJournalCrown() {
         } else {
             const id = ret?.data?.accounts?.genericUpdateMasterDetails
             console.log('id for TranH:', id)
+            // megaData.executeMethodForKey('render:stockJournalTotals',{})
             handleReset()
+            megaData.accounts.stockJournal.selectedStockJournalId = id
+            megaData.executeMethodForKey('render:stockJournalTotals',{})
         }
 
         function extractHeaderWithDetails() {
