@@ -29,15 +29,11 @@ function useStockJournalTotals() {
 
     useEffect(() => {
         megaData.registerKeyWithMethod(
-            'doPrintPreview:useStockJournalTotals',
+            'doPrintPreview:stockJournalTotals',
             doPrintPreview
         )
         megaData.registerKeyWithMethod('render:stockJournalTotals', setRefresh)
     }, [])
-
-    function test(obj:any){
-        setRefresh({})
-    }
 
     async function fetchStockJournalOnId(id: number) {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -59,7 +55,9 @@ function useStockJournalTotals() {
             stockJournal.selectedStockJournalRawData = ret?.jsonResult
             stockJournal.selectedStockJournalId = id
         }
-        showPdf(<StockJournalPdf mData={megaData} />)
+        await showPdf(<StockJournalPdf mData={megaData} />)
+        // megaData.accounts.stockJournal.selectedStockJournalId = undefined
+        // megaData.executeMethodForKey('render:stockJournalTotals',{})
     }
 
     // Transfer this function to global utils
