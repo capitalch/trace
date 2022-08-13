@@ -5,12 +5,13 @@ import {
     manageFormsState,
     usingIbuki as getIbuki,
 } from '../imports/trace-imports'
+import { axios, renderToStaticMarkup } from '../imports/regular-imports'
 import { Typography } from '@mui/material'
 import messages from '../messages.json'
 const { emit } = getIbuki()
 
 function utilMethods() {
-    const { getCurrentEntity, getCurrentComponent, getLoginData, } =
+    const { getCurrentEntity, getCurrentComponent, getLoginData, getFromBag } =
         manageEntitiesState()
     const artifacts = getArtifacts(getCurrentEntity())
     const { mutateGraphql, queryGraphql }: any = graphqlService()
@@ -269,7 +270,7 @@ function utilMethods() {
         )
         //For admin users and super admin users all controls are visible
         let enabled = false
-        if (['s','a'].includes(logindata.userType)) {
+        if (['s', 'a'].includes(logindata.userType)) {
             enabled = true
         } else {
             if (control) {
@@ -521,6 +522,47 @@ function utilMethods() {
         }
     }
 
+    async function showPdf(meta: any, content: any) {
+        const pre = meta.current
+        // const htmlString = renderToString(content)
+        // const lurl = 'http://localhost:8081/pdf1'
+        const htmlString = renderToStaticMarkup(content)
+        const configuration = getFromBag('configuration')
+        const { linkServerUrl, linkServerKey } = configuration
+       
+        emit('SHOW-LOADING-INDICATOR', true)
+        const options: any = await axios({
+            method: 'post',
+            url: `${linkServerUrl}/pdf`,
+            data: {
+                template: htmlString,
+                token: linkServerKey //+ '1111'
+            },
+        })
+
+        const buff = options.data.data
+        const buffer = Buffer.from(buff)
+
+        const base64 = buffer.toString('base64')
+        pre.objectUrl = 'data:application/pdf;base64, ' + base64
+        emit('SHOW-LOADING-INDICATOR', false)
+        pre.showDialog = true
+        pre.dialogConfig.content = () => (
+            <div>
+                {
+                    <object
+                        data={pre.objectUrl}
+                        type="application/pdf"
+                        width="100%"
+                        height="700">
+                        <p>Failed</p>
+                    </object>
+                }
+            </div>
+        )
+        pre.setRefresh({})
+    }
+
     function toDecimalFormat(s: any) {
         s ?? (s = '')
         if (s === '') {
@@ -556,6 +598,7 @@ function utilMethods() {
         sendEmail,
         sendSms,
         setIdForDataGridRows,
+        showPdf,
         toDecimalFormat,
     }
 }

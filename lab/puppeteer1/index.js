@@ -11,13 +11,6 @@ const app = express()
 app.use(express.json())
 
 app.use(cors())
-// app.engine(
-//     'handlebars',
-//     exphbs.engine({
-//         defaultLayout: 'main',
-//     })
-// )
-// app.set('view engine', 'handlebars')
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
@@ -63,17 +56,6 @@ app.get('/pdf1', async (req, res) => {
             }
         }
     )
-
-    // const browser = await puppeteer.launch()
-    // const page = await browser.newPage()
-
-    // await page.setContent(html)
-
-    // await page.goto('http://localhost:8081', { waitUntil: 'networkidle0' })
-    // const buff = await page.pdf({ format: 'a4' })
-    // res.end(buff)
-    // await browser.close()
-    // await page.close()
 })
 
 app.post('/pdf1', async (req, res) => {
@@ -96,14 +78,3 @@ const server = app.listen(8081, () => {
     const host = server.address().address
     console.log(`Server lstening at host: ${host}, port:${port}`)
 })
-
-//(async () => {
-// const browser = await puppeteer.launch()
-// const page = await browser.newPage()
-//     await page.goto('https://netwoven.com', {
-//         waitUntil: 'networkidle2',
-//     })
-//     await page.pdf({ path: 'hn.pdf', format: 'a4' })
-
-//     await browser.close()
-// })()

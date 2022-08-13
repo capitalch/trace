@@ -50,15 +50,16 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         Submit functionality
                                                                                                         Serial number, show serial numbers in view, and treat it during edit
                                                                                                         Security and permissions
-Reflect effect of stock journal in associated queries for stock and sales etc
+                                                                                                        Reflect effect of stock journal in associated queries for stock and sales etc
                                                                                                         QA
                                                                                                         PDF print
-Globalize PDF print methods
+                                                                                                        Globalize PDF print methods
                                                                                                         Edit of stockJournal adds record
                                                                                                         In edit of Stock Journal unable to select item
 Make zero rows allowed
-Print of just saved stock journal
-
+                                                                                                        Print of just saved stock journal
+                                                                                                        Transport PDF printing to Link server
+                                                                                                        Link server pdf print provide security and error handling
 ## PDF Print framework
                                                                                                         Express send PDF
                                                                                                         Show pdf at client side
