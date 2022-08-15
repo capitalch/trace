@@ -16,7 +16,7 @@ import {
     Paper,
     Typography,
 } from '../../../../imports/gui-imports'
-import { CloseSharp, PrintIcon } from '../../../../imports/icons-import'
+import { CloseSharp,Preview, PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrown } from './crown-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
@@ -65,8 +65,8 @@ function Crown({ meta }: any) {
                 </Typography>
                 <div>
                     <Tooltip
-                        title="Print"
-                        style={{
+                        title="Print preview"
+                        sx={{
                             display: ad?.header?.autoRefNo
                                 ? 'inline-block'
                                 : 'none',
@@ -75,7 +75,7 @@ function Crown({ meta }: any) {
                             className="print-button"
                             size="small"
                             onClick={handleOpen}>
-                            <PrintIcon className="print-icon" />
+                            <Preview className="preview-icon" />
                         </IconButton>
                     </Tooltip>
                     <SubmitButton ad={arbitraryData} meta={meta} />

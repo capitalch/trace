@@ -10,7 +10,6 @@ from loadConfig import cfg
 mail = None
 # In gmail MAIL_USE_SSL is True. Now I am using domain specific email because Gmail gives error due to security policy changes quite often. Now I am using milesweb, admin@kushinfotech.in, which I have created
 
-
 def setMailConfig(app):
     global mail
     mailSettings = cfg['mailSettings']

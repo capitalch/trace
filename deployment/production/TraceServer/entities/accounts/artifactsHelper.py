@@ -304,11 +304,12 @@ def genericUpdateMasterDetailsHelper(dbName, buCode, finYearId, valueDict, conte
                 execSqlWithCursor(cursor, sqlString, args=args,
                                   isMultipleRows=False, buCode=buCode)
         #####
-        
-        res = execSqlWithCursor(cursor=cursor,sqlString=allSqls['get_accountsBalances'], args = {'branchId':branchId, 'finYearId':finYearId, 'accIds': accIdsTuple}, buCode = buCode)
-        res = dict(res)
-        for k,v in res.items():
-            res[k] = str(v)
+        res=None
+        if(len(accIdsTuple) > 0):
+            res = execSqlWithCursor(cursor=cursor,sqlString=allSqls['get_accountsBalances'], args = {'branchId':branchId, 'finYearId':finYearId, 'accIds': accIdsTuple}, buCode = buCode)
+            res = dict(res)
+            for k,v in res.items():
+                res[k] = str(v)
        
         connection.commit()
         #####

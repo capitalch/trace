@@ -1,9 +1,7 @@
 import {
-    axios,
     execGenericView,
     IMegaData,
     MegaDataContext,
-    renderToStaticMarkup,
     showPdf,
     useContext,
     useEffect,

@@ -1,0 +1,2 @@
+-- created on 06-08-2022. New database will need to be upgraded from this patch. The accounts.sql which is used
+-- to create new database is alredy having ingredients of sql-patch1.sql and sql-patch2.sql and sql-patch3.sql
