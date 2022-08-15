@@ -2,7 +2,6 @@ import { Box, Button, IMegaData, MegaDataContext, useContext, useEffect, useStat
 import { useStockJournalCrown } from './stock-journal-crown-hook'
 
 function StockJournalCrown() {
-    // const [, setRefresh] = useState({})
     const theme = useTheme()
     const { isControlDisabled } = utilMethods()
     const { handleReset, handleSubmit, handleViewStockJournalDialog, meta } = useStockJournalCrown()
@@ -39,7 +38,12 @@ function StockJournalCrown() {
         const headerError = stockJournal?.allErrors
         const isHeaderError = Object.keys(headerError).some((key: string) => headerError[key])
 
-        return (isInputError || isOutputError || isHeaderError)
+        const inputItemsLength = megaData.accounts.stockJournal.inputSection.items.length 
+        const outputItemsLingth = megaData.accounts.stockJournal.outputSection.items.length
+
+        const itemsLengthError = (inputItemsLength + outputItemsLingth) === 0
+
+        return (isInputError || isOutputError || isHeaderError || itemsLengthError)
     }
 }
 

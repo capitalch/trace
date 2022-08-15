@@ -51,6 +51,7 @@ function startLinkServer (io) {
             `[${String(Object.keys(allLinksObject))}]`
         )
         link.on('disconnect', () => {
+            link.disconnect()
             delete allLinksObject[link.pointId]
             console.log(
                 'link disconnected, id=',

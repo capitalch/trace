@@ -75,7 +75,7 @@ function StockJournalItemsHeader({ section }: any) {
             }}>
             <Typography
                 variant="body1"
-                sx={{ fontWeight: 'bold', textDecoration: 'underline' }}>
+                sx={{ fontWeight: 'bold', textDecoration: 'underline', minWidth:theme.spacing(70) }}>
                 {stockJournal?.title || ''}
             </Typography>
 
@@ -507,14 +507,14 @@ function StockJournalLineItem({ section, item, index }: any) {
 
     function handleDeleteRow(e: any, item: any, index: number) {
         e.stopPropagation() // necessary to prevent the firing of Box click event. Box is the parent. Click event of the box is for setting focus
-        if (items.length === 1) {
-            clearRow(item)
-        } else {
+        // if (items.length === 1) {
+        //     clearRow(item)
+        // } else {
             items.splice(index, 1)
             if (item.id) {
                 stockJournal.deletedIds.push(item.id)
             }
-        }
+        // }
         stockJournal.currentItemIndex = items.length - 1
         megaData.executeMethodForKey(
             `render:stockJournalLineItems:${section}`,
@@ -523,6 +523,7 @@ function StockJournalLineItem({ section, item, index }: any) {
         megaData.executeMethodForKey(
             `computeSummary:stockJournalItemsFooter:${section}`
         )
+        megaData.executeMethodForKey('render:stockJournalCrown',{})
     }
 }
 

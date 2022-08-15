@@ -241,7 +241,7 @@ def graphql_server():
     return res, status_code
 
 
-@app.route("/test", methods=["GET"])
+@app.route("/test", methods=["GET", "POST"])
 def testFunc():
     return jsonify("Server ok"), 200
 

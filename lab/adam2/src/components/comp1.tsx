@@ -5,6 +5,11 @@ import reactDomServer from 'react-dom/server'
 import axios from 'axios'
 import { Comp2 } from './comp2'
 import { Buffer } from 'buffer'
+import html2Canvas from 'html2canvas'
+import jspdf from 'jspdf'
+import * as htmlToImage from 'html-to-image'
+import { Comp3 } from './Comp3'
+import jsPDF from 'jspdf'
 
 function Comp1() {
     const [, setrefresh] = useState({})
@@ -15,21 +20,42 @@ function Comp1() {
 
     return (
         <div>
-            {pre.objectUrl && (
-                <object
-                    data={pre.objectUrl}
-                    type="application/pdf"
-                    width="100%"
-                    height="800">
-                    <p>
-                        Alternative text - include a link{' '}
-                        <a href="http://localhost:8081/pdf">to the PDF!</a>
-                    </p>
-                </object>
-            )}
-            <button onClick={handleClick}>Post</button>
+            <Comp3 />
+            <button onClick={handleClick2}>HtmlToCanvas</button>
         </div>
     )
+
+    // return (
+    //     <div>
+    //         {pre.objectUrl && (
+    //             <object
+    //                 data={pre.objectUrl}
+    //                 type="application/pdf"
+    //                 width="100%"
+    //                 height="800">
+    //                 <p>
+    //                     Alternative text - include a link{' '}
+    //                     <a href="http://localhost:8081/pdf">to the PDF!</a>
+    //                 </p>
+    //             </object>
+    //         )}
+    //         <button onClick={handleClick}>Use Puppeteer</button>
+    //         <button onClick={handleClick1}>Use html-to-image</button>
+    //     </div>
+    // )
+
+    async function handleClick1() {}
+
+    async function handleClick2() {
+        const input: any = document.getElementById('#comp3')
+        const canvas = await html2Canvas(input)
+        const imageData:any = canvas.toDataURL('image/png')
+        const pdf = new jsPDF()//'p', 'px', 'a4')
+        pdf.addImage(imageData,'JPEG',10,10,480,600)
+        pdf.save('sample.pdf')
+        // pdf.addImage(imageData)
+        // pdf.save('test.pdf')
+    }
 
     async function handleClick() {
         const htmlString = reactDomServer.renderToString(<Comp2 />)

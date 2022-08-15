@@ -5,7 +5,11 @@ import {
     manageFormsState,
     usingIbuki as getIbuki,
 } from '../imports/trace-imports'
-import { axios, renderToStaticMarkup } from '../imports/regular-imports'
+import {
+    axios,
+    renderToStaticMarkup,
+    renderToString,
+} from '../imports/regular-imports'
 import { Typography } from '@mui/material'
 import messages from '../messages.json'
 const { emit } = getIbuki()
@@ -173,7 +177,7 @@ function utilMethods() {
                 duration: null,
             })
             ret = { message: error.message }
-            throw (error)
+            throw error
         }
         return ret
     }
@@ -285,12 +289,20 @@ function utilMethods() {
     function* keyGen() {
         let i = 1
         while (true) {
-            yield (i++)
+            yield i++
         }
     }
 
     function Mandatory() {
-        return <Typography variant='subtitle2' sx={{ color: 'red' }} component='span'> *</Typography>
+        return (
+            <Typography
+                variant="subtitle2"
+                sx={{ color: 'red' }}
+                component="span">
+                {' '}
+                *
+            </Typography>
+        )
     }
 
     function numberToWordsInRs(value: any) {
@@ -330,7 +342,8 @@ function utilMethods() {
                 res += (res === '' ? '' : ' ') + convert_number(kn) + ' LAKH'
             }
             if (Hn > 0) {
-                res += (res === '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
+                res +=
+                    (res === '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
             }
 
             if (Dn) {
@@ -357,7 +370,7 @@ function utilMethods() {
                 'SIXTEEN',
                 'SEVENTEEN',
                 'EIGHTEEN',
-                'NINETEEN'
+                'NINETEEN',
             ]
             let tens = [
                 '',
@@ -369,7 +382,7 @@ function utilMethods() {
                 'SIXTY',
                 'SEVENTY',
                 'EIGHTY',
-                'NINETY'
+                'NINETY',
             ]
 
             if (tn > 0 || one > 0) {
@@ -426,7 +439,7 @@ function utilMethods() {
     const saveForm = async (options: SaveFormOptions) => {
         emit('SHOW-LOADING-INDICATOR', true)
         options.queryId || (options.queryId = 'genericUpdateMasterDetails')
-        options.afterMethod || (options.afterMethod = () => { })
+        options.afterMethod || (options.afterMethod = () => {})
         const json: any = escape(JSON.stringify(options.data))
         const currentEntityName = getCurrentEntity()
         let ret: any = {}
@@ -518,7 +531,7 @@ function utilMethods() {
             row.id = incr()
         }
         function incr() {
-            return (count++)
+            return count++
         }
     }
 
@@ -529,14 +542,14 @@ function utilMethods() {
         const htmlString = renderToStaticMarkup(content)
         const configuration = getFromBag('configuration')
         const { linkServerUrl, linkServerKey } = configuration
-       
+
         emit('SHOW-LOADING-INDICATOR', true)
         const options: any = await axios({
             method: 'post',
             url: `${linkServerUrl}/pdf`,
             data: {
                 template: htmlString,
-                token: linkServerKey //+ '1111'
+                token: linkServerKey, //+ '1111'
             },
         })
 

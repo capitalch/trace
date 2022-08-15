@@ -56,7 +56,7 @@ worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
                                                                                                         Globalize PDF print methods
                                                                                                         Edit of stockJournal adds record
                                                                                                         In edit of Stock Journal unable to select item
-Make zero rows allowed
+                                                                                                        Make zero rows allowed
                                                                                                         Print of just saved stock journal
                                                                                                         Transport PDF printing to Link server
                                                                                                         Link server pdf print provide security and error handling
@@ -211,6 +211,9 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+
+# 05-08-2022 - 13-08-2022
+1. Stock journal completed and rectified bugs
 
 # 04-08-2022
 1. Resolved bug with Super admin

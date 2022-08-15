@@ -58,44 +58,6 @@ function useStockJournalTotals() {
         }
         await showPdf(meta, <StockJournalPdf mData={megaData} />)
     }
-
-    // Transfer this function to global utils
-    // async function showPdf(meta:any, content: any) {
-    //     const pre = meta.current
-    //     // const htmlString = renderToString(content)
-    //     const htmlString = renderToStaticMarkup(content)
-    //     emit('SHOW-LOADING-INDICATOR', true)
-    //     const options: any = await axios({
-    //         method: 'post',
-    //         url: 'http://localhost:8081/pdf1',
-    //         data: {
-    //             template: htmlString,
-    //         },
-    //     })
-
-    //     const buff = options.data.data
-    //     const buffer = Buffer.from(buff)
-
-    //     const base64 = buffer.toString('base64')
-    //     pre.objectUrl = 'data:application/pdf;base64, ' + base64
-    //     emit('SHOW-LOADING-INDICATOR', false)
-    //     pre.showDialog = true
-    //     pre.dialogConfig.content = () => (
-    //         <div>
-    //             {
-    //                 <object
-    //                     data={pre.objectUrl}
-    //                     type="application/pdf"
-    //                     width="100%"
-    //                     height="700">
-    //                     <p>Failed</p>
-    //                 </object>
-    //             }
-    //         </div>
-    //     )
-    //     pre.setRefresh({})
-    // }
-
     return { doPrintPreview, meta }
 }
 export { useStockJournalTotals }
