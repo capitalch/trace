@@ -54,7 +54,7 @@ function useTraceMaterialComponents() {
                 </IconButton>
             </DialogTitle>
             <DialogContent >
-                {<dialogConfig.content />}
+                {dialogConfig.content && <dialogConfig.content />}
             </DialogContent>
         </Dialog>)
 

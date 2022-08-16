@@ -4,6 +4,7 @@ import {
     useContext,
     useRef,
 } from '../../../../imports/regular-imports'
+import { useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import {
     Dialog,
     DialogContent,
@@ -16,11 +17,11 @@ import {
     Paper,
     Typography,
 } from '../../../../imports/gui-imports'
-import { CloseSharp,Preview, PrintIcon } from '../../../../imports/icons-import'
+import { CloseSharp, Preview, PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrown } from './crown-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
-import {PdfVoucher} from '../pdf/vouchers/pdf-voucher'
+import { PdfVoucher } from '../pdf/vouchers/pdf-voucher'
 
 function Crown({ meta }: any) {
     const classes = useStyles()
@@ -38,7 +39,7 @@ function Crown({ meta }: any) {
         SummaryDebitsCredits,
         SummaryGst,
     } = useCrown(meta, componentRef)
-
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
     const { emit, filterOn, PDFViewer } = useSharedElements()
 
     useEffect(() => {
@@ -81,7 +82,8 @@ function Crown({ meta }: any) {
                     <SubmitButton ad={arbitraryData} meta={meta} />
                 </div>
             </Paper>
-            <Dialog
+            <BasicMaterialDialog parentMeta={meta} />
+            {/* <Dialog
                 open={meta.current.showDialog}
                 onClose={handleClose}
                 fullWidth={true}
@@ -104,7 +106,7 @@ function Crown({ meta }: any) {
                         <PdfVoucher arbitraryData={arbitraryData} />
                     </PDFViewer>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
         </div>
     )
 }

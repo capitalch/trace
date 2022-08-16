@@ -3,20 +3,20 @@ import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
 
-function Receipt({ hidden }: any) {
-    const meta: any = useRef({
-        isMounted: false,
-        errorMessage: '',
-    })
+function Receipt({ hidden, meta }: any) {
+    // const meta: any = useRef({
+    //     isMounted: false,
+    //     errorMessage: '',
+    // })
 
-    useEffect(() => {
-        const curr = meta.current
-        curr.isMounted = true
-        return () => {
-            curr.isMounted = false
-        }
-    }, [])
-
+    // useEffect(() => {
+    //     const curr = meta.current
+    //     curr.isMounted = true
+    //     return () => {
+    //         curr.isMounted = false
+    //     }
+    // }, [])
+    
     //hidden prop used for tab visibility
     return (<div hidden={hidden}>
         <Crown meta={meta} />

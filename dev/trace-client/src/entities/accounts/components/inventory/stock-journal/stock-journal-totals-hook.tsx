@@ -55,6 +55,8 @@ function useStockJournalTotals() {
             stockJournal.selectedStockJournalId = id
         }
         await showPdf(meta, <StockJournalPdf mData={megaData} />)
+        // await showPdf(meta, <div style={{height:'300px'}}>PDF test</div>)
+
     }
     return { doPrintPreview, meta }
 }

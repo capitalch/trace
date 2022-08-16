@@ -219,6 +219,7 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
     const specialColumns = {
         isEdit: true,
         isDelete: true,
+        // isPrint: true,
     }
     const gridActionMessages = {
         fetchIbukiMessage: 'XX-GRID-VIEW-FETCH-VOUCHER-DATA',

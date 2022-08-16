@@ -3,19 +3,19 @@ import { Header } from '../header'
 import { ActionBlock } from '../action-block'
 import { Crown, Crown1 } from '../crown'
 
-function Journal({ hidden}: any) {
+function Journal({ hidden, meta}: any) {
 
-        const meta: any = useRef({
-                isMounted: false,
-                errorMessage: '',
-        })
-        useEffect(() => {
-                const curr = meta.current
-                curr.isMounted = true
-                return () => {
-                        curr.isMounted = false
-                }
-        }, [])
+        // const meta: any = useRef({
+        //         isMounted: false,
+        //         errorMessage: '',
+        // })
+        // useEffect(() => {
+        //         const curr = meta.current
+        //         curr.isMounted = true
+        //         return () => {
+        //                 curr.isMounted = false
+        //         }
+        // }, [])
 
         //hidden prop used for tab visibility
         return (<div hidden={hidden}>

@@ -12,7 +12,7 @@ import {
 } from '../imports/regular-imports'
 import { Typography } from '@mui/material'
 import messages from '../messages.json'
-const { emit } = getIbuki()
+const { emit }:any = getIbuki()
 
 function utilMethods() {
     const { getCurrentEntity, getCurrentComponent, getLoginData, getFromBag } =

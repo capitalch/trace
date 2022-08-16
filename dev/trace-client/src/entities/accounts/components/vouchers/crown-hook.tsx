@@ -1,11 +1,19 @@
-import { _, useState } from '../../../../imports/regular-imports'
+import { _, useContext, useState } from '../../../../imports/regular-imports'
 import { Button, Typography } from '../../../../imports/gui-imports'
+import { utilMethods } from '../../../../imports/trace-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { MultiDataContext } from '../common/multi-data-bridge'
+import { VoucherPdf } from './voucher-pdf'
+
 function useCrown(meta: any, componentRef: any) {
     const [, setRefresh] = useState({})
-    meta.current.dialogConfig = {}
-    meta.current.dialogConfig.title = 'Voucher'
+    // meta.current.dialogConfig = {
+    // meta.current.dialogConfig.title = 'Voucher'
+    const ctx: any = useContext(MultiDataContext)
+    const { showPdf } = utilMethods()
+    // const arbitraryData = ctx?.vouchers
+
     const {
         accountsMessages,
         emit,
@@ -256,9 +264,9 @@ function useCrown(meta: any, componentRef: any) {
         setRefresh({})
     }
 
-    function handleOpen() {
-        meta.current.showDialog = true
-        setRefresh({})
+    async function handleOpen() {
+        const arbitraryData = ctx?.vouchers
+        await showPdf(meta, <VoucherPdf arbitraryData={arbitraryData} />)
     }
 
     function SubmitButton({ ad }: any) {

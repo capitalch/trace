@@ -1,7 +1,6 @@
 import {
     _,
     Box,
-    getFromBag,
     IconButton,
     IMegaData,
     MegaDataContext,
@@ -9,12 +8,10 @@ import {
     Tooltip,
     Typography,
     useContext,
-    useEffect,
-    useState,
     useTraceMaterialComponents,
-    useTheme,
     utilMethods,
 } from '../redirect'
+
 import { useStockJournalTotals } from './stock-journal-totals-hook'
 function StockJournalTotals() {
     const { toDecimalFormat } = utilMethods()
