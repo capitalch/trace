@@ -5,11 +5,15 @@ import { Payment } from './voucher-type/payment'
 import { Receipt } from './voucher-type/receipt'
 import { Contra } from './voucher-type/contra'
 import { VoucherView } from './voucher-view'
+// import { MultiDataContext } from '../common/multi-data-bridge'
+// import { useContext } from 'react'
+// import { VoucherPdf } from './voucher-pdf'
 
 function Voucher({ loadComponent, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const { getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent, drillDownEditAttributes)
-
+    // const ctx: any = useContext(MultiDataContext)
+    // const arbitraryData = ctx?.vouchers
     function SelectedVoucherComponent({ hidden, meta }: any) {
         const logic: any = {
             journal: <Journal hidden={hidden} meta={meta} />,
@@ -38,6 +42,7 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
                 hidden={meta.current.tabValue !== 1}
                 tranTypeId={getTranTypeId()}
             />
+            {/* <VoucherPdf arbitraryData={arbitraryData} /> */}
         </div>
     )
 }

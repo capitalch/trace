@@ -115,10 +115,10 @@ function TableLayout({ items, title }: any) {
             <tr>
                 <th style={{ width: '4rem', textAlign: 'left' }}>#</th>
                 <th style={{ width: '4rem', textAlign: 'left' }}>Pr code</th>
-                <th style={{ width: '12rem', textAlign: 'left' }}>Details</th>
+                <th style={{ width: '16rem', textAlign: 'left' }}>Details</th>
                 <th style={{ width: '8rem', textAlign: 'left' }}>Ref no</th>
                 <th style={{ width: '9rem', textAlign: 'left' }}>Remarks</th>
-                <th style={{ width: '9rem', textAlign: 'left' }}>Sr. num</th>
+                <th style={{ width: '7rem', textAlign: 'left' }}>Sr. num</th>
             </tr>
             <Rows />
         </table>

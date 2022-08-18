@@ -8,11 +8,8 @@ import { VoucherPdf } from './voucher-pdf'
 
 function useCrown(meta: any, componentRef: any) {
     const [, setRefresh] = useState({})
-    // meta.current.dialogConfig = {
-    // meta.current.dialogConfig.title = 'Voucher'
     const ctx: any = useContext(MultiDataContext)
     const { showPdf } = utilMethods()
-    // const arbitraryData = ctx?.vouchers
 
     const {
         accountsMessages,
