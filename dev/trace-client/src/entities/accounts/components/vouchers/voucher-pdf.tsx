@@ -79,91 +79,91 @@ function VoucherPdf({ arbitraryData }: any) {
 
     function Transactions({ arbitraryData }: any) {
         return (
-            <div></div>
-            // <table
-            //     style={{
-            //         border: '1px solid lightGrey',
-            //         padding: '1rem',
-            //         marginTop: '.5rem',
-            //         fontSize: '14px',
-            //     }}>
-            //     <caption
-            //         style={{
-            //             textAlign: 'left',
-            //             fontWeight: 'bold',
-            //             marginBottom: '0.5rem',
-            //         }}>
-            //         Transactions
-            //     </caption>
-            //     {/* <thead> */}
-            //         {/* <tr>
-            //             <th
-            //                 style={{
-            //                     width: '4rem',
-            //                     textAlign: 'left',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 #
-            //             </th>
-            //             <th
-            //                 style={{
-            //                     width: '16rem',
-            //                     textAlign: 'left',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 Account name
-            //             </th>
-            //             <th
-            //                 style={{
-            //                     width: '5rem',
-            //                     textAlign: 'left',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 Instr no
-            //             </th>
-            //             <th
-            //                 style={{
-            //                     width: '8rem',
-            //                     textAlign: 'left',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 Ref no
-            //             </th>
-            //             <th
-            //                 style={{
-            //                     width: '9rem',
-            //                     textAlign: 'left',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 Remarks
-            //             </th>
-            //             <th
-            //                 style={{
-            //                     width: '9rem',
-            //                     textAlign: 'right',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 Debits
-            //             </th>
-            //             <th
-            //                 style={{
-            //                     width: '9rem',
-            //                     textAlign: 'right',
-            //                     ...styles().thBottom,
-            //                 }}>
-            //                 Credits
-            //             </th>
-            //         </tr> */}
-            //     {/* </thead> */}
-            //     {/* To provide blank vertical space */}
-            //     {/* <thead> */}
-            //         {/* <tr>
-            //             <th></th>
-            //         </tr> */}
-            //     {/* </thead> */}
-            //     {/* <Rows /> */}
-            //     {/* <TableSummary /> */}
-            // </table>
+            // <div></div>
+            <table
+                style={{
+                    border: '1px solid lightGrey',
+                    padding: '1rem',
+                    marginTop: '.5rem',
+                    fontSize: '14px',
+                }}>
+                <caption
+                    style={{
+                        textAlign: 'left',
+                        fontWeight: 'bold',
+                        marginBottom: '0.5rem',
+                    }}>
+                    Transactions
+                </caption>
+                <thead>
+                    <tr>
+                        <th
+                            style={{
+                                width: '4rem',
+                                textAlign: 'left',
+                                ...styles().thBottom,
+                            }}>
+                            #
+                        </th>
+                        <th
+                            style={{
+                                width: '16rem',
+                                textAlign: 'left',
+                                ...styles().thBottom,
+                            }}>
+                            Account name
+                        </th>
+                        <th
+                            style={{
+                                width: '5rem',
+                                textAlign: 'left',
+                                ...styles().thBottom,
+                            }}>
+                            Instr no
+                        </th>
+                        <th
+                            style={{
+                                width: '8rem',
+                                textAlign: 'left',
+                                ...styles().thBottom,
+                            }}>
+                            Ref no
+                        </th>
+                        <th
+                            style={{
+                                width: '9rem',
+                                textAlign: 'left',
+                                ...styles().thBottom,
+                            }}>
+                            Remarks
+                        </th>
+                        <th
+                            style={{
+                                width: '9rem',
+                                textAlign: 'right',
+                                ...styles().thBottom,
+                            }}>
+                            Debits
+                        </th>
+                        <th
+                            style={{
+                                width: '9rem',
+                                textAlign: 'right',
+                                ...styles().thBottom,
+                            }}>
+                            Credits
+                        </th>
+                    </tr>
+                </thead>
+                {/* To provide blank vertical space */}
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <Rows />
+                <TableSummary />
+            </table>
         )
 
         function Rows(): any {
@@ -270,7 +270,7 @@ function VoucherPdf({ arbitraryData }: any) {
 
     function Footer({ arbitraryData }: any) {
         const { numberToWordsInRs } = useSharedElements()
-        const debits = arbitraryData?.summary?.totalDebits || 0
+        const debits = arbitraryData?.summary?.totalDebits  || 0
         const { getFromBag } = manageEntitiesState()
         const unitInfo = getFromBag('unitInfo')
         const tranTypeId = arbitraryData?.header?.tranTypeId || 1
@@ -278,12 +278,11 @@ function VoucherPdf({ arbitraryData }: any) {
             tranTypeId === 3
                 ? 'Received with thanks '
                 : 'Total transaction amounts to '
+
         return (
             <div
-                style={{
-                    ...styles().horSpreadStyle,
-                    ...{ marginTop: '1rem' },
-                }}>
+                style={{ display:'flex', justifyContent:'space-between', marginTop: '1rem'}}
+                >
                 <span style={{ maxWidth: '60%' }}>
                     {comm.concat(numberToWordsInRs(debits))}
                 </span>

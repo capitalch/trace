@@ -8,11 +8,13 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
-import { useSharedElements } from '../common/shared-elements-hook'
+import { utilMethods } from '../../../../imports/trace-imports'
+import { useSharedElements, } from '../common/shared-elements-hook'
+import { GeneralLedgerPdf } from './general-ledger-pdf'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
-
+    const { showPdf } = utilMethods()
     const {
         emit,
         filterOn,
@@ -50,30 +52,33 @@ function useGeneralLedger(getArtifacts: any) {
         isDailySummary: false,
         isMounted: false,
         isReverseOrder: false,
-        sharedData : {},
+        sharedData: {},
         showDialog: false,
         showLedgerDialog: false,
         transactions: [],
         ledgerSubledger: {},
         sqlQueryArgs: null,
+        setRefresh: setRefresh,
         dialogConfig: {
-            title: '',
-            ledgerViewTitle:'',
-            content: () => {},
-            actions: () => {},
+
+            title: 'Ledger view',
+            content: () => <></>,
         },
     })
 
-    function handleLedgerDialogClose(){
+    function handleLedgerDialogClose() {
         meta.current.showLedgerDialog = false
         setRefresh({})
     }
 
-    function handleLedgerPreview(){
-        meta.current.showLedgerDialog = true
-        setRefresh({})
+    function handleLedgerPreview() {
+        meta.current.showDialog = true
+        showPdf(meta, <GeneralLedgerPdf ledgerData={
+            meta.current.sharedData.filteredRows || []
+        }
+            accName={meta.current.accName} />)
     }
-    return {handleLedgerDialogClose,handleLedgerPreview, meta }
+    return { handleLedgerDialogClose, handleLedgerPreview, meta }
 }
 
 export { useGeneralLedger }
@@ -109,8 +114,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
         previewTitle: {
             display: 'flex',
-            flexDirection:'row',
-            justifyContent:'space-between'
+            flexDirection: 'row',
+            justifyContent: 'space-between'
         }
     })
 )

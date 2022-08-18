@@ -83,30 +83,6 @@ function Crown({ meta }: any) {
                 </div>
             </Paper>
             <BasicMaterialDialog parentMeta={meta} />
-            {/* <Dialog
-                open={meta.current.showDialog}
-                onClose={handleClose}
-                fullWidth={true}
-                maxWidth="md">
-                <DialogTitle>
-                    <div className={classes.previewTitle}>
-                        <div>{meta.current.dialogConfig.title}</div>
-                        <Tooltip title="Close">
-                            <IconButton
-                                size="small"
-                                disabled={false}
-                                onClick={handleClose}>
-                                <CloseSharp />
-                            </IconButton>
-                        </Tooltip>
-                    </div>
-                </DialogTitle>
-                <DialogContent>
-                    <PDFViewer showToolbar={true} width={840} height={600}>
-                        <PdfVoucher arbitraryData={arbitraryData} />
-                    </PDFViewer>
-                </DialogContent>
-            </Dialog> */}
         </div>
     )
 }
