@@ -9,17 +9,14 @@ import {
     createStyles,
 } from '../../../../imports/gui-imports'
 import { utilMethods } from '../../../../imports/trace-imports'
-import { useSharedElements, } from '../common/shared-elements-hook'
+import { useSharedElements } from '../common/shared-elements-hook'
 import { GeneralLedgerPdf } from './general-ledger-pdf'
+import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
     const { showPdf } = utilMethods()
-    const {
-        emit,
-        filterOn,
-        getFromBag,
-    } = useSharedElements()
+    const { emit, filterOn, getFromBag, PDFViewer } = useSharedElements()
 
     useEffect(() => {
         const curr = meta.current
@@ -60,9 +57,9 @@ function useGeneralLedger(getArtifacts: any) {
         sqlQueryArgs: null,
         setRefresh: setRefresh,
         dialogConfig: {
-
             title: 'Ledger view',
             content: () => <></>,
+            fullWidth:false,
         },
     })
 
@@ -73,10 +70,19 @@ function useGeneralLedger(getArtifacts: any) {
 
     function handleLedgerPreview() {
         meta.current.showDialog = true
-        showPdf(meta, <GeneralLedgerPdf ledgerData={
-            meta.current.sharedData.filteredRows || []
-        }
-            accName={meta.current.accName} />)
+        meta.current.dialogConfig.content = () => (
+            <PDFViewer showToolbar={true} width={840} height={600}>
+                <PdfLedger
+                    ledgerData={meta.current.sharedData.filteredRows || []}
+                    accName={meta.current.accName}
+                />
+            </PDFViewer>
+        )
+        setRefresh({})
+        // showPdf(meta, <GeneralLedgerPdf ledgerData={
+        //     meta.current.sharedData.filteredRows || []
+        // }
+        //     accName={meta.current.accName} />)
     }
     return { handleLedgerDialogClose, handleLedgerPreview, meta }
 }
@@ -115,8 +121,8 @@ const useStyles: any = makeStyles((theme: Theme) =>
         previewTitle: {
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'space-between'
-        }
+            justifyContent: 'space-between',
+        },
     })
 )
 

@@ -5,9 +5,9 @@ import {
 } from '../../../../imports/regular-imports'
 import {
     Box,
-    Dialog,
-    DialogContent,
-    DialogTitle,
+    // Dialog,
+    // DialogContent,
+    // DialogTitle,
     IconButton,
     Tooltip,
     Typography,
@@ -16,9 +16,9 @@ import { CloseSharp, Preview } from '../../../../imports/icons-import'
 import { useTraceMaterialComponents, XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
-import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
+// import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 import { TypographySmart } from '../common/typography-smart'
-import { GeneralLedgerPdf } from './general-ledger-pdf'
+// import { GeneralLedgerPdf } from './general-ledger-pdf'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
@@ -118,10 +118,10 @@ function GeneralLedger() {
                 />
             </Box>
             <BasicMaterialDialog parentMeta={meta} />
-            <GeneralLedgerPdf ledgerData={
+            {/* <GeneralLedgerPdf ledgerData={
                 meta.current.sharedData.filteredRows || []
             }
-                accName={meta.current.accName} />
+                accName={meta.current.accName} /> */}
             {/* <PrimeDialog
                 header={accountsMessages.selectAccountHeader}
                 visible={meta.current.showDialog}

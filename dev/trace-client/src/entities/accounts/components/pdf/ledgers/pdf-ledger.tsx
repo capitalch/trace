@@ -74,12 +74,17 @@ function PdfLedger({ ledgerData, accName }: any) {
                 <HeaderAccount />
             </View>
         )
+
         function HeaderCompany() {
+            const branchObject = getFromBag('branchObject')
             return (
                 <View style={{ width: '65%', flexDirection: 'column' }} fixed>
-                    <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
-                        {unitInfo.unitName}
-                    </Text>
+                    <View style={{display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+                        <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
+                            {unitInfo.unitName}
+                        </Text>
+                        <Text style={{fontWeight:'bold'}}>{branchObject.branchName}</Text>
+                    </View>
                     <Text style={[gStyles.normal, { lineHeight: 1.6 }]}>
                         {''.concat(
                             'GSTIN:',
@@ -216,7 +221,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 {x.ledgerBal >= 0
                                     ? toDecimalFormat(x.ledgerBal) + ' Dr'
                                     : toDecimalFormat(Math.abs(x.ledgerBal)) +
-                                    ' Cr'}
+                                      ' Cr'}
                             </Text>
                             <Text
                                 style={[
@@ -261,7 +266,8 @@ function PdfLedger({ ledgerData, accName }: any) {
                                 { width: 65, textAlign: 'right' },
                             ]}>
                             {closingBalance < 0
-                                ? toDecimalFormat(Math.abs(closingBalance)) + ' Cr'
+                                ? toDecimalFormat(Math.abs(closingBalance)) +
+                                  ' Cr'
                                 : ''}
                         </Text>
                     </View>
