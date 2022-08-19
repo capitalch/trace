@@ -6,9 +6,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 // Following line is used to supress some warning related to useLayoutEffect which has internally some issues with material UI
-if (typeof document === 'undefined') {
-    React.useLayoutEffect = React.useEffect;
-}
+// if (typeof document === 'undefined') {
+//     React.useLayoutEffect = React.useEffect;
+// }
 
 // const tempRoot:any = document.getElementById("root")
 // const root:any = ReactDOM.createRoot(tempRoot);
