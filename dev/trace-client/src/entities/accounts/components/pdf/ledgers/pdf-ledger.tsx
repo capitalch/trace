@@ -83,7 +83,7 @@ function PdfLedger({ ledgerData, accName }: any) {
                         <Text style={{ fontSize: 12, fontWeight: 'bold' }}>
                             {unitInfo.unitName}
                         </Text>
-                        <Text style={{fontWeight:'bold'}}>{branchObject.branchName}</Text>
+                        <Text style={{fontWeight:'bold'}}>{branchObject?.branchName || ''}</Text>
                     </View>
                     <Text style={[gStyles.normal, { lineHeight: 1.6 }]}>
                         {''.concat(

@@ -270,7 +270,7 @@ function VoucherPdf({ arbitraryData }: any) {
 
     function Footer({ arbitraryData }: any) {
         const { numberToWordsInRs } = useSharedElements()
-        const debits = arbitraryData?.summary?.totalDebits  || 0
+        const debits = arbitraryData?.summary?.totalDebits || 0
         const { getFromBag } = manageEntitiesState()
         const unitInfo = getFromBag('unitInfo')
         const tranTypeId = arbitraryData?.header?.tranTypeId || 1
@@ -281,8 +281,8 @@ function VoucherPdf({ arbitraryData }: any) {
 
         return (
             <div
-                style={{ display:'flex', justifyContent:'space-between', marginTop: '1rem'}}
-                >
+                style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}
+            >
                 <span style={{ maxWidth: '60%' }}>
                     {comm.concat(numberToWordsInRs(debits))}
                 </span>

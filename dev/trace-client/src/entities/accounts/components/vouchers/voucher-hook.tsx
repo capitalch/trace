@@ -92,10 +92,11 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         tabValue: 0,
 
         setRefresh: setRefresh,
-        showDialog:false,
+        showDialog: false,
         dialogConfig: {
             title: 'Vouchers print preview',
             content: () => <></>,
+            fullWidth: false,
         },
     })
 
