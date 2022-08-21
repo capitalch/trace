@@ -101,6 +101,13 @@ function useProductsListReport() {
                 width: 60,
             },
             {
+                headerName: 'Pr. code',
+                headerClassName: 'header-class',
+                description: 'Product code',
+                field: 'productCode',
+                width: 100,
+            },
+            {
                 headerName: 'Category',
                 headerClassName: 'header-class',
                 description: 'Category',

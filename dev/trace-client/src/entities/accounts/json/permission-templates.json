@@ -163,7 +163,11 @@
         {
             "hierarchy": "inventory-reports",
             "isActive": false
-        },        
+        },
+        {
+            "hierarchy": "inventory-stock-journal",
+            "isActive": false
+        },
         {
             "hierarchy": "inventory-stock-journal-submit",
             "isActive": false

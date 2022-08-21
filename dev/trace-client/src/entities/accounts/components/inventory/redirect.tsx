@@ -6,6 +6,7 @@ import axios from 'axios'
 
 export { axios }
 export { renderToStaticMarkup, renderToString } from 'react-dom/server'
+export { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
 export {
     Badge,
     Box,

@@ -1,7 +1,9 @@
+import { PdfStockJournal } from '../../pdf/vouchers/pdf-stock-journal'
 import {
     execGenericView,
     IMegaData,
     MegaDataContext,
+    PDFViewer,
     showPdf,
     useContext,
     useEffect,
@@ -22,6 +24,7 @@ function useStockJournalTotals() {
         dialogConfig: {
             title: 'Stock journal print preview',
             content: () => <></>,
+            fullWidth:false,
         },
     })
     const pre = meta.current
@@ -49,14 +52,19 @@ function useStockJournalTotals() {
 
     async function doPrintPreview(id: number) {
         const ret = await fetchStockJournalOnId(id)
+        // const ret = await fetchStockJournalOnId(10516)
         if (ret) {
             const stockJournal = megaData.accounts.stockJournal
             stockJournal.selectedStockJournalRawData = ret?.jsonResult
             stockJournal.selectedStockJournalId = id
         }
-        await showPdf(meta, <StockJournalPdf mData={megaData} />)
-        // await showPdf(meta, <div style={{height:'300px'}}>PDF test</div>)
-
+        // await showPdf(meta, <StockJournalPdf mData={megaData} />)
+        pre.dialogConfig.content = () =>
+            <PDFViewer showToolbar={true} width={840} height={600}>
+                <PdfStockJournal mData={megaData} />
+            </PDFViewer>
+        pre.showDialog = true
+        setRefresh({})
     }
     return { doPrintPreview, meta }
 }

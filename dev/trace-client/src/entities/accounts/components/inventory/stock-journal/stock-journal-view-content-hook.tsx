@@ -257,7 +257,6 @@ function useStockJournalViewContent() {
                 description: 'Product details',
                 field: '',
                 width: 200,
-                // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) =>
                     `${params.row.catName} ${params.row.brandName} ${
                         params.row.label
