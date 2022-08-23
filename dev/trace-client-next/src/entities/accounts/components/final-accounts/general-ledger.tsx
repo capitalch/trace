@@ -5,19 +5,20 @@ import {
 } from '../../../../imports/regular-imports'
 import {
     Box,
-    Dialog,
-    DialogContent,
-    DialogTitle,
+    // Dialog,
+    // DialogContent,
+    // DialogTitle,
     IconButton,
     Tooltip,
     Typography,
 } from '../../../../imports/gui-imports'
 import { CloseSharp, Preview } from '../../../../imports/icons-import'
-import { XXGrid } from '../../../../imports/trace-imports'
+import { useTraceMaterialComponents, XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
-import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
+// import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 import { TypographySmart } from '../common/typography-smart'
+// import { GeneralLedgerPdf } from './general-ledger-pdf'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
@@ -33,6 +34,8 @@ function GeneralLedger() {
         PDFViewer,
         toDecimalFormat,
     } = useSharedElements()
+
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
 
     return (
         <div className={classes.content}>
@@ -94,7 +97,7 @@ function GeneralLedger() {
             </div>
 
             <Box className='data-grid'>
-                <XXGrid 
+                <XXGrid
                     autoFetchData={false}
                     columns={getArtifacts().columns}
                     gridActionMessages={getArtifacts().gridActionMessages}
@@ -114,7 +117,12 @@ function GeneralLedger() {
                     toShowReverseCheckbox={true}
                 />
             </Box>
-            <PrimeDialog
+            <BasicMaterialDialog parentMeta={meta} />
+            {/* <GeneralLedgerPdf ledgerData={
+                meta.current.sharedData.filteredRows || []
+            }
+                accName={meta.current.accName} /> */}
+            {/* <PrimeDialog
                 header={accountsMessages.selectAccountHeader}
                 visible={meta.current.showDialog}
                 onHide={() => {
@@ -122,8 +130,8 @@ function GeneralLedger() {
                     meta.current.isMounted && setRefresh({})
                 }}>
                 {accountsMessages.selectAccountDetails}
-            </PrimeDialog>
-            <Dialog
+            </PrimeDialog> */}
+            {/* <Dialog
                 open={meta.current.showLedgerDialog}
                 fullWidth={true}
                 maxWidth="md">
@@ -150,7 +158,7 @@ function GeneralLedger() {
                         />
                     </PDFViewer>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
         </div>
     )
 

@@ -1,6 +1,16 @@
 import {
-    Box, Button, genericUpdateMasterDetails, getFromBag, IMegaData, manageEntitiesState, MegaDataContext, setInBag, stockJournalMegaData, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, XXGrid
+    genericUpdateMasterDetails,
+    getFromBag,
+    IMegaData,
+    MegaDataContext,
+    stockJournalMegaData,
+    useContext,
+    useEffect,
+    useIbuki,
+    useRef,
+    useState,
 } from '../redirect'
+import { StockJournalViewContent } from './stock-journal-view-content'
 
 function useStockJournalCrown() {
     const [, setRefresh] = useState({})
@@ -8,9 +18,32 @@ function useStockJournalCrown() {
     const stockJournal = megaData.accounts.stockJournal
     const { emit } = useIbuki()
 
+    const meta: any = useRef({
+        showDialog: false,
+        dialogConfig: {
+            title: 'View stock journal',
+            content: () => <></>,
+        },
+    })
+    const pre = meta.current
+
+    useEffect(() => {
+        megaData.registerKeyWithMethod('render:stockJournalCrown', setRefresh)
+        megaData.registerKeyWithMethod(
+            'closeDialog:stockJournalCrown',
+            closeDialog
+        )
+    }, [])
+
+    function closeDialog() {
+        pre.showDialog = false
+        setRefresh({})
+    }
+
     function handleReset() {
         megaData.accounts.stockJournal = stockJournalMegaData()
-        emit('TRACE-MAIN:JUST-REFRESH', null)
+        megaData.executeMethodForKey('render:stockJournal',{})
+        // emit('TRACE-MAIN:JUST-REFRESH', null)
     }
 
     async function handleSubmit() {
@@ -18,12 +51,15 @@ function useStockJournalCrown() {
 
         console.log(headerWithDetails)
         const ret = await genericUpdateMasterDetails([headerWithDetails])
-        if(ret.error){
+        if (ret.error) {
             console.log(ret.error)
         } else {
             const id = ret?.data?.accounts?.genericUpdateMasterDetails
-            console.log('id for TranH:',id)
+            console.log('id for TranH:', id)
+            // megaData.executeMethodForKey('render:stockJournalTotals',{})
             handleReset()
+            megaData.accounts.stockJournal.selectedStockJournalId = id
+            megaData.executeMethodForKey('render:stockJournalTotals',{})
         }
 
         function extractHeaderWithDetails() {
@@ -47,45 +83,61 @@ function useStockJournalCrown() {
                 tranTypeId: 11,
                 details: [],
             }
-            
+
             item.details.push(extractDetails())
             obj.data.push(item)
             return obj
 
             function extractDetails() {
+                const inputSectionDeletedIds = stockJournal.inputSection.deletedIds || []
+                const outputSectionDeletedIds = stockJournal.outputSection.deletedIds || []
+                const allDdeletedIds = [...inputSectionDeletedIds, ...outputSectionDeletedIds]
                 const obj: any = {
                     tableName: 'StockJournal',
                     fkeyName: 'tranHeaderId',
-                    //deletedIds:[],
+                    deletedIds: allDdeletedIds.length === 0 ? undefined : allDdeletedIds,
                     // data:[]
                 }
                 const data: any[] = []
                 for (const item of stockJournal['inputSection'].items) {
                     data.push({
+                        id: item.id || undefined,
                         productId: item.productId,
                         qty: item.qty,
-                        lineRemarks: item.remarks,
-                        lineRefNo: item.refNo,
-                        dc: 'C'
+                        lineRemarks: item.lineRemarks,
+                        lineRefNo: item.lineRefNo,
+                        dc: 'C',
+                        jData: JSON.stringify({
+                            serialNumbers: item.serialNumbers
+                        }),
                     })
                 }
                 for (const item of stockJournal['outputSection'].items) {
                     data.push({
+                        id: item.id || undefined,
                         productId: item.productId,
                         qty: item.qty,
-                        lineRemarks: item.remarks,
-                        lineRefNo: item.refNo,
-                        dc: 'D'
+                        lineRemarks: item.lineRemarks,
+                        lineRefNo: item.lineRefNo,
+                        dc: 'D',
+                        jData: JSON.stringify({
+                            serialNumbers: item.serialNumbers
+                        }),
                     })
                 }
                 obj.data = [...data]
-                return (obj)
+                return obj
             }
         }
-
     }
 
-    return { handleReset, handleSubmit }
+    function handleViewStockJournalDialog() {
+        pre.showDialog = true
+        pre.dialogConfig.content = StockJournalViewContent
+        setRefresh({})
+    }
+
+    return { handleReset, handleSubmit, handleViewStockJournalDialog, meta }
 }
 
 export { useStockJournalCrown }

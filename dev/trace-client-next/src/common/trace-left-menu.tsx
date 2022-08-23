@@ -17,7 +17,7 @@ function TraceLeftMenu(props: any) {
     const meta: any = useRef({
         openArray: rootChildren ? Array(rootChildren.length).fill(true) : [], // whether or not a node is open
     })
-
+    
     function getUpDownArrowIcon(item: any, index: number) {
         let ret = undefined
         if (item.children) {

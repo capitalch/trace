@@ -1,8 +1,8 @@
 
 import {
     _, AccountsLedgerDialog, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
-    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MegaDataContext, MultiDataContext, Typography,
-    useContext, useIbuki, useLinkClient, useRef, useServerSocketMessageHandler, useState, useEffect,
+    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState,  MultiDataContext, Typography,
+    useIbuki, useLinkClient, useRef, useServerSocketMessageHandler, useState, useEffect,
     useTheme, utils
 } from './components/common/redirect'
 import {
@@ -12,6 +12,7 @@ import {
     TrialBalance, Voucher, OpeningStock, InventoryReports
 } from './components/common/redirect'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
+import { SalesRecoil } from './components/sales-recoil/sales-recoil'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
@@ -132,6 +133,7 @@ function LaunchPad() {
             purchases: Purchases,
             sales: Sales,
             salesNew:SalesNew,
+            salesRecoil: SalesRecoil,
             taxation: Taxation,
             trialBalance: TrialBalance,
             vouchers: Voucher,

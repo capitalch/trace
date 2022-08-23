@@ -1,0 +1,2 @@
+function useCustomer() {}
+export { useCustomer }

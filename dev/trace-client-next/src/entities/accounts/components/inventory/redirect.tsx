@@ -1,7 +1,14 @@
 import accountsMessages from '../../json/accounts-messages.json'
 import { manageEntitiesState } from '../../../../imports/trace-imports'
 import { utilMethods } from '../../../../global-utils/misc-utils'
+// import reactDomServer from 'react-dom/server'
+import axios from 'axios'
+
+export { axios }
+export { renderToStaticMarkup, renderToString } from 'react-dom/server'
+export { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
 export {
+    Badge,
     Box,
     Button,
     Card,
@@ -22,6 +29,7 @@ export {
     RadioGroup,
     Radio,
     Switch,
+    TextareaAutosize,
     TextField,
     Tooltip,
     Typography,
@@ -37,6 +45,7 @@ export {
     Edit,
     Link,
     ListAlt,
+    Preview,
     Search,
     SyncSharp,
 } from '../../../../imports/icons-import'
@@ -89,5 +98,4 @@ export { stockJournalMegaData } from '../common/init-mega-data-context-values'
 export { manageEntitiesState }
 export const { getFromBag, setInBag } = manageEntitiesState()
 // export { getFromBag, setInBag }
-export const {genericUpdateMasterDetails} = utilMethods()
-
+export const { execGenericView, showPdf, genericUpdateMasterDetails } = utilMethods()

@@ -20,7 +20,7 @@ import {
 function useProductsListReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
-    const { toCurrentDateFormat, getGridReportSubTitle } = utils()
+    const { getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit } = useIbuki()
     const theme = useTheme()
     
@@ -49,7 +49,6 @@ function useProductsListReport() {
             const requestSearch = d.data[0]
             const searchText = d.data[1]
             requestSearch(searchText)
-            // reIndex(pre.filteredRows)
         })
         return (() => {
             subs1.unsubscribe()
@@ -63,21 +62,9 @@ function useProductsListReport() {
                 isMultipleRows: true,
                 sqlKey: pre.sqlKey,
             })) || []
-        // setIndex(pre.allRows)
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
-        // reIndex(pre.filteredRows)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
-
-        // function setIndex(rows: any[]) {
-        //     let count = 1
-        //     for (const row of rows) {
-        //         row.index = incr()
-        //     }
-        //     function incr() {
-        //         return count++
-        //     }
-        // }
     }
 
     function getColumns(): any[] {
@@ -112,6 +99,13 @@ function useProductsListReport() {
                 description: 'Index',
                 field: 'index',
                 width: 60,
+            },
+            {
+                headerName: 'Pr. code',
+                headerClassName: 'header-class',
+                description: 'Product code',
+                field: 'productCode',
+                width: 100,
             },
             {
                 headerName: 'Category',
@@ -168,6 +162,14 @@ function useProductsListReport() {
                 type: 'number',
                 width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Sale',
+                headerClassName: 'header-class',
+                description: 'Sale',
+                field: 'sale',
+                type: 'number',
+                width: 70,
             },
         ]
     }

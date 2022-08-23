@@ -419,7 +419,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     width: '100%',
                     display: 'flex',
                     marginRight: theme.spacing(2),
-                    marginLeft: theme.spacing(2),
+                    // marginLeft: theme.spacing(2),
                     // justifyContent:'flex-end',
                     marginTop: theme.spacing(0.5),
                 },
@@ -456,7 +456,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 '& .toolbar-right-items': {
                     '& .global-search': {
                         // marginLeft: 'auto',
-                        marginRight: theme.spacing(1),
+                        marginRight: theme.spacing(2),
                     },
 
                     '& .add-button': {

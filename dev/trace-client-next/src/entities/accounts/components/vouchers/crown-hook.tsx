@@ -1,11 +1,17 @@
-import { _, useState } from '../../../../imports/regular-imports'
+import { _, useContext, useState } from '../../../../imports/regular-imports'
 import { Button, Typography } from '../../../../imports/gui-imports'
+import { utilMethods } from '../../../../imports/trace-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { MultiDataContext } from '../common/multi-data-bridge'
+// import { VoucherPdf } from './voucher-pdf'
+import { PdfVoucher } from '../pdf/vouchers/pdf-voucher'
+
 function useCrown(meta: any, componentRef: any) {
     const [, setRefresh] = useState({})
-    meta.current.dialogConfig = {}
-    meta.current.dialogConfig.title = 'Voucher'
+    const ctx: any = useContext(MultiDataContext)
+    // const { showPdf } = utilMethods()
+
     const {
         accountsMessages,
         emit,
@@ -14,6 +20,7 @@ function useCrown(meta: any, componentRef: any) {
         getFromBag,
         isInvalidDate,
         isInvalidGstin,
+        PDFViewer,
         toDecimalFormat,
     } = useSharedElements()
 
@@ -256,9 +263,17 @@ function useCrown(meta: any, componentRef: any) {
         setRefresh({})
     }
 
-    function handleOpen() {
+    async function handleOpen() {
         meta.current.showDialog = true
+        const arbitraryData = ctx?.vouchers
+
+        meta.current.dialogConfig.content = () =>
+            <PDFViewer showToolbar={true} width={840} height={600}>
+                <PdfVoucher arbitraryData={arbitraryData} />
+            </PDFViewer>
         setRefresh({})
+        // const arbitraryData = ctx?.vouchers
+        // await showPdf(meta, <VoucherPdf arbitraryData={arbitraryData} />)
     }
 
     function SubmitButton({ ad }: any) {

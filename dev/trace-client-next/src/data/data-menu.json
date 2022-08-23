@@ -71,6 +71,15 @@
                             }
                         },
                         {
+                            "name": "recoilSalesSubMenu",
+                            "hierarchy": "salespurchases-recoil-sales",
+                            "label": "Recoil sales",
+                            "componentName": "salesRecoil",
+                            "args":{
+                                "saleType": "sal"
+                            }
+                        },
+                        {
                             "name": "salesReturnSubMenu",
                             "hierarchy": "salespurchases-sales-return",
                             "label": "Sales return",

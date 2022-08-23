@@ -235,6 +235,7 @@ function useStockSummaryReport() {
                 width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
+
             {
                 headerName: 'Pur date',
                 headerClassName: 'header-class',
@@ -254,12 +255,52 @@ function useStockSummaryReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                headerName: 'Pr id',
-                description: 'Product id',
+                description:'Purchase',
+                headerName: 'Purchase',
                 headerClassName: 'header-class',
-                field: 'productId',
+                field: 'purchase',
                 type: 'number',
-                width: 60,
+                width: 70,
+            },
+            {
+                description:'Sale',
+                headerName: 'Sale',
+                headerClassName: 'header-class',
+                field: 'sale',
+                type: 'number',
+                width: 70,
+            },
+            {
+                description:'Return (purchase)',
+                headerName: 'Ret (purch)',
+                headerClassName: 'header-class',
+                field: 'purchaseRet',
+                type: 'number',
+                width: 90,
+            },
+            {
+                description:'Return (sale)',
+                headerName: 'Ret (sale)',
+                headerClassName: 'header-class',
+                field: 'saleRet',
+                type: 'number',
+                width: 90,
+            },
+            {
+                description:'Stock journal debits',
+                headerName: 'Dr (stk jrnl)',
+                headerClassName: 'header-class',
+                field: 'stockJournalDebits',
+                type: 'number',
+                width: 90,
+            },
+            {
+                description:'Stock journal credits',
+                headerName: 'Cr (stk jrnl)',
+                headerClassName: 'header-class',
+                field: 'stockJournalCredits',
+                type: 'number',
+                width: 90,
             },
         ])
     }

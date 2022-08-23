@@ -69,6 +69,7 @@ function PdfVoucher({ arbitraryData }: any) {
         )
 
         function HeaderCompany({ vou }: any) {
+            const branchObject = getFromBag('branchObject')
             const styles = StyleSheet.create({
                 headerCompany: {
                     flexDirection: 'column',
@@ -88,7 +89,10 @@ function PdfVoucher({ arbitraryData }: any) {
             const vu = vou.unitInfo
             return (
                 <View style={styles.headerCompany} fixed={true}>
-                    <Text style={styles.companyName}>{vu.unitName}</Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={styles.companyName}>{vu.unitName}</Text>
+                        <Text style={{ fontSize: 12 }}>{branchObject?.branchName || ''}</Text>
+                    </View>
                     <Text style={styles.gstin}>Gstin: {vu.gstin}</Text>
                     <Text style={gStyles.normal}>
                         {''.concat(
@@ -220,6 +224,19 @@ function PdfVoucher({ arbitraryData }: any) {
             function Details({ vou }: any) {
                 let counter = 0
                 const rows = vou.transactions.map((x: any, index: number) => {
+                    let gstInfo = ''
+                    if (!_.isEmpty(x?.gst)) {
+                        const gst = x.gst
+                        gstInfo = ''.concat(
+                            'Gstin:', gst.gstin, ' '
+                            , 'Hsn:', gst.hsn, ' '
+                            , 'Rate:', gst.rate, ' '
+                            , 'Cgst:', toDecimalFormat(gst.cgst), ' '
+                            , 'Sgst:', toDecimalFormat(gst.sgst), ' '
+                            , 'Igst:', toDecimalFormat(gst.igst))
+                    }
+                    const gstInfoDebit = (x.dc === 'D') ? gstInfo : ''
+                    const gstInfoCredit = (x.dc === 'C') ? gstInfo : ''
                     return (
                         <View
                             style={{ flexDirection: 'row', paddingBottom: 3 }}
@@ -247,20 +264,26 @@ function PdfVoucher({ arbitraryData }: any) {
                             <Text style={[gStyles.normal, { width: 70 }]}>
                                 {x.remarks || ''}
                             </Text>
-                            <Text
-                                style={[
-                                    gStyles.normal,
-                                    { width: 70, textAlign: 'right' },
-                                ]}>
-                                {x.dc === 'D' ? x.decimal : ''}
-                            </Text>
-                            <Text
-                                style={[
-                                    gStyles.normal,
-                                    { width: 70, textAlign: 'right' },
-                                ]}>
-                                {x.dc === 'C' ? x.decimal : ''}
-                            </Text>
+                            <View style={{width: 70, textAlign: 'right'}}>
+                                <Text
+                                    style={[
+                                        gStyles.normal,
+                                    
+                                    ]}>
+                                    {x.dc === 'D' ? x.decimal : ''}
+                                </Text>
+                                <Text style={{fontSize:8}}>{gstInfoDebit}</Text>
+                            </View>
+                            <View style={{width: 70,textAlign: 'right'}}>
+                                <Text
+                                    style={[
+                                        gStyles.normal,
+                                        
+                                    ]}>
+                                    {x.dc === 'C' ? x.decimal : ''}
+                                </Text>
+                                <Text style={{fontSize:8}}>{gstInfoCredit}</Text>
+                            </View>
                         </View>
                     )
                 })
@@ -304,9 +327,6 @@ function PdfVoucher({ arbitraryData }: any) {
                     justifyContent: 'space-between',
                     fontSize: 9,
                     top: 10,
-                    // position: 'absolute',
-                    // bottom: 30,
-                    // left: 30,
                     width: '100%'
                 }}>
                 <Text style={{ width: '65%' }}>{vou.summary.comments}</Text>

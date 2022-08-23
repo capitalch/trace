@@ -8,16 +8,15 @@ import {
     Theme,
     createStyles,
 } from '../../../../imports/gui-imports'
+import { utilMethods } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { GeneralLedgerPdf } from './general-ledger-pdf'
+import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
-
-    const {
-        emit,
-        filterOn,
-        getFromBag,
-    } = useSharedElements()
+    const { showPdf } = utilMethods()
+    const { emit, filterOn, getFromBag, PDFViewer } = useSharedElements()
 
     useEffect(() => {
         const curr = meta.current
@@ -50,30 +49,42 @@ function useGeneralLedger(getArtifacts: any) {
         isDailySummary: false,
         isMounted: false,
         isReverseOrder: false,
-        sharedData : {},
+        sharedData: {},
         showDialog: false,
         showLedgerDialog: false,
         transactions: [],
         ledgerSubledger: {},
         sqlQueryArgs: null,
+        setRefresh: setRefresh,
         dialogConfig: {
-            title: '',
-            ledgerViewTitle:'',
-            content: () => {},
-            actions: () => {},
+            title: 'Ledger view',
+            content: () => <></>,
+            fullWidth:false,
         },
     })
 
-    function handleLedgerDialogClose(){
+    function handleLedgerDialogClose() {
         meta.current.showLedgerDialog = false
         setRefresh({})
     }
 
-    function handleLedgerPreview(){
-        meta.current.showLedgerDialog = true
+    function handleLedgerPreview() {
+        meta.current.showDialog = true
+        meta.current.dialogConfig.content = () => (
+            <PDFViewer showToolbar={true} width={840} height={600}>
+                <PdfLedger
+                    ledgerData={meta.current.sharedData.filteredRows || []}
+                    accName={meta.current.accName}
+                />
+            </PDFViewer>
+        )
         setRefresh({})
+        // showPdf(meta, <GeneralLedgerPdf ledgerData={
+        //     meta.current.sharedData.filteredRows || []
+        // }
+        //     accName={meta.current.accName} />)
     }
-    return {handleLedgerDialogClose,handleLedgerPreview, meta }
+    return { handleLedgerDialogClose, handleLedgerPreview, meta }
 }
 
 export { useGeneralLedger }
@@ -109,9 +120,9 @@ const useStyles: any = makeStyles((theme: Theme) =>
         },
         previewTitle: {
             display: 'flex',
-            flexDirection:'row',
-            justifyContent:'space-between'
-        }
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+        },
     })
 )
 

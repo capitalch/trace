@@ -56,28 +56,28 @@ const stockJournalMegaData = () => ({
     inputSection: {
         allErrors: {},
         currentItemIndex: 0,
+        deletedIds:[],
         items: [{ qty: 1 }],
-        // qty: 1,
-        // remarks: undefined,
         summary: {
             count: 1,
             qty: 1,
         },
-        title: 'Source (Consumption / input / credit)'
+        title: 'Source (Consumption / input / credits)',
     },
     outputSection: {
         allErrors: {},
         currentItemIndex: 0,
+        deletedIds:[],
         items: [{ qty: 1 }],
-        // qty: 1,
-        // remarks: undefined,
         summary: {
             count: 1,
             qty: 1,
         },
-        title: 'Destination (Production / output / debit)'
+        title: 'Destination (Production / output / debits)',
     },
-    remarks:undefined,
+    remarks: undefined,
+    selectedStockJournalId: undefined,
+    selectedStockJournalRawData: undefined,
     tranDate: moment().format(isoDateFormat),
     userRefNo: undefined,
 })

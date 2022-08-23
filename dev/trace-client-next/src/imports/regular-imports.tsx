@@ -25,6 +25,7 @@ export { InputSwitch } from 'primereact/inputswitch'
 export { InputText } from 'primereact/inputtext'
 export { InputTextarea } from 'primereact/inputtextarea'
 export { InputNumber } from 'primereact/inputnumber'
+export { renderToStaticMarkup, renderToString } from 'react-dom/server'
 export { SplitButton } from 'primereact/splitbutton'
 export {
     _,

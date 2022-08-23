@@ -5,12 +5,17 @@ import {
     manageFormsState,
     usingIbuki as getIbuki,
 } from '../imports/trace-imports'
+import {
+    axios,
+    renderToStaticMarkup,
+    renderToString,
+} from '../imports/regular-imports'
 import { Typography } from '@mui/material'
 import messages from '../messages.json'
-const { emit } = getIbuki()
+const { emit }:any = getIbuki()
 
 function utilMethods() {
-    const { getCurrentEntity, getCurrentComponent, getLoginData, } =
+    const { getCurrentEntity, getCurrentComponent, getLoginData, getFromBag } =
         manageEntitiesState()
     const artifacts = getArtifacts(getCurrentEntity())
     const { mutateGraphql, queryGraphql }: any = graphqlService()
@@ -172,7 +177,7 @@ function utilMethods() {
                 duration: null,
             })
             ret = { message: error.message }
-            throw (error)
+            throw error
         }
         return ret
     }
@@ -267,9 +272,9 @@ function utilMethods() {
         const control = permissions.find(
             (item: any) => item.hierarchy === hierarchy
         )
-        //For admin users all controls are visible
+        //For admin users and super admin users all controls are visible
         let enabled = false
-        if (logindata.userType === 'a') {
+        if (['s', 'a'].includes(logindata.userType)) {
             enabled = true
         } else {
             if (control) {
@@ -284,12 +289,20 @@ function utilMethods() {
     function* keyGen() {
         let i = 1
         while (true) {
-            yield (i++)
+            yield i++
         }
     }
 
     function Mandatory() {
-        return <Typography variant='subtitle2' sx={{ color: 'red' }} component='span'> *</Typography>
+        return (
+            <Typography
+                variant="subtitle2"
+                sx={{ color: 'red' }}
+                component="span">
+                {' '}
+                *
+            </Typography>
+        )
     }
 
     function numberToWordsInRs(value: any) {
@@ -329,7 +342,8 @@ function utilMethods() {
                 res += (res === '' ? '' : ' ') + convert_number(kn) + ' LAKH'
             }
             if (Hn > 0) {
-                res += (res === '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
+                res +=
+                    (res === '' ? '' : ' ') + convert_number(Hn) + ' THOUSAND'
             }
 
             if (Dn) {
@@ -356,7 +370,7 @@ function utilMethods() {
                 'SIXTEEN',
                 'SEVENTEEN',
                 'EIGHTEEN',
-                'NINETEEN'
+                'NINETEEN',
             ]
             let tens = [
                 '',
@@ -368,7 +382,7 @@ function utilMethods() {
                 'SIXTY',
                 'SEVENTY',
                 'EIGHTY',
-                'NINETY'
+                'NINETY',
             ]
 
             if (tn > 0 || one > 0) {
@@ -425,7 +439,7 @@ function utilMethods() {
     const saveForm = async (options: SaveFormOptions) => {
         emit('SHOW-LOADING-INDICATOR', true)
         options.queryId || (options.queryId = 'genericUpdateMasterDetails')
-        options.afterMethod || (options.afterMethod = () => { })
+        options.afterMethod || (options.afterMethod = () => {})
         const json: any = escape(JSON.stringify(options.data))
         const currentEntityName = getCurrentEntity()
         let ret: any = {}
@@ -517,8 +531,49 @@ function utilMethods() {
             row.id = incr()
         }
         function incr() {
-            return (count++)
+            return count++
         }
+    }
+
+    async function showPdf(meta: any, content: any) {
+        const pre = meta.current
+        // const htmlString = renderToString(content)
+        // const lurl = 'http://localhost:8081/pdf1'
+        const htmlString = renderToStaticMarkup(content)
+        const configuration = getFromBag('configuration')
+        const { linkServerUrl, linkServerKey } = configuration
+
+        emit('SHOW-LOADING-INDICATOR', true)
+        const options: any = await axios({
+            method: 'post',
+            url: `${linkServerUrl}/pdf`,
+            data: {
+                template: htmlString,
+                token: linkServerKey, //+ '1111'
+            },
+        })
+
+        const buff = options.data.data
+        const buffer = Buffer.from(buff)
+
+        const base64 = buffer.toString('base64')
+        pre.objectUrl = 'data:application/pdf;base64, ' + base64
+        emit('SHOW-LOADING-INDICATOR', false)
+        pre.showDialog = true
+        pre.dialogConfig.content = () => (
+            <div>
+                {
+                    <object
+                        data={pre.objectUrl}
+                        type="application/pdf"
+                        width="100%"
+                        height="700">
+                        <p>Failed</p>
+                    </object>
+                }
+            </div>
+        )
+        pre.setRefresh({})
     }
 
     function toDecimalFormat(s: any) {
@@ -556,6 +611,7 @@ function utilMethods() {
         sendEmail,
         sendSms,
         setIdForDataGridRows,
+        showPdf,
         toDecimalFormat,
     }
 }

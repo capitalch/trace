@@ -1,5 +1,5 @@
 import {
-    _, Box, Button, ButtonGroup, CloseSharp, Dialog, DialogContent, DialogTitle, EmailIcon, IconButton, IMegaData,
+    _, Box, ButtonGroup, CloseSharp, Dialog, DialogContent, DialogTitle, EmailIcon, IconButton, IMegaData,
     manageEntitiesState, MegaDataContext, PDFViewer, Preview, SmsIcon, Tooltip, Typography, useContext, useEffect, useTraceMaterialComponents,
     useState, useTheme, utilMethods
 } from '../redirect'
@@ -16,7 +16,6 @@ function DebitsCreditsPreview() {
     const { handleBillPreview, handleClose, handleEmail, handleSms, meta } = useDebitsCreditsPreview()
     const { BasicMaterialDialog } = useTraceMaterialComponents()
     const unitInfo = getFromBag('unitInfo')
-    // const rawSaleData = getFromBag('rawSaleData') || meta.current.rawSaleData || { }
 
     useEffect(() => {
         megaData.registerKeyWithMethod('render:debitsCreditsPreview', setRefresh)

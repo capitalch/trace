@@ -43,6 +43,7 @@ function useProductUtils(
                     meta.current.dialogConfig.content = FilteredProductsList
                 } else {
                     meta.current.searchResult = 'Product not found'
+                    meta.current.dialogConfig.content = ()=><></>
                 }
                 meta.current.isMounted && setRefresh({})
             }

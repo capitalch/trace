@@ -5,17 +5,21 @@ import { Payment } from './voucher-type/payment'
 import { Receipt } from './voucher-type/receipt'
 import { Contra } from './voucher-type/contra'
 import { VoucherView } from './voucher-view'
+// import { MultiDataContext } from '../common/multi-data-bridge'
+// import { useContext } from 'react'
+// import { VoucherPdf } from './voucher-pdf'
 
 function Voucher({ loadComponent, drillDownEditAttributes }: any) {
     const classes = useStyles()
     const { getTranTypeId, handleOnTabChange, meta } = useVoucher(loadComponent, drillDownEditAttributes)
-
-    function SelectedVoucherComponent({ hidden }: any) {
+    // const ctx: any = useContext(MultiDataContext)
+    // const arbitraryData = ctx?.vouchers
+    function SelectedVoucherComponent({ hidden, meta }: any) {
         const logic: any = {
-            journal: <Journal hidden={hidden} />,
-            payment: <Payment hidden={hidden} />,
-            receipt: <Receipt hidden={hidden} />,
-            contra: <Contra hidden={hidden} />,
+            journal: <Journal hidden={hidden} meta={meta} />,
+            payment: <Payment hidden={hidden} meta={meta} />,
+            receipt: <Receipt hidden={hidden} meta={meta} />,
+            contra: <Contra hidden={hidden} meta={meta} />,
         }
         return logic[loadComponent]
     }
@@ -33,11 +37,12 @@ function Voucher({ loadComponent, drillDownEditAttributes }: any) {
                 <Tab className="tab" label="New / Edit" />
                 <Tab label="View" />
             </Tabs>
-            <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} />
+            <SelectedVoucherComponent hidden={meta.current.tabValue !== 0} meta={meta} />
             <VoucherView
                 hidden={meta.current.tabValue !== 1}
                 tranTypeId={getTranTypeId()}
             />
+            {/* <VoucherPdf arbitraryData={arbitraryData} /> */}
         </div>
     )
 }

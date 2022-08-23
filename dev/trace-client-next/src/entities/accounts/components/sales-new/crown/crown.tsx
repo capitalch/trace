@@ -1,4 +1,4 @@
-import { Box, Button, IMegaData, MegaDataContext, Typography, useContext, useTraceMaterialComponents, useState, useTheme, utilMethods } from '../redirect'
+import { Box, Button, IMegaData, MegaDataContext, useContext, useTraceMaterialComponents,  useTheme } from '../redirect'
 import { useCrown } from './crown-hook'
 
 function Crown() {

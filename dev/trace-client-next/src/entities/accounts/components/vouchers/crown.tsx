@@ -4,6 +4,7 @@ import {
     useContext,
     useRef,
 } from '../../../../imports/regular-imports'
+import { useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import {
     Dialog,
     DialogContent,
@@ -16,11 +17,11 @@ import {
     Paper,
     Typography,
 } from '../../../../imports/gui-imports'
-import { CloseSharp, PrintIcon } from '../../../../imports/icons-import'
+import { CloseSharp, Preview, PrintIcon } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useCrown } from './crown-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
-import {PdfVoucher} from '../pdf/vouchers/pdf-voucher'
+import { PdfVoucher } from '../pdf/vouchers/pdf-voucher'
 
 function Crown({ meta }: any) {
     const classes = useStyles()
@@ -38,7 +39,7 @@ function Crown({ meta }: any) {
         SummaryDebitsCredits,
         SummaryGst,
     } = useCrown(meta, componentRef)
-
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
     const { emit, filterOn, PDFViewer } = useSharedElements()
 
     useEffect(() => {
@@ -65,8 +66,8 @@ function Crown({ meta }: any) {
                 </Typography>
                 <div>
                     <Tooltip
-                        title="Print"
-                        style={{
+                        title="Print preview"
+                        sx={{
                             display: ad?.header?.autoRefNo
                                 ? 'inline-block'
                                 : 'none',
@@ -75,36 +76,13 @@ function Crown({ meta }: any) {
                             className="print-button"
                             size="small"
                             onClick={handleOpen}>
-                            <PrintIcon className="print-icon" />
+                            <Preview className="preview-icon" />
                         </IconButton>
                     </Tooltip>
                     <SubmitButton ad={arbitraryData} meta={meta} />
                 </div>
             </Paper>
-            <Dialog
-                open={meta.current.showDialog}
-                onClose={handleClose}
-                fullWidth={true}
-                maxWidth="md">
-                <DialogTitle>
-                    <div className={classes.previewTitle}>
-                        <div>{meta.current.dialogConfig.title}</div>
-                        <Tooltip title="Close">
-                            <IconButton
-                                size="small"
-                                disabled={false}
-                                onClick={handleClose}>
-                                <CloseSharp />
-                            </IconButton>
-                        </Tooltip>
-                    </div>
-                </DialogTitle>
-                <DialogContent>
-                    <PDFViewer showToolbar={true} width={840} height={600}>
-                        <PdfVoucher arbitraryData={arbitraryData} />
-                    </PDFViewer>
-                </DialogContent>
-            </Dialog>
+            <BasicMaterialDialog parentMeta={meta} />
         </div>
     )
 }

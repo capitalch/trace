@@ -1,419 +1,434 @@
 {
-   "base": [
-      {
-         "hierarchy":"vouchers",         
-         "isActive": false
-      },
-      {
-         "hierarchy":"vouchers-journals",
-         "isActive": false
-      },
-      {
-         "hierarchy":"vouchers-payments",
-         "isActive": false
-      },
-      {
-         "hierarchy":"vouchers-receipts",
-         "isActive": false
-      },
-      {
-         "hierarchy":"vouchers-contra",
-         "isActive": false         
-      },
-      {
-         "hierarchy":"salespurchases",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-sales",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-simple-sales",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-simple-sales-delete",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-simple-sales-edit",
-         "isActive": false
-      },      
-      {
-         "hierarchy":"salespurchases-sales-return",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-purchases",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-purchase-return",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-debit-notes",
-         "isActive": false
-      },
-      {
-         "hierarchy":"salespurchases-credit-notes",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-unit-info",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-general-settings",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-accounts",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-opening-balances",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-branches",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-financial-years",
-         "isActive": false
-      },
-      {
-         "hierarchy":"finalaccounts",
-         "isActive": false
-      },
-      {
-         "hierarchy":"finalaccounts-trial-balance",
-         "isActive": false
-      },
-      {
-         "hierarchy":"finalaccounts-balance-sheet",
-         "isActive": false
-      },
-      {
-         "hierarchy":"finalaccounts-pl-account",
-         "isActive": false
-      },
-      {
-         "hierarchy":"finalaccounts-general-ledger",
-         "isActive": false
-      },
-      {
-         "hierarchy":"options",
-         "isActive": false
-      },
-      {
-         "hierarchy":"options-bank-reconcillation",
-         "isActive": false
-      },
-      {
-         "hierarchy":"options-common-utilities",
-         "isActive": false
-      },
-      {
-         "hierarchy":"options-common-utilities-transfer",
-         "isActive": false
-      },
-      {
-         "hierarchy":"options-exports",
-         "isActive": false
-      },
-      {
-         "hierarchy":"options-exports-all-buttons",
-         "isActive": false
-      },      
-      {
-         "hierarchy":"reports",
-         "isActive": false
-      },
-      {
-         "hierarchy":"reports-all-transactions",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory-categories",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory-brands",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory-products",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory-opening-stock",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory-reports",
-         "isActive": false
-      },
-      {
-         "hierarchy":"financial-year-change",
-         "isActive": false
-      },
-      {
-         "hierarchy":"branch-change",
-         "isActive": false
-      },
-      {
-         "hierarchy":"masters-accounts-add-child",
-         "isActive": false
-      }
-   ],
-   "operator": [
-      {
-         "hierarchy":"vouchers",         
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-journals",
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-payments",
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-receipts",
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-contra",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-sales",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-sales-return",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-purchases",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-purchase-return",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-debit-notes",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-credit-notes",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options-bank-reconcillation",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options-common-utilities",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-categories",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-brands",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-products",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-opening-stock",
-         "isActive": false
-      },
-      {
-         "hierarchy":"inventory-reports",
-         "isActive": false
-      }
-   ],
-   "accountant": [
-      {
-         "hierarchy":"vouchers",         
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-journals",
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-payments",
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-receipts",
-         "isActive": true
-      },
-      {
-         "hierarchy":"vouchers-contra",
-         "isActive": true
-         
-      },
-      {
-         "hierarchy":"salespurchases",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-sales",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-sales-return",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-purchases",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-purchase-return",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-debit-notes",
-         "isActive": true
-      },
-      {
-         "hierarchy":"salespurchases-credit-notes",
-         "isActive": true
-      },
-      {
-         "hierarchy":"masters",
-         "isActive": true
-      },
-      {
-         "hierarchy":"masters-accounts",
-         "isActive": true
-      },
-      {
-         "hierarchy":"masters-opening-balances",
-         "isActive": true
-      },
-      {
-         "hierarchy":"masters-branches",
-         "isActive": true
-      },
-      {
-         "hierarchy":"masters-financial-years",
-         "isActive": true
-      },
-      {
-         "hierarchy":"finalaccounts",
-         "isActive": true
-      },
-      {
-         "hierarchy":"finalaccounts-trial-balance",
-         "isActive": true
-      },
-      {
-         "hierarchy":"finalaccounts-balance-sheet",
-         "isActive": true
-      },
-      {
-         "hierarchy":"finalaccounts-pl-account",
-         "isActive": true
-      },
-      {
-         "hierarchy":"finalaccounts-general-ledger",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options-bank-reconcillation",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options-common-utilities",
-         "isActive": true
-      },
-      {
-         "hierarchy":"options-exports",
-         "isActive": true
-      },
-      {
-         "hierarchy":"reports",
-         "isActive": true
-      },
-      {
-         "hierarchy":"reports-all-transactions",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-categories",
-         "descr": "General settings edit",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-brands",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-products",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-opening-stock",
-         "isActive": true
-      },
-      {
-         "hierarchy":"inventory-reports",
-         "isActive": true
-      },
-      {
-         "hierarchy":"financial-year-change",
-         "isActive": true
-      },
-      {
-         "hierarchy":"branch-change",
-         "isActive": true
-      },
-      {
-         "hierarchy":"masters-accounts-add-child",
-         "isActive": true
-      }
-   ],
-   "manager": []
+    "base": [
+        {
+            "hierarchy": "vouchers",
+            "isActive": false
+        },
+        {
+            "hierarchy": "vouchers-journals",
+            "isActive": false
+        },
+        {
+            "hierarchy": "vouchers-payments",
+            "isActive": false
+        },
+        {
+            "hierarchy": "vouchers-receipts",
+            "isActive": false
+        },
+        {
+            "hierarchy": "vouchers-contra",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-sales",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-simple-sales",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-simple-sales-delete",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-simple-sales-edit",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-sales-return",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-purchases",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-purchase-return",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-debit-notes",
+            "isActive": false
+        },
+        {
+            "hierarchy": "salespurchases-credit-notes",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-unit-info",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-general-settings",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-accounts",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-opening-balances",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-branches",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-financial-years",
+            "isActive": false
+        },
+        {
+            "hierarchy": "finalaccounts",
+            "isActive": false
+        },
+        {
+            "hierarchy": "finalaccounts-trial-balance",
+            "isActive": false
+        },
+        {
+            "hierarchy": "finalaccounts-balance-sheet",
+            "isActive": false
+        },
+        {
+            "hierarchy": "finalaccounts-pl-account",
+            "isActive": false
+        },
+        {
+            "hierarchy": "finalaccounts-general-ledger",
+            "isActive": false
+        },
+        {
+            "hierarchy": "options",
+            "isActive": false
+        },
+        {
+            "hierarchy": "options-bank-reconcillation",
+            "isActive": false
+        },
+        {
+            "hierarchy": "options-common-utilities",
+            "isActive": false
+        },
+        {
+            "hierarchy": "options-common-utilities-transfer",
+            "isActive": false
+        },
+        {
+            "hierarchy": "options-exports",
+            "isActive": false
+        },
+        {
+            "hierarchy": "options-exports-all-buttons",
+            "isActive": false
+        },
+        {
+            "hierarchy": "reports",
+            "isActive": false
+        },
+        {
+            "hierarchy": "reports-all-transactions",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-categories",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-brands",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-products",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-opening-stock",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-reports",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-stock-journal",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-stock-journal-submit",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-stock-journal-edit",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-stock-journal-delete",
+            "isActive": false
+        },
+        {
+            "hierarchy": "financial-year-change",
+            "isActive": false
+        },
+        {
+            "hierarchy": "branch-change",
+            "isActive": false
+        },
+        {
+            "hierarchy": "masters-accounts-add-child",
+            "isActive": false
+        }
+    ],
+    "operator": [
+        {
+            "hierarchy": "vouchers",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-journals",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-payments",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-receipts",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-contra",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-sales",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-sales-return",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-purchases",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-purchase-return",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-debit-notes",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-credit-notes",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options-bank-reconcillation",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options-common-utilities",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-categories",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-brands",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-products",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-opening-stock",
+            "isActive": false
+        },
+        {
+            "hierarchy": "inventory-reports",
+            "isActive": false
+        }
+    ],
+    "accountant": [
+        {
+            "hierarchy": "vouchers",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-journals",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-payments",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-receipts",
+            "isActive": true
+        },
+        {
+            "hierarchy": "vouchers-contra",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-sales",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-sales-return",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-purchases",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-purchase-return",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-debit-notes",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-credit-notes",
+            "isActive": true
+        },
+        {
+            "hierarchy": "masters",
+            "isActive": true
+        },
+        {
+            "hierarchy": "masters-accounts",
+            "isActive": true
+        },
+        {
+            "hierarchy": "masters-opening-balances",
+            "isActive": true
+        },
+        {
+            "hierarchy": "masters-branches",
+            "isActive": true
+        },
+        {
+            "hierarchy": "masters-financial-years",
+            "isActive": true
+        },
+        {
+            "hierarchy": "finalaccounts",
+            "isActive": true
+        },
+        {
+            "hierarchy": "finalaccounts-trial-balance",
+            "isActive": true
+        },
+        {
+            "hierarchy": "finalaccounts-balance-sheet",
+            "isActive": true
+        },
+        {
+            "hierarchy": "finalaccounts-pl-account",
+            "isActive": true
+        },
+        {
+            "hierarchy": "finalaccounts-general-ledger",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options-bank-reconcillation",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options-common-utilities",
+            "isActive": true
+        },
+        {
+            "hierarchy": "options-exports",
+            "isActive": true
+        },
+        {
+            "hierarchy": "reports",
+            "isActive": true
+        },
+        {
+            "hierarchy": "reports-all-transactions",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-categories",
+            "descr": "General settings edit",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-brands",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-products",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-opening-stock",
+            "isActive": true
+        },
+        {
+            "hierarchy": "inventory-reports",
+            "isActive": true
+        },
+        {
+            "hierarchy": "financial-year-change",
+            "isActive": true
+        },
+        {
+            "hierarchy": "branch-change",
+            "isActive": true
+        },
+        {
+            "hierarchy": "masters-accounts-add-child",
+            "isActive": true
+        }
+    ],
+    "manager": []
 }

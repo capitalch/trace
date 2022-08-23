@@ -90,6 +90,14 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         isMounted: false,
         title: getTitle(),
         tabValue: 0,
+
+        setRefresh: setRefresh,
+        showDialog: false,
+        dialogConfig: {
+            title: 'Vouchers print preview',
+            content: () => <></>,
+            fullWidth: false,
+        },
     })
 
     const vouchersData = getFromBag('vouchersData')

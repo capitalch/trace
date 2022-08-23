@@ -1,16 +1,13 @@
-import { Box, Button, IMegaData, MegaDataContext, useContext, useEffect, useState, useTheme } from '../redirect'
+import { Box, Button, IMegaData, MegaDataContext, useContext, useEffect, useState, useTheme, useTraceMaterialComponents, utilMethods } from '../redirect'
 import { useStockJournalCrown } from './stock-journal-crown-hook'
 
 function StockJournalCrown() {
-    const [, setRefresh] = useState({})
     const theme = useTheme()
-    const { handleReset, handleSubmit } = useStockJournalCrown()
+    const { isControlDisabled } = utilMethods()
+    const { handleReset, handleSubmit, handleViewStockJournalDialog, meta } = useStockJournalCrown()
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
-
-    useEffect(() => {
-        megaData.registerKeyWithMethod('render:stockJournalCrown', setRefresh)
-    }, [])
+    const { BasicMaterialDialog } = useTraceMaterialComponents()
 
     return (
         <Box sx={{ mt: 0, mb: 0, display: 'flex', flexDirection: 'column', ml: 'auto' }}>
@@ -19,15 +16,15 @@ function StockJournalCrown() {
                     onClick={handleReset}
                     size='small' sx={{ height: theme.spacing(5), }} color='warning' >Reset</Button>
                 <Button variant='contained'
-                    // onClick={handleViewSalesDialog} 
+                    onClick={handleViewStockJournalDialog}
                     size='small' sx={{ height: theme.spacing(5) }} color='secondary'>View</Button>
                 <Button variant='contained'
-                    onClick={handleSubmit} 
+                    onClick={handleSubmit}
                     size='large' sx={{ height: theme.spacing(5), }}
-                    disabled={isAnyError()}
+                    disabled={isAnyError() || isControlDisabled('inventory-stock-journal-submit')}
                     color='success'>Submit</Button>
             </Box>
-            {/* <BasicMaterialDialog parentMeta={meta}             /> */}
+            <BasicMaterialDialog parentMeta={meta} />
         </Box>
     )
 
@@ -41,7 +38,12 @@ function StockJournalCrown() {
         const headerError = stockJournal?.allErrors
         const isHeaderError = Object.keys(headerError).some((key: string) => headerError[key])
 
-        return (isInputError || isOutputError || isHeaderError)
+        const inputItemsLength = megaData.accounts.stockJournal.inputSection.items.length 
+        const outputItemsLingth = megaData.accounts.stockJournal.outputSection.items.length
+
+        const itemsLengthError = (inputItemsLength + outputItemsLingth) === 0
+
+        return (isInputError || isOutputError || isHeaderError || itemsLengthError)
     }
 }
 

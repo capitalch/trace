@@ -236,6 +236,11 @@ function usePurchaseView(
                 field: 'serialNumbers',
                 width: 160,
             },
+            {
+                headerName: "Product codes",
+                field: 'productCodes',
+                width: 160,
+            },
         ]
         const queryId = 'get_sale_purchase_headers'
         const queryArgs = {
