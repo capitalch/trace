@@ -12,7 +12,6 @@ import {
     moment,
     Search,
     TextField,
-    Tooltip,
     Typography,
     MegaDataContext,
     useContext,
@@ -20,12 +19,14 @@ import {
     useTheme,
     utils,
 } from '../redirect'
-import { useRecoilValue } from 'recoil'
-import { salesAtom } from '../sales-recoil-state/sales-atoms-selectors'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { billToGenericValueSelector, salesAtom, salesGenericValueSelector } from '../sales-recoil-state/sales-atoms-selectors'
 
 function Customer() {
     const [, setRefresh] = useState({})
     const salesAtomValue: any = useRecoilValue(salesAtom)
+    const [getGenericValue, setGenericValue] = useRecoilState(salesGenericValueSelector)
+    const [getBillTo, setBillTo] = useRecoilState(billToGenericValueSelector)
     const billTo = salesAtomValue.billTo
     const theme = useTheme()
 
@@ -70,6 +71,7 @@ function Customer() {
                         {salesAtomValue.autoRefNo || ''}
                     </Typography>
                 </Box>
+
                 {/* tran date */}
                 <Box className="vertical">
                     <Typography variant="body2">Date</Typography>
@@ -80,8 +82,7 @@ function Customer() {
                         // error={Boolean(allErrors['dateError'])}
                         // helperText={allErrors['dateError']}
                         onChange={(e: any) => {
-                            salesAtomValue.tranDate = e.target.value
-                            setRefresh({})
+                            setGenericValue({ propName: 'tranDate', e: e })
                         }}
                     />
                 </Box>
@@ -93,9 +94,9 @@ function Customer() {
                         value={salesAtomValue.userRefNo || ''}
                         sx={{ maxWidth: theme.spacing(16) }}
                         autoComplete="off"
-                        // onChange={(e: any) =>
-                        //     handleTextChanged('userRefNo', e)
-                        // }
+                        onChange={(e: any) =>
+                            setGenericValue({ propName: 'userRefNo', e: e })
+                        }
                     />
                 </Box>
                 {/* Gstin */}
@@ -107,8 +108,7 @@ function Customer() {
                         autoComplete="off"
                         // error={Boolean(allErrors.gstinError)}
                         onChange={(e: any) => {
-                            billTo.gstin = e.target.value
-                            setRefresh({})
+                            setBillTo({ propName: 'gstin', e: e })
                         }}
                     />
                 </Box>
@@ -124,15 +124,15 @@ function Customer() {
                         variant="standard"
                         value={salesAtomValue.commonRemarks || ''}
                         autoComplete="off"
-                        // onChange={(e: any) =>
-                        //     handleTextChanged('commonRemarks', e)
-                        // }
+                    // onChange={(e: any) =>
+                    //     handleTextChanged('commonRemarks', e)
+                    // }
                     />
                 </Box>
                 <Box
                     sx={{
                         pointerEvents:
-                        salesAtomValue.paymentVariety === 'i' ? 'none' : 'all',
+                            salesAtomValue.paymentVariety === 'i' ? 'none' : 'all',
                         opacity: salesAtomValue.paymentVariety === 'i' ? 0.4 : 1,
                         display: 'flex',
                         columnGap: 2,
@@ -187,15 +187,15 @@ function Customer() {
                                         <IconButton
                                             size="small"
                                             color="secondary"
-                                            // onClick={handleCustomerSearch}
-                                            >
+                                        // onClick={handleCustomerSearch}
+                                        >
                                             <Search />
                                         </IconButton>
                                         <IconButton
                                             size="small"
                                             color="secondary"
-                                            // onClick={handleCustomerSearchClear}
-                                            >
+                                        // onClick={handleCustomerSearchClear}
+                                        >
                                             <CloseSharp color="error" />
                                         </IconButton>
                                     </InputAdornment>

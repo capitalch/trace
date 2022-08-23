@@ -1,10 +1,10 @@
-import { atom } from 'recoil'
+import { atom, selector } from 'recoil'
 import moment from 'moment'
 
 const salesData = {
     allErrors: {},
     autoRefNo: undefined,
-    billTo: {},
+    billTo: {gstin:'abcd'},
     currentItemIndex: 0,
     commonRemarks: undefined,
     credits: 0,
@@ -38,10 +38,28 @@ const salesData = {
     userRefNo: undefined,
 }
 
-const salesAtom:any = atom({
+const salesAtom: any = atom({
     key: 'sales-recoil',
     default: salesData,
 })
 
+const salesGenericValueSelector: any = selector({
+    key: 'salesGenericValueSelector',
+    get: ({ get }: any) => get(salesAtom)
+    , set: ({ get, set }: any, obj) => {
+        const salesData = get(salesAtom)
+        set(salesAtom, { ...salesData, [obj.propName]: obj.e.target.value })
+    }
+})
 
-export {salesAtom}
+const billToGenericValueSelector:any = selector({
+    key: 'billToGenericValueSelector',
+    get: ({ get }: any) => get(salesAtom).billTo
+    , set: ({ get, set }: any, obj) => {
+        const billToData = get(salesAtom).billTo
+        set(salesAtom.billTo, { ...salesData.billTo, [obj.propName]: obj.e.target.value })
+    }
+})
+
+
+export {billToGenericValueSelector, salesAtom, salesGenericValueSelector }
