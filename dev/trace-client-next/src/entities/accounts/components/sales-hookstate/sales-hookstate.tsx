@@ -1,13 +1,14 @@
 import { Customer } from './customer/customer'
-import { RDebitsCreditsPreview } from './debits-credits-preview.tsx/r-debits-credits-preview'
+import { DebitsCreditsPreview } from './debits-credits-preview/debits-credits-preview'
+// import { RDebitsCreditsPreview } from './debits-credits-preview.tsx/r-debits-credits-preview'
 import { Box, Typography } from './redirect'
-function SalesRecoil() {
+function SalesHookstate() {
    return(
         <Box sx={{ '& .vertical': { display: 'flex', flexDirection: 'column', }, '& .right-aligned': { '& input': { textAlign: 'end' } } }}>
             <Box className='vertical' sx={{ flex: 1 }} >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
                     <Typography variant='subtitle1'>Sales</Typography>
-                    <RDebitsCreditsPreview />
+                    <DebitsCreditsPreview />
                 </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap-reverse', rowGap: 2, justifyContent: 'space-between' }}>
                     <Customer />
@@ -22,4 +23,4 @@ function SalesRecoil() {
         </Box>
     )
 }
-export { SalesRecoil }
+export { SalesHookstate }

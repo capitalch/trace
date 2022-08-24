@@ -1,4 +1,5 @@
 import { useCustomer } from './customer-hook'
+import { useHookstate } from '@hookstate/core'
 import {
     Box,
     Button,
@@ -19,15 +20,12 @@ import {
     useTheme,
     utils,
 } from '../redirect'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { billToGenericValueSelector, salesAtom, salesGenericValueSelector } from '../sales-recoil-state/sales-atoms-selectors'
+import { salesGlobal } from '../sales-global-state/sales-global'
+import { MyLocationOutlined } from '@mui/icons-material'
 
 function Customer() {
     const [, setRefresh] = useState({})
-    const salesAtomValue: any = useRecoilValue(salesAtom)
-    const [getGenericValue, setGenericValue] = useRecoilState(salesGenericValueSelector)
-    const [getBillTo, setBillTo] = useRecoilState(billToGenericValueSelector)
-    const billToValue:any = useRecoilValue(billToGenericValueSelector) //salesAtomValue.billTo
+    const salesState: any = useHookstate(salesGlobal)
     const theme = useTheme()
 
     return (
@@ -68,7 +66,7 @@ function Customer() {
                     </Typography>
                     {/* ref no */}
                     <Typography variant="body2">
-                        {salesAtomValue.autoRefNo || ''}
+                        {salesState.autoRefNo.get() || ''}
                     </Typography>
                 </Box>
 
@@ -78,11 +76,13 @@ function Customer() {
                     <TextField
                         variant="standard"
                         type="date"
-                        value={salesAtomValue.tranDate || ''}
+                        value={salesState.tranDate.get() || ''}
                         // error={Boolean(allErrors['dateError'])}
                         // helperText={allErrors['dateError']}
                         onChange={(e: any) => {
-                            setGenericValue({ propName: 'tranDate', e: e })
+                            salesState.tranDate.set(
+                                (old: any) => e.target.value
+                            )
                         }}
                     />
                 </Box>
@@ -91,11 +91,13 @@ function Customer() {
                     <Typography variant="body2">User ref no</Typography>
                     <TextField
                         variant="standard"
-                        value={salesAtomValue.userRefNo || ''}
+                        value={salesState.userRefNo.get() || ''}
                         sx={{ maxWidth: theme.spacing(16) }}
                         autoComplete="off"
                         onChange={(e: any) =>
-                            setGenericValue({ propName: 'userRefNo', e: e })
+                            salesState.userRefNo.set(
+                                (old: string) => e.target.value
+                            )
                         }
                     />
                 </Box>
@@ -104,11 +106,13 @@ function Customer() {
                     <Typography variant="body2">Gstin no</Typography>
                     <TextField
                         variant="standard"
-                        value={billToValue.gstin || ''}
+                        value={salesState.billTo.gstin.get() || ''}
                         autoComplete="off"
                         // error={Boolean(allErrors.gstinError)}
                         onChange={(e: any) => {
-                            setBillTo({ propName: 'gstin', e: e })
+                            salesState.billTo.gstin.set(
+                                (old: string) => e.target.value
+                            )
                         }}
                     />
                 </Box>
@@ -122,18 +126,18 @@ function Customer() {
                     <Typography variant="body2">Remarks</Typography>
                     <TextField
                         variant="standard"
-                        value={salesAtomValue.commonRemarks || ''}
+                        value={salesState.commonRemarks.get() || ''}
                         autoComplete="off"
-                    // onChange={(e: any) =>
-                    //     handleTextChanged('commonRemarks', e)
-                    // }
+                        onChange={(e: any) =>
+                            salesState.commonRemarks.set(e.target.value)
+                        }
                     />
                 </Box>
                 <Box
                     sx={{
-                        pointerEvents:
-                            salesAtomValue.paymentVariety === 'i' ? 'none' : 'all',
-                        opacity: salesAtomValue.paymentVariety === 'i' ? 0.4 : 1,
+                        // pointerEvents:
+                        // salesState.paymentVariety === 'i' ? 'none' : 'all',
+                        // opacity: salesAtomValue.paymentVariety === 'i' ? 0.4 : 1,
                         display: 'flex',
                         columnGap: 2,
                         rowGap: 2,
@@ -169,15 +173,15 @@ function Customer() {
                                             <Checkbox
                                                 sx={{ mt: -2 }}
                                                 size="small"
-                                                checked={
-                                                    salesAtomValue.isSearchTextOr ||
-                                                    false
-                                                }
-                                                onClick={(e: any) => {
-                                                    salesAtomValue.isSearchTextOr =
-                                                        e.target.checked
-                                                    setRefresh({})
-                                                }}
+                                                // checked={
+                                                //     salesState.isSearchTextOr ||
+                                                //     false
+                                                // }
+                                                // onClick={(e: any) => {
+                                                //     salesAtomValue.isSearchTextOr =
+                                                //         e.target.checked
+                                                //     setRefresh({})
+                                                // }}
                                             />
                                         </Box>
                                     </InputAdornment>
@@ -187,14 +191,14 @@ function Customer() {
                                         <IconButton
                                             size="small"
                                             color="secondary"
-                                        // onClick={handleCustomerSearch}
+                                            // onClick={handleCustomerSearch}
                                         >
                                             <Search />
                                         </IconButton>
                                         <IconButton
                                             size="small"
                                             color="secondary"
-                                        // onClick={handleCustomerSearchClear}
+                                            // onClick={handleCustomerSearchClear}
                                         >
                                             <CloseSharp color="error" />
                                         </IconButton>
@@ -210,7 +214,7 @@ function Customer() {
                             //     }
                             // }}
                             sx={{ minWidth: theme.spacing(15) }}
-                            value={salesAtomValue.searchText || ''}
+                            value={salesState.searchText.get() || ''}
                             variant="standard"
                         />
                     </Box>
@@ -250,9 +254,11 @@ function Customer() {
                         <Button
                             size="small"
                             color="warning"
-                            onClick={()=>{
-                                console.log(salesAtomValue)
-                            }
+                            onClick={
+                                () => {
+                                    // const myObj = Object.assign({}, salesState.get())
+                                    console.log(JSON.parse(JSON.stringify(salesState.get())))
+                                }
                                 // handleCustomerClear
                             }
                             variant="contained"

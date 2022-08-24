@@ -41,6 +41,7 @@
         "fontsource-roboto": "^4.0.0",
         "graphql": "^15.0.0",
         "graphql-tag": "^2.12.6",
+        "immer": "^9.0.15",
         "material-ui-confirm": "^3.0.4",
         "moment": "^2.29.4",
         "object-hash": "^3.0.0",

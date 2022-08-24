@@ -12,6 +12,7 @@ import {
     TrialBalance, Voucher, OpeningStock, InventoryReports
 } from './components/common/redirect'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
+import { SalesHookstate } from './components/sales-hookstate/sales-hookstate'
 import { SalesRecoil } from './components/sales-recoil/sales-recoil'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
@@ -132,6 +133,7 @@ function LaunchPad() {
             profitLoss: BalanceSheetProfitLoss,
             purchases: Purchases,
             sales: Sales,
+            salesHookstate:SalesHookstate,
             salesNew:SalesNew,
             salesRecoil: SalesRecoil,
             taxation: Taxation,
