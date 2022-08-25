@@ -270,28 +270,3 @@ if __name__ == '__main__':
     # app.run(debug=True, threaded=True)
     # socketio.run(app)
     pass
-
-
-# @app.route("/manifest.json")
-# def manifest():
-#     return send_from_directory('build', 'manifest.json')
-
-
-# @app.route('/favicon.ico')
-# def favicon():
-#     return send_from_directory('build', 'favicon.ico')
-
-
-# @app.route('/logo192.png')
-# def logo():
-#     return send_from_directory('build', 'logo192.png')
-
-
-# def enco(obj): return (
-#     obj.isoformat()
-#     if isinstance(obj, datetime.datetime)
-#     or isinstance(obj, datetime.date)
-#     else None
-# )
-
-# asyncio.run(connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey']))
