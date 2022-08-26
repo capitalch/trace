@@ -1,0 +1,10 @@
+type AuthenticationMutation {    
+    allocateEntitiesToClients(value:Generic): Generic
+    allocateUsersToEntities(value:Generic): Generic
+    changePwd(credentials:String): Generic
+    createBuInEntity(value:Generic): Generic
+    createClient(value:Generic): Generic
+    createOrUpdateUser(value:Generic): Generic
+    genericUpdateMaster(value:Generic): Generic
+}
+# For output type Generic is better than String. It allows all sort of data types as output without any conversion

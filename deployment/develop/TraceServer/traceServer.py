@@ -1,13 +1,10 @@
 from flask_cors import CORS
 import jwt
-import werkzeug
+# import werkzeug
 from pdfkit.api import configuration
-# import asyncio
-# from flask_scss import Scss
-# import sass
 from werkzeug.exceptions import HTTPException
 import simplejson as json
-from flask_mail import Mail, Message
+# from flask_mail import Mail, Message
 from ariadne.constants import PLAYGROUND_HTML
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
 from flask import Flask, jsonify, request, render_template, Response, abort, redirect
@@ -270,28 +267,3 @@ if __name__ == '__main__':
     # app.run(debug=True, threaded=True)
     # socketio.run(app)
     pass
-
-
-# @app.route("/manifest.json")
-# def manifest():
-#     return send_from_directory('build', 'manifest.json')
-
-
-# @app.route('/favicon.ico')
-# def favicon():
-#     return send_from_directory('build', 'favicon.ico')
-
-
-# @app.route('/logo192.png')
-# def logo():
-#     return send_from_directory('build', 'logo192.png')
-
-
-# def enco(obj): return (
-#     obj.isoformat()
-#     if isinstance(obj, datetime.datetime)
-#     or isinstance(obj, datetime.date)
-#     else None
-# )
-
-# asyncio.run(connectToLinkServer(linkServerUrl, 'traceServer', token=cfg['linkServerKey']))

@@ -755,52 +755,64 @@ allSqls = {
     ''',
 
     "get_products_info": '''
-        with cte0 as( --base cte used many times in next
-	select "productId", "tranTypeId", "qty", "price", "tranDate"
+    --with "branchId" as (values(1)), "finYearId" as (values (2022)),
+    with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+    cte0 as( --base cte used many times in next
+	select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
 		from "TranH" h
 			join "TranD" d
 				on h."id" = d."tranHeaderId"
 			join "SalePurchaseDetails" s
 				on d."id" = s."tranDetailsId"
-		--where "branchId" = 1 and "finYearId" = 2022
-		where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
-	), cte1 as ( -- opening balance
-		select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
-			from "ProductOpBal" p 
-		--where "branchId" = 1 and "finYearId" = 2022
-		where "branchId" = %(branchId)s and "finYearId" = %(finYearId)s
-	), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
-            select "productId","tranTypeId", 
-                SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
-                , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
-                , SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
-                , SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
-                , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
-                , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
-                from cte0
-            group by "productId", "tranTypeId" order by "productId", "tranTypeId"
-     ), cte3 as ( -- sum columns group by productId
-            select "productId"
-            , coalesce(SUM("sale"),0) as "sale"
-            , coalesce(SUM("purchase"),0) as "purchase"
-            , coalesce(SUM("saleRet"),0) as "saleRet"
-            , coalesce(SUM("purchaseRet"),0) as "purchaseRet"
-            , MAX("lastSaleDate") as "lastSaleDate"
-            , MAX("lastPurchaseDate") as "lastPurchaseDate"
-            from cte2
-                group by "productId"
-     ), cte4 as ( -- join opening balance (cte1) with latest result set
-            select coalesce(c1."productId",c3."productId")  as "productId"
-            , coalesce(c1.qty,0) as "op"
-            , coalesce("sale",0) as "sale"
-            , coalesce("purchase",0) as "purchase"
-            , coalesce("saleRet", 0) as "saleRet"
-            , coalesce("purchaseRet", 0) as "purchaseRet"
-            , coalesce(c3."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
-            , "openingPrice", "lastSaleDate"
-                from cte1 c1
-                    full join cte3 c3
-                        on c1."productId" = c3."productId"
+		where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+	union all --necessary otherwise rows with same values are removed
+	select "productId", "tranTypeId", "qty", 0 as "price", "tranDate", "dc"
+		from "TranH" h
+			join "StockJournal" s
+				on h."id" = s."tranHeaderId"
+		where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+        ), cte1 as ( -- opening balance
+            select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
+                from "ProductOpBal" p 
+            where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+        ), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
+                select "productId","tranTypeId", 
+                    SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
+                    , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
+                    , SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
+                    , SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
+                    , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'D') THEN "qty" ELSE 0 END) as "stockJournalDebits"
+                    , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'C') THEN "qty" ELSE 0 END) as "stockJournalCredits"
+                    , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
+                    , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
+                    from cte0
+                group by "productId", "tranTypeId" order by "productId", "tranTypeId"
+        ), cte3 as ( -- sum columns group by productId
+                select "productId"
+                , coalesce(SUM("sale"),0) as "sale"
+                , coalesce(SUM("purchase"),0) as "purchase"
+                , coalesce(SUM("saleRet"),0) as "saleRet"
+                , coalesce(SUM("purchaseRet"),0) as "purchaseRet"
+                , coalesce(SUM("stockJournalDebits"),0) as "stockJournalDebits"
+                , coalesce(SUM("stockJournalCredits"),0) as "stockJournalCredits"
+                , MAX("lastSaleDate") as "lastSaleDate"
+                , MAX("lastPurchaseDate") as "lastPurchaseDate"
+                from cte2
+                    group by "productId"
+        ), cte4 as ( -- join opening balance (cte1) with latest result set
+                select coalesce(c1."productId",c3."productId")  as "productId"
+                , coalesce(c1.qty,0) as "op"
+                , coalesce("sale",0) as "sale"
+                , coalesce("purchase",0) as "purchase"
+                , coalesce("saleRet", 0) as "saleRet"
+                , coalesce("purchaseRet", 0) as "purchaseRet"
+                , coalesce("stockJournalDebits", 0) as "stockJournalDebits"
+                , coalesce("stockJournalCredits", 0) as "stockJournalCredits"
+                , coalesce(c3."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
+                , "openingPrice", "lastSaleDate"
+                    from cte1 c1
+                        full join cte3 c3
+                            on c1."productId" = c3."productId"
         ), cte5 as ( -- get last purchase price for transacted products
             select DISTINCT ON("productId") "productId", "price" as "lastPurchasePrice"
                 from cte0
@@ -809,11 +821,10 @@ allSqls = {
         ), cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
             select coalesce(c4."productId", c5."productId") as "productId"
                 , coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice","lastPurchaseDate"
-                , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet") as "clos", "sale", "op", "openingPrice"
+                , ("op" + "purchase" - "purchaseRet" - "sale" + "saleRet" + "stockJournalDebits" - "stockJournalCredits") as "clos", "sale", "op", "openingPrice"
                 from cte4 c4
                     full join cte5 c5
                         on c4."productId" = c5."productId"
-                --where date_part('day', CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp) >= coalesce(%(days)s,0)
         ), cte7 as ( -- combine latest result set with ProductM, CategoryM and BrandM tables to attach catName, brandName, label
             select p."id", "productCode", "catName", "brandName", "label", coalesce("clos"::numeric(10,2),0) "clos", (coalesce("lastPurchasePrice",0) * (1 + "gstRate"/ 100)) "lastPurchasePriceGst", 
                     "lastPurchaseDate", (date_part('day',CURRENT_DATE::timestamp - "lastPurchaseDate"::timestamp)) as "age"
