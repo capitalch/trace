@@ -1,13 +1,10 @@
 from flask_cors import CORS
 import jwt
-import werkzeug
+# import werkzeug
 from pdfkit.api import configuration
-# import asyncio
-# from flask_scss import Scss
-# import sass
 from werkzeug.exceptions import HTTPException
 import simplejson as json
-from flask_mail import Mail, Message
+# from flask_mail import Mail, Message
 from ariadne.constants import PLAYGROUND_HTML
 from ariadne import QueryType, graphql_sync, make_executable_schema, gql, ObjectType, load_schema_from_path
 from flask import Flask, jsonify, request, render_template, Response, abort, redirect
