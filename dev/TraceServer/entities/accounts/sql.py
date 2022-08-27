@@ -330,7 +330,7 @@ allSqls = {
 
     'get_business_health':'''
     --with "branchId" as ( values (1)), "finYearId" as (values (2022)),
-    with branch as (values (%(branchId)s::int)), finyearid as (values (%(finYearId)s::int)),
+    with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
 	cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
             from "TranH" h
