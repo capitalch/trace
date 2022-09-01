@@ -137,6 +137,7 @@ k. Server logging for modify and delete, time and log viewer
 24. Server side printing cleanup and convert to puppeteer
 
 ## Bugs
+#. Print options in debit notes, creddit notes and purchase return
 #. When non gst sale bill from simple sales if hsn is not given then save error
 *. Sale billl to creditor, print is not having address
 *. When voucher is very long sometimes it part reaches the server. The server does not have debit credit checking. Also client should have robust check of debit credit. In Netwoven it happened that client automatically tripled the credit entries in payments and it reached the server and saved.
