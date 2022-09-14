@@ -3,7 +3,7 @@ type AccountsQuery {
     accountsMasterGroupsLedgers: Generic
     accountsOpBal: Generic
     balanceSheetProfitLoss: Generic
-    configuration: Generic 
+    configuration: Generic N
     genericView(value: Generic): Generic
     saleInvoiceView(value: Generic): Generic
     searchProduct(value: Generic): Generic
