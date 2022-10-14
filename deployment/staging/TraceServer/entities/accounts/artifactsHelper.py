@@ -187,13 +187,23 @@ def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='
     # find accId
     accId = None
     detailsData = None
+    tranDate=None
+    contactsId = None
+    autoRefNo = None
     tranH = valueDict.get('data', None)
     if(tranH):
+        tranDate = tranH[0].get('tranDate', None)
+        contactsId= tranH[0].get('contactsId', None)
+        autoRefNo=tranH[0].get('autoRefNo', None)
         tranDetails = tranH[0].get('details', None)
         if(tranDetails):
             detailsData = tranDetails.get('data', None)
             accId = detailsData[1].get('accId', None)
-    # print(accId)
+    # get contactName
+    sqlString = allSqls['get_contact_name']
+    ret = execSql(dbName, sqlString, {'contactsId': contactsId}, isMultipleRows=False, buCode=buCode)
+    result = dict(ret)
+    nameWithMobile = f"{result['contactName']}:{result['mobileNumber']}"
     sqlString = allSqls['get_lastNo_auto_subledger']
     ret = execSql(dbName, sqlString, {'branchId': branchId, 'accId': accId,
                                       'finYearId': finYearId}, isMultipleRows=False, buCode=buCode)
@@ -208,11 +218,12 @@ def processForAutoSubledger(dbName='', branchId=None, branchCode=None,  buCode='
     if(lastNo == 0):
         lastNo = 1
     accCode = f'{accId}/{branchCode}/{lastNo}/{finYearId}'
+    accName = f'{tranDate} {autoRefNo}: {accId}/{branchCode}/{lastNo} {nameWithMobile}'
     # searchPathSql = getschemaSearchPath(buCode)
     sqlString = allSqls['insert_account']
     args = {
         "accCode": accCode,
-        "accName": accCode,
+        "accName": accName,
         "accType": accType,
         "parentId": accId,
         "accLeaf": 'S',

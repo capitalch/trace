@@ -330,7 +330,7 @@ allSqls = {
 
     'get_business_health':'''
     --with "branchId" as ( values (1)), "finYearId" as (values (2022)),
-    with branch as (values (%(branchId)s::int)), finyearid as (values (%(finYearId)s::int)),
+    with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
 	cte0 as( --base cte used many times in next
         select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
             from "TranH" h
@@ -506,6 +506,10 @@ allSqls = {
     'get_contact_for_mobile': '''
         select * from "Contacts"
 	        where "mobileNumber" = %(mobileNumber)s limit 1
+    ''',
+
+    'get_contact_name': '''    
+        select "contactName", "mobileNumber" from "Contacts"  where "id" = %(contactsId)s
     ''',
 
     'get_contact_on_mobile_email_contactName': '''
