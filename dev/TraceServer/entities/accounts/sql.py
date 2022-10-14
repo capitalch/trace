@@ -508,6 +508,10 @@ allSqls = {
 	        where "mobileNumber" = %(mobileNumber)s limit 1
     ''',
 
+    'get_contact_name': '''    
+        select "contactName", "mobileNumber" from "Contacts"  where "id" = %(contactsId)s
+    ''',
+
     'get_contact_on_mobile_email_contactName': '''
         select * from "Contacts"
             where "mobileNumber" ~* %(searchString)s
