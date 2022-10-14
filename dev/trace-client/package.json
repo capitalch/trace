@@ -11,8 +11,9 @@
         "@mui/icons-material": "^5.8.4",
         "@mui/material": "^5.9.1",
         "@mui/styles": "^5.9.1",
-        "@mui/x-data-grid-pro": "^5.14.0",
-        "@react-pdf/renderer": "^2.3.0",
+        "@mui/x-data-grid-pro": "^5.17.1",
+        "@react-pdf/font": "^2.2.1",
+        "@react-pdf/renderer": "^2.1.0",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^12.1.5",
         "@testing-library/user-event": "^14.2.1",
@@ -71,6 +72,10 @@
     },
     "eslintConfig": {
         "extends": "react-app"
+    },
+    "resolutions": {
+        "@react-pdf/font": "2.2.1",
+        "@react-pdf/pdfkit": "2.1.0"
     },
     "browserslist": {
         "production": [

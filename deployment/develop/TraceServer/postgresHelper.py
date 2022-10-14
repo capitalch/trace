@@ -2,8 +2,6 @@ import psycopg2
 import simplejson as json
 from itertools import repeat
 from util import getschemaSearchPath
-# from entities.accounts.sql import allSqls
-
 
 def getInsertSql(data, tableName, fkeyName, fkeyValue):
     fieldsList = list(data.keys())
@@ -24,7 +22,6 @@ def getInsertSql(data, tableName, fkeyName, fkeyValue):
     '''
     return(sql, valuesTuple)
 
-
 def getUpdateSql(data, tableName):
     def getUpdateKeyValues(dataCopy):
         idValue = dataCopy['id']
@@ -42,7 +39,6 @@ def getUpdateSql(data, tableName):
         where id = {data['id']} returning {"id"}
     '''
     return(sql, valuesTuple)
-
 
 def getSql(sqlObject, data, fkeyValue):
     sql = None
@@ -98,7 +94,6 @@ def processData(sqlObject, cursor, data, fkeyValue, buCode='public'):
     # Following two lines are new and need testing
     # else:
     return id
-
 
 def execSqlObject(sqlObject, cursor, fkeyValue=None, buCode='public'):
     ret = None
