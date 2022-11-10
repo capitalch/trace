@@ -107,7 +107,7 @@ i. Gst rate in downloaded excel file
 j. salePurchaseDetails table jData has remarks etc. it should be null
 k. Server logging for modify and delete, time and log viewer
 0. Quick reports: Stock summary, daily sales, Jakar, orders, health
-0. 
+0. Customer search from sales reports
 11. Service+ to Trace import: Gstin No not coming
 12. Vouchers to allow GST for assets also. At present only Expences and incomes are allowed  
 20. Discount manage in sales           

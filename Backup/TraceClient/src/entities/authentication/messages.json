@@ -1,7 +1,0 @@
-{
-    "passwordsShouldBeSame":"Two passwords given by you must be same"
-    , "invalidUidOrPassword": "Invalid user id or password"
-    , "changePwdFail": "Change of password could not be done due to failure at server side. Please contact administrator"
-    , "userEmailExists": "User with this email already exists. Please try another email"
-    , "buCodeExists": "Business unit already exists for your client and entity"
-}
