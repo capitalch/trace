@@ -2520,5 +2520,3 @@ allSqls = {
     '''
 }
 
-
-# deprecated sql's
