@@ -618,9 +618,9 @@ function CategoriesMaster() {
                 setRefresh({})
             }, [])
 
-            return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            return (<Box sx={{ display: 'flex', flexDirection: 'column'}}>
                 <ReactSelect
-                    menuPlacement='auto'
+                    menuPlacement='bottom'
                     placeholder="Select tag"
                     options={pre.options}
                     value={pre.selectedTag}
