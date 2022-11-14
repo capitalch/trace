@@ -1,10 +1,6 @@
 import React from 'react'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
-import {
-    ThemeProvider,
-    createTheme,
-    StyledEngineProvider,
-} from '@mui/material/styles'
+import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
     purple,
@@ -26,7 +22,6 @@ import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
-import { RecoilRoot } from 'recoil'
 // import { MegaContext } from './imports/trace-imports'
 
 declare module '@mui/material/styles/' {
@@ -63,6 +58,7 @@ declare module '@mui/material/styles/' {
 }
 
 const App: React.FC = () => {
+
     const theme = createTheme({
         // typography: {
         //     h6: {
@@ -136,9 +132,7 @@ const App: React.FC = () => {
                 <ConfirmProvider>
                     {' '}
                     {/* confirm dialog box all over the application */}
-                    <RecoilRoot>
-                        <AppMain></AppMain>
-                    </RecoilRoot>
+                    <AppMain></AppMain>
                 </ConfirmProvider>
                 {/* </MegaContext.Provider> */}
             </ThemeProvider>

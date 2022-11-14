@@ -132,6 +132,11 @@ function useSalesViewContent() {
                 field: 'serialNumbers',
                 width: 160,
             },
+            {
+                headerName: 'Contact',
+                field: 'contact',
+                width: 200,
+            },
         ]
         const queryId = 'get_sale_purchase_headers'
         const queryArgs = {
