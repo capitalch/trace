@@ -51,6 +51,7 @@ function useDebitsCreditsPreview() {
     }
 
     async function handleEmail() {
+        // const rawSaleData = sales.rawSaleData || {}
         const rawSaleData = getFromBag('rawSaleData') || {}
         const emailAddress = rawSaleData?.jsonResult?.billTo?.email
         const options = {

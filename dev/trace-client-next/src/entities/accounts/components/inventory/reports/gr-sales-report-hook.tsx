@@ -10,7 +10,6 @@ function useSalesReport() {
     const { getFromBag } = manageEntitiesState()
     const finYearObject = getFromBag('finYearObject')
     const isoFormat = 'YYYY-MM-DD'
-    // const dateFormat = getFromBag('dateFormat')
 
     const meta: any = useRef({
         allRows: [],
@@ -337,6 +336,13 @@ function useSalesReport() {
                 type: 'date',
                 width: 100,
                 valueFormatter: (params: any) => params.value ? moment(params.value).format('hh:mm:ss A') : ''
+            },
+            {
+                headerName: 'Contact',
+                description: 'Contact',
+                headerClassName: 'header-class',
+                field: 'contact',
+                width: 200,
             },
             {
                 headerName: 'Pr id',

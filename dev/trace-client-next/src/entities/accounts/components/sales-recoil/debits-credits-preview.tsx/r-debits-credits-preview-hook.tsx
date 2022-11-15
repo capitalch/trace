@@ -1,4 +1,0 @@
-function useDebitsCreditsPreview(){
-
-}
-export {useDebitsCreditsPreview}

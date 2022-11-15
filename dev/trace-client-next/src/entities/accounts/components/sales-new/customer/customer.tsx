@@ -9,6 +9,7 @@ function Customer() {
     const allErrors = sales.allErrors
     const { checkAllErrors, handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta } = useCustomer()
     const pre = meta.current
+    // const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
     checkAllErrors()
     
@@ -109,6 +110,22 @@ function Customer() {
                     , (billTo?.email ? ', ' + billTo.email : '')
                     , (billTo?.pin ? ', ' + billTo.pin : '')
                 )}</Typography>
+                {/* <Box sx={{
+                    display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
+                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, maxWidth: theme.spacing(40), width: theme.spacing(40)
+                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'lightgrey'
+                }}>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id, ', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
+                    <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ', ') : ''}</Typography>
+                    <Typography>{billTo?.address2 ? ''.concat(' ', billTo.address2, ', ') : ''}</Typography>
+                    <Typography>{billTo?.email ? ''.concat(' ', billTo.email, ', ') : ''}</Typography>
+                    <Typography>{billTo?.country ? ''.concat(' ', billTo.country, ', ') : ''}</Typography>
+                    <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ', ') : ''}</Typography>
+                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
+                </Box> */}
 
                 <Box sx={{ display: 'flex', }}>
                     {/* clear */}
