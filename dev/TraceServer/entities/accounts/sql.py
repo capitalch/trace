@@ -916,7 +916,7 @@ allSqls = {
 					on c."id" = p."catId"
 				join "BrandM" b
 					on b."id" = p."brandId"
-			where p."isActive"
+			where p."isActive" and (coalesce("op",0) + coalesce("purchase",0) - coalesce("purchaseRet",0) - coalesce("sale",0) + coalesce("saleRet",0) + coalesce("stockJournalDebits",0) - coalesce("stockJournalCredits",0)) <> 0
 		order by "brandName", "catName",  "label", "info"
     ''',
 

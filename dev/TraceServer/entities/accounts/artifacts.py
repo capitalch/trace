@@ -9,7 +9,7 @@ from requests.models import Response
 from postgres import getPool, execSql, execGenericUpdateMaster,  genericView
 import pandas as pd
 import simplejson as json
-import demjson as demJson
+#import demjson #as demJson
 import re  # Python regex
 from time import sleep
 from urllib.parse import unquote
