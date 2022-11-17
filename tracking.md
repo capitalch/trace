@@ -1,3 +1,13 @@
+## Reports new / edit
+!. Stock Summary
+    Include Tags
+    Include Jakar info at bottom
+!. Sales: 
+    Speed up
+    Include Jakar sale info in Summary
+    Retrieve on click and not by default
+!. Orders report and order through mobile
+
 ## upgrade trace-client chitta and kush
 npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact
 
@@ -23,81 +33,7 @@ Also @mui/styles library expected React 17.x.x version. Finally only @react-pdf/
 create-react-app
 code transfer
 libs install
-worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc
-
-## Stock Journal
-                                                                                                        Correct validation errors in items of sales-new
-                                                                                                        Correct focus error for sales-new
-                                                                                                        Add items
-                                                                                                        Focus item
-                                                                                                        Error management header
-                                                                                                        Error management line item
-                                                                                                        itemchanged events to update data in header
-                                                                                                        itemchanged event for items
-                                                                                                        Item search
-                                                                                                        populate on product code
-                                                                                                        Error handling
-                                                                                                        Reset button
-                                                                                                        Overall look and feel
-                                                                                                        Header summary total input qty, output qty
-                                                                                                        Add Destination (Production)
-                                                                                                        Clear button in footer with functionality
-                                                                                                        Delete row functionality
-                                                                                                        View functionality
-                                                                                                        Edit functionality
-                                                                                                        Delete stock journal as whole
-                                                                                                        Delete items in edit mode
-                                                                                                        Submit functionality
-                                                                                                        Serial number, show serial numbers in view, and treat it during edit
-                                                                                                        Security and permissions
-                                                                                                        Reflect effect of stock journal in associated queries for stock and sales etc
-                                                                                                        QA
-                                                                                                        PDF print
-                                                                                                        Globalize PDF print methods
-                                                                                                        Edit of stockJournal adds record
-                                                                                                        In edit of Stock Journal unable to select item
-                                                                                                        Make zero rows allowed
-                                                                                                        Print of just saved stock journal
-                                                                                                        Transport PDF printing to Link server
-                                                                                                        Link server pdf print provide security and error handling
-## PDF Print framework
-                                                                                                        Express send PDF
-                                                                                                        Show pdf at client side
-                                                                                                        Create PDF from html
-                                                                                                        Send html from client and get pdf in return
-Globalize PDF print methods
-Set custom height considerations
-Create pdf for sales
-Create PDF for vouchers and others
-                                                                                                        Create PDF for Stock Journal
-Deploy solution to LinkServer
-Deploy solution to Trace server
-Cleanup Trace
-Upgrade Trace to React 18
-
-### Plan (new)
-Stock journals                          : 3 days: 14/07/2022
-Stock transaction reports               : 2 days: 16/07/2022
-Server side implement debit = credit    : 2 days: 18/07/2022
-Make product inactive                   : 2 days: 20/07/2022
-Purchase new-town                       : 7 daya: 27/07/2022
-Dashboard reports                       : 7 days: 04/08/2022
-Stock orders                            : 7 days: 11/08/2022
-Invoice wise payments                   : 3 days: 14/08/2022
-PDF storage of invoice                  : 14 days 02/09/2022
-Clean up client SizedBox                : 1 day 03/09/2022
-Clean up link-server                    : 2 days 05/09/2022
-
-
-
-
-### Plan(modify)
-Stock report pdf all details to exist   : 1 day: 15/08/2022
-Vouchers to allow GST for assets also   : 1 day: 16/08/2022
-Purchase entry, same user ref no entry  : 1 day: 17/08/2022
-give alert
-Meaningful server side error            : 1 day: 18/08/2022
-                                                                                        
+worked fine, but with react 18, pdf error: mediaQuery, even if upgraded @mui etc                                                                                
 
 
 ## Planning                                                                             
