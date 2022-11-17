@@ -143,6 +143,32 @@ function useSalesReport() {
         setRefresh({})
     }
 
+    function getAgeingOptions() {
+        const ageing = [{
+            label: 'All stock',
+            value: 0
+        },
+        {
+            label: 'Stock >= 90',
+            value: 90
+        },
+        {
+            label: 'Stock >= 180',
+            value: 180
+        },
+        {
+            label: 'Stock >= 270',
+            value: 270
+        },
+        {
+            label: 'Stock >= 360',
+            value: 360
+        }
+        ]
+        return (ageing)
+    }
+
+
     function getColumns(): any[] {
         return ([
             {
@@ -207,7 +233,7 @@ function useSalesReport() {
                 description: 'Product',
                 field: '1',
                 renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params:any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
+                valueGetter: (params: any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
                 width: 200,
             },
             {
@@ -419,10 +445,18 @@ function useSalesReport() {
             prev.aggrSale = prev.aggrSale + curr.aggrSale
             prev.grossProfit = prev.grossProfit + curr.grossProfit
             prev.count++
+            prev.age360Sale = prev.age360Sale + ((curr.age > 360) ? curr.amount : 0)
+            prev.age360Aggr = prev.age360Aggr + ((curr.age > 360) ? curr.aggrSale : 0)
+            prev.age360GrossProfit = prev.age360GrossProfit + ((curr.age > 360) ? curr.grossProfit : 0)
             return (prev)
-        }, { qty: 0, aggrSale: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0 })
+        }, { qty: 0, aggrSale: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0, age360Sale: 0, age360Aggr: 0, age360GrossProfit: 0 })
         totals.id = 'Total'
         return (totals)
+    }
+
+    function handleAgeingOptionSelected(selectedOption: { label: string; value: string }) {
+        pre.selectedAgeingOption = selectedOption
+        fetchData()
     }
 
     function onSelectModelChange(rowIds: any) {
@@ -470,7 +504,7 @@ function useSalesReport() {
 
     function removeRow(params: any) {
         const id = params.id
-        if(id ==='Total'){ // The row with totals cannot be removed
+        if (id === 'Total') { // The row with totals cannot be removed
             return
         }
         const temp = [...pre.filteredRows]
@@ -482,6 +516,6 @@ function useSalesReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange })
+    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleAgeingOptionSelected, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange })
 }
 export { useSalesReport }
