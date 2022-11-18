@@ -1050,8 +1050,8 @@ allSqls = {
     ''',
 
     "get_sale_report":'''
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)),
-        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)),
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)), --"days" as (values (%(days)s::int)),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
             select id, "parentId", "isLeaf", "catName"
@@ -1209,8 +1209,8 @@ allSqls = {
                         left join cte1 c1
                             on c1."productId" = c7."productId"
                     order by "productId"
-        )
-        select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
+        ), cte9 as
+        (select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
                 ,(date_part('day', (CASE WHEN (table "endDate") > CURRENT_DATE then CURRENT_DATE ELSE (table "endDate") END)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
             from cte5 c5
                 join "ProductM" p
@@ -1222,7 +1222,8 @@ allSqls = {
                 join cte8 c8
                     on c5."productId" = c8."productId"
             where "tranDate" between (table "startDate") and (table "endDate")
-                order by "tranDate", "salePurchaseDetailsId"
+                order by "tranDate", "salePurchaseDetailsId") 
+            select * from cte9
     ''',
 
     "get_search_product": '''
