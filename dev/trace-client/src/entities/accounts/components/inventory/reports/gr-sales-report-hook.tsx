@@ -20,6 +20,7 @@ function useSalesReport() {
         isSearchTextEdited: false,
         searchText: '',
         searchTextRef: null,
+        selectedAgeingOption: { label: 'All stock', value: 0 },
         selectedOption: { label: 'Today', value: 'today' },
         selectedTagOption: { label: 'All', value: 0 },
         setRefresh: setRefresh,
@@ -60,6 +61,7 @@ function useSalesReport() {
             args: {
                 startDate: pre.startDate,
                 endDate: pre.endDate,
+                days: pre.selectedAgeingOption.value || 0,
                 tagId: pre.selectedTagOption.value
             },
         }) || []
@@ -145,23 +147,23 @@ function useSalesReport() {
 
     function getAgeingOptions() {
         const ageing = [{
-            label: 'All stock',
+            label: 'All sale',
             value: 0
         },
         {
-            label: 'Stock >= 90',
+            label: 'Age >= 90',
             value: 90
         },
         {
-            label: 'Stock >= 180',
+            label: 'Age >= 180',
             value: 180
         },
         {
-            label: 'Stock >= 270',
+            label: 'Age >= 270',
             value: 270
         },
         {
-            label: 'Stock >= 360',
+            label: 'Age >= 360',
             value: 360
         }
         ]

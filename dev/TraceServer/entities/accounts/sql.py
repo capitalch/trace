@@ -1051,7 +1051,7 @@ allSqls = {
 
     "get_sale_report":'''
         --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
-        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)), --"days" as (values (%(days)s::int)),
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)),  "days" as (values (%(days)s::int)),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
             select id, "parentId", "isLeaf", "catName"
@@ -1223,7 +1223,7 @@ allSqls = {
                     on c5."productId" = c8."productId"
             where "tranDate" between (table "startDate") and (table "endDate")
                 order by "tranDate", "salePurchaseDetailsId") 
-            select * from cte9
+            select * from cte9 where "age" > (table "days")
     ''',
 
     "get_search_product": '''

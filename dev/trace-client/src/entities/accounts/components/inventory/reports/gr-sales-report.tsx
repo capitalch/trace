@@ -81,6 +81,12 @@ function SalesReport() {
                                     handleOptionSelected(optionSelected)
                                     setRefresh({})
                                 }} />
+                        {/* Ageing */}
+                        <ReactSelect menuPlacement='auto' placeholder='Select ageing'
+                            styles={reactSelectStyles}
+                            options={getAgeingOptions()}
+                            value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
+                        />
                         {/* Select tag */}
                         <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography>
                         <ReactSelect
@@ -117,11 +123,6 @@ function SalesReport() {
                             }}
 
                             value={pre.endDate || ''}
-                        />
-                        <ReactSelect menuPlacement='auto' placeholder='Select ageing'
-                            styles={reactSelectStyles}
-                            options={getAgeingOptions()}
-                            value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
                         />
                         {/* Sync */}
                         <IconButton
