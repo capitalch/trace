@@ -1,4 +1,5 @@
 import { _, IMegaData, MegaDataContext, PurchaseReport, SalesReport, StockSummaryReport, useContext, useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
+import { CurrentOrdersReport } from './gr-current-orders-report'
 import { ProductsListReport } from './gr-products-list-report'
 
 function useInventoryReports() {
@@ -52,9 +53,10 @@ function useInventoryReports() {
         pre.selectedReport = selectedReport
         pre.reportComponent = getReportFromsMap(inventory.selectedReportName)
         setRefresh({})
-
+        
         function getReportFromsMap(rName: string) {
             const map: any = {
+                currentOrdersReport: CurrentOrdersReport,
                 productsListReport: ProductsListReport,
                 purchaseReport: PurchaseReport,
                 salesReport: SalesReport,

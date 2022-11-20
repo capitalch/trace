@@ -38,6 +38,11 @@ export { InventoryReports }
 
 const reportsJson: any[] = [
     {
+        label: 'Current orders',
+        value: 'currentOrdersReport',
+        breadCrumb: 'Current orders'
+    },
+    {
         label: 'Products list',
         value: 'productsListReport',
         breadCrumb: 'Products list'

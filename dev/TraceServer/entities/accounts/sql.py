@@ -530,6 +530,57 @@ allSqls = {
 		    limit 100
     ''',
 
+    "get_current_orders":'''
+        with "tempMonth" as (values(EXTRACT(MONTH FROM CURRENT_DATE)::int )),
+        "currentMonth" as (values(CASE WHEN (table "tempMonth") in(1,2,3) THEN (table "tempMonth") + 12 ELSE (table "tempMonth") END)),
+        "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        --"branchId" as (values(1)), "finYearId" as (values (2022)),
+
+        "cteStock" as (
+            select * from get_current_stock((table "branchId"), (table "finYearId"))
+        ),
+
+        cte1 as (
+            select "productId", SUM("qty")::int as "qty", EXTRACT(MONTH from "tranDate")::int as "month"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+            where "tranTypeId" = 4 
+                and (((table "currentMonth") - EXTRACT(MONTH from "tranDate")::int) <= 3 ) 
+                and "branchId" = (table "branchId")
+            group by "productId", "month"
+                order by "month"
+        ), cte2 as (
+            select cte1.*, ((table "currentMonth") - "month") as "monthsOld" 
+                from cte1
+        ), cte3 as (
+            select cte2.*
+                , CASE 
+                    WHEN "monthsOld" = 0 THEN 1.8/4
+                    WHEN "monthsOld" = 1 THEN 1.5/4
+                    WHEN "monthsOld" = 2 THEN 0.6/4
+                    WHEN "monthsOld" = 3 THEN 0.4/4
+                END as "weight"
+            from cte2
+        ), cte4 as (
+            select cte3.*, ROUND(qty * weight, 0)::int as "order1"
+                from cte3
+        )
+        , cte5 as (
+            select "productId", SUM("order1") as "order2"
+                from cte4
+            GROUP by "productId"
+        )
+        select c."productId", c."productCode", c."brandName", c."categoryName", c."label", c."clos"::int, ("order2" - "clos")::int as "finalOrder", "price" * ("order2" - "clos")::decimal(12,0) as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
+            from cte5 c5
+                join "cteStock" c
+                    on c5."productId" = c."productId"
+            where ("order2" - "clos") > 0
+        order by "brandName", "categoryName",  "label"
+    ''',
+
     'get_debtors_creditors': '''
        select a."id", "accCode", "accName", e."isAutoSubledger", c."accClass", "gstin"
 		from "AccM" a
@@ -708,6 +759,7 @@ allSqls = {
                 left outer join cte2 b
                     on a."id" = b."accId"                                                           
                             order by "accType","accLeaf", "accName" ''',
+
 
     "get_pdf_sale_bill": '''
         select "jData"->'pdfSaleBill' as "pdfSaleBill"
