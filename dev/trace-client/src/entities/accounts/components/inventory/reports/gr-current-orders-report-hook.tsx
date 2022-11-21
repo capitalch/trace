@@ -102,7 +102,7 @@ function useCurrentOrdersReport() {
                 description: 'Product',
                 field: '1',
                 renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params:any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
+                valueGetter: (params:any) => `${params.row.brandName} ${params.row.categoryName} ${params.row.label}`,
                 width: 200,
             },
             {
@@ -200,10 +200,10 @@ export { useCurrentOrdersReport }
 function Product({ params }: any) {
     const theme = useTheme()
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-            {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
-            <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>                
-            {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+        <Box sx={{ display: 'flex', flexWrap:'wrap' }}>            
+            <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold'}}>{params.row.brandName}</Typography>&nbsp;
+            <Typography sx={{ fontSize: theme.spacing(1.7), }}>{' '.concat(params.row.categoryName)}</Typography>&nbsp;                
+            {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>{params.row.label}</Typography>}
         </Box>
     )
 }
