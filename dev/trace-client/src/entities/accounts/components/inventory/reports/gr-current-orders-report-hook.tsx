@@ -74,7 +74,7 @@ function useCurrentOrdersReport() {
                             title='Hide this row'
                             size="small"
                             color="primary"
-                            // onClick={() => removeRow(params)}
+                            onClick={() => removeRow(params)}
                             aria-label="hide">
                             <CloseSharp fontSize='small' />
                         </IconButton>
@@ -97,15 +97,25 @@ function useCurrentOrdersReport() {
                 width: 80,
             },
             {
+                cellClassName: 'cell-class-product',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
-                field: '1',
+                field: 'product',
                 renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params:any) => `${params.row.brandName} ${params.row.categoryName} ${params.row.label}`,
+                valueGetter: (params: any) => `${params.row.brandName} ${params.row.catName} ${params.row.label}`,
                 width: 200,
             },
             {
+                cellClassName: 'cell-class-product',
+                headerName: 'Details',
+                headerClassName: 'header-class',
+                description: 'Product details',
+                field: 'info',
+                width: 200,
+            },
+            {
+                cellClassName: 'cell-class-stock',
                 headerName: 'Stock',
                 headerClassName: 'header-class',
                 description: 'Current stock',
@@ -114,6 +124,7 @@ function useCurrentOrdersReport() {
                 width: 60,
             },
             {
+                cellClassName: 'cell-class-order',
                 headerName: 'Order',
                 headerClassName: 'header-class',
                 description: 'Final order',
@@ -127,6 +138,7 @@ function useCurrentOrdersReport() {
                 description: 'Order value',
                 field: 'orderValue',
                 type: 'number',
+                valueFormatter: (params: any) => params.value ? toDecimalFormat(params.value) : '',
                 width: 120,
             },
             {
@@ -134,7 +146,7 @@ function useCurrentOrdersReport() {
                 headerClassName: 'header-class',
                 description: 'Urgent',
                 field: 'isUrgent',
-                // type: 'boolean',
+                valueGetter: (params:any) => `${params.row.isUrgent ? 'Yes' : 'No'}`,
                 width: 80,
             },
         ])
@@ -143,56 +155,81 @@ function useCurrentOrdersReport() {
     function getGridSx() {
         return (
             {
-                p: 1, 
+                p: 1,
                 width: '100%',
                 fontSize: theme.spacing(1.7),
                 minHeight: theme.spacing(80),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'Helvetica',
-                // '& .footer-row-class': {
-                //     backgroundColor: theme.palette.grey[300]
-                // },
+                '& .footer-row-class': {
+                    backgroundColor: theme.palette.grey[300]
+                },
                 '& .header-class': {
                     fontWeight: 'bold',
                     color: 'green',
                     fontSize: theme.spacing(1.8),
                 },
-                // '& .grid-toolbar': {
-                //     width: '100%',
-                //     borderBottom: '1px solid lightgrey',
-                //     display: 'flex',
-                //     flexDirection: 'column',
-                //     alignItems: 'start'
-                // },
-                // '& .row-jakar':{
-                //     color: 'dodgerBlue'
-                // },
-                // '& .row-negative-clos':{
-                //     color: theme.palette.error.dark
-                // }
+                '& .cell-class-order':{
+                    fontWeight:'bold',
+                    fontSize: theme.spacing(2.0)
+                },
+                '& .cell-class-product': {
+                    paddingTop: theme.spacing(0.5),
+                    paddingBottom: theme.spacing(.5)
+                },
+                '& .cell-class-stock': {
+                    color: theme.palette.grey[400]
+                }
             }
         )
+    }
+
+    function getRowClassName(e: any) {
+        const row = e?.row || {}
+        let ret = ''
+        if (row.id === 'Total')
+            ret = 'footer-row-class'
+        else if (row.tranTypeId === 9) {
+            ret = 'row-sales-return'
+        } else if (row.grossProfit < 0) {
+            ret = 'row-loss'
+        } else if (row.age > 360) {
+            ret = 'row-jakar'
+        }
+        return (ret)
     }
 
     function getTotals() {
         const rows: any[] = pre.filteredRows
         const totals = rows.reduce((prev: any, curr: any, index: number) => {
-            // prev.op = prev.op + curr.op
-            // prev.opValue = prev.opValue + curr.opValue
-            // prev.dr = prev.dr + curr.dr
-            // prev.cr = prev.cr + curr.cr
-            // prev.clos = prev.clos + curr.clos
-            // prev.closValue = prev.closValue + curr.closValue
-            // prev.count++
+            prev.clos = prev.clos + curr.clos
+            prev.finalOrder = prev.finalOrder + curr.finalOrder
+            prev.orderValue = prev.orderValue + curr.orderValue
             return (prev)
         }, {
-            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0
+            clos: 0, finalOrder: 0, orderValue: 0
         })
         totals.id = 'Total'
+        // totals.clos = ''
+        totals.product = ''
         return (totals)
     }
 
-    return ({ fetchData, getColumns, getGridSx, meta })
+    function removeRow(params: any) {
+        const id = params.id
+        if (id === 'Total') { // The row with totals cannot be removed
+            return
+        }
+        const temp = [...pre.filteredRows]
+        _.remove(temp, (x: any) => x.id === id)
+        pre.filteredRows = temp
+        pre.filteredRows.pop()
+        pre.totals = getTotals()
+        pre.filteredRows.push(pre.totals)
+        setRefresh({})
+    }
+
+    return ({ fetchData, getColumns, getGridSx, getRowClassName, meta })
 }
 
 export { useCurrentOrdersReport }
@@ -200,10 +237,10 @@ export { useCurrentOrdersReport }
 function Product({ params }: any) {
     const theme = useTheme()
     return (
-        <Box sx={{ display: 'flex', flexWrap:'wrap' }}>            
-            <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold'}}>{params.row.brandName}</Typography>&nbsp;
-            <Typography sx={{ fontSize: theme.spacing(1.7), }}>{' '.concat(params.row.categoryName)}</Typography>&nbsp;                
-            {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>{params.row.label}</Typography>}
+        <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>{params.row.brandName ? params.row.brandName : ''}</Typography>&nbsp;
+            <Typography sx={{ fontSize: theme.spacing(1.7), }}>{params.row.catName ? params.row.catName : ''}</Typography>&nbsp;
+            {params.row.label && <Typography sx={{ display: 'inline-block', fontSize: theme.spacing(1.7) }}>{params.row.label ? params.row.label : ''}</Typography>}
         </Box>
     )
 }

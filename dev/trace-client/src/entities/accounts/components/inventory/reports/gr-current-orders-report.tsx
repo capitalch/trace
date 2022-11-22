@@ -12,7 +12,7 @@ import {
 import { useCurrentOrdersReport } from './gr-current-orders-report-hook'
 
 function CurrentOrdersReport() {
-    const { fetchData, getColumns, getGridSx, meta } = useCurrentOrdersReport()
+    const { fetchData, getColumns, getGridSx, getRowClassName, meta } = useCurrentOrdersReport()
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
@@ -26,9 +26,10 @@ function CurrentOrdersReport() {
             // }}
             disableColumnMenu={true}
             disableSelectionOnClick={true}
-            // getRowClassName={getRowClassName}
+            // getCellClassName={()=>'cell-class'}
+            getRowClassName={getRowClassName}
             // onSelectionModelChange={onSelectModelChange}
-            rowHeight={70}
+            getRowHeight={() => 'auto'}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}

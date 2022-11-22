@@ -146,6 +146,7 @@ function useStockSummaryReport() {
             },
             // valueGetter is provided so that the data is available in csv export
             {
+                cellClassName:'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
@@ -155,6 +156,7 @@ function useStockSummaryReport() {
                 width: 200,
             },
             {
+                cellClassName:'cell-class-padding',
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
@@ -333,6 +335,10 @@ function useStockSummaryReport() {
                 },
                 '& .row-negative-clos':{
                     color: theme.palette.error.dark
+                },
+                '& .cell-class-padding':{
+                    paddingTop: theme.spacing(0.5),
+                    paddingBottom: theme.spacing(.5)
                 }
             }
         )
@@ -403,10 +409,15 @@ function useStockSummaryReport() {
 
     function removeRow(params: any) {
         const id = params.id
+        if (id === 'Total') { // The row with totals cannot be removed
+            return
+        }
         const temp = [...pre.filteredRows]
         _.remove(temp, (x: any) => x.id === id)
         pre.filteredRows = temp
+        pre.filteredRows.pop()
         pre.totals = getTotals()
+        pre.filteredRows.push(pre.totals)
         setRefresh({})
     }
 

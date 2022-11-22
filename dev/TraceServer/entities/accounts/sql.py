@@ -573,12 +573,12 @@ allSqls = {
                 from cte4
             GROUP by "productId"
         )
-        select c."productId", c."productCode", c."brandName", c."categoryName", c."label", c."clos"::int, ("order2" - "clos")::int as "finalOrder", "price" * ("order2" - "clos")::decimal(12,0) as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
+        select c."productId", c."productCode", c."brandName", c."catName", c."label", c."info", c."clos"::int, ("order2" - "clos")::int as "finalOrder", "price" * ("order2" - "clos")::decimal(12,0) as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
             from cte5 c5
                 join "cteStock" c
                     on c5."productId" = c."productId"
             where ("order2" - "clos") > 0
-        order by "brandName", "categoryName",  "label"
+        order by "brandName", "catName",  "label"
     ''',
 
     'get_debtors_creditors': '''
@@ -1414,7 +1414,7 @@ allSqls = {
                         OR (table "isAll") 
                             and p."isActive")
                 order by "catName", "brandName", "label"
-                ) select * from cte7 where "clos" <> 0
+                ) select * from cte7
         ''',
 
     "get_tags":'''

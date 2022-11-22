@@ -43,7 +43,7 @@ function StockSummaryReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
-            rowHeight={70}
+            getRowHeight={()=>'auto'}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}

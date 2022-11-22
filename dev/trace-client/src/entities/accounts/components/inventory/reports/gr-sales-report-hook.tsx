@@ -215,6 +215,7 @@ function useSalesReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
+                cellClassName: 'cell-class-padding',
                 headerName: 'Ref no | Accounts',
                 headerClassName: 'header-class',
                 description: 'Ref no',
@@ -230,6 +231,7 @@ function useSalesReport() {
                 width: 80,
             },
             {
+                cellClassName: 'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
@@ -416,6 +418,10 @@ function useSalesReport() {
                 },
                 '& .row-jakar': {
                     color: 'dodgerBlue'
+                },
+                '& .cell-class-padding':{
+                    paddingTop: theme.spacing(0.5),
+                    paddingBottom: theme.spacing(.5)
                 }
             }
         )
