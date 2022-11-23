@@ -530,6 +530,57 @@ allSqls = {
 		    limit 100
     ''',
 
+    "get_current_orders":'''
+        with "tempMonth" as (values(EXTRACT(MONTH FROM CURRENT_DATE)::int )),
+        "currentMonth" as (values(CASE WHEN (table "tempMonth") in(1,2,3) THEN (table "tempMonth") + 12 ELSE (table "tempMonth") END)),
+        "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        --"branchId" as (values(1)), "finYearId" as (values (2022)),
+
+        "cteStock" as (
+            select * from get_current_stock((table "branchId"), (table "finYearId"))
+        ),
+
+        cte1 as (
+            select "productId", SUM("qty")::int as "qty", EXTRACT(MONTH from "tranDate")::int as "month"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+            where "tranTypeId" = 4 
+                and (((table "currentMonth") - EXTRACT(MONTH from "tranDate")::int) <= 3 ) 
+                and "branchId" = (table "branchId")
+            group by "productId", "month"
+                order by "month"
+        ), cte2 as (
+            select cte1.*, ((table "currentMonth") - "month") as "monthsOld" 
+                from cte1
+        ), cte3 as (
+            select cte2.*
+                , CASE 
+                    WHEN "monthsOld" = 0 THEN 1.8/4
+                    WHEN "monthsOld" = 1 THEN 1.5/4
+                    WHEN "monthsOld" = 2 THEN 0.6/4
+                    WHEN "monthsOld" = 3 THEN 0.4/4
+                END as "weight"
+            from cte2
+        ), cte4 as (
+            select cte3.*, ROUND(qty * weight, 0)::int as "order1"
+                from cte3
+        )
+        , cte5 as (
+            select "productId", SUM("order1") as "order2"
+                from cte4
+            GROUP by "productId"
+        )
+        select c."productId", c."productCode", c."brandName", c."catName", c."label", c."clos"::int, ("order2" - "clos")::int as "finalOrder", "price" * ("order2" - "clos")::decimal(12,0) as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
+            from cte5 c5
+                join "cteStock" c
+                    on c5."productId" = c."productId"
+            where ("order2" - "clos") > 0
+        order by "brandName", "catName",  "label"
+    ''',
+
     'get_debtors_creditors': '''
        select a."id", "accCode", "accName", e."isAutoSubledger", c."accClass", "gstin"
 		from "AccM" a
@@ -708,6 +759,7 @@ allSqls = {
                 left outer join cte2 b
                     on a."id" = b."accId"                                                           
                             order by "accType","accLeaf", "accName" ''',
+
 
     "get_pdf_sale_bill": '''
         select "jData"->'pdfSaleBill' as "pdfSaleBill"
@@ -916,7 +968,7 @@ allSqls = {
 					on c."id" = p."catId"
 				join "BrandM" b
 					on b."id" = p."brandId"
-			where p."isActive" and (coalesce("op",0) + coalesce("purchase",0) - coalesce("purchaseRet",0) - coalesce("sale",0) + coalesce("saleRet",0) + coalesce("stockJournalDebits",0) - coalesce("stockJournalCredits",0)) <> 0
+			where p."isActive" --and (coalesce("op",0) + coalesce("purchase",0) - coalesce("purchaseRet",0) - coalesce("sale",0) + coalesce("saleRet",0) + coalesce("stockJournalDebits",0) - coalesce("stockJournalCredits",0)) <> 0
 		order by "brandName", "catName",  "label", "info"
     ''',
 
@@ -1050,8 +1102,8 @@ allSqls = {
     ''',
 
     "get_sale_report":'''
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)),
-        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)),
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)),  "days" as (values (%(days)s::int)),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
             select id, "parentId", "isLeaf", "catName"
@@ -1209,8 +1261,8 @@ allSqls = {
                         left join cte1 c1
                             on c1."productId" = c7."productId"
                     order by "productId"
-        )
-        select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
+        ), cte9 as
+        (select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
                 ,(date_part('day', (CASE WHEN (table "endDate") > CURRENT_DATE then CURRENT_DATE ELSE (table "endDate") END)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
             from cte5 c5
                 join "ProductM" p
@@ -1222,154 +1274,8 @@ allSqls = {
                 join cte8 c8
                     on c5."productId" = c8."productId"
             where "tranDate" between (table "startDate") and (table "endDate")
-                order by "tranDate", "salePurchaseDetailsId"
-    ''',
-
-    "get_sale_report1": '''
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)),
-        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)),
-	    cte as ( --filter on tagId in CategoryM
-            with recursive rec as (
-            select id, "parentId", "isLeaf", "catName"
-                from "CategoryM"
-                    where (("tagId" = (table "tagId")) or ((table "tagId") = 0))
-            union
-            select c.id, c."parentId", c."isLeaf", c."catName"
-                from "CategoryM" c
-                    join rec on
-                        rec."id" = c."parentId"
-            ) select * from rec where "isLeaf"
-        ),
-        cte0 as( --base cte: from tranD where 4,5,9,10, branchId, finYearId, tranDate <= endDate
-        select "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
-            , s."amount", "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp"
-            , (
-                select string_agg("accName", ', ')
-                    from "AccM" a
-                        join "TranD" d
-                            on a."id" = d."accId"
-                        join "TranH" h1
-                            on h1."id" = d."tranHeaderId"
-                where h1.id = h.id and "dc" <> 'C'
-            ) as "accounts", '' as "dc"
-            from "TranH" h
-                join "TranD" d
-                    on h."id" = d."tranHeaderId"
-                join "AccM" a
-                            on a."id" = d."accId"
-                join "SalePurchaseDetails" s
-                    on d."id" = s."tranDetailsId"
-                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
-                --where "branchId" = 1 and "finYearId" = 2022
-                and "tranDate" <=(table "endDate")
-                and "tranTypeId" in (4, 5, 9, 10)
-			union all
-		select "tranDate", s."productId", "tranTypeId", "qty", 0 as "price",0 as "discount", 0as "cgst", 0 as "sgst", 0 as "igst"
-            , 0 as "amount", 0 as "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp", '' as "accounts", "dc"
-			from "TranH" h
-				join "StockJournal" s
-					on h."id" = s."tranHeaderId"
-			where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
-        ), cte1 as( --from ProductOpBal where branch, finYear
-            select "productId","qty", "openingPrice", "lastPurchaseDate"
-                from "ProductOpBal" p 
-                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
-                --where "branchId" = 1 and "finYearId" = 2022
-        ), cte2 as( -- compute last purchase date and last purchase price till sale date
-            select c0.*, (
-                select ("price" - "discount") 
-                    from cte0
-                        where "tranTypeId" = 5
-                            and "productId" = c0."productId"
-                            and "tranDate" <= c0."tranDate"
-                    order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
-            ) as "lastPurchasePrice"
-            , (
-                select "tranDate" 
-                    from cte0
-                        where "tranTypeId" = 5
-                            and "productId" = c0."productId"
-                            and "tranDate" <= c0."tranDate"
-                    order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
-            ) as "lastPurchaseDate"
-                from cte0 c0
-            where "tranTypeId" in (4, 9)
-        ), cte3 as ( -- using ProductOpBal fill for missing lastPurchasePrice and lastPurchaseDate (c1 is ProductOpBal)
-                select "tranDate", c2."productId", c2."qty", "price", "timestamp", "accounts"
-                , coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice"
-                , coalesce(c2."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
-                , "discount", c2."qty" * ("price" - "discount") as "aggrSale", "cgst", "sgst", "igst"
-                , "amount", "gstRate", "tranTypeId","salePurchaseDetailsId", "autoRefNo"
-                    from cte2 c2
-                        left join cte1 c1
-                            on c2."productId" = c1."productId"
-        ), cte4 as ( -- compute gross profit
-                select cte3.*, "qty" * ("price" - "discount" - "lastPurchasePrice") as "grossProfit"
-                    from cte3
-        ), cte5 as ( --negate for sales return
-                select "tranDate", "productId", "price", "lastPurchasePrice", "discount", "gstRate","tranTypeId","salePurchaseDetailsId", "autoRefNo"
-                , CASE when "tranTypeId" = 4 then "qty" else -"qty" end as "qty"
-                , CASE when "tranTypeId" = 4 then "aggrSale" else -"aggrSale" end as "aggrSale"
-                , CASE when "tranTypeId" = 4 then "cgst" else -"cgst" end as "cgst"
-                , CASE when "tranTypeId" = 4 then "sgst" else -"sgst" end as "sgst"
-                , CASE when "tranTypeId" = 4 then "igst" else -"igst" end as "igst"
-                , CASE when "tranTypeId" = 4 then "amount" else -"amount" end as "amount"
-                , CASE when "tranTypeId" = 4 then 'Sale' else 'Return' end as "saleType"
-                , CASE when "tranTypeId" = 4 then "grossProfit" else -"grossProfit" end as "grossProfit"
-                , "lastPurchaseDate", "timestamp", "accounts"
-                    from cte4
-        ),		
-		cte6 as ( --for stock: cte0-> group by on productId, saleType, get columns as sale, ret, purchase
-            select "productId","tranTypeId", 
-                    SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
-                    , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
-                    , SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
-                    , SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
-					, SUM(CASE WHEN (("tranTypeId" = 11) and ("dc" = 'D')) THEN "qty" ELSE 0 END) as "stockJournalDebits"
-					, SUM(CASE WHEN (("tranTypeId" = 11) and ("dc" = 'C')) THEN "qty" ELSE 0 END) as "stockJournalCredits"
-                from cte0
-                    group by "productId", "tranTypeId" 
-                    order by "productId", "tranTypeId"
-        ), cte7 as ( -- sum up using group by to get rid of multiple productId
-            select "productId"
-            , SUM("sale") as "sale"
-            , SUM("saleRet") as "saleRet"
-            , SUM("purchase") as "purchase"
-            , SUM("purchaseRet") as "purchaseRet"
-			, SUM("stockJournalDebits") as "stockJournalDebits"
-			, SUM("stockJournalCredits") as "stockJournalCredits"
-            from cte6
-                group by "productId"
-                order by "productId"
-        ), cte8 as ( --cte7 + cte1 -> combine op bal to get opening stock figure, also compute closing stock
-            select c7."productId"
-                , coalesce(c1.qty,0) as "op"
-                , "sale"
-                , "purchase"
-                , "saleRet"
-                , "purchaseRet"
-				, "stockJournalDebits"
-				, "stockJournalCredits"
-                , (coalesce(c1.qty,0) + "purchase" - "sale" - "purchaseRet" + "saleRet" + "stockJournalDebits" - "stockJournalCredits") as "stock"
-                    from cte7 c7
-                        left join cte1 c1
-                            on c1."productId" = c7."productId"
-                    order by "productId"
-        )
-            
-        select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
-                ,(date_part('day', (CASE WHEN (table "endDate") > CURRENT_DATE then CURRENT_DATE ELSE (table "endDate") END)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
-            from cte5 c5
-                join "ProductM" p
-                    on p."id" = c5."productId"
-                join cte c --"CategoryM" c
-                    on c."id" = p."catId"
-                join "BrandM" b
-                    on b.id = p."brandId"
-                join cte8 c8
-                    on c5."productId" = c8."productId"
-            where "tranDate" between (table "startDate") and (table "endDate")
-                order by "tranDate", "salePurchaseDetailsId"
+                order by "tranDate", "salePurchaseDetailsId") 
+            select * from cte9 where "age" > (table "days")
     ''',
 
     "get_search_product": '''

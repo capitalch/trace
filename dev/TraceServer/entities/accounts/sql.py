@@ -2173,6 +2173,77 @@ allSqls = {
                 , 'tranDetails', (SELECT json_agg(row_to_json(b)) from cte2 b)
             ) as "jsonResult"
     ''',
+    
+    'get_stock_transactions':'''
+                with 
+            --"branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+            "branchId" as (values(1))
+            , "finYearId" as (values (2022))
+            , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId"))
+        select "productId", "productCode", (table "startDate") as "tranDate"
+            , CONCAT_WS(' ', "catName", "brandName", "label") "product"
+            , CASE WHEN "qty" >= 0 THEN "qty" else 0 END as "debits"
+            , CASE WHEN "qty" < 0 THEN "qty" else 0 END as "credits"
+            , 'Opening' as "tranType"
+            , 'Opening balance' as "remarks"
+            , (table "startDate") as "timestamp"
+            from "ProductOpBal" op
+                join "ProductM" p
+                    on p."id" = op."productId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
+                join "CategoryM" c
+                    on c."id" = p."catId"
+            where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
+        UNION ALL
+        select "productId", "productCode", "tranDate"
+            , '' as "product"
+            , CASE WHEN h."tranTypeId" in (5, 9) then "qty" ELSE 0 END as "debits"
+            , CASE WHEN h."tranTypeId" in (4, 10) then "qty" ELSE 0 END as "credits"
+            , "tranType"
+            , CONCAT_WS(' ', "autoRefNo", a."accName", f."accName", "userRefNo", h."remarks", d."instrNo", d."lineRefNo", d."remarks", s."jData"->'serialNumbers') as "remarks"
+            , d."timestamp"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+                join "TranTypeM" t
+                    on t."id" = h."tranTypeId"
+                join "ProductM" p
+                    on p."id" = s."productId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
+                join "CategoryM" c
+                    on c."id" = p."catId"
+                join "AccM" a
+                    on a."id" = d."accId"
+                join "TranD" e
+                    on d."tranHeaderId" = e."tranHeaderId"
+                join "AccM" f
+                    on f."id" = e."accId"
+            where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
+        UNION ALL
+        select "productId", "productCode", "tranDate"
+            , '' as "product"
+            , CASE WHEN "dc" = 'D' then "qty" ELSE 0 END as "debits"
+            , CASE WHEN "dc" = 'C' then "qty" ELSE 0 END as "credits"
+            , 'Stock journal' as "tranType"
+            , CONCAT_WS(' ', "autoRefNo", "userRefNo", h."remarks", "lineRefNo", "lineRemarks", (j."jData"->'serialNumbers')) as "remarks"
+            , j."timestamp"
+            from "TranH" h
+                join "StockJournal" j
+                    on h."id" = j."tranHeaderId"
+                join "ProductM" p
+                    on p."id" = j."productId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
+                join "CategoryM" c
+                    on c."id" = p."catId"
+            where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
+
+        ORDER by "productId", "tranDate", "timestamp"
+    ''',
 
     'insert_account': '''
         insert into "AccM"("accCode", "accName", "accType", "parentId", "accLeaf", "isPrimary", "classId")
