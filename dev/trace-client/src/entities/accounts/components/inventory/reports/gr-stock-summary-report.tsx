@@ -1,22 +1,26 @@
 import {
-    Box, CloseSharp, DataGridPro,
+    Box, Button, CloseSharp, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, moment, ReactSelect, SyncSharp, TextField,
-    Typography, useRef, useState, useTheme,
+    IconButton, IMegaData, MegaDataContext, moment, ReactSelect, SyncSharp, TextField,
+    Typography, useContext, useRef, useState, useTheme,
     useStockSummaryReport, utilMethods,
 } from '../redirect'
 import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockSummaryReport() {
-    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange, } = useStockSummaryReport()
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected,handleSelectedTagOption, handleTrim, meta, onSelectModelChange, } = useStockSummaryReport()
+    const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
     pre.searchTextRef = useRef({})
+    const allTags: any[] = megaData.accounts.inventory.allTags
+    const allTagsOptions = allTags.map((x: any) => ({ label: x.tagName, value: x.id1 }))
+    allTagsOptions.unshift({ label: 'All', value: 0 })
 
     const reactSelectStyles = {
         option: (base: any) => ({
@@ -43,7 +47,7 @@ function StockSummaryReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
-            getRowHeight={()=>'auto'}
+            getRowHeight={() => 'auto'}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}
@@ -65,12 +69,12 @@ function StockSummaryReport() {
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
                         {/* Sync */}
-                        <IconButton
+                        {/* <IconButton
                             size="small"
                             color="secondary"
                             onClick={fetchData}>
                             <SyncSharp fontSize='small'></SyncSharp>
-                        </IconButton>
+                        </IconButton> */}
                         <ReactSelect menuPlacement='auto' placeholder='Select ageing'
                             styles={reactSelectStyles}
                             options={getAgeingOptions()}
@@ -82,7 +86,7 @@ function StockSummaryReport() {
                                 title="Clear"
                                 aria-label="Clear"
                                 size="small"
-                                onClick={() => {                                    
+                                onClick={() => {
                                     pre.stockDate = moment().format('YYYY-MM-DD')
                                     fetchData()
                                 }}>
@@ -97,7 +101,7 @@ function StockSummaryReport() {
                                     pre.stockDate = e.target.value
                                     setRefresh({})
                                 }}
-                                onFocus={(e: any) => e.target.select()}                                
+                                onFocus={(e: any) => e.target.select()}
                                 value={pre.stockDate || ''}
                             />
                             {/* Sync */}
@@ -110,6 +114,19 @@ function StockSummaryReport() {
                                 <SyncSharp fontSize='small'></SyncSharp>
                             </IconButton>
                         </Box>
+                        <Button variant='outlined' color='primary' sx={{ ml: 1 }} size='small' onClick={handleTrim}>Trim</Button>
+                        {/* Select tag */}
+                        <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography>
+                        <ReactSelect
+                            menuPlacement='auto' placeholder='Select tag'
+                            styles={reactSelectStyles}
+                            options={allTagsOptions}
+                            value={pre.selectedTagOption}
+                            onChange={
+                                (selectedTag: any) => {
+                                    handleSelectedTagOption(selectedTag)
+                                }}
+                        />
                     </Box>
                     <GridSearchBox parentMeta={meta} />
                 </Box>
@@ -119,7 +136,7 @@ function StockSummaryReport() {
 
     function CustomFooter() {
         return (<GridFooterContainer >
-            <Box sx={{ width:'100%', display: 'flex', fontSize: theme.spacing(1.8), color: theme.palette.common.black }}>
+            <Box sx={{ width: '100%', display: 'flex', fontSize: theme.spacing(1.8), color: theme.palette.common.black }}>
                 <Box sx={{ display: 'flex', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
                     <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
                     <Box>{''.concat('Selected count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>

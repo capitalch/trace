@@ -1120,18 +1120,7 @@ allSqls = {
         cte0 as( --base cte: from tranD where 4,5,9,10, branchId, finYearId, tranDate <= endDate
         select h."id", "tranDate", s."productId", "tranTypeId", "qty", "price", "discount", "cgst", "sgst","igst"
             , s."amount", "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp" , concat_ws(' ', "contactName", "mobileNumber", "address1", "address2") as "contact"
-            , 
---             (
---                  select string_agg("accName", ', ')
---                      from "AccM" a
---                          join "TranD" d
---                              on a."id" = d."accId"
---                          join "TranH" h1
---                              on h1."id" = d."tranHeaderId" 
---                  where h1.id = h.id and "dc" <> 'C'
---              ) 
---             as "accounts", 
-			'' as "dc"
+            , '' as "dc"
             from "TranH" h
                 join "TranD" d
                     on h."id" = d."tranHeaderId"
@@ -1145,7 +1134,7 @@ allSqls = {
                 and "tranDate" <=(table "endDate")
                 and "tranTypeId" in (4, 5, 9, 10)
             union all
-        select h."id", "tranDate", s."productId", "tranTypeId", "qty", 0 as "price",0 as "discount", 0as "cgst", 0 as "sgst", 0 as "igst"
+        select h."id", "tranDate", s."productId", "tranTypeId", "qty", 0 as "price",0 as "discount", 0 as "cgst", 0 as "sgst", 0 as "igst"
             , 0 as "amount", 0 as "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp", '' as "contact"
             , "dc"
             from "TranH" h
@@ -1175,7 +1164,7 @@ allSqls = {
             select c0.*, accounts, (
                 select ("price" - "discount") 
                     from cte0
-                        where "tranTypeId" = 5
+                        where "tranTypeId"  in(5,11) -- for purchase and stock journal
                             and "productId" = c0."productId"
                             and "tranDate" <= c0."tranDate"
                     order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
@@ -1183,7 +1172,7 @@ allSqls = {
 			(
                 select "tranDate" 
                     from cte0
-                        where "tranTypeId" = 5
+                        where "tranTypeId" in(5,11) -- for purchase and stock journal
                             and "productId" = c0."productId"
                             and "tranDate" <= c0."tranDate"
                     order by "tranDate" DESC, "salePurchaseDetailsId" DESC LIMIT 1
@@ -1262,7 +1251,9 @@ allSqls = {
                             on c1."productId" = c7."productId"
                     order by "productId"
         ), cte9 as
-        (select c5.*, "productCode", "catName", "brandName", "label", "stock", "info" 
+        (select c5.*, "productCode", 
+		 "catName", 
+		 "brandName", "label", "stock", "info" 
                 ,(date_part('day', (CASE WHEN (table "endDate") > CURRENT_DATE then CURRENT_DATE ELSE (table "endDate") END)::timestamp - "lastPurchaseDate"::timestamp)) as "age"
             from cte5 c5
                 join "ProductM" p
@@ -1275,7 +1266,7 @@ allSqls = {
                     on c5."productId" = c8."productId"
             where "tranDate" between (table "startDate") and (table "endDate")
                 order by "tranDate", "salePurchaseDetailsId") 
-            select * from cte9 where "age" > (table "days")
+            select * from cte9 where "age" >= (table "days")
     ''',
 
     "get_search_product": '''
@@ -1318,9 +1309,21 @@ allSqls = {
     ''',
 
     "get_stock_summary":'''
-        --with "branchId" as (values(1)), "finYearId" as (values (2022)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)),
-        with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "onDate" as (values(%(onDate)s ::date)), "isAll" as (values(%(isAll)s::boolean)), "days" as (values(%(days)s::int)),
-        cte0 as( --base cte used many times in next
+--        with "branchId" as (values(1)), "finYearId" as (values (2022)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)),
+        with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "onDate" as (values(%(onDate)s ::date)), "isAll" as (values(%(isAll)s::boolean)), "days" as (values(%(days)s::int)),        
+		cte as ( --filter on tagId in CategoryM
+            with recursive rec as (
+            select id, "parentId", "isLeaf", "catName"
+                from "CategoryM"
+                    where (("tagId" = (table "tagId")) or ((table "tagId") = 0))
+            union
+            select c.id, c."parentId", c."isLeaf", c."catName"
+                from "CategoryM" c
+                    join rec on
+                        rec."id" = c."parentId"
+            ) select * from rec where "isLeaf"
+        ),
+		cte0 as( --base cte used many times in next
             select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
                 from "TranH" h
                     join "TranD" d
@@ -1350,7 +1353,7 @@ allSqls = {
                     , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'D') THEN "qty" ELSE 0 END) as "stockJournalDebits"
                     , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'C') THEN "qty" ELSE 0 END) as "stockJournalCredits"
                     , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
-                    , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
+                    , MAX(CASE WHEN "tranTypeId" in(5,11) THEN "tranDate" END) as "lastPurchaseDate" --Purchase or stock journal
                     from cte0
                 group by "productId", "tranTypeId" order by "productId", "tranTypeId"
             )
@@ -1406,7 +1409,7 @@ allSqls = {
                     from cte6 c6
                         right join "ProductM" p
                             on p."id" = c6."productId"
-                        join "CategoryM" c
+                        join cte c -- "CategoryM" c
                             on c."id" = p."catId"
                         join "BrandM" b
                             on b."id" = p."brandId"

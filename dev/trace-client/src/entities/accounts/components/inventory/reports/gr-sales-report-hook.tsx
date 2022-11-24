@@ -390,7 +390,7 @@ function useSalesReport() {
             {
                 p: 1,
                 width: '100%',
-                fontSize: theme.spacing(1.7),
+                fontSize: theme.spacing(1.8),
                 minHeight: theme.spacing(70),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',
@@ -421,7 +421,8 @@ function useSalesReport() {
                 },
                 '& .cell-class-padding':{
                     paddingTop: theme.spacing(0.5),
-                    paddingBottom: theme.spacing(.5)
+                    paddingBottom: theme.spacing(.5),
+                    fontSize: theme.spacing(1.8),
                 }
             }
         )

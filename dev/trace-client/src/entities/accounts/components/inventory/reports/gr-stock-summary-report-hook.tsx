@@ -1,4 +1,4 @@
-import { _,Box, CloseSharp, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Box, CloseSharp, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryReport() {
     const [, setRefresh] = useState({})
@@ -10,7 +10,7 @@ function useStockSummaryReport() {
     const meta: any = useRef({
         allRows: [],
         dataPath: 'jsonResult.stock',
-        debounceMessage:'STOCK-SUMMARY-DEBOUNCE',
+        debounceMessage: 'STOCK-SUMMARY-DEBOUNCE',
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
@@ -19,6 +19,7 @@ function useStockSummaryReport() {
         searchTextRef: null,
         selectedAgeingOption: { label: 'Age (all)', value: 0 },
         selectedRowsObject: {},
+        selectedTagOption: { label: 'All', value: 0 },
         sqlKey: 'get_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
@@ -56,7 +57,8 @@ function useStockSummaryReport() {
                     pre.stockDate
                     || null,
                 days: pre.selectedAgeingOption.value || 0,
-                isAll: false // Only products having some transaction or OP bal are shown
+                isAll: false, // Only products having some transaction or OP bal are shown
+                tagId: pre.selectedTagOption.value
             },
         }) || {}
         setId(pre.allRows)
@@ -146,17 +148,17 @@ function useStockSummaryReport() {
             },
             // valueGetter is provided so that the data is available in csv export
             {
-                cellClassName:'cell-class-padding',
+                cellClassName: 'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
                 renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params:any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
+                valueGetter: (params: any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
                 width: 200,
             },
             {
-                cellClassName:'cell-class-padding',
+                cellClassName: 'cell-class-padding',
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
@@ -187,7 +189,7 @@ function useStockSummaryReport() {
                 description: 'Age of product sold',
                 field: 'age',
                 type: 'number',
-                width: 60,                
+                width: 60,
             },
             {
                 headerName: 'Pur price',
@@ -246,7 +248,7 @@ function useStockSummaryReport() {
                 type: 'date',
                 width: 95,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
-            },            
+            },
             {
                 headerName: 'Sal date',
                 headerClassName: 'header-class',
@@ -257,7 +259,7 @@ function useStockSummaryReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                description:'Purchase',
+                description: 'Purchase',
                 headerName: 'Purchase',
                 headerClassName: 'header-class',
                 field: 'purchase',
@@ -265,7 +267,7 @@ function useStockSummaryReport() {
                 width: 70,
             },
             {
-                description:'Sale',
+                description: 'Sale',
                 headerName: 'Sale',
                 headerClassName: 'header-class',
                 field: 'sale',
@@ -273,7 +275,7 @@ function useStockSummaryReport() {
                 width: 70,
             },
             {
-                description:'Return (purchase)',
+                description: 'Return (purchase)',
                 headerName: 'Ret (purch)',
                 headerClassName: 'header-class',
                 field: 'purchaseRet',
@@ -281,7 +283,7 @@ function useStockSummaryReport() {
                 width: 90,
             },
             {
-                description:'Return (sale)',
+                description: 'Return (sale)',
                 headerName: 'Ret (sale)',
                 headerClassName: 'header-class',
                 field: 'saleRet',
@@ -289,7 +291,7 @@ function useStockSummaryReport() {
                 width: 90,
             },
             {
-                description:'Stock journal debits',
+                description: 'Stock journal debits',
                 headerName: 'Dr (stk jrnl)',
                 headerClassName: 'header-class',
                 field: 'stockJournalDebits',
@@ -297,7 +299,7 @@ function useStockSummaryReport() {
                 width: 90,
             },
             {
-                description:'Stock journal credits',
+                description: 'Stock journal credits',
                 headerName: 'Cr (stk jrnl)',
                 headerClassName: 'header-class',
                 field: 'stockJournalCredits',
@@ -311,7 +313,7 @@ function useStockSummaryReport() {
         return (
             {
                 p: 1, width: '100%',
-                fontSize: theme.spacing(1.7),
+                fontSize: theme.spacing(1.8),
                 minHeight: theme.spacing(80),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'Helvetica',
@@ -330,15 +332,16 @@ function useStockSummaryReport() {
                     flexDirection: 'column',
                     alignItems: 'start'
                 },
-                '& .row-jakar':{
+                '& .row-jakar': {
                     color: 'dodgerBlue'
                 },
-                '& .row-negative-clos':{
+                '& .row-negative-clos': {
                     color: theme.palette.error.dark
                 },
-                '& .cell-class-padding':{
+                '& .cell-class-padding': {
                     paddingTop: theme.spacing(0.5),
-                    paddingBottom: theme.spacing(.5)
+                    paddingBottom: theme.spacing(.5),
+                    fontSize: theme.spacing(1.8),
                 }
             }
         )
@@ -349,9 +352,9 @@ function useStockSummaryReport() {
         let ret = ''
         if (row.id === 'Total')
             ret = 'footer-row-class'
-        else if(row.age >= 360){
+        else if (row.age >= 360) {
             ret = 'row-jakar'
-        } else if(row.clos < 0){
+        } else if (row.clos < 0) {
             ret = 'row-negative-clos'
         }
         return (ret)
@@ -380,6 +383,17 @@ function useStockSummaryReport() {
         fetchData()
     }
 
+    async function handleSelectedTagOption(selectedTagOption: any) {
+        pre.selectedTagOption = selectedTagOption
+        await fetchData()
+        setRefresh({})
+    }
+
+    function handleTrim() {
+        pre.filteredRows = pre.filteredRows.filter((x:any)=>(x.clos !==0))
+        setRefresh({})
+    }
+
     function onSelectModelChange(rowIds: any) {
         const rows = pre.allRows
         const obj = rowIds.reduce((prev: any, current: any) => {
@@ -395,8 +409,8 @@ function useStockSummaryReport() {
         return (
             <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                 {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
-                <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>                
-                {params.row.label && <Typography sx={{display:'inline-block', whiteSpace:'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+                <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>
+                {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
             </Box>
         )
     }
@@ -421,7 +435,7 @@ function useStockSummaryReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, meta, onSelectModelChange })
+    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected,handleSelectedTagOption, handleTrim, meta, onSelectModelChange })
 }
 
 export { useStockSummaryReport }

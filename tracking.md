@@ -1,8 +1,8 @@
 ## Reports new / edit
 !. Stock Summary
-    Include Tags
+                                                            Include Tags
                                                             Include Jakar info at bottom
-    When jakar selected certain stock jrnl and foc details also pop in
+                                                            When jakar selected certain stock jrnl and foc details also pop in
 !. Sales: 
                                                             Speed up
                                                             Include Jakar sale info in Summary
@@ -152,10 +152,12 @@ k. Server logging for modify and delete, time and log viewer
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
 # 15-11-2022 - 24-11-2022
-1. Reporting bug fixes
+1. Multiple reporting bug fixes
 2. Trace mobile upgrade and comply with new inventory reports
 3. New orders report
 4. Jakar sale details in Sales report
+5. Tags in Stock summary report
+
 
 # 05-08-2022 - 13-08-2022
 1. Stock journal completed and rectified bugs
