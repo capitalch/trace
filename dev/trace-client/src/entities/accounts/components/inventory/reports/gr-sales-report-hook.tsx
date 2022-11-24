@@ -20,7 +20,7 @@ function useSalesReport() {
         isSearchTextEdited: false,
         searchText: '',
         searchTextRef: null,
-        selectedAgeingOption: { label: 'All stock', value: 0 },
+        selectedAgeingOption: { label: 'Age (all)', value: 0 },
         selectedOption: { label: 'Today', value: 'today' },
         selectedTagOption: { label: 'All', value: 0 },
         setRefresh: setRefresh,
@@ -147,7 +147,7 @@ function useSalesReport() {
 
     function getAgeingOptions() {
         const ageing = [{
-            label: 'All sale',
+            label: 'Age (all)',
             value: 0
         },
         {

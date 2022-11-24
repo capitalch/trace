@@ -115,7 +115,7 @@ function useCurrentOrdersReport() {
                 width: 200,
             },
             {
-                cellClassName: 'cell-class-stock',
+                // cellClassName: 'cell-class-stock',
                 headerName: 'Stock',
                 headerClassName: 'header-class',
                 description: 'Current stock',
@@ -177,9 +177,6 @@ function useCurrentOrdersReport() {
                     paddingTop: theme.spacing(0.5),
                     paddingBottom: theme.spacing(.5)
                 },
-                '& .cell-class-stock': {
-                    color: theme.palette.grey[400]
-                }
             }
         )
     }

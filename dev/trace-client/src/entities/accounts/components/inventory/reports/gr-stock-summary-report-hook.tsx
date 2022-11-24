@@ -17,7 +17,7 @@ function useStockSummaryReport() {
         setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
-        selectedAgeingOption: { label: 'All stock', value: 0 },
+        selectedAgeingOption: { label: 'Age (all)', value: 0 },
         selectedRowsObject: {},
         sqlKey: 'get_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
@@ -80,23 +80,23 @@ function useStockSummaryReport() {
 
     function getAgeingOptions() {
         const ageing = [{
-            label: 'All stock',
+            label: 'Age (all)',
             value: 0
         },
         {
-            label: 'Stock >= 90 days',
+            label: 'Age >= 90 days',
             value: 90
         },
         {
-            label: 'Stock >= 180 days',
+            label: 'Age >= 180 days',
             value: 180
         },
         {
-            label: 'Stock >= 270 days',
+            label: 'Age >= 270 days',
             value: 270
         },
         {
-            label: 'Stock >= 360 days',
+            label: 'Age >= 360 days',
             value: 360
         }
         ]

@@ -1,12 +1,14 @@
 ## Reports new / edit
 !. Stock Summary
     Include Tags
-    Include Jakar info at bottom
+                                                            Include Jakar info at bottom
+    When jakar selected certain stock jrnl and foc details also pop in
 !. Sales: 
-    Speed up
-    Include Jakar sale info in Summary
-    Retrieve on click and not by default
-!. Orders report and order through mobile
+                                                            Speed up
+                                                            Include Jakar sale info in Summary
+                                                            Jakar sale details
+!.                                                          Orders report 
+!. order through mobile
 
 ## upgrade trace-client chitta and kush
 npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact
@@ -148,6 +150,12 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+
+# 15-11-2022 - 24-11-2022
+1. Reporting bug fixes
+2. Trace mobile upgrade and comply with new inventory reports
+3. New orders report
+4. Jakar sale details in Sales report
 
 # 05-08-2022 - 13-08-2022
 1. Stock journal completed and rectified bugs

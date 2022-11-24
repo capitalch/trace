@@ -32,7 +32,8 @@ class SalesReportBody extends StatelessWidget {
               args: {
                 'startDate': Utils.toIsoDateString(props.startDate),
                 'endDate': Utils.toIsoDateString(props.endDate),
-                'tagId': '0'
+                'tagId': '0',
+                'days': 0
               });
           return FutureBuilder(
             future: salesFuture,
