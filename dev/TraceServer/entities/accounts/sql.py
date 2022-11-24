@@ -840,7 +840,7 @@ allSqls = {
                     , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'D') THEN "qty" ELSE 0 END) as "stockJournalDebits"
                     , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'C') THEN "qty" ELSE 0 END) as "stockJournalCredits"
                     , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
-                    , MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
+                    , MAX(CASE WHEN "tranTypeId" in(5,11) THEN "tranDate" END) as "lastPurchaseDate" -- for purchase and Stock Journal
                     from cte0
                 group by "productId", "tranTypeId" order by "productId", "tranTypeId"
         ), cte3 as ( -- sum columns group by productId
@@ -872,7 +872,7 @@ allSqls = {
         ), cte5 as ( -- get last purchase price for transacted products
             select DISTINCT ON("productId") "productId", "price" as "lastPurchasePrice"
                 from cte0
-                    where "tranTypeId" = 5
+                    where "tranTypeId" in(5,11)
                         order by "productId", "tranDate" DESC
         ), cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
             select coalesce(c4."productId", c5."productId") as "productId"

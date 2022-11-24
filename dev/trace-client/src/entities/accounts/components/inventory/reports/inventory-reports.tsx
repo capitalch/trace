@@ -62,6 +62,10 @@ const reportsJson: any[] = [
         value: 'stockSummaryReport',
         breadCrumb: 'Stock summary'
     },
-    
+    {
+        label: 'Stock transactions',
+        value: 'stockTransactionReport',
+        breadCrumb: 'Stock transactions'
+    },
     
 ]
