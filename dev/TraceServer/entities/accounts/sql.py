@@ -2178,7 +2178,7 @@ allSqls = {
     ''',
     
     'get_stock_transactions':'''
-            with 
+           with 
 		--"branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
 		"branchId" as (values(1))
 		, "finYearId" as (values (2022))
@@ -2207,7 +2207,9 @@ allSqls = {
 		, CASE WHEN h."tranTypeId" in (5, 9) then "qty" ELSE 0 END as "debits"
 		, CASE WHEN h."tranTypeId" in (4, 10) then "qty" ELSE 0 END as "credits"
 		, "tranType"
-		, CONCAT_WS(' ', "autoRefNo", a."accName",  "userRefNo", h."remarks", d."instrNo", d."lineRefNo", d."remarks", s."jData"->'serialNumbers') as "remarks"
+		, CONCAT_WS(' ', "autoRefNo", a."accName"
+					--, STRING_AGG(f."accName", ' ')
+					,  "userRefNo", h."remarks", d."instrNo", d."lineRefNo", d."remarks", s."jData"->'serialNumbers') as "remarks"
 		, d."timestamp"
 		from "TranH" h
 			join "TranD" d
@@ -2224,10 +2226,10 @@ allSqls = {
 				on c."id" = p."catId"
 			join "AccM" a
 				on a."id" = d."accId"
--- 			join "TranD" e
--- 				on d."tranHeaderId" = e."tranHeaderId"
--- 			join "AccM" f
--- 				on f."id" = e."accId"
+--    			join "TranD" e
+--    				on (d."tranHeaderId" = e."tranHeaderId" ) and (d."id" <> e."id")
+--    			join "AccM" f
+--    				on f."id" = e."accId"
 		where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
 	UNION ALL
 	select j."id", "productId", "productCode"		
@@ -2267,7 +2269,7 @@ allSqls = {
 		select 0 as id, "productId", "productCode", "product", (table "endDate") as "tranDate", 0 as "debits", 0 as "credits", "clos", 'Closing' as "tranType", 'Closing balance' as "remarks"
 			from cte2		
 	) select * from cte3
-		order by "product", "tranDate" ASC
+		order by "productId", "tranDate" ASC
     ''',
 
     'insert_account': '''
