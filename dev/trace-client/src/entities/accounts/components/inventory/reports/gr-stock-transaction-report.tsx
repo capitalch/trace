@@ -12,7 +12,7 @@ import {
 import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
 
 function StockTransactionReport() {
-    const { fetchData, getColumns, getGridSx, meta } = useStockTransactionReport()
+    const { fetchData, getColumns, getGridSx,getRowClassName, meta } = useStockTransactionReport()
     const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
@@ -39,12 +39,15 @@ function StockTransactionReport() {
                 Toolbar: CustomToolbar,
                 Footer: CustomFooter,
             }}
+            // density='compact'
             disableColumnMenu={true}
             disableSelectionOnClick={true}
-            // getRowClassName={getRowClassName}
+            getRowClassName={getRowClassName}
             // onSelectionModelChange={onSelectModelChange}
             getRowHeight={() => 'auto'}
+            // rowHeight={23}
             rows={pre.filteredRows}
+            // rowSpacingType='border'
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}

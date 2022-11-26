@@ -13,10 +13,15 @@ function useInventoryReports() {
     const meta = useRef({
         title: 'Inventory reports',
         reportComponent: () => <></>,
+        // selectedReport: {
+        //     label: 'Select a report ...',
+        //     value: null,
+        //     breadCrumb: ''
+        // },
         selectedReport: {
-            label: 'Select a report ...',
-            value: null,
-            breadCrumb: ''
+            label: 'Stock transactions',
+            value: 'stockTransactionReport',
+            breadCrumb: 'Stock transactions'
         },
     })
     const pre = meta.current

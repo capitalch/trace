@@ -26,6 +26,7 @@ function InventoryReports() {
             <Box sx={{ display: 'flex', flexDirection: 'column', '& .react-select': { width: '60%' } }}>
                 <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.selectedReport.breadCrumb)}</Typography>
                 <ReactSelect className='react-select' menuPlacement='auto' placeholder='Select ...' styles={styles}
+                    // defaultValue={{label:'stockTransactionReport', value:1}}
                     options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
             </Box>
             <Box sx={{ marginTop: theme.spacing(1) }}>
