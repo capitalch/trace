@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { _, Box, CloseSharp, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 function useStockTransactionReport() {
     const [, setRefresh] = useState({})
@@ -9,6 +10,16 @@ function useStockTransactionReport() {
     const meta: any = useRef({
         allRows: [],
         filteredRows: [],
+        options: {
+            allOptionsJson: {},
+            optionsSqlKey: 'get_options_brands_categories_tags',
+            optionsBrand: [],
+            selectedBrand: {},
+            optionsTag: [],
+            selectedTag: {},
+            catTree: [],
+            selectedCategory: 0,
+        },
         // getTotals: getTotals,
         setRefresh: setRefresh,
         sqlKey: 'get_stock_transactions',
@@ -20,8 +31,64 @@ function useStockTransactionReport() {
 
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
-        fetchData()
+        fetchOptionsData()
+        // fetchData()
     }, [])
+
+    function createOptions() {
+        createBrandOptions()
+        createTagOptions()
+        createCategoryOptions()
+        setRefresh({})
+
+        function createBrandOptions() {
+            const brands = pre.options.allOptionsJson?.jsonResult?.brands
+            pre.options.optionsBrand = brands.map((x: any) => ({ label: x.brandName, value: x.id }))
+            const allBrands = { label: 'All brands', value: 0 }
+            const noBrands = {label: 'No brands', value: null}
+            pre.options.optionsBrand.unshift(allBrands)
+            pre.options.optionsBrand.unshift(noBrands)
+            pre.options.selectedBrand = noBrands
+        }
+
+        function createTagOptions() {
+            const tags = pre.options.allOptionsJson?.jsonResult?.tags
+            pre.options.optionsTag = tags.map((x: any) => ({ label: x.tagName, value: x.id }))
+            const allTags = { label: 'All tags', value: 0 }
+            const noTags = { label: 'No tags', value: null }
+            pre.options.optionsTag.unshift(allTags)
+            pre.options.optionsTag.unshift(noTags)
+            pre.options.selectedTag = noTags
+        }
+
+        function createCategoryOptions() {
+            const temp: any[] = pre.options.allOptionsJson?.jsonResult?.categories
+            const cats = temp.map((x: any) => ({ key: x.id, label: x.catName, parentId: x.parentId, isLeaf: x.isLeaf, data: x.id }))
+            const dict: any = {}
+            for (const cat of cats) {
+                dict[cat.key] = cat
+            }
+            for (const cat of cats) {
+                if (cat.parentId) {
+                    const parent = dict[cat.parentId]
+                    if (parent) {
+                        if (!parent.children) {
+                            parent.children = []
+                        }
+                        parent.children.push(cat)
+                    }
+                }
+            }
+            const catTree = cats.filter((x: any) => (x.parentId === null))
+            pre.options.catTree = [...catTree]
+            const allCategories = { key: 0, label: 'All categories', isLeaf: true, parentId: null }
+            const noCategories = { key: 999999, label: 'No categories', isLeaf: true, parentId: null }
+            pre.options.catTree.unshift(allCategories)
+            pre.options.catTree.unshift(noCategories)
+            pre.options.selectedCategory = 999999
+        }
+
+    }
 
     async function fetchData() {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -51,13 +118,23 @@ function useStockTransactionReport() {
         }
     }
 
+    async function fetchOptionsData() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        pre.options.allOptionsJson = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: pre.options.optionsSqlKey
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        createOptions() // create options arrays for brands, categories and tags
+    }
+
     function getColumns() {
         return ([
             {
                 headerName: '#',
                 headerClassName: 'header-class',
                 description: 'Index',
-                field: 'id',
+                field: 'itemIndex',
                 width: 60,
             },
 
@@ -123,6 +200,15 @@ function useStockTransactionReport() {
                 width: 120,
             },
             {
+                headerName: 'Price',
+                headerClassName: 'header-class',
+                description: 'Price',
+                field: 'price',
+                type: 'number',
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+                width: 120,
+            },
+            {
                 cellClassName: 'cell-class-padding',
                 headerName: 'Remarks',
                 headerClassName: 'header-class',
@@ -173,57 +259,99 @@ function useStockTransactionReport() {
                     paddingBottom: theme.spacing(1),
                     // fontSize: theme.spacing(1.8),
                 },
-                '& .cell-class-bold': {
-                    fontWeight: 'bold'
-                },
-                // '& .row-class-opening': {
-                //     backgroundColor: theme.palette.grey[200]
-                // },
-                '& .row-class-summary': {
-                    backgroundColor: theme.palette.yellow.light,
+                '& .row-class-bold': {
                     fontWeight: 'bold',
-                    // color: theme.palette.getContrastText(theme.palette.lightBlue.main)
                 },
-                '& .cell-class-white': {
-                    color: theme.palette.common.white,
+                '& .row-bcolor-true': {
+                    backgroundColor: theme.palette.neutral.light,
                 },
+                '& .row-bcolor-true-bold': {
+                    backgroundColor: theme.palette.neutral.light,
+                    fontWeight: 'bold',
+                },
+                "& .MuiDataGrid-row:hover": {
+                    backgroundColor: theme.palette.action.focus
+                },
+                '& .row-red': {
+                    color: theme.palette.error.dark,
+                    // color: theme.palette.getContrastText(theme.palette.error.light)
+                },
+                '& .p-treeselect': {
+                    marginLeft: theme.spacing(1)
+                    // fontSize: theme.spacing(1.0)
+                }
             }
         )
     }
 
     function getRowClassName(e: any) {
         const row = e?.row || {}
+        const balance = row?.balance || 0
         let ret = ''
-        // if (row.tranType === 'Opening') {
-        //     ret = 'row-class-opening'
-        // }
-        // else 
         if (row.remarks === 'Summary') {
-            ret = 'row-class-summary'
+            if (row.bColor) {
+                ret = 'row-bcolor-true-bold'
+            } else {
+                ret = 'row-class-bold'
+            }
+        } else {
+            if (row.bColor) {
+                ret = 'row-bcolor-true'
+            }
         }
-
+        if (balance < 0) {
+            ret = 'row-red'
+        }
         return (ret)
+    }
+
+    function handleSelectedBrand(selectedBrand: any) {
+        pre.options.selectedBrand = selectedBrand
+        setRefresh({})
+    }
+
+    function handleSelectedCategory(selectedCategory: any) {
+        pre.options.selectedCategory = selectedCategory
+        setRefresh({})
+    }
+
+    function handleSelectedTag(selectedTag: any) {
+        pre.options.selectedTag = selectedTag
+        setRefresh({})
     }
 
     function massageRows(rows: any[]) {
         const length = rows.length
+        let count = 1
         let bufferBal = 0
+        let bColor = false
         for (let i = 0; i < length; i++) {
             const remarks = rows[i].remarks
             const debits = rows[i].debits
             const credits = rows[i].credits
-            if( remarks === 'Opening balance'){
+            if (remarks === 'Opening balance') {
                 bufferBal = rows[i].debits - rows[i].credits
-            } else if(remarks === 'Summary'){
-                
+                rows[i].itemIndex = incr()
+                bColor = !bColor
+                // rows[i].bColor = bColor
+            } else if (remarks === 'Summary') {
+
             } else {
                 bufferBal = bufferBal + debits - credits
                 rows[i].balance = bufferBal
+                // rows[i].bColor = bColor
+                rows[i].productCode = ''
+                rows[i].product = ''
             }
+            rows[i].bColor = bColor
         }
         setRefresh({})
+
+        function incr() {
+            return (count++)
+        }
     }
 
-    return ({ fetchData, getColumns, getGridSx, getRowClassName, meta })
+    return ({ fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
 }
 export { useStockTransactionReport }

@@ -1,14 +1,14 @@
-## Reports new / edit
-!. Stock Summary
-                                                            Include Tags
-                                                            Include Jakar info at bottom
-                                                            When jakar selected certain stock jrnl and foc details also pop in
-!. Sales: 
-                                                            Speed up
-                                                            Include Jakar sale info in Summary
-                                                            Jakar sale details
-!.                                                          Orders report 
-!. order through mobile
+## Stock transaction
+1. Complete client side events and query
+2. Assimilate server query
+3. Add search box
+                                                                                            1. Remove Ageing, on Date
+                                                                                            2. Implement tags
+                                                                                            3. Dropdown category + product hierarchy
+                                                                                            4. Check date sorting working or not
+                                                                                            6. Add price
+                                                                                            7. Balance negative red
+
 
 ## upgrade trace-client chitta and kush
 npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact

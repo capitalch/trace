@@ -759,7 +759,26 @@ allSqls = {
                 left outer join cte2 b
                     on a."id" = b."accId"                                                           
                             order by "accType","accLeaf", "accName" ''',
-
+                            
+    "get_options_brands_categories_tags": '''
+		with cte1 as(
+			select "id", "brandName"
+				from "BrandM"
+					order by "brandName"
+		), cte2 as (
+			select "id", "catName", "parentId", "isLeaf"
+				from "CategoryM"
+					order by "catName"
+		), cte3 as (
+			select "id", "tagName"
+				from "TagsM"
+					order by "tagName"
+		) select json_build_object(
+			'brands', (select json_agg(row_to_json(a)) from cte1 a),
+			'categories',(select json_agg(row_to_json(b)) from cte2 b),
+			'tags',(select json_agg(row_to_json(c)) from cte3 c)
+		) as "jsonResult"
+    ''',
 
     "get_pdf_sale_bill": '''
         select "jData"->'pdfSaleBill' as "pdfSaleBill"
@@ -2178,115 +2197,117 @@ allSqls = {
     ''',
     
     'get_stock_transactions':'''
-          with 
-    "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int))
-    --"branchId" as (values(1)), "finYearId" as (values (2022))
-    , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId")),
-    cte1 as ( --all account names for tranHeaderId
-        select h."id" as "tranHeaderId", STRING_AGG("accName", ', ') as "accountNames"
-            from "TranH" h
-                join "TranD" d
-                    on h."id" = d."tranHeaderId"
-                join "AccM" a
-                    on a."id" = d."accId"
-            where "tranTypeId" in(4,5,9,10)
-            group by h."id"
-    ),
-    cte2 as -- Rows from SalesPurchaseDetails table
-        (select "productId", "productCode","autoRefNo"
-        , h."id" as "tranHeaderId"
-        , CONCAT_WS(' ', "catName", "brandName", "label") "product"
-        , "tranDate"
-        , CASE WHEN h."tranTypeId" in (5, 9) then "qty" ELSE 0 END as "debits"
-        , CASE WHEN h."tranTypeId" in (4, 10) then "qty" ELSE 0 END as "credits"
-        , "tranType"
-        , CONCAT_WS(', ', "autoRefNo",  "userRefNo", h."remarks", d."instrNo", d."lineRefNo", d."remarks", s."jData"->'serialNumbers') as "remarks"
-        , d."timestamp"
-        from "TranH" h
-            join "TranD" d
-                on h."id" = d."tranHeaderId"
-            join "SalePurchaseDetails" s
-                on d."id" = s."tranDetailsId"
-            join "TranTypeM" t
-                on t."id" = h."tranTypeId"
-            join "ProductM" p
-                on p."id" = s."productId"
-            join "BrandM" b
-                on b."id" = p."brandId"
-            join "CategoryM" c
-                on c."id" = p."catId"
-            join "AccM" a
-                on a."id" = d."accId"
-        where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")),
-    cte3 as ( -- cte1 join cte2 for getting accountNames
-        select c2."productId", "productCode", "product", "tranDate", "debits", "credits", "tranType", CONCAT_WS(', ',"accountNames", "remarks") as "remarks"
-        ,"timestamp"
-            from cte2 c2
-                join cte1 c1
-                    on c2."tranHeaderId" = c1."tranHeaderId"
-    ),
-    cte4 as ( -- Add stockJournal transactions
-        select c3.* from cte3 c3
-        union all
-        select "productId", "productCode"       
-        , CONCAT_WS(' ', "catName", "brandName", "label") "product"
-        , "tranDate"
-        , CASE WHEN "dc" = 'D' then "qty" ELSE 0 END as "debits"
-        , CASE WHEN "dc" = 'C' then "qty" ELSE 0 END as "credits"
-        , 'Stock journal' as "tranType"
-        , CONCAT_WS(' ', "autoRefNo", "userRefNo", h."remarks", "lineRefNo", "lineRemarks", (j."jData"->'serialNumbers')) as "remarks"
-        , j."timestamp"
-        from "TranH" h
-            join "StockJournal" j
-                on h."id" = j."tranHeaderId"
-            join "ProductM" p
-                on p."id" = j."productId"
-            join "BrandM" b
-                on b."id" = p."brandId"
-            join "CategoryM" c
-                on c."id" = p."catId"
-        where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
-    ),
-    cte5 as ( -- op stock for all products, including zero opening stock
-        select DISTINCT COALESCE(c4."productId", op."productId") as "productId", COALESCE("qty",0) as "qty"
-            from cte4 c4 
-                full join "ProductOpBal" op
-                    on c4."productId" = op."productId"
-    ),
- cte6 as ( -- union all
-     select c4.* from cte4 c4
-         union all
-     select c5."productId", "productCode", CONCAT_WS(' ', "catName", "brandName", "label") "product", (table "startDate") as "tranDate",
-         CASE WHEN "qty" >= 0 then "qty" else 0 END as "debits",
-         CASE WHEN "qty" < 0 then "qty" else 0 END as "credits",
-         '' as "tranType", 'Opening balance' as "remarks",'2000-01-01 00:00:00.00+00'::timestamp as timestamp
-         from cte5 c5
-             join "ProductM" p
-                 on p."id" = c5."productId"
-         join "BrandM" b
-             on b."id" = p."brandId"
-         join "CategoryM" c
-             on c."id" = p."catId"
-     order by "product", "tranDate", "timestamp"
- ),
- cte7 as ( -- calculate closing
- 	select "productId", "productCode", "product", SUM("debits") as "debits", SUM("credits") as "credits", SUM("debits" - "credits") as "balance"
-	 	from cte6 c6
-	GROUP BY "productId", "productCode", "product"
-	 	order by "productId"
- ), cte8 as ( -- Everything
- 	select "productId", "productCode", "product","tranDate", "debits", "credits",  0 as "balance"
-	, "tranType", "remarks", "timestamp"
-	 	from cte6 c6
-	 union all
-	select c7."productId", c7."productCode", c7."product", CURRENT_DATE as "tranDate"
-	 , "debits"
-	 , "credits"
-	 , "balance"
-	 , '' as "tranType", 'Summary' as "remarks", CURRENT_TIMESTAMP as timestamp
-	 from cte7 c7
- ) select * from cte8
- 	order by "product", "timestamp"
+        with 
+            "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int))
+            --"branchId" as (values(1)), "finYearId" as (values (2022))
+            , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId")),
+            cte1 as ( --all account names for tranHeaderId
+                select h."id" as "tranHeaderId", STRING_AGG("accName", ', ') as "accountNames"
+                    from "TranH" h
+                        join "TranD" d
+                            on h."id" = d."tranHeaderId"
+                        join "AccM" a
+                            on a."id" = d."accId"
+                    where "tranTypeId" in(4,5,9,10)
+                    group by h."id"
+            ),
+            cte2 as -- Rows from SalesPurchaseDetails table
+                (select "productId", "productCode","autoRefNo"
+                , h."id" as "tranHeaderId"
+                , CONCAT_WS(' ', "catName", "brandName", "label") "product"
+                , "tranDate"
+                , CASE WHEN h."tranTypeId" in (5, 9) then "qty" ELSE 0 END as "debits"
+                , CASE WHEN h."tranTypeId" in (4, 10) then "qty" ELSE 0 END as "credits"
+                , "tranType"
+				, "price"
+                , CONCAT_WS(', ', "autoRefNo",  "userRefNo", h."remarks", d."instrNo", d."lineRefNo", d."remarks", s."jData"->'serialNumbers') as "remarks"
+                , d."timestamp"
+                from "TranH" h
+                    join "TranD" d
+                        on h."id" = d."tranHeaderId"
+                    join "SalePurchaseDetails" s
+                        on d."id" = s."tranDetailsId"
+                    join "TranTypeM" t
+                        on t."id" = h."tranTypeId"
+                    join "ProductM" p
+                        on p."id" = s."productId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                    join "AccM" a
+                        on a."id" = d."accId"
+                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")) ,
+            cte3 as ( -- cte1 join cte2 for getting accountNames
+                select c2."productId", "productCode", "product", "tranDate", "debits", "credits", "tranType", "price", CONCAT_WS(', ',"accountNames", "remarks") as "remarks"
+                ,"timestamp"
+                    from cte2 c2
+                        join cte1 c1
+                            on c2."tranHeaderId" = c1."tranHeaderId"
+            ),
+            cte4 as ( -- Add stockJournal transactions
+                select c3.* from cte3 c3
+                union all
+                select "productId", "productCode"       
+                , CONCAT_WS(' ', "catName", "brandName", "label") "product"
+                , "tranDate"
+                , CASE WHEN "dc" = 'D' then "qty" ELSE 0 END as "debits"
+                , CASE WHEN "dc" = 'C' then "qty" ELSE 0 END as "credits"
+                , 'Stock journal' as "tranType"
+				, 0 as "price"
+                , CONCAT_WS(' ', "autoRefNo", "userRefNo", h."remarks", "lineRefNo", "lineRemarks", (j."jData"->'serialNumbers')) as "remarks"
+                , j."timestamp"
+                from "TranH" h
+                    join "StockJournal" j
+                        on h."id" = j."tranHeaderId"
+                    join "ProductM" p
+                        on p."id" = j."productId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId")
+            ),
+            cte5 as ( -- op stock for all products, including zero opening stock
+                select DISTINCT COALESCE(c4."productId", op."productId") as "productId", COALESCE("qty",0) as "qty", "openingPrice" as "price"
+                    from cte4 c4 
+                        full join "ProductOpBal" op
+                            on c4."productId" = op."productId"
+            ),
+        cte6 as ( -- union all
+            select c4.* from cte4 c4
+                union all
+            select c5."productId", "productCode", CONCAT_WS(' ', "catName", "brandName", "label") "product", (table "startDate") as "tranDate",
+                CASE WHEN "qty" >= 0 then "qty" else 0 END as "debits",
+                CASE WHEN "qty" < 0 then "qty" else 0 END as "credits",
+                '' as "tranType", "price", 'Opening balance' as "remarks",'2000-01-01 00:00:00.00+00'::timestamp as timestamp
+                from cte5 c5
+                    join "ProductM" p
+                        on p."id" = c5."productId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
+                join "CategoryM" c
+                    on c."id" = p."catId"
+            order by "product", "tranDate", "timestamp"
+        ),
+        cte7 as ( -- calculate closing
+            select "productId", "productCode", "product", SUM("debits") as "debits", SUM("credits") as "credits", SUM("debits" - "credits") as "balance"
+                from cte6 c6
+            GROUP BY "productId", "productCode", "product"
+                order by "productId"
+        ), cte8 as ( -- Everything
+            select "productId", "productCode", "product","tranDate", "debits", "credits",  0 as "balance"
+            , "tranType", "price", "remarks", "timestamp"
+                from cte6 c6
+            union all
+            select c7."productId", c7."productCode", c7."product", CURRENT_DATE as "tranDate"
+            , "debits"
+            , "credits"
+            , "balance"
+            , '' as "tranType", 0 as "price", 'Summary' as "remarks", CURRENT_TIMESTAMP as timestamp
+            from cte7 c7
+        ) select * from cte8
+            order by "product","tranDate", "timestamp"
 
     ''',
 

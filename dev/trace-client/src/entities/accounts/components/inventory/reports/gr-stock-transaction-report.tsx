@@ -5,14 +5,14 @@ import {
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, IMegaData, MegaDataContext, moment, ReactSelect, SyncSharp, TextField,
+    IconButton, IMegaData, MegaDataContext, moment, ReactSelect, SyncSharp, TextField, TreeSelect,
     Typography, useContext, useRef, useState, useTheme,
     useStockSummaryReport, utilMethods,
 } from '../redirect'
 import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
 
 function StockTransactionReport() {
-    const { fetchData, getColumns, getGridSx,getRowClassName, meta } = useStockTransactionReport()
+    const { fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
     const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
@@ -28,6 +28,7 @@ function StockTransactionReport() {
         control: (provided: any) => ({
             ...provided,
             width: theme.spacing(22),
+            marginLeft: '.8rem',
         })
     }
 
@@ -46,6 +47,7 @@ function StockTransactionReport() {
             // onSelectionModelChange={onSelectModelChange}
             getRowHeight={() => 'auto'}
             // rowHeight={23}
+            // isRowSelectable={()=>false}
             rows={pre.filteredRows}
             // rowSpacingType='border'
             showCellRightBorder={true}
@@ -67,56 +69,23 @@ function StockTransactionReport() {
                         <GridToolbarColumnsButton color='secondary' />
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
-                        {/* Sync */}
-                        {/* <IconButton
-                            size="small"
-                            color="secondary"
-                            onClick={fetchData}>
-                            <SyncSharp fontSize='small'></SyncSharp>
-                        </IconButton> */}
-                        <ReactSelect menuPlacement='auto' placeholder='Select ageing'
-                            styles={reactSelectStyles}
-                            // options={getAgeingOptions()}
-                            // value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
-                        />
-                        <Box sx={{ display: 'flex', ml: 1, flexWrap: 'wrap', alignItems: 'center', border: '1px solid lightGrey' }}>
-                            <Typography sx={{ ml: 1, }} variant='subtitle2'>Stock on date:</Typography>
-                            <IconButton
-                                title="Clear"
-                                aria-label="Clear"
-                                size="small"
-                                onClick={() => {
-                                    pre.stockDate = moment().format('YYYY-MM-DD')
-                                    fetchData()
-                                }}>
-                                <CloseSharp fontSize="small" />
-                            </IconButton>
-                            <TextField
-                                color='primary'
-                                variant="standard"
-                                type="date"
-                                InputLabelProps={{ shrink: true }}
-                                onChange={(e: any) => {
-                                    pre.stockDate = e.target.value
-                                    setRefresh({})
-                                }}
-                                onFocus={(e: any) => e.target.select()}
-                                value={pre.stockDate || ''}
-                            />
-                            {/* Sync */}
-                            <IconButton
-                                size="small"
-                                color="secondary"
-                                onClick={() => {
-                                    fetchData()
-                                }}>
-                                <SyncSharp fontSize='small'></SyncSharp>
-                            </IconButton>
-                        </Box>
-                        {/* <Button variant='outlined' color='primary' sx={{ ml: 1 }} size='small' onClick={handleTrim}>Trim</Button> */}
-                        {/* Select tag */}
-                        <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography>
+                        {/* Select brand */}
                         <ReactSelect
+                            menuPlacement='auto' placeholder='Select tag'
+                            styles={reactSelectStyles}
+                            options={pre.options.optionsBrand}
+                            value={pre.options.selectedBrand}
+                            onChange={
+                                (selectedBrand: any) => {
+                                    handleSelectedBrand(selectedBrand)
+                                }}
+                        />
+                        {/* Select category */}
+                        <TreeSelect options={pre.options.catTree}
+                            onChange={(e: any) => handleSelectedCategory(e.value)}
+                            value={pre.options.selectedCategory}
+                        />
+                        {/* <ReactSelect
                             menuPlacement='auto' placeholder='Select tag'
                             styles={reactSelectStyles}
                             // options={allTagsOptions}
@@ -125,7 +94,26 @@ function StockTransactionReport() {
                                 (selectedTag: any) => {
                                     // handleSelectedTagOption(selectedTag)
                                 }}
+                        /> */}
+                        {/* Select tag */}
+                        {/* <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography> */}
+                        <ReactSelect
+                            menuPlacement='auto' placeholder='Select tag'
+                            styles={reactSelectStyles}
+                            options={pre.options.optionsTag}
+                            value={pre.options.selectedTag}
+                            onChange={
+                                (selectedTag: any) => {
+                                    handleSelectedTag(selectedTag)
+                                }}
                         />
+                        {/* Sync */}
+                        <IconButton
+                            size="small"
+                            color="secondary"
+                            onClick={fetchData}>
+                            <SyncSharp fontSize='small'></SyncSharp>
+                        </IconButton>
                     </Box>
                     {/* <GridSearchBox parentMeta={meta} /> */}
                 </Box>

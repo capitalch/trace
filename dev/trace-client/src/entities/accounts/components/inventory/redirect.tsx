@@ -70,7 +70,7 @@ export { useStockSummaryReport } from './reports/gr-stock-summary-report-hook'
 export { StockSummaryReport } from './reports/gr-stock-summary-report'
 export { useTraceMaterialComponents } from '../../../../common/trace-material-components'
 export { useConfirm } from 'material-ui-confirm'
-
+export { TreeSelect } from 'primereact/treeselect'
 export {
     DataGridPro,
     GridToolbarFilterButton,

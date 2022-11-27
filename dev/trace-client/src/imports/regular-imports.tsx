@@ -27,6 +27,7 @@ export { InputTextarea } from 'primereact/inputtextarea'
 export { InputNumber } from 'primereact/inputnumber'
 export { renderToStaticMarkup, renderToString } from 'react-dom/server'
 export { SplitButton } from 'primereact/splitbutton'
+// export { TreeSelect } from 'primereact/treeselect'
 export {
     _,
     axios,
