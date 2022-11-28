@@ -15,12 +15,18 @@ function useStockTransactionReport() {
             optionsSqlKey: 'get_options_brands_categories_tags',
             optionsBrand: [],
             selectedBrand: {},
+            noBrandsLabel: 'No brands',
             optionsTag: [],
             selectedTag: {},
+            noTagsLabel: 'No tags',
             catTree: [],
             selectedCategory: 0,
+            noCategoriesLabel: 'No categories'
         },
-        // getTotals: getTotals,
+        queryArgs: {
+            type: '',
+            value: null
+        },
         setRefresh: setRefresh,
         sqlKey: 'get_stock_transactions',
         subTitle: '',
@@ -45,7 +51,7 @@ function useStockTransactionReport() {
             const brands = pre.options.allOptionsJson?.jsonResult?.brands
             pre.options.optionsBrand = brands.map((x: any) => ({ label: x.brandName, value: x.id }))
             const allBrands = { label: 'All brands', value: 0 }
-            const noBrands = {label: 'No brands', value: null}
+            const noBrands = { label: pre.options.noBrandsLabel, value: null }
             pre.options.optionsBrand.unshift(allBrands)
             pre.options.optionsBrand.unshift(noBrands)
             pre.options.selectedBrand = noBrands
@@ -55,7 +61,7 @@ function useStockTransactionReport() {
             const tags = pre.options.allOptionsJson?.jsonResult?.tags
             pre.options.optionsTag = tags.map((x: any) => ({ label: x.tagName, value: x.id }))
             const allTags = { label: 'All tags', value: 0 }
-            const noTags = { label: 'No tags', value: null }
+            const noTags = { label: pre.options.noTagsLabel, value: null }
             pre.options.optionsTag.unshift(allTags)
             pre.options.optionsTag.unshift(noTags)
             pre.options.selectedTag = noTags
@@ -82,7 +88,7 @@ function useStockTransactionReport() {
             const catTree = cats.filter((x: any) => (x.parentId === null))
             pre.options.catTree = [...catTree]
             const allCategories = { key: 0, label: 'All categories', isLeaf: true, parentId: null }
-            const noCategories = { key: 999999, label: 'No categories', isLeaf: true, parentId: null }
+            const noCategories = { key: 999999, label: pre.options.noCategoriesLabel, isLeaf: true, parentId: null }
             pre.options.catTree.unshift(allCategories)
             pre.options.catTree.unshift(noCategories)
             pre.options.selectedCategory = 999999
@@ -91,11 +97,18 @@ function useStockTransactionReport() {
     }
 
     async function fetchData() {
+        if ((pre.queryArgs.value === 999999) || (pre.queryArgs.value === null)) { // 999999is for no categories
+            pre.filteredRows = []
+            setRefresh({})
+            return
+        }
         emit('SHOW-LOADING-INDICATOR', true)
         pre.allRows = await execGenericView({
             isMultipleRows: true,
             sqlKey: pre.sqlKey,
             args: {
+                type: pre.queryArgs.type,
+                value: pre.queryArgs.value
             },
         }) || {}
         setId(pre.allRows)
@@ -307,17 +320,35 @@ function useStockTransactionReport() {
 
     function handleSelectedBrand(selectedBrand: any) {
         pre.options.selectedBrand = selectedBrand
+        pre.queryArgs.type = 'brand'
+        pre.queryArgs.value = selectedBrand.value
+
+        pre.options.selectedCategory = 999999
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }       
         setRefresh({})
+        fetchData()
     }
 
     function handleSelectedCategory(selectedCategory: any) {
         pre.options.selectedCategory = selectedCategory
+        pre.queryArgs.type = 'cat'
+        pre.queryArgs.value = selectedCategory
+
+        pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }        
         setRefresh({})
+        fetchData()
     }
 
     function handleSelectedTag(selectedTag: any) {
         pre.options.selectedTag = selectedTag
+        pre.queryArgs.type = 'tag'
+        pre.queryArgs.value = selectedTag.value
+
+        pre.options.selectedCategory = 999999
+        pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
         setRefresh({})
+        fetchData()
     }
 
     function massageRows(rows: any[]) {

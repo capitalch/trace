@@ -2198,9 +2198,10 @@ allSqls = {
     
     'get_stock_transactions':'''
         with 
-            "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int))
-            --"branchId" as (values(1)), "finYearId" as (values (2022))
+            "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "type" as (values (%(type)s::text)), "value" as (values (%(value)s::int))
+            --"branchId" as (values(1)), "finYearId" as (values (2022)), "type" as (values('cat')), "value" as (values(0))
             , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId")),
+			"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") )),
             cte1 as ( --all account names for tranHeaderId
                 select h."id" as "tranHeaderId", STRING_AGG("accName", ', ') as "accountNames"
                     from "TranH" h
@@ -2229,7 +2230,7 @@ allSqls = {
                         on d."id" = s."tranDetailsId"
                     join "TranTypeM" t
                         on t."id" = h."tranTypeId"
-                    join "ProductM" p
+                    join "cteProduct" p
                         on p."id" = s."productId"
                     join "BrandM" b
                         on b."id" = p."brandId"
@@ -2260,7 +2261,7 @@ allSqls = {
                 from "TranH" h
                     join "StockJournal" j
                         on h."id" = j."tranHeaderId"
-                    join "ProductM" p
+                    join "cteProduct" p
                         on p."id" = j."productId"
                     join "BrandM" b
                         on b."id" = p."brandId"
@@ -2282,7 +2283,7 @@ allSqls = {
                 CASE WHEN "qty" < 0 then "qty" else 0 END as "credits",
                 '' as "tranType", "price", 'Opening balance' as "remarks",'2000-01-01 00:00:00.00+00'::timestamp as timestamp
                 from cte5 c5
-                    join "ProductM" p
+                    join "cteProduct" p
                         on p."id" = c5."productId"
                 join "BrandM" b
                     on b."id" = p."brandId"
