@@ -157,15 +157,15 @@ function useStockSummaryReport() {
                 valueGetter: (params: any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
                 width: 200,
             },
-            {
-                cellClassName: 'cell-class-padding',
-                headerName: 'Details',
-                headerClassName: 'header-class',
-                description: 'Product details',
-                field: 'info',
-                renderCell: (params: any) => <ProductDetails params={params} />,
-                width: 300,
-            },
+            // {
+            //     cellClassName: 'cell-class-padding',
+            //     headerName: 'Details',
+            //     headerClassName: 'header-class',
+            //     description: 'Product details',
+            //     field: 'info',
+            //     renderCell: (params: any) => <ProductDetails params={params} />,
+            //     width: 300,
+            // },
             {
                 headerName: 'Clos',
                 headerClassName: 'header-class',
@@ -173,6 +173,15 @@ function useStockSummaryReport() {
                 field: 'clos',
                 type: 'number',
                 width: 60,
+            },
+            {
+                headerName: 'Gp',
+                headerClassName: 'header-class',
+                description: 'Gross profit',
+                field: 'grossProfit',
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
                 headerName: 'Clos val',
@@ -339,9 +348,9 @@ function useStockSummaryReport() {
                     color: theme.palette.error.dark
                 },
                 '& .cell-class-padding': {
-                    paddingTop: theme.spacing(0.5),
-                    paddingBottom: theme.spacing(.5),
-                    fontSize: theme.spacing(1.8),
+                    // paddingTop: theme.spacing(0.5),
+                    // paddingBottom: theme.spacing(.5),
+                    // fontSize: theme.spacing(1.8),
                 }
             }
         )
@@ -369,10 +378,11 @@ function useStockSummaryReport() {
             prev.cr = prev.cr + curr.cr
             prev.clos = prev.clos + curr.clos
             prev.closValue = prev.closValue + curr.closValue
+            prev.grossProfit = prev.grossProfit + curr.grossProfit
             prev.count++
             return (prev)
         }, {
-            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0
+            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0, grossProfit:0
         })
         totals.id = 'Total'
         return (totals)
@@ -407,10 +417,10 @@ function useStockSummaryReport() {
 
     function Product({ params }: any) {
         return (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                {params.row.catName && <Typography sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
-                <Typography sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>
-                {params.row.label && <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+            <Box sx={{overflow: 'clip'}}>
+                {params.row.catName && <Typography component='span' sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
+                <Typography component='span' sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>
+                {params.row.label && <Typography component='span' sx={{  fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
             </Box>
         )
     }

@@ -537,7 +537,7 @@ allSqls = {
         --"branchId" as (values(1)), "finYearId" as (values (2022)),
 
         "cteStock" as (
-            select * from get_current_stock((table "branchId"), (table "finYearId"))
+            select * from get_stock_on_date((table "branchId"), (table "finYearId"), CURRENT_DATE)
         ),
 
         cte1 as (
@@ -1328,7 +1328,7 @@ allSqls = {
     ''',
 
     "get_stock_summary":'''
---        with "branchId" as (values(1)), "finYearId" as (values (2022)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)),
+        --with "branchId" as (values(1)), "finYearId" as (values (2022)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)),
         with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "onDate" as (values(%(onDate)s ::date)), "isAll" as (values(%(isAll)s::boolean)), "days" as (values(%(days)s::int)),        
 		cte as ( --filter on tagId in CategoryM
             with recursive rec as (
@@ -1343,7 +1343,7 @@ allSqls = {
             ) select * from rec where "isLeaf"
         ),
 		cte0 as( --base cte used many times in next
-            select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
+            select "productId", "tranTypeId", "qty", "price", "discount", "tranDate", '' as "dc"
                 from "TranH" h
                     join "TranD" d
                         on h."id" = d."tranHeaderId"
@@ -1352,13 +1352,24 @@ allSqls = {
                 where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
                         union all --necessary otherwise rows with same values are removed
-            select "productId", "tranTypeId", "qty", 0 as "price", "tranDate", "dc"
+            select "productId", "tranTypeId", "qty", 0 as "price", 0 as "discount", "tranDate", "dc"
                 from "TranH" h
                     join "StockJournal" s
                         on h."id" = s."tranHeaderId"
                 where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
-            )		
+            ), cte00 as ( -- add lastTranPurchasePrice
+			select c0.*,
+ 			(
+ 				select DISTINCT ON("productId") "price"
+                     from cte0
+                         where ("tranTypeId" = 5) and ("tranDate" <= c0."tranDate") and "productId" = c0."productId"
+                             order by "productId", "tranDate" DESC
+ 			) as "lastTranPurchasePrice" from cte0 c0)
+			, cte000 as ( --add gross profit
+				select cte00.*, "qty" * ("price" - "discount" - "lastTranPurchasePrice") as "grossProfit"
+					from cte00
+			)
 			, cte1 as ( -- opening balance
                 select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
                     from "ProductOpBal" p 
@@ -1373,7 +1384,8 @@ allSqls = {
                     , SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'C') THEN "qty" ELSE 0 END) as "stockJournalCredits"
                     , MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
                     , MAX(CASE WHEN "tranTypeId" in(5,11) THEN "tranDate" END) as "lastPurchaseDate" --Purchase or stock journal
-                    from cte0
+					, SUM(CASE WHEN "tranTypeId" = 4 THEN "grossProfit" WHEN "tranTypeId" = 9 THEN -"grossProfit" ELSE 0 END) as "grossProfit"
+                    from cte000
                 group by "productId", "tranTypeId" order by "productId", "tranTypeId"
             )
 			, cte3 as ( -- sum columns group by productId
@@ -1384,6 +1396,7 @@ allSqls = {
                 , coalesce(SUM("purchaseRet"),0) as "purchaseRet"
                 , coalesce(SUM("stockJournalDebits"),0) as "stockJournalDebits"
                 , coalesce(SUM("stockJournalCredits"),0) as "stockJournalCredits"
+				, coalesce(SUM("grossProfit"),0) as "grossProfit"
                 , MAX("lastSaleDate") as "lastSaleDate"
                 , MAX("lastPurchaseDate") as "lastPurchaseDate"
                 from cte2
@@ -1399,6 +1412,7 @@ allSqls = {
                 , coalesce("stockJournalDebits", 0) as "stockJournalDebits"
                 , coalesce("stockJournalCredits", 0) as "stockJournalCredits"
                 , coalesce(c3."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
+				, coalesce("grossProfit",0) as "grossProfit"
                 , "openingPrice", "lastSaleDate"
                     from cte1 c1
                         full join cte3 c3
@@ -1414,6 +1428,7 @@ allSqls = {
                 select coalesce(c4."productId", c5."productId") as "productId"
                     , coalesce("openingPrice",0) as "openingPrice", "op", coalesce("op"* "openingPrice",0)::numeric(12,2) "opValue", "sale", "purchase", "saleRet","purchaseRet","stockJournalDebits", "stockJournalCredits", coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice","lastPurchaseDate","lastSaleDate"
                     , coalesce("op" + "purchase" - "purchaseRet" - "sale" + "saleRet" + "stockJournalDebits" - "stockJournalCredits",0) as "clos"
+					, "grossProfit"
                     from cte4 c4
                         full join cte5 c5
                             on c4."productId" = c5."productId"
@@ -1424,7 +1439,7 @@ allSqls = {
                 , (coalesce("purchase",0) + coalesce("saleRet",0) + coalesce("stockJournalDebits",0))::numeric(10,2) as "dr", (coalesce("sale",0) + coalesce("purchaseRet",0) + coalesce("stockJournalCredits",0)):: numeric(10,2) as "cr",
                 coalesce("sale",0)::numeric(10,2) as "sale", coalesce("purchase",0)::numeric(10,2) as "purchase", coalesce("saleRet",0)::numeric(10,2) as "saleRet", coalesce("purchaseRet",0)::numeric(10,2) as "purchaseRet", coalesce("stockJournalDebits",0)::numeric(10,2) as "stockJournalDebits", coalesce("stockJournalCredits",0)::numeric(10,2) as "stockJournalCredits", coalesce("clos",0)::numeric(10,2) as "clos", "lastPurchasePrice", ("clos" * "lastPurchasePrice")::numeric(12,2) as "closValue"
                         , "lastPurchaseDate", "lastSaleDate" 
-                ,(date_part('day',coalesce((table "onDate"), CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age", "info"
+                ,(date_part('day',coalesce((table "onDate"), CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age", "info", "grossProfit"
                     from cte6 c6
                         right join "ProductM" p
                             on p."id" = c6."productId"

@@ -12,7 +12,7 @@ import {
 import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockSummaryReport() {
-    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected,handleSelectedTagOption, handleTrim, meta, onSelectModelChange, } = useStockSummaryReport()
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, handleSelectedTagOption, handleTrim, meta, onSelectModelChange, } = useStockSummaryReport()
     const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
@@ -47,7 +47,8 @@ function StockSummaryReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
-            getRowHeight={() => 'auto'}
+            rowHeight={25}
+            // getRowHeight={() => 'auto'}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}
@@ -143,6 +144,7 @@ function StockSummaryReport() {
                     <Box>{''.concat('Selected close', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
                 </Box>
                 <Box sx={{ display: 'flex', ml: 'auto', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
+                    <Box>{''.concat('Gp', ' : ', toDecimalFormat(pre?.totals?.grossProfit || 0))}</Box>
                     <Box>{''.concat('Op', ' : ', toDecimalFormat(pre?.totals?.opValue || 0))}</Box>
                     <Box sx={{ fontWeight: 'bolder' }}>{''.concat('Clos', ' : ', toDecimalFormat(pre?.totals?.closValue || 0))}</Box>
                     <Box>{''.concat('Increase', ' : ', toDecimalFormat((pre?.totals?.closValue || 0) - (pre?.totals?.opValue || 0)))}</Box>
