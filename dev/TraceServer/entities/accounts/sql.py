@@ -1328,20 +1328,9 @@ allSqls = {
     ''',
 
     "get_stock_summary":'''
-        --with "branchId" as (values(1)), "finYearId" as (values (2022)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)),
-        with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "onDate" as (values(%(onDate)s ::date)), "isAll" as (values(%(isAll)s::boolean)), "days" as (values(%(days)s::int)),        
-		cte as ( --filter on tagId in CategoryM
-            with recursive rec as (
-            select id, "parentId", "isLeaf", "catName"
-                from "CategoryM"
-                    where (("tagId" = (table "tagId")) or ((table "tagId") = 0))
-            union
-            select c.id, c."parentId", c."isLeaf", c."catName"
-                from "CategoryM" c
-                    join rec on
-                        rec."id" = c."parentId"
-            ) select * from rec where "isLeaf"
-        ),
+        --with "branchId" as (values(1)), "finYearId" as (values (2022)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)), "type" as (values('cat')), "value" as (values(0)),
+        with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "onDate" as (values(%(onDate)s ::date)), "isAll" as (values(%(isAll)s::boolean)), "days" as (values(%(days)s::int)), "type" as (values (%(type)s::text)), "value" as (values (%(value)s::int)),     
+		"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") )),
 		cte0 as( --base cte used many times in next
             select "productId", "tranTypeId", "qty", "price", "discount", "tranDate", '' as "dc"
                 from "TranH" h
@@ -1441,15 +1430,14 @@ allSqls = {
                         , "lastPurchaseDate", "lastSaleDate" 
                 ,(date_part('day',coalesce((table "onDate"), CURRENT_DATE)::timestamp - "lastPurchaseDate"::timestamp)) as "age", "info", "grossProfit"
                     from cte6 c6
-                        right join "ProductM" p
+                        right join "cteProduct" p
                             on p."id" = c6."productId"
-                        join cte c -- "CategoryM" c
+                        join "CategoryM" c
                             on c."id" = p."catId"
                         join "BrandM" b
                             on b."id" = p."brandId"
                     where ((NOT(("clos" = 0) and ("op" = 0) and ("sale" = 0) and ("purchase" = 0) and ("saleRet" = 0) and ("purchaseRet" = 0) and ("stockJournalDebits" = 0) and("stockJournalCredits" = 0))) 
-                        OR (table "isAll") 
-                            and p."isActive")
+                        OR (table "isAll"))
                 order by "catName", "brandName", "label"
                 ) select * from cte7
         ''',

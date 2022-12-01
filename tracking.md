@@ -1,7 +1,7 @@
 ## Stock transaction
-1. Complete client side events and query
-2. Assimilate server query
-3. Add search box
+1. Search Box
+2. Transaction on product code
+3. 
                                                                                             1. Remove Ageing, on Date
                                                                                             2. Implement tags
                                                                                             3. Dropdown category + product hierarchy
@@ -9,6 +9,10 @@
                                                                                             6. Add price
                                                                                             7. Balance negative red
 
+## Stock summary
+1. Server implementation and testing
+## Sales report
+1. While in stock journal does not show correct GP
 
 ## upgrade trace-client chitta and kush
 npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact
@@ -151,6 +155,8 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
+# 25-11-2022 - 30-11-2022
+!. Report enhancements
 # 15-11-2022 - 24-11-2022
 1. Multiple reporting bug fixes
 2. Trace mobile upgrade and comply with new inventory reports

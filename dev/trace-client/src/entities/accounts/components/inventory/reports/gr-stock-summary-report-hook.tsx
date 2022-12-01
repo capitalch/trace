@@ -1,4 +1,4 @@
-import { _, Box, CloseSharp, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryReport() {
     const [, setRefresh] = useState({})
@@ -14,6 +14,23 @@ function useStockSummaryReport() {
         filteredRows: [],
         getTotals: getTotals,
         isSearchTextEdited: false,
+        options: {
+            allOptionsJson: {},
+            optionsSqlKey: 'get_options_brands_categories_tags',
+            optionsBrand: [],
+            selectedBrand: {},
+            noBrandsLabel: 'No brands',
+            optionsTag: [],
+            selectedTag: {},
+            noTagsLabel: 'No tags',
+            catTree: [],
+            selectedCategory: 0,
+            noCategoriesLabel: 'No categories'
+        },
+        queryArgs: {
+            type: '',
+            value: null
+        },
         setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
@@ -36,7 +53,8 @@ function useStockSummaryReport() {
 
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
-        fetchData()
+        // fetchData()
+        fetchOptionsData()
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
             const requestSearch = d.data[0]
             const searchText = d.data[1]
@@ -46,6 +64,61 @@ function useStockSummaryReport() {
             subs1.unsubscribe()
         })
     }, [])
+
+    function createOptions() {
+        createBrandOptions()
+        createTagOptions()
+        createCategoryOptions()
+        setRefresh({})
+
+        function createBrandOptions() {
+            const brands = pre.options.allOptionsJson?.jsonResult?.brands
+            pre.options.optionsBrand = brands.map((x: any) => ({ label: x.brandName, value: x.id }))
+            const allBrands = { label: 'All brands', value: 0 }
+            const noBrands = { label: pre.options.noBrandsLabel, value: null }
+            pre.options.optionsBrand.unshift(allBrands)
+            pre.options.optionsBrand.unshift(noBrands)
+            pre.options.selectedBrand = allBrands
+        }
+
+        function createCategoryOptions() {
+            const temp: any[] = pre.options.allOptionsJson?.jsonResult?.categories
+            const cats = temp.map((x: any) => ({ key: x.id, label: x.catName, parentId: x.parentId, isLeaf: x.isLeaf, data: x.id }))
+            const dict: any = {}
+            for (const cat of cats) {
+                dict[cat.key] = cat
+            }
+            for (const cat of cats) {
+                if (cat.parentId) {
+                    const parent = dict[cat.parentId]
+                    if (parent) {
+                        if (!parent.children) {
+                            parent.children = []
+                        }
+                        parent.children.push(cat)
+                    }
+                }
+            }
+            const catTree = cats.filter((x: any) => (x.parentId === null))
+            pre.options.catTree = [...catTree]
+            const allCategories = { key: 0, label: 'All categories', isLeaf: true, parentId: null }
+            const noCategories = { key: 999999, label: pre.options.noCategoriesLabel, isLeaf: true, parentId: null }
+            pre.options.catTree.unshift(allCategories)
+            pre.options.catTree.unshift(noCategories)
+            pre.options.selectedCategory = 999999
+        }
+
+        function createTagOptions() {
+            const tags = pre.options.allOptionsJson?.jsonResult?.tags
+            pre.options.optionsTag = tags.map((x: any) => ({ label: x.tagName, value: x.id }))
+            const allTags = { label: 'All tags', value: 0 }
+            const noTags = { label: pre.options.noTagsLabel, value: null }
+            pre.options.optionsTag.unshift(allTags)
+            pre.options.optionsTag.unshift(noTags)
+            pre.options.selectedTag = noTags
+        }
+
+    }
 
     async function fetchData() {
         emit('SHOW-LOADING-INDICATOR', true)
@@ -58,7 +131,9 @@ function useStockSummaryReport() {
                     || null,
                 days: pre.selectedAgeingOption.value || 0,
                 isAll: false, // Only products having some transaction or OP bal are shown
-                tagId: pre.selectedTagOption.value
+                tagId: pre.selectedTagOption.value,
+                type: pre.queryArgs.type,
+                value: pre.queryArgs.value
             },
         }) || {}
         setId(pre.allRows)
@@ -78,6 +153,16 @@ function useStockSummaryReport() {
                 return (count++)
             }
         }
+    }
+
+    async function fetchOptionsData() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        pre.options.allOptionsJson = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: pre.options.optionsSqlKey
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        createOptions() // create options arrays for brands, categories and tags
     }
 
     function getAgeingOptions() {
@@ -148,24 +233,37 @@ function useStockSummaryReport() {
             },
             // valueGetter is provided so that the data is available in csv export
             {
-                cellClassName: 'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
-                renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params: any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
+                // renderCell: (params: any) => <Product params={params} />,
+                valueGetter: (params: any) => `${params.row.catName ? params.row.catName : ''} ${params.row.brandName ? params.row.brandName : ''} ${params.row.label ? params.row.label : params.row.label}`,
+                valueFormatter: (params: any) => `${params?.value ? params.value : ''} `,
                 width: 200,
             },
-            // {
-            //     cellClassName: 'cell-class-padding',
-            //     headerName: 'Details',
-            //     headerClassName: 'header-class',
-            //     description: 'Product details',
-            //     field: 'info',
-            //     renderCell: (params: any) => <ProductDetails params={params} />,
-            //     width: 300,
-            // },
+            {
+                headerName: 'Op',
+                headerClassName: 'header-class',
+                description: 'Opening',
+                field: 'op',
+                type: 'number',
+                width: 60,
+            },
+            {
+                headerName: 'Dr',
+                headerClassName: 'header-class',
+                field: 'dr',
+                type: 'number',
+                width: 70,
+            },
+            {
+                headerName: 'Cr',
+                headerClassName: 'header-class',
+                field: 'cr',
+                type: 'number',
+                width: 70,
+            },
             {
                 headerName: 'Clos',
                 headerClassName: 'header-class',
@@ -184,52 +282,12 @@ function useStockSummaryReport() {
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
             {
-                headerName: 'Clos val',
-                headerClassName: 'header-class',
-                description: 'Closing value',
-                field: 'closValue',
-                type: 'number',
-                width: 120,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
                 headerName: 'Age',
                 headerClassName: 'header-class',
                 description: 'Age of product sold',
                 field: 'age',
                 type: 'number',
                 width: 60,
-            },
-            {
-                headerName: 'Pur price',
-                headerClassName: 'header-class',
-                description: 'Last purchase price',
-                field: 'lastPurchasePrice',
-                type: 'number',
-                width: 110,
-                valueFormatter: (params: any) => toDecimalFormat(params.value),
-            },
-            {
-                headerName: 'Op',
-                headerClassName: 'header-class',
-                description: 'Opening',
-                field: 'op',
-                type: 'number',
-                width: 60,
-            },
-            {
-                headerName: 'Debits',
-                headerClassName: 'header-class',
-                field: 'dr',
-                type: 'number',
-                width: 70,
-            },
-            {
-                headerName: 'Credits',
-                headerClassName: 'header-class',
-                field: 'cr',
-                type: 'number',
-                width: 70,
             },
             {
                 headerName: 'Op Price',
@@ -248,28 +306,45 @@ function useStockSummaryReport() {
                 width: 120,
                 valueFormatter: (params: any) => toDecimalFormat(params.value),
             },
-
             {
-                headerName: 'Pur date',
+                headerName: 'Clos price',
+                headerClassName: 'header-class',
+                description: 'Last purchase price',
+                field: 'lastPurchasePrice',
+                type: 'number',
+                width: 110,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Clos val',
+                headerClassName: 'header-class',
+                description: 'Closing value',
+                field: 'closValue',
+                type: 'number',
+                width: 120,
+                valueFormatter: (params: any) => toDecimalFormat(params.value),
+            },
+            {
+                headerName: 'Lst pur dt',
                 headerClassName: 'header-class',
                 description: 'Last purchase date',
                 field: 'lastPurchaseDate',
                 type: 'date',
-                width: 95,
+                width: 100,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                headerName: 'Sal date',
+                headerName: 'Lst sal dt',
                 headerClassName: 'header-class',
                 description: 'Last sale date',
                 field: 'lastSaleDate',
                 type: 'date',
-                width: 95,
+                width: 100,
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
                 description: 'Purchase',
-                headerName: 'Purchase',
+                headerName: 'Pur',
                 headerClassName: 'header-class',
                 field: 'purchase',
                 type: 'number',
@@ -277,31 +352,31 @@ function useStockSummaryReport() {
             },
             {
                 description: 'Sale',
-                headerName: 'Sale',
+                headerName: 'Sal',
                 headerClassName: 'header-class',
                 field: 'sale',
                 type: 'number',
                 width: 70,
             },
             {
-                description: 'Return (purchase)',
-                headerName: 'Ret (purch)',
+                description: 'Purchase returns',
+                headerName: 'Pur ret',
                 headerClassName: 'header-class',
                 field: 'purchaseRet',
                 type: 'number',
                 width: 90,
             },
             {
-                description: 'Return (sale)',
-                headerName: 'Ret (sale)',
+                description: 'Sale returns',
+                headerName: 'Sal ret',
                 headerClassName: 'header-class',
                 field: 'saleRet',
                 type: 'number',
                 width: 90,
             },
             {
-                description: 'Stock journal debits',
-                headerName: 'Dr (stk jrnl)',
+                description: 'Stock Journal debits',
+                headerName: 'Stk Jr Dr',
                 headerClassName: 'header-class',
                 field: 'stockJournalDebits',
                 type: 'number',
@@ -309,7 +384,7 @@ function useStockSummaryReport() {
             },
             {
                 description: 'Stock journal credits',
-                headerName: 'Cr (stk jrnl)',
+                headerName: 'Stk Jr Cr',
                 headerClassName: 'header-class',
                 field: 'stockJournalCredits',
                 type: 'number',
@@ -347,10 +422,8 @@ function useStockSummaryReport() {
                 '& .row-negative-clos': {
                     color: theme.palette.error.dark
                 },
-                '& .cell-class-padding': {
-                    // paddingTop: theme.spacing(0.5),
-                    // paddingBottom: theme.spacing(.5),
-                    // fontSize: theme.spacing(1.8),
+                '& .row-alt-bgcolor': {
+                    backgroundColor: theme.palette.neutral.light,
                 }
             }
         )
@@ -366,6 +439,10 @@ function useStockSummaryReport() {
         } else if (row.clos < 0) {
             ret = 'row-negative-clos'
         }
+        if ((row.id % 2) === 0) {
+            ret = clsx(ret, 'row-alt-bgcolor')
+        }
+
         return (ret)
     }
 
@@ -382,7 +459,7 @@ function useStockSummaryReport() {
             prev.count++
             return (prev)
         }, {
-            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0, grossProfit:0
+            opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0, grossProfit: 0
         })
         totals.id = 'Total'
         return (totals)
@@ -393,14 +470,47 @@ function useStockSummaryReport() {
         fetchData()
     }
 
-    async function handleSelectedTagOption(selectedTagOption: any) {
-        pre.selectedTagOption = selectedTagOption
-        await fetchData()
+    // async function handleSelectedTagOption(selectedTagOption: any) {
+    //     pre.selectedTagOption = selectedTagOption
+    //     await fetchData()
+    //     setRefresh({})
+    // }
+
+    function handleSelectedBrand(selectedBrand: any) {
+        pre.options.selectedBrand = selectedBrand
+        pre.queryArgs.type = 'brand'
+        pre.queryArgs.value = selectedBrand.value
+
+        pre.options.selectedCategory = 999999
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }       
         setRefresh({})
+        fetchData()
+    }
+
+    function handleSelectedCategory(selectedCategory: any) {
+        pre.options.selectedCategory = selectedCategory
+        pre.queryArgs.type = 'cat'
+        pre.queryArgs.value = selectedCategory
+
+        pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }        
+        setRefresh({})
+        fetchData()
+    }
+
+    function handleSelectedTag(selectedTag: any) {
+        pre.options.selectedTag = selectedTag
+        pre.queryArgs.type = 'tag'
+        pre.queryArgs.value = selectedTag.value
+
+        pre.options.selectedCategory = 999999
+        pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
+        setRefresh({})
+        fetchData()
     }
 
     function handleTrim() {
-        pre.filteredRows = pre.filteredRows.filter((x:any)=>(x.clos !==0))
+        pre.filteredRows = pre.filteredRows.filter((x: any) => (x.clos !== 0))
         setRefresh({})
     }
 
@@ -413,22 +523,6 @@ function useStockSummaryReport() {
         }, {})
         pre.selectedRowsObject = _.isEmpty(obj) ? {} : obj
         setRefresh({})
-    }
-
-    function Product({ params }: any) {
-        return (
-            <Box sx={{overflow: 'clip'}}>
-                {params.row.catName && <Typography component='span' sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
-                <Typography component='span' sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>
-                {params.row.label && <Typography component='span' sx={{  fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
-            </Box>
-        )
-    }
-
-    function ProductDetails({ params }: any) {
-        return (
-            <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
-        )
     }
 
     function removeRow(params: any) {
@@ -445,7 +539,33 @@ function useStockSummaryReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected,handleSelectedTagOption, handleTrim, meta, onSelectModelChange })
+    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getRowClassName, handleAgeingOptionSelected, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, handleTrim, meta, onSelectModelChange })
 }
 
 export { useStockSummaryReport }
+
+// {
+//     cellClassName: 'cell-class-padding',
+//     headerName: 'Details',
+//     headerClassName: 'header-class',
+//     description: 'Product details',
+//     field: 'info',
+//     renderCell: (params: any) => <ProductDetails params={params} />,
+//     width: 300,
+// },
+
+// function Product({ params }: any) {
+//     return (
+//         <Box sx={{ overflow: 'clip' }}>
+//             {params.row.catName && <Typography component='span' sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
+//             <Typography component='span' sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>
+//             {params.row.label && <Typography component='span' sx={{ fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
+//         </Box>
+//     )
+// }
+
+// function ProductDetails({ params }: any) {
+//     return (
+//         <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
+//     )
+// }

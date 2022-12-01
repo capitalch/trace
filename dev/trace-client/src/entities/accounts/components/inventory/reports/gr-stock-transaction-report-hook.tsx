@@ -38,7 +38,6 @@ function useStockTransactionReport() {
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
         fetchOptionsData()
-        // fetchData()
     }, [])
 
     function createOptions() {
@@ -55,16 +54,6 @@ function useStockTransactionReport() {
             pre.options.optionsBrand.unshift(allBrands)
             pre.options.optionsBrand.unshift(noBrands)
             pre.options.selectedBrand = noBrands
-        }
-
-        function createTagOptions() {
-            const tags = pre.options.allOptionsJson?.jsonResult?.tags
-            pre.options.optionsTag = tags.map((x: any) => ({ label: x.tagName, value: x.id }))
-            const allTags = { label: 'All tags', value: 0 }
-            const noTags = { label: pre.options.noTagsLabel, value: null }
-            pre.options.optionsTag.unshift(allTags)
-            pre.options.optionsTag.unshift(noTags)
-            pre.options.selectedTag = noTags
         }
 
         function createCategoryOptions() {
@@ -92,6 +81,16 @@ function useStockTransactionReport() {
             pre.options.catTree.unshift(allCategories)
             pre.options.catTree.unshift(noCategories)
             pre.options.selectedCategory = 999999
+        }
+
+        function createTagOptions() {
+            const tags = pre.options.allOptionsJson?.jsonResult?.tags
+            pre.options.optionsTag = tags.map((x: any) => ({ label: x.tagName, value: x.id }))
+            const allTags = { label: 'All tags', value: 0 }
+            const noTags = { label: pre.options.noTagsLabel, value: null }
+            pre.options.optionsTag.unshift(allTags)
+            pre.options.optionsTag.unshift(noTags)
+            pre.options.selectedTag = noTags
         }
 
     }
@@ -292,7 +291,8 @@ function useStockTransactionReport() {
                 '& .p-treeselect': {
                     marginLeft: theme.spacing(1)
                     // fontSize: theme.spacing(1.0)
-                }
+                },
+               
             }
         )
     }

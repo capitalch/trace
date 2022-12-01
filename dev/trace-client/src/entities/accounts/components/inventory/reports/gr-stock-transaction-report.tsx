@@ -1,5 +1,6 @@
 import {
     Box, Button, CloseSharp, DataGridPro,
+    GRID_CHECKBOX_SELECTION_COL_DEF,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
@@ -48,6 +49,7 @@ function StockTransactionReport() {
             getRowHeight={() => 'auto'}
             // rowHeight={23}
             // isRowSelectable={()=>false}
+            // initialState={{pinnedColumns:{left:[GRID_CHECKBOX_SELECTION_COL_DEF.field,'product']}}}
             rows={pre.filteredRows}
             // rowSpacingType='border'
             showCellRightBorder={true}
@@ -69,6 +71,7 @@ function StockTransactionReport() {
                         <GridToolbarColumnsButton color='secondary' />
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
+                        
                         {/* Select brand */}
                         <ReactSelect
                             menuPlacement='auto' placeholder='Select tag'
@@ -85,18 +88,8 @@ function StockTransactionReport() {
                             onChange={(e: any) => handleSelectedCategory(e.value)}
                             value={pre.options.selectedCategory}
                         />
-                        {/* <ReactSelect
-                            menuPlacement='auto' placeholder='Select tag'
-                            styles={reactSelectStyles}
-                            // options={allTagsOptions}
-                            value={pre.selectedTagOption}
-                            onChange={
-                                (selectedTag: any) => {
-                                    // handleSelectedTagOption(selectedTag)
-                                }}
-                        /> */}
-                        {/* Select tag */}
-                        {/* <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography> */}
+                       
+                        {/* Select tag */}                       
                         <ReactSelect
                             menuPlacement='auto' placeholder='Select tag'
                             styles={reactSelectStyles}
