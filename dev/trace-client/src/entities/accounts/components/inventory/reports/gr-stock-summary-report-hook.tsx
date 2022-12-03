@@ -1,3 +1,4 @@
+import { ModeOfTravelSharp } from '@mui/icons-material'
 import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryReport() {
@@ -28,15 +29,15 @@ function useStockSummaryReport() {
             noCategoriesLabel: 'No categories'
         },
         queryArgs: {
-            type: '',
-            value: null
+            type: 'brand',
+            value: 0 // for all brands
         },
         setRefresh: setRefresh,
         searchText: '',
         searchTextRef: null,
         selectedAgeingOption: { label: 'Age (all)', value: 0 },
         selectedRowsObject: {},
-        selectedTagOption: { label: 'All', value: 0 },
+        // selectedTagOption: { label: 'All', value: 0 },
         sqlKey: 'get_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
@@ -117,7 +118,6 @@ function useStockSummaryReport() {
             pre.options.optionsTag.unshift(noTags)
             pre.options.selectedTag = noTags
         }
-
     }
 
     async function fetchData() {
@@ -131,7 +131,7 @@ function useStockSummaryReport() {
                     || null,
                 days: pre.selectedAgeingOption.value || 0,
                 isAll: false, // Only products having some transaction or OP bal are shown
-                tagId: pre.selectedTagOption.value,
+                // tagId: pre.selectedTagOption.value,
                 type: pre.queryArgs.type,
                 value: pre.queryArgs.value
             },
@@ -163,6 +163,7 @@ function useStockSummaryReport() {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         createOptions() // create options arrays for brands, categories and tags
+        await fetchData()
     }
 
     function getAgeingOptions() {
@@ -237,9 +238,10 @@ function useStockSummaryReport() {
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
+                // field:'product',
                 // renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params: any) => `${params.row.catName ? params.row.catName : ''} ${params.row.brandName ? params.row.brandName : ''} ${params.row.label ? params.row.label : params.row.label}`,
-                valueFormatter: (params: any) => `${params?.value ? params.value : ''} `,
+                valueGetter: (params: any) => `${params.row?.catName ? params.row.catName : ''} ${params.row?.brandName ? params.row.brandName : ''} ${params.row?.label ? params.row.label : params.row.label}`,
+                // valueFormatter: (params: any) => `${params?.value ? params.value : ''} `,
                 width: 200,
             },
             {
@@ -462,6 +464,9 @@ function useStockSummaryReport() {
             opValue: 0, op: 0, dr: 0, cr: 0, clos: 0, closValue: 0, count: 0, grossProfit: 0
         })
         totals.id = 'Total'
+        totals.catName = ''
+        totals.brandName = ''
+        totals.label = ''
         return (totals)
     }
 
@@ -482,8 +487,7 @@ function useStockSummaryReport() {
         pre.queryArgs.value = selectedBrand.value
 
         pre.options.selectedCategory = 999999
-        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }       
-        setRefresh({})
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
         fetchData()
     }
 
@@ -493,8 +497,7 @@ function useStockSummaryReport() {
         pre.queryArgs.value = selectedCategory
 
         pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
-        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }        
-        setRefresh({})
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
         fetchData()
     }
 
@@ -505,7 +508,6 @@ function useStockSummaryReport() {
 
         pre.options.selectedCategory = 999999
         pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
-        setRefresh({})
         fetchData()
     }
 
