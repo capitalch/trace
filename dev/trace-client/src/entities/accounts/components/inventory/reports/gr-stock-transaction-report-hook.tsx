@@ -9,7 +9,9 @@ function useStockTransactionReport() {
 
     const meta: any = useRef({
         allRows: [],
+        debounceMessage: 'STOCK-SUMMARY-DEBOUNCE',
         filteredRows: [],
+        isSearchTextEdited: false,
         options: {
             allOptionsJson: {},
             optionsSqlKey: 'get_options_brands_categories_tags',
@@ -28,6 +30,8 @@ function useStockTransactionReport() {
             value: null
         },
         setRefresh: setRefresh,
+        searchText: '',
+        searchTextRef: null,
         sqlKey: 'get_stock_transactions',
         subTitle: '',
         title: 'Stock transactions',
@@ -36,8 +40,22 @@ function useStockTransactionReport() {
     const pre = meta.current
 
     useEffect(() => {
+        if (pre.isSearchTextEdited && pre.searchTextRef.current) {
+            pre.searchTextRef.current.focus()
+        }
+    })
+
+    useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
         fetchOptionsData()
+        const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
+            const requestSearch = d.data[0]
+            const searchText = d.data[1]
+            requestSearch(searchText)
+        })
+        return (() => {
+            subs1.unsubscribe()
+        })
     }, [])
 
     function createOptions() {
@@ -365,19 +383,23 @@ function useStockTransactionReport() {
         let count = 1
         let bufferBal = 0
         let bColor = false
+        // let bufferGp = 0
         for (let i = 0; i < length; i++) {
             const remarks = rows[i].remarks
             const debits = rows[i].debits
             const credits = rows[i].credits
+            const gp = rows[i].grossProfit
             if (remarks === 'Opening balance') {
                 bufferBal = rows[i].debits - rows[i].credits
+                // bufferGp = gp
                 rows[i].itemIndex = incr()
                 bColor = !bColor
                 // rows[i].bColor = bColor
             } else if (remarks === 'Summary') {
-
+                // rows[i].grossProfit = bufferGp
             } else {
                 bufferBal = bufferBal + debits - credits
+                // bufferGp = bufferGp + gp
                 rows[i].balance = bufferBal
                 // rows[i].bColor = bColor
                 rows[i].productCode = ''

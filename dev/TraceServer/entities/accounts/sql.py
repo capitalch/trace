@@ -2333,7 +2333,7 @@ allSqls = {
             order by "product", "tranDate", "timestamp"
         ),
         cte7 as ( -- calculate closing
-            select "productId", "productCode", "product", SUM("debits") as "debits", SUM("credits") as "credits", SUM("debits" - "credits") as "balance"
+            select "productId", "productCode", "product", SUM("debits") as "debits", SUM("credits") as "credits", SUM("debits" - "credits") as "balance", SUM("grossProfit") as "grossProfit"
                 from cte6 c6
             GROUP BY "productId", "productCode", "product"
                 order by "productId"
@@ -2346,7 +2346,7 @@ allSqls = {
             , "debits"
             , "credits"
             , "balance"
-            , '' as "tranType", 0 as "price", 'Summary' as "remarks", CURRENT_TIMESTAMP as timestamp, 0 as "grossProfit"
+            , '' as "tranType", 0 as "price", 'Summary' as "remarks", CURRENT_TIMESTAMP as timestamp, "grossProfit"
             from cte7 c7
         ) select * from cte8
             order by "product","tranDate", "timestamp"

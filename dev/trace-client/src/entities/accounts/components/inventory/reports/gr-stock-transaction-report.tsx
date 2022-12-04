@@ -1,21 +1,23 @@
 import {
-    Box, DataGridPro,
+    Box, DataGridPro, 
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
     IconButton, ReactSelect, SyncSharp, TreeSelect,
-    Typography, useState, useTheme,
+    Typography,useRef, useState, useTheme,
     utilMethods,
 } from '../redirect'
 import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
+import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockTransactionReport() {
     const { fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
     // const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
+    pre.searchTextRef = useRef({})
     const { toDecimalFormat } = utilMethods()
 
     const reactSelectStyles = {
@@ -107,7 +109,7 @@ function StockTransactionReport() {
                             <SyncSharp fontSize='small'></SyncSharp>
                         </IconButton>
                     </Box>
-                    {/* <GridSearchBox parentMeta={meta} /> */}
+                    <GridSearchBox parentMeta={meta} />
                 </Box>
             </GridToolbarContainer>
         )
