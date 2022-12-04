@@ -1,21 +1,13 @@
 import {
-    Box, CloseSharp, DataGridPro,
-    GridToolbarFilterButton,
-    GridToolbarExport,
-    GridToolbarContainer,
-    GridToolbarColumnsButton,
-    GridFooterContainer,
-    IconButton, moment, ReactSelect, SyncSharp, TextField,
-    Typography, useRef, useState, useTheme,
-    useStockSummaryReport, utilMethods,
+    DataGridPro,
 } from '../redirect'
 import { useCurrentOrdersReport } from './gr-current-orders-report-hook'
 
 function CurrentOrdersReport() {
-    const { fetchData, getColumns, getGridSx, getRowClassName, meta } = useCurrentOrdersReport()
+    const { getColumns, getGridSx, getRowClassName, meta } = useCurrentOrdersReport()
     const pre = meta.current
-    const theme = useTheme()
-    const { toDecimalFormat } = utilMethods()
+    // const theme = useTheme()
+    // const { toDecimalFormat } = utilMethods()
     return (
         <DataGridPro
             checkboxSelection={true}

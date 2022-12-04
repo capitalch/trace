@@ -1,20 +1,19 @@
 import {
-    Box, Button, CloseSharp, DataGridPro,
-    GRID_CHECKBOX_SELECTION_COL_DEF,
+    Box, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, IMegaData, MegaDataContext, moment, ReactSelect, SyncSharp, TextField, TreeSelect,
-    Typography, useContext, useRef, useState, useTheme,
-    useStockSummaryReport, utilMethods,
+    IconButton, ReactSelect, SyncSharp, TreeSelect,
+    Typography, useState, useTheme,
+    utilMethods,
 } from '../redirect'
 import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
 
 function StockTransactionReport() {
     const { fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
-    const megaData: IMegaData = useContext(MegaDataContext)
+    // const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
