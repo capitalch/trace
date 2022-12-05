@@ -585,7 +585,7 @@ allSqls = {
             from cte4 c4
                 join "cteStock" c
                     on c4."productId" = c."productId"
-            where (("order" - "clos") > 0) and ("clos" > 0)
+            where (("order" - "clos") > 0) and ("clos" >= 0)
         order by "brandName", "catName",  "label"
     ''',
 
@@ -2223,8 +2223,8 @@ allSqls = {
             "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "type" as (values (%(type)s::text)), "value" as (values (%(value)s::int))
             --"branchId" as (values(1)), "finYearId" as (values (2022)), "type" as (values('cat')), "value" as (values(0))
             , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId")),
-			"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") )),
-            cte1 as ( --all account names for tranHeaderId
+			"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") ))
+            , cte1 as ( --all account names for tranHeaderId
                 select h."id" as "tranHeaderId", STRING_AGG("accName", ', ') as "accountNames"
                     from "TranH" h
                         join "TranD" d
@@ -2233,8 +2233,8 @@ allSqls = {
                             on a."id" = d."accId"
                     where "tranTypeId" in(4,5,9,10)
                     group by h."id"
-            ),
-            cte2 as -- Rows from SalesPurchaseDetails table
+            )
+            , cte2 as -- Rows from SalesPurchaseDetails table
                 (select "productId", "productCode","autoRefNo"
                 , h."id" as "tranHeaderId"
                 , CONCAT_WS(' ', "catName", "brandName", "label") "product"
@@ -2260,8 +2260,8 @@ allSqls = {
                         on b."id" = p."brandId"
                     join "CategoryM" c
                         on c."id" = p."catId"
-                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId"))				
-			,cte22 as ( -- add lastTranPurchasePrice
+                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId"))			
+			, cte22 as ( -- add lastTranPurchasePrice
 				select c2.*
 				, (
 					select DISTINCT on("productId") "price"
@@ -2271,14 +2271,14 @@ allSqls = {
 				) as "lastTranPurchasePrice"
 				, "openingPrice"				
 					from cte2 c2
-						join "ProductOpBal" p
+						left join "ProductOpBal" p
 							on p."productId" = c2."productId"
 			)
 			, cte222 as ( --add gross profit
 				select cte22.*, "qty" * ("price" - COALESCE("lastTranPurchasePrice", "openingPrice")) as "grossProfit"
 					from cte22
-			),
-            cte3 as ( -- cte1 join cte2 for getting accountNames
+			)
+            , cte3 as ( -- cte1 join cte2 for getting accountNames
                 select c2."productId", "productCode", "product", "tranDate", "debits", "credits", "tranType", "price", CONCAT_WS(', ',"accountNames", "remarks") as "remarks"
                 , "timestamp", "grossProfit"
                     from cte222 c2
