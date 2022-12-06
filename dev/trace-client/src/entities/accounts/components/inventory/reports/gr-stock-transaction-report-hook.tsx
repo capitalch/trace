@@ -383,7 +383,6 @@ function useStockTransactionReport() {
         let count = 1
         let bufferBal = 0
         let bColor = false
-        // let bufferGp = 0
         for (let i = 0; i < length; i++) {
             const remarks = rows[i].remarks
             const debits = rows[i].debits
@@ -391,17 +390,13 @@ function useStockTransactionReport() {
             const gp = rows[i].grossProfit
             if (remarks === 'Opening balance') {
                 bufferBal = rows[i].debits - rows[i].credits
-                // bufferGp = gp
                 rows[i].itemIndex = incr()
                 bColor = !bColor
-                // rows[i].bColor = bColor
             } else if (remarks === 'Summary') {
-                // rows[i].grossProfit = bufferGp
+                
             } else {
                 bufferBal = bufferBal + debits - credits
-                // bufferGp = bufferGp + gp
                 rows[i].balance = bufferBal
-                // rows[i].bColor = bColor
                 rows[i].productCode = ''
                 rows[i].product = ''
             }

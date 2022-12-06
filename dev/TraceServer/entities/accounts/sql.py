@@ -576,17 +576,38 @@ allSqls = {
 				order by "daysLabel"
 		)
 		, cte4 as (
-			select "productId", SUM("qty"*"weight") "qty", ROUND(SUM("qty"*"weight"),0) "order"
+			select "productId", SUM("qty"*"weight") "qty", TRUNC(SUM("qty"*"weight"),0) "order"
 				from cte3
 				group by "productId"
 				order by "productId"
+		) --select * from cte4 order by "productId"
+        ,  cte5 as (
+			select c4."productId"
+			, p."productCode"
+			,"qty"
+			, COALESCE("clos"::int,0) as "clos"
+			, b."brandName"
+			, c."catName"
+			, p."label"
+			, ("order" - COALESCE("clos",0)::int) as "finalOrder"
+			, p."info"
+			, "price"
+				from cte4 c4
+					left join "cteStock" s
+						on c4."productId" = s."productId"
+					join "ProductM" p
+						on p."id" = c4."productId"
+					join "BrandM" b
+						on b."id" = p."brandId"
+					join "CategoryM" c
+						on c."id" = p."catId"
+			order by "productId"
 		)
-        select c."productId", c."productCode", c."brandName", c."catName", c."label", c."info", c."clos"::int, ("order" - "clos")::int as "finalOrder", "price" * ("order" - "clos")::decimal(12,0) as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
-            from cte4 c4
-                join "cteStock" c
-                    on c4."productId" = c."productId"
-            where (("order" - "clos") > 0) and ("clos" >= 0)
-        order by "brandName", "catName",  "label"
+		, cte6 as (
+			select "productId","productCode", "brandName", "catName", "label", "info", "clos", "finalOrder", "price" * "finalOrder" as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
+				from cte5 where ("finalOrder" > 0) and "clos" >= 0
+                    ORDER BY "brandName", "catName", "label" 
+		) select * from cte6
     ''',
 
     'get_debtors_creditors': '''

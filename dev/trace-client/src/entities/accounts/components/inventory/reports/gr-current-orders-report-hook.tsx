@@ -104,7 +104,7 @@ function useCurrentOrdersReport() {
                 field: 'product',
                 renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) => `${params.row.brandName} ${params.row.catName} ${params.row.label}`,
-                width: 200,
+                width: 250,
             },
             {
                 cellClassName: 'cell-class-product',
@@ -112,7 +112,7 @@ function useCurrentOrdersReport() {
                 headerClassName: 'header-class',
                 description: 'Product details',
                 field: 'info',
-                width: 200,
+                width: 250,
             },
             {
                 // cellClassName: 'cell-class-stock',
