@@ -1,4 +1,3 @@
-import { ModeOfTravelSharp } from '@mui/icons-material'
 import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function useStockSummaryReport() {
@@ -545,29 +544,3 @@ function useStockSummaryReport() {
 }
 
 export { useStockSummaryReport }
-
-// {
-//     cellClassName: 'cell-class-padding',
-//     headerName: 'Details',
-//     headerClassName: 'header-class',
-//     description: 'Product details',
-//     field: 'info',
-//     renderCell: (params: any) => <ProductDetails params={params} />,
-//     width: 300,
-// },
-
-// function Product({ params }: any) {
-//     return (
-//         <Box sx={{ overflow: 'clip' }}>
-//             {params.row.catName && <Typography component='span' sx={{ fontSize: theme.spacing(1.7) }}>{params.row.catName}</Typography>}
-//             <Typography component='span' sx={{ fontSize: theme.spacing(1.7), fontWeight: 'bold' }}>&nbsp;{params.row.brandName}</Typography>
-//             {params.row.label && <Typography component='span' sx={{ fontSize: theme.spacing(1.7) }}>&nbsp;{params.row.label}</Typography>}
-//         </Box>
-//     )
-// }
-
-// function ProductDetails({ params }: any) {
-//     return (
-//         <Typography sx={{ display: 'inline-block', whiteSpace: 'pre-line', fontSize: theme.spacing(1.6), }}>{params.row.info}</Typography>
-//     )
-// }

@@ -1020,6 +1020,51 @@ allSqls = {
 		order by "brandName", "catName",  "label", "info"
     ''',
 
+    "get_purchase_price_variation": '''
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)),
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        cte1 as (select distinct on("productId","price", "accId") "productId", "tranDate", "price", "qty", h."id" as "tranHeaderId"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+            where "branchId" = (table "branchId") 
+                and "finYearId" = (table "finYearId")
+                and "tranTypeId" = 5
+            order by "productId","price", "accId", "tranDate")
+            , cte11 as (
+                select h."id" as "tranHeaderId", "accName", "contactName", "mobileNumber", "email"
+                    from "TranH" h
+                        join "TranD" d
+                            on h."id" = d."tranHeaderId"
+                        join "AccM" a
+                            on a."id" = d."accId"
+                        join "ExtBusinessContactsAccM" e
+                            on a."id" = e."accId"
+                where "tranTypeId" = 5
+            )
+            , cte2 as (
+                select "productId", COUNT("productId") as "productCount"
+                    from cte1
+                GROUP BY "productId"
+                HAVING (COUNT("productId") > 1)
+            ) 
+            , cte3 as (select "productCode","brandName", "catName", "label",  "tranDate", "price", "qty", "accName", "contactName", "mobileNumber", "email"
+                from cte1 c1
+                    join cte2 c2
+                        on c1."productId" = c2."productId"
+                    join cte11 c11
+                        on c1."tranHeaderId" = c11."tranHeaderId"
+                    join "ProductM" p
+                        on p."id" = c1."productId"
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+                    ) select * from cte3 order by "brandName","catName","label", "productCode", "tranDate"
+    ''',
+
     "get_purchase_report": '''
         select "autoRefNo", "userRefNo", "tranDate", s."productId", "productCode", "catName", "brandName","label", "tranTypeId", "price", "discount", s."gstRate"
 			, s."id" as "salePurchaseDetailsId"

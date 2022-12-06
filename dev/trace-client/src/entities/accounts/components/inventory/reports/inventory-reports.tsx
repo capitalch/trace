@@ -49,10 +49,15 @@ const reportsJson: any[] = [
         breadCrumb: 'Products list'
     },
     {
+        label: 'Purchase price variation',
+        value: 'purchasePriceVariation',
+        breadCrumb: 'Purchase price variation'
+    },
+    {
         label: 'Purchases',
         value: 'purchaseReport',
         breadCrumb: 'Purchases'
-    },
+    },    
     {
         label: 'Sales',
         value: 'salesReport',
