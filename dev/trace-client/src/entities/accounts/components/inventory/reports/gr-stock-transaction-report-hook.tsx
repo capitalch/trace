@@ -110,7 +110,6 @@ function useStockTransactionReport() {
             pre.options.optionsTag.unshift(noTags)
             pre.options.selectedTag = noTags
         }
-
     }
 
     async function fetchData() {

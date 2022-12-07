@@ -1,18 +1,6 @@
-## Stock transaction
-1. Search Box
-2. Transaction on product code
-3. 
-                                                                                            1. Remove Ageing, on Date
-                                                                                            2. Implement tags
-                                                                                            3. Dropdown category + product hierarchy
-                                                                                            4. Check date sorting working or not
-                                                                                            6. Add price
-                                                                                            7. Balance negative red
-
-## Stock summary
-1. Server implementation and testing
-## Sales report
-1. While in stock journal does not show correct GP
+## Reports modification
+!. Purchase-price-variation: Header, search on brand, category, tag
+!. Sales: New brand, category, tags
 
 ## upgrade trace-client chitta and kush
 npm install @mui/material @mui/styles @mui/x-data-grid-pro rxjs big.js clsx moment primereact

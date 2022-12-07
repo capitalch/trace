@@ -9,49 +9,100 @@ function usePurchasePriceVariation() {
 
     const meta: any = useRef({
         allRows: [],
-        // dataPath: 'jsonResult.stock',
-        // debounceMessage: 'STOCK-SUMMARY-DEBOUNCE',
         filteredRows: [],
-        // getTotals: getTotals,
-        // isSearchTextEdited: false,
-        // options: {
-        //     allOptionsJson: {},
-        //     optionsSqlKey: 'get_options_brands_categories_tags',
-        //     optionsBrand: [],
-        //     selectedBrand: {},
-        //     noBrandsLabel: 'No brands',
-        //     optionsTag: [],
-        //     selectedTag: {},
-        //     noTagsLabel: 'No tags',
-        //     catTree: [],
-        //     selectedCategory: 0,
-        //     noCategoriesLabel: 'No categories'
-        // },
+        options: {
+            allOptionsJson: {},
+            optionsSqlKey: 'get_options_brands_categories_tags',
+            optionsBrand: [],
+            selectedBrand: {},
+            noBrandsLabel: 'No brands',
+            optionsTag: [],
+            selectedTag: {},
+            noTagsLabel: 'No tags',
+            catTree: [],
+            selectedCategory: 0,
+            noCategoriesLabel: 'No categories'
+        },
+        queryArgs: {
+            type: '',
+            value: null
+        },
         setRefresh: setRefresh,
-        // searchText: '',
-        // searchTextRef: null,
-        // selectedAgeingOption: { label: 'Age (all)', value: 0 },
-        // selectedRowsObject: {},
-        // selectedTagOption: { label: 'All', value: 0 },
         sqlKey: 'get_purchase_price_variation',
-        // stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
-        title: 'purchase price variation',
-        // totals: {}
+        title: 'Purchase price variation',
     })
     const pre = meta.current
 
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
-        fetchData()
+        fetchOptionsData()
+        // fetchData()
     }, [])
+
+    function createOptions() {
+        createBrandOptions()
+        createTagOptions()
+        createCategoryOptions()
+        setRefresh({})
+
+        function createBrandOptions() {
+            const brands = pre.options.allOptionsJson?.jsonResult?.brands
+            pre.options.optionsBrand = brands.map((x: any) => ({ label: x.brandName, value: x.id }))
+            const allBrands = { label: 'All brands', value: 0 }
+            const noBrands = { label: pre.options.noBrandsLabel, value: null }
+            pre.options.optionsBrand.unshift(allBrands)
+            pre.options.optionsBrand.unshift(noBrands)
+            pre.options.selectedBrand = noBrands
+        }
+
+        function createCategoryOptions() {
+            const temp: any[] = pre.options.allOptionsJson?.jsonResult?.categories
+            const cats = temp.map((x: any) => ({ key: x.id, label: x.catName, parentId: x.parentId, isLeaf: x.isLeaf, data: x.id }))
+            const dict: any = {}
+            for (const cat of cats) {
+                dict[cat.key] = cat
+            }
+            for (const cat of cats) {
+                if (cat.parentId) {
+                    const parent = dict[cat.parentId]
+                    if (parent) {
+                        if (!parent.children) {
+                            parent.children = []
+                        }
+                        parent.children.push(cat)
+                    }
+                }
+            }
+            const catTree = cats.filter((x: any) => (x.parentId === null))
+            pre.options.catTree = [...catTree]
+            const allCategories = { key: 0, label: 'All categories', isLeaf: true, parentId: null }
+            const noCategories = { key: 999999, label: pre.options.noCategoriesLabel, isLeaf: true, parentId: null }
+            pre.options.catTree.unshift(allCategories)
+            pre.options.catTree.unshift(noCategories)
+            pre.options.selectedCategory = 999999
+        }
+
+        function createTagOptions() {
+            const tags = pre.options.allOptionsJson?.jsonResult?.tags
+            pre.options.optionsTag = tags.map((x: any) => ({ label: x.tagName, value: x.id }))
+            const allTags = { label: 'All tags', value: 0 }
+            const noTags = { label: pre.options.noTagsLabel, value: null }
+            pre.options.optionsTag.unshift(allTags)
+            pre.options.optionsTag.unshift(noTags)
+            pre.options.selectedTag = noTags
+        }
+    }
 
     async function fetchData() {
         emit('SHOW-LOADING-INDICATOR', true)
         pre.allRows = await execGenericView({
             isMultipleRows: true,
             sqlKey: pre.sqlKey,
-            args: {},
+            args: {
+                type: pre.queryArgs.type,
+                value: pre.queryArgs.value
+            },
         }) || {}
         setId(pre.allRows)
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
@@ -71,6 +122,16 @@ function usePurchasePriceVariation() {
                 return (count++)
             }
         }
+    }
+
+    async function fetchOptionsData() {
+        emit('SHOW-LOADING-INDICATOR', true)
+        pre.options.allOptionsJson = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: pre.options.optionsSqlKey
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        createOptions() // create options arrays for brands, categories and tags
     }
 
     function getColumns() {
@@ -150,11 +211,12 @@ function usePurchasePriceVariation() {
                 width: 100,
             },
             {
+                // align:'right',
                 headerName: 'Diff',
                 headerClassName: 'header-class',
                 description: 'Difference in price',
                 field: 'diff',
-                // type: 'number',
+                type: 'number',
                 // valueFormatter: (params: any) => toDecimalFormat(params.value),
                 width: 100,
             },
@@ -174,7 +236,6 @@ function usePurchasePriceVariation() {
                 valueGetter: (params: any) => `${params.row?.mobileNumber ? params.row.mobileNumber : ''} ${params.row?.email ? params.row.email : ''}`,
                 width: 250,
             },
-
         ])
     }
 
@@ -191,10 +252,20 @@ function usePurchasePriceVariation() {
                     paddingBottom: theme.spacing(.5),
                     fontSize: theme.spacing(1.8),
                 },
+                '& .grid-toolbar': {
+                    width: '100%',
+                    borderBottom: '1px solid lightgrey',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start'
+                },
                 '& .header-class': {
                     fontWeight: 'bold',
                     color: 'green',
                     fontSize: theme.spacing(1.8),
+                },
+                '& .row-class-red':{
+                    color: theme.palette.error.main
                 },
                 '& .row-bcolor-true': {
                     backgroundColor: theme.palette.neutral.light,
@@ -209,7 +280,43 @@ function usePurchasePriceVariation() {
         if (row.bColor) {
             ret = 'row-bcolor-true'
         }
+        if((row.absDiff || 0) >= 5){
+            ret = clsx(ret,'row-class-red')
+        }
         return (ret)
+    }
+
+    function handleSelectedBrand(selectedBrand: any) {
+        pre.options.selectedBrand = selectedBrand
+        pre.queryArgs.type = 'brand'
+        pre.queryArgs.value = selectedBrand.value
+
+        pre.options.selectedCategory = 999999
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }       
+        setRefresh({})
+        fetchData()
+    }
+
+    function handleSelectedCategory(selectedCategory: any) {
+        pre.options.selectedCategory = selectedCategory
+        pre.queryArgs.type = 'cat'
+        pre.queryArgs.value = selectedCategory
+
+        pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }        
+        setRefresh({})
+        fetchData()
+    }
+
+    function handleSelectedTag(selectedTag: any) {
+        pre.options.selectedTag = selectedTag
+        pre.queryArgs.type = 'tag'
+        pre.queryArgs.value = selectedTag.value
+
+        pre.options.selectedCategory = 999999
+        pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
+        setRefresh({})
+        fetchData()
     }
 
     function massageRows(rows: any[]) {
@@ -224,8 +331,11 @@ function usePurchasePriceVariation() {
 
             if (productCode === bufferProductCode) {
                 if (price !== bufferPrice) {
+                    const diff = ((price - bufferPrice) / bufferPrice) * 100
+                    const absDiff = Math.abs(diff)
                     // rows[i].diff =  ''.concat(String(((price - bufferPrice)/bufferPrice) * 100), '%')
-                    rows[i].diff = toDecimalFormat(((price - bufferPrice) / bufferPrice) * 100) + ' %'
+                    rows[i].diff = toDecimalFormat(diff) + ' %'
+                    rows[i].absDiff = absDiff
                     bufferPrice = price
                 }
             } else {
@@ -234,18 +344,6 @@ function usePurchasePriceVariation() {
                 bufferPrice = price
             }
 
-            // if (remarks === 'Opening balance') {
-            //     bufferBal = rows[i].debits - rows[i].credits
-            //     rows[i].itemIndex = incr()
-            //     bColor = !bColor
-            // } else if (remarks === 'Summary') {
-
-            // } else {
-            //     bufferBal = bufferBal + debits - credits
-            //     rows[i].balance = bufferBal
-            //     rows[i].productCode = ''
-            //     rows[i].product = ''
-            // }
             rows[i].bColor = bColor
             rows[i].count = i + 1
         }
@@ -270,6 +368,6 @@ function usePurchasePriceVariation() {
         // pre.filteredRows.push(pre.totals)
         setRefresh({})
     }
-    return ({ getColumns, getGridSx, getRowClassName, meta })
+    return ({fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
 }
 export { usePurchasePriceVariation }

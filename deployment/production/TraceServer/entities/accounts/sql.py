@@ -576,17 +576,38 @@ allSqls = {
 				order by "daysLabel"
 		)
 		, cte4 as (
-			select "productId", SUM("qty"*"weight") "qty", ROUND(SUM("qty"*"weight"),0) "order"
+			select "productId", SUM("qty"*"weight") "qty", TRUNC(SUM("qty"*"weight"),0) "order"
 				from cte3
 				group by "productId"
 				order by "productId"
+		) --select * from cte4 order by "productId"
+        ,  cte5 as (
+			select c4."productId"
+			, p."productCode"
+			,"qty"
+			, COALESCE("clos"::int,0) as "clos"
+			, b."brandName"
+			, c."catName"
+			, p."label"
+			, ("order" - COALESCE("clos",0)::int) as "finalOrder"
+			, p."info"
+			, "price"
+				from cte4 c4
+					left join "cteStock" s
+						on c4."productId" = s."productId"
+					join "ProductM" p
+						on p."id" = c4."productId"
+					join "BrandM" b
+						on b."id" = p."brandId"
+					join "CategoryM" c
+						on c."id" = p."catId"
+			order by "productId"
 		)
-        select c."productId", c."productCode", c."brandName", c."catName", c."label", c."info", c."clos"::int, ("order" - "clos")::int as "finalOrder", "price" * ("order" - "clos")::decimal(12,0) as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
-            from cte4 c4
-                join "cteStock" c
-                    on c4."productId" = c."productId"
-            where (("order" - "clos") > 0) and ("clos" > 0)
-        order by "brandName", "catName",  "label"
+		, cte6 as (
+			select "productId","productCode", "brandName", "catName", "label", "info", "clos", "finalOrder", "price" * "finalOrder" as "orderValue", CASE WHEN "clos" = 0 THEN true ELSE false END as "isUrgent"
+				from cte5 where ("finalOrder" > 0) and "clos" >= 0
+                    ORDER BY "brandName", "catName", "label" 
+		) select * from cte6
     ''',
 
     'get_debtors_creditors': '''
@@ -997,6 +1018,51 @@ allSqls = {
 					on b."id" = p."brandId"
 			where p."isActive" --and (coalesce("op",0) + coalesce("purchase",0) - coalesce("purchaseRet",0) - coalesce("sale",0) + coalesce("saleRet",0) + coalesce("stockJournalDebits",0) - coalesce("stockJournalCredits",0)) <> 0
 		order by "brandName", "catName",  "label", "info"
+    ''',
+
+    "get_purchase_price_variation": '''
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)),
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        cte1 as (select distinct on("productId","price", "accId") "productId", "tranDate", "price", "qty", h."id" as "tranHeaderId"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+            where "branchId" = (table "branchId") 
+                and "finYearId" = (table "finYearId")
+                and "tranTypeId" = 5
+            order by "productId","price", "accId", "tranDate")
+            , cte11 as (
+                select h."id" as "tranHeaderId", "accName", "contactName", "mobileNumber", "email"
+                    from "TranH" h
+                        join "TranD" d
+                            on h."id" = d."tranHeaderId"
+                        join "AccM" a
+                            on a."id" = d."accId"
+                        join "ExtBusinessContactsAccM" e
+                            on a."id" = e."accId"
+                where "tranTypeId" = 5
+            )
+            , cte2 as (
+                select "productId", COUNT("productId") as "productCount"
+                    from cte1
+                GROUP BY "productId"
+                HAVING (COUNT("productId") > 1)
+            ) 
+            , cte3 as (select "productCode","brandName", "catName", "label",  "tranDate", "price", "qty", "accName", "contactName", "mobileNumber", "email"
+                from cte1 c1
+                    join cte2 c2
+                        on c1."productId" = c2."productId"
+                    join cte11 c11
+                        on c1."tranHeaderId" = c11."tranHeaderId"
+                    join "ProductM" p
+                        on p."id" = c1."productId"
+                    join "CategoryM" c
+                        on c."id" = p."catId"
+                    join "BrandM" b
+                        on b."id" = p."brandId"
+                    ) select * from cte3 order by "brandName","catName","label", "productCode", "tranDate"
     ''',
 
     "get_purchase_report": '''
@@ -2223,8 +2289,8 @@ allSqls = {
             "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "type" as (values (%(type)s::text)), "value" as (values (%(value)s::int))
             --"branchId" as (values(1)), "finYearId" as (values (2022)), "type" as (values('cat')), "value" as (values(0))
             , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId")),
-			"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") )),
-            cte1 as ( --all account names for tranHeaderId
+			"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") ))
+            , cte1 as ( --all account names for tranHeaderId
                 select h."id" as "tranHeaderId", STRING_AGG("accName", ', ') as "accountNames"
                     from "TranH" h
                         join "TranD" d
@@ -2233,8 +2299,8 @@ allSqls = {
                             on a."id" = d."accId"
                     where "tranTypeId" in(4,5,9,10)
                     group by h."id"
-            ),
-            cte2 as -- Rows from SalesPurchaseDetails table
+            )
+            , cte2 as -- Rows from SalesPurchaseDetails table
                 (select "productId", "productCode","autoRefNo"
                 , h."id" as "tranHeaderId"
                 , CONCAT_WS(' ', "catName", "brandName", "label") "product"
@@ -2260,8 +2326,8 @@ allSqls = {
                         on b."id" = p."brandId"
                     join "CategoryM" c
                         on c."id" = p."catId"
-                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId"))				
-			,cte22 as ( -- add lastTranPurchasePrice
+                where "branchId" = (table "branchId") and "finYearId" = (table "finYearId"))			
+			, cte22 as ( -- add lastTranPurchasePrice
 				select c2.*
 				, (
 					select DISTINCT on("productId") "price"
@@ -2271,14 +2337,14 @@ allSqls = {
 				) as "lastTranPurchasePrice"
 				, "openingPrice"				
 					from cte2 c2
-						join "ProductOpBal" p
+						left join "ProductOpBal" p
 							on p."productId" = c2."productId"
 			)
 			, cte222 as ( --add gross profit
 				select cte22.*, "qty" * ("price" - COALESCE("lastTranPurchasePrice", "openingPrice")) as "grossProfit"
 					from cte22
-			),
-            cte3 as ( -- cte1 join cte2 for getting accountNames
+			)
+            , cte3 as ( -- cte1 join cte2 for getting accountNames
                 select c2."productId", "productCode", "product", "tranDate", "debits", "credits", "tranType", "price", CONCAT_WS(', ',"accountNames", "remarks") as "remarks"
                 , "timestamp", "grossProfit"
                     from cte222 c2

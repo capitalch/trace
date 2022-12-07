@@ -1021,9 +1021,10 @@ allSqls = {
     ''',
 
     "get_purchase_price_variation": '''
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)),
-        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
-        cte1 as (select distinct on("productId","price", "accId") "productId", "tranDate", "price", "qty", h."id" as "tranHeaderId"
+         --with "branchId" as (values (1)), "finYearId" as (values (2022)), "type" as (values('cat')), "value" as (values(0))
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "type" as (values (%(type)s::text)), "value" as (values (%(value)s::int))
+		, "cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") ))
+        , cte1 as (select distinct on("productId","price", "accId") "productId", "tranDate", ("price" - "discount") price, "qty", h."id" as "tranHeaderId"
             from "TranH" h
                 join "TranD" d
                     on h."id" = d."tranHeaderId"
@@ -1056,7 +1057,7 @@ allSqls = {
                         on c1."productId" = c2."productId"
                     join cte11 c11
                         on c1."tranHeaderId" = c11."tranHeaderId"
-                    join "ProductM" p
+                    join "cteProduct" p
                         on p."id" = c1."productId"
                     join "CategoryM" c
                         on c."id" = p."catId"

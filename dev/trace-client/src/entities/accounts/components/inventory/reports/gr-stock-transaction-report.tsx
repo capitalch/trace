@@ -14,7 +14,6 @@ import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockTransactionReport() {
     const { fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
-    // const megaData: IMegaData = useContext(MegaDataContext)
     const pre = meta.current
     const theme = useTheme()
     pre.searchTextRef = useRef({})
@@ -42,17 +41,11 @@ function StockTransactionReport() {
                 Toolbar: CustomToolbar,
                 Footer: CustomFooter,
             }}
-            // density='compact'
             disableColumnMenu={true}
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
-            // onSelectionModelChange={onSelectModelChange}
             getRowHeight={() => 'auto'}
-            // rowHeight={23}
-            // isRowSelectable={()=>false}
-            // initialState={{pinnedColumns:{left:[GRID_CHECKBOX_SELECTION_COL_DEF.field,'product']}}}
             rows={pre.filteredRows}
-            // rowSpacingType='border'
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}
