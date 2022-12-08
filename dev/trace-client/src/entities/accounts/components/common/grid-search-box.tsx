@@ -13,7 +13,7 @@ function GridSearchBox({ parentMeta }: any) {
         autoComplete='off'
         value={pre.searchText || ''}
         onChange={handleOnChange}
-        placeholder="Search…"
+        placeholder="Global search"
         InputProps={{
             startAdornment: <>
                 <Checkbox checked={pre.isSearchTextOr} onClick={handleOnClickCheckbox} size='small' />

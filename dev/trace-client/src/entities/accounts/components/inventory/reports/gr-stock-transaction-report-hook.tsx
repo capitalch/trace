@@ -4,12 +4,14 @@ function useStockTransactionReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
-    const { debounceFilterOn, emit, } = useIbuki()
+    const {debounceEmit, debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
 
     const meta: any = useRef({
         allRows: [],
         debounceMessage: 'STOCK-SUMMARY-DEBOUNCE',
+        productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
+        productSearchText: '',
         filteredRows: [],
         isSearchTextEdited: false,
         options: {
@@ -53,8 +55,12 @@ function useStockTransactionReport() {
             const searchText = d.data[1]
             requestSearch(searchText)
         })
+        const subs2 = debounceFilterOn(pre.productSearchDebounceMessage).subscribe((d:any)=>{
+            productSearch(d.data)
+        })
         return (() => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
         })
     }, [])
 
@@ -318,7 +324,7 @@ function useStockTransactionReport() {
                     marginLeft: theme.spacing(1)
                     // fontSize: theme.spacing(1.0)
                 },
-               
+
             }
         )
     }
@@ -344,13 +350,25 @@ function useStockTransactionReport() {
         return (ret)
     }
 
+    function handleOnChangeProductSearch(e: any) {
+        pre.productSearchText = e.target.value
+        pre.setRefresh({})
+        debounceEmit(pre.productSearchDebounceMessage, e.target.value)
+    }
+
+    function handleProductSearchClear(e: any) {
+        pre.productSearchText = ''
+        // pre.isSearchTextOr = false
+        productSearch('')
+    }
+
     function handleSelectedBrand(selectedBrand: any) {
         pre.options.selectedBrand = selectedBrand
         pre.queryArgs.type = 'brand'
         pre.queryArgs.value = selectedBrand.value
 
         pre.options.selectedCategory = 999999
-        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }       
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
         setRefresh({})
         fetchData()
     }
@@ -361,7 +379,7 @@ function useStockTransactionReport() {
         pre.queryArgs.value = selectedCategory
 
         pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
-        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }        
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
         setRefresh({})
         fetchData()
     }
@@ -387,16 +405,17 @@ function useStockTransactionReport() {
             const debits = rows[i].debits
             const credits = rows[i].credits
             const gp = rows[i].grossProfit
+            // rows[i].product1 = rows[i].product // for product search purpose
             if (remarks === 'Opening balance') {
                 bufferBal = rows[i].debits - rows[i].credits
                 rows[i].itemIndex = incr()
                 bColor = !bColor
             } else if (remarks === 'Summary') {
-                
+
             } else {
                 bufferBal = bufferBal + debits - credits
                 rows[i].balance = bufferBal
-                rows[i].productCode = ''
+                rows[i].productCode = ''                
                 rows[i].product = ''
             }
             rows[i].bColor = bColor
@@ -408,6 +427,16 @@ function useStockTransactionReport() {
         }
     }
 
-    return ({ fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
+    function productSearch(txt: string) {
+        pre.filteredRows = pre.allRows.filter((row:any)=>row.product.toLowerCase().includes(txt.toLowerCase()))
+        // pre.filteredRows = fRows
+        setRefresh({})
+    }
+
+    // function sortRows(){
+    //     pre.filteredRows = _.sortBy(pre.filteredRows, "product", "timestamp")
+    // }
+
+    return ({ fetchData, getColumns, getGridSx, getRowClassName, handleOnChangeProductSearch, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
 }
 export { useStockTransactionReport }

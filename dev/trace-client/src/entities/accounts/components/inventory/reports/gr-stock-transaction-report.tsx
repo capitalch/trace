@@ -1,19 +1,19 @@
 import {
-    Box, DataGridPro, 
+    Box,CloseSharp, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
-    IconButton, ReactSelect, SyncSharp, TreeSelect,
-    Typography,useRef, useState, useTheme,
+    IconButton, ReactSelect, Search, SyncSharp, TextField, TreeSelect,
+    Typography, useRef, useState, useTheme,
     utilMethods,
 } from '../redirect'
 import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
 import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockTransactionReport() {
-    const { fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
+    const { fetchData, getColumns, getGridSx, getRowClassName, handleOnChangeProductSearch, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
     const pre = meta.current
     const theme = useTheme()
     pre.searchTextRef = useRef({})
@@ -62,10 +62,10 @@ function StockTransactionReport() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
-                        <GridToolbarColumnsButton color='secondary' />
+                        {/* <GridToolbarColumnsButton color='secondary' /> */}
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
-                        
+
                         {/* Select brand */}
                         <ReactSelect
                             menuPlacement='auto' placeholder='Select tag'
@@ -82,8 +82,8 @@ function StockTransactionReport() {
                             onChange={(e: any) => handleSelectedCategory(e.value)}
                             value={pre.options.selectedCategory}
                         />
-                       
-                        {/* Select tag */}                       
+
+                        {/* Select tag */}
                         <ReactSelect
                             menuPlacement='auto' placeholder='Select tag'
                             styles={reactSelectStyles}
@@ -94,6 +94,36 @@ function StockTransactionReport() {
                                     handleSelectedTag(selectedTag)
                                 }}
                         />
+                    
+                        {/* Product search */}
+                        <TextField
+                            autoComplete='off'
+                            InputProps={{
+                                startAdornment: <>
+                                    <Search fontSize="small" />
+                                </>,
+                                endAdornment: (
+                                    <IconButton
+                                        title="Clear"
+                                        aria-label="Clear"
+                                        size="small"
+                                        sx={{
+                                            visibility: pre.productSearchText ? 'visible' : 'hidden'
+                                        }}
+                                        // onClick={handleClear}
+                                        >
+                                        <CloseSharp fontSize="small" />
+                                    </IconButton>
+                                ),
+                            }}
+                            onChange={handleOnChangeProductSearch}
+                            placeholder='Product search'
+                            size='small'
+                            sx={{marginLeft:'0.8rem'}}
+                            value = {pre.productSearchText}
+                            variant='outlined'
+                        />
+
                         {/* Sync */}
                         <IconButton
                             size="small"
