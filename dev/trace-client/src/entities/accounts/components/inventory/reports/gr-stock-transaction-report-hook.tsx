@@ -10,8 +10,6 @@ function useStockTransactionReport() {
     const meta: any = useRef({
         allRows: [],
         debounceMessage: 'STOCK-SUMMARY-DEBOUNCE',
-        productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
-        productSearchText: '',
         filteredRows: [],
         isSearchTextEdited: false,
         options: {
@@ -27,6 +25,9 @@ function useStockTransactionReport() {
             selectedCategory: 0,
             noCategoriesLabel: 'No categories'
         },
+        productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
+        productSearchTextRef: null,
+        productSearchText:'',
         queryArgs: {
             type: '',
             value: null
@@ -39,8 +40,7 @@ function useStockTransactionReport() {
         title: 'Stock transactions',
         totals: {}
     })
-    const pre = meta.current
-
+    const pre = meta.current    
     useEffect(() => {
         if (pre.isSearchTextEdited && pre.searchTextRef.current) {
             pre.searchTextRef.current.focus()

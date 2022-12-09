@@ -3,7 +3,7 @@ import {
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
-    GridToolbarColumnsButton,
+    // GridToolbarColumnsButton,
     GridFooterContainer,
     IconButton, ReactSelect, Search, SyncSharp, TextField, TreeSelect,
     Typography, useEffect, useIbuki, useRef, useState, useTheme, utils,
@@ -17,6 +17,7 @@ function StockTransactionReport() {
     const pre = meta.current
     const theme = useTheme()
     pre.searchTextRef = useRef({})
+    pre.productSearchRef = useRef({})
     const { toDecimalFormat } = utilMethods()
 
     const reactSelectStyles = {
@@ -163,13 +164,15 @@ function ProductSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const { debounceEmit, debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-    const meta = useRef({
-        productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
-        productSearchText: '',
-        subTitle: ''
-    })
-    const pre: any = meta.current
-    const parentPre = parentMeta.current
+    // const productSearchRef:any = useRef()
+    // const meta = useRef({
+    //     productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
+    //     productSearchText: '',
+    //     subTitle: ''
+    // })
+    // const pre: any = meta.current
+    const pre = parentMeta.current
+    // parentPre.productSearchRef = useRef()
     const { getGridReportSubTitle } = utils()
 
     useEffect(() => {
@@ -201,17 +204,20 @@ function ProductSearch({ parentMeta }: any) {
                 </IconButton>
             ),
         }}
+        inputRef={pre.productSearchTextRef}
         onChange={handleOnChangeProductSearch}
         placeholder='Product search'
         size='small'
         sx={{ marginLeft: '0.8rem', width: theme.spacing(25) }}
-        value={parentPre.productSearchText}
+        value={pre.productSearchText}
+        // value = {productSearchRef.current?.value? productSearchRef.current.value : ''}
         variant='outlined'
     />)
 
     function handleOnChangeProductSearch(e: any) {
-        parentPre.productSearchText = e.target.value
-        parentPre.setRefresh({})
+        pre.productSearchText = e.target.value
+        // parentPre.setRefresh({})
+        const x = e.target.value
         debounceEmit(pre.productSearchDebounceMessage, e.target.value)
     }
 
@@ -221,8 +227,8 @@ function ProductSearch({ parentMeta }: any) {
     }
 
     function productSearch(txt: string) {
-        parentPre.filteredRows = parentPre.allRows.filter((row:any)=>row.product.toLowerCase().includes(txt.toLowerCase()))
+        pre.filteredRows = pre.allRows.filter((row: any) => row.product.toLowerCase().includes(txt.toLowerCase()))
 
-       parentPre.setRefresh({})
+        pre.setRefresh({})
     }
 }
