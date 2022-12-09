@@ -55,12 +55,12 @@ function useStockTransactionReport() {
             const searchText = d.data[1]
             requestSearch(searchText)
         })
-        const subs2 = debounceFilterOn(pre.productSearchDebounceMessage).subscribe((d:any)=>{
-            productSearch(d.data)
-        })
+        // const subs2 = debounceFilterOn(pre.productSearchDebounceMessage).subscribe((d:any)=>{
+        //     productSearch(d.data)
+        // })
         return (() => {
             subs1.unsubscribe()
-            subs2.unsubscribe()
+            // subs2.unsubscribe()
         })
     }, [])
 

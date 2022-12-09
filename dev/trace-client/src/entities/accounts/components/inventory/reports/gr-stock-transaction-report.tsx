@@ -1,12 +1,12 @@
 import {
-    Box,CloseSharp, DataGridPro,
+    Box, CloseSharp, DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
     GridFooterContainer,
     IconButton, ReactSelect, Search, SyncSharp, TextField, TreeSelect,
-    Typography, useRef, useState, useTheme,
+    Typography, useEffect, useIbuki, useRef, useState, useTheme, utils,
     utilMethods,
 } from '../redirect'
 import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
@@ -94,9 +94,10 @@ function StockTransactionReport() {
                                     handleSelectedTag(selectedTag)
                                 }}
                         />
-                    
+
                         {/* Product search */}
-                        <TextField
+                        <ProductSearch parentMeta={meta} />
+                        {/* <TextField
                             autoComplete='off'
                             InputProps={{
                                 startAdornment: <>
@@ -119,10 +120,10 @@ function StockTransactionReport() {
                             onChange={handleOnChangeProductSearch}
                             placeholder='Product search'
                             size='small'
-                            sx={{marginLeft:'0.8rem'}}
+                            sx={{marginLeft:'0.8rem', width:theme.spacing(25)}}
                             value = {pre.productSearchText}
                             variant='outlined'
-                        />
+                        /> */}
 
                         {/* Sync */}
                         <IconButton
@@ -157,3 +158,71 @@ function StockTransactionReport() {
 }
 
 export { StockTransactionReport }
+
+function ProductSearch({ parentMeta }: any) {
+    const [, setRefresh] = useState({})
+    const { debounceEmit, debounceFilterOn, emit, } = useIbuki()
+    const theme = useTheme()
+    const meta = useRef({
+        productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
+        productSearchText: '',
+        subTitle: ''
+    })
+    const pre: any = meta.current
+    const parentPre = parentMeta.current
+    const { getGridReportSubTitle } = utils()
+
+    useEffect(() => {
+        pre.subTitle = getGridReportSubTitle()
+        const subs1 = debounceFilterOn(pre.productSearchDebounceMessage).subscribe((d: any) => {
+            productSearch(d.data)
+        })
+        return (() => {
+            subs1.unsubscribe()
+        })
+    }, [])
+
+    return (<TextField
+        autoComplete='off'
+        InputProps={{
+            startAdornment: <>
+                <Search fontSize="small" />
+            </>,
+            endAdornment: (
+                <IconButton
+                    title="Clear"
+                    aria-label="Clear"
+                    size="small"
+                    sx={{
+                        visibility: pre.productSearchText ? 'visible' : 'hidden'
+                    }}
+                    onClick={handleProductSearchClear} >
+                    <CloseSharp fontSize="small" />
+                </IconButton>
+            ),
+        }}
+        onChange={handleOnChangeProductSearch}
+        placeholder='Product search'
+        size='small'
+        sx={{ marginLeft: '0.8rem', width: theme.spacing(25) }}
+        value={parentPre.productSearchText}
+        variant='outlined'
+    />)
+
+    function handleOnChangeProductSearch(e: any) {
+        parentPre.productSearchText = e.target.value
+        parentPre.setRefresh({})
+        debounceEmit(pre.productSearchDebounceMessage, e.target.value)
+    }
+
+    function handleProductSearchClear(e: any) {
+        pre.productSearchText = ''
+        productSearch('')
+    }
+
+    function productSearch(txt: string) {
+        parentPre.filteredRows = parentPre.allRows.filter((row:any)=>row.product.toLowerCase().includes(txt.toLowerCase()))
+
+       parentPre.setRefresh({})
+    }
+}
