@@ -3,7 +3,6 @@ import {
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
-    // GridToolbarColumnsButton,
     GridFooterContainer,
     IconButton, ReactSelect, Search, SyncSharp, TextField, TreeSelect,
     Typography, useEffect, useIbuki, useRef, useState, useTheme, utils,
@@ -13,7 +12,7 @@ import { useStockTransactionReport } from "./gr-stock-transaction-report-hook"
 import { GridSearchBox } from '../../common/grid-search-box'
 
 function StockTransactionReport() {
-    const { fetchData, getColumns, getGridSx, getRowClassName, handleOnChangeProductSearch, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
+    const { fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = useStockTransactionReport()
     const pre = meta.current
     const theme = useTheme()
     pre.searchTextRef = useRef({})
@@ -35,22 +34,27 @@ function StockTransactionReport() {
     }
 
     return (
-        <DataGridPro
-            checkboxSelection={true}
-            columns={getColumns()}
-            components={{
-                Toolbar: CustomToolbar,
-                Footer: CustomFooter,
-            }}
-            disableColumnMenu={true}
-            disableSelectionOnClick={true}
-            getRowClassName={getRowClassName}
-            getRowHeight={() => 'auto'}
-            rows={pre.filteredRows}
-            showCellRightBorder={true}
-            showColumnRightBorder={true}
-            sx={getGridSx()}
-        />
+        <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <ProductSearch parentMeta={meta} />
+            </Box>
+            <DataGridPro
+                checkboxSelection={true}
+                columns={getColumns()}
+                components={{
+                    Toolbar: CustomToolbar,
+                    Footer: CustomFooter,
+                }}
+                disableColumnMenu={true}
+                disableSelectionOnClick={true}
+                getRowClassName={getRowClassName}
+                getRowHeight={() => 'auto'}
+                rows={pre.filteredRows}
+                showCellRightBorder={true}
+                showColumnRightBorder={true}
+                sx={getGridSx()}
+            />
+        </Box>
     )
 
     function CustomToolbar() {
@@ -96,36 +100,6 @@ function StockTransactionReport() {
                                 }}
                         />
 
-                        {/* Product search */}
-                        <ProductSearch parentMeta={meta} />
-                        {/* <TextField
-                            autoComplete='off'
-                            InputProps={{
-                                startAdornment: <>
-                                    <Search fontSize="small" />
-                                </>,
-                                endAdornment: (
-                                    <IconButton
-                                        title="Clear"
-                                        aria-label="Clear"
-                                        size="small"
-                                        sx={{
-                                            visibility: pre.productSearchText ? 'visible' : 'hidden'
-                                        }}
-                                        // onClick={handleClear}
-                                        >
-                                        <CloseSharp fontSize="small" />
-                                    </IconButton>
-                                ),
-                            }}
-                            onChange={handleOnChangeProductSearch}
-                            placeholder='Product search'
-                            size='small'
-                            sx={{marginLeft:'0.8rem', width:theme.spacing(25)}}
-                            value = {pre.productSearchText}
-                            variant='outlined'
-                        /> */}
-
                         {/* Sync */}
                         <IconButton
                             size="small"
@@ -144,7 +118,7 @@ function StockTransactionReport() {
         return (<GridFooterContainer >
             <Box sx={{ width: '100%', display: 'flex', fontSize: theme.spacing(1.8), color: theme.palette.common.black }}>
                 <Box sx={{ display: 'flex', columnGap: theme.spacing(2), rowGap: theme.spacing(1) }}>
-                    <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length - 1) || 0))}</Box>
+                    <Box>{''.concat('Count', ' : ', String(toDecimalFormat(pre.filteredRows.length) || 0))}</Box>
                     <Box>{''.concat('Selected count', ' : ', String(pre.selectedRowsObject?.count || 0))}</Box>
                     <Box>{''.concat('Selected close', ' : ', toDecimalFormat(pre?.selectedRowsObject?.closValue || 0))}</Box>
                 </Box>
@@ -164,15 +138,7 @@ function ProductSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
     const { debounceEmit, debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-    // const productSearchRef:any = useRef()
-    // const meta = useRef({
-    //     productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
-    //     productSearchText: '',
-    //     subTitle: ''
-    // })
-    // const pre: any = meta.current
     const pre = parentMeta.current
-    // parentPre.productSearchRef = useRef()
     const { getGridReportSubTitle } = utils()
 
     useEffect(() => {
@@ -185,39 +151,39 @@ function ProductSearch({ parentMeta }: any) {
         })
     }, [])
 
-    return (<TextField
-        autoComplete='off'
-        InputProps={{
-            startAdornment: <>
-                <Search fontSize="small" />
-            </>,
-            endAdornment: (
-                <IconButton
-                    title="Clear"
-                    aria-label="Clear"
-                    size="small"
-                    sx={{
-                        visibility: pre.productSearchText ? 'visible' : 'hidden'
-                    }}
-                    onClick={handleProductSearchClear} >
-                    <CloseSharp fontSize="small" />
-                </IconButton>
-            ),
-        }}
-        inputRef={pre.productSearchTextRef}
-        onChange={handleOnChangeProductSearch}
-        placeholder='Product search'
-        size='small'
-        sx={{ marginLeft: '0.8rem', width: theme.spacing(25) }}
-        value={pre.productSearchText}
-        // value = {productSearchRef.current?.value? productSearchRef.current.value : ''}
-        variant='outlined'
-    />)
+    return (
+        <TextField
+            autoComplete='off'
+            InputProps={{
+                startAdornment: <>
+                    <Search fontSize="small" />
+                </>,
+                endAdornment: (
+                    <IconButton
+                        title="Clear"
+                        aria-label="Clear"
+                        size="small"
+                        sx={{
+                            visibility: pre.productSearchText ? 'visible' : 'hidden'
+                        }}
+                        onClick={handleProductSearchClear} >
+                        <CloseSharp fontSize="small" />
+                    </IconButton>
+                ),
+            }}
+            onChange={handleOnChangeProductSearch}
+            label='Product search'
+            placeholder='Product search'
+            size='small'
+            sx={{ marginBottom: theme.spacing(1) }}
+            value={pre.productSearchText || ''}
+            variant='standard'
+        />
+    )
 
     function handleOnChangeProductSearch(e: any) {
         pre.productSearchText = e.target.value
-        // parentPre.setRefresh({})
-        const x = e.target.value
+        setRefresh({})
         debounceEmit(pre.productSearchDebounceMessage, e.target.value)
     }
 
@@ -228,7 +194,6 @@ function ProductSearch({ parentMeta }: any) {
 
     function productSearch(txt: string) {
         pre.filteredRows = pre.allRows.filter((row: any) => row.product.toLowerCase().includes(txt.toLowerCase()))
-
         pre.setRefresh({})
     }
 }

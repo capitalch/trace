@@ -1,10 +1,9 @@
-import clsx from 'clsx'
-import { _, Box, CloseSharp, GridCellParams, IconButton, moment, Typography, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, GridCellParams, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 function useStockTransactionReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
-    const {debounceEmit, debounceFilterOn, emit, } = useIbuki()
+    const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
 
     const meta: any = useRef({
@@ -26,8 +25,7 @@ function useStockTransactionReport() {
             noCategoriesLabel: 'No categories'
         },
         productSearchDebounceMessage: 'PRODUCT-SEARCH-DEBOUNCE',
-        productSearchTextRef: null,
-        productSearchText:'',
+        productSearchText: '',
         queryArgs: {
             type: '',
             value: null
@@ -40,7 +38,7 @@ function useStockTransactionReport() {
         title: 'Stock transactions',
         totals: {}
     })
-    const pre = meta.current    
+    const pre = meta.current
     useEffect(() => {
         if (pre.isSearchTextEdited && pre.searchTextRef.current) {
             pre.searchTextRef.current.focus()
@@ -51,16 +49,13 @@ function useStockTransactionReport() {
         pre.subTitle = getGridReportSubTitle()
         fetchOptionsData()
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
+            pre.productSearchText = ''
             const requestSearch = d.data[0]
             const searchText = d.data[1]
             requestSearch(searchText)
         })
-        // const subs2 = debounceFilterOn(pre.productSearchDebounceMessage).subscribe((d:any)=>{
-        //     productSearch(d.data)
-        // })
         return (() => {
             subs1.unsubscribe()
-            // subs2.unsubscribe()
         })
     }, [])
 
@@ -136,8 +131,6 @@ function useStockTransactionReport() {
         setId(pre.allRows)
         pre.filteredRows = pre.allRows.map((x: any) => ({ ...x })) //its faster
         massageRows(pre.filteredRows)
-        // pre.totals = getTotals() || {}
-        // pre.filteredRows.push(pre.totals)
         emit('SHOW-LOADING-INDICATOR', false)
         setRefresh({})
 
@@ -172,7 +165,6 @@ function useStockTransactionReport() {
                 field: 'itemIndex',
                 width: 60,
             },
-
             {
                 cellClassName: getCellClassName,
                 headerName: 'Pr code',
@@ -199,27 +191,22 @@ function useStockTransactionReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
-                // cellClassName: 'cell-class-bold',
                 headerName: 'Debits',
                 headerClassName: 'header-class',
                 description: 'Debits',
                 field: 'debits',
                 type: 'number',
                 width: 80,
-                // valueFormatter: (params: any) => params.value ? params.value : '' //toCurrentDateFormat(params.value || '')
             },
             {
-                // cellClassName: 'cell-class-bold',
                 headerName: 'Credits',
                 headerClassName: 'header-class',
                 description: 'Credits',
                 field: 'credits',
                 type: 'number',
                 width: 80,
-                // valueFormatter: (params: any) => params.value ? params.value : ''
             },
             {
-                // cellClassName: 'cell-class-bold',
                 headerName: 'Balance',
                 headerClassName: 'header-class',
                 description: 'Balance',
@@ -280,8 +267,8 @@ function useStockTransactionReport() {
             {
                 p: 1, width: '100%',
                 fontSize: theme.spacing(1.7),
-                minHeight: theme.spacing(80),
-                height: 'calc(100vh - 230px)',
+                minHeight: theme.spacing(70), //80
+                height: 'calc(100vh - 280px)',
                 fontFamily: 'Helvetica',
                 '& .footer-row-class': {
                     backgroundColor: theme.palette.grey[300]
@@ -301,7 +288,6 @@ function useStockTransactionReport() {
                 '& .cell-class-padding': {
                     paddingTop: theme.spacing(1),
                     paddingBottom: theme.spacing(1),
-                    // fontSize: theme.spacing(1.8),
                 },
                 '& .row-class-bold': {
                     fontWeight: 'bold',
@@ -318,12 +304,10 @@ function useStockTransactionReport() {
                 },
                 '& .row-red': {
                     color: theme.palette.error.dark,
-                    // color: theme.palette.getContrastText(theme.palette.error.light)
                 },
                 '& .p-treeselect': {
                     marginLeft: theme.spacing(1)
-                    // fontSize: theme.spacing(1.0)
-                },
+                }
 
             }
         )
@@ -350,18 +334,6 @@ function useStockTransactionReport() {
         return (ret)
     }
 
-    function handleOnChangeProductSearch(e: any) {
-        pre.productSearchText = e.target.value
-        pre.setRefresh({})
-        debounceEmit(pre.productSearchDebounceMessage, e.target.value)
-    }
-
-    function handleProductSearchClear(e: any) {
-        pre.productSearchText = ''
-        // pre.isSearchTextOr = false
-        productSearch('')
-    }
-
     function handleSelectedBrand(selectedBrand: any) {
         pre.options.selectedBrand = selectedBrand
         pre.queryArgs.type = 'brand'
@@ -369,6 +341,7 @@ function useStockTransactionReport() {
 
         pre.options.selectedCategory = 999999
         pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
+        pre.productSearchText = ''
         setRefresh({})
         fetchData()
     }
@@ -380,6 +353,7 @@ function useStockTransactionReport() {
 
         pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
         pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
+        pre.productSearchText = ''
         setRefresh({})
         fetchData()
     }
@@ -391,6 +365,7 @@ function useStockTransactionReport() {
 
         pre.options.selectedCategory = 999999
         pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
+        pre.productSearchText = ''
         setRefresh({})
         fetchData()
     }
@@ -404,8 +379,7 @@ function useStockTransactionReport() {
             const remarks = rows[i].remarks
             const debits = rows[i].debits
             const credits = rows[i].credits
-            const gp = rows[i].grossProfit
-            // rows[i].product1 = rows[i].product // for product search purpose
+            // const gp = rows[i].grossProfit
             if (remarks === 'Opening balance') {
                 bufferBal = rows[i].debits - rows[i].credits
                 rows[i].itemIndex = incr()
@@ -415,7 +389,7 @@ function useStockTransactionReport() {
             } else {
                 bufferBal = bufferBal + debits - credits
                 rows[i].balance = bufferBal
-                rows[i].productCode = ''                
+                rows[i].productCode = ''
                 rows[i].product = ''
             }
             rows[i].bColor = bColor
@@ -427,16 +401,12 @@ function useStockTransactionReport() {
         }
     }
 
-    function productSearch(txt: string) {
-        pre.filteredRows = pre.allRows.filter((row:any)=>row.product.toLowerCase().includes(txt.toLowerCase()))
-        // pre.filteredRows = fRows
-        setRefresh({})
-    }
-
-    // function sortRows(){
-    //     pre.filteredRows = _.sortBy(pre.filteredRows, "product", "timestamp")
+    // function resetProductSearch() {
+    //     pre.productSearchText = ''
+    //     setRefresh({})
     // }
 
-    return ({ fetchData, getColumns, getGridSx, getRowClassName, handleOnChangeProductSearch, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
+    return ({ fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
 }
+
 export { useStockTransactionReport }
