@@ -24,7 +24,6 @@ import {
     useTheme,
 } from '../../../../imports/gui-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { ThemeConsumer } from 'styled-components'
 
 function useBankRecon() {
     const [, setRefresh] = useState({})
