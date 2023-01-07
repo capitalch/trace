@@ -1,3 +1,4 @@
+import { SxProps } from '@mui/material'
 import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
 
 function usePurchasePriceVariation() {
@@ -239,7 +240,7 @@ function usePurchasePriceVariation() {
         ])
     }
 
-    function getGridSx() {
+    function getGridSx(): SxProps {
         return (
             {
                 p: 1, width: '100%',
@@ -264,7 +265,7 @@ function usePurchasePriceVariation() {
                     color: 'green',
                     fontSize: theme.spacing(1.8),
                 },
-                '& .row-class-red':{
+                '& .row-class-red': {
                     color: theme.palette.error.main
                 },
                 '& .row-bcolor-true': {
@@ -280,8 +281,8 @@ function usePurchasePriceVariation() {
         if (row.bColor) {
             ret = 'row-bcolor-true'
         }
-        if((row.absDiff || 0) >= 5){
-            ret = clsx(ret,'row-class-red')
+        if ((row.absDiff || 0) >= 5) {
+            ret = clsx(ret, 'row-class-red')
         }
         return (ret)
     }
@@ -292,7 +293,7 @@ function usePurchasePriceVariation() {
         pre.queryArgs.value = selectedBrand.value
 
         pre.options.selectedCategory = 999999
-        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }       
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
         setRefresh({})
         fetchData()
     }
@@ -303,7 +304,7 @@ function usePurchasePriceVariation() {
         pre.queryArgs.value = selectedCategory
 
         pre.options.selectedBrand = { value: null, label: pre.options.noBrandsLabel }
-        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }        
+        pre.options.selectedTag = { value: null, label: pre.options.noTagsLabel }
         setRefresh({})
         fetchData()
     }
@@ -368,6 +369,6 @@ function usePurchasePriceVariation() {
         // pre.filteredRows.push(pre.totals)
         setRefresh({})
     }
-    return ({fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
+    return ({ fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
 }
 export { usePurchasePriceVariation }
