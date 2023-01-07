@@ -19,7 +19,6 @@ import {
     makeStyles,
     NativeSelect,
     Theme,
-    Typography,
     createStyles,
     useTheme,
 } from '../../../../imports/gui-imports'
