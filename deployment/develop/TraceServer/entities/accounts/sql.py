@@ -1196,7 +1196,7 @@ allSqls = {
     ''',
 
     "get_sale_report":'''
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2022-04-01' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)), "days" as (values (COALESCE(%(days)s,0))),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
@@ -1256,16 +1256,16 @@ allSqls = {
         ), 
         cte2 as( -- compute last purchase date and last purchase price till sale date
             select c0.*, accounts, (
-                select distinct on("productId") "price"
+                select distinct on("productId") coalesce("price",0) as "price"
 					from cte0
-						where ("tranTypeId" = 5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId")
+						where ("tranTypeId" in (5,11) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
 					order by "productId", "tranDate" DESC, "salePurchaseDetailsId" DESC
 				
             ) as "lastPurchasePrice",
 			(
 				select distinct on("productId") "tranDate"
 					from cte0
-						where ("tranTypeId" = 5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId")
+						where ("tranTypeId" in (5,11) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
 					order by "productId", "tranDate" DESC, "salePurchaseDetailsId" DESC
             ) as "lastPurchaseDate"
                 from cte0 c0
