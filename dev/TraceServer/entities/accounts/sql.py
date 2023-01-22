@@ -1196,7 +1196,7 @@ allSqls = {
     ''',
 
     "get_sale_report":'''
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values('2023-01-17' ::date)), "days" as (values(0)),
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)), "days" as (values (COALESCE(%(days)s,0))),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
@@ -1258,7 +1258,7 @@ allSqls = {
             select c0.*, accounts, (
                 select distinct on("productId") coalesce("price",0) as "price"
 					from cte0
-						where ("tranTypeId" in (5,11) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
+						where ("tranTypeId" in (5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
 					order by "productId", "tranDate" DESC, "salePurchaseDetailsId" DESC
 				
             ) as "lastPurchasePrice",
@@ -1276,7 +1276,7 @@ allSqls = {
         
         cte3 as ( -- using ProductOpBal fill for missing lastPurchasePrice and lastPurchaseDate (c1 is ProductOpBal)
                 select "tranDate", c2."productId", c2."qty", "price", "timestamp", "accounts","contact"
-                , coalesce("lastPurchasePrice","openingPrice") as "lastPurchasePrice"
+                , coalesce("lastPurchasePrice","openingPrice",0) as "lastPurchasePrice"
                 , coalesce(c2."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
                 , c2."qty" * "price" as "aggrSale", "cgst", "sgst", "igst"
                 , "amount", "gstRate", "tranTypeId","salePurchaseDetailsId", "autoRefNo"
