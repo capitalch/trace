@@ -1196,7 +1196,11 @@ allSqls = {
     ''',
 
     "get_sale_report":'''
+<<<<<<< HEAD
         --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values('2023-01-17' ::date)), "days" as (values(0)),
+=======
+        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
+>>>>>>> d393a5eeaa44e466ed763430af8f43ee890cf5e6
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)), "days" as (values (COALESCE(%(days)s,0))),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
@@ -1258,7 +1262,11 @@ allSqls = {
             select c0.*, accounts, (
                 select distinct on("productId") coalesce("price",0) as "price"
 					from cte0
+<<<<<<< HEAD
 						where ("tranTypeId" in (5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
+=======
+						where ("tranTypeId" in (5,11) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
+>>>>>>> d393a5eeaa44e466ed763430af8f43ee890cf5e6
 					order by "productId", "tranDate" DESC, "salePurchaseDetailsId" DESC
 				
             ) as "lastPurchasePrice",
