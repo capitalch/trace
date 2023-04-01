@@ -325,74 +325,67 @@ select * from cte2
 16) TaxM (may not be there, can be provided in settings)
 	id(tinyInt), taxName(text), taxPercent(numeric(5,2)), jData(jsonB)
 
-set search_path to capitalchowringhee;
-with cte1 as (select 
-            d."id" as "tranDetailsId",
-            h."id" --as "headerId"
-            , "tranDate"
-            , "tranTypeId"
-            , "userRefNo"
-            , h."remarks"
-            , "autoRefNo"
-            , "lineRefNo"
-            , "instrNo"
-            , d."remarks" as "lineRemarks"
-            , CASE WHEN "dc" = 'D' then "amount" ELSE 0 END as "credit"
-            , CASE WHEN "dc" = 'C' then "amount" ELSE 0 END as "debit"
-            , x."clearDate", "clearRemarks", x."id" as "bankReconId"
-            , x."clearDate" as "origClearDate"
-            , "clearRemarks" as "origClearRemarks"
-                from "TranD" d
-                    left outer join "ExtBankReconTranD" x
-                        on d."id" = x."tranDetailsId"
-                    join "TranH" h
-                        on h."id" = d."tranHeaderId"
-            where "accId" = 310 --%(accId)s
-                and (("finYearId" = 2022) --or  %(finYearId)s
-                --(x."clearDate" between %(isoStartDate)s and %(isoEndDate)s)
-                )
-            order by "clearDate", "tranDate", h."id"
-        ), 
-        cte2 as (
-            select
-            CASE WHEN "dc" = 'D' then "amount" ELSE 0.00 END as "debit"
-            , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
-            , "dc"
-            from "BankOpBal"
-                where "accId" = 310 --%(accId)s
-                    and "finYearId" = 2022 --%(finYearId)s
-                    )
-                    ,
-        cte3 as (
-            select c1.* 
-            , (
-                select string_agg("accName", ' ,')
-                    from "TranD" d1
-                        join "AccM" a
-                            on a."id" = d1."accId"
-                    where d1."tranHeaderId" = c1."id"
-                        and "accId" <> 310 --%(accId)s
-                ) as "accNames"
-            from cte1 c1
-                order by "clearDate","tranDate", "id"
-                --order by c1."headerId" DESC
-        )
-        select "id", "tranDate", "autoRefNo", "instrNo", "credit", "debit", "clearDate", "accNames" from cte3
-            where "tranTypeId" = 2 and ("autoRefNo" like '%950%')
-                order by "clearDate" DESC
---        select json_build_object(
---            'bankRecon', (SELECT json_agg(row_to_json(a)) from cte3 a)
---            , 'opBalance', (SELECT row_to_json(b) from cte2 b)
---        ) as "jsonResult"
 
-set search_path to capitalchowringhee;
-select * from 
-    "TranH" h
-        join "TranD" d
-            on h."id" = d."tranHeaderId"
-        join "ExtBankReconTranD" x
-            on d."id" = x."tranDetailsId"
-        where "finYearId" = 2022
-            and "tranTypeId" = 2
-            and "accId" = 310
-            and ("autoRefNo" like '%950%')
+set search_path to demounit1;
+with "branchId" as (values (1)), "finYearId" as (values (2022)), "closingDate" as (values ('2023-03-31')),
+        --with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        cte1 as (
+            select "productId", (table "branchId") "branchId", ((table "finYearId") + 1) "finYearId", "clos" "qty", "price" "openingPrice", "lastPurchaseDate"
+                from get_stock_on_date((table "branchId"), (table "finYearId"), (table "closingDate")::date)
+        ),
+        cte2 as (
+            insert into "ProductOpBal" ("productId", "branchId", "finYearId", "qty", "openingPrice", "lastPurchaseDate")
+                select "productId", "branchId", "finYearId", "qty", COALESCE("openingPrice",0), COALESCE("lastPurchaseDate", '2023-04-01')
+                    from cte1 where not exists(
+                        select 1 from "ProductOpBal"
+                            where "productId" = cte1."productId"
+                                and "branchId" = cte1."branchId"
+                                and "finYearId" = cte1."finYearId"
+                    )
+                returning id
+        ),
+        update as (
+            update "ProductOpBal" p
+                set qty = cte1.qty,
+                "openingPrice" = COALESCE(cte1."openingPrice", 0),
+                "lastPurchaseDate" = COALESCE(cte1."lastPurchaseDate", '2023-04-01')
+            from cte1
+            where
+                p."productId" = cte1."productId"
+                and p."branchId" = cte1."branchId"
+                and p."finYearId" = cte1."finYearId"
+        )
+--      , deleted as (
+--          delete from "ProductOpBal"
+--              where "finYearId" = ((table "finYearId") + 1) returning id
+--      )
+--      , inserted as (
+--          insert into "ProductOpBal" ("productId", "branchId", "finYearId", "qty", "openingPrice", "lastPurchaseDate")
+--              select "productId", "branchId", "finYearId", "qty", COALESCE("openingPrice",0), COALESCE("lastPurchaseDate", '2023-04-01')
+--                  from cte1 returning id
+--      )
+        select * from cte2
+
+
+        set search_path to demounit1;
+delete from "ProductOpBal"
+    where "finYearId" = 2023
+
+
+    set search_path to demounit1;
+with "branchId" as (values (1)), "finYearId" as (values (2022)), "closingDate" as (values ('2023-03-31')),
+        --with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        cte1 as (
+            select "productId", (table "branchId") "branchId", ((table "finYearId") + 1) "finYearId", "clos" "qty", "price" "openingPrice", "lastPurchaseDate"
+                from get_stock_on_date((table "branchId"), (table "finYearId"), (table "closingDate")::date)
+        ),
+        deleted as (
+            delete from "ProductOpBal"
+                where "finYearId" = ((table "finYearId") + 1) returning id
+        )
+        , inserted as (
+            insert into "ProductOpBal" ("productId", "branchId", "finYearId", "qty", "openingPrice", "lastPurchaseDate")
+                select "productId", "branchId", "finYearId", "qty", COALESCE("openingPrice",0), COALESCE("lastPurchaseDate", '2023-04-01')
+                    from cte1 returning id
+        )
+        select * from deleted
