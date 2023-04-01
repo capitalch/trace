@@ -50,6 +50,7 @@ k. Server logging for modify and delete, time and log viewer
 3. Correct pricing of purchase and sales entry to dealer price and mrp. Iterate over other prices
 4. Purchase entry, unable to enter GST price
 6. Deletion in product not working
+7. Mobile version collapses when sale returnentry is there for that date
 
 # Long term Priority
 
