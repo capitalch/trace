@@ -5,6 +5,38 @@ allSqls = {
                 , %(branchCode)s, %(branchName)s)
                     returning "id"
     ''',
+    
+    "exec_stock_transfer": '''
+        with "branchId" as (values (1)), "finYearId" as (values (2022)), "closingDate" as (values ('2023-03-31')),
+        --with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "closingDate" as (values (%(closingDate)s)),
+        cte1 as (
+            select "productId", (table "branchId") "branchId", ((table "finYearId") + 1) "finYearId", "clos" "qty", "price" "openingPrice", "lastPurchaseDate"
+                from get_stock_on_date((table "branchId"), (table "finYearId"), (table "closingDate")::date)
+        ),
+        cte2 as (
+            insert into "ProductOpBal" ("productId", "branchId", "finYearId", "qty", "openingPrice", "lastPurchaseDate")
+                select "productId", "branchId", "finYearId", "qty", COALESCE("openingPrice",0), COALESCE("lastPurchaseDate", (table "closingDate"):: date)
+                    from cte1 where not exists(
+                        select 1 from "ProductOpBal"
+                            where "productId" = cte1."productId"
+                                and "branchId" = cte1."branchId"
+                                and "finYearId" = cte1."finYearId"
+                    )
+                returning id
+        ),
+        update as (
+            update "ProductOpBal" p
+                set qty = cte1.qty,
+                "openingPrice" = COALESCE(cte1."openingPrice", 0),
+                "lastPurchaseDate" = COALESCE(cte1."lastPurchaseDate", (table "closingDate"):: date)
+            from cte1
+            where
+                p."productId" = cte1."productId"
+                and p."branchId" = cte1."branchId"
+                and p."finYearId" = cte1."finYearId"
+        )
+        select * from cte2
+    ''',
 
     "get_accountsMaster": '''
         select a.*, "accClass"
@@ -1196,11 +1228,7 @@ allSqls = {
     ''',
 
     "get_sale_report":'''
-<<<<<<< HEAD
         --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values('2023-01-17' ::date)), "days" as (values(0)),
-=======
-        --with "branchId" as (values (1)), "finYearId" as (values (2022)), "tagId" as (values(0)), "startDate" as (values('2023-01-17' ::date)), "endDate" as (values(CURRENT_DATE)), "days" as (values(0)),
->>>>>>> d393a5eeaa44e466ed763430af8f43ee890cf5e6
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "tagId" as (values(%(tagId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date)), "days" as (values (COALESCE(%(days)s,0))),
         cte as ( --filter on tagId in CategoryM
             with recursive rec as (
@@ -1262,11 +1290,7 @@ allSqls = {
             select c0.*, accounts, (
                 select distinct on("productId") coalesce("price",0) as "price"
 					from cte0
-<<<<<<< HEAD
 						where ("tranTypeId" in (5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
-=======
-						where ("tranTypeId" in (5,11) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
->>>>>>> d393a5eeaa44e466ed763430af8f43ee890cf5e6
 					order by "productId", "tranDate" DESC, "salePurchaseDetailsId" DESC
 				
             ) as "lastPurchasePrice",
