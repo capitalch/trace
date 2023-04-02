@@ -1,5 +1,5 @@
 import { moment, useEffect, useRef, useSharedElements, } from './redirect'
-
+import messages from '../../../../messages.json'
 function useOpeningStock() {
     // const [, setRefresh] = useState({})
     const { globalMessages, confirm, emit, execGenericView, filterOn, genericUpdateMaster, getFromBag, toDecimalFormat } = useSharedElements()
@@ -132,17 +132,19 @@ function useOpeningStock() {
         const branchId = getFromBag('branchObject')?.branchId
         confirm(options)
             .then(async () => {
-                await execGenericView({
+                emit(actionMessages.fetchIbukiMessage, '')
+                const ret = await execGenericView({
                     sqlKey: 'exec_stock_transfer',
                     args: {
-                        branchId:branchId,
+                        branchId: branchId,
                         finYearId: finYearId,
                         closingDate: endDate
                     },
                     isMultipleRows: true
                 })
-                emit('SHOW-MESSAGE', {})
-                emit(actionMessages.fetchIbukiMessage, '')
+                if (ret) {
+                    emit('SHOW-MESSAGE', {})
+                }
             })
             .catch(() => { }) // important to have otherwise eror
     }
