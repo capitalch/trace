@@ -143,7 +143,8 @@ allSqls = {
                         on h."id" = d."tranHeaderId" 
                     join "AccM" a
                         on a."id" = d."accId"
-            where "tranTypeId" = %(tranTypeId)s
+            where "tranTypeId" = %(tranTypeId)s 
+                and "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
             ) select "id", "tranDate", "autoRefNo", "userRefNo", MAX("amount") as "amount", "remarks",
                 STRING_AGG(DISTINCT "debitAccount", '') as "debitAccount",
                 STRING_AGG(DISTINCT "creditAccount", '') as "creditAccount",
