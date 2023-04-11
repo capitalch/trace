@@ -36,6 +36,7 @@ k. Server logging for modify and delete, time and log viewer
 24. Server side printing cleanup and convert to puppeteer
 
 ## Bugs
+1. Debit notes showing results of previous years
 #. Print options in debit notes, creddit notes and purchase return
 #. When non gst sale bill from simple sales if hsn is not given then save error
 *. Sale billl to creditor, print is not having address
