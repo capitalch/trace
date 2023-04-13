@@ -1452,7 +1452,13 @@ allSqls = {
                         on h."id" = s."tranHeaderId"
                 where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
-            ), cte00 as ( -- add lastTranPurchasePrice
+            )
+			, cte1 as ( -- opening balance
+                select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
+                    from "ProductOpBal" p 
+                where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+            ),
+			cte00 as ( -- add lastTranPurchasePrice
 			select c0.*,
 				(
 					select DISTINCT ON("productId") "price"
@@ -1462,8 +1468,9 @@ allSqls = {
 				) as "lastTranPurchasePrice",
 				"openingPrice"
 					from cte0 c0
-						left join "ProductOpBal" p
+						left join cte1 p
 							on p."productId" = c0."productId"
+								--where p."finYearId" = (table "finYearId")
 			)
 			, cte000 as ( --add gross profit
 				select cte00.*,
@@ -1477,12 +1484,7 @@ allSqls = {
 				END
 				as "grossProfit"
 					from cte00
-			)
-			, cte1 as ( -- opening balance
-                select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
-                    from "ProductOpBal" p 
-                where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
-            ), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
+			), cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
                 select "productId","tranTypeId", 
                     SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
                     , SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
@@ -2324,7 +2326,12 @@ allSqls = {
             --"branchId" as (values(1)), "finYearId" as (values (2022)), "type" as (values('cat')), "value" as (values(0))
             , "startDate" as (select "startDate" from "FinYearM" where "id" = (table "finYearId")),
 			"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") ))
-            , cte1 as ( --all account names for tranHeaderId
+            , cte0 as ( -- opening balance
+                select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
+                    from "ProductOpBal" p 
+                where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+            )
+			, cte1 as ( --all account names for tranHeaderId
                 select h."id" as "tranHeaderId", STRING_AGG("accName", ', ') as "accountNames"
                     from "TranH" h
                         join "TranD" d
@@ -2371,7 +2378,7 @@ allSqls = {
 				) as "lastTranPurchasePrice"
 				, "openingPrice"				
 					from cte2 c2
-						left join "ProductOpBal" p
+						left join cte0 p
 							on p."productId" = c2."productId"
 			)
 			, cte222 as ( --add gross profit
@@ -2414,6 +2421,7 @@ allSqls = {
                     from cte4 c4 
                         full join "ProductOpBal" op
                             on c4."productId" = op."productId"
+								where op."finYearId" = (table "finYearId")
             ),
         cte6 as ( -- union all
             select c4.* from cte4 c4
