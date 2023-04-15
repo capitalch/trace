@@ -1,5 +1,11 @@
+## Important
+1. Stock summary, include HSN code.
+2. In GST reports add HSN code
+3. Bank reconcillation multiple entries happen
+4. While doing billing, provide aggregate price for view (Excluding GST)
+5. Print for debit notes, credit notes
 
-## Planning                                                                             
+## Planning                                                                  
 f. xx-data-grid filter results
 h. To do list
 i. Gst rate in downloaded excel file
