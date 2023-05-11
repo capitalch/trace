@@ -1858,6 +1858,8 @@ allSqls = {
 			-- gst-output-sales-hsn (considering only table SalePurchaseDetails)
             cte6 as (
                 select  "tranType", hsn,
+ 				COUNT(*) as "itemsCount",
+				COUNT(DISTINCT h.id) as "saleBillsCount",				
                 SUM(CASE WHEN "tranTypeId" = 4 THEN (s."amount" - "cgst" - "sgst" - "igst") ELSE -(s."amount" - "cgst" - "sgst" - "igst") END) as "aggregate",
                 SUM(CASE WHEN "tranTypeId" = 4 THEN "cgst" ELSE -"cgst" END) as "cgst",
                 SUM(CASE WHEN "tranTypeId" = 4 THEN "sgst" ELSE -"sgst" END) as "sgst",
@@ -1882,9 +1884,8 @@ allSqls = {
 							"branchId" = (table "branchId") and
 							("tranDate" between (table "startDate") and (table "endDate"))
                     GROUP BY 
-                        "tranType", "accName", "dc", "hsn"     
-                    order by hsn
-            )
+                        "tranType", "accName", "dc", "hsn"
+                    order by hsn)
             select json_build_object(
                     '01-gst-input-consolidated', (SELECT json_agg(row_to_json(a)) from cte1 a),
                     '02-gst-output-consolidated', (SELECT json_agg(row_to_json(b)) from cte2 b),
