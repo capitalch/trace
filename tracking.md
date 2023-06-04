@@ -1,6 +1,14 @@
+## Logic for Stock Journal price
+1. In database StockJournal table include price, default 0
+2. client side add price in stock journal
+3. Change stock summary
+4. Change sales
+5. Change Products price
+6. Change stock transaction
+
 ## Important
 1. Stock summary, include HSN code.
-2. In GST reports add HSN code
+                                                                                                                    2. In GST reports add HSN code
 3. Bank reconcillation multiple entries happen
 4. While doing billing, provide aggregate price for view (Excluding GST)
 5. Print for debit notes, credit notes
