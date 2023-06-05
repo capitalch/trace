@@ -1,5 +1,7 @@
--- created on 06-08-2022. New database will need to be upgraded from this patch. The accounts.sql which is used
--- to create new database is alredy having ingredients of sql-patch1.sql and sql-patch2.sql and sql-patch3.sql
+-- created in April 2023. 
+-- New database will need to be upgraded from this patch. 
+-- sql-patch1, sql-patch2, sql-patch3 are already there in accounts.db (creates new database)
+-- As on May 2023 end, all databases are upgraded from this patch
 
 CREATE TABLE IF NOT EXISTS audit_table
 (
@@ -310,3 +312,7 @@ AS $BODY$
 				  from cte7
 	
 $BODY$;
+
+-- On 05-06-2023. StockJournal price. Updated in all existing databases
+ALTER TABLE IF EXISTS "StockJournal"
+	ADD COLUMN IF NOT EXISTS "price" NUMERIC(12,0) DEFAULT 0;
