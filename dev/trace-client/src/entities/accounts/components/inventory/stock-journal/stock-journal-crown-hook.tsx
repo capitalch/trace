@@ -6,7 +6,6 @@ import {
     stockJournalMegaData,
     useContext,
     useEffect,
-    useIbuki,
     useRef,
     useState,
 } from '../redirect'
@@ -16,7 +15,6 @@ function useStockJournalCrown() {
     const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal
-    const { emit } = useIbuki()
 
     const meta: any = useRef({
         showDialog: false,
@@ -43,7 +41,6 @@ function useStockJournalCrown() {
     function handleReset() {
         megaData.accounts.stockJournal = stockJournalMegaData()
         megaData.executeMethodForKey('render:stockJournal',{})
-        // emit('TRACE-MAIN:JUST-REFRESH', null)
     }
 
     async function handleSubmit() {
@@ -104,6 +101,7 @@ function useStockJournalCrown() {
                         id: item.id || undefined,
                         productId: item.productId,
                         qty: item.qty,
+                        price: item.price,
                         lineRemarks: item.lineRemarks,
                         lineRefNo: item.lineRefNo,
                         dc: 'C',
@@ -117,6 +115,7 @@ function useStockJournalCrown() {
                         id: item.id || undefined,
                         productId: item.productId,
                         qty: item.qty,
+                        price: item.price,
                         lineRemarks: item.lineRemarks,
                         lineRefNo: item.lineRefNo,
                         dc: 'D',
