@@ -23,7 +23,7 @@ import {
     utilMethods,
 } from '../redirect'
 import { ProductsSearch } from '../../common/products-search'
-import { InputMask } from '../../sales-new/redirect'
+
 function StockJournalDetails() {
     return (
         <Box
@@ -110,8 +110,6 @@ function StockJournalLineItems({ section }: any) {
             title: 'Serial numbers (Comma separated)',
             content: () => <></>
         },
-        // renderCallbackKey: 'render:itemsFooter',
-        // setItemToSelectedProductCallbackKey: 'setItemToSelectedProduct:lineItems',
         showDialog: false,
     })
     const pre = meta.current
@@ -328,7 +326,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Card
                 variant="outlined"
                 sx={{
-                    width: theme.spacing(22),
+                    width: theme.spacing(20),
                     height: theme.spacing(8),
                     p: 0.5,
                     pt: 0,
@@ -355,7 +353,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                     Qty
                 </Typography>
                 <NumberFormat
-                    sx={{ maxWidth: theme.spacing(10) }}
+                    sx={{ maxWidth: theme.spacing(8) }}
                     autoComplete="off"
                     allowNegative={false}
                     className="right-aligned"
@@ -379,11 +377,42 @@ function StockJournalLineItem({ section, item, index }: any) {
                 />
             </Box>
 
+            {/* price */}
+            <Box className="vertical">
+                <Typography variant="body2" sx={{ textAlign: 'right' }}>
+                    Price
+                </Typography>
+                <NumberFormat
+                    sx={{ maxWidth: theme.spacing(14) }}
+                    autoComplete="off"
+                    allowNegative={false}
+                    className="right-aligned"
+                    customInput={TextField}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    value={item.price || 0.0}
+                    onFocus={(e: any) => {
+                        e.target.select()
+                    }}
+                    onValueChange={(value) => {
+                        const { floatValue } = value
+                        item.price = floatValue
+                        setRefresh({})
+                        megaData.executeMethodForKey(
+                            `computeSummary:stockJournalItemsFooter:${section}`
+                        )
+                    }}
+                    thousandSeparator={true}
+                    variant="standard"
+                />
+                <Typography variant="body2" sx={{ textAlign: 'right',mt:'5px' }}>test</Typography>
+            </Box>
+
             {/* ref no */}
             <Box className="vertical">
                 <Typography variant="body2">Ref no</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(10) }}
+                    sx={{ maxWidth: theme.spacing(9) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRefNo = e.target.value
@@ -398,7 +427,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(15) }}
+                    sx={{ maxWidth: theme.spacing(10) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRemarks = e.target.value
