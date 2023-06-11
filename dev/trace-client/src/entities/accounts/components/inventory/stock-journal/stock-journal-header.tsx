@@ -33,7 +33,6 @@ function StockJournalHeader() {
                 columnGap: 4,
                 rowGap: 2,
                 p: 2,
-                // borderTop: '1px solid lightGrey',
             }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="body2">Ref no</Typography>

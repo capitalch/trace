@@ -1,9 +1,7 @@
 ## Logic for Stock Journal price client
-- On items search provide price
-- On product code change provide price
-- On item details provide amount
-- A method to recalculate amount every time
-- In footer provide amount and recalculate amount whenever required
+- Check the sql for get product on product code
+- Check sale profit
+- UI amount is not getting auto calculated
 
 ## Logic for Stock Journal price
 1. In database StockJournal table include price, default 0

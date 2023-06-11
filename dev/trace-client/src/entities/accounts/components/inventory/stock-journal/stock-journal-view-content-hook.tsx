@@ -154,6 +154,7 @@ function useStockJournalViewContent() {
                     stockJournal.inputSection.items[ind].catName = el.catName
                     stockJournal.inputSection.items[ind].info = el.info
                     stockJournal.inputSection.items[ind].qty = el.qty
+                    stockJournal.inputSection.items[ind].price = el.price
                     stockJournal.inputSection.items[ind].serialNumbers =
                         el.serialNumbers
                     stockJournal.inputSection.items[ind].lineRefNo =
@@ -186,6 +187,7 @@ function useStockJournalViewContent() {
                     stockJournal.outputSection.items[ind].catName = el.catName
                     stockJournal.outputSection.items[ind].info = el.info
                     stockJournal.outputSection.items[ind].qty = el.qty
+                    stockJournal.outputSection.items[ind].price = el.price
                     stockJournal.outputSection.items[ind].serialNumbers =
                         el.serialNumbers
                     stockJournal.outputSection.items[ind].lineRefNo =

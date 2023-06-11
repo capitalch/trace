@@ -324,10 +324,8 @@ function StockJournalLineItem({ section, item, index }: any) {
                 />
                 <IconButton
                     size="small"
-                    // sx={{fontSize: 5, color: 'teal'}}
-                    color="inherit"
                     onClick={async () => {
-                        doSearchProductOnProductCode({ item, setRefresh })
+                        await doSearchProductOnProductCode({ data: { item, setRefresh } })
                     }}>
                     <SyncSharp fontSize='small' color='secondary'></SyncSharp>
                 </IconButton>
@@ -337,7 +335,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Card
                 variant="outlined"
                 sx={{
-                    width: theme.spacing(20),
+                    width: theme.spacing(30),
                     height: theme.spacing(8),
                     p: 0.5,
                     pt: 0,
@@ -417,8 +415,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                     }}
                     thousandSeparator={true}
                     variant="standard"
-                />
-                {/* <Typography variant="body2" sx={{ textAlign: 'right',mt:'5px' }}>test</Typography> */}
+                />                
                 <Typography variant='body2' sx={{ ml: 'auto', mt: '8px', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
             </Box>
 
@@ -426,7 +423,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Ref no</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(9) }}
+                    sx={{ maxWidth: theme.spacing(20) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRefNo = e.target.value
@@ -441,7 +438,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(10) }}
+                    sx={{ width: theme.spacing(50) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRemarks = e.target.value

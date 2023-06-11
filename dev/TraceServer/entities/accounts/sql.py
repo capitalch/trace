@@ -863,28 +863,33 @@ allSqls = {
     ''',
 
     "get_product_on_product_code": '''
-        select h."tranDate", p."id", coalesce(s."price", o."openingPrice", p."purPrice", 0) as "price",
-            c."catName", p."isActive", b."brandName",             
+        with cte1 as (
+	select p."id", coalesce(s."price", o."openingPrice", p."purPrice", 0) as "price"
+		from "ProductM" p
+			left join "SalePurchaseDetails" s
+				on p."id" = s."productId"
+			left join "TranD" d
+				on d."id" = s."tranDetailsId"
+			left join "TranH" h
+				on h."id" = d."tranHeaderId"
+			left join "ProductOpBal" o
+				on p."id" = o."productId"
+		where p."productCode" = %(productCode)s
+                and h."tranTypeId" = 5
+                and h."tranDate" <= CURRENT_DATE
+            order by h."tranDate" DESC limit 1
+        ) select p."id", c."catName", p."isActive", b."brandName", coalesce(c1."price",p."purPrice", 0) "price",
             p."salePriceGst", p."saleDiscount", p."saleDiscountRate", 
-            p."purPrice", p."purDiscount", p."purDiscountRate",            
-            coalesce(p."hsn", c."hsn") hsn, p."info", p."label", p."productCode", p."upcCode", s."gstRate"
-            from "TranH" h
-                join "TranD" d
-                    on h."id" = d."tranHeaderId"
-                join "SalePurchaseDetails" s
-                    on d."id" = s."tranDetailsId"
-                join "ProductM" p
-                    on p."id" = s."productId"
-                left join "ProductOpBal" o
-                    on p."id" = o."productId"
+            p."purPrice", p."purDiscount", p."purDiscountRate", p."gstRate" ,
+            coalesce(p."hsn", c."hsn") hsn, p."info", p."label", p."productCode", p."upcCode"
+			from "ProductM" p
                 join "CategoryM" c
                     on c."id" = p."catId"
                 join "BrandM" b
                     on b."id" = p."brandId"
-            where p."productCode" = %(productCode)s
-                and h."tranTypeId" = 5
-                and h."tranDate" <= CURRENT_DATE
-            order by h."tranDate" DESC limit 1
+				left join cte1 c1
+					on c1."id" = p."id"
+			where p."productCode" = %(productCode)s
     ''',
 
     "get_products": '''
@@ -1272,7 +1277,7 @@ allSqls = {
                 and "tranDate" <=(table "endDate")
                 and "tranTypeId" in (4, 5, 9, 10)
             union all
-        select h."id", "tranDate", s."productId", "tranTypeId", "qty", 0 as "price", 0 as "cgst", 0 as "sgst", 0 as "igst"
+        select h."id", "tranDate", s."productId", "tranTypeId", "qty", "price", 0 as "cgst", 0 as "sgst", 0 as "igst"
             , 0 as "amount", 0 as "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp", '' as "contact"
             , "dc"
             from "TranH" h
@@ -2469,7 +2474,7 @@ allSqls = {
                     where "id" = %(id)s
         ), cte2 as (
 			select s."id","productId", "productCode","brandName", "label", "catName", "info", qty
-                , "lineRefNo", "lineRemarks"
+                , "lineRefNo", "lineRemarks", s."price"
 				, s."jData"->>'serialNumbers' as "serialNumbers"
 				, "dc","lineRefNo", "lineRemarks"
 					from cte1 c1
