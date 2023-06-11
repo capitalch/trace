@@ -61,6 +61,7 @@ const stockJournalMegaData = () => ({
         summary: {
             count: 1,
             qty: 1,
+            amount: 0
         },
         title: 'Source (Consumption / input / credits)',
     },
@@ -72,6 +73,7 @@ const stockJournalMegaData = () => ({
         summary: {
             count: 1,
             qty: 1,
+            amount: 0
         },
         title: 'Destination (Production / output / debits)',
     },

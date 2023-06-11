@@ -863,17 +863,28 @@ allSqls = {
     ''',
 
     "get_product_on_product_code": '''
-        select p."id", 
-            "catName", "isActive","brandName",             
-            "salePriceGst", "saleDiscount", "saleDiscountRate", 
-            "purPrice", "purDiscount", "purDiscountRate",            
-            coalesce(p."hsn", c."hsn") hsn, "info", "label", "productCode", "upcCode", "gstRate"
-            from "ProductM" p
+        select h."tranDate", p."id", coalesce(s."price", o."openingPrice", p."purPrice", 0) as "price",
+            c."catName", p."isActive", b."brandName",             
+            p."salePriceGst", p."saleDiscount", p."saleDiscountRate", 
+            p."purPrice", p."purDiscount", p."purDiscountRate",            
+            coalesce(p."hsn", c."hsn") hsn, p."info", p."label", p."productCode", p."upcCode", s."gstRate"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+                join "ProductM" p
+                    on p."id" = s."productId"
+                left join "ProductOpBal" o
+                    on p."id" = o."productId"
                 join "CategoryM" c
                     on c."id" = p."catId"
                 join "BrandM" b
                     on b."id" = p."brandId"
-        where p."productCode" = %(productCode)s
+            where p."productCode" = %(productCode)s
+                and h."tranTypeId" = 5
+                and h."tranDate" <= CURRENT_DATE
+            order by h."tranDate" DESC limit 1
     ''',
 
     "get_products": '''
