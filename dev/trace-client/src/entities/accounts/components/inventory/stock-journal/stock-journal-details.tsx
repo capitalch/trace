@@ -6,6 +6,7 @@ import {
     Button,
     Card,
     CloseSharp,
+    Divider,
     IconButton,
     IMegaData,
     MegaDataContext,
@@ -31,12 +32,14 @@ function StockJournalDetails() {
             sx={{
                 display: 'flex',
                 rowGap: 2,
-                columnGap: 2,
+                direction:'column',
+                // rowGap:90,
                 mt: 1,
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
             }}>
             <StockJournalItems section="inputSection" />
+            {/* <Divider variant='fullWidth' /> */}
             <StockJournalItems section="outputSection" />
         </Box>
     )
@@ -48,6 +51,7 @@ function StockJournalItems({ section }: any) {
     return (
         <Box
             sx={{
+                mb:6,
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
@@ -76,7 +80,7 @@ function StockJournalItemsHeader({ section }: any) {
             }}>
             <Typography
                 variant="body1"
-                sx={{ fontWeight: 'bold', textDecoration: 'underline', minWidth: theme.spacing(70) }}>
+                sx={{ fontWeight: 'bolder', fontSize:'20px',  minWidth: theme.spacing(70) }}>
                 {stockJournal?.title || ''}
             </Typography>
 
@@ -438,7 +442,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
-                    sx={{ width: theme.spacing(50) }}
+                    sx={{ width: theme.spacing(40) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRemarks = e.target.value
@@ -503,6 +507,10 @@ function StockJournalLineItem({ section, item, index }: any) {
 
     function computeAmount(item: any) {
         item.amount = item.qty * item.price
+        megaData.executeMethodForKey(
+            `computeSummary:stockJournalItemsFooter:${section}`
+        )
+        megaData.executeMethodForKey('render:stockJournalCrown', {})
     }
 
     async function doSearchProductOnProductCode(d: any) {
@@ -536,6 +544,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                 )
                 item.price = result.price || 0
             }
+            computeAmount(item)
             setRefresh({})
         } catch (e: any) {
             console.log(e.message)
@@ -685,7 +694,6 @@ function StockJournalItemsFooter({ section }: any) {
                 const qty = (prev.qty || 0) + (curr.qty || 0)
                 const amount = (prev.amount || 0) + (curr.amount || 0)
                 return ({ qty: qty, amount: amount })
-                // return { qty: (prev.qty || 0) + (curr.qty || 0) }
             },
             { qty: 0, amount: 0 }
         )

@@ -72,7 +72,7 @@ function useStockJournalViewContent() {
                             emit('SHOW-MESSAGE', {})
                             emit(gridActionMessages.fetchIbukiMessage, null)
                         })
-                        .catch(() => {}) // important to have otherwise eror
+                        .catch(() => { }) // important to have otherwise eror
                 }
             }
         )
@@ -113,6 +113,7 @@ function useStockJournalViewContent() {
             stockJournal.selectedStockJournalRawData = ret?.jsonResult
             stockJournal.selectedStockJournalId = id
             prepareStockJournalData(ret, stockJournal)
+
         }
         // populate megaData.acounts.stockJournal from database
         function prepareStockJournalData(data: any, stockJournal: any) {
@@ -171,6 +172,7 @@ function useStockJournalViewContent() {
                             ' ',
                             el.info
                         )
+                    stockJournal.inputSection.items[ind].amount = el.qty * el.price
                 })
                 const stockJournaloutputs: any[] = sj.filter(
                     (el: any) => el.dc === 'D'
@@ -204,6 +206,7 @@ function useStockJournalViewContent() {
                             ' ',
                             el.info
                         )
+                    stockJournal.outputSection.items[ind].amount = el.qty * el.price
                 })
             }
         }
@@ -260,8 +263,7 @@ function useStockJournalViewContent() {
                 field: '',
                 width: 200,
                 valueGetter: (params: any) =>
-                    `${params.row.catName} ${params.row.brandName} ${
-                        params.row.label
+                    `${params.row.catName} ${params.row.brandName} ${params.row.label
                     } ${params.row.info ?? ''}`,
             },
             {
