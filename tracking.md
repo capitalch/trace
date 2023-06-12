@@ -133,6 +133,8 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
+# 12-06-2023 - 13-06-2023
+- Implemented stock journals price and its effect on reports
 # 25-11-2022 - 30-11-2022
 !. Report enhancements
 # 15-11-2022 - 24-11-2022
