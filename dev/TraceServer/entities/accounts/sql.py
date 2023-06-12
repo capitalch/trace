@@ -1307,7 +1307,7 @@ allSqls = {
             select c0.*, accounts, (
                 select distinct on("productId") coalesce("price",0) as "price"
 					from cte0
-						where ("tranTypeId" in (5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId"))
+						where ("tranTypeId" in (5,11) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId") and ("price" <> 0) and ("price" is not null))
 					order by "productId", "tranDate" DESC, "salePurchaseDetailsId" DESC
 				
             ) as "lastPurchasePrice",
@@ -1462,7 +1462,7 @@ allSqls = {
                 where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
                         union all --necessary otherwise rows with same values are removed
-            select h."id", "productId", "tranTypeId", "qty", null as "price", 0 as "discount", "tranDate", "dc"
+            select h."id", "productId", "tranTypeId", "qty", "price", 0 as "discount", "tranDate", "dc"
                 from "TranH" h
                     join "StockJournal" s
                         on h."id" = s."tranHeaderId"
@@ -1479,7 +1479,7 @@ allSqls = {
 				(
 					select DISTINCT ON("productId") "price"
 						 from cte0
-							 where ("tranTypeId" = 5) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId") and (c0."price" is not null)
+							 where ("tranTypeId" in(5,11)) and ("tranDate" <= c0."tranDate") and ("productId" = c0."productId") and (c0."price" is not null) and (c0."price" <> 0)
 								 order by "productId", "tranDate" DESC, "id" DESC
 				) as "lastTranPurchasePrice",
 				"openingPrice"
