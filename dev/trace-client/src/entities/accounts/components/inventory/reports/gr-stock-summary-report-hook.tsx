@@ -241,7 +241,7 @@ function useStockSummaryReport() {
                 // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) => `${params.row?.catName ? params.row.catName : ''} ${params.row?.brandName ? params.row.brandName : ''} ${params.row?.label ? params.row.label : params.row.label}`,
                 // valueFormatter: (params: any) => `${params?.value ? params.value : ''} `,
-                width: 200,
+                width: '430',
             },
             {
                 headerName: 'Op',
