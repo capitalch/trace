@@ -82,6 +82,7 @@ const iconMap: any = {
     salesSubMenu: <Money></Money>,
     simpleSalesSubMenu: <Money />,
     purchasesSubMenu: <MoneyOff></MoneyOff>,
+    purchaseNewSubMenu: <MoneyOff></MoneyOff>,
     salesReturnSubMenu: <AssignmentReturn></AssignmentReturn>,
     purchasesReturnSubMenu: <AssignmentReturned></AssignmentReturned>,
     debitNotesSubMenu: <FlightLand></FlightLand>,

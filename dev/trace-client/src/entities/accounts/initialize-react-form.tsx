@@ -18,7 +18,6 @@ initialize({
     entityName: getCurrentEntity()
     , usingIbuki: usingIbuki
     , sharedArtifacts: sharedArtifacts
-    // , customComponents: customComponents
     , customControls: customControls
     , setLevelValidators: setLevelValidators
     , formLevelValidators: formLevelValidators

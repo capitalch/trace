@@ -55,9 +55,9 @@ function initCode() {
         const dateFormat = 'DD/MM/YYYY'
         setInBag('buCode', 'demounit1')
         const finYearObject: any = {
-            finYearId: 2021,
-            startDate: moment('2021-04-01').format(dateFormat),
-            endDate: moment('2022-03-31').format(dateFormat),
+            finYearId: 2023,
+            startDate: moment('2023-04-01').format(dateFormat),
+            endDate: moment('2024-03-31').format(dateFormat),
         }
         setInBag('finYearObject', finYearObject)
         setInBag('dateFormat', dateFormat)

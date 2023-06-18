@@ -89,6 +89,15 @@
                             }
                         },
                         {
+                            "name": "purchaseNewSubMenu",
+                            "hierarchy": "salespurchases-purchase-new",
+                            "label": "Purchase new",
+                            "componentName": "purchaseNew",
+                            "args": {
+                                "purchaseType": "pur"
+                            }
+                        },
+                        {
                             "name": "purchasesReturnSubMenu",
                             "hierarchy": "salespurchases-purchase-return",
                             "label": "Purchase return",

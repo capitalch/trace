@@ -1,15 +1,15 @@
 
 import {
     _, AccountsLedgerDialog, getDebitCreditNotesArbitraryData, getPurchasesArbitraryData,
-    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState,  MultiDataContext, Typography,
+    getSalesArbitraryData, getVouchersArbitraryData, manageEntitiesState, MultiDataContext, Typography,
     useIbuki, useLinkClient, useRef, useServerSocketMessageHandler, useState, useEffect,
     useTheme, utils
 } from './components/common/redirect'
 import {
     AccountsMaster, AccountsOpBal, BalanceSheetProfitLoss, BankRecon, Brands, Branches,
     CategoriesMaster, CommonUtilities, CreditNotes, DebitNotes, FinancialYears, GenericDialoges,
-    GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales,SalesNew, Taxation,
-    TrialBalance, Voucher, OpeningStock, InventoryReports
+    GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales, SalesNew, Taxation,
+    TrialBalance, Voucher, OpeningStock, InventoryReports, PurchaseNew
 } from './components/common/redirect'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
@@ -33,8 +33,8 @@ function LaunchPad() {
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
     // const megaData = useContext(MegaDataContext)
     meta.current.mainHeading = getUnitHeading()
-    
-    
+
+
 
     const { socketMessageHandler } = useServerSocketMessageHandler()
 
@@ -60,7 +60,7 @@ function LaunchPad() {
 
     useEffect(() => {
         const configuration = getFromBag('configuration')
-        if(_.isEmpty(configuration)){
+        if (_.isEmpty(configuration)) {
             return
         }
         const { linkServerUrl, linkServerKey } = configuration
@@ -130,8 +130,9 @@ function LaunchPad() {
             products: Products,
             profitLoss: BalanceSheetProfitLoss,
             purchases: Purchases,
+            purchaseNew: PurchaseNew,
             sales: Sales,
-            salesNew:SalesNew,
+            salesNew: SalesNew,
             taxation: Taxation,
             trialBalance: TrialBalance,
             vouchers: Voucher,
