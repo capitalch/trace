@@ -1,10 +1,10 @@
 // import {FormikHelpers} from '../../../../../imports/regular-imports'
-import { PurchaseNewStore } from '../purchase-new-store'
+import { PurchaseStore } from '../purchase-store'
 
 function usePurchaseNewMain() {
     function handleOnSubmit(values: any) {
         console.log(values)
-        const invoiceNo =  PurchaseNewStore.main.header.invoiceNo.value
+        const invoiceNo =  PurchaseStore.main.header.invoiceNo.value
         console.log(invoiceNo)
     }
     return({handleOnSubmit})

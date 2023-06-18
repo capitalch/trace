@@ -43,7 +43,6 @@
         "big.js": "^6.2.1",
         "clsx": "^1.2.1",
         "fontsource-roboto": "^4.0.0",
-        "formik": "^2.4.2",
         "graphql": "^15.0.0",
         "graphql-tag": "^2.12.6",
         "immer": "^9.0.15",

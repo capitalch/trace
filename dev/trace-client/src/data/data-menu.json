@@ -89,10 +89,10 @@
                             }
                         },
                         {
-                            "name": "purchaseNewSubMenu",
-                            "hierarchy": "salespurchases-purchase-new",
+                            "name": "purchaseSubMenu",
+                            "hierarchy": "salespurchases-purchase",
                             "label": "Purchase new",
-                            "componentName": "purchaseNew",
+                            "componentName": "purchase",
                             "args": {
                                 "purchaseType": "pur"
                             }

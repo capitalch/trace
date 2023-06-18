@@ -9,7 +9,7 @@ import {
     AccountsMaster, AccountsOpBal, BalanceSheetProfitLoss, BankRecon, Brands, Branches,
     CategoriesMaster, CommonUtilities, CreditNotes, DebitNotes, FinancialYears, GenericDialoges,
     GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales, SalesNew, Taxation,
-    TrialBalance, Voucher, OpeningStock, InventoryReports, PurchaseNew
+    TrialBalance, Voucher, OpeningStock, InventoryReports, Purchase
 } from './components/common/redirect'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
@@ -130,7 +130,7 @@ function LaunchPad() {
             products: Products,
             profitLoss: BalanceSheetProfitLoss,
             purchases: Purchases,
-            purchaseNew: PurchaseNew,
+            purchase: Purchase,
             sales: Sales,
             salesNew: SalesNew,
             taxation: Taxation,

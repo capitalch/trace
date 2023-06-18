@@ -1,11 +1,11 @@
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../../imports/gui-imports'
-import { useFormik, Yup } from '../../../../../imports/regular-imports'
+// import { useFormik, Yup } from '../../../../../imports/regular-imports'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { PurchaseNewStore } from '../purchase-new-store'
-import { PurchaseNewMainHeader } from './purchase-new-main-header'
-import { usePurchaseNewMain } from './purchase-new-main-hook'
+import { PurchaseStore } from '../purchase-store'
+import { PurchaseNewMainHeader } from './purchase-main-header'
+import { usePurchaseNewMain } from './purchase-main-hook'
 
-function PurchaseNewMain() {
+function PurchaseMain() {
     const theme = useTheme()
     const { accountsMessages } = useSharedElements()
     const { handleOnSubmit } = usePurchaseNewMain()
@@ -33,7 +33,7 @@ function PurchaseNewMain() {
        
     </Box>)
 }
-export { PurchaseNewMain }
+export { PurchaseMain }
 
 // {/* <form onSubmit={formik.handleSubmit}> */}
 //  {/* </form> */}

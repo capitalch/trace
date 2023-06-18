@@ -1,11 +1,11 @@
 
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
-import { PurchaseNewMain } from './main/purchase-new-main'
-import { usePurchaseNew } from './purchase-new-hook'
-import { PurchaseNewStore } from './purchase-new-store'
-import { PurchaseNewView } from './purchase-new-view'
-function PurchaseNew() {
-    const { handleOnReset, handleOnTabChange } = usePurchaseNew()
+import { PurchaseMain } from './main/purchase-main'
+import { usePurchase } from './purchase-hook'
+import { PurchaseStore } from './purchase-store'
+import { PurchaseView } from './purchase-view'
+function Purchase() {
+    const { handleOnReset, handleOnTabChange } = usePurchase()
     const theme = useTheme()
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography color='secondary' variant='subtitle1' component='div'>Purchase</Typography>
@@ -15,7 +15,7 @@ function PurchaseNew() {
             marginTop: theme.spacing(0.5)
         }}
             indicatorColor='primary'
-            value={PurchaseNewStore.tabValue.value}
+            value={PurchaseStore.tabValue.value}
             onChange={handleOnTabChange}>
             <Tab label='Main' />
             <Tab label='View' />
@@ -25,12 +25,12 @@ function PurchaseNew() {
                 margin: 'auto',
             }} variant='contained' onClick={handleOnReset}>Reset</Button>
         </Tabs>
-        <Box hidden={PurchaseNewStore.tabValue.value === 1}>
-            <PurchaseNewMain />
+        <Box hidden={PurchaseStore.tabValue.value === 1}>
+            <PurchaseMain />
         </Box>
-        <Box hidden={PurchaseNewStore.tabValue.value === 0}>
-            <PurchaseNewView />
+        <Box hidden={PurchaseStore.tabValue.value === 0}>
+            <PurchaseView />
         </Box>
     </Box>)
 }
-export { PurchaseNew }
+export { Purchase }

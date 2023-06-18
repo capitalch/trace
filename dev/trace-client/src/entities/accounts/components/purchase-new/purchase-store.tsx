@@ -1,6 +1,6 @@
 import { signal, Signal, _ } from '../../../../imports/regular-imports'
 
-const PurchaseNewStoreT: PurchaseNewStoreType = {
+const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
     errors: {
         tranDate: signal(''),
@@ -13,22 +13,22 @@ const PurchaseNewStoreT: PurchaseNewStoreType = {
         cgst: signal(''),
         sgst: signal(''),
         igst: signal(''),
-        lineItems: signal([
+        lineItems: [
             {
                 productCode: signal(''),
                 hsn: signal(''),
                 gstPercent: signal(''),
-                qty:signal('')
+                qty: signal('')
             }
-        ]),
+        ],
     },
     main: {
         header: {
             id: undefined,
-            refNo: signal(''),
-            tranDate: signal(''),
-            invoiceNo: signal(''),
-            commonRemarks: signal(''),
+            refNo: signal(undefined),
+            tranDate: signal(undefined),
+            invoiceNo: signal(undefined),
+            commonRemarks: signal(undefined),
             isCreditPurchase: signal(true),
             isGstInvoice: signal(true),
             isSubmitDisabled: signal(true)
@@ -66,9 +66,9 @@ const PurchaseNewStoreT: PurchaseNewStoreType = {
     },
 }
 
-const PurchaseNewStore: PurchaseNewStoreType = _.cloneDeep(PurchaseNewStoreT)
+const PurchaseStore: PurchaseStoreType = _.cloneDeep(PurchaseStoreT)
 
-type PurchaseNewStoreType = {
+type PurchaseStoreType = {
     tabValue: Signal<number>,
     errors: {
         tranDate: Signal<string>
@@ -81,15 +81,16 @@ type PurchaseNewStoreType = {
         cgst: Signal<string>
         sgst: Signal<string>
         igst: Signal<string>
-        lineItems: Signal<Array<LineItemErrorType>>
+        // lineItems: Signal<Array<LineItemErrorType>>
+        lineItems: LineItemErrorType[]
     },
     main: {
         header: {
             id: string | undefined
-            refNo: Signal<string>
-            tranDate: Signal<string>
-            invoiceNo: Signal<string>
-            commonRemarks: Signal<string>
+            refNo: Signal<string | undefined>
+            tranDate: Signal<string | undefined>
+            invoiceNo: Signal<string | undefined>
+            commonRemarks: Signal<string | undefined>
             isCreditPurchase: Signal<boolean>
             isGstInvoice: Signal<boolean>
             isSubmitDisabled: Signal<boolean>
@@ -135,4 +136,4 @@ type LineItemErrorType = {
     qty: Signal<string>
 }
 
-export { PurchaseNewStore }
+export { PurchaseStore }
