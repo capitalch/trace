@@ -4,19 +4,15 @@ import { Error, Check, PrintIcon } from '../../../../../imports/icons-import'
 import { PurchaseStore } from '../purchase-store'
 import { usePurchaseNewHeader } from './purchase-main-header-hook'
 import { useSharedElements } from '../../common/shared-elements-hook'
-function PurchaseNewMainHeader() {
+function PurchaseMainHeader() {
     const theme = useTheme()
     // const { errors, getFieldProps, handleBlur, handleChange, handleSubmit, isValid, touched, values } = formik
     const header = PurchaseStore.main.header
-    const errors = PurchaseStore.errors
+    // const errors = PurchaseStore.errors
     const { isError, isInValidInvoiceNo, isGstinExists, isInvalidTranDate } = usePurchaseNewHeader()
     const { isInvalidDate } = useSharedElements()
 
-    useEffect(() => {
-        if (isGstinExists()) {
-            header.isGstInvoice.value = true
-        }
-    }, [])
+    
 
     return (<Box sx={{ display: 'flex', columnGap: theme.spacing(4), flexWrap: 'wrap', rowGap: theme.spacing(4) }}>
 
@@ -41,7 +37,7 @@ function PurchaseNewMainHeader() {
             error={
                 isInvalidTranDate() ? true : false
             }
-            helperText={PurchaseStore.errors.tranDate.value}
+            // helperText={PurchaseStore.errors.tranDate.value}
             // helperText={(() => {
             //     let ret
             //     if (errorObject.isDateError) {
@@ -92,25 +88,25 @@ function PurchaseNewMainHeader() {
 
         {/* Submit */}
         <Button
-            sx={{ ml: 'auto', height: '32px' }}
+            sx={{ ml: 'auto', height: theme.spacing(4) }}
             type='button'
             variant="contained"
             size="large"
             color="secondary"
-            disabled={isError()}
-            startIcon={
-                isError() ? (
-                    <Error color="error" />
-                ) : (
-                    <Check style={{ color: 'white' }} />
-                )
-            }
+            // disabled={isError()}
+            // startIcon={
+            //     isError() ? (
+            //         <Error color="error" />
+            //     ) : (
+            //         <Check style={{ color: 'white' }} />
+            //     )
+            // }
         >
             Submit
         </Button>
     </Box>)
 }
-export { PurchaseNewMainHeader }
+export { PurchaseMainHeader }
 
 // function PurchaseCashCredit() {
 //     const theme = useTheme()

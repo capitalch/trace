@@ -2,10 +2,10 @@ import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../../imp
 // import { useFormik, Yup } from '../../../../../imports/regular-imports'
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { PurchaseStore } from '../purchase-store'
-import { PurchaseNewMainHeader } from './purchase-main-header'
+import { PurchaseMainHeader } from './purchase-main-header'
 import { usePurchaseNewMain } from './purchase-main-hook'
 
-function PurchaseMain() {
+function PurchaseMain({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
     const theme = useTheme()
     const { accountsMessages } = useSharedElements()
     const { handleOnSubmit } = usePurchaseNewMain()
@@ -28,9 +28,9 @@ function PurchaseMain() {
     //     onSubmit: handleOnSubmit
     // })
     return (<Box sx={{ mt: theme.spacing(2), display: 'flex', flexDirection: 'column' }}>
-        
-            <PurchaseNewMainHeader />
-       
+
+        <PurchaseMainHeader />
+
     </Box>)
 }
 export { PurchaseMain }

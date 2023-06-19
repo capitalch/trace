@@ -2,26 +2,27 @@ import { signal, Signal, _ } from '../../../../imports/regular-imports'
 
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
-    errors: {
-        tranDate: signal(''),
-        invoiceNo: signal(''),
-        purchaseAccountCode: signal(''),
-        otherAccountCode: signal(''),
-        gstinNumber: signal(''),
-        invoiceAmount: signal(''),
-        totalQty: signal(''),
-        cgst: signal(''),
-        sgst: signal(''),
-        igst: signal(''),
-        lineItems: [
-            {
-                productCode: signal(''),
-                hsn: signal(''),
-                gstPercent: signal(''),
-                qty: signal('')
-            }
-        ],
-    },
+    errors: {},
+    // errors: {
+    //     tranDate: signal(''),
+    //     invoiceNo: signal(''),
+    //     purchaseAccountCode: signal(''),
+    //     otherAccountCode: signal(''),
+    //     gstinNumber: signal(''),
+    //     invoiceAmount: signal(''),
+    //     totalQty: signal(''),
+    //     cgst: signal(''),
+    //     sgst: signal(''),
+    //     igst: signal(''),
+    //     lineItems: [
+    //         {
+    //             productCode: signal(''),
+    //             hsn: signal(''),
+    //             gstPercent: signal(''),
+    //             qty: signal('')
+    //         }
+    //     ],
+    // },
     main: {
         header: {
             id: undefined,
@@ -70,20 +71,20 @@ const PurchaseStore: PurchaseStoreType = _.cloneDeep(PurchaseStoreT)
 
 type PurchaseStoreType = {
     tabValue: Signal<number>,
-    errors: {
-        tranDate: Signal<string>
-        invoiceNo: Signal<string>
-        purchaseAccountCode: Signal<string>
-        otherAccountCode: Signal<string>
-        gstinNumber: Signal<string>
-        invoiceAmount: Signal<string>
-        totalQty: Signal<string>
-        cgst: Signal<string>
-        sgst: Signal<string>
-        igst: Signal<string>
-        // lineItems: Signal<Array<LineItemErrorType>>
-        lineItems: LineItemErrorType[]
-    },
+    errors: any,
+    // errors: {
+    //     tranDate: Signal<string>
+    //     invoiceNo: Signal<string>
+    //     purchaseAccountCode: Signal<string>
+    //     otherAccountCode: Signal<string>
+    //     gstinNumber: Signal<string>
+    //     invoiceAmount: Signal<string>
+    //     totalQty: Signal<string>
+    //     cgst: Signal<string>
+    //     sgst: Signal<string>
+    //     igst: Signal<string>
+    //     lineItems: LineItemErrorType[]
+    // },
     main: {
         header: {
             id: string | undefined

@@ -4,7 +4,7 @@ import { PurchaseMain } from './main/purchase-main'
 import { usePurchase } from './purchase-hook'
 import { PurchaseStore } from './purchase-store'
 import { PurchaseView } from './purchase-view'
-function Purchase() {
+function Purchase({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
     const { handleOnReset, handleOnTabChange } = usePurchase()
     const theme = useTheme()
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -26,7 +26,7 @@ function Purchase() {
             }} variant='contained' onClick={handleOnReset}>Reset</Button>
         </Tabs>
         <Box hidden={PurchaseStore.tabValue.value === 1}>
-            <PurchaseMain />
+            <PurchaseMain purchaseType={purchaseType} />
         </Box>
         <Box hidden={PurchaseStore.tabValue.value === 0}>
             <PurchaseView />
