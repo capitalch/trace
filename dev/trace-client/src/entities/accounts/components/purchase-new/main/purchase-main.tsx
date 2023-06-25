@@ -3,13 +3,26 @@ import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../../imp
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { PurchaseStore } from '../purchase-store'
 import { PurchaseMainHeader } from './purchase-main-header'
-import { usePurchaseNewMain } from './purchase-main-hook'
+import { usePurchaseMain } from './purchase-main-hook'
+import { PurchaseMainItems } from './items/purchase-main-items'
+import { PurchaseMainSubheader } from './purchase-main-subheader'
 
 function PurchaseMain({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
     const theme = useTheme()
     const { accountsMessages } = useSharedElements()
-    const { handleOnSubmit } = usePurchaseNewMain()
-    // const formik = useFormik({
+    const { handleOnSubmit } = usePurchaseMain()
+
+    return (<Box sx={{ mt: theme.spacing(2), display: 'flex', flexDirection: 'column' }}>
+        <PurchaseMainHeader />
+        <PurchaseMainSubheader />
+        <PurchaseMainItems />
+    </Box>)
+}
+export { PurchaseMain }
+
+// {/* <form onSubmit={formik.handleSubmit}> */}
+//  {/* </form> */}
+// const formik = useFormik({
     //     initialValues: {
     //         refNo: PurchaseNewStore.main.header.refNo.value,
     //         tranDate: PurchaseNewStore.main.header.tranDate.value,
@@ -27,13 +40,3 @@ function PurchaseMain({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
 
     //     onSubmit: handleOnSubmit
     // })
-    return (<Box sx={{ mt: theme.spacing(2), display: 'flex', flexDirection: 'column' }}>
-
-        <PurchaseMainHeader />
-
-    </Box>)
-}
-export { PurchaseMain }
-
-// {/* <form onSubmit={formik.handleSubmit}> */}
-//  {/* </form> */}

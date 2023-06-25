@@ -1,13 +1,9 @@
 import { clsx, useState, useEffect, useRef, } from '../../../../imports/regular-imports'
 import Select, { components } from 'react-select'
-// import { useIbuki } from '../../../../imports/trace-imports'
 import { makeStyles, createStyles, Theme } from '../../../../imports/gui-imports'
 import { useSharedElements } from './shared-elements-hook'
 
 interface LedgerSubledgerOptions {
-    // allAccounts: any[]
-    // controlId?: string
-    // ledgerAccounts?: any[]
     className?: string
     ledgerFilterMethodName?: string
     onChange?: any
@@ -15,7 +11,6 @@ interface LedgerSubledgerOptions {
     showAutoSubledgerValues?: boolean
 }
 function LedgerSubledger({    
-    // ledgerAccounts,
     className,
     ledgerFilterMethodName,
     onChange,
@@ -35,7 +30,6 @@ function LedgerSubledger({
             if (['Y', 'L'].includes(item?.accLeaf)) {
                 // Leaf or ledger as auto subledger
                 curr.ledgerItem = {
-                    // label: ''.concat(item?.accName, ` ${item.balanceDrCr || ''}`),
                     label: item?.accName,
                     value: item?.id,
                 }

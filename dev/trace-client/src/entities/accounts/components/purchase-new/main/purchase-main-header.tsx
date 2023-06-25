@@ -2,19 +2,16 @@ import { useEffect } from 'react'
 import { Box, Button, Checkbox, FormControlLabel, Radio, Tab, Tabs, TextField, Typography, useTheme } from '../../../../../imports/gui-imports'
 import { Error, Check, PrintIcon } from '../../../../../imports/icons-import'
 import { PurchaseStore } from '../purchase-store'
-import { usePurchaseNewHeader } from './purchase-main-header-hook'
+import { usePurchaseMainHeader } from './purchase-main-header-hook'
 import { useSharedElements } from '../../common/shared-elements-hook'
+
 function PurchaseMainHeader() {
     const theme = useTheme()
-    // const { errors, getFieldProps, handleBlur, handleChange, handleSubmit, isValid, touched, values } = formik
+    const {handleSubmit} = usePurchaseMainHeader()
     const header = PurchaseStore.main.header
-    // const errors = PurchaseStore.errors
-    const { isError, isInValidInvoiceNo, isGstinExists, isInvalidTranDate } = usePurchaseNewHeader()
-    const { isInvalidDate } = useSharedElements()
+    const errorsObject = PurchaseStore.errorsObject
 
-    
-
-    return (<Box sx={{ display: 'flex', columnGap: theme.spacing(4), flexWrap: 'wrap', rowGap: theme.spacing(4) }}>
+    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4) }}>
 
         {/* auto ref no */}
         <TextField
@@ -32,23 +29,10 @@ function PurchaseMainHeader() {
             variant='standard'
             type='date'
             value={header.tranDate.value || ''}
-            // error={errors.tranDate.value ? Boolean(errors.tranDate.value) : false}
-
             error={
-                isInvalidTranDate() ? true : false
+                Boolean(errorsObject.tranDateError())
             }
-            // helperText={PurchaseStore.errors.tranDate.value}
-            // helperText={(() => {
-            //     let ret
-            //     if (errorObject.isDateError) {
-            //         if (errorObject.isDateError()) {
-            //             ret = 'Date range / Audit lock error'
-            //         }
-            //     } else {
-            //         ret = 'Date range / Audit lock error'
-            //     }
-            //     return ret
-            // })()}
+            helperText={errorsObject.tranDateError()}
             onChange={(e: any) => {
                 header.tranDate.value = e.target.value
             }}
@@ -60,7 +44,7 @@ function PurchaseMainHeader() {
             label="Invoice no"
             variant="standard"
             sx={{ maxWidth: '10rem' }}
-            error={isInValidInvoiceNo()}
+            // error={isInValidInvoiceNo()}
             onChange={(e: any) => { header.invoiceNo.value = e.target.value }}
             value={header.invoiceNo.value}
         />
@@ -88,7 +72,7 @@ function PurchaseMainHeader() {
 
         {/* Submit */}
         <Button
-            sx={{ ml: 'auto', height: theme.spacing(4) }}
+            sx={{ ml: 'auto', height: theme.spacing(6) }}
             type='button'
             variant="contained"
             size="large"
@@ -101,6 +85,7 @@ function PurchaseMainHeader() {
             //         <Check style={{ color: 'white' }} />
             //     )
             // }
+            onClick={handleSubmit}
         >
             Submit
         </Button>

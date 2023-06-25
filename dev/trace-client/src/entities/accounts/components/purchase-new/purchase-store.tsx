@@ -2,28 +2,24 @@ import { signal, Signal, _ } from '../../../../imports/regular-imports'
 
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
-    errors: {},
-    // errors: {
-    //     tranDate: signal(''),
-    //     invoiceNo: signal(''),
-    //     purchaseAccountCode: signal(''),
-    //     otherAccountCode: signal(''),
-    //     gstinNumber: signal(''),
-    //     invoiceAmount: signal(''),
-    //     totalQty: signal(''),
-    //     cgst: signal(''),
-    //     sgst: signal(''),
-    //     igst: signal(''),
-    //     lineItems: [
-    //         {
-    //             productCode: signal(''),
-    //             hsn: signal(''),
-    //             gstPercent: signal(''),
-    //             qty: signal('')
-    //         }
-    //     ],
-    // },
+    purchaseType: 'pur',
+    errorsObject: {
+        tranDateError: () => '',
+        invoiceNoError: () => '',
+        gstinError: () => '',
+        invoiceAmountError: () => '',
+        totalQtyError: () => '',
+        totalCgstError: () => '',
+        totalSgstError: () => '',
+        totalIgstError: () => ''
+    },
+
     main: {
+        computedInvoiceAmount: 0,
+        computedTotalQty: 0,
+        computedCgst: 0,
+        computedSgst: 0,
+        computedIgst: 0,
         header: {
             id: undefined,
             refNo: signal(undefined),
@@ -34,7 +30,8 @@ const PurchaseStoreT: PurchaseStoreType = {
             isGstInvoice: signal(true),
             isSubmitDisabled: signal(true)
         },
-        subHeader: {
+        subheader: {
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: true },
             purchaseAccountCode: signal(''),
             otherAccountCode: signal(''),
             gstinNumber: signal(''),
@@ -48,9 +45,10 @@ const PurchaseStoreT: PurchaseStoreType = {
             {
                 index: signal(0),
                 productCode: signal(''),
-                hsn: signal(''),
+                hsn: signal(0),
                 productDetails: signal(''),
-                gstPercent: signal(0),
+                gstRate: signal(0),
+                clos:signal(0),
                 qty: signal(0),
                 price: signal(0),
                 priceGst: signal(0),
@@ -71,21 +69,24 @@ const PurchaseStore: PurchaseStoreType = _.cloneDeep(PurchaseStoreT)
 
 type PurchaseStoreType = {
     tabValue: Signal<number>,
-    errors: any,
-    // errors: {
-    //     tranDate: Signal<string>
-    //     invoiceNo: Signal<string>
-    //     purchaseAccountCode: Signal<string>
-    //     otherAccountCode: Signal<string>
-    //     gstinNumber: Signal<string>
-    //     invoiceAmount: Signal<string>
-    //     totalQty: Signal<string>
-    //     cgst: Signal<string>
-    //     sgst: Signal<string>
-    //     igst: Signal<string>
-    //     lineItems: LineItemErrorType[]
-    // },
+    purchaseType: 'pur' | 'ret'
+    errorsObject: {
+        tranDateError: ErrorType
+        invoiceNoError: ErrorType
+        gstinError: ErrorType
+        invoiceAmountError: ErrorType
+        totalQtyError: ErrorType
+        totalCgstError: ErrorType
+        totalSgstError: ErrorType
+        totalIgstError: ErrorType
+    },
+
     main: {
+        computedInvoiceAmount: number,
+        computedTotalQty: number,
+        computedCgst: number,
+        computedSgst: number,
+        computedIgst: number,
         header: {
             id: string | undefined
             refNo: Signal<string | undefined>
@@ -96,7 +97,8 @@ type PurchaseStoreType = {
             isGstInvoice: Signal<boolean>
             isSubmitDisabled: Signal<boolean>
         },
-        subHeader: {
+        subheader: {
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean }
             purchaseAccountCode: Signal<string>
             otherAccountCode: Signal<string>
             gstinNumber: Signal<string>
@@ -111,12 +113,34 @@ type PurchaseStoreType = {
 
 }
 
+const purchaseMainlineItemInstance: LineItemType = {
+    index: signal(0),
+    productCode: signal(''),
+    hsn: signal(0),
+    productDetails: signal(''),
+    gstRate: signal(0),
+    clos: signal(0),
+    qty: signal(0),
+    price: signal(0),
+    priceGst: signal(0),
+    discount: signal(0),
+    subTotal: signal(0),
+    amount: signal(0),
+    serialNumber: signal(''),
+    remarks: signal(''),
+    cgst: signal(0),
+    sgst: signal(0),
+    igst: signal(0)
+}
+export {purchaseMainlineItemInstance}
+
 type LineItemType = {
     index: Signal<number>
     productCode: Signal<string>
-    hsn: Signal<string>
+    hsn: Signal<number>
     productDetails: Signal<string>
-    gstPercent: Signal<number>
+    gstRate: Signal<number>
+    clos?: Signal<number>
     qty: Signal<number>
     price: Signal<number>
     priceGst: Signal<number>
@@ -130,6 +154,8 @@ type LineItemType = {
     igst: Signal<number>
 }
 
+export type { LineItemType as PurchaseMainLineItemType }
+
 type LineItemErrorType = {
     productCode: Signal<string>
     hsn: Signal<string>
@@ -137,4 +163,41 @@ type LineItemErrorType = {
     qty: Signal<string>
 }
 
+type ErrorType = () => string
+
 export { PurchaseStore }
+
+// errors: {
+//     tranDate: signal(''),
+//     invoiceNo: signal(''),
+//     purchaseAccountCode: signal(''),
+//     otherAccountCode: signal(''),
+//     gstinNumber: signal(''),
+//     invoiceAmount: signal(''),
+//     totalQty: signal(''),
+//     cgst: signal(''),
+//     sgst: signal(''),
+//     igst: signal(''),
+//     lineItems: [
+//         {
+//             productCode: signal(''),
+//             hsn: signal(''),
+//             gstPercent: signal(''),
+//             qty: signal('')
+//         }
+//     ],
+// },
+
+// errors: {
+//     tranDate: Signal<string>
+//     invoiceNo: Signal<string>
+//     purchaseAccountCode: Signal<string>
+//     otherAccountCode: Signal<string>
+//     gstinNumber: Signal<string>
+//     invoiceAmount: Signal<string>
+//     totalQty: Signal<string>
+//     cgst: Signal<string>
+//     sgst: Signal<string>
+//     igst: Signal<string>
+//     lineItems: LineItemErrorType[]
+// },

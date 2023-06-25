@@ -198,11 +198,7 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Purchase a/c</Typography>
                         {/* purchase */}
                         <LedgerSubledger
-                            // allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            // ledgerAccounts={getMappedAccounts(
-                            //     ad.accounts.purchaseLedgerAccounts
-                            // )}
                             ledgerFilterMethodName='purchaseAccounts'
                             onChange={() => {
                                 setRefresh({})

@@ -2,31 +2,15 @@ import { useSharedElements } from "../../common/shared-elements-hook"
 import { getFromBag } from "../../inventory/redirect"
 import { PurchaseStore } from "../purchase-store"
 import { useGranularEffect } from '../../../../../imports/regular-imports'
-import { ErrorSharp } from "@mui/icons-material"
 
-function usePurchaseNewHeader() {
+function usePurchaseMainHeader() {
     const header = PurchaseStore.main.header
-    // const errors = PurchaseStore.errors
-    const { accountsMessages, isInvalidDate } = useSharedElements()
+    const subheader = PurchaseStore.main.subheader
+    // const errorsObject = PurchaseStore.errorsObject
+    // const { accountsMessages, isInvalidDate } = useSharedElements()
 
-    useGranularEffect(() => {
-        setErrors()
-        if (isGstinExists()) {
-            header.isGstInvoice.value = true
-        }
-
-    }, [], [isGstinExists, setErrors])
-
-    function isInValidInvoiceNo() {
-        let ret = false
-        // errors.invoiceNo.value = ''
-        // if (!header.invoiceNo.value) {
-        //     errors.invoiceNo.value = accountsMessages.genericRequired
-        //     ret = true
-        // }
-        return (ret)
-    }
-
+    header.isGstInvoice.value = isGstinExists()
+    
     function isGstinExists() {
         let ret = false
         const info = getFromBag('unitInfo')
@@ -36,37 +20,19 @@ function usePurchaseNewHeader() {
         return (ret)
     }
 
-    function isInvalidTranDate() {
-        let ret = false
-        // PurchaseStore.errors.tranDate.value =''
-        if (isInvalidDate(header.tranDate.value)) {
-            ret = true
-            // PurchaseStore.errors.tranDate.value = accountsMessages.dateRangeAuditLockMessage
+    function handleSubmit(){
+        const data = {
+            refNo: header.refNo.value,
+            tranDate : header.tranDate.value,
+            userRefNo: header.invoiceNo.value,
+            commonRemarks: header.commonRemarks.value,
+            isGstInvoice: header.isGstInvoice.value,
+            purchase: subheader.ledgerSubledgerPurchase
         }
-        return (ret)
+        console.log(data)
     }
 
-    function isError() {
-        // const errors: any = PurchaseStore.errors
-        // const vals: any[] = Object.values(errors)
-        // const lineItems:any[] = vals.pop()
-
-        // const isError = vals.some((x: any) => {
-        //     console.log(x.value)
-        //     return(Boolean(x.value))
-        // })
-        // return (isError)
-    }
-
-    function setErrors() {
-        const errors:any = PurchaseStore.errors
-        errors.isDateError = ()=>isInvalidDate(header.tranDate.value) || false
-        errors.isInvoiceNoError = ()=>{
-            
-        }
-
-    }
-
-    return ({ isError, isGstinExists, isInValidInvoiceNo, isInvalidTranDate })
+    return({handleSubmit})
+    // return ({errorsObject, isGstinExists, })
 }
-export { usePurchaseNewHeader }
+export { usePurchaseMainHeader }

@@ -5,6 +5,7 @@ import { usePurchase } from './purchase-hook'
 import { PurchaseStore } from './purchase-store'
 import { PurchaseView } from './purchase-view'
 function Purchase({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
+    PurchaseStore.purchaseType = purchaseType
     const { handleOnReset, handleOnTabChange } = usePurchase()
     const theme = useTheme()
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
