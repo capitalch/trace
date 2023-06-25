@@ -32,7 +32,7 @@ function initCode() {
         const buCode = getLoginData().lastUsedBuCode
 
         //Uncomment following lines
-        // emit('SHOW-LOADING-INDICATOR', true)
+        emit('SHOW-LOADING-INDICATOR', true)
         // if (buCode) {
         //     setInBag('buCode', buCode)
         //     const branchId = brId || getLoginData().lastUsedBranchId

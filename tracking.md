@@ -1,15 +1,19 @@
-## Logic for Stock Journal price client
-- Check the sql for get product on product code
-- Check sale profit
-- UI amount is not getting auto calculated
-
-## Logic for Stock Journal price
-1. In database StockJournal table include price, default 0
-2. client side add price in stock journal
-3. Change stock summary
-4. Change sales
-5. Change Products price
-6. Change stock transaction
+## Purchase to do
+- Add buttonon every line
+- Seach icon button with index
+- items wire up with data
+- computations
+- items eror handling
+- items search
+- serial no
+- edit
+- final validation
+- submit and save
+- delete row
+- retain data
+- view with syncfusion
+- Populate gstin from party account
+- database delete functionlity
 
 ## Important
 1. Stock summary, include HSN code.

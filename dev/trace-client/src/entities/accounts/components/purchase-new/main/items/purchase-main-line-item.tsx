@@ -1,4 +1,4 @@
-import { CloseSharp } from "@mui/icons-material"
+import { AddCircle, CloseSharp, Delete, Search } from "@mui/icons-material"
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material"
 import NumberFormat from "react-number-format"
 import { utilMethods } from "../../../inventory/redirect"
@@ -10,9 +10,18 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
         display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
         , flexWrap: 'wrap', p: 2, pr: 1, rowGap: 3, columnGap: 2
     }}>
-        {/* Index */}
-        <Typography variant='body2' sx={{ mt: 1, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
 
+        {/* Index */}
+        <Typography variant='body2' sx={{ mt: 5, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
+
+        {/* Search */}
+        <Box>
+            <IconButton sx={{ ml:-4.5, mt:-4.5}} size="medium" color='error'
+                onClick={(e: any) => handleDeleteRow(e, item, index)}
+            >
+                <CloseSharp />
+            </IconButton>
+        </Box>
         {/* Product code */}
         <Box >
             <Typography variant='body2'>Product code</Typography>
@@ -224,7 +233,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
             //         : 'secondary'
             // }
             showZero={true}>
-            <Button color='primary' size='medium' variant='contained' onClick={() => {
+            <Button color='info' size='small' variant='contained' onClick={() => {
                 // megaData.executeMethodForKey('handleSerialNo:lineItems', { item })
             }}>Serial no</Button>
         </Badge>
@@ -232,14 +241,25 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
         {/* amount */}
         <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >
             {toDecimalFormat(item.amount.value || 0.00)}</Typography>
-        <Box sx={{ ml: -6.5, mt: -8, mr: 0.5 }}>
-            {/* delete */}
-            <IconButton sx={{ position: 'relative', left: theme.spacing(1.5), }} size='small' color='error'
+
+        <Box sx={{ ml: -8.5, mt: -8, mr: 0.5 }}>
+            {/* search */}
+            <IconButton sx={{ position: 'relative', left: theme.spacing(7.5), }} size='medium' color='info'
                 onClick={(e: any) => handleDeleteRow(e, item, index)}
             >
-                <CloseSharp />
+                <Search />
             </IconButton>
         </Box>
+        {/* Add */}
+        <IconButton
+            sx={{}}
+            className="add-box"
+            aria-label="add"
+            size="medium"
+        // onClick={handleAddItem}
+        >
+            <AddCircle sx={{ fontSize: '2.2rem', color: theme.palette.secondary.main, }} />
+        </IconButton>
     </Box>)
 
     function handleDeleteRow(e: any, item: any, index: number) {
