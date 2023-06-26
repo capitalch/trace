@@ -12,20 +12,18 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
     }}>
 
         {/* Index */}
-        <Typography variant='body2' sx={{ mt: 5, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
+        <Typography variant='body2' sx={{ mt: 1.2, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
 
-        {/* Search */}
-        <Box>
-            <IconButton sx={{ ml:-4.5, mt:-4.5}} size="medium" color='error'
-                onClick={(e: any) => handleDeleteRow(e, item, index)}
-            >
+        {/* Delete */}
+            <IconButton sx={{ ml:-4.5, mt:-6.5}} size="medium" color='error'
+                onClick={(e: any) => handleDeleteRow(e, item, index)}>
                 <CloseSharp />
             </IconButton>
-        </Box>
+        
         {/* Product code */}
-        <Box >
+        <Box className='vertical'>
             <Typography variant='body2'>Product code</Typography>
-            <NumberFormat sx={{ maxWidth: theme.spacing(10) }}
+            <NumberFormat sx={{ maxWidth: theme.spacing(10), mt:-.5 }}
                 allowNegative={false}
                 autoComplete='off'
                 customInput={TextField}
@@ -48,6 +46,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 onFocus={(e: any) => {
                     e.target.select()
                 }} />
+                <Button color='info' sx={{height:20, width:60,mt:.5 }}>Search</Button>
         </Box>
 
         {/* Product details */}
@@ -242,14 +241,6 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
         <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >
             {toDecimalFormat(item.amount.value || 0.00)}</Typography>
 
-        <Box sx={{ ml: -8.5, mt: -8, mr: 0.5 }}>
-            {/* search */}
-            <IconButton sx={{ position: 'relative', left: theme.spacing(7.5), }} size='medium' color='info'
-                onClick={(e: any) => handleDeleteRow(e, item, index)}
-            >
-                <Search />
-            </IconButton>
-        </Box>
         {/* Add */}
         <IconButton
             sx={{}}
