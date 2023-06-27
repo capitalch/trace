@@ -2,10 +2,13 @@ import { AddCircle, CloseSharp, Delete, Search } from "@mui/icons-material"
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material"
 import NumberFormat from "react-number-format"
 import { utilMethods } from "../../../inventory/redirect"
+import { usePurchaseMainLineItem } from "./purchase-main-line-item-hook"
 
 function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
     const theme = useTheme()
+    const {handleAddItem, handleDeleteItem } = usePurchaseMainLineItem()
     const { extractAmount, toDecimalFormat } = utilMethods()
+
     return (<Box sx={{
         display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
         , flexWrap: 'wrap', p: 2, pr: 1, rowGap: 3, columnGap: 2
@@ -15,15 +18,15 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
         <Typography variant='body2' sx={{ mt: 1.2, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
 
         {/* Delete */}
-            <IconButton sx={{ ml:-4.5, mt:-6.5}} size="medium" color='error'
-                onClick={(e: any) => handleDeleteRow(e, item, index)}>
-                <CloseSharp />
-            </IconButton>
-        
+        <IconButton sx={{ ml: -4.5, mt: -6.5 }} size="medium" color='error'
+            onClick={(e: any) => handleDeleteItem(e, item, index)}>
+            <CloseSharp />
+        </IconButton>
+
         {/* Product code */}
         <Box className='vertical'>
             <Typography variant='body2'>Product code</Typography>
-            <NumberFormat sx={{ maxWidth: theme.spacing(10), mt:-.5 }}
+            <NumberFormat sx={{ maxWidth: theme.spacing(10), mt: .5 }}
                 allowNegative={false}
                 autoComplete='off'
                 customInput={TextField}
@@ -42,11 +45,11 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                     // setRefresh({})
                     // }
                 }}
-
+                
                 onFocus={(e: any) => {
                     e.target.select()
                 }} />
-                <Button color='info' sx={{height:20, width:60,mt:.5 }}>Search</Button>
+            <Button variant='text' color='info' sx={{ height: 20, width: 60, mt: 1 , ml:0}}>Search</Button>
         </Box>
 
         {/* Product details */}
@@ -247,14 +250,12 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
             className="add-box"
             aria-label="add"
             size="medium"
-        // onClick={handleAddItem}
+        onClick={()=>handleAddItem(index)}
         >
             <AddCircle sx={{ fontSize: '2.2rem', color: theme.palette.secondary.main, }} />
         </IconButton>
     </Box>)
 
-    function handleDeleteRow(e: any, item: any, index: number) {
 
-    }
 }
 export { PurchaseMainLineItem }

@@ -134,6 +134,30 @@ const purchaseMainlineItemInstance: LineItemType = {
 }
 export {purchaseMainlineItemInstance}
 
+function getInstance(){
+    return({
+        index: signal(0),
+    productCode: signal(''),
+    hsn: signal(0),
+    productDetails: signal(''),
+    gstRate: signal(0),
+    clos: signal(0),
+    qty: signal(0),
+    price: signal(0),
+    priceGst: signal(0),
+    discount: signal(0),
+    subTotal: signal(0),
+    amount: signal(0),
+    serialNumber: signal(''),
+    remarks: signal(''),
+    cgst: signal(0),
+    sgst: signal(0),
+    igst: signal(0)
+    })
+}
+
+export {getInstance}
+
 type LineItemType = {
     index: Signal<number>
     productCode: Signal<string>
