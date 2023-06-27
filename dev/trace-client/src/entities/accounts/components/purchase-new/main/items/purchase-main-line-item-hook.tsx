@@ -28,7 +28,7 @@ function usePurchaseMainLineItem() {
                 sgst: signal(0),
                 igst: signal(0)
             }
-            draft.splice(0, 0, ins)
+            draft.splice(0, 0, {...ins})
             return (draft)
         })
     }
