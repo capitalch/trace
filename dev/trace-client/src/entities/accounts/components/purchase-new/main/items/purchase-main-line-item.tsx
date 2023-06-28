@@ -33,11 +33,11 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 decimalScale={0}
                 // error={item.isProductCodeError}
                 fixedDecimalScale={true}
-                // value={item.productCode || ''}
+                value={item.productCode || ''}
                 variant='standard'
                 size='small'
                 onChange={(e: any) => {
-                    // item.productCode = e.target.value
+                    item.productCode = e.target.value
                     // if (item.productCode) {
                     // debounceEmit('DEBOUNCE-ON-CHANGE', { item, setRefresh })
                     // } else {
@@ -60,7 +60,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
             <Typography sx={{
                 fontSize: theme.spacing(1.8),
                 fontWeight: 'bold', overflow: 'hidden', color: theme.palette.common.black,
-            }} variant='body1'>{item.productDetails.value || ''}</Typography>
+            }} variant='body1'>{item.productDetails || ''}</Typography>
         </Card>
 
         {/* Hsn */}
@@ -74,8 +74,11 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 decimalScale={0}
                 // error={item.isHsnError}
                 fixedDecimalScale={true}
-                value={item.hsn.value || 0}
+                value={item.hsn || 0}
                 variant='standard'
+                onChange={(e:any)=>{
+                    item.hsn = e.target.value
+                }}
                 // onChange={(e: any) => handleTextChanged(item, 'hsn', e)}
                 onFocus={(e: any) => {
                     e.target.select()
@@ -93,14 +96,14 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 customInput={TextField}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.gstRate.value || 0.00}
+                value={item.gstRate || 0.00}
                 variant='standard'
                 onFocus={(e: any) => {
                     e.target.select()
                 }}
                 onValueChange={(values: any) => {
                     const { floatValue } = values
-                    item.gstRate.value = floatValue || 0.0
+                    item.gstRate = floatValue || 0.0
                     // setRefresh({})
                     // computeRow(item)
                 }} />
@@ -121,13 +124,13 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 customInput={TextField}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.qty.value || 1.00}
+                value={item.qty || 1.00}
                 onFocus={(e: any) => {
                     e.target.select()
                 }}
                 onValueChange={(value) => {
                     const { floatValue } = value
-                    item.qty.value = floatValue
+                    item.qty = floatValue
                     // setRefresh({})
                     // computeRow(item)
                 }}
@@ -146,7 +149,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 customInput={TextField}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.price.value || 0.00}
+                value={item.price || 0.00}
                 onChange={(e: any) => {
                     // item.price = +extractAmount(e.target.value) || 0.0
                     // setPriceGst(item)
