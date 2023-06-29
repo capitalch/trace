@@ -7,11 +7,11 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 
 function PurchaseMainHeader() {
     const theme = useTheme()
-    const {handleSubmit} = usePurchaseMainHeader()
+    const { handleOnReset, handleSubmit } = usePurchaseMainHeader()
     const header = PurchaseStore.main.header
     const errorsObject = PurchaseStore.errorsObject
 
-    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4) }}>
+    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4), alignItems:'center' }}>
 
         {/* auto ref no */}
         <TextField
@@ -61,7 +61,7 @@ function PurchaseMainHeader() {
         />
 
         <FormControlLabel
-            sx={{ position: 'relative', top: theme.spacing(1) }}
+            sx={{ position: 'relative', top: theme.spacing(1), ml:'auto' }}
             control={
                 <Checkbox checked={header.isGstInvoice.value}
                     onChange={() => (header.isGstInvoice.value = !header.isGstInvoice.value)}
@@ -72,10 +72,10 @@ function PurchaseMainHeader() {
 
         {/* Submit */}
         <Button
-            sx={{ ml: 'auto', height: theme.spacing(6) }}
+            sx={{  height: theme.spacing(5), width: theme.spacing(16),  }}
             type='button'
             variant="contained"
-            size="large"
+            size="medium"
             color="secondary"
             // disabled={isError()}
             // startIcon={

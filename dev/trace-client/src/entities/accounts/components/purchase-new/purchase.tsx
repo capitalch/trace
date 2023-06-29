@@ -20,11 +20,11 @@ function Purchase({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
             onChange={handleOnTabChange}>
             <Tab label='Main' />
             <Tab label='View' />
-            <Button sx={{
+            {/* <Button sx={{
                 backgroundColor: theme.palette.blue.main, color: theme.palette.getContrastText(theme.palette.blue.main),
                 height: theme.spacing(4),
-                margin: 'auto',
-            }} variant='contained' onClick={handleOnReset}>Reset</Button>
+                // margin: 'auto',
+            }} variant='contained' onClick={handleOnReset}>Reset</Button> */}
         </Tabs>
         <Box hidden={PurchaseStore.tabValue.value === 1}>
             <PurchaseMain purchaseType={purchaseType} />

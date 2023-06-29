@@ -10,8 +10,8 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
     const { extractAmount, toDecimalFormat } = utilMethods()
 
     return (<Box sx={{
-        display: 'flex', alignItems: 'center', border: '1px solid lightGrey'
-        , flexWrap: 'wrap', p: 2, pr: 1, rowGap: 3, columnGap: 2
+        display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey'
+        , flexWrap: 'wrap', pr: 1, rowGap: 3, columnGap: 2
     }}>
 
         {/* Index */}
@@ -54,7 +54,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
 
         {/* Product details */}
         <Card variant='outlined' sx={{
-            width: theme.spacing(22), height: theme.spacing(8),
+            width: theme.spacing(26), height: theme.spacing(8),
             p: .5, pt: 0, border: '1px solid lightGrey', borderColor: item.isProductDetailsError ? 'red' : 'lightGrey'
         }}>
             <Typography sx={{
@@ -96,14 +96,14 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 customInput={TextField}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.gstRate || 0.00}
+                value={item.gstRate.value || 0.00}
                 variant='standard'
                 onFocus={(e: any) => {
                     e.target.select()
                 }}
                 onValueChange={(values: any) => {
                     const { floatValue } = values
-                    item.gstRate = floatValue || 0.0
+                    item.gstRate.value = floatValue || 0.0
                     // setRefresh({})
                     // computeRow(item)
                 }} />
@@ -124,13 +124,13 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 customInput={TextField}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.qty || 1.00}
+                value={item.qty.value || 1.00}
                 onFocus={(e: any) => {
                     e.target.select()
                 }}
                 onValueChange={(value) => {
                     const { floatValue } = value
-                    item.qty = floatValue
+                    item.qty.value = floatValue
                     // setRefresh({})
                     // computeRow(item)
                 }}
@@ -149,9 +149,9 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 customInput={TextField}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.price || 0.00}
+                value={item.price.value || 0.00}
                 onChange={(e: any) => {
-                    // item.price = +extractAmount(e.target.value) || 0.0
+                    item.price.value = +extractAmount(e.target.value) || 0.0
                     // setPriceGst(item)
                     // setRefresh({})
                     // computeRow(item)
@@ -177,12 +177,12 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 onFocus={(e: any) => {
                     e.target.select()
                 }}
-                // onChange={(e: any) => {
-                //     item.priceGst.value = +extractAmount(e.target.value) || 0.0
-                //     setPrice(item)
-                //     setRefresh({})
-                //     computeRow(item)
-                // }}
+                onChange={(e: any) => {
+                    item.priceGst.value = +extractAmount(e.target.value) || 0.0
+                    // setPrice(item)
+                    // setRefresh({})
+                    // computeRow(item)
+                }}
                 thousandSeparator={true}
                 size='small' color='secondary'
                 variant='standard'
@@ -254,10 +254,8 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
             size="large"
             onClick={() => handleAddItem(index)}
         >
-            <AddCircle sx={{ fontSize: '3.5rem', color: theme.palette.secondary.main, }} />
+            <AddCircle sx={{ fontSize: '3rem', color: theme.palette.secondary.main, }} />
         </IconButton>
     </Box>)
-
-
 }
 export { PurchaseMainLineItem }

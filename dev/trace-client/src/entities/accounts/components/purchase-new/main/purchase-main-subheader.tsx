@@ -13,7 +13,7 @@ function PurchaseMainSubheader() {
     const main = PurchaseStore.main
     // const errorsObject = PurchaseStore.errorsObject
 
-    return (<Box sx={{ display: 'flex', mt: 4, columnGap: 4, rowGap: 4, flexWrap: 'wrap' }}>
+    return (<Box sx={{ display: 'flex', mt: 2, columnGap: 4, rowGap: 4, flexWrap: 'wrap',alignItems:'center' }}>
         {/* Purchase a/c */}
         <Box>
             <Typography variant="caption">Purchase a/c</Typography>
@@ -62,7 +62,7 @@ function PurchaseMainSubheader() {
         />
 
         {/* Right */}
-        <Box sx={{ display: 'flex', p: 1, border: '1px solid lightGray',  columnGap: 6, backgroundColor: theme.palette.grey[50], '& input': { textAlign: 'end' } }}>
+        <Box sx={{ display: 'flex', ml:'auto', mr:8, p: 1, border: '1px solid lightGray',  columnGap: 6, backgroundColor: theme.palette.grey[50], '& input': { textAlign: 'end' } }}>
             {/* Invoice amt, qty */}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
 
@@ -225,6 +225,13 @@ function PurchaseMainSubheader() {
                 />
             </Box>
         </Box>
+
+        <Button sx={{
+            // ml: 'auto',
+            backgroundColor: theme.palette.blue.main, color: theme.palette.getContrastText(theme.palette.blue.main),
+            height: theme.spacing(5),
+            // margin: 'auto',
+        }} variant='contained' onClick={()=>{}}>Reset</Button>
     </Box>)
 }
 export { PurchaseMainSubheader }

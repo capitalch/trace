@@ -19,15 +19,15 @@ function PurchaseMainItemsHeader() {
                     }
                 />
                 {/* Add */}
-                <Button size='small' variant='contained' color='secondary' sx={{ width: theme.spacing(12.5) }}
+                {/* <Button size='small' variant='contained' color='secondary' sx={{ width: theme.spacing(12.5) }}
                     onClick={handleAddItem}
                     startIcon={<AddCircle sx={{ ml: -3 }} />}
-                >Add</Button>
+                >Add</Button> */}
             </Box>
         </Box>
     )
 
-    function handleAddItem() {
+    // function handleAddItem() {
         // const lineItems = PurchaseStore.main.lineItems.value
         // const item: PurchaseMainLineItemType = { ...purchaseMainlineItemInstance }
         // PurchaseStore.main.lineItems.value = produce(PurchaseStore.main.lineItems.value, (draft: any[]) => {
@@ -37,6 +37,6 @@ function PurchaseMainItemsHeader() {
         // lineItems.push(item)
         // const tempItems = PurchaseStore.main.lineItems.value
         // PurchaseStore.main.lineItems.value = [...tempItems]
-    }
+    // }
 }
 export { PurchaseMainItemsHeader }

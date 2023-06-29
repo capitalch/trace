@@ -32,7 +32,11 @@ function usePurchaseMainHeader() {
         console.log(data)
     }
 
-    return({handleSubmit})
+    function handleOnReset(){
+
+    }
+
+    return({handleOnReset, handleSubmit})
     // return ({errorsObject, isGstinExists, })
 }
 export { usePurchaseMainHeader }

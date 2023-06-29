@@ -1,16 +1,18 @@
-## Purchase to do
-- Add buttonon every line
-- Seach icon button with index
-- items wire up with data
+## Purchase to do           
 - computations
 - items eror handling
-- items search
+- items search and populate
 - serial no
 - edit
 - final validation
 - submit and save
-- delete row
-- retain data
+- Igst enabling
+- Controls uncomment properties
+                                                                                                                    - delete row
+                                                                                                                    - retain data
+                                                                                                                    - Add button on every line
+                                                                                                                    - Seach icon button with index
+                                                                                                                    - items wire up with data
 - view with syncfusion
 - Populate gstin from party account
 - database delete functionlity
