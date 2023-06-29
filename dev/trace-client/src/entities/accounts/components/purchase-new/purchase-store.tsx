@@ -42,25 +42,24 @@ const PurchaseStoreT: PurchaseStoreType = {
             igst: signal(0),
         },
         lineItems: signal([
-            // {
-            //     index: 0,
-            //     productCode: '',
-            //     hsn: 0,
-            //     productDetails: '',
-            //     gstRate: 0,
-            //     clos: 0,
-            //     qty: 0,
-            //     price: 0,
-            //     priceGst: 0,
-            //     discount: 0,
-            //     subTotal: 0,
-            //     amount: 0,
-            //     serialNumber: '',
-            //     remarks: '',
-            //     cgst: 0,
-            //     sgst: 0,
-            //     igst: 0
-            // }
+            {
+                productCode: signal(''),
+                hsn: signal(0),
+                // productDetails: '',
+                // gstRate: 0,
+                // clos: 0,
+                // qty: 0,
+                // price: 0,
+                // priceGst: 0,
+                // discount: 0,
+                // subTotal: 0,
+                // amount: 0,
+                // serialNumber: '',
+                // remarks: '',
+                // cgst: 0,
+                // sgst: 0,
+                // igst: 0
+            }
         ]),
     },
 }
@@ -109,31 +108,72 @@ type PurchaseStoreType = {
             sgst: Signal<number>
             igst: Signal<number>
         },
-        lineItems: Signal<LineItemType[]>
+        lineItems: Signal<PurchaseLineItemType[]>
     },
 
 }
 
-const purchaseMainlineItemInstance: LineItemType = {
-    index: 0,
-    productCode: '',
-    hsn: 0,
-    productDetails: '',
-    gstRate: 0,
-    clos: 0,
-    qty: 0,
-    price: 0,
-    priceGst: 0,
-    discount: 0,
-    subTotal: 0,
-    amount: 0,
-    serialNumber: '',
-    remarks: '',
-    cgst: 0,
-    sgst: 0,
-    igst: 0
+function getPurchaseLineItemInstance(): PurchaseLineItemType {
+    return ({
+        productCode: signal(''),
+        hsn: signal(0)
+    })
 }
-export { purchaseMainlineItemInstance }
+export { getPurchaseLineItemInstance }
+
+type PurchaseLineItemType = {
+    productCode: Signal<string>
+    hsn: Signal<number>
+    // productDetails: string
+    // gstRate: number
+    // clos?: number
+    // qty: number
+    // price: number
+    // priceGst: number
+    // discount: number
+    // subTotal: number
+    // amount: number
+    // serialNumber: string
+    // remarks: string
+    // cgst: number
+    // sgst: number
+    // igst: number
+}
+
+export type { PurchaseLineItemType}
+
+type LineItemErrorType = {
+    productCode: Signal<string>
+    hsn: Signal<string>
+    gstPercent: Signal<string>
+    qty: Signal<string>
+}
+
+type ErrorType = () => string
+
+export { PurchaseStore }
+
+
+// const purchaseMainlineItemInstance: LineItemType = {
+//     index: 0,
+//     productCode: '',
+//     hsn: 0,
+//     productDetails: '',
+//     gstRate: 0,
+//     clos: 0,
+//     qty: 0,
+//     price: 0,
+//     priceGst: 0,
+//     discount: 0,
+//     subTotal: 0,
+//     amount: 0,
+//     serialNumber: '',
+//     remarks: '',
+//     cgst: 0,
+//     sgst: 0,
+//     igst: 0
+// }
+// export { purchaseMainlineItemInstance }
 
 // function getInstance() {
 //     return ({
@@ -158,39 +198,6 @@ export { purchaseMainlineItemInstance }
 // }
 
 // export { getInstance }
-
-type LineItemType = {
-    index: number
-    productCode: string
-    hsn: number
-    productDetails: string
-    gstRate: number
-    clos?: number
-    qty: number
-    price: number
-    priceGst: number
-    discount: number
-    subTotal: number
-    amount: number
-    serialNumber: string
-    remarks: string
-    cgst: number
-    sgst: number
-    igst: number
-}
-
-export type { LineItemType as PurchaseMainLineItemType }
-
-type LineItemErrorType = {
-    productCode: Signal<string>
-    hsn: Signal<string>
-    gstPercent: Signal<string>
-    qty: Signal<string>
-}
-
-type ErrorType = () => string
-
-export { PurchaseStore }
 
 // errors: {
 //     tranDate: signal(''),

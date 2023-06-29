@@ -1,5 +1,5 @@
 import { produce } from "immer"
-import { PurchaseStore, purchaseMainlineItemInstance } from "../../purchase-store"
+import { PurchaseStore, getPurchaseLineItemInstance } from "../../purchase-store"
 import { signal } from "@preact/signals-react"
 
 function usePurchaseMainLineItem() {
@@ -8,7 +8,7 @@ function usePurchaseMainLineItem() {
     function handleAddItem(index: number) {
         PurchaseStore.main.lineItems.value = produce(PurchaseStore.main.lineItems.value, (draft: any[]) => {
             // draft.push(purchaseMainlineItemInstance)
-            draft.splice(0, 0, {...purchaseMainlineItemInstance})
+            draft.splice(index + 1, 0, getPurchaseLineItemInstance())
             return (draft)
         })
     }
@@ -16,7 +16,7 @@ function usePurchaseMainLineItem() {
     function handleDeleteItem(e: any, item: any, index: number) {
         PurchaseStore.main.lineItems.value = produce(PurchaseStore.main.lineItems.value, (draft: any[]) => {
             // draft.push(purchaseMainlineItemInstance)
-            draft.splice(index - 1, 1)
+            draft.splice(index, 1)
             return (draft)
         })
     }

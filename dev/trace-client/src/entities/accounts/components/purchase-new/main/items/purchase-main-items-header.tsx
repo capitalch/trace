@@ -1,6 +1,6 @@
 import { AddCircle } from "@mui/icons-material"
 import { Box, Button, Checkbox, FormControlLabel, Typography, useTheme } from "@mui/material"
-import { PurchaseMainLineItemType, PurchaseStore, purchaseMainlineItemInstance } from "../../purchase-store"
+import { PurchaseStore, } from "../../purchase-store"
 import { signal } from "@preact/signals-react"
 import { produce } from "immer"
 
@@ -28,13 +28,12 @@ function PurchaseMainItemsHeader() {
     )
 
     function handleAddItem() {
-        const lineItems = PurchaseStore.main.lineItems.value
-        const item: PurchaseMainLineItemType = { ...purchaseMainlineItemInstance }
-        PurchaseStore.main.lineItems.value = produce(PurchaseStore.main.lineItems.value, (draft: any[]) => {
-            // draft.push(purchaseMainlineItemInstance)
-            draft.splice(0, 0, { ...purchaseMainlineItemInstance })
-            return (draft)
-        })
+        // const lineItems = PurchaseStore.main.lineItems.value
+        // const item: PurchaseMainLineItemType = { ...purchaseMainlineItemInstance }
+        // PurchaseStore.main.lineItems.value = produce(PurchaseStore.main.lineItems.value, (draft: any[]) => {
+        //     draft.splice(0, 0, { ...purchaseMainlineItemInstance })
+        //     return (draft)
+        // })
         // lineItems.push(item)
         // const tempItems = PurchaseStore.main.lineItems.value
         // PurchaseStore.main.lineItems.value = [...tempItems]

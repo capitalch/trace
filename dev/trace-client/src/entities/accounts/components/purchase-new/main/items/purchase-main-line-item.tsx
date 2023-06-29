@@ -6,7 +6,7 @@ import { usePurchaseMainLineItem } from "./purchase-main-line-item-hook"
 
 function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
     const theme = useTheme()
-    const {handleAddItem, handleDeleteItem } = usePurchaseMainLineItem()
+    const { handleAddItem, handleDeleteItem } = usePurchaseMainLineItem()
     const { extractAmount, toDecimalFormat } = utilMethods()
 
     return (<Box sx={{
@@ -33,11 +33,11 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 decimalScale={0}
                 // error={item.isProductCodeError}
                 fixedDecimalScale={true}
-                value={item.productCode || ''}
+                value={item.productCode.value || ''}
                 variant='standard'
                 size='small'
                 onChange={(e: any) => {
-                    item.productCode = e.target.value
+                    item.productCode.value = e.target.value
                     // if (item.productCode) {
                     // debounceEmit('DEBOUNCE-ON-CHANGE', { item, setRefresh })
                     // } else {
@@ -45,11 +45,11 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                     // setRefresh({})
                     // }
                 }}
-                
+
                 onFocus={(e: any) => {
                     e.target.select()
                 }} />
-            <Button variant='text' color='info' sx={{ height: 20, width: 60, mt: 1 , ml:0}}>Search</Button>
+            <Button variant='text' color='info' sx={{ height: 20, width: 60, mt: 1, ml: 0 }}>Search</Button>
         </Box>
 
         {/* Product details */}
@@ -74,10 +74,10 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 decimalScale={0}
                 // error={item.isHsnError}
                 fixedDecimalScale={true}
-                value={item.hsn || 0}
+                value={item.hsn.value || 0}
                 variant='standard'
-                onChange={(e:any)=>{
-                    item.hsn = e.target.value
+                onChange={(e: any) => {
+                    item.hsn.value = e.target.value
                 }}
                 // onChange={(e: any) => handleTextChanged(item, 'hsn', e)}
                 onFocus={(e: any) => {
@@ -249,13 +249,12 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
 
         {/* Add */}
         <IconButton
-            sx={{}}
             className="add-box"
             aria-label="add"
-            size="medium"
-        onClick={()=>handleAddItem(index)}
+            size="large"
+            onClick={() => handleAddItem(index)}
         >
-            <AddCircle sx={{ fontSize: '2.2rem', color: theme.palette.secondary.main, }} />
+            <AddCircle sx={{ fontSize: '3.5rem', color: theme.palette.secondary.main, }} />
         </IconButton>
     </Box>)
 

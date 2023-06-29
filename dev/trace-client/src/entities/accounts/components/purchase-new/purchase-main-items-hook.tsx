@@ -1,5 +1,0 @@
-
-function usePurchaseMainItems(){
-
-}
-export {usePurchaseMainItems}
