@@ -8,25 +8,36 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
     const theme = useTheme()
     const { handleAddItem, handleDeleteItem } = usePurchaseMainLineItem()
     const { extractAmount, toDecimalFormat } = utilMethods()
+    // const {
+    //     searchProduct,
+    //     searchProductOnProductCode,
+    //     searchProductOnUpcCode,
+    // } = useProductUtils(meta)
 
     return (<Box sx={{
         display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey'
         , flexWrap: 'wrap', pr: 1, rowGap: 3, columnGap: 2
     }}>
 
-        {/* Index */}
-        <Typography variant='body2' sx={{ mt: 1.2, textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
+        <Box display='flex' flexDirection='column'>
+            {/* Delete */}
+            <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='error'
+                onClick={(e: any) => handleDeleteItem(e, item, index)}>
+                <CloseSharp />
+            </IconButton>
+            {/* Index */}
+            <Typography variant='body2' sx={{ textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
 
-        {/* Delete */}
-        <IconButton sx={{ ml: -4.5, mt: -6.5 }} size="medium" color='error'
-            onClick={(e: any) => handleDeleteItem(e, item, index)}>
-            <CloseSharp />
-        </IconButton>
 
-        {/* Product code */}
-        <Box className='vertical'>
-            <Typography variant='body2'>Product code</Typography>
-            <NumberFormat sx={{ maxWidth: theme.spacing(10), mt: .5 }}
+        </Box>
+
+        {/* Product code or UPC*/}
+        <Box className='vertical' >
+            <Box sx={{ display: 'flex' }}>
+                <Typography variant='body2'>Prod/UPC</Typography>
+                <Button variant='outlined' color='info' sx={{ height: 20, width: 60, ml: 2 }}>Search</Button>
+            </Box>
+            {/* <NumberFormat sx={{ maxWidth: theme.spacing(10),  }}
                 allowNegative={false}
                 autoComplete='off'
                 customInput={TextField}
@@ -36,6 +47,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 value={item.productCode.value || ''}
                 variant='standard'
                 size='small'
+                placeholder="Pr code"
                 onChange={(e: any) => {
                     item.productCode.value = e.target.value
                     // if (item.productCode) {
@@ -48,8 +60,17 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
 
                 onFocus={(e: any) => {
                     e.target.select()
-                }} />
-            <Button variant='text' color='info' sx={{ height: 20, width: 60, mt: 1, ml: 0 }}>Search</Button>
+                }} /> */}
+            <TextField
+                autoComplete='off'
+                sx={{ maxWidth: theme.spacing(18) }}
+                variant='standard'
+                value={item.productCodeOrUpc.value || ''}
+            // placeholder="UPC code"
+            // onChange={(e: any) => handleTextChanged(item, 'remarks', e)} 
+
+            />
+            {/*  */}
         </Box>
 
         {/* Product details */}
@@ -111,7 +132,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
 
         {/* Qty */}
         <Box className='vertical'>
-            <Badge badgeContent={item.clos.value || 0} color='secondary' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
+            <Badge badgeContent={item.clos.value || 0} color='default' sx={{ ml: 4, }} showZero overlap='circular' anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'right',
             }}>
@@ -214,10 +235,29 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
 
         {/* Remarks */}
         <Box className='vertical' >
-            <Typography variant='body2'>Remarks</Typography>
+            <Box display='flex'>
+                <Typography variant='body2'>Remarks</Typography>
+                <Badge
+                    badgeContent={
+                        (item.serialNumbers || '')
+                            .split(',')
+                            .filter(Boolean).length
+                    }
+                    // color={
+                    //     getSlNoError(item)
+                    //         ? 'error'
+                    //         : 'secondary'
+                    // }
+
+                    showZero={true}>
+                    <Button color="secondary" variant='outlined' sx={{ width: theme.spacing(12), height:20, ml: 2 }} onClick={() => {
+                        // megaData.executeMethodForKey('handleSerialNo:lineItems', { item })
+                    }}>Serial</Button>
+                </Badge>
+            </Box>
             <TextField
                 autoComplete='off'
-                sx={{ maxWidth: theme.spacing(18) }}
+                sx={{ maxWidth: theme.spacing(22) }}
                 variant='standard'
                 value={item.remarks.value || ''}
             // onChange={(e: any) => handleTextChanged(item, 'remarks', e)} 
@@ -226,7 +266,7 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
         </Box>
 
         {/* Serial numbers */}
-        <Badge
+        {/* <Badge
             badgeContent={
                 (item.serialNumbers || '')
                     .split(',')
@@ -237,11 +277,12 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
             //         ? 'error'
             //         : 'secondary'
             // }
+
             showZero={true}>
-            <Button color='info' size='small' variant='contained' onClick={() => {
+            <Button color="secondary" variant='outlined' sx={{ width: theme.spacing(12) }} onClick={() => {
                 // megaData.executeMethodForKey('handleSerialNo:lineItems', { item })
-            }}>Serial no</Button>
-        </Badge>
+            }}>Serial</Button>
+        </Badge> */}
 
         {/* amount */}
         <Typography variant='body2' sx={{ ml: 'auto', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >

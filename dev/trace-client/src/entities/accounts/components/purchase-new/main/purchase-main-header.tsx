@@ -11,7 +11,7 @@ function PurchaseMainHeader() {
     const header = PurchaseStore.main.header
     const errorsObject = PurchaseStore.errorsObject
 
-    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4), alignItems:'center' }}>
+    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4), alignItems: 'center' }}>
 
         {/* auto ref no */}
         <TextField
@@ -61,7 +61,7 @@ function PurchaseMainHeader() {
         />
 
         <FormControlLabel
-            sx={{ position: 'relative', top: theme.spacing(1), ml:'auto' }}
+            sx={{ position: 'relative', top: theme.spacing(1), ml: 'auto' }}
             control={
                 <Checkbox checked={header.isGstInvoice.value}
                     onChange={() => (header.isGstInvoice.value = !header.isGstInvoice.value)}
@@ -70,9 +70,16 @@ function PurchaseMainHeader() {
             label='Gst invoice'
         />
 
+        <Button color='warning' sx={{
+            // backgroundColor: theme.palette.amber.main, 
+            // color: theme.palette.getContrastText(theme.palette.amber.main),
+            height: theme.spacing(5),
+            // margin: 'auto',
+        }} variant='contained' onClick={() => { }}>Reset</Button>
+
         {/* Submit */}
         <Button
-            sx={{  height: theme.spacing(5), width: theme.spacing(16),  }}
+            sx={{ height: theme.spacing(5), width: theme.spacing(16), }}
             type='button'
             variant="contained"
             size="medium"

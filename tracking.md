@@ -8,6 +8,10 @@
 - submit and save
 - Igst enabling
 - Controls uncomment properties
+- Qty badge pull stock value
+- Product code change debounce populate row
+- computeRow function to to compute all values in the row
+- ComputeTotal to compute all
                                                                                                                     - delete row
                                                                                                                     - retain data
                                                                                                                     - Add button on every line
