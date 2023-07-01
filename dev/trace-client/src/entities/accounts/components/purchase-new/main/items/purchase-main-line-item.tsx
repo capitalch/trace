@@ -1,4 +1,4 @@
-import { AddCircle, CloseSharp, Delete, Search } from "@mui/icons-material"
+import { AddCircle, CloseSharp, Delete, DeleteSharp, Search } from "@mui/icons-material"
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material"
 import NumberFormat from "react-number-format"
 import { utilMethods } from "../../../inventory/redirect"
@@ -15,15 +15,15 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
     // } = useProductUtils(meta)
 
     return (<Box sx={{
-        display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey'
-        , flexWrap: 'wrap', pr: 1, rowGap: 3, columnGap: 2
+        display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey', mt:1
+        , flexWrap: 'wrap',  rowGap: 3, columnGap: 2
     }}>
 
         <Box display='flex' flexDirection='column'>
-            {/* Delete */}
-            <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='error'
+            {/* Search */}
+            <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='secondary'
                 onClick={(e: any) => handleDeleteItem(e, item, index)}>
-                <CloseSharp />
+                <Search />
             </IconButton>
             {/* Index */}
             <Typography variant='body2' sx={{ textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
@@ -31,11 +31,11 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
 
         </Box>
 
-        {/* Product code or UPC*/}
+        {/* Product code or UPC search */}
         <Box className='vertical' >
             <Box sx={{ display: 'flex' }}>
-                <Typography variant='body2'>Prod/UPC</Typography>
-                <Button variant='outlined' color='info' sx={{ height: 20, width: 60, ml: 2 }}>Search</Button>
+                <Typography variant='body2'>Prod code / UPC</Typography>
+                {/* <Button variant='outlined' color='info' sx={{ height: 22, width: 60, ml: 1 }}>Search</Button> */}
             </Box>
             {/* <NumberFormat sx={{ maxWidth: theme.spacing(10),  }}
                 allowNegative={false}
@@ -63,14 +63,17 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                 }} /> */}
             <TextField
                 autoComplete='off'
-                sx={{ maxWidth: theme.spacing(18) }}
+                sx={{ maxWidth: theme.spacing(14) }}
                 variant='standard'
                 value={item.productCodeOrUpc.value || ''}
-            // placeholder="UPC code"
             // onChange={(e: any) => handleTextChanged(item, 'remarks', e)} 
-
             />
-            {/*  */}
+        </Box>
+
+        {/* Product code / upc code display */}
+        <Box className='vertical'>
+                <Typography variant='body2'>{item.productCode.value}</Typography>
+                <Typography variant='body2'>{item.upcCode.value}</Typography>
         </Box>
 
         {/* Product details */}
@@ -250,14 +253,14 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
                     // }
 
                     showZero={true}>
-                    <Button color="secondary" variant='outlined' sx={{ width: theme.spacing(12), height:20, ml: 2 }} onClick={() => {
+                    <Button color="secondary" variant='outlined' sx={{ width: theme.spacing(12), height:22, ml: 1 }} onClick={() => {
                         // megaData.executeMethodForKey('handleSerialNo:lineItems', { item })
                     }}>Serial</Button>
                 </Badge>
             </Box>
             <TextField
                 autoComplete='off'
-                sx={{ maxWidth: theme.spacing(22) }}
+                sx={{ maxWidth: theme.spacing(20) }}
                 variant='standard'
                 value={item.remarks.value || ''}
             // onChange={(e: any) => handleTextChanged(item, 'remarks', e)} 
@@ -293,10 +296,14 @@ function PurchaseMainLineItem({ item, index }: { item: any, index: number }) {
             className="add-box"
             aria-label="add"
             size="large"
-            onClick={() => handleAddItem(index)}
-        >
+            onClick={() => handleAddItem(index)}>
             <AddCircle sx={{ fontSize: '3rem', color: theme.palette.secondary.main, }} />
         </IconButton>
+        {/* Delete */}
+        <IconButton sx={{ ml: -5, mt: -8 }} size="medium" color='error'
+                onClick={(e: any) => handleDeleteItem(e, item, index)}>
+                <CloseSharp />
+            </IconButton>
     </Box>)
 }
 export { PurchaseMainLineItem }

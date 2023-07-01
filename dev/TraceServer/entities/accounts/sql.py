@@ -891,6 +891,31 @@ allSqls = {
 					on c1."id" = p."id"
 			where p."productCode" = %(productCode)s
     ''',
+    
+    'get_product_on_product_code_upc':'''
+        with "productCodeOrUpc" as (values(%(productCodeUpc)s))
+        -- with "productCodeUpc" as (values('1338'))
+        select p."id", coalesce(s."price", o."openingPrice", p."purPrice", 0) as "lastPurchasePrice"
+            , c."catName", b."brandName", coalesce(s."hsn", p."hsn", c."hsn", 0) hsn, p."info", p."label", p."productCode", p."upcCode"
+            , coalesce(s."gstRate", p."gstRate", 0) "gstRate"
+            from "ProductM" p
+                left join "SalePurchaseDetails" s
+                    on p."id" = s."productId"
+                left join "TranD" d
+                    on d."id" = s."tranDetailsId"
+                left join "TranH" h
+                    on h."id" = d."tranHeaderId"
+                left join "ProductOpBal" o
+                    on p."id" = o."productId"
+                left join "CategoryM" c
+                    on c."id" = p."catId"
+                left join "BrandM" b
+                    on b."id" = p."brandId"
+            where (p."productCode" = (table "productCodeOrUpc") or (p."upcCode" = (table "productCodeOrUpc")))
+                and h."tranTypeId" = 5
+                and h."tranDate" <= CURRENT_DATE
+            order by h."tranDate" DESC limit 1
+    ''',
 
     "get_products": '''
         select ROW_NUMBER() over(order by "catName", "brandName", "label") as "index", p."id"  as "id" , c."id" as "catId", u."id" as "unitId", b."id" as "brandId",

@@ -1,4 +1,4 @@
-import { _, useState, } from '../../../../imports/regular-imports'
+import { Signal, _, useState, } from '../../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import {
     Avatar, List, Typography,
@@ -128,6 +128,19 @@ function useProductUtils(
                     </List>
                 </div>
             )
+        }
+    }
+
+    // Uses signals
+    async function searchProductOnProductCodeOrUps(item: any){
+        const code = item.productCodeOrUpc.value
+        emit('SHOW-LOADING-INDICATOR', true)
+        try{
+
+        } catch(e:any){
+            console.log(e.message)
+        } finally {
+            emit('SHOW-LOADING-INDICATOR', false)
         }
     }
 

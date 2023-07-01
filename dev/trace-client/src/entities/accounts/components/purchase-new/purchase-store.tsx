@@ -44,7 +44,8 @@ const PurchaseStoreT: PurchaseStoreType = {
         lineItems: signal([
             {
                 productCodeOrUpc: signal(''),
-                // upcCode: signal(''),
+                productCode:signal(''),
+                upcCode: signal(''),
                 hsn: signal(0),
                 productDetails: signal(''),
                 gstRate: signal(0),
@@ -116,7 +117,8 @@ type PurchaseStoreType = {
 function getPurchaseLineItemInstance(): PurchaseLineItemType {
     return ({
         productCodeOrUpc: signal(''),
-        // upcCode: signal(''),
+        productCode:signal(''),
+        upcCode: signal(''),
         hsn: signal(0),
         productDetails: signal(''),
         gstRate: signal(0),
@@ -138,7 +140,8 @@ export { getPurchaseLineItemInstance }
 
 type PurchaseLineItemType = {
     productCodeOrUpc: Signal<string>
-    // upcCode: Signal<string>
+    productCode:Signal<string>
+    upcCode: Signal<string>
     hsn: Signal<number>
     productDetails: Signal<string>
     gstRate: Signal<number>
