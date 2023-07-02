@@ -13,6 +13,7 @@
 - Serial no better display
                                                                                                                     - clear row button
 - Price check validations in purchase invoice
+- cleanup
                                                                                                                     - Default qty at summary is 0; it should be 1
                                                                                                                     - Move add to the top and bottom
                                                                                                                     - adjust delete

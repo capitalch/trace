@@ -7,22 +7,18 @@ import { usePurchaseMainSubheader } from "./purchase-main-subheader-hook"
 
 function PurchaseMainSubheader() {
     const theme = useTheme()
-    const { errorsObject, handleClearSubHeaderNumbers } = usePurchaseMainSubheader()
+    const { errorsObject, handleClearSubHeaderNumbers, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther } = usePurchaseMainSubheader()
     const subheader = PurchaseStore.main.subheader
-    // const main = PurchaseStore.main
-    // const errorsObject = PurchaseStore.errorsObject
 
     return (<Box sx={{ display: 'flex', mt: 2, columnGap: 4, rowGap: 4, flexWrap: 'wrap',alignItems:'center' }}>
+        
         {/* Purchase a/c */}
         <Box>
             <Typography variant="caption">Purchase a/c</Typography>
             <LedgerSubledger
                 className="ledger-subledger"
                 ledgerFilterMethodName='purchaseAccounts'
-                // onChange={() => {
-                //     setRefresh({})
-                //     emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                // }}
+                onChange={handleLedgerSubledgerPurchase}
                 rowData={subheader.ledgerSubledgerPurchase}
             />
         </Box>
@@ -33,11 +29,8 @@ function PurchaseMainSubheader() {
             <LedgerSubledger
                 className="ledger-subledger"
                 ledgerFilterMethodName='debtorsCreditors'
-                // onChange={() => {
-                //     setRefresh({})
-                //     emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-                // }}
-                rowData={subheader.ledgerSubledgerPurchase}
+                onChange={handleLedgerSubledgerOther}
+                rowData={subheader.ledgerSubledgerOther}
             />
         </Box>
 
@@ -52,11 +45,6 @@ function PurchaseMainSubheader() {
             onChange={(e: any) => {
                 subheader.gstinNumber.value = e.target.value
             }}
-            // onChange={(e: any) => {
-            //     ad.gstin = e.target.value
-            //     setRefresh({})
-            //     emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
-            // }}
             value={subheader.gstinNumber.value}
         />
 

@@ -1,9 +1,10 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
 import { getFromBag } from "../../inventory/redirect"
-import { PurchaseStore } from "../purchase-store"
-import { useCallback, useEffect, useGranularEffect } from '../../../../../imports/regular-imports'
+import { PurchaseStore, PurchaseStoreT } from "../purchase-store"
+import { _, useCallback, useEffect, useGranularEffect, useState } from '../../../../../imports/regular-imports'
 
 function usePurchaseMainHeader() {
+    const [, setRefresh] = useState({})
     const header = PurchaseStore.main.header
     const subheader = PurchaseStore.main.subheader
     // const errorsObject = PurchaseStore.errorsObject
@@ -32,11 +33,14 @@ function usePurchaseMainHeader() {
             isGstInvoice: header.isGstInvoice.value,
             purchase: subheader.ledgerSubledgerPurchase
         }
-        console.log(data)
     }
 
     function handleOnReset() {
-
+        header.id = undefined
+        header.invoiceNo.value = undefined
+        header.tranDate.value = undefined
+        header.commonRemarks.value = undefined
+        header.isGstInvoice.value = true
     }
 
     return ({ handleOnReset, handleSubmit })

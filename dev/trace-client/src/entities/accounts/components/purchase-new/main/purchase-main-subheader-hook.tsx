@@ -1,21 +1,44 @@
 import { PurchaseStore } from "../purchase-store"
 import { useSharedElements } from '../../common/shared-elements-hook'
+import { execGenericView, useIbuki } from "../../inventory/redirect"
 
 function usePurchaseMainSubheader() {
     const errorsObject = PurchaseStore.errorsObject
     const subheader = PurchaseStore.main.subheader
     const header = PurchaseStore.main.header
-    const main = PurchaseStore.main
+    const {emit} = useIbuki()
 
     const { isInvalidGstin } = useSharedElements()
     setErrorsObject()
 
-    function handleClearSubHeaderNumbers(){
+    function handleClearSubHeaderNumbers() {
         subheader.invoiceAmount.value = 0
         subheader.totalQty.value = 0
         subheader.cgst.value = 0
         subheader.sgst.value = 0
         subheader.igst.value = 0
+    }
+
+    function handleLedgerSubledgerPurchase() {
+        const purchaseAccount: any = subheader.ledgerSubledgerPurchase
+        subheader.purchaseAccId.value = purchaseAccount.accId
+    }
+
+    async function handleLedgerSubledgerOther() {
+        const otherAccount: any = subheader.ledgerSubledgerOther
+        subheader.otherAccId.value = otherAccount.accId
+        const accId = otherAccount.accId
+        if(!accId){
+            return
+        }
+        emit('SHOW-LOADING-INDICATOR', true)
+        const result: any = await execGenericView({
+            isMultipleRows: false,
+            args: { id: accId },
+            sqlKey: 'get_gstin',
+        })
+        subheader.gstinNumber.value = result?.gstin
+        emit('SHOW-LOADING-INDICATOR', false)
     }
 
     function setErrorsObject() {
@@ -46,28 +69,28 @@ function usePurchaseMainSubheader() {
             return (ret)
         }
 
-        errorsObject.totalCgstError = ()=>{
+        errorsObject.totalCgstError = () => {
             let ret = ''
             // if(!almostEqual(subheader.cgst.value, main.computedCgst)){
             //     ret = 'invalid'
             // }
-            return(ret)
+            return (ret)
         }
 
-        errorsObject.totalSgstError = ()=>{
+        errorsObject.totalSgstError = () => {
             let ret = ''
             // if(!almostEqual(subheader.sgst.value, main.computedSgst)){
             //     ret = 'invalid'
             // }
-            return(ret)
+            return (ret)
         }
 
-        errorsObject.totalIgstError = ()=>{
+        errorsObject.totalIgstError = () => {
             let ret = ''
             // if(!almostEqual(subheader.igst.value, main.computedIgst)){
             //     ret = 'invalid'
             // }
-            return(ret)
+            return (ret)
         }
     }
 
@@ -78,6 +101,6 @@ function usePurchaseMainSubheader() {
     }
 
 
-    return ({ errorsObject, handleClearSubHeaderNumbers })
+    return ({ errorsObject, handleClearSubHeaderNumbers, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther })
 }
 export { usePurchaseMainSubheader }

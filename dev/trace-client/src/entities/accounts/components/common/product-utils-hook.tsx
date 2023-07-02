@@ -1,4 +1,4 @@
-import { Signal, _, useState, } from '../../../../imports/regular-imports'
+import { _, useState, } from '../../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import {
     Avatar, List, Typography,
@@ -43,7 +43,7 @@ function useProductUtils(
                     meta.current.dialogConfig.content = FilteredProductsList
                 } else {
                     meta.current.searchResult = 'Product not found'
-                    meta.current.dialogConfig.content = ()=><></>
+                    meta.current.dialogConfig.content = () => <></>
                 }
                 meta.current.isMounted && setRefresh({})
             }
@@ -132,12 +132,12 @@ function useProductUtils(
     }
 
     // Uses signals
-    async function searchProductOnProductCodeOrUps(item: any){
+    async function searchProductOnProductCodeOrUps(item: any) {
         const code = item.productCodeOrUpc.value
         emit('SHOW-LOADING-INDICATOR', true)
-        try{
+        try {
 
-        } catch(e:any){
+        } catch (e: any) {
             console.log(e.message)
         } finally {
             emit('SHOW-LOADING-INDICATOR', false)

@@ -37,8 +37,9 @@ const PurchaseStoreT: PurchaseStoreType = {
         },
         subheader: {
             ledgerSubledgerPurchase: { isLedgerSubledgerError: true },
-            purchaseAccountCode: signal(''),
-            otherAccountCode: signal(''),
+            ledgerSubledgerOther: { isLedgerSubledgerError: true },
+            purchaseAccId: signal(0),
+            otherAccId: signal(0),
             gstinNumber: signal(''),
             invoiceAmount: signal(0.00),
             totalQty: signal(0),
@@ -85,8 +86,8 @@ type PurchaseStoreType = {
             clearLineItem: (row: PurchaseLineItemType) => void
             computeRow: (row: PurchaseLineItemType) => void
             computeSummary: () => void
-            deleteLineItem:(index:number) => void
-            populateLineItem:(row: PurchaseLineItemType, data: any) => void
+            deleteLineItem: (index: number) => void
+            populateLineItem: (row: PurchaseLineItemType, data: any) => void
             setPrice: (row: PurchaseLineItemType) => void
             setPriceGst: (row: PurchaseLineItemType) => void
         }
@@ -102,8 +103,9 @@ type PurchaseStoreType = {
         },
         subheader: {
             ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean }
-            purchaseAccountCode: Signal<string>
-            otherAccountCode: Signal<string>
+            ledgerSubledgerOther: { isLedgerSubledgerError: boolean }
+            purchaseAccId: Signal<number>
+            otherAccId: Signal<number>
             gstinNumber: Signal<string>
             invoiceAmount: Signal<number>
             totalQty: Signal<number>
@@ -182,4 +184,4 @@ type LineItemErrorType = {
 
 type ErrorType = () => string
 
-export { PurchaseStore }
+export { PurchaseStore, PurchaseStoreT }

@@ -45,7 +45,9 @@ function PurchaseMainHeader() {
             variant="standard"
             sx={{ maxWidth: '10rem' }}
             // error={isInValidInvoiceNo()}
-            onChange={(e: any) => { header.invoiceNo.value = e.target.value }}
+            onChange={(e: any) => { 
+                header.invoiceNo.value = e.target.value 
+            }}
             value={header.invoiceNo.value}
         />
 
@@ -77,7 +79,7 @@ function PurchaseMainHeader() {
             // color: theme.palette.getContrastText(theme.palette.amber.main),
             height: theme.spacing(5),
             // margin: 'auto',
-        }} variant='contained' onClick={() => { }}>Reset</Button>
+        }} variant='contained' onClick={handleOnReset}>Reset</Button>
 
         {/* Submit */}
         <Button
