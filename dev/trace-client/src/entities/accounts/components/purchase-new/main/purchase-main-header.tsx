@@ -59,12 +59,14 @@ function PurchaseMainHeader() {
             }}
             value={header.commonRemarks.value}
         />
-
+              
         <FormControlLabel
             sx={{ position: 'relative', top: theme.spacing(1), ml: 'auto' }}
             control={
-                <Checkbox checked={header.isGstInvoice.value}
-                    onChange={() => (header.isGstInvoice.value = !header.isGstInvoice.value)}
+                <Checkbox checked={Boolean(header.isGstInvoice.value || false)}
+                    onChange={() => {
+                        header.isGstInvoice.value = !header.isGstInvoice.value
+                    }}
                 />
             }
             label='Gst invoice'

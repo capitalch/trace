@@ -32,41 +32,41 @@ function usePurchaseMainSubheader() {
 
         errorsObject.invoiceAmountError = () => {
             let ret = ''
-            if (!almostEqual(subheader.invoiceAmount.value, main.computedInvoiceAmount)) {
-                ret = 'invalid'
-            }
+            // if (!almostEqual(subheader.invoiceAmount.value, main.computedInvoiceAmount)) {
+            //     ret = 'invalid'
+            // }
             return (ret)
         }
 
         errorsObject.totalQtyError = () => {
             let ret = ''
-            if (main.computedTotalQty !== subheader.totalQty.value) {
-                ret = 'invallid'
-            }
+            // if (main.computedTotalQty !== subheader.totalQty.value) {
+            //     ret = 'invallid'
+            // }
             return (ret)
         }
 
         errorsObject.totalCgstError = ()=>{
             let ret = ''
-            if(!almostEqual(subheader.cgst.value, main.computedCgst)){
-                ret = 'invalid'
-            }
+            // if(!almostEqual(subheader.cgst.value, main.computedCgst)){
+            //     ret = 'invalid'
+            // }
             return(ret)
         }
 
         errorsObject.totalSgstError = ()=>{
             let ret = ''
-            if(!almostEqual(subheader.sgst.value, main.computedSgst)){
-                ret = 'invalid'
-            }
+            // if(!almostEqual(subheader.sgst.value, main.computedSgst)){
+            //     ret = 'invalid'
+            // }
             return(ret)
         }
 
         errorsObject.totalIgstError = ()=>{
             let ret = ''
-            if(!almostEqual(subheader.igst.value, main.computedIgst)){
-                ret = 'invalid'
-            }
+            // if(!almostEqual(subheader.igst.value, main.computedIgst)){
+            //     ret = 'invalid'
+            // }
             return(ret)
         }
     }

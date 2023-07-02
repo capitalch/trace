@@ -15,11 +15,16 @@ const PurchaseStoreT: PurchaseStoreType = {
     },
 
     main: {
-        computedInvoiceAmount: 0,
-        computedTotalQty: 0,
-        computedCgst: 0,
-        computedSgst: 0,
-        computedIgst: 0,
+        functions: {
+            addLineItem: () => { },
+            clearLineItem: () => { },
+            computeRow: () => { },
+            computeSummary: () => { },
+            deleteLineItem: () => { },
+            populateLineItem: () => { },
+            setPrice: () => { },
+            setPriceGst: () => { },
+        },
         header: {
             id: undefined,
             refNo: signal(undefined),
@@ -27,7 +32,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             invoiceNo: signal(undefined),
             commonRemarks: signal(undefined),
             isCreditPurchase: signal(true),
-            isGstInvoice: signal(true),
+            isGstInvoice: signal(false),
             isSubmitDisabled: signal(true)
         },
         subheader: {
@@ -42,27 +47,19 @@ const PurchaseStoreT: PurchaseStoreType = {
             igst: signal(0),
         },
         lineItems: signal([
-            {
-                productCodeOrUpc: signal(''),
-                productCode:signal(''),
-                upcCode: signal(''),
-                hsn: signal(0),
-                productDetails: signal(''),
-                gstRate: signal(0),
-                clos: signal(0),
-                qty: signal(0),
-                price: signal(0),
-                priceGst: signal(0),
-                discount: signal(0),
-                subTotal: signal(0),
-                amount: signal(0),
-                serialNumber: signal(''),
-                remarks: signal(''),
-                cgst: signal(0),
-                sgst: signal(0),
-                igst: signal(0)
-            }
         ]),
+        lineItemsHeader: {
+            isIgst: signal(false),
+        },
+        lineItemsFooter: {
+            qty: signal(0.0),
+            discount: signal(0.0),
+            subTotal: signal(0.0),
+            amount: signal(0.0),
+            cgst: signal(0.0),
+            sgst: signal(0.0),
+            igst: signal(0.0),
+        }
     },
 }
 
@@ -83,11 +80,16 @@ type PurchaseStoreType = {
     },
 
     main: {
-        computedInvoiceAmount: number,
-        computedTotalQty: number,
-        computedCgst: number,
-        computedSgst: number,
-        computedIgst: number,
+        functions: {
+            addLineItem: (index: number) => void
+            clearLineItem: (row: PurchaseLineItemType) => void
+            computeRow: (row: PurchaseLineItemType) => void
+            computeSummary: () => void
+            deleteLineItem:(index:number) => void
+            populateLineItem:(row: PurchaseLineItemType, data: any) => void
+            setPrice: (row: PurchaseLineItemType) => void
+            setPriceGst: (row: PurchaseLineItemType) => void
+        }
         header: {
             id: string | undefined
             refNo: Signal<string | undefined>
@@ -109,39 +111,49 @@ type PurchaseStoreType = {
             sgst: Signal<number>
             igst: Signal<number>
         },
-        lineItems: Signal<PurchaseLineItemType[]>
+        lineItems: Signal<PurchaseLineItemType[]>,
+        lineItemsHeader: {
+            isIgst: Signal<boolean>
+        },
+        lineItemsFooter: {
+            discount: Signal<number>
+            qty: Signal<number>
+            subTotal: Signal<number>
+            amount: Signal<number>
+            cgst: Signal<number>
+            sgst: Signal<number>
+            igst: Signal<number>
+        }
     },
 
 }
 
-function getPurchaseLineItemInstance(): PurchaseLineItemType {
-    return ({
-        productCodeOrUpc: signal(''),
-        productCode:signal(''),
-        upcCode: signal(''),
-        hsn: signal(0),
-        productDetails: signal(''),
-        gstRate: signal(0),
-        clos: signal(0),
-        qty: signal(0),
-        price: signal(0),
-        priceGst: signal(0),
-        discount: signal(0),
-        subTotal: signal(0),
-        amount: signal(0),
-        serialNumber: signal(''),
-        remarks: signal(''),
-        cgst: signal(0),
-        sgst: signal(0),
-        igst: signal(0)
-    })
-}
-export { getPurchaseLineItemInstance }
+// function populateLineItem(item: PurchaseLineItemType, data: any) {
+//     item.productCodeOrUpc.value = ''
+//     item.productCode.value = data.productCode
+//     item.upcCode.value = data.upcCode
+//     item.productId.value = data.productId
+//     item.hsn.value = data.hsn
+//     item.productDetails.value = `${data.catName} ${data.brandName} ${data.label}`
+//     item.gstRate.value = data.gstRate
+//     item.qty.value = 1
+//     item.price.value = data.lastPurchasePrice
+//     item.discount.value = 0
+//     item.subTotal.value = 0
+//     item.amount.value = 0
+//     item.serialNumbers.value = ''
+//     item.remarks.value = ''
+//     item.cgst.value = 0
+//     item.sgst.value = 0
+//     item.igst.value = 0
+// }
+// export { populateLineItem }
 
 type PurchaseLineItemType = {
     productCodeOrUpc: Signal<string>
-    productCode:Signal<string>
+    productCode: Signal<string>
     upcCode: Signal<string>
+    productId: Signal<number | undefined>
     hsn: Signal<number>
     productDetails: Signal<string>
     gstRate: Signal<number>
@@ -152,7 +164,7 @@ type PurchaseLineItemType = {
     discount: Signal<number>
     subTotal: Signal<number>
     amount: Signal<number>
-    serialNumber: Signal<string>
+    serialNumbers: Signal<string>
     remarks: Signal<string>
     cgst: Signal<number>
     sgst: Signal<number>
@@ -171,84 +183,3 @@ type LineItemErrorType = {
 type ErrorType = () => string
 
 export { PurchaseStore }
-
-
-// const purchaseMainlineItemInstance: LineItemType = {
-//     index: 0,
-//     productCode: '',
-//     hsn: 0,
-//     productDetails: '',
-//     gstRate: 0,
-//     clos: 0,
-//     qty: 0,
-//     price: 0,
-//     priceGst: 0,
-//     discount: 0,
-//     subTotal: 0,
-//     amount: 0,
-//     serialNumber: '',
-//     remarks: '',
-//     cgst: 0,
-//     sgst: 0,
-//     igst: 0
-// }
-// export { purchaseMainlineItemInstance }
-
-// function getInstance() {
-//     return ({
-//         index: signal(0),
-//         productCode: signal(''),
-//         hsn: signal(0),
-//         productDetails: signal(''),
-//         gstRate: signal(0),
-//         clos: signal(0),
-//         qty: signal(0),
-//         price: signal(0),
-//         priceGst: signal(0),
-//         discount: signal(0),
-//         subTotal: signal(0),
-//         amount: signal(0),
-//         serialNumber: signal(''),
-//         remarks: signal(''),
-//         cgst: signal(0),
-//         sgst: signal(0),
-//         igst: signal(0)
-//     })
-// }
-
-// export { getInstance }
-
-// errors: {
-//     tranDate: signal(''),
-//     invoiceNo: signal(''),
-//     purchaseAccountCode: signal(''),
-//     otherAccountCode: signal(''),
-//     gstinNumber: signal(''),
-//     invoiceAmount: signal(''),
-//     totalQty: signal(''),
-//     cgst: signal(''),
-//     sgst: signal(''),
-//     igst: signal(''),
-//     lineItems: [
-//         {
-//             productCode: signal(''),
-//             hsn: signal(''),
-//             gstPercent: signal(''),
-//             qty: signal('')
-//         }
-//     ],
-// },
-
-// errors: {
-//     tranDate: Signal<string>
-//     invoiceNo: Signal<string>
-//     purchaseAccountCode: Signal<string>
-//     otherAccountCode: Signal<string>
-//     gstinNumber: Signal<string>
-//     invoiceAmount: Signal<string>
-//     totalQty: Signal<string>
-//     cgst: Signal<string>
-//     sgst: Signal<string>
-//     igst: Signal<string>
-//     lineItems: LineItemErrorType[]
-// },

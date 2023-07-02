@@ -1,17 +1,28 @@
 ## Purchase to do           
-- computations
-- items eror handling
+- Edit
+- Total error handling
 - items search and populate
-- serial no
-- edit
+- serial no                                                                                                          
 - final validation
 - submit and save
-- Igst enabling
-- Controls uncomment properties
-- Qty badge pull stock value
-- Product code change debounce populate row
-- computeRow function to to compute all values in the row
-- ComputeTotal to compute all
+- Reset
+                                                                                                                    - Gst invoice
+- GSTIN auto populate
+- Validations
+- Checkup with real invoice
+- Serial no better display
+                                                                                                                    - clear row button
+- Price check validations in purchase invoice
+                                                                                                                    - Default qty at summary is 0; it should be 1
+                                                                                                                    - Move add to the top and bottom
+                                                                                                                    - adjust delete
+                                                                                                                    - Igst enabling
+                                                                                                                    - Controls uncomment properties
+                                                                                                                    - Qty badge pull stock value
+                                                                                                                    - Product code change debounce populate row
+                                                                                                                    - computeRow function to to compute all values in the row
+                                                                                                                    - ComputeTotal to compute all
+                                                                                                                    - Delete not last row
                                                                                                                     - delete row
                                                                                                                     - retain data
                                                                                                                     - Add button on every line

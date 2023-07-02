@@ -1,8 +1,8 @@
 import { Box } from "@mui/material"
-import { PurchaseMainLineItem } from "./purchase-main-line-item"
+import { PurchaseLineItem } from "./purchase-line-item"
 import { PurchaseStore } from "../../purchase-store"
 
-function PurchaseMainLineItems() {
+function PurchaseLineItems() {
     const lineItems = PurchaseStore.main.lineItems.value
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1 }}>
@@ -11,9 +11,9 @@ function PurchaseMainLineItems() {
 
     function getLineItems() {
         const purchaseMainLineItems: any[] = lineItems.map((item: any, index: number) => {
-            return (<PurchaseMainLineItem item={item} key={index} index={index} />)
+            return (<PurchaseLineItem item={item} key={index} index={index} />)
         })
         return (purchaseMainLineItems)
     }
 }
-export { PurchaseMainLineItems }
+export { PurchaseLineItems }

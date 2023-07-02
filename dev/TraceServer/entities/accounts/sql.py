@@ -893,9 +893,9 @@ allSqls = {
     ''',
     
     'get_product_on_product_code_upc':'''
-        with "productCodeOrUpc" as (values(%(productCodeUpc)s))
-        -- with "productCodeUpc" as (values('1338'))
-        select p."id", coalesce(s."price", o."openingPrice", p."purPrice", 0) as "lastPurchasePrice"
+        with "productCodeOrUpc" as (values(%(productCodeOrUpc)s))
+        --with "productCodeOrUpc" as (values('1111'))
+        select p."id" "productId", coalesce(s."price", o."openingPrice", p."purPrice", 0) as "lastPurchasePrice"
             , c."catName", b."brandName", coalesce(s."hsn", p."hsn", c."hsn", 0) hsn, p."info", p."label", p."productCode", p."upcCode"
             , coalesce(s."gstRate", p."gstRate", 0) "gstRate"
             from "ProductM" p

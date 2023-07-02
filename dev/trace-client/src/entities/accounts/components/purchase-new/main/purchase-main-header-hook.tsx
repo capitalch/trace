@@ -1,7 +1,7 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
 import { getFromBag } from "../../inventory/redirect"
 import { PurchaseStore } from "../purchase-store"
-import { useGranularEffect } from '../../../../../imports/regular-imports'
+import { useCallback, useEffect, useGranularEffect } from '../../../../../imports/regular-imports'
 
 function usePurchaseMainHeader() {
     const header = PurchaseStore.main.header
@@ -9,8 +9,11 @@ function usePurchaseMainHeader() {
     // const errorsObject = PurchaseStore.errorsObject
     // const { accountsMessages, isInvalidDate } = useSharedElements()
 
-    header.isGstInvoice.value = isGstinExists()
-    
+    const isGstinExistsCB = useCallback(isGstinExists, [])
+    useEffect(() => {
+        header.isGstInvoice.value = isGstinExistsCB()
+    }, [isGstinExistsCB, header.isGstInvoice])
+
     function isGstinExists() {
         let ret = false
         const info = getFromBag('unitInfo')
@@ -20,10 +23,10 @@ function usePurchaseMainHeader() {
         return (ret)
     }
 
-    function handleSubmit(){
+    function handleSubmit() {
         const data = {
             refNo: header.refNo.value,
-            tranDate : header.tranDate.value,
+            tranDate: header.tranDate.value,
             userRefNo: header.invoiceNo.value,
             commonRemarks: header.commonRemarks.value,
             isGstInvoice: header.isGstInvoice.value,
@@ -32,11 +35,11 @@ function usePurchaseMainHeader() {
         console.log(data)
     }
 
-    function handleOnReset(){
+    function handleOnReset() {
 
     }
 
-    return({handleOnReset, handleSubmit})
+    return ({ handleOnReset, handleSubmit })
     // return ({errorsObject, isGstinExists, })
 }
 export { usePurchaseMainHeader }
