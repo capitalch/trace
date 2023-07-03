@@ -19,7 +19,7 @@ function PurchaseMainHeader() {
             variant="standard"
             disabled={true}
             label="Ref no"
-            value={header.refNo.value}
+            value={header.refNo.value || ''}
         />
 
         {/* date */}
@@ -48,7 +48,7 @@ function PurchaseMainHeader() {
             onChange={(e: any) => { 
                 header.invoiceNo.value = e.target.value 
             }}
-            value={header.invoiceNo.value}
+            value={header.invoiceNo.value || ''}
         />
 
         {/* remarks */}
@@ -59,7 +59,7 @@ function PurchaseMainHeader() {
             onChange={(e: any) => {
                 header.commonRemarks.value = e.target.value
             }}
-            value={header.commonRemarks.value}
+            value={header.commonRemarks.value || ''}
         />
               
         <FormControlLabel

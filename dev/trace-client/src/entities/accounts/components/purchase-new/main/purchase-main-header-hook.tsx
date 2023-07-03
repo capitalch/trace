@@ -36,11 +36,13 @@ function usePurchaseMainHeader() {
     }
 
     function handleOnReset() {
-        header.id = undefined
-        header.invoiceNo.value = undefined
-        header.tranDate.value = undefined
-        header.commonRemarks.value = undefined
-        header.isGstInvoice.value = true
+        PurchaseStore.main.header= _.cloneDeep(PurchaseStoreT.main.header)
+        // header.id = undefined
+        // header.invoiceNo.value = undefined
+        // header.tranDate.value = undefined
+        // header.commonRemarks.value = ''
+        // header.isGstInvoice.value = true
+        setRefresh({})
     }
 
     return ({ handleOnReset, handleSubmit })

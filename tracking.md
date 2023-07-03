@@ -1,19 +1,21 @@
-## Purchase to do           
+## Purchase to do 
+                                                                                                                    - Perhaps 'undefined' for string | undefined types do not work for switching in signals. Check it in lab          
+- Need to do in markup for string values as value: PurchaseStore.main.remarks.value || ''
 - Edit
 - Total error handling
 - items search and populate
 - serial no                                                                                                          
 - final validation
 - submit and save
-- Reset
-                                                                                                                    - Gst invoice
-- GSTIN auto populate
+-   Reset                                                                                                      
 - Validations
 - Checkup with real invoice
 - Serial no better display
-                                                                                                                    - clear row button
 - Price check validations in purchase invoice
 - cleanup
+                                                                                                                    - clear row button
+                                                                                                                    - Gst invoice
+                                                                                                                    - GSTIN auto populate
                                                                                                                     - Default qty at summary is 0; it should be 1
                                                                                                                     - Move add to the top and bottom
                                                                                                                     - adjust delete
