@@ -1,13 +1,14 @@
-import { Box, Typography, useSharedElements, useTheme } from './redirect'
+import { Box, Button, Typography, useSharedElements, useTheme } from './redirect'
 import { useOpeningStock } from "./opening-stock-hook"
 import { OpeningStockWorkBench } from "./opening-stock-work-bench"
 
 function OpeningStock() {
     const { XXGrid } = useSharedElements()
-    const { getXXGriArtifacts, } = useOpeningStock()
-    const { actionMessages, columns, jsonFieldPath,meta, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
+    const { getXXGriArtifacts, handleStockTransferToNextYear} = useOpeningStock()
+    const { actionMessages, columns, jsonFieldPath, meta, sqlQueryArgs, sqlQueryId, specialColumns, summaryColNames, } = getXXGriArtifacts()
     const theme = useTheme()
     const pre = meta.current
+    
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: theme.spacing(1), columnGap: theme.spacing(3), justifyContent: 'space-evenly' }}>
             {/* New / Edit entry */}
@@ -23,12 +24,16 @@ function OpeningStock() {
 
             {/* View  */}
             <Box sx={{ display: 'flex', flexDirection: 'column', flex: 3 }}>
-                <Typography
-                    color="primary"
-                    variant='subtitle1'
-                    component="span">
-                    Opening stock (View)
-                </Typography>
+                <Box sx={{display:'flex', justifyContent:'space-between'}}>
+                    <Typography
+                        color="primary"
+                        variant='subtitle1'
+                        component="span">
+                        Opening stock (View)
+                    </Typography>
+                    <Button size='small' color='info' variant='text' onClick={handleStockTransferToNextYear}>Stock transfer to next year</Button>
+                </Box>
+
                 <XXGrid
                     sx={{ border: '4px solid orange', p: 2, width: '100%' }}
                     autoFetchData={true}

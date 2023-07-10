@@ -33,7 +33,6 @@ function StockJournalHeader() {
                 columnGap: 4,
                 rowGap: 2,
                 p: 2,
-                // borderTop: '1px solid lightGrey',
             }}>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <Typography variant="body2">Ref no</Typography>
@@ -81,7 +80,7 @@ function StockJournalHeader() {
             {/* Remarks */}
             <Box
                 className="vertical"
-                sx={{ maxWidth: theme.spacing(45), ml: 1 }}>
+                sx={{ width: theme.spacing(70), ml: 1 }}>
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
                     variant="standard"

@@ -283,8 +283,8 @@ function utils() {
         return !isProperDate
     }
 
-    function isInvalidDate(mDate: string) {
-        //mDate is isoFormat
+    function isInvalidDate(mDate: string | undefined) {
+        // mDate is isoFormat
         // Invalid date: less than start date || greater than end date || in between start date and audit lock date
         try {
             const finObject = getFromBag('finYearObject')
@@ -296,8 +296,12 @@ function utils() {
                 lockDate = startDate.subtract(1, 'days')
             }
             lockDate = moment(lockDate)
-            const tranDate: any =
-                mDate === undefined ? undefined : moment(mDate)
+            let tranDate: any = undefined
+            if(mDate){
+                tranDate = moment(mDate)
+            }
+            // const tranDate: any =
+            //     mDate === (undefined || '') ? undefined : moment(mDate)
             const isInValidDate =
                 tranDate === undefined ||
                 tranDate.isBefore(startDate) ||

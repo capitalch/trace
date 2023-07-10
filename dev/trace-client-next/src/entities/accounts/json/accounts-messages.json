@@ -29,6 +29,7 @@
     "errorOpBalDebitCreditTogether": "Debit and credit entries for opening balance cannot be together",
     "errorZeroAmount": "Amount cannot be zero",
     "finYearNotPresent":"The selected business unit does not contain financial year for current date. Please define financial year for today's date in the business unit",
+    "genericRequired":"Required field",
     "getFinYearsFailed":"Retrival of financial years from server failed",
     "getBranchesFailed": "Retrieval of branches from server failed",
     "giveSearchCriteria":"Search cannot be empty. Give a search criteria.",

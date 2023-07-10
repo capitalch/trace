@@ -1,7 +1,7 @@
 import { DataTable, useState } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { usePurchaseItems, useStyles } from './purchase-items-hook'
-import { Badge, } from '../../../../imports/gui-imports'
+import { Badge, Box, } from '../../../../imports/gui-imports'
 import { ZoomIn, ZoomOut, } from '../../../../imports/icons-import'
 
 function PurchaseItems({ arbitraryData }: any) {
@@ -16,7 +16,7 @@ function PurchaseItems({ arbitraryData }: any) {
     } = useSharedElements()
 
     return (
-        <div className={classes.content}>
+        <Box className={classes.content} sx={{height:'80vh'}}>
             <Badge
                 className="badge-extender"
                 badgeContent={
@@ -39,16 +39,18 @@ function PurchaseItems({ arbitraryData }: any) {
                     )
                 }>
                 <DataTable
+                rows={10}
                     rowHover={true}
                     scrollable={true}
-                    scrollHeight={meta.current.zoomIn ? '36vh' : '55vh'}
+                    // scrollHeight={meta.current.zoomIn ? '36vh' : '55vh'}
+                    // height='80vh'
                     className="items"
                     value={arbitraryData.lineItems}>
                     {getColumns()}
                 </DataTable>
             </Badge>
             <TraceDialog meta={meta} />
-        </div>
+        </Box>
     )
 }
 

@@ -20,6 +20,7 @@ function useSalesReport() {
         isSearchTextEdited: false,
         searchText: '',
         searchTextRef: null,
+        selectedAgeingOption: { label: 'Age (all)', value: 0 },
         selectedOption: { label: 'Today', value: 'today' },
         selectedTagOption: { label: 'All', value: 0 },
         setRefresh: setRefresh,
@@ -60,6 +61,7 @@ function useSalesReport() {
             args: {
                 startDate: pre.startDate,
                 endDate: pre.endDate,
+                days: pre.selectedAgeingOption.value || 0,
                 tagId: pre.selectedTagOption.value
             },
         }) || []
@@ -143,6 +145,32 @@ function useSalesReport() {
         setRefresh({})
     }
 
+    function getAgeingOptions() {
+        const ageing = [{
+            label: 'Age (all)',
+            value: 0
+        },
+        {
+            label: 'Age >= 90',
+            value: 90
+        },
+        {
+            label: 'Age >= 180',
+            value: 180
+        },
+        {
+            label: 'Age >= 270',
+            value: 270
+        },
+        {
+            label: 'Age >= 360',
+            value: 360
+        }
+        ]
+        return (ageing)
+    }
+
+
     function getColumns(): any[] {
         return ([
             {
@@ -187,6 +215,7 @@ function useSalesReport() {
                 valueFormatter: (params: any) => toCurrentDateFormat(params.value || '')
             },
             {
+                cellClassName: 'cell-class-padding',
                 headerName: 'Ref no | Accounts',
                 headerClassName: 'header-class',
                 description: 'Ref no',
@@ -202,12 +231,13 @@ function useSalesReport() {
                 width: 80,
             },
             {
+                cellClassName: 'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
                 renderCell: (params: any) => <Product params={params} />,
-                valueGetter: (params:any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
+                valueGetter: (params: any) => `${params.row.catName} ${params.row.brandName} ${params.row.label}`,
                 width: 200,
             },
             {
@@ -360,7 +390,7 @@ function useSalesReport() {
             {
                 p: 1,
                 width: '100%',
-                fontSize: theme.spacing(1.7),
+                fontSize: theme.spacing(1.8),
                 minHeight: theme.spacing(70),
                 height: 'calc(100vh - 230px)',
                 fontFamily: 'sans-serif',
@@ -388,6 +418,11 @@ function useSalesReport() {
                 },
                 '& .row-jakar': {
                     color: 'dodgerBlue'
+                },
+                '& .cell-class-padding':{
+                    paddingTop: theme.spacing(0.5),
+                    paddingBottom: theme.spacing(.5),
+                    fontSize: theme.spacing(1.8),
                 }
             }
         )
@@ -419,10 +454,18 @@ function useSalesReport() {
             prev.aggrSale = prev.aggrSale + curr.aggrSale
             prev.grossProfit = prev.grossProfit + curr.grossProfit
             prev.count++
+            prev.age360Sale = prev.age360Sale + ((curr.age > 360) ? curr.amount : 0)
+            prev.age360Aggr = prev.age360Aggr + ((curr.age > 360) ? curr.aggrSale : 0)
+            prev.age360GrossProfit = prev.age360GrossProfit + ((curr.age > 360) ? curr.grossProfit : 0)
             return (prev)
-        }, { qty: 0, aggrSale: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0 })
+        }, { qty: 0, aggrSale: 0, cgst: 0, sgst: 0, igst: 0, amount: 0, grossProfit: 0, count: 0, age360Sale: 0, age360Aggr: 0, age360GrossProfit: 0 })
         totals.id = 'Total'
         return (totals)
+    }
+
+    function handleAgeingOptionSelected(selectedOption: { label: string; value: string }) {
+        pre.selectedAgeingOption = selectedOption
+        fetchData()
     }
 
     function onSelectModelChange(rowIds: any) {
@@ -470,7 +513,7 @@ function useSalesReport() {
 
     function removeRow(params: any) {
         const id = params.id
-        if(id ==='Total'){ // The row with totals cannot be removed
+        if (id === 'Total') { // The row with totals cannot be removed
             return
         }
         const temp = [...pre.filteredRows]
@@ -482,6 +525,6 @@ function useSalesReport() {
         setRefresh({})
     }
 
-    return ({ fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange })
+    return ({ fetchData, getAgeingOptions, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleAgeingOptionSelected, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange })
 }
 export { useSalesReport }

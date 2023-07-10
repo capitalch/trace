@@ -43,7 +43,7 @@ function useProductUtils(
                     meta.current.dialogConfig.content = FilteredProductsList
                 } else {
                     meta.current.searchResult = 'Product not found'
-                    meta.current.dialogConfig.content = ()=><></>
+                    meta.current.dialogConfig.content = () => <></>
                 }
                 meta.current.isMounted && setRefresh({})
             }
@@ -128,6 +128,19 @@ function useProductUtils(
                     </List>
                 </div>
             )
+        }
+    }
+
+    // Uses signals
+    async function searchProductOnProductCodeOrUps(item: any) {
+        const code = item.productCodeOrUpc.value
+        emit('SHOW-LOADING-INDICATOR', true)
+        try {
+
+        } catch (e: any) {
+            console.log(e.message)
+        } finally {
+            emit('SHOW-LOADING-INDICATOR', false)
         }
     }
 

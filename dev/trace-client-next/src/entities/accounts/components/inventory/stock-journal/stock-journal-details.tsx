@@ -6,10 +6,12 @@ import {
     Button,
     Card,
     CloseSharp,
+    Divider,
     IconButton,
     IMegaData,
     MegaDataContext,
     NumberFormat,
+    SyncSharp,
     TextareaAutosize,
     TextField,
     Typography,
@@ -23,19 +25,21 @@ import {
     utilMethods,
 } from '../redirect'
 import { ProductsSearch } from '../../common/products-search'
-import { InputMask } from '../../sales-new/redirect'
+
 function StockJournalDetails() {
     return (
         <Box
             sx={{
                 display: 'flex',
                 rowGap: 2,
-                columnGap: 2,
+                direction:'column',
+                // rowGap:90,
                 mt: 1,
                 flexWrap: 'wrap',
                 justifyContent: 'space-between',
             }}>
             <StockJournalItems section="inputSection" />
+            {/* <Divider variant='fullWidth' /> */}
             <StockJournalItems section="outputSection" />
         </Box>
     )
@@ -47,6 +51,7 @@ function StockJournalItems({ section }: any) {
     return (
         <Box
             sx={{
+                mb:6,
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
@@ -75,7 +80,7 @@ function StockJournalItemsHeader({ section }: any) {
             }}>
             <Typography
                 variant="body1"
-                sx={{ fontWeight: 'bold', textDecoration: 'underline', minWidth:theme.spacing(70) }}>
+                sx={{ fontWeight: 'bolder', fontSize:'20px',  minWidth: theme.spacing(70) }}>
                 {stockJournal?.title || ''}
             </Typography>
 
@@ -110,8 +115,6 @@ function StockJournalLineItems({ section }: any) {
             title: 'Serial numbers (Comma separated)',
             content: () => <></>
         },
-        // renderCallbackKey: 'render:itemsFooter',
-        // setItemToSelectedProductCallbackKey: 'setItemToSelectedProduct:lineItems',
         showDialog: false,
     })
     const pre = meta.current
@@ -232,7 +235,7 @@ function StockJournalLineItem({ section, item, index }: any) {
     const theme = useTheme()
     const [, setRefresh] = useState({})
     const { debounceEmit, debounceFilterOn, emit } = useIbuki()
-
+    const { toDecimalFormat } = utilMethods()
     const megaData: IMegaData = useContext(MegaDataContext)
     const stockJournal = megaData.accounts.stockJournal[section]
     const items: any[] = stockJournal.items
@@ -313,6 +316,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                                 item,
                                 setRefresh,
                             })
+                            computeAmount(item)
                         } else {
                             clearRow(item)
                             setRefresh({})
@@ -322,13 +326,20 @@ function StockJournalLineItem({ section, item, index }: any) {
                         e.target.select()
                     }}
                 />
+                <IconButton
+                    size="small"
+                    onClick={async () => {
+                        await doSearchProductOnProductCode({ data: { item, setRefresh } })
+                    }}>
+                    <SyncSharp fontSize='small' color='secondary'></SyncSharp>
+                </IconButton>
             </Box>
 
             {/* Product details */}
             <Card
                 variant="outlined"
                 sx={{
-                    width: theme.spacing(22),
+                    width: theme.spacing(30),
                     height: theme.spacing(8),
                     p: 0.5,
                     pt: 0,
@@ -355,7 +366,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                     Qty
                 </Typography>
                 <NumberFormat
-                    sx={{ maxWidth: theme.spacing(10) }}
+                    sx={{ maxWidth: theme.spacing(8) }}
                     autoComplete="off"
                     allowNegative={false}
                     className="right-aligned"
@@ -369,6 +380,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                     onValueChange={(value) => {
                         const { floatValue } = value
                         item.qty = floatValue
+                        computeAmount(item)
                         setRefresh({})
                         megaData.executeMethodForKey(
                             `computeSummary:stockJournalItemsFooter:${section}`
@@ -379,11 +391,43 @@ function StockJournalLineItem({ section, item, index }: any) {
                 />
             </Box>
 
+            {/* price */}
+            <Box className="vertical">
+                <Typography variant="body2" sx={{ textAlign: 'right' }}>
+                    Price
+                </Typography>
+                <NumberFormat
+                    sx={{ maxWidth: theme.spacing(14) }}
+                    autoComplete="off"
+                    allowNegative={false}
+                    className="right-aligned"
+                    customInput={TextField}
+                    decimalScale={2}
+                    fixedDecimalScale={true}
+                    value={item.price || 0.0}
+                    onFocus={(e: any) => {
+                        e.target.select()
+                    }}
+                    onValueChange={(value) => {
+                        const { floatValue } = value
+                        item.price = floatValue
+                        computeAmount(item)
+                        setRefresh({})
+                        megaData.executeMethodForKey(
+                            `computeSummary:stockJournalItemsFooter:${section}`
+                        )
+                    }}
+                    thousandSeparator={true}
+                    variant="standard"
+                />                
+                <Typography variant='body2' sx={{ ml: 'auto', mt: '8px', textAlign: 'right', color: theme.palette.common.black, fontWeight: 'bolder' }} >{toDecimalFormat(item.amount || 0.00)}</Typography>
+            </Box>
+
             {/* ref no */}
             <Box className="vertical">
                 <Typography variant="body2">Ref no</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(10) }}
+                    sx={{ maxWidth: theme.spacing(20) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRefNo = e.target.value
@@ -398,7 +442,7 @@ function StockJournalLineItem({ section, item, index }: any) {
             <Box className="vertical">
                 <Typography variant="body2">Remarks</Typography>
                 <TextField
-                    sx={{ maxWidth: theme.spacing(15) }}
+                    sx={{ width: theme.spacing(40) }}
                     autoComplete="off"
                     onChange={(e: any) => {
                         item.lineRemarks = e.target.value
@@ -417,7 +461,7 @@ function StockJournalLineItem({ section, item, index }: any) {
                             ? 'error'
                             : 'info'
                     }
-                    showZero={true} sx={{ position: 'relative', top: theme.spacing(1.5), right:theme.spacing(1) }} >
+                    showZero={true} sx={{ position: 'relative', top: theme.spacing(1.5), right: theme.spacing(1) }} >
                     <Button color='info' sx={{ height: theme.spacing(1), position: 'relative', }}
                         onClick={() => megaData.executeMethodForKey(`handleSerialNo:stockJournalLineItems:${section}`, { item })}
                     >Serial no</Button>
@@ -457,6 +501,16 @@ function StockJournalLineItem({ section, item, index }: any) {
         item.lineRefNo = undefined
         item.serialNumbers = undefined
         item.qty = 1
+        item.price = 0
+        item.amount = 0
+    }
+
+    function computeAmount(item: any) {
+        item.amount = item.qty * item.price
+        megaData.executeMethodForKey(
+            `computeSummary:stockJournalItemsFooter:${section}`
+        )
+        megaData.executeMethodForKey('render:stockJournalCrown', {})
     }
 
     async function doSearchProductOnProductCode(d: any) {
@@ -486,9 +540,11 @@ function StockJournalLineItem({ section, item, index }: any) {
                     ' ',
                     result.label,
                     ' ',
-                    result.info
+                    result.info || ''
                 )
+                item.price = result.price || 0
             }
+            computeAmount(item)
             setRefresh({})
         } catch (e: any) {
             console.log(e.message)
@@ -507,14 +563,10 @@ function StockJournalLineItem({ section, item, index }: any) {
 
     function handleDeleteRow(e: any, item: any, index: number) {
         e.stopPropagation() // necessary to prevent the firing of Box click event. Box is the parent. Click event of the box is for setting focus
-        // if (items.length === 1) {
-        //     clearRow(item)
-        // } else {
-            items.splice(index, 1)
-            if (item.id) {
-                stockJournal.deletedIds.push(item.id)
-            }
-        // }
+        items.splice(index, 1)
+        if (item.id) {
+            stockJournal.deletedIds.push(item.id)
+        }
         stockJournal.currentItemIndex = items.length - 1
         megaData.executeMethodForKey(
             `render:stockJournalLineItems:${section}`,
@@ -523,7 +575,7 @@ function StockJournalLineItem({ section, item, index }: any) {
         megaData.executeMethodForKey(
             `computeSummary:stockJournalItemsFooter:${section}`
         )
-        megaData.executeMethodForKey('render:stockJournalCrown',{})
+        megaData.executeMethodForKey('render:stockJournalCrown', {})
     }
 }
 
@@ -612,6 +664,15 @@ function StockJournalItemsFooter({ section }: any) {
                         toDecimalFormat(stockJournal.summary.qty)
                     )}
                 </Typography>
+                {/* Amount */}
+                <Typography
+                    color={theme.palette.common.black}
+                    className="footer">
+                    {''.concat(
+                        'Amount: ',
+                        toDecimalFormat(stockJournal.summary.amount)
+                    )}
+                </Typography>
             </Box>
             {/* clear */}
             <Button
@@ -630,9 +691,11 @@ function StockJournalItemsFooter({ section }: any) {
         const items: any[] = stockJournal.items
         const total = items.reduce(
             (prev: any, curr: any) => {
-                return { qty: (prev.qty || 0) + (curr.qty || 0) }
+                const qty = (prev.qty || 0) + (curr.qty || 0)
+                const amount = (prev.amount || 0) + (curr.amount || 0)
+                return ({ qty: qty, amount: amount })
             },
-            { qty: 0 }
+            { qty: 0, amount: 0 }
         )
         total.count = items.length
         stockJournal.summary = total

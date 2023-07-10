@@ -45,7 +45,8 @@ function ProductsSearch({ parentMeta }: any) {
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}
-            rowHeight={65}
+            // rowHeight={65}
+            getRowHeight={()=>'auto'}
             selectionModel={pre.selectionModel}
             onSelectionModelChange={(newModel: any) => {
                 const products = allProducts
@@ -91,6 +92,7 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 60,
             },
             {
+                cellClassName:'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
@@ -99,6 +101,7 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 200,
             },
             {
+                cellClassName:'cell-class-padding',
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',
@@ -213,6 +216,10 @@ function ProductsSearch({ parentMeta }: any) {
                 },
                 '& .row-negative-clos': {
                     color: theme.palette.error.dark
+                },
+                '& .cell-class-padding': {
+                    paddingTop: theme.spacing(0.5),
+                    paddingBottom: theme.spacing(.5)
                 }
             }
         )

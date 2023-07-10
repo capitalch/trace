@@ -11,6 +11,7 @@
     , "formError": "There are some errors in this form"
     , "initError":"Initialization error"
     , "operationSuccessful": "Operation was completed successfully"
-    , "productInsertError": "Error occured inserting the product"   
+    , "productInsertError": "Error occured inserting the product" 
+    , "stockTransferMessage": "Are you sure to do stock transfer to next year?"  
     , "validationError":"There was validation error in the form"
 }

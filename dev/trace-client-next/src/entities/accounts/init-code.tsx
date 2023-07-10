@@ -32,32 +32,32 @@ function initCode() {
         const buCode = getLoginData().lastUsedBuCode
 
         //Uncomment following lines
-        emit('SHOW-LOADING-INDICATOR', true)
-        if (buCode) {
-            setInBag('buCode', buCode)
-            const branchId = brId || getLoginData().lastUsedBranchId
-            await setNowFinYearIdDatesFinYearsBranches(branchId)
-        } else {
-            emit('TRACE-MAIN:JUST-REFRESH', '')
-            emit('SHOW-MESSAGE', {
-                message: accountsMessages['selectBusinessUnit'],
-                severity: 'error',
-                duration: null,
-            })
-        }
-        emit('SHOW-LOADING-INDICATOR', false)
+        // emit('SHOW-LOADING-INDICATOR', true)
+        // if (buCode) {
+        //     setInBag('buCode', buCode)
+        //     const branchId = brId || getLoginData().lastUsedBranchId
+        //     await setNowFinYearIdDatesFinYearsBranches(branchId)
+        // } else {
+        //     emit('TRACE-MAIN:JUST-REFRESH', '')
+        //     emit('SHOW-MESSAGE', {
+        //         message: accountsMessages['selectBusinessUnit'],
+        //         severity: 'error',
+        //         duration: null,
+        //     })
+        // }
+        // emit('SHOW-LOADING-INDICATOR', false)
 
         // comment following line
-        // await dummy()
+        await dummy()
     }
 
     async function dummy() {
         const dateFormat = 'DD/MM/YYYY'
         setInBag('buCode', 'demounit1')
         const finYearObject: any = {
-            finYearId: 2021,
-            startDate: moment('2021-04-01').format(dateFormat),
-            endDate: moment('2022-03-31').format(dateFormat),
+            finYearId: 2023,
+            startDate: moment('2023-04-01').format(dateFormat),
+            endDate: moment('2024-03-31').format(dateFormat),
         }
         setInBag('finYearObject', finYearObject)
         setInBag('dateFormat', dateFormat)

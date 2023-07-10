@@ -90,9 +90,27 @@
                         },
                         {
                             "name": "purchasesReturnSubMenu",
-                            "hierarchy": "salespurchases-purchase-return",
+                            "hierarchy": "salespurchases-purchases-return",
                             "label": "Purchase return",
                             "componentName": "purchases",
+                            "args": {
+                                "purchaseType": "ret"
+                            }
+                        },
+                        {
+                            "name": "purchaseSubMenu",
+                            "hierarchy": "salespurchases-purchase",
+                            "label": "Purchase new",
+                            "componentName": "purchase",
+                            "args": {
+                                "purchaseType": "pur"
+                            }
+                        },
+                        {
+                            "name": "purchaseReturnSubMenu",
+                            "hierarchy": "salespurchases-purchase-return",
+                            "label": "Purchase return new",
+                            "componentName": "purchase",
                             "args": {
                                 "purchaseType": "ret"
                             }

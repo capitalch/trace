@@ -1,5 +1,6 @@
 import React from 'react'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
+// import {DataGridPro} from '@mui/x-data-grid-pro'
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
@@ -66,7 +67,9 @@ const App: React.FC = () => {
         //         fontSize:'1rem'
         //     },
         // },
-
+        components: {
+            
+        },
         palette: {
             primary: { main: brown[800] },
             secondary: { main: teal[500] },
@@ -76,11 +79,11 @@ const App: React.FC = () => {
                 dark: blueGrey[900],
                 light: blueGrey[100],
             },
-            neutral: { main: cyan[500], dark: cyan[900], light: cyan[400] },
+            neutral: { main: cyan[500], dark: cyan[900], light: cyan[50] },
             purple: {
                 main: purple['A700'],
                 dark: purple[900],
-                light: purple[400],
+                light: purple[100],
             },
             deepPurple: {
                 main: deepPurple[900],
@@ -88,29 +91,29 @@ const App: React.FC = () => {
                 light: deepPurple[400],
             },
             teal: { main: teal[500], dark: teal[900], light: teal[400] },
-            lime: { main: lime[500], dark: lime[900], light: lime[400] },
+            lime: { main: lime[500], dark: lime[900], light: lime[100] },
             yellow: {
                 main: yellow[500],
                 dark: yellow[900],
                 light: yellow[100],
             },
-            amber: { main: amber[500], dark: amber[900], light: amber[300] },
+            amber: { main: amber[500], dark: amber[900], light: amber[100] },
             orange: {
                 main: orange[500],
                 dark: orange[900],
-                light: orange[400],
+                light: orange[100],
             },
             indigo: {
                 main: indigo[500],
                 dark: indigo[900],
-                light: indigo[400],
+                light: indigo[100],
             },
             blue: { main: blue[500], dark: blue[900], light: blue[400] },
             cyan: { main: cyan[800], dark: cyan[900], light: cyan[600] },
             lightBlue: {
                 main: lightBlue[600],
                 dark: lightBlue[900],
-                light: lightBlue[500],
+                light: lightBlue[200],
             },
         },
     })

@@ -12,7 +12,7 @@ import { GridSearchBox } from '../../common/grid-search-box'
 import { useSalesReport } from './gr-sales-report-hook'
 
 function SalesReport() {
-    const { fetchData, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange } = useSalesReport()
+    const { fetchData, getAgeingOptions, getColumns, getGridSx, getSalesPeriodOptions, getRowClassName, handleAgeingOptionSelected, handleOptionSelected, handleSelectedTagOption, meta, onSelectModelChange } = useSalesReport()
     const pre = meta.current
     const theme = useTheme()
     const megaData: IMegaData = useContext(MegaDataContext)
@@ -50,7 +50,8 @@ function SalesReport() {
             disableSelectionOnClick={true}
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
-            rowHeight={70}
+            // rowHeight={75}
+            getRowHeight={()=>'auto'}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}
@@ -66,7 +67,7 @@ function SalesReport() {
                     <Typography variant='subtitle2'>{pre.subTitle}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1, columnGap:0.5 }}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
                         <GridToolbarColumnsButton color='secondary' />
                         <GridToolbarFilterButton color='primary' />
@@ -81,6 +82,12 @@ function SalesReport() {
                                     handleOptionSelected(optionSelected)
                                     setRefresh({})
                                 }} />
+                        {/* Ageing */}
+                        <ReactSelect menuPlacement='auto' placeholder='Select ageing'
+                            styles={reactSelectStyles}
+                            options={getAgeingOptions()}
+                            value={pre.selectedAgeingOption} onChange={handleAgeingOptionSelected}
+                        />
                         {/* Select tag */}
                         <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography>
                         <ReactSelect
@@ -125,8 +132,9 @@ function SalesReport() {
                             onClick={fetchData}>
                             <SyncSharp fontSize='small'></SyncSharp>
                         </IconButton>
+                        <GridSearchBox parentMeta={meta} />
                     </Box>
-                    <GridSearchBox parentMeta={meta} />
+                    
                 </Box>
             </GridToolbarContainer>
         )
@@ -145,6 +153,9 @@ function SalesReport() {
                     <Box>{''.concat('Sale', ' : ', toDecimalFormat(pre?.totals?.amount || 0))}</Box>
                     <Box >{''.concat('Aggr', ' : ', toDecimalFormat(pre?.totals?.aggrSale || 0))}</Box>
                     <Box>{''.concat('GP', ' : ', toDecimalFormat((pre?.totals?.grossProfit || 0) - (pre?.totals?.opValue || 0)))}</Box>
+                    <Box>{''.concat('Age360Sale', ' : ', toDecimalFormat((pre?.totals?.age360Sale || 0)))}</Box>
+                    <Box>{''.concat('Age360Aggr', ' : ', toDecimalFormat((pre?.totals?.age360Aggr || 0)))}</Box>
+                    <Box>{''.concat('Age360GP', ' : ', toDecimalFormat((pre?.totals?.age360GrossProfit || 0)))}</Box>
                 </Box>
             </Box>
         </GridFooterContainer>)

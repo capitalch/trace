@@ -1,6 +1,7 @@
 export { createStyles, makeStyles } from '@mui/styles'
 export { useTheme } from '@mui/material/styles'
 export { type Theme } from '@mui/material'
+export {GRID_CHECKBOX_SELECTION_COL_DEF} from '@mui/x-data-grid-pro'
 export {
     Alert,
     AppBar,

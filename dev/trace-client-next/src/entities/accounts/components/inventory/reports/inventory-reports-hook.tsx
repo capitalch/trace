@@ -1,5 +1,8 @@
 import { _, IMegaData, MegaDataContext, PurchaseReport, SalesReport, StockSummaryReport, useContext, useEffect, useIbuki, useRef, useState, utils, utilMethods } from '../redirect'
+import { CurrentOrdersReport } from './gr-current-orders-report'
 import { ProductsListReport } from './gr-products-list-report'
+import { PurchasePriceVariation } from './gr-purchase-price-variation'
+import { StockTransactionReport } from './gr-stock-transaction-report'
 
 function useInventoryReports() {
     const [, setRefresh] = useState({})
@@ -16,6 +19,11 @@ function useInventoryReports() {
             value: null,
             breadCrumb: ''
         },
+        // selectedReport: {
+        //     label: 'Stock transactions',
+        //     value: 'stockTransactionReport',
+        //     breadCrumb: 'Stock transactions'
+        // },
     })
     const pre = meta.current
 
@@ -52,13 +60,16 @@ function useInventoryReports() {
         pre.selectedReport = selectedReport
         pre.reportComponent = getReportFromsMap(inventory.selectedReportName)
         setRefresh({})
-
+        
         function getReportFromsMap(rName: string) {
             const map: any = {
+                currentOrdersReport: CurrentOrdersReport,
                 productsListReport: ProductsListReport,
+                purchasePriceVariation: PurchasePriceVariation,
                 purchaseReport: PurchaseReport,
                 salesReport: SalesReport,
                 stockSummaryReport: StockSummaryReport,
+                stockTransactionReport: StockTransactionReport
             }
             return (map[rName] || (() => <></>))
         }

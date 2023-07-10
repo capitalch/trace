@@ -62,39 +62,6 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
             actions: () => {},
         },
     })
-    
-    // function setAccounts() {
-    //     // allAccounts
-    //     const allAccounts = getFromBag('allAccounts') || []
-    //     ad.accounts.allAccounts = allAccounts
-
-    //     purchaseLedgerAccounts
-    //     const purchaseLedgerAccounts = allAccounts.filter(
-    //         (el: any) =>
-    //             ['purchase'].includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    //     ad.accounts.purchaseLedgerAccounts = purchaseLedgerAccounts
-
-    //     cashBankLedgerAccounts
-    //     const cashBankArray = ['cash', 'bank', 'card', 'ecash']
-    //     const cashBankLedgerAccounts = allAccounts.filter(
-    //         (el: any) =>
-    //             cashBankArray.includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L')
-    //     )
-    //     ad.accounts.cashBankLedgerAccounts = cashBankLedgerAccounts
-
-    //     debtorCreditorLedgerAccounts
-    //     const drCrArray = ['debtor', 'creditor']
-    //     const debtorCreditorLedgerAccounts = allAccounts.filter(
-    //         (el: any) =>
-    //             drCrArray.includes(el.accClass) &&
-    //             (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
-    //             !el.isAutoSubledger
-    //     )
-    //     ad.accounts.debtorCreditorLedgerAccounts = debtorCreditorLedgerAccounts
-    // }
 
     function checkIfValidInvoice() {
         const errorAllowed = 0.99

@@ -39,7 +39,6 @@ function Purchases({ purchaseType, drillDownEditAttributes }: any) {
                         drillDownEditAttributes={drillDownEditAttributes}
                     />
                 </div>
-            {/* </PurchasesProvider> */}
         </div>
     )
 }

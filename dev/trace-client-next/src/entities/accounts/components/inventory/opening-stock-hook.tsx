@@ -1,14 +1,14 @@
 import { moment, useEffect, useRef, useSharedElements, } from './redirect'
-
+import messages from '../../../../messages.json'
 function useOpeningStock() {
     // const [, setRefresh] = useState({})
-    const { globalMessages, confirm, emit, filterOn, genericUpdateMaster, getFromBag, toDecimalFormat } = useSharedElements()
+    const { globalMessages, confirm, emit, execGenericView, filterOn, genericUpdateMaster, getFromBag, toDecimalFormat } = useSharedElements()
     const meta = useRef({
         title: 'Opening stock (New / Edit)',
     })
     const actionMessages = getXXGriArtifacts().actionMessages
     const dateFormat = getFromBag('dateFormat')
-    
+
     useEffect(() => {
         const subs1 = filterOn(actionMessages.deleteIbukiMessage).subscribe(handleDelete)
         return (() => {
@@ -121,7 +121,35 @@ function useOpeningStock() {
         }
     }
 
-    return ({ getXXGriArtifacts, })
+    function handleStockTransferToNextYear() {
+        const options = {
+            description: globalMessages.stockTransferMessage,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        const finYearId = getFromBag('finYearObject')?.finYearId
+        const endDate = getFromBag('finYearObject')?.isoEndDate
+        const branchId = getFromBag('branchObject')?.branchId
+        confirm(options)
+            .then(async () => {
+                emit(actionMessages.fetchIbukiMessage, '')
+                const ret = await execGenericView({
+                    sqlKey: 'exec_stock_transfer',
+                    args: {
+                        branchId: branchId,
+                        finYearId: finYearId,
+                        closingDate: endDate
+                    },
+                    isMultipleRows: true
+                })
+                if (ret) {
+                    emit('SHOW-MESSAGE', {})
+                }
+            })
+            .catch(() => { }) // important to have otherwise eror
+    }
+
+    return ({ getXXGriArtifacts, handleStockTransferToNextYear })
 
 }
 

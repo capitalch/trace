@@ -26,6 +26,7 @@ function InventoryReports() {
             <Box sx={{ display: 'flex', flexDirection: 'column', '& .react-select': { width: '60%' } }}>
                 <Typography variant='subtitle1'>{''.concat(pre.title, ' > ', pre.selectedReport.breadCrumb)}</Typography>
                 <ReactSelect className='react-select' menuPlacement='auto' placeholder='Select ...' styles={styles}
+                    // defaultValue={{label:'stockTransactionReport', value:1}}
                     options={reportsJson} value={pre.selectedReport} onChange={onReportSelected} />
             </Box>
             <Box sx={{ marginTop: theme.spacing(1) }}>
@@ -38,15 +39,25 @@ export { InventoryReports }
 
 const reportsJson: any[] = [
     {
+        label: 'Current orders',
+        value: 'currentOrdersReport',
+        breadCrumb: 'Current orders'
+    },
+    {
         label: 'Products list',
         value: 'productsListReport',
         breadCrumb: 'Products list'
     },
     {
+        label: 'Purchase price variation',
+        value: 'purchasePriceVariation',
+        breadCrumb: 'Purchase price variation'
+    },
+    {
         label: 'Purchases',
         value: 'purchaseReport',
         breadCrumb: 'Purchases'
-    },
+    },    
     {
         label: 'Sales',
         value: 'salesReport',
@@ -57,6 +68,10 @@ const reportsJson: any[] = [
         value: 'stockSummaryReport',
         breadCrumb: 'Stock summary'
     },
-    
+    {
+        label: 'Stock transactions',
+        value: 'stockTransactionReport',
+        breadCrumb: 'Stock transactions'
+    },
     
 ]
