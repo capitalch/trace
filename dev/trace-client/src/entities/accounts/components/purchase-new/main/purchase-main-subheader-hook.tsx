@@ -56,7 +56,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.invoiceAmountError = () => {
             let ret = ''
-            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount())) {
+            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(),0,0.99)) {
                 ret = 'invalid'
             }
             return (ret)
@@ -72,7 +72,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.totalCgstError = () => {
             let ret = ''
-            if (main.functions.getComputedTotalCgst() !== subheader.cgst.value) {
+            if (!almostEqual(main.functions.getComputedTotalCgst(), subheader.cgst.value, 0.01,.99) ){
                 ret = 'invallid'
             }
             return (ret)
@@ -80,7 +80,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.totalSgstError = () => {
             let ret = ''
-            if (main.functions.getComputedTotalSgst() !== subheader.sgst.value) {
+            if (!almostEqual(main.functions.getComputedTotalSgst(),subheader.sgst.value,.01,.99)) {
                 ret = 'invallid'
             }
             return (ret)
@@ -88,7 +88,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.totalIgstError = () => {
             let ret = ''
-            if (main.functions.getComputedTotalSgst() !== subheader.sgst.value) {
+            if (!almostEqual(main.functions.getComputedTotalSgst(),subheader.sgst.value,.01,.99)) {
                 ret = 'invallid'
             }
             return (ret)

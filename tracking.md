@@ -1,14 +1,15 @@
-## Purchase to do                                                                                                     
-- Total error handling
+## Purchase to do            
+- Debounce searc on prod code                                                                                         
 - items search and populate                                                                                                        
-- final validation
+- warning for price variation of products by 5 % and above
 - submit and save                                                                                                      
 - Check calculations
 - Purchase Ret
 - Edit
 - View
-- Checkup with real invoice
+                                                                                                                    - Checkup with real invoice: 3 invoices
 - Mechanism to see whether sl no required or not
+                                                                                                                    - Total error handling
                                                                                                                     - Validations
                                                                                                                     - serial no  
                                                                                                                     - When not GST invoice then remove GST calculations

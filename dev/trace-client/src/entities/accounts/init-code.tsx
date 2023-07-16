@@ -32,23 +32,23 @@ function initCode() {
         const buCode = getLoginData().lastUsedBuCode
 
         //Uncomment following lines
-        // emit('SHOW-LOADING-INDICATOR', true)
-        // if (buCode) {
-        //     setInBag('buCode', buCode)
-        //     const branchId = brId || getLoginData().lastUsedBranchId
-        //     await setNowFinYearIdDatesFinYearsBranches(branchId)
-        // } else {
-        //     emit('TRACE-MAIN:JUST-REFRESH', '')
-        //     emit('SHOW-MESSAGE', {
-        //         message: accountsMessages['selectBusinessUnit'],
-        //         severity: 'error',
-        //         duration: null,
-        //     })
-        // }
-        // emit('SHOW-LOADING-INDICATOR', false)
+        emit('SHOW-LOADING-INDICATOR', true)
+        if (buCode) {
+            setInBag('buCode', buCode)
+            const branchId = brId || getLoginData().lastUsedBranchId
+            await setNowFinYearIdDatesFinYearsBranches(branchId)
+        } else {
+            emit('TRACE-MAIN:JUST-REFRESH', '')
+            emit('SHOW-MESSAGE', {
+                message: accountsMessages['selectBusinessUnit'],
+                severity: 'error',
+                duration: null,
+            })
+        }
+        emit('SHOW-LOADING-INDICATOR', false)
 
         // comment following line
-        await dummy()
+        // await dummy()
     }
 
     async function dummy() {

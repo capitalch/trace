@@ -7,7 +7,7 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 
 function PurchaseMainHeader() {
     const theme = useTheme()
-    const {handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit , isError} = usePurchaseMainHeader()
+    const {handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit , isFormError} = usePurchaseMainHeader()
     const header = PurchaseStore.main.header
     const errorsObject = PurchaseStore.errorsObject
 
@@ -24,6 +24,7 @@ function PurchaseMainHeader() {
 
         {/* date */}
         <TextField
+            autoFocus
             label={header.tranDate.value ? 'Date' : undefined}
             variant='standard'
             type='date'
@@ -62,7 +63,7 @@ function PurchaseMainHeader() {
         />
               
         <FormControlLabel
-            sx={{ position: 'relative', top: theme.spacing(1), ml: 'auto' }}
+            sx={{ position: 'relative', top: theme.spacing(1), }}
             control={
                 <Checkbox checked={Boolean(header.isGstInvoice.value || false)}
                     onChange={handleOnChangeGstInvoiceCheckbox}
@@ -75,6 +76,7 @@ function PurchaseMainHeader() {
             // backgroundColor: theme.palette.amber.main, 
             // color: theme.palette.getContrastText(theme.palette.amber.main),
             height: theme.spacing(5),
+            ml: 'auto' 
             // margin: 'auto',
         }} variant='contained' onClick={handleOnReset}>Reset</Button>
 
@@ -85,7 +87,7 @@ function PurchaseMainHeader() {
             variant="contained"
             size="medium"
             color="secondary"
-            disabled={isError()}
+            disabled={isFormError()}
             // startIcon={
             //     isError() ? (
             //         <Error color="error" />

@@ -16,6 +16,7 @@ function usePurchaseMainHeader() {
     useEffect(() => {
         header.isGstInvoice.value = isGstinExistsCB()
         setErrorsObjectCB()
+        PurchaseStore.main.functions.isFormError = isFormError
     }, [isGstinExistsCB, header.isGstInvoice, setErrorsObjectCB])
 
     function handleOnChangeGstInvoiceCheckbox(e: any) {
@@ -38,14 +39,17 @@ function usePurchaseMainHeader() {
     }
 
     function handleSubmit() {
-        const data = {
-            refNo: header.refNo.value,
-            tranDate: header.tranDate.value,
-            userRefNo: header.invoiceNo.value,
-            commonRemarks: header.commonRemarks.value,
-            isGstInvoice: header.isGstInvoice.value,
-            purchase: subheader.ledgerSubledgerPurchase
+        if(!isFormError()){
+            const data = {
+                refNo: header.refNo.value,
+                tranDate: header.tranDate.value,
+                userRefNo: header.invoiceNo.value,
+                commonRemarks: header.commonRemarks.value,
+                isGstInvoice: header.isGstInvoice.value,
+                purchase: subheader.ledgerSubledgerPurchase
+            }
         }
+        
     }
 
     function isGstinExists() {
@@ -71,12 +75,32 @@ function usePurchaseMainHeader() {
         }
     }
 
-    function isError(): boolean {
+    function isFormError(): boolean {
         let ret = true
-
+        const errorsObject = PurchaseStore.errorsObject
+        const err = errorsObject.tranDateError()
+            || errorsObject.invoiceNoError()
+            || errorsObject.purchaseAcError()
+            || errorsObject.otherAcError()
+            || errorsObject.gstinError()
+            || errorsObject.invoiceAmountError()
+            || errorsObject.totalQtyError()
+            || errorsObject.totalCgstError()
+            || errorsObject.totalSgstError()
+            || errorsObject.totalIgstError()
+        const lineItemsError = PurchaseStore.main.lineItems.value.reduce((acc: any, lineItem: PurchaseLineItemType) => {
+            const itemError = errorsObject.productCodeError(lineItem)
+                || errorsObject.productDetailsError(lineItem)
+                || errorsObject.hsnError(lineItem)
+                || errorsObject.gstRateError(lineItem)
+                || errorsObject.qtyError(lineItem)
+                || errorsObject.slNoError(lineItem)
+            return (acc || itemError)
+        }, false)
+        ret = Boolean(err || lineItemsError)
         return (ret)
     }
 
-    return ({ handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isError })
+    return ({ handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError })
 }
 export { usePurchaseMainHeader }

@@ -19,8 +19,8 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
         <Box display='flex' flexDirection='column'>
             {/* Search */}
             <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='secondary'
-                // onClick={(e: any) => handleDeleteItem(e, item, index)}
-                >
+            // onClick={(e: any) => handleDeleteItem(e, item, index)}
+            >
                 <Search />
             </IconButton>
             {/* Index */}
@@ -296,7 +296,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                     <AddCircle sx={{ fontSize: '2.5rem', color: theme.palette.secondary.main, }} />
                 </IconButton>
             </Box>
-            
+
             {/* Delete */}
             <IconButton sx={{ mt: 0, height: '1.3rem', width: '1.3rem', ml: 8 }} size="small" color='info'
                 onClick={(e: any) => PurchaseStore.main.functions.deleteLineItem(index)}>
