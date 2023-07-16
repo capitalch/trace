@@ -1,27 +1,40 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
-import { getFromBag } from "../../inventory/redirect"
-import { PurchaseStore, PurchaseStoreT } from "../purchase-store"
+import { getFromBag, useIbuki } from "../../inventory/redirect"
+import { PurchaseLineItemType, PurchaseStore, PurchaseStoreT, resetPurchaseStore } from "../purchase-store"
 import { _, useCallback, useEffect, useGranularEffect, useState } from '../../../../../imports/regular-imports'
 
 function usePurchaseMainHeader() {
-    const [, setRefresh] = useState({})
+    const { emit } = useIbuki()
+    const { getCurrentComponent } = useSharedElements()
+    const { isInvalidDate, accountsMessages } = useSharedElements()
     const header = PurchaseStore.main.header
     const subheader = PurchaseStore.main.subheader
-    // const errorsObject = PurchaseStore.errorsObject
-    // const { accountsMessages, isInvalidDate } = useSharedElements()
 
     const isGstinExistsCB = useCallback(isGstinExists, [])
+    const setErrorsObjectCB = useCallback(setErrorsObject, [])
+
     useEffect(() => {
         header.isGstInvoice.value = isGstinExistsCB()
-    }, [isGstinExistsCB, header.isGstInvoice])
+        setErrorsObjectCB()
+    }, [isGstinExistsCB, header.isGstInvoice, setErrorsObjectCB])
 
-    function isGstinExists() {
-        let ret = false
-        const info = getFromBag('unitInfo')
-        if (info?.gstin) {
-            ret = true
+    function handleOnChangeGstInvoiceCheckbox(e: any) {
+        header.isGstInvoice.value = !header.isGstInvoice.value
+        PurchaseStore.main.functions.clearSubheaderTotals()
+        if (!e.target.checked) {
+            subheader.gstinNumber.value = ''
+            PurchaseStore.main.lineItems.value.forEach((item: PurchaseLineItemType) => {
+                item.hsn.value = 0
+                item.gstRate.value = 0
+                PurchaseStore.main.functions.computeRow(item)
+            })
+            PurchaseStore.main.functions.computeSummary()
         }
-        return (ret)
+    }
+
+    function handleOnReset() {
+        resetPurchaseStore()
+        emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
     }
 
     function handleSubmit() {
@@ -35,17 +48,35 @@ function usePurchaseMainHeader() {
         }
     }
 
-    function handleOnReset() {
-        PurchaseStore.main.header= _.cloneDeep(PurchaseStoreT.main.header)
-        // header.id = undefined
-        // header.invoiceNo.value = undefined
-        // header.tranDate.value = undefined
-        // header.commonRemarks.value = ''
-        // header.isGstInvoice.value = true
-        setRefresh({})
+    function isGstinExists() {
+        let ret = false
+        const info = getFromBag('unitInfo')
+        if (info?.gstin) {
+            ret = true
+        }
+        return (ret)
     }
 
-    return ({ handleOnReset, handleSubmit })
-    // return ({errorsObject, isGstinExists, })
+    function setErrorsObject() {
+        const errorsObject = PurchaseStore.errorsObject
+        errorsObject.tranDateError = () => isInvalidDate(header.tranDate.value) ? accountsMessages.dateRangeAuditLockMessage : ''
+        errorsObject.invoiceNoError = () => {
+            let error = ''
+            if (PurchaseStore.purchaseType === 'pur') {
+                if (!header.invoiceNo.value) {
+                    error = 'Required'
+                }
+            }
+            return (error)
+        }
+    }
+
+    function isError(): boolean {
+        let ret = true
+
+        return (ret)
+    }
+
+    return ({ handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isError })
 }
 export { usePurchaseMainHeader }

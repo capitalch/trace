@@ -328,6 +328,7 @@ function usePurchaseItems(arbitraryData: any) {
             }
         }
         meta.current.isMounted && setRefresh({})
+        
         function handleClose(slNo: string) {
             const pre = meta.current.dialogConfig
             pre.serialNumbers = smoothOut(slNo)
@@ -919,7 +920,7 @@ export { usePurchaseItems }
 
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
-        content: {
+        content: { // This error goes away when following errors in comments are removed
             marginTop: theme.spacing(4),
             position: 'relative',
             zIndex: 0, //without zIndex: 0 the purchase items grid come to front and it covers the ledger-subledger drop down list
@@ -944,19 +945,18 @@ const useStyles: any = makeStyles((theme: Theme) =>
                 },
                 '& .right-aligned-numeric': {
                     '& input': {
-                        textAlign: 'end',
+                        textAlign: 'end', // error
                     },
                 },
                 '& .center-aligned-numeric': {
                     '& input': {
-                        textAlign: 'center',
+                        textAlign: 'center', // error
                     },
                 },
 
                 '& input': {
                     fontFamily: 'Helvetica', // good font for numeric
                     color: theme.palette.common.black
-                    // fontSize: '0.9rem',
                 },
                 '& .product-details': {
                     fontFamily: 'lato',
@@ -967,11 +967,11 @@ const useStyles: any = makeStyles((theme: Theme) =>
                     alignItems: 'center',
                     justifyContent: 'flex-start',
                     '& .index': {
-                        position: 'relative',
+                        position: 'relative', // error
                         left: '-0.8rem',
                     },
                     '& .add-box': {
-                        position: 'relative',
+                        position: 'relative', // error
                         left: '-0.8rem',
                         marginLeft: '0px',
                         '& .add-icon': {
@@ -992,7 +992,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             },
             '& .is-igst': {
                 display: 'flex',
-                flexDirection: 'column',
+                // flexDirection: 'column',
                 alignItems: 'center',
                 marginTop: '0.8rem',
                 '& div': { fontSize: '0.8rem', marginTop: '-0.5rem' },

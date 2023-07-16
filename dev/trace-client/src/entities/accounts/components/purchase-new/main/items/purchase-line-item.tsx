@@ -1,15 +1,15 @@
-import { AddCircle, ClearAll, CloseSharp, Delete, DeleteSharp, Search } from "@mui/icons-material"
+import { AddCircle, ClearAll, CloseSharp, Search } from "@mui/icons-material"
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material"
 import NumberFormat from "react-number-format"
-import { useIbuki, utilMethods } from "../../../inventory/redirect"
+import { utilMethods } from "../../../inventory/redirect"
 import { usePurchaseLineItem } from "./purchase-line-item-hook"
 import { PurchaseLineItemType, PurchaseStore } from "../../purchase-store"
 
 function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: number }) {
     const theme = useTheme()
-    const { doSearchOnProductCodeOrUpc, handleDeleteItem, } = usePurchaseLineItem(item)
+    const { doSearchOnProductCodeOrUpc, handleSerialNumber, } = usePurchaseLineItem(item)
     const { extractAmount, toDecimalFormat } = utilMethods()
-
+    const errorsObject = PurchaseStore.errorsObject
     // Container box
     return (<Box sx={{
         display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey', mt: 1
@@ -19,7 +19,8 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
         <Box display='flex' flexDirection='column'>
             {/* Search */}
             <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='secondary'
-                onClick={(e: any) => handleDeleteItem(e, item, index)}>
+                // onClick={(e: any) => handleDeleteItem(e, item, index)}
+                >
                 <Search />
             </IconButton>
             {/* Index */}
@@ -42,7 +43,11 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 }}
             />
             <Box display='flex'>
-                <Typography variant='body2' fontWeight='bolder' color={theme.palette.success.main} mt={1}>{item.productCode.value || 'Prod code'}</Typography>
+                <Typography
+                    variant='body2'
+                    fontWeight='bolder'
+                    color={Boolean(errorsObject.productCodeError(item)) ? theme.palette.error.light : theme.palette.success.main}
+                    mt={1}>{item.productCode.value || 'Prod code'}</Typography>
                 <IconButton color="info"
                     size="small"
                     onClick={() => {
@@ -56,8 +61,10 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
         {/* Product details */}
         <Card variant='outlined' sx={{
             width: theme.spacing(26), height: theme.spacing(8),
-            p: .5, pt: 0, border: '1px solid lightGrey',
-            // borderColor: item.isProductDetailsError ? 'red' : 'lightGrey'
+            p: .5,
+            pt: 0,
+            border: '1px solid lightGrey',
+            borderColor: Boolean(errorsObject.productDetailsError(item)) ? theme.palette.error.light : 'lightGrey'
         }}>
             <Typography sx={{
                 fontSize: theme.spacing(1.8),
@@ -74,7 +81,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 className='right-aligned'
                 customInput={TextField}
                 decimalScale={0}
-                // error={item.isHsnError}
+                error={Boolean(errorsObject.hsnError(item))}
                 fixedDecimalScale={true}
                 value={item.hsn.value || 0}
                 variant='standard'
@@ -92,7 +99,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
             <NumberFormat sx={{ maxWidth: theme.spacing(6) }}
                 allowNegative={false}
                 autoComplete='off'
-                // error={item.isGstRateError}
+                error={Boolean(errorsObject.gstRateError(item))}
                 className='right-aligned'
                 customInput={TextField}
                 decimalScale={2}
@@ -118,15 +125,16 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 allowNegative={false}
                 className='right-aligned'
                 customInput={TextField}
+                error={Boolean(errorsObject.qtyError(item))}
                 decimalScale={2}
                 fixedDecimalScale={true}
-                value={item.qty.value || 1.00}
+                value={item.qty.value}
                 onFocus={(e: any) => {
                     e.target.select()
                 }}
                 onValueChange={(value) => {
                     const { floatValue } = value
-                    item.qty.value = floatValue || 1
+                    item.qty.value = floatValue || 0
                     PurchaseStore.main.functions.computeRow(item)
                     PurchaseStore.main.functions.computeSummary()
                 }}
@@ -258,6 +266,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
 
                     showZero={true}>
                     <Button color="info" variant='text' sx={{ width: theme.spacing(9), height: 22, fontWeight: 'bold', }} onClick={() => {
+                        handleSerialNumber(item)
                         // megaData.executeMethodForKey('handleSerialNo:lineItems', { item })
                     }}>Ser No</Button>
                 </Badge>
@@ -279,7 +288,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                     {toDecimalFormat(item.amount.value || 0.00)}</Typography>
                 {/* Add button */}
                 <IconButton
-                    sx={{ ml: 1 }}
+                    sx={{ height: '2.3rem', width: '2.3rem', ml: 1 }}
                     className="add-box"
                     aria-label="add"
                     size="small"
@@ -287,29 +296,14 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                     <AddCircle sx={{ fontSize: '2.5rem', color: theme.palette.secondary.main, }} />
                 </IconButton>
             </Box>
+            
             {/* Delete */}
-            <IconButton sx={{ mt: -2, width: theme.spacing(4), ml: 8 }} size="small" color='error'
+            <IconButton sx={{ mt: 0, height: '1.3rem', width: '1.3rem', ml: 8 }} size="small" color='info'
                 onClick={(e: any) => PurchaseStore.main.functions.deleteLineItem(index)}>
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
         </Box>
 
-        {/* Add delete */}
-        {/* <Box className="vertical" ml='auto'>
-    
-            <IconButton sx={{ mt: -3, }} size="small" color='error'
-                onClick={(e: any) => PurchaseStore.main.functions.deleteLineItem(index)}>
-                <CloseSharp />
-            </IconButton>
-            <IconButton
-                sx={{ mt: -1 }}
-                className="add-box"
-                aria-label="add"
-                size="large"
-                onClick={() => PurchaseStore.main.functions.addLineItem(index)} >
-                <AddCircle sx={{ fontSize: '2.5rem', color: theme.palette.secondary.main, }} />
-            </IconButton>
-        </Box> */}
     </Box >)
 }
 export { PurchaseLineItem }

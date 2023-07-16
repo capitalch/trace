@@ -1,18 +1,19 @@
-## Purchase to do 
-                                                                                                                    - Perhaps 'undefined' for string | undefined types do not work for switching in signals. Check it in lab          
-- Need to do in markup for string values as value: PurchaseStore.main.remarks.value || ''
-- Edit
+## Purchase to do                                                                                                     
 - Total error handling
-- items search and populate
-- serial no                                                                                                          
+- items search and populate                                                                                                        
 - final validation
-- submit and save
--   Reset                                                                                                      
-- Validations
+- submit and save                                                                                                      
+- Check calculations
+- Purchase Ret
+- Edit
+- View
 - Checkup with real invoice
-- Serial no better display
-- Price check validations in purchase invoice
-- cleanup
+- Mechanism to see whether sl no required or not
+                                                                                                                    - Validations
+                                                                                                                    - serial no  
+                                                                                                                    - When not GST invoice then remove GST calculations
+                                                                                                                    - Validations for Invoice amount, Total qty, cgst, sgst, igst
+                                                                                                                    - Reset button
                                                                                                                     - clear row button
                                                                                                                     - Gst invoice
                                                                                                                     - GSTIN auto populate

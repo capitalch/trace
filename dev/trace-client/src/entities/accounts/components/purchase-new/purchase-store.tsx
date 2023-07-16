@@ -1,4 +1,5 @@
 import { signal, Signal, _ } from '../../../../imports/regular-imports'
+import { produce } from 'immer'
 
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
@@ -6,21 +7,40 @@ const PurchaseStoreT: PurchaseStoreType = {
     errorsObject: {
         tranDateError: () => '',
         invoiceNoError: () => '',
+
+        purchaseAcError: () => '',
+        otherAcError: () => '',
         gstinError: () => '',
+
         invoiceAmountError: () => '',
         totalQtyError: () => '',
         totalCgstError: () => '',
         totalSgstError: () => '',
-        totalIgstError: () => ''
+        totalIgstError: () => '',
+
+        productCodeError: () => '',
+        productDetailsError: () => '',
+        hsnError: () => '',
+        gstRateError: () => '',
+
+        qtyError: () => '',
+        slNoError: () => ''
+
     },
 
     main: {
         functions: {
             addLineItem: () => { },
+            clearSubheaderTotals: () => { },
             clearLineItem: () => { },
             computeRow: () => { },
             computeSummary: () => { },
             deleteLineItem: () => { },
+            getComputedInvoiceAmount: () => 0,
+            getComputedTotalQty: () => 0,
+            getComputedTotalCgst: () => 0,
+            getComputedTotalSgst: () => 0,
+            getComputedTotalIgst: () => 0,
             populateLineItem: () => { },
             setPrice: () => { },
             setPriceGst: () => { },
@@ -64,7 +84,11 @@ const PurchaseStoreT: PurchaseStoreType = {
     },
 }
 
-const PurchaseStore: PurchaseStoreType = _.cloneDeep(PurchaseStoreT)
+let PurchaseStore: PurchaseStoreType = _.cloneDeep(PurchaseStoreT)
+
+function resetPurchaseStore() {
+    PurchaseStore = _.cloneDeep(PurchaseStoreT)
+}
 
 type PurchaseStoreType = {
     tabValue: Signal<number>,
@@ -72,21 +96,38 @@ type PurchaseStoreType = {
     errorsObject: {
         tranDateError: ErrorType
         invoiceNoError: ErrorType
+
+        purchaseAcError: ErrorType
+        otherAcError: ErrorType
         gstinError: ErrorType
         invoiceAmountError: ErrorType
         totalQtyError: ErrorType
         totalCgstError: ErrorType
         totalSgstError: ErrorType
         totalIgstError: ErrorType
+
+        productCodeError: ErrorTypeWithLineItem
+        productDetailsError: ErrorTypeWithLineItem
+        hsnError: ErrorTypeWithLineItem
+        gstRateError: ErrorTypeWithLineItem
+        // discountError: ErrorTypeWithLineItem
+        qtyError: ErrorTypeWithLineItem
+        slNoError: ErrorTypeWithLineItem
     },
 
     main: {
         functions: {
             addLineItem: (index: number) => void
+            clearSubheaderTotals: () => void
             clearLineItem: (row: PurchaseLineItemType) => void
             computeRow: (row: PurchaseLineItemType) => void
             computeSummary: () => void
             deleteLineItem: (index: number) => void
+            getComputedInvoiceAmount: () => number
+            getComputedTotalQty: () => number
+            getComputedTotalCgst: () => number
+            getComputedTotalSgst: () => number
+            getComputedTotalIgst: () => number
             populateLineItem: (row: PurchaseLineItemType, data: any) => void
             setPrice: (row: PurchaseLineItemType) => void
             setPriceGst: (row: PurchaseLineItemType) => void
@@ -130,27 +171,6 @@ type PurchaseStoreType = {
 
 }
 
-// function populateLineItem(item: PurchaseLineItemType, data: any) {
-//     item.productCodeOrUpc.value = ''
-//     item.productCode.value = data.productCode
-//     item.upcCode.value = data.upcCode
-//     item.productId.value = data.productId
-//     item.hsn.value = data.hsn
-//     item.productDetails.value = `${data.catName} ${data.brandName} ${data.label}`
-//     item.gstRate.value = data.gstRate
-//     item.qty.value = 1
-//     item.price.value = data.lastPurchasePrice
-//     item.discount.value = 0
-//     item.subTotal.value = 0
-//     item.amount.value = 0
-//     item.serialNumbers.value = ''
-//     item.remarks.value = ''
-//     item.cgst.value = 0
-//     item.sgst.value = 0
-//     item.igst.value = 0
-// }
-// export { populateLineItem }
-
 type PurchaseLineItemType = {
     productCodeOrUpc: Signal<string>
     productCode: Signal<string>
@@ -167,13 +187,14 @@ type PurchaseLineItemType = {
     subTotal: Signal<number>
     amount: Signal<number>
     serialNumbers: Signal<string>
+    serialNumberCount: Signal<number>
     remarks: Signal<string>
     cgst: Signal<number>
     sgst: Signal<number>
     igst: Signal<number>
 }
 
-export type { PurchaseLineItemType }
+export { type PurchaseLineItemType, resetPurchaseStore }
 
 type LineItemErrorType = {
     productCode: Signal<string>
@@ -183,5 +204,6 @@ type LineItemErrorType = {
 }
 
 type ErrorType = () => string
+type ErrorTypeWithLineItem = (lineItem: PurchaseLineItemType) => string
 
 export { PurchaseStore, PurchaseStoreT }

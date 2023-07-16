@@ -19,6 +19,7 @@ import { manageEntitiesState, useIbuki, useTraceGlobal } from '../imports/trace-
 import menu from '../data/data-menu.json'
 import '../entities/authentication/initialize-react-form'
 import { useTraceHeader } from './trace-header-hook'
+import { MaterialDialogASignals } from '../entities/accounts/components/common/material-dialogA-signals'
 
 function TraceHeader({ open, handleDrawerOpen }: any) {
     const { filterOn, emit } = useIbuki()
@@ -246,6 +247,7 @@ function TraceHeader({ open, handleDrawerOpen }: any) {
                     {snackbar.current.message}
                 </Alert>
             </Snackbar>
+            <MaterialDialogASignals />
         </Toolbar>
     )
 }

@@ -3,15 +3,17 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 import { execGenericView, useIbuki } from "../../inventory/redirect"
 
 function usePurchaseMainSubheader() {
-    const errorsObject = PurchaseStore.errorsObject
     const subheader = PurchaseStore.main.subheader
     const header = PurchaseStore.main.header
-    const {emit} = useIbuki()
+    const main = PurchaseStore.main
+    const { emit } = useIbuki()
 
+    const errorsObject = PurchaseStore.errorsObject
     const { isInvalidGstin } = useSharedElements()
     setErrorsObject()
+    PurchaseStore.main.functions.clearSubheaderTotals = handleClearSubHeaderTotals
 
-    function handleClearSubHeaderNumbers() {
+    function handleClearSubHeaderTotals() {
         subheader.invoiceAmount.value = 0
         subheader.totalQty.value = 0
         subheader.cgst.value = 0
@@ -28,7 +30,7 @@ function usePurchaseMainSubheader() {
         const otherAccount: any = subheader.ledgerSubledgerOther
         subheader.otherAccId.value = otherAccount.accId
         const accId = otherAccount.accId
-        if(!accId){
+        if (!accId) {
             return
         }
         emit('SHOW-LOADING-INDICATOR', true)
@@ -42,7 +44,6 @@ function usePurchaseMainSubheader() {
     }
 
     function setErrorsObject() {
-
         errorsObject.gstinError = () => {
             let ret = ''
             if (header.isGstInvoice.value) {
@@ -55,41 +56,41 @@ function usePurchaseMainSubheader() {
 
         errorsObject.invoiceAmountError = () => {
             let ret = ''
-            // if (!almostEqual(subheader.invoiceAmount.value, main.computedInvoiceAmount)) {
-            //     ret = 'invalid'
-            // }
+            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount())) {
+                ret = 'invalid'
+            }
             return (ret)
         }
 
         errorsObject.totalQtyError = () => {
             let ret = ''
-            // if (main.computedTotalQty !== subheader.totalQty.value) {
-            //     ret = 'invallid'
-            // }
+            if (main.functions.getComputedTotalQty() !== subheader.totalQty.value) {
+                ret = 'invallid'
+            }
             return (ret)
         }
 
         errorsObject.totalCgstError = () => {
             let ret = ''
-            // if(!almostEqual(subheader.cgst.value, main.computedCgst)){
-            //     ret = 'invalid'
-            // }
+            if (main.functions.getComputedTotalCgst() !== subheader.cgst.value) {
+                ret = 'invallid'
+            }
             return (ret)
         }
 
         errorsObject.totalSgstError = () => {
             let ret = ''
-            // if(!almostEqual(subheader.sgst.value, main.computedSgst)){
-            //     ret = 'invalid'
-            // }
+            if (main.functions.getComputedTotalSgst() !== subheader.sgst.value) {
+                ret = 'invallid'
+            }
             return (ret)
         }
 
         errorsObject.totalIgstError = () => {
             let ret = ''
-            // if(!almostEqual(subheader.igst.value, main.computedIgst)){
-            //     ret = 'invalid'
-            // }
+            if (main.functions.getComputedTotalSgst() !== subheader.sgst.value) {
+                ret = 'invallid'
+            }
             return (ret)
         }
     }
@@ -101,6 +102,6 @@ function usePurchaseMainSubheader() {
     }
 
 
-    return ({ errorsObject, handleClearSubHeaderNumbers, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther })
+    return ({ errorsObject, handleClearSubHeaderTotals, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther })
 }
 export { usePurchaseMainSubheader }

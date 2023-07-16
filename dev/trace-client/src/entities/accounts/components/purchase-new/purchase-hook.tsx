@@ -8,7 +8,7 @@ function usePurchase() {
     const errorsObject = PurchaseStore.errorsObject
     const header = PurchaseStore.main.header
 
-    setErrorsObject()
+    // setErrorsObject()
 
     // useEffect(() => {
     //     setErrorsObject()
@@ -22,18 +22,18 @@ function usePurchase() {
 
     }
 
-    function setErrorsObject() {
-        errorsObject.tranDateError = () => isInvalidDate(header.tranDate.value) ? accountsMessages.dateRangeAuditLockMessage : ''
-        errorsObject.invoiceNoError = () => {
-            let error = ''
-            if(PurchaseStore.purchaseType==='pur'){
-                if(!header.invoiceNo.value){
-                    error = 'Required'
-                }
-            }
-            return(error)
-        }
-    }
+    // function setErrorsObject() {
+    //     errorsObject.tranDateError = () => isInvalidDate(header.tranDate.value) ? accountsMessages.dateRangeAuditLockMessage : ''
+    //     errorsObject.invoiceNoError = () => {
+    //         let error = ''
+    //         if(PurchaseStore.purchaseType==='pur'){
+    //             if(!header.invoiceNo.value){
+    //                 error = 'Required'
+    //             }
+    //         }
+    //         return(error)
+    //     }
+    // }
 
     return { handleOnReset, handleOnTabChange }
 }

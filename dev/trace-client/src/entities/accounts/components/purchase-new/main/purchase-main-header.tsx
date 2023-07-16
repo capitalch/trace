@@ -7,7 +7,7 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 
 function PurchaseMainHeader() {
     const theme = useTheme()
-    const { handleOnReset, handleSubmit } = usePurchaseMainHeader()
+    const {handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit , isError} = usePurchaseMainHeader()
     const header = PurchaseStore.main.header
     const errorsObject = PurchaseStore.errorsObject
 
@@ -24,7 +24,6 @@ function PurchaseMainHeader() {
 
         {/* date */}
         <TextField
-            // sx={{ mt: theme.spacing(2) }}
             label={header.tranDate.value ? 'Date' : undefined}
             variant='standard'
             type='date'
@@ -43,8 +42,8 @@ function PurchaseMainHeader() {
         <TextField
             label="Invoice no"
             variant="standard"
-            sx={{ maxWidth: '10rem' }}
-            // error={isInValidInvoiceNo()}
+            sx={{ maxWidth: '16rem' }}
+            error={Boolean(errorsObject.invoiceNoError())}
             onChange={(e: any) => { 
                 header.invoiceNo.value = e.target.value 
             }}
@@ -66,15 +65,13 @@ function PurchaseMainHeader() {
             sx={{ position: 'relative', top: theme.spacing(1), ml: 'auto' }}
             control={
                 <Checkbox checked={Boolean(header.isGstInvoice.value || false)}
-                    onChange={() => {
-                        header.isGstInvoice.value = !header.isGstInvoice.value
-                    }}
+                    onChange={handleOnChangeGstInvoiceCheckbox}
                 />
             }
             label='Gst invoice'
         />
 
-        <Button color='warning' sx={{
+        <Button color='info' sx={{
             // backgroundColor: theme.palette.amber.main, 
             // color: theme.palette.getContrastText(theme.palette.amber.main),
             height: theme.spacing(5),
@@ -88,7 +85,7 @@ function PurchaseMainHeader() {
             variant="contained"
             size="medium"
             color="secondary"
-            // disabled={isError()}
+            disabled={isError()}
             // startIcon={
             //     isError() ? (
             //         <Error color="error" />

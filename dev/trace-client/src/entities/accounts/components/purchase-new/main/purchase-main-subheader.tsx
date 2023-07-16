@@ -7,7 +7,7 @@ import { usePurchaseMainSubheader } from "./purchase-main-subheader-hook"
 
 function PurchaseMainSubheader() {
     const theme = useTheme()
-    const { errorsObject, handleClearSubHeaderNumbers, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther } = usePurchaseMainSubheader()
+    const { errorsObject, handleClearSubHeaderTotals, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther } = usePurchaseMainSubheader()
     const subheader = PurchaseStore.main.subheader
 
     return (<Box sx={{ display: 'flex', mt: 2, columnGap: 4, rowGap: 4, flexWrap: 'wrap',alignItems:'center' }}>
@@ -101,7 +101,7 @@ function PurchaseMainSubheader() {
                     thousandSeparator={true}
                     value={subheader.totalQty.value || 0.00}
                 />
-                <Button variant="text" onClick={handleClearSubHeaderNumbers} color='info' sx={{ mt: 1, width: 2, height: 2, }}>Clear</Button>
+                <Button variant="text" onClick={handleClearSubHeaderTotals} color='info' sx={{ mt: 1, width: 2, height: 2, }}>Clear</Button>
             </Box>
 
             {/* Cgst, Sgst, Igst  */}

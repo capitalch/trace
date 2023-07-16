@@ -7,11 +7,14 @@ import Big from "big.js"
 import { useCallback, useEffect } from "react"
 import { produce } from "immer"
 import { signal } from "@preact/signals-react"
+import { isNumber } from "lodash"
+import { LineItems } from "../../../sales-new/redirect"
 
 function PurchaseItems() {
-    
+
     const addLineItemCB = useCallback(addLineItem, [])
     const attachFunctionsCB = useCallback(attachFunctions, [])
+    const errorsObject = PurchaseStore.errorsObject
 
     useEffect(() => {
         attachFunctionsCB()
@@ -20,6 +23,7 @@ function PurchaseItems() {
         }
     }, [attachFunctionsCB, addLineItemCB])
 
+    setErrorsObject()
     return (<Box sx={{
         display: 'flex', p: 1, pt: 0.5, mt: 0, '& .vertical': { display: 'flex', flexDirection: 'column', },
         '& .right-aligned': { '& input': { textAlign: 'end' } }
@@ -38,7 +42,7 @@ function PurchaseItems() {
         })
         PurchaseStore.main.functions.computeSummary()
     }
-
+    
     function attachFunctions() {
         PurchaseStore.main.functions.addLineItem = addLineItem
         PurchaseStore.main.functions.computeRow = computeRow
@@ -48,6 +52,11 @@ function PurchaseItems() {
         PurchaseStore.main.functions.clearLineItem = clearLineItem
         PurchaseStore.main.functions.populateLineItem = populateLineItem
         PurchaseStore.main.functions.deleteLineItem = deleteLineItem
+        PurchaseStore.main.functions.getComputedInvoiceAmount = getComputedInvoiceAmount
+        PurchaseStore.main.functions.getComputedTotalQty = getComputedTotalQty
+        PurchaseStore.main.functions.getComputedTotalCgst = getComputedTotalCgst
+        PurchaseStore.main.functions.getComputedTotalSgst = getComputedTotalSgst
+        PurchaseStore.main.functions.getComputedTotalIgst = getComputedTotalIgst
     }
 
     function clearLineItem(item: PurchaseLineItemType) {
@@ -99,13 +108,20 @@ function PurchaseItems() {
         let cgst = 0, sgst = 0, igst = 0, amount = 0, qty = 0, subTotal = 0, discount = 0
         lineItems.forEach(lineItem => {
             computeRow(lineItem)
-            cgst += lineItem.cgst.value
-            sgst += lineItem.sgst.value
-            igst += lineItem.igst.value
-            amount += lineItem.amount.value
-            qty += lineItem.qty.value
-            subTotal += lineItem.subTotal.value
-            discount += lineItem.discount.value * lineItem.qty.value
+            cgst = +Big(cgst).add(lineItem.cgst.value)
+            sgst = +Big(sgst).add(lineItem.sgst.value)
+            igst = +Big(igst).add(lineItem.igst.value)
+            amount = +Big(amount).add(lineItem.amount.value)
+            qty = +Big(qty).add(lineItem.qty.value)
+            subTotal = +Big(subTotal).add(lineItem.subTotal.value)
+            discount = +Big(discount).add(lineItem.discount.value)
+            // cgst += lineItem.cgst.value
+            // sgst += lineItem.sgst.value
+            // igst += lineItem.igst.value
+            // amount += lineItem.amount.value
+            // qty += lineItem.qty.value
+            // subTotal += lineItem.subTotal.value
+            // discount += lineItem.discount.value * lineItem.qty.value
         })
         const lineItemsFooter = PurchaseStore.main.lineItemsFooter
         lineItemsFooter.cgst.value = cgst
@@ -145,11 +161,52 @@ function PurchaseItems() {
             subTotal: signal(0),
             amount: signal(0),
             serialNumbers: signal(''),
+            serialNumberCount: signal(0),
             remarks: signal(''),
             cgst: signal(0),
             sgst: signal(0),
             igst: signal(0)
         })
+    }
+
+    function getComputedInvoiceAmount() {
+        const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
+        const ret = lineItems.reduce((acc, lineItem) => {
+            return (acc + lineItem.amount.value)
+        }, 0)
+        return (ret)
+    }
+
+    function getComputedTotalQty() {
+        const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
+        const ret = lineItems.reduce((acc, lineItem) => {
+            return (acc + lineItem.qty.value)
+        }, 0)
+        return (ret)
+    }
+
+    function getComputedTotalCgst() {
+        const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
+        const ret = lineItems.reduce((acc, lineItem) => {
+            return (acc + lineItem.cgst.value)
+        }, 0)
+        return (ret)
+    }
+
+    function getComputedTotalSgst() {
+        const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
+        const ret = lineItems.reduce((acc, lineItem) => {
+            return (acc + lineItem.sgst.value)
+        }, 0)
+        return (ret)
+    }
+
+    function getComputedTotalIgst() {
+        const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
+        const ret = lineItems.reduce((acc, lineItem) => {
+            return (acc + lineItem.igst.value)
+        }, 0)
+        return (ret)
     }
 
     function populateLineItem(item: PurchaseLineItemType, data: any) {
@@ -172,6 +229,60 @@ function PurchaseItems() {
         item.igst.value = 0
     }
 
+    function setErrorsObject() {
+        errorsObject.productCodeError = (item: PurchaseLineItemType) => {
+            let ret = 'invalid'
+            const productCode = item.productCode.value
+            if (productCode && isNumber(+productCode) && (productCode !== '0')) {
+                ret = ''
+            }
+            return (ret)
+        }
+
+        errorsObject.productDetailsError = (item: PurchaseLineItemType) => {
+            const ret = item.productDetails.value ? '' : 'invalid'
+            return (ret)
+        }
+
+        errorsObject.hsnError = (item: PurchaseLineItemType) => {
+            let ret = ''
+            const isGstInvoice = PurchaseStore.main.header.isGstInvoice.value
+            if (isGstInvoice) {
+                ret = item.hsn.value ? '' : 'invalid'
+            }
+            return (ret)
+        }
+
+        errorsObject.gstRateError = (item: PurchaseLineItemType) => {
+            let ret = ''
+            const isGstInvoice = PurchaseStore.main.header.isGstInvoice.value
+            if (isGstInvoice) {
+                ret = item.gstRate.value ? '' : 'invalid'
+            }
+            return (ret)
+        }
+
+
+        errorsObject.qtyError = (item: PurchaseLineItemType) => {
+            const rt = item.qty.value
+            const ret = item.qty.value ? '' : 'invalid'
+            return (ret)
+        }
+
+        errorsObject.slNoError = (item: PurchaseLineItemType) => {
+            let ret = ''
+            function getCount() {
+                return (
+                    item?.serialNumbers.value.split(',').filter(Boolean).length || 0
+                )
+            }
+            if (getCount() !== 0) {
+                ret = (getCount() === item.qty.value) ? '' : 'invalid'
+            }
+            return (ret)
+        }
+
+    }
     function setPrice(item: PurchaseLineItemType) {
         const priceGst = +Big(item.priceGst.value)
         const gstRate = +Big(item.gstRate.value)
