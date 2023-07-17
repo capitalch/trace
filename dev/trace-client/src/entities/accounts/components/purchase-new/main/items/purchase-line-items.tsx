@@ -5,7 +5,7 @@ import { PurchaseStore } from "../../purchase-store"
 function PurchaseLineItems() {
     const lineItems = PurchaseStore.main.lineItems.value
 
-    return (<Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1 }}>
+    return (<Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1, }}>
         {getLineItems()}
     </Box>)
 

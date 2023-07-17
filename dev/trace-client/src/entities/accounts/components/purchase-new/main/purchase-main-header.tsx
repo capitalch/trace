@@ -43,7 +43,7 @@ function PurchaseMainHeader() {
         <TextField
             label="Invoice no"
             variant="standard"
-            sx={{ maxWidth: '16rem' }}
+            sx={{ maxWidth: '15rem', width: '13rem' }}
             error={Boolean(errorsObject.invoiceNoError())}
             onChange={(e: any) => { 
                 header.invoiceNo.value = e.target.value 
@@ -53,7 +53,7 @@ function PurchaseMainHeader() {
 
         {/* remarks */}
         <TextField
-            sx={{ maxWidth: '30rem' }}
+            sx={{ maxWidth: '12rem', width: '11rem' }}
             label="Common remarks"
             variant="standard"
             onChange={(e: any) => {

@@ -10,17 +10,7 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
     const { execGenericView, } = utilMethods()
     const [, setRefresh] = useState({})
     const meta: any = useRef({
-        // tranType: 'purchase',
-        dialogConfig: {
-            title: '',
-            content: () => { },
-            actions: () => { },
-            serialNumbers: '',
-        },
-        // isMounted: false,
-        searchFilter: '',
-        showDialog: false,
-        // zoomIn: true,
+        productCodeOrUpc: ''
     })
 
     async function doSearchOnProductCodeOrUpc(value: string) {
@@ -116,6 +106,6 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
     }
 
 
-    return ({ doSearchOnProductCodeOrUpc, handleSerialNumber })
+    return ({ doSearchOnProductCodeOrUpc, handleSerialNumber, meta })
 }
 export { usePurchaseLineItem }

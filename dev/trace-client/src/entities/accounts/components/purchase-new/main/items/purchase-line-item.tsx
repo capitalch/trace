@@ -7,13 +7,13 @@ import { PurchaseLineItemType, PurchaseStore } from "../../purchase-store"
 
 function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: number }) {
     const theme = useTheme()
-    const { doSearchOnProductCodeOrUpc, handleSerialNumber, } = usePurchaseLineItem(item)
+    const { doSearchOnProductCodeOrUpc, handleSerialNumber, meta } = usePurchaseLineItem(item)
     const { extractAmount, toDecimalFormat } = utilMethods()
     const errorsObject = PurchaseStore.errorsObject
     // Container box
     return (<Box sx={{
-        display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey', mt: 1
-        , flexWrap: 'wrap', rowGap: 3, columnGap: 2
+        display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey', mt: 1,
+        flexWrap: 'wrap', rowGap: 3, columnGap: 1.5
     }}>
 
         <Box display='flex' flexDirection='column'>
@@ -35,20 +35,26 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 sx={{ maxWidth: theme.spacing(12) }}
                 variant='standard'
                 value={item.productCodeOrUpc.value || ''}
+                // value={meta.current.productCodeOrUpc || ''}
                 onChange={(e: any) => {
                     item.productCodeOrUpc.value = e.target.value
+                    // meta.current.productCodeOrUpc = e.target.value
                 }}
                 onBlur={(e: any) => {
+                    // if(item.productCodeOrUpc.value !== e.target.value) {
                     doSearchOnProductCodeOrUpc(e.target.value)
+                    // }
                 }}
             />
             <Box display='flex'>
                 <Typography
+                    width='6rem'
                     variant='body2'
                     fontWeight='bolder'
                     color={Boolean(errorsObject.productCodeError(item)) ? theme.palette.error.light : theme.palette.success.main}
-                    mt={1}>{item.productCode.value || 'Prod code'}</Typography>
+                    mt={1}>{item.productCode.value || 'Product code'}</Typography>
                 <IconButton color="info"
+                    sx={{ mt: .8, height: '1.3rem', width: '1.3rem' }}
                     size="small"
                     onClick={() => {
                         PurchaseStore.main.functions.clearLineItem(item)
@@ -303,7 +309,6 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
         </Box>
-
     </Box >)
 }
 export { PurchaseLineItem }
