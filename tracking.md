@@ -1,10 +1,11 @@
 ## Purchase to do            
 - Debounce search on prod code  
 - Serial no color                                                                                       
-- items search and populate                                                                                                        
+                                                                                                                    - items search and populate                                                                                                        
 - warning for price variation of products by 5 % and above
 - submit and save                                                                                                      
 - Check calculations
+
 - Purchase Ret
 - Edit
 - View

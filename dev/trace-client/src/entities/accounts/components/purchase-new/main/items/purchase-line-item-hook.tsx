@@ -1,15 +1,12 @@
 import { PurchaseLineItemType, PurchaseStore, } from "../../../../stores/purchase-store"
-// import { signal } from "@preact/signals-react"
-// import { useEffect } from "react"
-import { Badge, Box, Button, TextareaAutosize, _, useIbuki, useRef, useState, utilMethods } from "../../../inventory/redirect"
+import { Badge, Box, Button, TextareaAutosize, _, useIbuki, useRef, utilMethods } from "../../../inventory/redirect"
 import { AppStore } from "../../../../stores/app-store"
 import { ProductsSearch } from "../../../common/products-search"
-// import Big from "big.js"
 
 function usePurchaseLineItem(item: PurchaseLineItemType) {
     const { emit } = useIbuki()
     const { execGenericView, } = utilMethods()
-    // const [, setRefresh] = useState({})
+
     const meta: any = useRef({
         productCodeOrUpc: ''
     })

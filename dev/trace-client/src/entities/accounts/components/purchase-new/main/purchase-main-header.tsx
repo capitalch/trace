@@ -66,18 +66,14 @@ function PurchaseMainHeader() {
             sx={{ position: 'relative', top: theme.spacing(1), }}
             control={
                 <Checkbox checked={Boolean(header.isGstInvoice.value || false)}
-                    onChange={handleOnChangeGstInvoiceCheckbox}
-                />
+                    onChange={handleOnChangeGstInvoiceCheckbox} />
             }
             label='Gst invoice'
         />
 
         <Button color='info' sx={{
-            // backgroundColor: theme.palette.amber.main, 
-            // color: theme.palette.getContrastText(theme.palette.amber.main),
             height: theme.spacing(5),
-            ml: 'auto' 
-            // margin: 'auto',
+            ml: 'auto'
         }} variant='contained' onClick={handleOnReset}>Reset</Button>
 
         {/* Submit */}
@@ -88,15 +84,14 @@ function PurchaseMainHeader() {
             size="medium"
             color="secondary"
             disabled={isFormError()}
-            // startIcon={
-            //     isError() ? (
-            //         <Error color="error" />
-            //     ) : (
-            //         <Check style={{ color: 'white' }} />
-            //     )
-            // }
-            onClick={handleSubmit}
-        >
+            startIcon={
+                PurchaseStore.main.functions.isFormError() ? (
+                    <Error color="error" />
+                ) : (
+                    <Check style={{ color: 'white' }} />
+                )
+            }
+            onClick={handleSubmit}>
             Submit
         </Button>
     </Box>)

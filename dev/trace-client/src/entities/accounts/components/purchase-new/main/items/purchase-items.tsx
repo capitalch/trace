@@ -264,7 +264,6 @@ function PurchaseItems() {
 
 
         errorsObject.qtyError = (item: PurchaseLineItemType) => {
-            const rt = item.qty.value
             const ret = item.qty.value ? '' : 'invalid'
             return (ret)
         }

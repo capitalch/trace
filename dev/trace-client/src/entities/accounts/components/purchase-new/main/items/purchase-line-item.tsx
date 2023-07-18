@@ -264,16 +264,15 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                             .split(',')
                             .filter(Boolean).length
                     }
-                    // color={
-                    //     getSlNoError(item)
-                    //         ? 'error'
-                    //         : 'secondary'
-                    // }
+                    color={
+                        PurchaseStore.errorsObject.slNoError(item)
+                            ? 'error'
+                            : 'secondary'
+                    }
 
                     showZero={true}>
                     <Button color="info" variant='text' sx={{ width: theme.spacing(9), height: 22, fontWeight: 'bold', }} onClick={() => {
                         handleSerialNumber(item)
-                        // megaData.executeMethodForKey('handleSerialNo:lineItems', { item })
                     }}>Ser No</Button>
                 </Badge>
             </Box>
@@ -283,7 +282,6 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 variant='standard'
                 value={item.remarks.value || ''}
                 onChange={(e: any) => { item.remarks.value = e.target.value }}
-            // onChange={(e: any) => handleTextChanged(item, 'remarks', e)} 
             />
         </Box>
 

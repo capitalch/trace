@@ -17,6 +17,7 @@
         "@react-pdf/fontkit": "2.0.2",
         "@react-pdf/pdfkit": "2.1.0",
         "@react-pdf/renderer": "2.0.19",
+        "@syncfusion/ej2-react-grids": "^22.1.39",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^12.1.5",
         "@testing-library/user-event": "^14.2.1",

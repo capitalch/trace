@@ -1,6 +1,7 @@
 import React from 'react'
 import { LicenseInfo } from '@mui/x-data-grid-pro'
 // import {DataGridPro} from '@mui/x-data-grid-pro'
+import { registerLicense } from '@syncfusion/ej2-base'
 import { ThemeProvider, createTheme, StyledEngineProvider } from '@mui/material/styles'
 import { ConfirmProvider } from 'material-ui-confirm'
 import {
@@ -23,6 +24,7 @@ import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
+import "../node_modules/@syncfusion/ej2-react-grids/styles/material.css";
 // import { MegaContext } from './imports/trace-imports'
 
 declare module '@mui/material/styles/' {
@@ -68,7 +70,7 @@ const App: React.FC = () => {
         //     },
         // },
         components: {
-            
+
         },
         palette: {
             primary: { main: brown[800] },
@@ -118,9 +120,12 @@ const App: React.FC = () => {
         },
     })
 
+    // Material grid
     LicenseInfo.setLicenseKey(
         '094c13fcff99f49fe015161354d1d052T1JERVI6MjkzMjgsRVhQSVJZPTE2NjMxMjQ0NjcwMDAsS0VZVkVSU0lPTj0x'
     )
+    // syncfusion grid
+    registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF5cXmdCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWXhedHVVR2RZU0J+XEA=')
     // To disable mobile browser back
     window.history.pushState(null, 'null', window.location.href)
     window.onpopstate = function () {
