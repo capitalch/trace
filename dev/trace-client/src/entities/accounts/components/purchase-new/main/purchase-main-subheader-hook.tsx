@@ -1,4 +1,4 @@
-import { PurchaseStore } from "../purchase-store"
+import { PurchaseStore } from "../../../stores/purchase-store"
 import { useSharedElements } from '../../common/shared-elements-hook'
 import { execGenericView, useIbuki } from "../../inventory/redirect"
 

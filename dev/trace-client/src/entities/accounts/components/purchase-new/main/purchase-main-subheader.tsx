@@ -1,6 +1,6 @@
 import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material"
 import { LedgerSubledger } from "../../common/ledger-subledger"
-import { PurchaseStore } from "../purchase-store"
+import { PurchaseStore } from "../../../stores/purchase-store"
 import { NumberFormat } from '../../../../../imports/regular-imports'
 import { useTheme } from '../../../../../imports/gui-imports'
 import { usePurchaseMainSubheader } from "./purchase-main-subheader-hook"

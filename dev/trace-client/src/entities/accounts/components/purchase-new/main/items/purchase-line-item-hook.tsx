@@ -1,14 +1,15 @@
-import { PurchaseLineItemType, PurchaseStore, } from "../../purchase-store"
+import { PurchaseLineItemType, PurchaseStore, } from "../../../../stores/purchase-store"
 // import { signal } from "@preact/signals-react"
 // import { useEffect } from "react"
 import { Badge, Box, Button, TextareaAutosize, _, useIbuki, useRef, useState, utilMethods } from "../../../inventory/redirect"
-import { AppStore } from "../../../common/app-store"
+import { AppStore } from "../../../../stores/app-store"
+import { ProductsSearch } from "../../../common/products-search"
 // import Big from "big.js"
 
 function usePurchaseLineItem(item: PurchaseLineItemType) {
     const { emit } = useIbuki()
     const { execGenericView, } = utilMethods()
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const meta: any = useRef({
         productCodeOrUpc: ''
     })
@@ -41,15 +42,19 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
         }
     }
 
+    function handleItemSearch(item: PurchaseLineItemType) {
+        AppStore.modalDialogA.title.value = 'Search for all products'
+        AppStore.modalDialogA.body.value = () => <ProductsSearch />
+        AppStore.modalDialogA.isOpen.value = true
+        AppStore.modalDialogA.maxWidth.value='md'
+        AppStore.modalDialogA.itemData.value =item
+    }
+
     function handleSerialNumber(item: PurchaseLineItemType) {
         AppStore.modalDialogA.title.value = 'Serial numbers (Comma separated)'
         AppStore.modalDialogA.body.value = Content
         AppStore.modalDialogA.isOpen.value = true
-        // meta.current.showDialog = true
-        // meta.current.dialogConfig.isSearchBox = false
-        // meta.current.dialogConfig.title = 'Serial numbers (Comma separated)'
-        // meta.current.dialogConfig.content = Content
-        // setRefresh({})
+        AppStore.modalDialogA.maxWidth.value='sm'
         function Content() {
             return (
                 <Box>
@@ -106,6 +111,6 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
     }
 
 
-    return ({ doSearchOnProductCodeOrUpc, handleSerialNumber, meta })
+    return ({ doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber, meta })
 }
 export { usePurchaseLineItem }

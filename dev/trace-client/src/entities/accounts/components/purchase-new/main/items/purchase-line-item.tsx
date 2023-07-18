@@ -3,26 +3,26 @@ import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme }
 import NumberFormat from "react-number-format"
 import { utilMethods } from "../../../inventory/redirect"
 import { usePurchaseLineItem } from "./purchase-line-item-hook"
-import { PurchaseLineItemType, PurchaseStore } from "../../purchase-store"
+import { PurchaseLineItemType, PurchaseStore } from "../../../../stores/purchase-store"
 
 function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: number }) {
     const theme = useTheme()
-    const { doSearchOnProductCodeOrUpc, handleSerialNumber, meta } = usePurchaseLineItem(item)
+    const { doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber } = usePurchaseLineItem(item)
     const { extractAmount, toDecimalFormat } = utilMethods()
     const errorsObject = PurchaseStore.errorsObject
-    // Container box
+
     return (<Box sx={{
-        display: 'flex', alignItems: 'center', borderBottom: '1px solid lightGrey', mt: 1,
+        display: 'flex', alignItems: 'center', borderBottom: '2px solid teal', mt: 1, pb:1,
         flexWrap: 'wrap', rowGap: 3, columnGap: 1.5
     }}>
-
+        
         <Box display='flex' flexDirection='column'>
             {/* Search */}
             <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='secondary'
-            // onClick={(e: any) => handleDeleteItem(e, item, index)}
-            >
+                onClick={() => handleItemSearch(item)}>
                 <Search />
             </IconButton>
+
             {/* Index */}
             <Typography variant='body2' sx={{ textDecoration: 'underline', fontSize: theme.spacing(1.5) }} color={theme.palette.secondary.main}>{index + 1}</Typography>
         </Box>

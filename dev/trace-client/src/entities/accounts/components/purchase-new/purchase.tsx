@@ -2,7 +2,7 @@
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import { PurchaseMain } from './main/purchase-main'
 import { usePurchase } from './purchase-hook'
-import { PurchaseStore } from './purchase-store'
+import { PurchaseStore } from '../../stores/purchase-store'
 import { PurchaseView } from './purchase-view'
 function Purchase({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
     PurchaseStore.purchaseType = purchaseType

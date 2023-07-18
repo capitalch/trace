@@ -8,7 +8,10 @@ const appStoreT: AppStoreType = {
         defaultData: signal(undefined),
         isOpen: signal(false),
         isCentered: false,
-        size: signal('md'),
+        isFullScreen: false,
+        itemData: signal({}),
+        maxWidth: signal('sm'),
+        // selectedItem:signal({}),
         title: signal(''),
         toShowCloseButton: signal(false),
     },
@@ -18,7 +21,7 @@ const appStoreT: AppStoreType = {
         defaultData: signal(undefined),
         isOpen: signal(false),
         isCentered: false,
-        size: signal('md'),
+        maxWidth: signal('md'),
         title: signal(''),
         toShowCloseButton: signal(false),
     },
@@ -29,22 +32,25 @@ export { AppStore }
 
 type AppStoreType = {
     modalDialogA: {
-        body: Signal<FC>,
-        defaultData: Signal<any>,
-        isOpen: Signal<boolean>,
-        isCentered?: boolean,
-        size: Signal<'md' | 'sm' | 'lg' | 'md'>,
-        title: Signal<string>,
-        toShowCloseButton: Signal<boolean>,
+        body: Signal<FC>
+        defaultData: Signal<any>
+        isOpen: Signal<boolean>
+        isCentered?: boolean
+        isFullScreen?:boolean
+        itemData: Signal<any>
+        maxWidth: Signal<'md' | 'sm' | 'lg' | 'md'>
+        // selectedItem?:Signal<any>
+        title: Signal<string>
+        toShowCloseButton: Signal<boolean>
     },
 
     modalDialogB: {
-        body: Signal<FC>,
-        defaultData: Signal<any>,
-        isOpen: Signal<boolean>,
-        isCentered?: boolean,
-        size: Signal<'md' | 'sm' | 'lg' | 'md'>,
-        title: Signal<string>,
-        toShowCloseButton: Signal<boolean>,
+        body: Signal<FC>
+        defaultData: Signal<any>
+        isOpen: Signal<boolean>
+        isCentered?: boolean
+        maxWidth: Signal<'md' | 'sm' | 'lg' | 'md'>
+        title: Signal<string>
+        toShowCloseButton: Signal<boolean>
     },
 }

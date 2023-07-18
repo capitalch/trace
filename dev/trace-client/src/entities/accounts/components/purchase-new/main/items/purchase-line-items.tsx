@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 import { PurchaseLineItem } from "./purchase-line-item"
-import { PurchaseStore } from "../../purchase-store"
+import { PurchaseStore } from "../../../../stores/purchase-store"
 
 function PurchaseLineItems() {
     const lineItems = PurchaseStore.main.lineItems.value

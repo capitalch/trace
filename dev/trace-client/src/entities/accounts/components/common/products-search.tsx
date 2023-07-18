@@ -1,7 +1,11 @@
+import { ListItemSecondaryAction } from '@mui/material'
+import { AppStore } from '../../stores/app-store'
 import {
     _, Box, Button, DataGridPro, IMegaData, MegaDataContext, SearchBox, Typography,
     useContext, useEffect, useGridApiRef, useIbuki, useRef, useState, useTheme, utilMethods, manageEntitiesState
 } from '../sales-new/redirect'
+import { isTemplateMiddleOrTemplateTail } from 'typescript'
+import { inventoryMegaData } from './init-mega-data-context-values'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
@@ -45,7 +49,6 @@ function ProductsSearch({ parentMeta }: any) {
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}
-            // rowHeight={65}
             getRowHeight={()=>'auto'}
             selectionModel={pre.selectionModel}
             onSelectionModelChange={(newModel: any) => {
@@ -62,6 +65,17 @@ function ProductsSearch({ parentMeta }: any) {
                     parentMeta.current.showDialog = false
                     megaData.executeMethodForKey(renderCallbackKey, {}) // calling setRefresh({}) of parent
                     megaData.executeMethodForKey(setItemToSelectedProductCallbackKey) // populates the selected product to current item
+                }
+                if(!_.isEmpty(AppStore.modalDialogA.itemData?.value)){
+                    const itemData: any = AppStore.modalDialogA.itemData?.value
+                    itemData.hsn.value = selectedProduct.hsn
+                    itemData.productCode.value = selectedProduct.productCode
+                    itemData.productDetails.value = `${selectedProduct.catName} ${selectedProduct.brandName} ${selectedProduct.label}`
+                    itemData.productId.value = selectedProduct.id1
+                    itemData.clos.value = selectedProduct.clos
+                    itemData.price.value = selectedProduct.lastPurchasePrice || selectedProduct.openingPrice
+                    itemData.gstRate.value = selectedProduct.gstRate
+                    AppStore.modalDialogA.isOpen.value = false
                 }
             }}
         />

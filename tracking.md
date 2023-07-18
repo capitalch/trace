@@ -1,5 +1,6 @@
 ## Purchase to do            
-- Debounce searc on prod code                                                                                         
+- Debounce search on prod code  
+- Serial no color                                                                                       
 - items search and populate                                                                                                        
 - warning for price variation of products by 5 % and above
 - submit and save                                                                                                      
@@ -159,6 +160,8 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
+# 16-07-2023 - 17-07-2023
+- New purchase
 # 18-06-2023
 - new purchase
 # 12-06-2023 - 13-06-2023

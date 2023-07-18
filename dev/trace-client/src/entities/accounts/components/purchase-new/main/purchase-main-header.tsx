@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Box, Button, Checkbox, FormControlLabel, Radio, Tab, Tabs, TextField, Typography, useTheme } from '../../../../../imports/gui-imports'
 import { Error, Check, PrintIcon } from '../../../../../imports/icons-import'
-import { PurchaseStore } from '../purchase-store'
+import { PurchaseStore } from '../../../stores/purchase-store'
 import { usePurchaseMainHeader } from './purchase-main-header-hook'
 import { useSharedElements } from '../../common/shared-elements-hook'
 

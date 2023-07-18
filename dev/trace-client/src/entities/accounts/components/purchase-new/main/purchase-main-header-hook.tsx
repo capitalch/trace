@@ -1,6 +1,6 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
 import { getFromBag, useIbuki } from "../../inventory/redirect"
-import { PurchaseLineItemType, PurchaseStore, PurchaseStoreT, resetPurchaseStore } from "../purchase-store"
+import { PurchaseLineItemType, PurchaseStore, PurchaseStoreT, resetPurchaseStore } from "../../../stores/purchase-store"
 import { _, useCallback, useEffect, useGranularEffect, useState } from '../../../../../imports/regular-imports'
 
 function usePurchaseMainHeader() {

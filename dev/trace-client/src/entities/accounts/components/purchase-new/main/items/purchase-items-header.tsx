@@ -1,5 +1,5 @@
 import { Box, Checkbox, FormControlLabel, Typography, useTheme } from "@mui/material"
-import { PurchaseStore, } from "../../purchase-store"
+import { PurchaseStore, } from "../../../../stores/purchase-store"
 
 function PurchaseItemsHeader() {
     const theme = useTheme()

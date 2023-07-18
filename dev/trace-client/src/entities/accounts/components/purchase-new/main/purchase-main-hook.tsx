@@ -1,5 +1,5 @@
 // import {FormikHelpers} from '../../../../../imports/regular-imports'
-import { PurchaseStore } from '../purchase-store'
+import { PurchaseStore } from '../../../stores/purchase-store'
 
 function usePurchaseMain() {
     function handleOnSubmit(values: any) {
