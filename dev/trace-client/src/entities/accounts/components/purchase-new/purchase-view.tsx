@@ -1,8 +1,12 @@
 import { useRef } from 'react'
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import { fdata } from "./fakedata";
-import { AggregatesDirective, AggregateDirective, AggregateColumnsDirective, 
-    AggregateColumnDirective, ColumnsDirective, ColumnDirective, GridComponent, Inject, Aggregate, Toolbar, Group } from '@syncfusion/ej2-react-grids'
+import {
+    AggregatesDirective, AggregateDirective, AggregateColumnsDirective,
+    AggregateColumnDirective, ColumnsDirective, ColumnDirective, GridComponent, Inject,
+} from '@syncfusion/ej2-react-grids'
+
+import { Aggregate } from '@syncfusion/ej2-react-grids'
 function PurchaseView() {
     const theme = useTheme()
     const gridRef: any = useRef({})
@@ -17,15 +21,15 @@ function PurchaseView() {
             dataSource={fdata}
             height={500}
             gridLines="Both"
-            // rowSelected={(row: any) => {
-            //     console.log(row.data)
-            //     console.log(gridRef.current.getSelectedRecords())
-            // }}
-            // rowDeselected={(row: any) => {
-            //     console.log(row.data)
-            //     console.log(gridRef.current.getSelectedRecords())
-            // }}
-            >
+        // rowSelected={(row: any) => {
+        //     console.log(row.data)
+        //     console.log(gridRef.current.getSelectedRecords())
+        // }}
+        // rowDeselected={(row: any) => {
+        //     console.log(row.data)
+        //     console.log(gridRef.current.getSelectedRecords())
+        // }}
+        >
             <ColumnsDirective>
                 <ColumnDirective type='checkbox' width='15' />
                 <ColumnDirective field='id' width='120' headerText="Order ID" />
@@ -42,7 +46,7 @@ function PurchaseView() {
                     </AggregateColumnsDirective>
                 </AggregateDirective>
             </AggregatesDirective>
-            <Inject services={[Aggregate, Toolbar, Group]} />
+            <Inject services={[Aggregate]} />
         </GridComponent>
     </Box>)
 }
