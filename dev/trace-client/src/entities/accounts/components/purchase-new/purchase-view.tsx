@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import { fdata } from "./fakedata";
 import {
@@ -7,13 +7,21 @@ import {
 } from '@syncfusion/ej2-react-grids'
 
 import { Aggregate } from '@syncfusion/ej2-react-grids'
+import { execGenericView, manageEntitiesState } from '../inventory/redirect';
+
 function PurchaseView() {
     const theme = useTheme()
+    const { getCurrentEntity, getFromBag } = manageEntitiesState()
     const gridRef: any = useRef({})
+    const entityName = getCurrentEntity()
 
     const footerCount = (props: any) => {
         return (<span>Count: {props.Count}</span>)
     }
+
+    useEffect(() => {
+        loadData()
+    }, [])
 
     return (<Box sx={{ mt: theme.spacing(2) }}>
         <GridComponent
@@ -49,5 +57,20 @@ function PurchaseView() {
             <Inject services={[Aggregate]} />
         </GridComponent>
     </Box>)
+
+    async function loadData() {
+        const ret = await execGenericView({
+            isMultipleRows: true,
+            sqlKey: 'get_sale_purchase_headers',
+            args: {
+                tranTypeId: 5,
+                no: 100,
+                accId:'%',
+                tranDc: 'D'
+            },
+            entityName: entityName
+        })
+        console.log(ret)
+    }
 }
 export { PurchaseView }
