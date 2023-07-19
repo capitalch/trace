@@ -8,6 +8,7 @@ import {
 
 import { Aggregate } from '@syncfusion/ej2-react-grids'
 import { execGenericView, manageEntitiesState } from '../inventory/redirect';
+import { PurchaseStore } from '../../stores/purchase-store';
 
 function PurchaseView() {
     const theme = useTheme()
@@ -20,8 +21,10 @@ function PurchaseView() {
     }
 
     useEffect(() => {
-        loadData()
-    }, [])
+        if(PurchaseStore.tabValue.value === 1){
+            loadData()
+        }
+    }, [PurchaseStore.tabValue.value])
 
     return (<Box sx={{ mt: theme.spacing(2) }}>
         <GridComponent
@@ -61,12 +64,10 @@ function PurchaseView() {
     async function loadData() {
         const ret = await execGenericView({
             isMultipleRows: true,
-            sqlKey: 'get_sale_purchase_headers',
+            sqlKey: 'get_purchase_headers',
             args: {
                 tranTypeId: 5,
                 no: 100,
-                accId:'%',
-                tranDc: 'D'
             },
             entityName: entityName
         })

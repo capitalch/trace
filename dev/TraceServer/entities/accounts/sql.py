@@ -1139,6 +1139,28 @@ allSqls = {
                         on b."id" = p."brandId"
                     ) select * from cte3 order by "brandName","catName","label", "productCode", "tranDate"
     ''',
+    
+    "get_purchase_headers":'''
+        -- with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5))
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),"tranTypeId" as (values(%(tranTypeId)s)), "no" as (values(%(no)s))
+        select h."id" as "id", "autoRefNo", "userRefNo",h."remarks", d."amount",string_agg("label",', ') as "labels"
+        , string_agg(s."jData"->>'serialNumbers', ', ') as "serialNumbers", string_agg("productCode", ', ') as "productCodes"
+        , string_agg(s.hsn::text, ', ') as "hsns", SUM(s."qty") as "productQty"
+        , SUM(s."qty" * (s."price" - s."discount")) as "aggr", SUM(s."cgst") as "cgst", SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
+        ,	"tranDate"
+            from "TranH" h
+                join "TranD" d
+                    on h."id" = d."tranHeaderId"
+                join "SalePurchaseDetails" s
+                    on d."id" = s."tranDetailsId"
+                join "ProductM" p
+                    on p."id" = s."productId"
+            where "tranTypeId" = (table "tranTypeId") and
+                "finYearId" = (table "finYearId") and
+                "branchId" = (table "branchId")
+            group by h."id", d."amount" 
+            order by "tranDate" DESC limit (table "no")
+    ''',
 
     "get_purchase_report": '''
         select "autoRefNo", "userRefNo", "tranDate", s."productId", "productCode", "catName", "brandName","label", "tranTypeId", "price", "discount", s."gstRate"
@@ -1218,51 +1240,6 @@ allSqls = {
             )
 					
         select  cte1."id",cte1."accounts", cte1."clearDate",cte1."contact", cte2.* 
-            from cte1
-                join cte2
-                    on cte1."id" = cte2."id"
-                order by "tranDate" DESC, cte1."id" DESC LIMIT %(no)s
-    ''',
-    "get_sale_purchase_headers1": '''
-        with cte1 as (
-            select h."id", string_agg("accName",', ') as "accounts", "clearDate"
-                from "TranH" h		
-                    join "TranD" d
-                        on h."id" = d."tranHeaderId" 
-                    join "AccM" a
-                        on a."id" = d."accId"
-                    left outer join "ExtBankReconTranD" b
-						on d."id" = b."tranDetailsId"
-                    where "tranTypeId" = %(tranTypeId)s
-                        and "dc" <> %(tranDc)s
-                        and "accId"::text ILIKE %(accId)s
-                        and "finYearId" = %(finYearId)s
-                        and "branchId" = %(branchId)s
-                group by h."id", "clearDate"
-        ),
-        cte2 as (
-            select h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
-                d."amount" , string_agg("label", ' ,') as "labels", 
-                string_agg(s."jData"->>'serialNumbers', ' ,') as "serialNumbers",
-                string_agg("productCode", ' ,') as "productCodes",
-                SUM(s."qty" * (s."price" - s."discount")) as "aggr", SUM(s."cgst") as "cgst",
-                SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
-                from "TranH" h			
-                    join "TranD" d
-                        on "h"."id" = d."tranHeaderId" 
-                    join "SalePurchaseDetails" s
-                        on d."id" = s."tranDetailsId"
-                    join "ProductM" p
-                        on p."id" = s."productId"		
-                where "tranTypeId" = %(tranTypeId)s
-                    and "dc" = %(tranDc)s
-                    and "finYearId" = %(finYearId)s
-                    and "branchId" = %(branchId)s
-                group by h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
-                    d."amount"
-            )
-					
-        select  cte1."id",cte1."accounts", cte1."clearDate", cte2.* 
             from cte1
                 join cte2
                     on cte1."id" = cte2."id"
