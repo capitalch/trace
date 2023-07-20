@@ -83,6 +83,9 @@ const PurchaseStoreT: PurchaseStoreType = {
             igst: signal(0.0),
         }
     },
+    view:{
+        rows:[]
+    }
 }
 
 let PurchaseStore: PurchaseStoreType = _.cloneDeep(PurchaseStoreT)
@@ -171,6 +174,9 @@ type PurchaseStoreType = {
         }
     },
 
+    view:{
+        rows: Signal<any>[]
+    }
 }
 
 type PurchaseLineItemType = {
