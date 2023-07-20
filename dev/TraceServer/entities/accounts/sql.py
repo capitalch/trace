@@ -1141,9 +1141,9 @@ allSqls = {
     ''',
     
     "get_purchase_headers":'''
-        -- with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5))
+        -- with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5)), "no" as (values(100))
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),"tranTypeId" as (values(%(tranTypeId)s)), "no" as (values(%(no)s))
-        select h."id" as "id", "autoRefNo", "userRefNo",h."remarks", d."amount",string_agg("label",', ') as "labels"
+        select h."id" as "id", "autoRefNo", "userRefNo",h."remarks", d."amount",string_agg("brandName" || ' ' || "label",', ') as "productDetails"
         , string_agg(s."jData"->>'serialNumbers', ', ') as "serialNumbers", string_agg("productCode", ', ') as "productCodes"
         , string_agg(s.hsn::text, ', ') as "hsns", SUM(s."qty") as "productQty"
         , SUM(s."qty" * (s."price" - s."discount")) as "aggr", SUM(s."cgst") as "cgst", SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
@@ -1155,6 +1155,8 @@ allSqls = {
                     on d."id" = s."tranDetailsId"
                 join "ProductM" p
                     on p."id" = s."productId"
+                join "BrandM" b
+                    on b."id" = p."brandId"
             where "tranTypeId" = (table "tranTypeId") and
                 "finYearId" = (table "finYearId") and
                 "branchId" = (table "branchId")
