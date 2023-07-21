@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
-import { fdata } from "./fakedata";
 import {
     AggregatesDirective, AggregateDirective, AggregateColumnsDirective,
     AggregateColumnDirective, ColumnsDirective, ColumnDirective, GridComponent, Inject,
@@ -9,8 +8,7 @@ import {
 import { Aggregate } from '@syncfusion/ej2-react-grids'
 import { execGenericView, manageEntitiesState, useSharedElements } from '../inventory/redirect';
 import { PurchaseStore } from '../../stores/purchase-store';
-import { ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid';
-import { getGridDefaultColumnTypes } from '@mui/x-data-grid-pro';
+import { ColumnOptions, ColumnTextAlign, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
 
 function PurchaseView() {
     const theme = useTheme()
@@ -39,23 +37,20 @@ function PurchaseView() {
         }
         return (gridOptions)
     }
-
+    
     function getColumns(): ColumnOptions[] {
         const columns: ColumnOptions[] = [
-            { field: 'tranDate', headerText: 'Date', }
+            { field: 'tranDate', headerText: 'Date', width:60 }
             , { field: 'autoRefNo', headerText: 'Ref no' }
             , { field: 'userRefNo', headerText: 'Invoice no' }
             , { field: 'productDetails', headerText: 'Product details' }
-            , { field: 'amount', headerText: 'Amount' }
+            , { field: 'amount', headerText: 'Amount', textAlign: 'Right' }
             , { field: 'serialNumbers', headerText: 'Serial No' }
             , { field: 'productCodes', headerText: 'Product codes' }
             , { field: 'hsns', headerText: 'Hsn codes' }
         ]
         return (columns)
     }
-
-
-
 }
 export { PurchaseView }
 

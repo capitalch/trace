@@ -35,6 +35,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 field={column.field}
                 headerText={column.headerText}
                 key={index}
+                textAlign={column.textAlign}
                 width={column.width || 100}
             />)
         })
@@ -80,5 +81,8 @@ export type GridOptions = {
 export type ColumnOptions = {
     field: string
     headerText: string
+    textAlign?: ColumnTextAlign
     width?: number
 }
+
+export type ColumnTextAlign = 'Center' | 'Justify' | 'Left' | 'Right'  
