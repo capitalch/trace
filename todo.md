@@ -1,11 +1,11 @@
 ## Purchase
 - Column Account: Inter Photo, Capital Photo etc.
-- Column Aggr, Gst's, Remarks
-- wrap text
-- numeric, rignt aligned
-- date format
+																									- Column Aggr, Gst's, Remarks
+																									- wrap text
+																									- numeric, rignt aligned
+																									- date format
 - edit, delete, view pdf columns																									
 																									- Attach columns and data
 - Top: View no of rows, Export, Refresh, Search, 
-- summary: Aggregate (count, Sum aggr, sum cgst, sgst, igst, amount, )
+																									- summary: Aggregate (count, Sum aggr, sum cgst, sgst, igst, amount, )
 																									- columns: labels, Serial numbers, product codes, hsn

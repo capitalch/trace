@@ -24,7 +24,7 @@ import 'primereact/resources/themes/nova/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
 import { AppMain } from './app-main'
-import "../node_modules/@syncfusion/ej2-react-grids/styles/material.css";
+import "../node_modules/@syncfusion/ej2-react-grids/styles/fabric.css";
 // import { MegaContext } from './imports/trace-imports'
 
 declare module '@mui/material/styles/' {

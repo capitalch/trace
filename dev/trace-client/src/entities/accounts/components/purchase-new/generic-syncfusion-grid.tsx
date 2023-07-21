@@ -1,17 +1,24 @@
-import { Box, Button } from "@mui/material"
-import { ColumnDirective, ColumnsDirective, GridComponent } from "@syncfusion/ej2-react-grids"
-import { useEffect, useRef } from "react"
+import { Box, Button, TextField } from "@mui/material"
+import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
+import { Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective, AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject, Search } from "@syncfusion/ej2-react-grids"
+import { FC, useEffect, useRef } from "react"
 import { _, execGenericView, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
 
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
-    const { emit , filterOn} = useSharedElements()
-    
+    const { emit, filterOn, debounceFilterOn } = useSharedElements()
+
     useEffect(() => {
         const subs1 = filterOn('GENERIC-SYNCFUSION-GRID-LOAD-DATA').subscribe(loadData)
-        return(()=>{
+        const subs2 = debounceFilterOn('GENERIC-SYNCFUSION-GRID-SEARCH', 1200).subscribe((d: any) => {
+            if (gridRef.current) {
+                gridRef.current.search(d.data)
+            }
+        })
+        return (() => {
             subs1.unsubscribe()
+            subs2.unsubscribe()
         })
     }, [])
 
@@ -20,17 +27,44 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         <GridComponent
             allowSorting={true}
             allowTextWrap={true}
-
             gridLines="Both"
-            ref={gridRef} 
-            // width={gridOptions.widthInPercent || undefined}
-            width={gridOptions.width}       
-        >
+            ref={gridRef}
+            width={gridOptions.width}>
             <ColumnsDirective>
                 {getColumnDirectives()}
             </ColumnsDirective>
+            <AggregatesDirective>
+                {getAggrDirectives()}
+            </AggregatesDirective>
+            <Inject services={[Aggregate, Search]} />
         </GridComponent>
     </Box>)
+
+    function getAggrDirectives() {
+        const aggrs: AggrOptions[] = gridOptions.aggregates || []
+        const aggrDirectives =
+            <AggregateDirective>
+                <AggregateColumnsDirective>
+                    {getAggrDirectives()}
+                </AggregateColumnsDirective>
+            </AggregateDirective>
+
+        return (aggrDirectives)
+
+        function getAggrDirectives() {
+            const defaultFooterTemplate: FC = (props: any) => <span><b>{props.Sum}</b></span>
+            const ds: any[] = aggrs.map((aggr: AggrOptions, index: number) => {
+                return (<AggregateColumnDirective
+                    key={index}
+                    field={aggr.field}
+                    type={aggr.type}
+                    footerTemplate={aggr.footerTemplate || defaultFooterTemplate}
+                    format={aggr.format || 'N2'}
+                />)
+            })
+            return (ds)
+        }
+    }
 
     function getColumnDirectives() {
         const columns: ColumnOptions[] = gridOptions.columns
@@ -43,7 +77,6 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 type={column.type}
                 width={column.width}
                 format={column.format}
-                // width={100}
             />)
         })
         return (columnDirectives)
@@ -58,8 +91,8 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 args: gridOptions.sqlArgs,
                 entityName: 'accounts'
             })
-            if((!_.isEmpty(ret)) && Array.isArray(ret) && (ret.length > 0)){
-                ret.forEach((item:any, index: number)=>{
+            if ((!_.isEmpty(ret)) && Array.isArray(ret) && (ret.length > 0)) {
+                ret.forEach((item: any, index: number) => {
                     item.index = index + 1
                 })
             }
@@ -78,18 +111,38 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
 export { GenericSyncfusionGrid }
 
 function GridHeader() {
-    return (<Box>
+    const { debounceEmit } = useSharedElements()
+    const textBoxRef: any = useRef({})
+
+    useEffect(() => {
+        textBoxRef.current.addIcon('append', 'fa fa-search')
+    }, [])
+
+    return (<Box mb={2}>
         <Button size="small" variant="text">Test</Button>
+        <TextBoxComponent style={{ height: '30px' }} width={250} ref={textBoxRef} showClearButton placeholder="Search" input={handleToolbarTextChanged} />
+        <input type='text' style={{ height: '30px' }} />
     </Box>)
+
+    function handleToolbarTextChanged(e: any) {
+        debounceEmit('GENERIC-SYNCFUSION-GRID-SEARCH', e.value)
+    }
 }
 
 export type GridOptions = {
+    aggregates?: AggrOptions[]
     columns: ColumnOptions[]
     sqlArgs: any
     sqlKey: string
-    widthInPercent?:string
+    widthInPercent?: string
     width?: number
-    // triggerLoadData: string
+}
+
+export type AggrOptions = {
+    field: string
+    type: 'Average' | 'Count' | 'Sum' | 'Min' | 'Max'
+    footerTemplate?: FC
+    format?: 'N2' | 'N0'
 }
 
 export type ColumnOptions = {
@@ -101,5 +154,5 @@ export type ColumnOptions = {
     width?: number
 }
 
-export type ColumnTextAlign = 'Center' | 'Justify' | 'Left' | 'Right' 
+export type ColumnTextAlign = 'Center' | 'Justify' | 'Left' | 'Right'
 export type ColumnType = 'string' | 'number' | 'boolean' | 'date' | 'datetime'
