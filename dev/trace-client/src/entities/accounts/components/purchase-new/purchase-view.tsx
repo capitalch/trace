@@ -34,20 +34,27 @@ function PurchaseView() {
                 tranTypeId: 5,
                 no: 100
             },
+            width: 2000,
+
         }
         return (gridOptions)
     }
-    
+
     function getColumns(): ColumnOptions[] {
         const columns: ColumnOptions[] = [
-            { field: 'tranDate', headerText: 'Date', width:60 }
-            , { field: 'autoRefNo', headerText: 'Ref no' }
-            , { field: 'userRefNo', headerText: 'Invoice no' }
-            , { field: 'productDetails', headerText: 'Product details' }
-            , { field: 'amount', headerText: 'Amount', textAlign: 'Right' }
+            { field: 'index', headerText: '#', width: 80 }
+            , { field: 'tranDate', headerText: 'Date', width: 120, format:'dd/MM/yyyy' }
+            , { field: 'autoRefNo', headerText: 'Ref no', width: 170 }
+            , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }
+            , { field: 'amount', headerText: 'Amount',textAlign: 'Right', type:'number', width: 140, format: 'N2' }
+            , { field: 'productDetails', headerText: 'Product details', width: 220 }
+            , { field: 'aggr', headerText: 'Aggr', textAlign: 'Right',  width: 140, format: 'N2' }
+            , { field: 'cgst', headerText: 'Cgst', textAlign: 'Right', width: 120, format: 'N2' }
+            , { field: 'sgst', headerText: 'Sgst', textAlign: 'Right', width: 120, format: 'N2' }
+            , { field: 'igst', headerText: 'Igst', textAlign: 'Right', width: 120, format: 'N2' }
             , { field: 'serialNumbers', headerText: 'Serial No' }
-            , { field: 'productCodes', headerText: 'Product codes' }
-            , { field: 'hsns', headerText: 'Hsn codes' }
+            , { field: 'productCodes', headerText: 'Product codes', width: 150 }
+            , { field: 'hsns', headerText: 'Hsn codes', width: 150 }
         ]
         return (columns)
     }

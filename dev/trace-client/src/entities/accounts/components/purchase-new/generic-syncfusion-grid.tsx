@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material"
 import { ColumnDirective, ColumnsDirective, GridComponent } from "@syncfusion/ej2-react-grids"
 import { useEffect, useRef } from "react"
-import { execGenericView, useSharedElements } from "../inventory/redirect"
+import { _, execGenericView, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
 
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
@@ -19,8 +19,12 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         <GridHeader />
         <GridComponent
             allowSorting={true}
+            allowTextWrap={true}
+
             gridLines="Both"
-            ref={gridRef}
+            ref={gridRef} 
+            // width={gridOptions.widthInPercent || undefined}
+            width={gridOptions.width}       
         >
             <ColumnsDirective>
                 {getColumnDirectives()}
@@ -36,7 +40,10 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 headerText={column.headerText}
                 key={index}
                 textAlign={column.textAlign}
-                width={column.width || 100}
+                type={column.type}
+                width={column.width}
+                format={column.format}
+                // width={100}
             />)
         })
         return (columnDirectives)
@@ -45,12 +52,17 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     async function loadData() {
         try {
             emit('SHOW-LOADING-INDICATOR', true)
-            const ret = await execGenericView({
+            const ret: any = await execGenericView({
                 isMultipleRows: true,
                 sqlKey: gridOptions.sqlKey,
                 args: gridOptions.sqlArgs,
                 entityName: 'accounts'
             })
+            if((!_.isEmpty(ret)) && Array.isArray(ret) && (ret.length > 0)){
+                ret.forEach((item:any, index: number)=>{
+                    item.index = index + 1
+                })
+            }
             emit('SHOW-LOADING-INDICATOR', false)
             gridRef.current.dataSource = ret
         } catch (error: any) {
@@ -75,14 +87,19 @@ export type GridOptions = {
     columns: ColumnOptions[]
     sqlArgs: any
     sqlKey: string
+    widthInPercent?:string
+    width?: number
     // triggerLoadData: string
 }
 
 export type ColumnOptions = {
     field: string
+    format?: string
     headerText: string
     textAlign?: ColumnTextAlign
+    type?: ColumnType
     width?: number
 }
 
-export type ColumnTextAlign = 'Center' | 'Justify' | 'Left' | 'Right'  
+export type ColumnTextAlign = 'Center' | 'Justify' | 'Left' | 'Right' 
+export type ColumnType = 'string' | 'number' | 'boolean' | 'date' | 'datetime'
