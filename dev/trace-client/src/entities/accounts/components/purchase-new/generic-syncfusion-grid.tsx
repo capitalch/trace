@@ -1,9 +1,10 @@
-import { Box, Button, TextField } from "@mui/material"
+import { Box, Button, IconButton, TextField } from "@mui/material"
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
 import { Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective, AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject, Search } from "@syncfusion/ej2-react-grids"
 import { FC, useEffect, useRef } from "react"
 import { _, execGenericView, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
+import { CloseSharp, Search as SearchIcon } from '../../../../imports/icons-import'
 
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
@@ -115,13 +116,45 @@ function GridHeader() {
     const textBoxRef: any = useRef({})
 
     useEffect(() => {
-        textBoxRef.current.addIcon('append', 'fa fa-search')
+        // if(textBoxRef?.current) {
+        // textBoxRef.current.addIcon('append', SearchIcon)
+        // }
     }, [])
 
     return (<Box mb={2}>
         <Button size="small" variant="text">Test</Button>
-        <TextBoxComponent style={{ height: '30px' }} width={250} ref={textBoxRef} showClearButton placeholder="Search" input={handleToolbarTextChanged} />
-        <input type='text' style={{ height: '30px' }} />
+        {/* <TextBoxComponent style={{ height: '30px' }} width={250} ref={textBoxRef} showClearButton placeholder="Search" input={handleToolbarTextChanged} /> */}
+        <TextField
+            inputRef={textBoxRef}
+            variant="standard"
+            autoComplete='off'
+            // autoFocus={!meta.current.isFirstTime}
+            // value={props.value}
+            // onChange={props.onChange}
+            placeholder="Search…"
+            className="global-search"
+            InputProps={{
+                startAdornment: <>
+                    {/* <Checkbox checked={pre.isSearchTextOr} onClick={handleOnClickSearchCheckbox} size='small' /> */}
+                    <SearchIcon fontSize="small" />
+                </>,
+                endAdornment: (
+                    <IconButton
+                        title="Clear"
+                        aria-label="Clear"
+                        size="small"
+                    // style={{
+                    //     visibility: props.value
+                    //         ? 'visible'
+                    //         : 'hidden',
+                    // }}
+                    // onClick={props.clearSearch}
+                    >
+                        <CloseSharp fontSize="small" />
+                    </IconButton>
+                ),
+            }}
+        />
     </Box>)
 
     function handleToolbarTextChanged(e: any) {
