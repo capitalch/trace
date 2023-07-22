@@ -1,14 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
-import {
-    AggregatesDirective, AggregateDirective, AggregateColumnsDirective,
-    AggregateColumnDirective, ColumnsDirective, ColumnDirective, GridComponent, Inject,
-} from '@syncfusion/ej2-react-grids'
-
-import { Aggregate } from '@syncfusion/ej2-react-grids'
+// import { Aggregate,
+//     AggregatesDirective, AggregateDirective, AggregateColumnsDirective,
+//     AggregateColumnDirective, ColumnsDirective, ColumnDirective, GridComponent, Inject,
+// } from '@syncfusion/ej2-react-grids'
 import { execGenericView, manageEntitiesState, useSharedElements } from '../inventory/redirect';
 import { PurchaseStore } from '../../stores/purchase-store';
-import { AggrOptions, ColumnOptions, ColumnTextAlign, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
+import { AggrOptions, ColumnOptions,  GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
 
 function PurchaseView() {
     const theme = useTheme()

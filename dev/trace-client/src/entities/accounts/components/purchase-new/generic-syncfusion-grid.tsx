@@ -1,7 +1,7 @@
-import { Box, Button, IconButton, TextField } from "@mui/material"
+import { Box, Button, IconButton, TextField, useTheme } from "@mui/material"
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
 import { Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective, AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject, Search } from "@syncfusion/ej2-react-grids"
-import { FC, useEffect, useRef } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { _, execGenericView, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
 import { CloseSharp, Search as SearchIcon } from '../../../../imports/icons-import'
@@ -9,10 +9,10 @@ import { CloseSharp, Search as SearchIcon } from '../../../../imports/icons-impo
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
     const { emit, filterOn, debounceFilterOn } = useSharedElements()
-
+    const theme = useTheme()
     useEffect(() => {
         const subs1 = filterOn('GENERIC-SYNCFUSION-GRID-LOAD-DATA').subscribe(loadData)
-        const subs2 = debounceFilterOn('GENERIC-SYNCFUSION-GRID-SEARCH', 1200).subscribe((d: any) => {
+        const subs2 = debounceFilterOn('GENERIC-SYNCFUSION-GRID-SEARCH', 1400).subscribe((d: any) => {
             if (gridRef.current) {
                 gridRef.current.search(d.data)
             }
@@ -23,7 +23,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         })
     }, [])
 
-    return (<Box>
+    return (<Box width='calc(100vw - 325px)' height = 'calc(100vh - 260px)'>
         <GridHeader />
         <GridComponent
             allowSorting={true}
@@ -114,50 +114,60 @@ export { GenericSyncfusionGrid }
 function GridHeader() {
     const { debounceEmit } = useSharedElements()
     const textBoxRef: any = useRef({})
+    const [, setRefresh] = useState({})
+    const meta: any = useRef({
+        textSearch: ''
+    })
 
     useEffect(() => {
+
         // if(textBoxRef?.current) {
         // textBoxRef.current.addIcon('append', SearchIcon)
         // }
     }, [])
 
-    return (<Box mb={2}>
+    return (<Box mb={2} display='flex' justifyContent='space-between' width='100%'>
         <Button size="small" variant="text">Test</Button>
-        {/* <TextBoxComponent style={{ height: '30px' }} width={250} ref={textBoxRef} showClearButton placeholder="Search" input={handleToolbarTextChanged} /> */}
-        <TextField
+        <TextBoxComponent style={{ height: '30px', marginLeft:'auto' }} width={250} ref={textBoxRef} showClearButton placeholder="Search" input={handleToolbarTextChanged} />
+        {/* <TextField
+            autoFocus
             inputRef={textBoxRef}
             variant="standard"
             autoComplete='off'
-            // autoFocus={!meta.current.isFirstTime}
-            // value={props.value}
-            // onChange={props.onChange}
+            size="small"
+            sx={{ width: '220px', marginLeft: 'auto', }}
+            value={meta.current.searchText}
+            onChange={handleToolbarTextChanged}
             placeholder="Search…"
             className="global-search"
             InputProps={{
-                startAdornment: <>
-                    {/* <Checkbox checked={pre.isSearchTextOr} onClick={handleOnClickSearchCheckbox} size='small' /> */}
-                    <SearchIcon fontSize="small" />
-                </>,
+                startAdornment: <><SearchIcon fontSize="small" /></>,
                 endAdornment: (
                     <IconButton
                         title="Clear"
                         aria-label="Clear"
                         size="small"
-                    // style={{
-                    //     visibility: props.value
-                    //         ? 'visible'
-                    //         : 'hidden',
-                    // }}
-                    // onClick={props.clearSearch}
+                        style={{
+                            visibility: meta.current.searchText
+                                ? 'visible'
+                                : 'hidden',
+                        }}
+                        onClick={() => {
+                            meta.current.searchText = ''
+                            setRefresh({})
+                            debounceEmit('GENERIC-SYNCFUSION-GRID-SEARCH','')
+                        }}
                     >
                         <CloseSharp fontSize="small" />
                     </IconButton>
                 ),
             }}
-        />
+        /> */}
     </Box>)
 
     function handleToolbarTextChanged(e: any) {
+        // meta.current.searchText = e.target.value
+        // setRefresh({})
         debounceEmit('GENERIC-SYNCFUSION-GRID-SEARCH', e.value)
     }
 }
