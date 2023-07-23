@@ -84,7 +84,8 @@ const PurchaseStoreT: PurchaseStoreType = {
         }
     },
     view:{
-        rows:[]
+        rows:[],
+        // searchText:signal('')
     }
 }
 
@@ -176,6 +177,7 @@ type PurchaseStoreType = {
 
     view:{
         rows: Signal<any>[]
+        // searchText: Signal<string>
     }
 }
 

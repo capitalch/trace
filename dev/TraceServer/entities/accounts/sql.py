@@ -1141,7 +1141,7 @@ allSqls = {
     ''',
     
     "get_purchase_headers":'''
-        -- with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5)), "no" as (values(100))
+         --with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5)), "no" as (values(null))
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),"tranTypeId" as (values(%(tranTypeId)s)), "no" as (values(%(no)s))
         select h."id" as "id", "autoRefNo", "userRefNo",h."remarks", d."amount",string_agg("brandName" || ' ' || "label",', ') as "productDetails"
         , string_agg(s."jData"->>'serialNumbers', ', ') as "serialNumbers", string_agg("productCode", ', ') as "productCodes"
@@ -1161,7 +1161,7 @@ allSqls = {
                 "finYearId" = (table "finYearId") and
                 "branchId" = (table "branchId")
             group by h."id", d."amount" 
-            order by "tranDate" DESC limit (table "no")
+            order by "tranDate" DESC limit %(no)s
     ''',
 
     "get_purchase_report": '''

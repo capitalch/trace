@@ -36,11 +36,13 @@ function AppMain() {
     }, [])
 
     function handleDrawerOpen() {
+        setInGlobalBag('isDrawyerOpen',true)
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(true)
     }
 
     function handleDrawerClose() {
+        setInGlobalBag('isDrawyerOpen',false)
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(false)
     }

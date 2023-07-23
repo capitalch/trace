@@ -444,7 +444,7 @@ export { usePurchaseView }
 const useStyles: any = makeStyles((theme: Theme) =>
     createStyles({
         content: {
-            height: 'calc(100vh - 245px)',
+            height: 'calc(100vh - 260px)',
             width: '100%',
             marginTop: '5px',
         },

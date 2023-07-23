@@ -3,6 +3,18 @@ import _ from "lodash";
 import { FC } from "react";
 
 const appStoreT: AppStoreType = {
+    misc: {
+        purchase: {
+            grid: {
+                searchTextWrapper: {
+                    text: signal('')
+                },
+                viewLimitWrapper: {
+                    no: signal(100)
+                }
+            },
+        }
+    },
     modalDialogA: {
         body: signal(() => <></>),
         defaultData: signal(undefined),
@@ -31,12 +43,24 @@ const AppStore: AppStoreType = _.cloneDeep(appStoreT)
 export { AppStore }
 
 type AppStoreType = {
+    misc: {
+        purchase: {
+            grid: {
+                searchTextWrapper: {
+                    text: Signal<string>
+                },
+                viewLimitWrapper: {
+                    no: Signal<number>
+                }
+            }
+        }
+    },
     modalDialogA: {
         body: Signal<FC>
         defaultData: Signal<any>
         isOpen: Signal<boolean>
         isCentered?: boolean
-        isFullScreen?:boolean
+        isFullScreen?: boolean
         itemData: Signal<any>
         maxWidth: Signal<'md' | 'sm' | 'lg' | 'md'>
         // selectedItem?:Signal<any>

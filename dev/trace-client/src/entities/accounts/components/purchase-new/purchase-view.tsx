@@ -6,7 +6,8 @@ import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../import
 // } from '@syncfusion/ej2-react-grids'
 import { execGenericView, manageEntitiesState, useSharedElements } from '../inventory/redirect';
 import { PurchaseStore } from '../../stores/purchase-store';
-import { AggrOptions, ColumnOptions,  GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
+import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
+import { AppStore } from '../../stores/app-store';
 
 function PurchaseView() {
     const theme = useTheme()
@@ -15,25 +16,27 @@ function PurchaseView() {
 
     useEffect(() => {
         if (PurchaseStore.tabValue.value === 1) {
-            emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA', undefined)
+            emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + PurchaseStore.purchaseType, undefined)
         }
     }, [PurchaseStore.tabValue.value])
 
-    return (<Box sx={{ mt: theme.spacing(2) }}>
+    return (<Box mt={2}>
         <GenericSyncfusionGrid gridOptions={getGridOptions()} />
     </Box>)
-
 
     function getGridOptions(): GridOptions {
         const gridOptions: GridOptions = {
             aggregates: getAggregates(),
+            instance: PurchaseStore.purchaseType,
+            searchTextWrapper: AppStore.misc.purchase.grid.searchTextWrapper,
+            viewLimitWrapper: AppStore.misc.purchase.grid.viewLimitWrapper,
             sqlKey: 'get_purchase_headers',
             columns: getColumns(),
+            // searchText: PurchaseStore.view.searchText,
             sqlArgs: {
                 tranTypeId: 5,
                 no: 100
             },
-            width: 2100,
         }
         return (gridOptions)
     }
@@ -53,7 +56,7 @@ function PurchaseView() {
     function getColumns(): ColumnOptions[] {
         const columns: ColumnOptions[] = [
             { field: 'index', headerText: '#', width: 70 }
-            , { field: 'tranDate', headerText: 'Date', type: 'date', width: 100, format: 'dd/MM/yyyy' }
+            , { field: 'tranDate', headerText: 'Date', type: 'date', width: 100, format: {type:'date', format:'dd/MM/yyyy'}}
             , { field: 'autoRefNo', headerText: 'Ref no', width: 170 }
             , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }
             , { field: 'amount', headerText: 'Amount', textAlign: 'Right', type: 'number', width: 130, format: 'N2' }
@@ -62,7 +65,7 @@ function PurchaseView() {
             , { field: 'cgst', headerText: 'Cgst', textAlign: 'Right', width: 110, format: 'N2' }
             , { field: 'sgst', headerText: 'Sgst', textAlign: 'Right', width: 110, format: 'N2' }
             , { field: 'igst', headerText: 'Igst', textAlign: 'Right', width: 110, format: 'N2' }
-            , { field: 'serialNumbers', headerText: 'Serial No' }
+            , { field: 'serialNumbers', headerText: 'Serial No', width: 150 }
             , { field: 'productCodes', headerText: 'Product codes', width: 150 }
             , { field: 'hsns', headerText: 'Hsn codes', width: 150 }
             , { field: 'remarks', headerText: 'Remarks', width: 150 }
@@ -71,63 +74,3 @@ function PurchaseView() {
     }
 }
 export { PurchaseView }
-
-// const gridRef: any = useRef({})
-//     const entityName = getCurrentEntity()
-
-// const footerCount = (props: any) => {
-//     return (<span>Count: {props.Count}</span>)
-// }
-
-// useEffect(() => {
-//     if (PurchaseStore.tabValue.value === 1) {
-//         loadData()
-//     }
-// }, [PurchaseStore.tabValue.value])
-
-// async function loadData() {
-//     const ret = await execGenericView({
-//         isMultipleRows: true,
-//         sqlKey: 'get_purchase_headers',
-//         args: {
-//             tranTypeId: 5,
-//             no: 100,
-//         },
-//         entityName: entityName
-//     })
-//     console.log(ret)
-//     gridRef.current.dataSource = ret
-// }
-
-// function getColumnsDirective() {
-//     const cols: any[] = []
-//     let idx = 1
-//     cols.push(<ColumnDirective key={idx++} field='tranDate' width={theme.spacing(16)} headerText='Date' />)
-//     cols.push(<ColumnDirective key={idx++} field='autoRefNo' headerText='RefNo' />)
-//     cols.push(<ColumnDirective key={idx++} field='userRefNo' headerText='Invoice no' />)
-//     cols.push(<ColumnDirective key={idx++} field='remarks' headerText='remarks' />)
-//     cols.push(<ColumnDirective key={idx++} field='labels' headerText='Labels' />)
-//     cols.push(<ColumnDirective key={idx++} field='SerialNumbers' headerText='Ser nos' />)
-
-//     return (cols)
-// }
-
-// {/* <GridComponent
-// ref={gridRef}
-// // dataSource={fdata}
-// height={500}
-// gridLines="Both"
-
-// >
-// <ColumnsDirective>
-//     {getColumnsDirective()}
-// </ColumnsDirective>
-// <AggregatesDirective>
-//     <AggregateDirective>
-//         <AggregateColumnsDirective>
-//             <AggregateColumnDirective field="id" type='Count' footerTemplate={footerCount} />
-//         </AggregateColumnsDirective>
-//     </AggregateDirective>
-// </AggregatesDirective>
-// <Inject services={[Aggregate]} />
-// </GridComponent> */}
