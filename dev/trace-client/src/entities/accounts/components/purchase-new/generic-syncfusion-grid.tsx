@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, TextField, Typography, useTheme } from "@mui/material"
+import { Box, IconButton, Tooltip, Typography, } from "@mui/material"
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
 import {
     Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective,
@@ -8,10 +8,9 @@ import {
 import { FC, useEffect, useRef, useState } from "react"
 import { _, execGenericView, useIbuki, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
-import { CloseSharp, Search as SearchIcon } from '../../../../imports/icons-import'
+import { Search as SearchIcon } from '../../../../imports/icons-import'
 import { useTraceGlobal } from "../masters/redirect"
 import { Close, SyncSharp, InsertDriveFile } from "@mui/icons-material"
-import { AppStore } from "../../stores/app-store"
 import { Signal } from "@preact/signals-react"
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 // import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
@@ -19,37 +18,18 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
     const { getCurrentWindowSize } = useTraceGlobal()
-    const { emit, filterOn, debounceFilterOn } = useSharedElements()
+    const { emit, filterOn, } = useSharedElements()
     useEffect(() => {
         const subs1 = filterOn('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance).subscribe(loadData)
-        const subs2 = debounceFilterOn('GENERIC-SYNCFUSION-GRID-SEARCH' + gridOptions.instance, 1400).subscribe((d: any) => {
-            doGridSearch(d.data)
-        })
-        doGridSearch(gridOptions.searchTextWrapper.text.value)
         return (() => {
             subs1.unsubscribe()
-            subs2.unsubscribe()
         })
     }, [])
 
-    const gridHeaderActions: GridHeaderActions = {
-        pdfExport: doPdfExport
-    }
-
-    // const toolbar = ['PdfExport', 'ExcelExport']
-    // const toolbarClick = (args: any) => {
-    //     if (gridRef && args.item.id === 'grid_pdfexport') {
-    //         gridRef.current.pdfExport();
-    //     }
-    //     if (gridRef && args.item.id === 'grid_excelexport') {
-    //         gridRef.current.excelExport();
-    //     }
-    // };
-
     return (
         <Box>
-            <GridHeader gridOptions={gridOptions} gridHeaderActions={gridHeaderActions} />
-            <GridComponent id='grid'  
+            <GridHeader gridOptions={gridOptions} gridRef={gridRef} />
+            <GridComponent id='grid'
                 allowPdfExport={true}
                 allowExcelExport={true}
                 allowResizing={true}
@@ -58,28 +38,17 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 gridLines="Both"
                 ref={gridRef}
                 height='calc(100vh - 370px)'
-                width={getCurrentWindowSize()}
-            >
+                width={getCurrentWindowSize()}>
                 <ColumnsDirective>
                     {getColumnDirectives()}
                 </ColumnsDirective>
                 <AggregatesDirective>
                     {getAggrDirectives()}
                 </AggregatesDirective>
-                <Inject services={[Aggregate,ExcelExport, PdfExport, Resize, Search, Toolbar]} />
+                <Inject services={[Aggregate, ExcelExport, PdfExport, Resize, Search, Toolbar]} />
             </GridComponent>
         </Box>
     )
-
-    function doGridSearch(searchText: string) {
-        if (gridRef.current) {
-            gridRef.current.search(searchText)
-        }
-    }
-
-    function doPdfExport() {
-        gridRef.current.pdfExport()
-    }
 
     function getAggrDirectives() {
         const aggrs: AggrOptions[] = gridOptions.aggregates || []
@@ -152,15 +121,22 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
 
 export { GenericSyncfusionGrid }
 
-function GridHeader({ gridOptions, gridHeaderActions }: { gridOptions: GridOptions, gridHeaderActions: GridHeaderActions }) {
+function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRef: any }) {
     const { debounceEmit } = useSharedElements()
     const textBoxRef: any = useRef({})
     const [, setRefresh] = useState({})
-    const { emit } = useIbuki()
+    const { debounceFilterOn, emit } = useIbuki()
+
+    useEffect(() => {
+        const subs1 = debounceFilterOn('GENERIC-SYNCFUSION-GRID-SEARCH' + gridOptions.instance, 1200).subscribe((d: any) => {
+            doGridSearch(d.data)
+        })
+        doGridSearch(gridOptions.searchTextWrapper.text.value)
+        return (() => { subs1.unsubscribe() })
+    }, [])
 
     return (<Box mb={1} display='flex' justifyContent='space-between' alignItems='center' >
         <Box display='flex' alignItems='center' >
-            <Button size="small" variant="text">Test</Button>
             <div className="view-limit">
                 <Typography component='span' variant="body2">View</Typography>
                 <select
@@ -171,9 +147,7 @@ function GridHeader({ gridOptions, gridHeaderActions }: { gridOptions: GridOptio
                         marginLeft: '0.2rem',
                     }}
                     onChange={(e: any) => {
-                        // meta.current.viewLimit = e.target.value
                         gridOptions.viewLimitWrapper.no.value = e.target.value
-                        // gridOptions.sqlArgs.no = +gridOptions.viewLimitWrapper.no.value || null
                         emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance, '')
                         setRefresh({})
                     }}>
@@ -182,30 +156,32 @@ function GridHeader({ gridOptions, gridHeaderActions }: { gridOptions: GridOptio
                     <option value={'0'}>All</option>
                 </select>
             </div>
-            <IconButton
-                size="medium"
-                color="secondary"
-                onClick={(e: any) => {
-                    emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance, '')
-                }}>
-                <SyncSharp></SyncSharp>
-            </IconButton>
-            <IconButton
-                size="medium"
-                color='primary'
-                onClick={(e: any) => {
-                    gridHeaderActions.pdfExport()
-                }}>
+            <Tooltip title='Reload'>
+                <IconButton
+                    size="medium"
+                    color="secondary"
+                    onClick={(e: any) => {
+                        emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance, '')
+                    }}>
+                    <SyncSharp></SyncSharp>
+                </IconButton>
+            </Tooltip>
+            <Tooltip title='PDF export'>
+                <IconButton
+                    size="medium"
+                    color='warning'
+                    onClick={handlePdfExport}>
                     <PictureAsPdfIcon />
-            </IconButton>
-            <IconButton
-                size="medium"
-                color='primary'
-                onClick={(e: any) => {
-                    gridHeaderActions.pdfExport()
-                }}>
+                </IconButton>
+            </Tooltip>
+            <Tooltip title='Excel export'>
+                <IconButton
+                    size="medium"
+                    color='info'
+                    onClick={handleExcelExport}>
                     <InsertDriveFile />
-            </IconButton>
+                </IconButton>
+            </Tooltip>
         </Box>
         <Box display='flex' alignItems='center' >
             <SearchIcon fontSize="small" sx={{ mr: .5 }} />
@@ -215,6 +191,20 @@ function GridHeader({ gridOptions, gridHeaderActions }: { gridOptions: GridOptio
             </IconButton>
         </Box>
     </Box>)
+
+    function doGridSearch(searchText: string) {
+        if (gridRef.current) {
+            gridRef.current.search(searchText)
+        }
+    }
+
+    function handleExcelExport() {
+        gridRef.current.excelExport()
+    }
+
+    function handlePdfExport() {
+        gridRef.current.pdfExport()
+    }
 
     function handleToolbarTextChanged(e: any) {
         gridOptions.searchTextWrapper.text.value = e.value
@@ -257,7 +247,3 @@ export type ColumnOptions = {
 
 export type ColumnTextAlign = 'Center' | 'Justify' | 'Left' | 'Right'
 export type ColumnType = 'string' | 'number' | 'boolean' | 'date' | 'datetime'
-
-export type GridHeaderActions = {
-    pdfExport: () => void
-}
