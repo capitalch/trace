@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import _ from 'lodash'
-import { execGenericView, manageEntitiesState, useSharedElements } from '../inventory/redirect';
+import { accountsMessages, execGenericView, manageEntitiesState, useSharedElements } from '../inventory/redirect';
 import { PurchaseStore } from '../../stores/purchase-store';
 import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
 import { AppStore } from '../../stores/app-store';
 import { signal } from '@preact/signals-react';
 
 function PurchaseView() {
-    const theme = useTheme()
     const { emit } = useSharedElements()
-    // const { getCurrentEntity, getFromBag } = manageEntitiesState()
-    const [, setRefresh] = useState({})
     useEffect(() => {
         if (PurchaseStore.tabValue.value === 1) {
             emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + PurchaseStore.purchaseType, undefined)
@@ -26,8 +23,6 @@ function PurchaseView() {
         const gridOptions: GridOptions = {
             aggregates: getAggregates(),
             instance: PurchaseStore.purchaseType,
-            // searchTextWrapper: AppStore.misc.purchase.grid.searchTextWrapper,
-            // viewLimitWrapper: AppStore.misc.purchase.grid.viewLimitWrapper,
             sqlKey: 'get_purchase_headers',
             columns: getColumns(),
             sqlArgs: {
@@ -98,15 +93,12 @@ function PurchaseView() {
         loadExtGstTranD(res)
         loadSalePurchaseDetails(res)
         loadTranD(res)
-        // setRefresh({})
-        // PurchaseStore.main.functions.refreshPurchaseLineItems()
     }
 
     function populateFunctions() {
         const header = PurchaseStore.main.header
         const subheader = PurchaseStore.main.subheader
         const lineItemsHeader = PurchaseStore.main.lineItemsHeader
-        let lineItems = PurchaseStore.main.lineItems
 
         function loadTranH(res: any) {
             const tranH = res.tranH
@@ -143,17 +135,12 @@ function PurchaseView() {
             if (salePurchaseDetails?.length === 0) {
                 return
             }
-            let numb = 1
-            function incr() {
-                return numb++
-            }
 
             PurchaseStore.main.lineItems.value = salePurchaseDetails.map((item: any) => ({
                 id: signal(item.id),
-                // index: incr(),
                 remarks: signal(item.remarks || ''),
                 upcCode: signal(item.upcCode),
-                producrCodeOrUpc: signal(''),
+                productCodeOrUpc: signal(''),
                 productCode: signal(item.productCode),
                 productId: signal(item.productId),
                 productDetails: signal(item.label
@@ -173,10 +160,35 @@ function PurchaseView() {
                 igst: signal(item.igst),
                 serialNumbers: signal(item?.serialNumbers || ''),
             }))
+            
+            const totalQty = salePurchaseDetails.reduce((acc: number, curr: any) => {
+                return (acc + curr.qty)
+            }, 0)
+            subheader.totalQty.value = totalQty
         }
 
         function loadTranD(res: any) {
+            const tranD = res.tranD
+            if (tranD.length !== 2) {
+                emit('SHOW-MESSAGE', {
+                    severity: 'error',
+                    message: accountsMessages.purchaseError,
+                    duration: null,
+                })
+                return
+            }
 
+            for (let row of tranD) {
+                if (row.dc === 'D') {
+                    subheader.ledgerSubledgerPurchase.accId = row.accId
+                    subheader.purchaseAccId.value = row.accId
+                    subheader.invoiceAmount.value = row.amount
+                } else {
+                    subheader.otherAccId.value = row.accId
+                    subheader.ledgerSubledgerOther.accId = row.accId
+                }
+                PurchaseStore.main.functions.refreshSubheader()
+            }
         }
 
         return ({ loadTranH, loadExtGstTranD, loadSalePurchaseDetails, loadTranD })

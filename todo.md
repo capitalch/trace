@@ -1,13 +1,16 @@
 
 ## Purchase
 - Column Account: Inter Photo, Capital Photo etc.
-- edit
-- delete
-- view as pdf																									
+- delete																									
 - Filter
-- Search
 - Descr column at end
 - purchase ret
+- submit																				
+																									- Serial numbers not working
+																									- Total amt vs invoice amount not tallying in case of Inter foto
+																									- edit
+																									- Search
+
 																									- No of rows select
 																									- Export pdf
 																									- Export Excel

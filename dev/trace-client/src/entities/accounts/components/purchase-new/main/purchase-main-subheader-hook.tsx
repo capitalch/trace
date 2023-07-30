@@ -1,18 +1,26 @@
 import { PurchaseStore } from "../../../stores/purchase-store"
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { execGenericView, useIbuki } from "../../inventory/redirect"
+import { execGenericView, useEffect, useIbuki, useState } from "../../inventory/redirect"
 
 function usePurchaseMainSubheader() {
     const subheader = PurchaseStore.main.subheader
     const header = PurchaseStore.main.header
     const main = PurchaseStore.main
     const { emit } = useIbuki()
+    const [, setRefresh] = useState({})
+
+    useEffect(()=>{
+        PurchaseStore.main.functions.refreshSubheader = doRefresh
+    },[])
 
     const errorsObject = PurchaseStore.errorsObject
     const { isInvalidGstin } = useSharedElements()
     setErrorsObject()
     PurchaseStore.main.functions.clearSubheaderTotals = handleClearSubHeaderTotals
 
+    function doRefresh(){
+        setRefresh({})
+    }
     function handleClearSubHeaderTotals() {
         subheader.invoiceAmount.value = 0
         subheader.totalQty.value = 0
@@ -56,7 +64,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.invoiceAmountError = () => {
             let ret = ''
-            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(),0,0.99)) {
+            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(),0.1,0.99)) {
                 ret = 'invalid'
             }
             return (ret)

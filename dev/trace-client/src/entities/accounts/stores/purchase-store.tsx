@@ -43,6 +43,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             isFormError: () => true,
             populateLineItem: () => { },
             // refreshPurchaseLineItems: () => {},
+            refreshSubheader: () => {},
             setPrice: () => { },
             setPriceGst: () => { },
         },
@@ -57,8 +58,8 @@ const PurchaseStoreT: PurchaseStoreType = {
             isSubmitDisabled: signal(true)
         },
         subheader: {
-            ledgerSubledgerPurchase: { isLedgerSubledgerError: true },
-            ledgerSubledgerOther: { isLedgerSubledgerError: true },
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: true, accId: undefined },
+            ledgerSubledgerOther: { isLedgerSubledgerError: true, accId: undefined },
             purchaseAccId: signal(0),
             otherAccId: signal(0),
             gstinNumber: signal(''),
@@ -133,6 +134,7 @@ type PurchaseStoreType = {
             isFormError: () => boolean
             populateLineItem: (row: PurchaseLineItemType, data: any) => void
             // refreshPurchaseLineItems: () => void
+            refreshSubheader: () => void
             setPrice: (row: PurchaseLineItemType) => void
             setPriceGst: (row: PurchaseLineItemType) => void
         }
@@ -147,8 +149,8 @@ type PurchaseStoreType = {
             isSubmitDisabled: Signal<boolean>
         },
         subheader: {
-            ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean }
-            ledgerSubledgerOther: { isLedgerSubledgerError: boolean }
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean, accId: string | undefined }
+            ledgerSubledgerOther: { isLedgerSubledgerError: boolean, accId: string | undefined }
             purchaseAccId: Signal<number>
             otherAccId: Signal<number>
             gstinNumber: Signal<string>
@@ -200,7 +202,7 @@ export function getEmptyPurchaseLineItem() {
         sgst: signal(0),
         igst: signal(0),
     }
-    return ({...lineItem})
+    return ({ ...lineItem })
 }
 
 type PurchaseLineItemType = {

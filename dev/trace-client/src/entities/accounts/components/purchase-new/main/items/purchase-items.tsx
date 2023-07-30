@@ -144,31 +144,6 @@ function PurchaseItems() {
         PurchaseStore.main.functions.computeSummary()
     }
 
-    // function getLineItemInstance(): PurchaseLineItemType {
-    //     return ({
-    //         productCodeOrUpc: signal(''),
-    //         productCode: signal(''),
-    //         upcCode: signal(''),
-    //         productId: signal(undefined),
-    //         hsn: signal(0),
-    //         productDetails: signal(''),
-    //         gstRate: signal(0),
-    //         clos: signal(0),
-    //         qty: signal(1),
-    //         price: signal(0),
-    //         priceGst: signal(0),
-    //         discount: signal(0),
-    //         subTotal: signal(0),
-    //         amount: signal(0),
-    //         serialNumbers: signal(''),
-    //         serialNumberCount: signal(0),
-    //         remarks: signal(''),
-    //         cgst: signal(0),
-    //         sgst: signal(0),
-    //         igst: signal(0)
-    //     })
-    // }
-
     function getComputedInvoiceAmount() {
         const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
         const ret = lineItems.reduce((acc, lineItem) => {

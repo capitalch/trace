@@ -58,7 +58,11 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
                     <Badge
                         color="secondary"
                         showZero={true}
-                        badgeContent={item.serialNumberCount.value}>
+                        // badgeContent={item.serialNumberCount.value}
+                        badgeContent = {(item.serialNumbers.value || '')
+                        .split(',')
+                        .filter(Boolean).length}
+                        >
                     </Badge>
                     <TextareaAutosize
                         autoFocus={true}
@@ -66,7 +70,7 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
                         minRows={5}
                         onChange={(e: any) => {
                             item.serialNumbers.value = e.target.value
-                            processCount()
+                            // processCount()
                         }}
                         value={item.serialNumbers.value}
                     />
@@ -99,7 +103,7 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
 
             function handleClear() {
                 item.serialNumbers.value = ''
-                processCount()
+                // processCount()
             }
             function handleClose() {
                 AppStore.modalDialogA.isOpen.value = false

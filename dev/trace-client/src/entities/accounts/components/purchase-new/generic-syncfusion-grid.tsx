@@ -34,8 +34,6 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         })
     }, [])
 
-    const infiniteOptions = { enableCache: true }
-
     return (
         <Box>
             <GridHeader gridOptions={gridOptions} gridRef={gridRef} />
