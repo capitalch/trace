@@ -5,8 +5,8 @@
 - view as pdf
 																									- Search
 																									- No of rows select
-- Export pdf
-- Export Excel
+																									- Export pdf
+																									- Export Excel
 																									- Refresh
 - Filter
 																									- Column Aggr, Gst's, Remarks
