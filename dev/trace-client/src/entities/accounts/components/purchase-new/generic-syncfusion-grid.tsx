@@ -3,28 +3,38 @@ import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
 import {
     Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective,
     AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject
-    , PdfExport, ExcelExport, Resize, Search, Toolbar
+    , PdfExport, ExcelExport, Resize, Search, Toolbar, VirtualScroll, InfiniteScroll
 } from "@syncfusion/ej2-react-grids"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useRef, } from "react"
 import { _, execGenericView, useIbuki, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
 import { Search as SearchIcon } from '../../../../imports/icons-import'
 import { useTraceGlobal } from "../masters/redirect"
-import { Close, SyncSharp, InsertDriveFile } from "@mui/icons-material"
-import { Signal } from "@preact/signals-react"
+import { Close, DeleteForever, Edit, SyncSharp, InsertDriveFile } from "@mui/icons-material"
+// import { Signal } from "@preact/signals-react"
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-// import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile'
+import { AppStore } from "../../stores/app-store"
 
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
     const { getCurrentWindowSize } = useTraceGlobal()
     const { emit, filterOn, } = useSharedElements()
+    let toShowDeleteButton: boolean = false, toShowEditButton: boolean = false
+    if (gridOptions.onDelete) {
+        toShowDeleteButton = true
+    }
+    if (gridOptions.onEdit) {
+        toShowEditButton = true
+    }
+
     useEffect(() => {
         const subs1 = filterOn('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance).subscribe(loadData)
         return (() => {
             subs1.unsubscribe()
         })
     }, [])
+
+    const infiniteOptions = { enableCache: true }
 
     return (
         <Box>
@@ -35,9 +45,12 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 allowResizing={true}
                 allowSorting={true}
                 allowTextWrap={true}
+                // enableInfiniteScrolling={true}
+                // infiniteScrollSettings={infiniteOptions}
+                // enableVirtualization={true}
                 gridLines="Both"
                 ref={gridRef}
-                height='calc(100vh - 370px)'
+                height='calc(100vh - 380px)'
                 width={getCurrentWindowSize()}>
                 <ColumnsDirective>
                     {getColumnDirectives()}
@@ -45,7 +58,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 <AggregatesDirective>
                     {getAggrDirectives()}
                 </AggregatesDirective>
-                <Inject services={[Aggregate, ExcelExport, PdfExport, Resize, Search, Toolbar]} />
+                <Inject services={[Aggregate, ExcelExport, InfiniteScroll, PdfExport, Resize, Search, Toolbar, ]} />
             </GridComponent>
         </Box>
     )
@@ -76,9 +89,34 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         }
     }
 
+    function editColumnTemplate(props: any) {
+        return (<Box display='flex'>
+            {toShowEditButton && <IconButton
+                onClick={(e) => handleClickEdit(props)}
+                size='small'
+                color='secondary'>
+                <Edit></Edit>
+            </IconButton>}
+            {toShowDeleteButton && <IconButton
+                onClick={(e) => handleClickDelete(props)}
+                size='small'
+                color='error'>
+                <DeleteForever></DeleteForever>
+            </IconButton>}
+        </Box>)
+    }
+
+    function handleClickDelete(props: any){
+        gridOptions.onDelete && gridOptions.onDelete(props.id)
+    }
+
+    function handleClickEdit(props: any) {
+        gridOptions.onEdit && gridOptions.onEdit(props.id)
+    }
+
     function getColumnDirectives() {
         const columns: ColumnOptions[] = gridOptions.columns
-        const columnDirectives = columns.map((column: ColumnOptions, index: number) => {
+        const columnDirectives: any[] = columns.map((column: ColumnOptions, index: number) => {
             return (<ColumnDirective
                 field={column.field}
                 headerText={column.headerText}
@@ -89,13 +127,22 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 format={column.format}
             />)
         })
+        if (toShowEditButton || toShowDeleteButton) {
+            columnDirectives.unshift(<ColumnDirective
+                key='E'
+                field=""
+                headerText=""
+                template={editColumnTemplate}
+                width={80}
+            />)
+        }
         return (columnDirectives)
     }
 
     async function loadData() {
         try {
             emit('SHOW-LOADING-INDICATOR', true)
-            gridOptions.sqlArgs.no = +gridOptions.viewLimitWrapper.no.value || null
+            gridOptions.sqlArgs.no = +AppStore.syncFusionGrid[gridOptions.instance].viewLimit.value || null
             const ret: any = await execGenericView({
                 isMultipleRows: true,
                 sqlKey: gridOptions.sqlKey,
@@ -109,6 +156,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
             }
             emit('SHOW-LOADING-INDICATOR', false)
             gridRef.current.dataSource = ret
+            // refreshGrid(ret)
         } catch (error: any) {
             emit('SHOW-MESSAGE', {
                 message: messages.errorInOperation,
@@ -117,6 +165,10 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
             })
         }
     }
+
+    // async function refreshGrid(ret:any){
+    //     gridRef.current.dataSource = ret
+    // }
 }
 
 export { GenericSyncfusionGrid }
@@ -124,38 +176,42 @@ export { GenericSyncfusionGrid }
 function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRef: any }) {
     const { debounceEmit } = useSharedElements()
     const textBoxRef: any = useRef({})
-    const [, setRefresh] = useState({})
+    // const [, setRefresh] = useState({})
     const { debounceFilterOn, emit } = useIbuki()
 
     useEffect(() => {
         const subs1 = debounceFilterOn('GENERIC-SYNCFUSION-GRID-SEARCH' + gridOptions.instance, 1200).subscribe((d: any) => {
             doGridSearch(d.data)
         })
-        doGridSearch(gridOptions.searchTextWrapper.text.value)
+        doGridSearch(AppStore.syncFusionGrid[gridOptions.instance].searchText.value)
         return (() => { subs1.unsubscribe() })
     }, [])
 
     return (<Box mb={1} display='flex' justifyContent='space-between' alignItems='center' >
         <Box display='flex' alignItems='center' >
+
+            {/* View limit */}
             <div className="view-limit">
                 <Typography component='span' variant="body2">View</Typography>
                 <select
-                    value={gridOptions.viewLimitWrapper.no.value || ''}
+                    value = {AppStore.syncFusionGrid[gridOptions.instance].viewLimit.value || ''}
                     style={{
                         fontSize: '0.8rem',
                         width: '4rem',
                         marginLeft: '0.2rem',
                     }}
                     onChange={(e: any) => {
-                        gridOptions.viewLimitWrapper.no.value = e.target.value
+                        AppStore.syncFusionGrid[gridOptions.instance].viewLimit.value = e.target.value
                         emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance, '')
-                        setRefresh({})
+                        // setRefresh({})
                     }}>
                     <option value={'100'}>100</option>
                     <option value={'1000'}>1000</option>
                     <option value={'0'}>All</option>
                 </select>
             </div>
+
+            {/* Reload */}
             <Tooltip title='Reload'>
                 <IconButton
                     size="medium"
@@ -166,6 +222,8 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
                     <SyncSharp></SyncSharp>
                 </IconButton>
             </Tooltip>
+
+            {/* PDF export */}
             <Tooltip title='PDF export'>
                 <IconButton
                     size="medium"
@@ -174,6 +232,8 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
                     <PictureAsPdfIcon />
                 </IconButton>
             </Tooltip>
+
+            {/* Excel Export */}
             <Tooltip title='Excel export'>
                 <IconButton
                     size="medium"
@@ -183,10 +243,12 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
                 </IconButton>
             </Tooltip>
         </Box>
+
+        {/* Search */}
         <Box display='flex' alignItems='center' >
             <SearchIcon fontSize="small" sx={{ mr: .5 }} />
-            <TextBoxComponent value={gridOptions.searchTextWrapper.text.value} type='text' style={{ height: '30px', width: '100%' }} ref={textBoxRef} showClearButton={true} placeholder="Search" input={handleToolbarTextChanged} />
-            <IconButton disabled={gridOptions.searchTextWrapper.text.value ? false : true} size="small" sx={{}} onClick={handleClear}>
+            <TextBoxComponent value={AppStore.syncFusionGrid[gridOptions.instance].searchText.value} type='text' style={{ height: '30px', width: '100%' }} ref={textBoxRef} showClearButton={true} placeholder="Search" input={handleToolbarTextChanged} />
+            <IconButton disabled={AppStore.syncFusionGrid[gridOptions.instance].searchText.value ? false : true} size="small" onClick={handleClear}>
                 <Close sx={{ fontSize: '18px' }} />
             </IconButton>
         </Box>
@@ -207,13 +269,12 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
     }
 
     function handleToolbarTextChanged(e: any) {
-        gridOptions.searchTextWrapper.text.value = e.value
+        AppStore.syncFusionGrid[gridOptions.instance].searchText.value = e.value
         debounceEmit('GENERIC-SYNCFUSION-GRID-SEARCH' + gridOptions.instance, e.value)
     }
 
     function handleClear() {
-        gridOptions.searchTextWrapper.text.value = ''
-        setRefresh({})
+        AppStore.syncFusionGrid[gridOptions.instance].searchText.value = ''
         debounceEmit('GENERIC-SYNCFUSION-GRID-SEARCH' + gridOptions.instance, '')
     }
 }
@@ -225,8 +286,8 @@ export type GridOptions = {
     sqlArgs: any
     sqlKey: string
     widthInPercent?: string
-    searchTextWrapper: { text: Signal<string> }
-    viewLimitWrapper: { no: Signal<number> }
+    onEdit?: (id: number) => void
+    onDelete?: (id: number) => void
 }
 
 export type AggrOptions = {

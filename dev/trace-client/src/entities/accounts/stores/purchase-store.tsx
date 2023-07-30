@@ -1,5 +1,5 @@
 import { signal, Signal, _ } from '../../../imports/regular-imports'
-import { produce } from 'immer'
+// import { produce } from 'immer'
 
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
@@ -25,7 +25,6 @@ const PurchaseStoreT: PurchaseStoreType = {
 
         qtyError: () => '',
         slNoError: () => ''
-
     },
 
     main: {
@@ -43,6 +42,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             getComputedTotalIgst: () => 0,
             isFormError: () => true,
             populateLineItem: () => { },
+            // refreshPurchaseLineItems: () => {},
             setPrice: () => { },
             setPriceGst: () => { },
         },
@@ -52,7 +52,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             tranDate: signal(undefined),
             invoiceNo: signal(undefined),
             commonRemarks: signal(undefined),
-            isCreditPurchase: signal(true),
+            // isCreditPurchase: signal(true),
             isGstInvoice: signal(false),
             isSubmitDisabled: signal(true)
         },
@@ -68,8 +68,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             sgst: signal(0),
             igst: signal(0),
         },
-        lineItems: signal([
-        ]),
+        lineItems: signal([getEmptyPurchaseLineItem()]),
         lineItemsHeader: {
             isIgst: signal(false),
         },
@@ -83,9 +82,8 @@ const PurchaseStoreT: PurchaseStoreType = {
             igst: signal(0.0),
         }
     },
-    view:{
-        rows:[],
-        // searchText:signal('')
+    view: {
+        rows: [],
     }
 }
 
@@ -115,7 +113,6 @@ type PurchaseStoreType = {
         productDetailsError: ErrorTypeWithLineItem
         hsnError: ErrorTypeWithLineItem
         gstRateError: ErrorTypeWithLineItem
-        // discountError: ErrorTypeWithLineItem
         qtyError: ErrorTypeWithLineItem
         slNoError: ErrorTypeWithLineItem
     },
@@ -135,6 +132,7 @@ type PurchaseStoreType = {
             getComputedTotalIgst: () => number
             isFormError: () => boolean
             populateLineItem: (row: PurchaseLineItemType, data: any) => void
+            // refreshPurchaseLineItems: () => void
             setPrice: (row: PurchaseLineItemType) => void
             setPriceGst: (row: PurchaseLineItemType) => void
         }
@@ -144,7 +142,7 @@ type PurchaseStoreType = {
             tranDate: Signal<string | undefined>
             invoiceNo: Signal<string | undefined>
             commonRemarks: Signal<string | undefined>
-            isCreditPurchase: Signal<boolean>
+            // isCreditPurchase: Signal<boolean>
             isGstInvoice: Signal<boolean>
             isSubmitDisabled: Signal<boolean>
         },
@@ -175,10 +173,34 @@ type PurchaseStoreType = {
         }
     },
 
-    view:{
+    view: {
         rows: Signal<any>[]
-        // searchText: Signal<string>
     }
+}
+export function getEmptyPurchaseLineItem() {
+    const lineItem = {
+        productCodeOrUpc: signal(''),
+        productCode: signal(''),
+        upcCode: signal(''),
+        productId: signal(0),
+        hsn: signal(0),
+        productDetails: signal(''),
+        gstRate: signal(0),
+        clos: signal(0),
+        qty: signal(1),
+        price: signal(0),
+        priceGst: signal(0),
+        discount: signal(0),
+        subTotal: signal(0),
+        amount: signal(0),
+        serialNumbers: signal(''),
+        serialNumberCount: signal(0),
+        remarks: signal(''),
+        cgst: signal(0),
+        sgst: signal(0),
+        igst: signal(0),
+    }
+    return ({...lineItem})
 }
 
 type PurchaseLineItemType = {
