@@ -3,18 +3,18 @@ import _ from "lodash";
 import { FC } from "react";
 
 const appStoreT: AppStoreType = {
-    misc: {
-        purchase: {
-            grid: {
-                searchTextWrapper: {
-                    text: signal('')
-                },
-                viewLimitWrapper: {
-                    no: signal(100)
-                }
-            },
-        }
-    },
+    // misc: {
+    //     purchase: {
+    //         grid: {
+    //             searchTextWrapper: {
+    //                 text: signal('')
+    //             },
+    //             viewLimitWrapper: {
+    //                 no: signal(100)
+    //             }
+    //         },
+    //     }
+    // },
     modalDialogA: {
         body: signal(() => <></>),
         defaultData: signal(undefined),
@@ -23,7 +23,6 @@ const appStoreT: AppStoreType = {
         isFullScreen: false,
         itemData: signal({}),
         maxWidth: signal('sm'),
-        // selectedItem:signal({}),
         title: signal(''),
         toShowCloseButton: signal(false),
     },
@@ -37,24 +36,33 @@ const appStoreT: AppStoreType = {
         title: signal(''),
         toShowCloseButton: signal(false),
     },
+
+    syncFusionGrid: {
+        pur: {
+            searchText: signal(''),
+            viewLimit: signal(100)
+        }
+    }
+
+
 }
 
 const AppStore: AppStoreType = _.cloneDeep(appStoreT)
 export { AppStore }
 
 type AppStoreType = {
-    misc: {
-        purchase: {
-            grid: {
-                searchTextWrapper: {
-                    text: Signal<string>
-                },
-                viewLimitWrapper: {
-                    no: Signal<number>
-                }
-            }
-        }
-    },
+    // misc: {
+    //     purchase: {
+    //         grid: {
+    //             searchTextWrapper: {
+    //                 text: Signal<string>
+    //             },
+    //             viewLimitWrapper: {
+    //                 no: Signal<number>
+    //             }
+    //         }
+    //     }
+    // },
     modalDialogA: {
         body: Signal<FC>
         defaultData: Signal<any>
@@ -63,7 +71,6 @@ type AppStoreType = {
         isFullScreen?: boolean
         itemData: Signal<any>
         maxWidth: Signal<'md' | 'sm' | 'lg' | 'md'>
-        // selectedItem?:Signal<any>
         title: Signal<string>
         toShowCloseButton: Signal<boolean>
     },
@@ -77,4 +84,11 @@ type AppStoreType = {
         title: Signal<string>
         toShowCloseButton: Signal<boolean>
     },
+
+    syncFusionGrid: {
+        [key: string]: {
+            searchText: Signal<string>,
+            viewLimit: Signal<number>
+        }
+    }
 }

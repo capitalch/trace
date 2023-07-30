@@ -2,7 +2,7 @@ import { Box } from "@mui/material"
 import { PurchaseItemsHeader } from "./purchase-items-header"
 import { PurchaseItemsFooter } from "./purchase-items-footer"
 import { PurchaseLineItems } from "./purchase-line-items"
-import { PurchaseLineItemType, PurchaseStore } from "../../../../stores/purchase-store"
+import { PurchaseLineItemType, PurchaseStore, getEmptyPurchaseLineItem } from "../../../../stores/purchase-store"
 import Big from "big.js"
 import { useCallback, useEffect } from "react"
 import { produce } from "immer"
@@ -37,7 +37,7 @@ function PurchaseItems() {
 
     function addLineItem(index: number) {
         PurchaseStore.main.lineItems.value = produce(PurchaseStore.main.lineItems.value, (draft: any[]) => {
-            draft.splice(index + 1, 0, getLineItemInstance())
+            draft.splice(index + 1, 0, getEmptyPurchaseLineItem())
             return (draft)
         })
         PurchaseStore.main.functions.computeSummary()
@@ -144,30 +144,30 @@ function PurchaseItems() {
         PurchaseStore.main.functions.computeSummary()
     }
 
-    function getLineItemInstance(): PurchaseLineItemType {
-        return ({
-            productCodeOrUpc: signal(''),
-            productCode: signal(''),
-            upcCode: signal(''),
-            productId: signal(undefined),
-            hsn: signal(0),
-            productDetails: signal(''),
-            gstRate: signal(0),
-            clos: signal(0),
-            qty: signal(1),
-            price: signal(0),
-            priceGst: signal(0),
-            discount: signal(0),
-            subTotal: signal(0),
-            amount: signal(0),
-            serialNumbers: signal(''),
-            serialNumberCount: signal(0),
-            remarks: signal(''),
-            cgst: signal(0),
-            sgst: signal(0),
-            igst: signal(0)
-        })
-    }
+    // function getLineItemInstance(): PurchaseLineItemType {
+    //     return ({
+    //         productCodeOrUpc: signal(''),
+    //         productCode: signal(''),
+    //         upcCode: signal(''),
+    //         productId: signal(undefined),
+    //         hsn: signal(0),
+    //         productDetails: signal(''),
+    //         gstRate: signal(0),
+    //         clos: signal(0),
+    //         qty: signal(1),
+    //         price: signal(0),
+    //         priceGst: signal(0),
+    //         discount: signal(0),
+    //         subTotal: signal(0),
+    //         amount: signal(0),
+    //         serialNumbers: signal(''),
+    //         serialNumberCount: signal(0),
+    //         remarks: signal(''),
+    //         cgst: signal(0),
+    //         sgst: signal(0),
+    //         igst: signal(0)
+    //     })
+    // }
 
     function getComputedInvoiceAmount() {
         const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
@@ -271,9 +271,10 @@ function PurchaseItems() {
         errorsObject.slNoError = (item: PurchaseLineItemType) => {
             let ret = ''
             function getCount() {
-                return (
-                    item?.serialNumbers.value.split(',').filter(Boolean).length || 0
-                )
+                return 0
+                // return (
+                //     item?.serialNumbers?.value.split(',').filter(Boolean).length || 0
+                // )
             }
             if (getCount() !== 0) {
                 ret = (getCount() === item.qty.value) ? '' : 'invalid'

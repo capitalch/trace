@@ -12,10 +12,10 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
     const errorsObject = PurchaseStore.errorsObject
 
     return (<Box sx={{
-        display: 'flex', alignItems: 'center', borderBottom: '2px solid teal', mt: 1, pb:1,
+        display: 'flex', alignItems: 'center', borderBottom: '2px solid teal', mt: 1, pb: 1,
         flexWrap: 'wrap', rowGap: 3, columnGap: 1.5
     }}>
-        
+
         <Box display='flex' flexDirection='column'>
             {/* Search */}
             <IconButton sx={{ ml: -2, mt: -2 }} size="medium" color='secondary'
@@ -34,7 +34,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 autoComplete='off'
                 sx={{ maxWidth: theme.spacing(12) }}
                 variant='standard'
-                value={item.productCodeOrUpc.value || ''}
+                value={item?.productCodeOrUpc?.value || ''}
                 // value={meta.current.productCodeOrUpc || ''}
                 onChange={(e: any) => {
                     item.productCodeOrUpc.value = e.target.value
@@ -280,7 +280,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 autoComplete='off'
                 sx={{ maxWidth: theme.spacing(16) }}
                 variant='standard'
-                value={item.remarks.value || ''}
+                value={item?.remarks?.value || ''}
                 onChange={(e: any) => { item.remarks.value = e.target.value }}
             />
         </Box>
@@ -296,14 +296,22 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                     className="add-box"
                     aria-label="add"
                     size="small"
-                    onClick={() => PurchaseStore.main.functions.addLineItem(index)} >
+                    onClick={() => {
+                        PurchaseStore.main.functions.addLineItem(index)
+                        // PurchaseStore.main.functions.refreshPurchaseLineItems()
+                    }
+
+                    }>
                     <AddCircle sx={{ fontSize: '2.5rem', color: theme.palette.secondary.main, }} />
                 </IconButton>
             </Box>
 
             {/* Delete */}
             <IconButton sx={{ mt: 0, height: '1.3rem', width: '1.3rem', ml: 8 }} size="small" color='info'
-                onClick={(e: any) => PurchaseStore.main.functions.deleteLineItem(index)}>
+                onClick={(e: any) => {
+                    PurchaseStore.main.functions.deleteLineItem(index)
+                    // PurchaseStore.main.functions.refreshPurchaseLineItems()
+                }}>
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
         </Box>

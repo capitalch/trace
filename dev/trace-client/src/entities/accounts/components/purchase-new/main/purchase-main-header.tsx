@@ -59,7 +59,7 @@ function PurchaseMainHeader() {
             onChange={(e: any) => {
                 header.commonRemarks.value = e.target.value
             }}
-            value={header.commonRemarks.value || ''}
+            value={header?.commonRemarks.value || ''}
         />
               
         <FormControlLabel

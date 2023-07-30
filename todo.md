@@ -1,14 +1,17 @@
+
 ## Purchase
 - Column Account: Inter Photo, Capital Photo etc.
 - edit
 - delete
-- view as pdf
-																									- Search
+- view as pdf																									
+- Filter
+- Search
+- Descr column at end
+- purchase ret
 																									- No of rows select
 																									- Export pdf
 																									- Export Excel
 																									- Refresh
-- Filter
 																									- Column Aggr, Gst's, Remarks
 																									- wrap text
 																									- numeric, rignt aligned
