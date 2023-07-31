@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import _ from 'lodash'
-import { accountsMessages, execGenericView, manageEntitiesState, useSharedElements } from '../inventory/redirect';
+import { accountsMessages, execGenericView, manageEntitiesState, useSharedElements, utilMethods } from '../inventory/redirect';
 import { PurchaseStore } from '../../stores/purchase-store';
 import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
-import { AppStore } from '../../stores/app-store';
 import { signal } from '@preact/signals-react';
 
 function PurchaseView() {
-    const { emit } = useSharedElements()
+    const { emit, confirm, genericUpdateMaster, isAllowedUpdate } = useSharedElements()
+    const { isControlDisabled } = utilMethods()
+    const isDeleteDisabled = isControlDisabled('salespurchases-purchase-delete')
+    const isEditDisabled = isControlDisabled('salespurchases-purchase-edit')
+
     useEffect(() => {
         if (PurchaseStore.tabValue.value === 1) {
             emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + PurchaseStore.purchaseType, undefined)
@@ -31,6 +34,8 @@ function PurchaseView() {
             },
             onDelete: onPurchaseDelete,
             onEdit: onPurchaseEdit,
+            isDeleteDisabled: isDeleteDisabled,
+            isEditDisabled: isEditDisabled
         }
         return (gridOptions)
     }
@@ -68,7 +73,25 @@ function PurchaseView() {
     }
 
     function onPurchaseDelete(id: number) {
-
+        const options = {
+            description: accountsMessages.transactionDelete,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        // if (isAllowedUpdate({ '2023-11-11', '2023-11-11'}))
+        // {
+        confirm(options)
+            .then(async () => {
+                emit('SHOW-LOADING-INDICATOR', true)
+                // await genericUpdateMaster({
+                //     deletedIds: [id],
+                //     tableName: 'TranH',
+                // })
+                emit('SHOW-LOADING-INDICATOR', false)
+                emit('SHOW-MESSAGE', {})
+                emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + PurchaseStore.purchaseType, undefined)
+            }).catch(() => { })
+        // }
     }
 
     async function onPurchaseEdit(id: number) {
@@ -160,7 +183,7 @@ function PurchaseView() {
                 igst: signal(item.igst),
                 serialNumbers: signal(item?.serialNumbers || ''),
             }))
-            
+
             const totalQty = salePurchaseDetails.reduce((acc: number, curr: any) => {
                 return (acc + curr.qty)
             }, 0)

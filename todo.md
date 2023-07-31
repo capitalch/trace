@@ -1,5 +1,6 @@
 
 ## Purchase
+- Autorized to delete and edit implement
 - Column Account: Inter Photo, Capital Photo etc.
 - delete																									
 - Filter

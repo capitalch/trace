@@ -287,9 +287,11 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
 
         <Box display='flex' flexDirection='column' marginLeft='auto'>
             <Box display='flex' alignItems='center' >
+
                 {/* Amount */}
                 <Typography variant='body1' sx={{ textAlign: 'right', width: theme.spacing(12), color: theme.palette.common.black, fontWeight: 'bolder' }} >
                     {toDecimalFormat(item.amount.value || 0.00)}</Typography>
+
                 {/* Add button */}
                 <IconButton
                     sx={{ height: '2.3rem', width: '2.3rem', ml: 1 }}
@@ -298,10 +300,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                     size="small"
                     onClick={() => {
                         PurchaseStore.main.functions.addLineItem(index)
-                        // PurchaseStore.main.functions.refreshPurchaseLineItems()
-                    }
-
-                    }>
+                    }}>
                     <AddCircle sx={{ fontSize: '2.5rem', color: theme.palette.secondary.main, }} />
                 </IconButton>
             </Box>
@@ -310,10 +309,10 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
             <IconButton sx={{ mt: 0, height: '1.3rem', width: '1.3rem', ml: 8 }} size="small" color='info'
                 onClick={(e: any) => {
                     PurchaseStore.main.functions.deleteLineItem(index)
-                    // PurchaseStore.main.functions.refreshPurchaseLineItems()
                 }}>
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
+            
         </Box>
     </Box >)
 }

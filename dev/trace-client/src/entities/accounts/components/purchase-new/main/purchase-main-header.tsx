@@ -7,7 +7,7 @@ import { useSharedElements } from '../../common/shared-elements-hook'
 
 function PurchaseMainHeader() {
     const theme = useTheme()
-    const {handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit , isFormError} = usePurchaseMainHeader()
+    const { handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError } = usePurchaseMainHeader()
     const header = PurchaseStore.main.header
     const errorsObject = PurchaseStore.errorsObject
 
@@ -45,15 +45,15 @@ function PurchaseMainHeader() {
             variant="standard"
             sx={{ maxWidth: '15rem', width: '13rem' }}
             error={Boolean(errorsObject.invoiceNoError())}
-            onChange={(e: any) => { 
-                header.invoiceNo.value = e.target.value 
+            onChange={(e: any) => {
+                header.invoiceNo.value = e.target.value
             }}
             value={header.invoiceNo.value || ''}
         />
 
         {/* remarks */}
         <TextField
-            sx={{ maxWidth: '12rem', width: '11rem' }}
+            sx={{ maxWidth: '12rem', width: '11rem', ml: .3 }}
             label="Common remarks"
             variant="standard"
             onChange={(e: any) => {
@@ -61,7 +61,7 @@ function PurchaseMainHeader() {
             }}
             value={header?.commonRemarks.value || ''}
         />
-              
+
         <FormControlLabel
             sx={{ position: 'relative', top: theme.spacing(1), }}
             control={

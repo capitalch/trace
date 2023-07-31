@@ -56,7 +56,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 <AggregatesDirective>
                     {getAggrDirectives()}
                 </AggregatesDirective>
-                <Inject services={[Aggregate, ExcelExport, InfiniteScroll, PdfExport, Resize, Search, Toolbar, ]} />
+                <Inject services={[Aggregate, ExcelExport, InfiniteScroll, PdfExport, Resize, Search, Toolbar,]} />
             </GridComponent>
         </Box>
     )
@@ -87,15 +87,17 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         }
     }
 
-    function editColumnTemplate(props: any) {
+    function editDeleteColumnTemplate(props: any) {
         return (<Box display='flex'>
             {toShowEditButton && <IconButton
                 onClick={(e) => handleClickEdit(props)}
                 size='small'
+                disabled={gridOptions.isEditDisabled}
                 color='secondary'>
                 <Edit></Edit>
             </IconButton>}
             {toShowDeleteButton && <IconButton
+                disabled={gridOptions.isDeleteDisabled}
                 onClick={(e) => handleClickDelete(props)}
                 size='small'
                 color='error'>
@@ -104,7 +106,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         </Box>)
     }
 
-    function handleClickDelete(props: any){
+    function handleClickDelete(props: any) {
         gridOptions.onDelete && gridOptions.onDelete(props.id)
     }
 
@@ -130,7 +132,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 key='E'
                 field=""
                 headerText=""
-                template={editColumnTemplate}
+                template={editDeleteColumnTemplate}
                 width={80}
             />)
         }
@@ -192,7 +194,7 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
             <div className="view-limit">
                 <Typography component='span' variant="body2">View</Typography>
                 <select
-                    value = {AppStore.syncFusionGrid[gridOptions.instance].viewLimit.value || ''}
+                    value={AppStore.syncFusionGrid[gridOptions.instance].viewLimit.value || ''}
                     style={{
                         fontSize: '0.8rem',
                         width: '4rem',
@@ -286,6 +288,8 @@ export type GridOptions = {
     widthInPercent?: string
     onEdit?: (id: number) => void
     onDelete?: (id: number) => void
+    isDeleteDisabled?: boolean
+    isEditDisabled?: boolean
 }
 
 export type AggrOptions = {
