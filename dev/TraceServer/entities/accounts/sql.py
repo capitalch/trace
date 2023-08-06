@@ -152,7 +152,7 @@ allSqls = {
                 STRING_AGG("lineRemarks", ',') as "lineRemarks"
                 from cte1
                     group by "id", "tranDate", "autoRefNo", "userRefNo", "remarks"
-                    order by "id" DESC limit %(no)s
+                    order by "id" DESC limit (table "no") --%(no)s
     ''',
 
     'get_allTransactions': '''
@@ -1141,13 +1141,25 @@ allSqls = {
     ''',
     
     "get_purchase_headers":'''
-         --with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5)), "no" as (values(null))
+        -- with "branchId" as (values (1)), "finYearId" as (values (2023)),"tranTypeId" as (values(5)), "no" as (values(100))
         with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),"tranTypeId" as (values(%(tranTypeId)s)), "no" as (values(%(no)s))
-        select h."id" as "id", "autoRefNo", "userRefNo",h."remarks", d."amount",string_agg("brandName" || ' ' || "label",', ') as "productDetails"
+        , cte1 as (
+			select "tranHeaderId", string_agg("accName",', ') as "accounts"
+				from "TranD" d
+					join "TranH" h
+						on h."id" = d."tranHeaderId"
+					join "AccM" a
+						on a."id" = d."accId"
+			where dc = CASE (table "tranTypeId") WHEN 5 then 'C' else 'D' END
+			and "finYearId" = (table "finYearId") 
+			and "branchId" = (table "branchId")
+			group by "tranHeaderId"
+		)
+		select h."id" as "id", "autoRefNo", "userRefNo", h."remarks", "accounts", d."amount", string_agg("brandName" || ' ' || "label",', ') as "productDetails"
         , string_agg(s."jData"->>'serialNumbers', ', ') as "serialNumbers", string_agg("productCode", ', ') as "productCodes"
         , string_agg(s.hsn::text, ', ') as "hsns", SUM(s."qty") as "productQty"
         , SUM(s."qty" * (s."price" - s."discount")) as "aggr", SUM(s."cgst") as "cgst", SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
-        ,	"tranDate"
+        ,	"tranDate", string_agg(s."jData"->>'remarks', ', ') as "lineRemarks"
             from "TranH" h
                 join "TranD" d
                     on h."id" = d."tranHeaderId"
@@ -1157,11 +1169,15 @@ allSqls = {
                     on p."id" = s."productId"
                 join "BrandM" b
                     on b."id" = p."brandId"
+				join cte1 
+					on cte1."tranHeaderId" = d."tranHeaderId"
             where "tranTypeId" = (table "tranTypeId") and
                 "finYearId" = (table "finYearId") and
                 "branchId" = (table "branchId")
-            group by h."id", d."amount" 
-            order by "tranDate" DESC limit %(no)s
+            group by h."id", d."amount" , d."remarks", cte1."accounts"
+            order by "tranDate" DESC limit 
+			-- (table "no")
+			%(no)s
     ''',
 
     "get_purchase_report": '''

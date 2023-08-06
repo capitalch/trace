@@ -1,13 +1,13 @@
-
-
 ## Purchase
+- Drill down compatibility
 - Autorized to delete and edit implement
-- Column Account: Inter Photo, Capital Photo etc.
-- delete																									
-- Filter
-- Descr column at end
+																									- Column Account: Inter Photo, Capital Photo etc.
+																									- delete																									
+																									- Descr column at end
 - purchase ret
-- submit																				
+- submit
+																									- Change icons to PDF and EXCEL icons
+- Exhaustive check																			
 																									- Serial numbers not working
 																									- Total amt vs invoice amount not tallying in case of Inter foto
 																									- edit
