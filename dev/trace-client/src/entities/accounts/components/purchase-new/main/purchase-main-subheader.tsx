@@ -45,7 +45,7 @@ function PurchaseMainSubheader() {
             onChange={(e: any) => {
                 subheader.gstinNumber.value = e.target.value
             }}
-            value={subheader.gstinNumber.value}
+            value={subheader.gstinNumber.value || ''}
         />
 
         {/* Right */}

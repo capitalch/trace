@@ -426,6 +426,7 @@ function usePurchaseBody(arbitraryData: any, purchaseType: string) {
 
             purchRow.details.push(gst)
 
+            
             for (let item of ad.lineItems) {
                 const obj: any = {
                     tableName: 'SalePurchaseDetails',

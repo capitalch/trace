@@ -7,7 +7,7 @@ import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from '
 import { signal } from '@preact/signals-react';
 
 function PurchaseView() {
-    const { emit, confirm, genericUpdateMaster, isAllowedUpdate } = useSharedElements()
+    const { emit, confirm, genericUpdateMaster, isAllowedUpdate }: any = useSharedElements()
     const { isControlDisabled } = utilMethods()
     const isDeleteDisabled = isControlDisabled('salespurchases-purchase-delete')
     const isEditDisabled = isControlDisabled('salespurchases-purchase-edit')
@@ -55,12 +55,12 @@ function PurchaseView() {
     function getColumns(): ColumnOptions[] {
         const columns: ColumnOptions[] = [
             { field: 'index', headerText: '#', width: 70 }
-            , { field: 'tranDate', headerText: 'Date', type: 'date', width: 95, format: { type: 'date', format: 'dd/MM/yyyy',  } }
+            , { field: 'tranDate', headerText: 'Date', type: 'date', width: 95, format: { type: 'date', format: 'dd/MM/yyyy', } }
             , { field: 'autoRefNo', headerText: 'Ref no', width: 170 }
             , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }
             , { field: 'amount', headerText: 'Amount', textAlign: 'Right', type: 'number', width: 130, format: 'N2' }
             , { field: 'productDetails', headerText: 'Product details', width: 220 }
-            , { field: 'accounts', headerText: 'Account', width: 160}
+            , { field: 'accounts', headerText: 'Account', width: 160 }
             , { field: 'aggr', headerText: 'Aggr', textAlign: 'Right', width: 130, format: 'N2' } //numeric with 2 decimals
             , { field: 'cgst', headerText: 'Cgst', textAlign: 'Right', width: 110, format: 'N2' }
             , { field: 'sgst', headerText: 'Sgst', textAlign: 'Right', width: 110, format: 'N2' }
@@ -80,8 +80,6 @@ function PurchaseView() {
             confirmationText: 'Yes',
             cancellationText: 'No',
         }
-        // if (isAllowedUpdate({ '2023-11-11', '2023-11-11'}))
-        // {
         confirm(options)
             .then(async () => {
                 emit('SHOW-LOADING-INDICATOR', true)

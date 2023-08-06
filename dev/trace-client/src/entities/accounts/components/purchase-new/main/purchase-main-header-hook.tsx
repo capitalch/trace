@@ -1,7 +1,8 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
-import { getFromBag, useIbuki } from "../../inventory/redirect"
+import { genericUpdateMasterDetails, getFromBag, useIbuki } from "../../inventory/redirect"
 import { PurchaseLineItemType, PurchaseStore, PurchaseStoreT, resetPurchaseStore } from "../../../stores/purchase-store"
 import { _, useCallback, useEffect, useGranularEffect, useState } from '../../../../../imports/regular-imports'
+import Swal from "sweetalert2"
 
 function usePurchaseMainHeader() {
     const { emit } = useIbuki()
@@ -9,6 +10,7 @@ function usePurchaseMainHeader() {
     const { isInvalidDate, accountsMessages } = useSharedElements()
     const header = PurchaseStore.main.header
     const subheader = PurchaseStore.main.subheader
+    const main = PurchaseStore.main
 
     const isGstinExistsCB = useCallback(isGstinExists, [])
     const setErrorsObjectCB = useCallback(setErrorsObject, [])
@@ -38,18 +40,45 @@ function usePurchaseMainHeader() {
         emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
     }
 
-    function handleSubmit() {
-        if(!isFormError()){
-            const data = {
-                refNo: header.refNo.value,
-                tranDate: header.tranDate.value,
-                userRefNo: header.invoiceNo.value,
-                commonRemarks: header.commonRemarks.value,
-                isGstInvoice: header.isGstInvoice.value,
-                purchase: subheader.ledgerSubledgerPurchase
-            }
+    async function handleSubmit() {
+        if (isFormError()) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation error',
+                text: 'Something is wrong'
+            })
+            return
         }
-        
+        const purchaseHeader = getSubmitElements().extractHeader()
+        const purchaseDetails = getSubmitElements().extractDetails()
+        purchaseHeader.data[0].details = purchaseDetails
+        const ret = await genericUpdateMasterDetails([purchaseHeader])
+        if (ret.error) {
+            console.log(ret.error)
+        } else {
+            // if (ad.shouldCloseParentOnSave) {
+            //     emit(
+            //         'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG',
+            //         null
+            //     )
+            // } else if (ad.isViewBack) {
+            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+            //     emit('PURCHASES-HOOK-CHANGE-TAB', 1)
+            //     emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
+            // } else {
+            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+            // }
+        }
+        // const data = {
+        //     refNo: header.refNo.value,
+        //     tranDate: header.tranDate.value,
+        //     userRefNo: header.invoiceNo.value,
+        //     commonRemarks: header.commonRemarks.value,
+        //     isGstInvoice: header.isGstInvoice.value,
+        //     purchase: subheader.ledgerSubledgerPurchase
+        // }
+
+
     }
 
     function isGstinExists() {
@@ -99,6 +128,113 @@ function usePurchaseMainHeader() {
         }, false)
         ret = Boolean(err || lineItemsError)
         return (ret)
+    }
+
+    function getSubmitElements() {
+        function extractHeader() {
+            const finYearId = getFromBag('finYearObject')?.finYearId
+            const branchId = getFromBag('branchObject')?.branchId || 1
+            const obj: any = {
+                tableName: 'TranH',
+                data: [],
+            }
+            const item = {
+                id: header.id || undefined,
+                tranDate: header.tranDate.value,
+                userRefNo: header.invoiceNo.value,
+                remarks: header.commonRemarks.value,
+                tags: undefined,
+                jData: '{}',
+                finYearId: finYearId,
+                branchId: branchId,
+                posId: '1',
+                autoRefNo: header.refNo.value,
+                tranTypeId: PurchaseStore.purchaseType === 'pur' ? 5 : 10,
+                details: [],
+            }
+            obj.data.push(item)
+            return obj
+        }
+
+        function extractDetails() {
+            const tranD: any = {
+                tableName: 'TranD',
+                fkeyName: 'tranHeaderId',
+                data: [],
+            }
+
+            const purchRow: any = {
+                // id: ad.ledgerSubledgerPurchase.id,
+                accId: subheader.purchaseAccId.value, //ledgerSubledgerPurchase.accId,
+                dc: PurchaseStore.purchaseType === 'pur' ? 'D' : 'C',
+                amount: subheader.invoiceAmount.value,
+                details: [],
+            }
+
+            const otherRow: any = {
+                // id: ad.ledgerSubledgerOther.id,
+                accId: subheader.otherAccId.value, //ad.ledgerSubledgerOther.accId,
+                dc: PurchaseStore.purchaseType === 'pur' ? 'C' : 'D',
+                amount: subheader.invoiceAmount.value,
+                details: [],
+            }
+
+
+            tranD.data.push(purchRow)
+            tranD.data.push(otherRow)
+
+            const gst = {
+                tableName: 'ExtGstTranD',
+                fkeyName: 'tranDetailsId',
+                data: [
+                    {
+                        // id: ad.extGstTranDId,
+                        gstin: subheader.gstinNumber.value,
+                        cgst: subheader.cgst.value, //  ad.cgst,
+                        sgst: subheader.sgst.value, //ad.sgst,
+                        igst: subheader.igst.value, //ad.igst,
+                        isInput: PurchaseStore.purchaseType === 'pur' ? true : false,
+                    },
+                ],
+            }
+
+            purchRow.details.push(gst)
+
+            for (let item of main.lineItems.value) {
+                const obj: any = {
+                    tableName: 'SalePurchaseDetails',
+                    fkeyName: 'tranDetailsId',
+                    // deletedIds:
+                    //     ad?.deletedSalePurchaseIds.length > 0
+                    //         ? [...ad.deletedSalePurchaseIds]
+                    //         : undefined,
+                    data: [
+                        {
+                            // id: item.id,
+                            productId: item.productId,
+                            qty: item.qty,
+                            price: item.price,
+                            priceGst: item.priceGst,
+                            discount: item.discount,
+                            gstRate: item.gstRate,
+                            cgst: item.cgst,
+                            sgst: item.sgst,
+                            igst: item.igst,
+                            amount: item.amount,
+                            hsn: item.hsn,
+                            jData: JSON.stringify({
+                                serialNumbers: item.serialNumbers,
+                                remarks: item.remarks,
+                            }),
+                        },
+                    ],
+                }
+                purchRow.details.push(obj)
+            }
+            return tranD
+        }
+
+        return ({ extractHeader, extractDetails })
     }
 
     return ({ handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError })
