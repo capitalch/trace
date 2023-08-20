@@ -1921,14 +1921,42 @@ allSqls = {
 							("tranDate" between (table "startDate") and (table "endDate"))
                     GROUP BY 
                         "tranType", "accName", "dc", "hsn"
-                    order by hsn)
+                    order by hsn),
+			-- gst-output-sales-hsn-details (considering only table SalePurchaseDetails)
+            cte7 as (
+                select h."autoRefNo",  "tranType", hsn,
+				CASE WHEN "tranTypeId" = 4 THEN (s."amount" - "cgst" - "sgst" - "igst") ELSE -(s."amount" - "cgst" - "sgst" - "igst") END as "aggregate",
+				CASE WHEN "tranTypeId" = 4 THEN "cgst" ELSE -"cgst" END as "cgst",
+                CASE WHEN "tranTypeId" = 4 THEN "sgst" ELSE -"sgst" END as "sgst",
+                CASE WHEN "tranTypeId" = 4 THEN "igst" ELSE -"igst" END as "igst",
+                CASE WHEN "tranTypeId" = 4 THEN s."amount" ELSE -s."amount" END as "amount",
+                "accName", "dc"
+                        from "TranH" h
+                            join "TranD" d
+                                on h."id" = d."tranHeaderId"
+                            join "AccM" a
+                                on a."id" = d."accId"
+                            join "TranTypeM" t
+                                on t."id" = h."tranTypeId"
+                            join "SalePurchaseDetails" s
+                                on d."id" = s."tranDetailsId"
+                        where
+                            ("cgst" <> 0 or
+                            "sgst" <> 0 or
+                            "igst" <> 0) and
+                            "tranTypeId" in (4,9) and
+                            "finYearId" = (table "finYearId") and
+							"branchId" = (table "branchId") and
+							("tranDate" between (table "startDate") and (table "endDate"))
+                    order by h.id)
             select json_build_object(
                     '01-gst-input-consolidated', (SELECT json_agg(row_to_json(a)) from cte1 a),
                     '02-gst-output-consolidated', (SELECT json_agg(row_to_json(b)) from cte2 b),
                     '03-gst-input-purchases', (SELECT json_agg(row_to_json(d)) from cte4 d),
                     '04-gst-output-sales', (SELECT json_agg(row_to_json(c)) from cte3 c), 
                     '05-gst-input-vouchers', (SELECT json_agg(row_to_json(e)) from cte5 e),
-					'06-gst-output-sales-hsn', (SELECT json_agg(row_to_json(f)) from cte6 f)
+					'06-gst-output-sales-hsn', (SELECT json_agg(row_to_json(f)) from cte6 f),
+					'07-gst-output-sales-hsn-details', (SELECT json_agg(row_to_json(f)) from cte7 f)
                 ) as "jsonResult"
     ''',
 
