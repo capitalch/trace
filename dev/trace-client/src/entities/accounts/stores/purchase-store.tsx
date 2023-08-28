@@ -17,6 +17,8 @@ const PurchaseStoreT: PurchaseStoreType = {
         totalCgstError: () => '',
         totalSgstError: () => '',
         totalIgstError: () => '',
+        cgstSgstIgstError:()=>'',
+        igstError:() => '',
 
         productCodeError: () => '',
         productDetailsError: () => '',
@@ -58,8 +60,9 @@ const PurchaseStoreT: PurchaseStoreType = {
             isSubmitDisabled: signal(true)
         },
         subheader: {
-            ledgerSubledgerPurchase: { isLedgerSubledgerError: true, accId: undefined },
-            ledgerSubledgerOther: { isLedgerSubledgerError: true, accId: undefined },
+            extGstTranDId: undefined,
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: true, accId: undefined, id: undefined},
+            ledgerSubledgerOther: { isLedgerSubledgerError: true, accId: undefined, id: undefined},
             purchaseAccId: signal(0),
             otherAccId: signal(0),
             gstinNumber: signal(''),
@@ -109,6 +112,8 @@ type PurchaseStoreType = {
         totalCgstError: ErrorType
         totalSgstError: ErrorType
         totalIgstError: ErrorType
+        cgstSgstIgstError: ErrorType
+        igstError: ErrorType
 
         productCodeError: ErrorTypeWithLineItem
         productDetailsError: ErrorTypeWithLineItem
@@ -139,7 +144,7 @@ type PurchaseStoreType = {
             setPriceGst: (row: PurchaseLineItemType) => void
         }
         header: {
-            id: string | undefined
+            id: number | undefined
             refNo: Signal<string | undefined>
             tranDate: Signal<string | undefined>
             invoiceNo: Signal<string | undefined>
@@ -149,8 +154,9 @@ type PurchaseStoreType = {
             isSubmitDisabled: Signal<boolean>
         },
         subheader: {
-            ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean, accId: string | undefined }
-            ledgerSubledgerOther: { isLedgerSubledgerError: boolean, accId: string | undefined }
+            extGstTranDId: number | undefined
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean, accId: string | undefined, id: number | undefined }
+            ledgerSubledgerOther: { isLedgerSubledgerError: boolean, accId: string | undefined, id: number | undefined }
             purchaseAccId: Signal<number>
             otherAccId: Signal<number>
             gstinNumber: Signal<string>
@@ -181,6 +187,7 @@ type PurchaseStoreType = {
 }
 export function getEmptyPurchaseLineItem() {
     const lineItem = {
+        id: undefined,
         productCodeOrUpc: signal(''),
         productCode: signal(''),
         upcCode: signal(''),
@@ -206,6 +213,7 @@ export function getEmptyPurchaseLineItem() {
 }
 
 type PurchaseLineItemType = {
+    id: number | undefined
     productCodeOrUpc: Signal<string>
     productCode: Signal<string>
     upcCode: Signal<string>
@@ -230,12 +238,12 @@ type PurchaseLineItemType = {
 
 export { type PurchaseLineItemType, resetPurchaseStore }
 
-type LineItemErrorType = {
-    productCode: Signal<string>
-    hsn: Signal<string>
-    gstPercent: Signal<string>
-    qty: Signal<string>
-}
+// type LineItemErrorType = {
+//     productCode: Signal<string>
+//     hsn: Signal<string>
+//     gstPercent: Signal<string>
+//     qty: Signal<string>
+// }
 
 type ErrorType = () => string
 type ErrorTypeWithLineItem = (lineItem: PurchaseLineItemType) => string

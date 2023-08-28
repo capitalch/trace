@@ -9,16 +9,16 @@ function usePurchaseMainSubheader() {
     const { emit } = useIbuki()
     const [, setRefresh] = useState({})
 
-    useEffect(()=>{
+    useEffect(() => {
         PurchaseStore.main.functions.refreshSubheader = doRefresh
-    },[])
+    }, [])
 
     const errorsObject = PurchaseStore.errorsObject
     const { isInvalidGstin } = useSharedElements()
     setErrorsObject()
     PurchaseStore.main.functions.clearSubheaderTotals = handleClearSubHeaderTotals
 
-    function doRefresh(){
+    function doRefresh() {
         setRefresh({})
     }
     function handleClearSubHeaderTotals() {
@@ -64,7 +64,31 @@ function usePurchaseMainSubheader() {
 
         errorsObject.invoiceAmountError = () => {
             let ret = ''
-            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(),0.1,0.99)) {
+            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(), 0.1, 0.99)) {
+                ret = 'invalid'
+            }
+            return (ret)
+        }
+
+        errorsObject.cgstSgstIgstError = () => {
+            let ret = ''
+            if (subheader.sgst.value !== subheader.cgst.value) {
+                ret = 'invalid'
+            }
+            if ((subheader.sgst.value !== 0) && (subheader.igst.value !== 0)) {
+                ret = 'invalid'
+            }
+            if ((header.isGstInvoice.value) && (subheader.invoiceAmount.value !== 0)) {
+                if ((subheader.cgst.value === 0) && (subheader.sgst.value === 0) && (subheader.igst.value === 0)) {
+                    ret = 'invalid'
+                }
+            }
+            return (ret)
+        }
+
+        errorsObject.igstError = () => {
+            let ret = ''
+            if ((subheader.invoiceAmount.value !== 0) && PurchaseStore.main.lineItemsHeader.isIgst.value && (subheader.igst.value === 0)) {
                 ret = 'invalid'
             }
             return (ret)
@@ -80,7 +104,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.totalCgstError = () => {
             let ret = ''
-            if (!almostEqual(main.functions.getComputedTotalCgst(), subheader.cgst.value, 0.01,.99) ){
+            if (!almostEqual(main.functions.getComputedTotalCgst(), subheader.cgst.value, 0.01, .99)) {
                 ret = 'invallid'
             }
             return (ret)
@@ -88,7 +112,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.totalSgstError = () => {
             let ret = ''
-            if (!almostEqual(main.functions.getComputedTotalSgst(),subheader.sgst.value,.01,.99)) {
+            if (!almostEqual(main.functions.getComputedTotalSgst(), subheader.sgst.value, .01, .99)) {
                 ret = 'invallid'
             }
             return (ret)
@@ -96,7 +120,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.totalIgstError = () => {
             let ret = ''
-            if (!almostEqual(main.functions.getComputedTotalSgst(),subheader.sgst.value,.01,.99)) {
+            if (!almostEqual(main.functions.getComputedTotalSgst(), subheader.sgst.value, .01, .99)) {
                 ret = 'invallid'
             }
             return (ret)

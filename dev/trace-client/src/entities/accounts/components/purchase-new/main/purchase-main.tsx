@@ -1,7 +1,5 @@
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../../imports/gui-imports'
-// import { useFormik, Yup } from '../../../../../imports/regular-imports'
 import { useSharedElements } from '../../common/shared-elements-hook'
-import { PurchaseStore } from '../../../stores/purchase-store'
 import { PurchaseMainHeader } from './purchase-main-header'
 import { usePurchaseMain } from './purchase-main-hook'
 import { PurchaseItems } from './items/purchase-items'

@@ -97,37 +97,3 @@ function PurchaseMainHeader() {
     </Box>)
 }
 export { PurchaseMainHeader }
-
-// function PurchaseCashCredit() {
-//     const theme = useTheme()
-//     const header = PurchaseNewStore.main.header
-//     return (<Box sx={{ position: 'relative', top: theme.spacing(1) }}>
-//         <FormControlLabel
-//             label='Credit purchase'
-//             control={
-//                 <Radio
-//                     disabled={Boolean(header.id)}
-//                     size='small'
-//                     color='secondary'
-//                     checked={header.isCreditPurchase.value}
-//                     onClick={() => {
-//                         header.isCreditPurchase.value = true
-//                     }}
-//                 />
-//             } />
-
-//         <FormControlLabel
-//             label='Cash purchase'
-//             control={
-//                 <Radio
-//                     disabled={Boolean(header.id)}
-//                     size='small'
-//                     color='secondary'
-//                     checked={header.isCreditPurchase.value}
-//                     onClick={() => {
-//                         header.isCreditPurchase.value = true
-//                     }}
-//                 />
-//             } />
-//     </Box>)
-// }

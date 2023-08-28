@@ -91,7 +91,6 @@ function PurchaseView() {
                 emit('SHOW-MESSAGE', {})
                 emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + PurchaseStore.purchaseType, undefined)
             }).catch(() => { })
-        // }
     }
 
     async function onPurchaseEdit(id: number) {
@@ -116,6 +115,7 @@ function PurchaseView() {
         loadExtGstTranD(res)
         loadSalePurchaseDetails(res)
         loadTranD(res)
+        PurchaseStore.main.functions.computeSummary()
     }
 
     function populateFunctions() {
@@ -134,6 +134,7 @@ function PurchaseView() {
 
         function loadExtGstTranD(res: any) {
             const extGstTranD = res?.extGstTranD
+            subheader.extGstTranDId = extGstTranD.id
             subheader.gstinNumber.value = extGstTranD?.gstin
             subheader.cgst.value = extGstTranD?.cgst
             subheader.sgst.value = extGstTranD?.sgst
@@ -160,7 +161,7 @@ function PurchaseView() {
             }
 
             PurchaseStore.main.lineItems.value = salePurchaseDetails.map((item: any) => ({
-                id: signal(item.id),
+                id: item.id,
                 remarks: signal(item.remarks || ''),
                 upcCode: signal(item.upcCode),
                 productCodeOrUpc: signal(''),
@@ -204,11 +205,13 @@ function PurchaseView() {
             for (let row of tranD) {
                 if (row.dc === 'D') {
                     subheader.ledgerSubledgerPurchase.accId = row.accId
+                    subheader.ledgerSubledgerPurchase.id = row.id
                     subheader.purchaseAccId.value = row.accId
                     subheader.invoiceAmount.value = row.amount
                 } else {
                     subheader.otherAccId.value = row.accId
                     subheader.ledgerSubledgerOther.accId = row.accId
+                    subheader.ledgerSubledgerOther.id = row.id
                 }
                 PurchaseStore.main.functions.refreshSubheader()
             }
@@ -216,8 +219,5 @@ function PurchaseView() {
 
         return ({ loadTranH, loadExtGstTranD, loadSalePurchaseDetails, loadTranD })
     }
-
-
-
 }
 export { PurchaseView }

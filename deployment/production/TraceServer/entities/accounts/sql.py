@@ -1750,7 +1750,7 @@ allSqls = {
 
     "getJson_all_gst_reports": '''
         --with "branchId" as (values(1)), "finYearId" as (values(2022)), "startDate" as (values('2022-04-01'::date)), "endDate" as (values('2023-03-31'::date))
-			with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "startDate" as (values('2023-04-01' ::date)), "endDate" as (values('2024-03-31' ::date))
+			with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "startDate" as (values(%(startDate)s ::date)), "endDate" as (values(%(endDate)s:: date))
 			, cte1 as (
             select  "tranDate", "autoRefNo", "userRefNo", "tranType", "gstin", d."amount" - "cgst" - "sgst" - "igst" as "aggregate", "cgst", "sgst", "igst", d."amount",
                     "accName",h."remarks", "dc", "lineRefNo", d."remarks" as "lineRemarks"
@@ -1924,7 +1924,7 @@ allSqls = {
                     order by hsn),
 			-- gst-output-sales-hsn-details (considering only table SalePurchaseDetails)
             cte7 as (
-                select h."autoRefNo",  "tranType", hsn,
+                select h."autoRefNo", "tranDate", "tranType", hsn,
 				CASE WHEN "tranTypeId" = 4 THEN (s."amount" - "cgst" - "sgst" - "igst") ELSE -(s."amount" - "cgst" - "sgst" - "igst") END as "aggregate",
 				CASE WHEN "tranTypeId" = 4 THEN "cgst" ELSE -"cgst" END as "cgst",
                 CASE WHEN "tranTypeId" = 4 THEN "sgst" ELSE -"sgst" END as "sgst",

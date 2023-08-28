@@ -1,7 +1,7 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
 import { genericUpdateMasterDetails, getFromBag, useIbuki } from "../../inventory/redirect"
-import { PurchaseLineItemType, PurchaseStore, PurchaseStoreT, resetPurchaseStore } from "../../../stores/purchase-store"
-import { _, useCallback, useEffect, useGranularEffect, useState } from '../../../../../imports/regular-imports'
+import { PurchaseLineItemType, PurchaseStore, resetPurchaseStore } from "../../../stores/purchase-store"
+import { useCallback, useEffect } from '../../../../../imports/regular-imports'
 import Swal from "sweetalert2"
 
 function usePurchaseMainHeader() {
@@ -77,8 +77,6 @@ function usePurchaseMainHeader() {
         //     isGstInvoice: header.isGstInvoice.value,
         //     purchase: subheader.ledgerSubledgerPurchase
         // }
-
-
     }
 
     function isGstinExists() {
@@ -117,6 +115,8 @@ function usePurchaseMainHeader() {
             || errorsObject.totalCgstError()
             || errorsObject.totalSgstError()
             || errorsObject.totalIgstError()
+            || errorsObject.cgstSgstIgstError()
+            || errorsObject.igstError()
         const lineItemsError = PurchaseStore.main.lineItems.value.reduce((acc: any, lineItem: PurchaseLineItemType) => {
             const itemError = errorsObject.productCodeError(lineItem)
                 || errorsObject.productDetailsError(lineItem)
@@ -165,6 +165,7 @@ function usePurchaseMainHeader() {
 
             const purchRow: any = {
                 // id: ad.ledgerSubledgerPurchase.id,
+                id: subheader.ledgerSubledgerPurchase.id || undefined,
                 accId: subheader.purchaseAccId.value, //ledgerSubledgerPurchase.accId,
                 dc: PurchaseStore.purchaseType === 'pur' ? 'D' : 'C',
                 amount: subheader.invoiceAmount.value,
@@ -173,6 +174,7 @@ function usePurchaseMainHeader() {
 
             const otherRow: any = {
                 // id: ad.ledgerSubledgerOther.id,
+                id: subheader.ledgerSubledgerOther.id || undefined,
                 accId: subheader.otherAccId.value, //ad.ledgerSubledgerOther.accId,
                 dc: PurchaseStore.purchaseType === 'pur' ? 'C' : 'D',
                 amount: subheader.invoiceAmount.value,
@@ -189,6 +191,7 @@ function usePurchaseMainHeader() {
                 data: [
                     {
                         // id: ad.extGstTranDId,
+                        id: subheader.extGstTranDId,
                         gstin: subheader.gstinNumber.value,
                         cgst: subheader.cgst.value, //  ad.cgst,
                         sgst: subheader.sgst.value, //ad.sgst,
@@ -210,7 +213,7 @@ function usePurchaseMainHeader() {
                     //         : undefined,
                     data: [
                         {
-                            // id: item.id,
+                            id: item.id,
                             productId: item.productId,
                             qty: item.qty,
                             price: item.price,

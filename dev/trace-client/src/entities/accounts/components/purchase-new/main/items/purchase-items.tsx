@@ -115,13 +115,6 @@ function PurchaseItems() {
             qty = +Big(qty).add(lineItem.qty.value)
             subTotal = +Big(subTotal).add(lineItem.subTotal.value)
             discount = +Big(discount).add(lineItem.discount.value)
-            // cgst += lineItem.cgst.value
-            // sgst += lineItem.sgst.value
-            // igst += lineItem.igst.value
-            // amount += lineItem.amount.value
-            // qty += lineItem.qty.value
-            // subTotal += lineItem.subTotal.value
-            // discount += lineItem.discount.value * lineItem.qty.value
         })
         const lineItemsFooter = PurchaseStore.main.lineItemsFooter
         lineItemsFooter.cgst.value = cgst
@@ -147,8 +140,8 @@ function PurchaseItems() {
     function getComputedInvoiceAmount() {
         const lineItems: PurchaseLineItemType[] = PurchaseStore.main.lineItems.value
         const ret = lineItems.reduce((acc, lineItem) => {
-            return (acc + lineItem.amount.value)
-        }, 0)
+            return(+Big(acc).add(+Big(lineItem.amount.value)))
+        }, +Big(0))
         return (ret)
     }
 
@@ -237,7 +230,6 @@ function PurchaseItems() {
             return (ret)
         }
 
-
         errorsObject.qtyError = (item: PurchaseLineItemType) => {
             const ret = item.qty.value ? '' : 'invalid'
             return (ret)
@@ -246,10 +238,9 @@ function PurchaseItems() {
         errorsObject.slNoError = (item: PurchaseLineItemType) => {
             let ret = ''
             function getCount() {
-                return 0
-                // return (
-                //     item?.serialNumbers?.value.split(',').filter(Boolean).length || 0
-                // )
+                return (
+                    item?.serialNumbers?.value.split(',').filter(Boolean).length || 0
+                )
             }
             if (getCount() !== 0) {
                 ret = (getCount() === item.qty.value) ? '' : 'invalid'

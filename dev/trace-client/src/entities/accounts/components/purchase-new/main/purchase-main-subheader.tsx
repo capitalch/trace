@@ -115,7 +115,7 @@ function PurchaseMainSubheader() {
                     customInput={TextField}
                     decimalScale={2}
                     size="small"
-                    error={Boolean(errorsObject.totalCgstError())}
+                    error={Boolean(errorsObject.totalCgstError() || errorsObject.cgstSgstIgstError())}
                     fixedDecimalScale={true}
                     onFocus={(e: any) => {
                         e.target.select()
@@ -149,7 +149,7 @@ function PurchaseMainSubheader() {
                     customInput={TextField}
                     decimalScale={2}
                     size='small'
-                    error={Boolean(errorsObject.totalSgstError())}
+                    error={Boolean(errorsObject.totalSgstError() || errorsObject.cgstSgstIgstError())}
                     fixedDecimalScale={true}
                     onFocus={(e: any) => {
                         e.target.select()
@@ -184,7 +184,7 @@ function PurchaseMainSubheader() {
                     customInput={TextField}
                     decimalScale={2}
                     size='small'
-                    error={Boolean(errorsObject.totalIgstError())}
+                    error={Boolean(errorsObject.totalIgstError() || errorsObject.igstError() || errorsObject.cgstSgstIgstError())}
                     fixedDecimalScale={true}
                     onFocus={(e: any) => {
                         e.target.select()

@@ -1,18 +1,21 @@
 ## Purchase
+- Purchase delete of lineItem not working. Row still remains in SalePurchaseDetails table
+																									- Sum of item values has floating point approximations. Use big.js
+																									- Purchase edit: Total amount at bottom is not changing
+- Purchase view index should be serially ASC
 - Drill down compatibility
 - Autorized to delete and edit implement
-																									- Column Account: Inter Photo, Capital Photo etc.
-																									- delete																									
-																									- Descr column at end
 - purchase ret
-- submit
-																									- Change icons to PDF and EXCEL icons
-- Exhaustive check																			
+- submit for insert, update and delete
+- Exhaustive check
+																									- Column Account: Inter Photo, Capital Photo etc.
+																									- delete				
+																									- Descr column at end
+																									- Change icons to PDF and EXCEL icons				
 																									- Serial numbers not working
 																									- Total amt vs invoice amount not tallying in case of Inter foto
 																									- edit
 																									- Search
-
 																									- No of rows select
 																									- Export pdf
 																									- Export Excel
