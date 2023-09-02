@@ -57,10 +57,10 @@ function PurchaseView() {
             { field: 'index', headerText: '#', width: 70 }
             , { field: 'tranDate', headerText: 'Date', type: 'date', width: 95, format: { type: 'date', format: 'dd/MM/yyyy', } }
             , { field: 'autoRefNo', headerText: 'Ref no', width: 170 }
-            , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }
-            , { field: 'amount', headerText: 'Amount', textAlign: 'Right', type: 'number', width: 130, format: 'N2' }
+            , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }            
             , { field: 'productDetails', headerText: 'Product details', width: 220 }
             , { field: 'accounts', headerText: 'Account', width: 160 }
+            , { field: 'amount', headerText: 'Amount', textAlign: 'Right', type: 'number', width: 130, format: 'N2' }
             , { field: 'aggr', headerText: 'Aggr', textAlign: 'Right', width: 130, format: 'N2' } //numeric with 2 decimals
             , { field: 'cgst', headerText: 'Cgst', textAlign: 'Right', width: 110, format: 'N2' }
             , { field: 'sgst', headerText: 'Sgst', textAlign: 'Right', width: 110, format: 'N2' }
@@ -104,6 +104,7 @@ function PurchaseView() {
         emit('SHOW-LOADING-INDICATOR', false)
         if (!_.isEmpty(ret)) {
             PurchaseStore.tabValue.value = 0
+            PurchaseStore.goToView = true // After submit operation, the view is loaded
             preparePurchaseStore(ret)
         }
     }

@@ -3,6 +3,7 @@ import { signal, Signal, _ } from '../../../imports/regular-imports'
 
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
+    goToView: false,
     purchaseType: 'pur',
     errorsObject: {
         tranDateError: () => '',
@@ -17,8 +18,8 @@ const PurchaseStoreT: PurchaseStoreType = {
         totalCgstError: () => '',
         totalSgstError: () => '',
         totalIgstError: () => '',
-        cgstSgstIgstError:()=>'',
-        igstError:() => '',
+        cgstSgstIgstError: () => '',
+        igstError: () => '',
 
         productCodeError: () => '',
         productDetailsError: () => '',
@@ -45,7 +46,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             isFormError: () => true,
             populateLineItem: () => { },
             // refreshPurchaseLineItems: () => {},
-            refreshSubheader: () => {},
+            refreshSubheader: () => { },
             setPrice: () => { },
             setPriceGst: () => { },
         },
@@ -61,8 +62,8 @@ const PurchaseStoreT: PurchaseStoreType = {
         },
         subheader: {
             extGstTranDId: undefined,
-            ledgerSubledgerPurchase: { isLedgerSubledgerError: true, accId: undefined, id: undefined},
-            ledgerSubledgerOther: { isLedgerSubledgerError: true, accId: undefined, id: undefined},
+            ledgerSubledgerPurchase: { isLedgerSubledgerError: true, accId: undefined, id: undefined },
+            ledgerSubledgerOther: { isLedgerSubledgerError: true, accId: undefined, id: undefined },
             purchaseAccId: signal(0),
             otherAccId: signal(0),
             gstinNumber: signal(''),
@@ -73,6 +74,7 @@ const PurchaseStoreT: PurchaseStoreType = {
             igst: signal(0),
         },
         lineItems: signal([getEmptyPurchaseLineItem()]),
+        deletedSalePurchaseIds: [],
         lineItemsHeader: {
             isIgst: signal(false),
         },
@@ -99,6 +101,7 @@ function resetPurchaseStore() {
 
 type PurchaseStoreType = {
     tabValue: Signal<number>,
+    goToView: boolean
     purchaseType: 'pur' | 'ret'
     errorsObject: {
         tranDateError: ErrorType
@@ -121,7 +124,7 @@ type PurchaseStoreType = {
         gstRateError: ErrorTypeWithLineItem
         qtyError: ErrorTypeWithLineItem
         slNoError: ErrorTypeWithLineItem
-    },
+    }
 
     main: {
         functions: {
@@ -130,7 +133,7 @@ type PurchaseStoreType = {
             clearLineItem: (row: PurchaseLineItemType) => void
             computeRow: (row: PurchaseLineItemType) => void
             computeSummary: () => void
-            deleteLineItem: (index: number) => void
+            deleteLineItem: (index: number, item: any) => void
             getComputedInvoiceAmount: () => number
             getComputedTotalQty: () => number
             getComputedTotalCgst: () => number
@@ -152,7 +155,7 @@ type PurchaseStoreType = {
             // isCreditPurchase: Signal<boolean>
             isGstInvoice: Signal<boolean>
             isSubmitDisabled: Signal<boolean>
-        },
+        }
         subheader: {
             extGstTranDId: number | undefined
             ledgerSubledgerPurchase: { isLedgerSubledgerError: boolean, accId: string | undefined, id: number | undefined }
@@ -165,11 +168,12 @@ type PurchaseStoreType = {
             cgst: Signal<number>
             sgst: Signal<number>
             igst: Signal<number>
-        },
-        lineItems: Signal<PurchaseLineItemType[]>,
+        }
+        lineItems: Signal<PurchaseLineItemType[]>
+        deletedSalePurchaseIds: number[]
         lineItemsHeader: {
             isIgst: Signal<boolean>
-        },
+        }
         lineItemsFooter: {
             discount: Signal<number>
             qty: Signal<number>
@@ -179,7 +183,7 @@ type PurchaseStoreType = {
             sgst: Signal<number>
             igst: Signal<number>
         }
-    },
+    }
 
     view: {
         rows: Signal<any>[]

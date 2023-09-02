@@ -1,4 +1,5 @@
 ## Purchase
+- salePurchaseDeletedIds if empty array then save error at server
 - Purchase delete of lineItem not working. Row still remains in SalePurchaseDetails table
 																									- Sum of item values has floating point approximations. Use big.js
 																									- Purchase edit: Total amount at bottom is not changing

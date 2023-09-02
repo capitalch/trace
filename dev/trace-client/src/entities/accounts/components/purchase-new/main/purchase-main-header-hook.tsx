@@ -1,7 +1,7 @@
 import { useSharedElements } from "../../common/shared-elements-hook"
 import { genericUpdateMasterDetails, getFromBag, useIbuki } from "../../inventory/redirect"
 import { PurchaseLineItemType, PurchaseStore, resetPurchaseStore } from "../../../stores/purchase-store"
-import { useCallback, useEffect } from '../../../../../imports/regular-imports'
+import { _, useCallback, useEffect } from '../../../../../imports/regular-imports'
 import Swal from "sweetalert2"
 
 function usePurchaseMainHeader() {
@@ -56,6 +56,13 @@ function usePurchaseMainHeader() {
         if (ret.error) {
             console.log(ret.error)
         } else {
+            // Reset purchase data and go back to purchase view
+            const goToView = PurchaseStore.goToView
+            resetPurchaseStore()
+            if (goToView) {
+                PurchaseStore.tabValue.value = 1
+            }
+            emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
             // if (ad.shouldCloseParentOnSave) {
             //     emit(
             //         'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG',
@@ -207,6 +214,7 @@ function usePurchaseMainHeader() {
                 const obj: any = {
                     tableName: 'SalePurchaseDetails',
                     fkeyName: 'tranDetailsId',
+                    deletedIds: _.isEmpty(PurchaseStore.main.deletedSalePurchaseIds) ? undefined : PurchaseStore.main.deletedSalePurchaseIds,
                     // deletedIds:
                     //     ad?.deletedSalePurchaseIds.length > 0
                     //         ? [...ad.deletedSalePurchaseIds]

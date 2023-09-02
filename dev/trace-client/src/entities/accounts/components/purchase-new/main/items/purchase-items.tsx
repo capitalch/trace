@@ -126,7 +126,7 @@ function PurchaseItems() {
         lineItemsFooter.amount.value = amount
     }
 
-    function deleteLineItem(index: number) {
+    function deleteLineItem(index: number, item:any) {
         if (PurchaseStore.main.lineItems.value.length === 1) {
             return
         }
@@ -134,6 +134,9 @@ function PurchaseItems() {
             draft.splice(index, 1)
             return (draft)
         })
+        if(item.id){
+            PurchaseStore.main.deletedSalePurchaseIds.push(item.id)
+        }
         PurchaseStore.main.functions.computeSummary()
     }
 

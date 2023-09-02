@@ -308,7 +308,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
             {/* Delete */}
             <IconButton sx={{ mt: 0, height: '1.3rem', width: '1.3rem', ml: 8 }} size="small" color='info'
                 onClick={(e: any) => {
-                    PurchaseStore.main.functions.deleteLineItem(index)
+                    PurchaseStore.main.functions.deleteLineItem(index, item)
                 }}>
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
