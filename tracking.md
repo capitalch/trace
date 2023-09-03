@@ -1,5 +1,5 @@
 ## Purchase to do
-- Purchase ret select from invoice
+- Ned to reset purchaseStore at proper times like change of company, fin year etc                                                                                                         - Purchase ret select from invoice
 - Drill down from balance sheet
 - remove old purchase
                                                                                                                     - Debounce search on prod code  

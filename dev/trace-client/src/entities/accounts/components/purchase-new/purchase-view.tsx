@@ -18,6 +18,10 @@ function PurchaseView() {
         }
     }, [PurchaseStore.tabValue.value])
 
+    useEffect(() => {
+        PurchaseStore.main.functions.preparePurchaseStore = preparePurchaseStore
+    },[])
+
     return (<Box mt={2}>
         <GenericSyncfusionGrid gridOptions={getGridOptions()} />
     </Box>)

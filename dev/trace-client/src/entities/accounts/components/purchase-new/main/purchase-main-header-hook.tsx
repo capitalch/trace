@@ -24,10 +24,11 @@ function usePurchaseMainHeader() {
     }, [isGstinExistsCB, header.isGstInvoice, setErrorsObjectCB])
 
     function handleInvoiceSearch() {
-        AppStore.modalDialogA.title.value = 'Search from all purchase invoices'
+        AppStore.modalDialogA.title.value = 'Select an invoice by clicking a row'
         AppStore.modalDialogA.body.value = () => <PurchaseMainInvoices />
         AppStore.modalDialogA.isOpen.value = true
         AppStore.modalDialogA.maxWidth.value='lg'
+        const x = AppStore.modalDialogA.itemData.value
         // AppStore.modalDialogA.itemData.value =item
     }
 

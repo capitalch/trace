@@ -1,9 +1,9 @@
-import { Box, Button, Icon, IconButton, SvgIcon, Tooltip, Typography, } from "@mui/material"
+import { Box, IconButton, Tooltip, Typography, } from "@mui/material"
 import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
 import {
     Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective,
     AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject
-    , PdfExport, ExcelExport, Resize, Search, Toolbar,InfiniteScroll, Selection, RowSelectEventArgs
+    , PdfExport, ExcelExport, Resize, Search, Toolbar,InfiniteScroll, Selection, 
 } from "@syncfusion/ej2-react-grids"
 import { FC, useEffect, useRef, } from "react"
 import { _, execGenericView, useIbuki, useSharedElements } from "../inventory/redirect"
@@ -14,7 +14,6 @@ import { Close, DeleteForever, Edit, SyncSharp, } from "@mui/icons-material"
 import { AppStore } from "../../stores/app-store"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons'
-// import { PurchaseStore } from "../../stores/purchase-store"
 
 function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
@@ -74,13 +73,13 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         const aggrDirectives =
             <AggregateDirective>
                 <AggregateColumnsDirective>
-                    {getAggrDirectives()}
+                    {getAggrColDirectives()}
                 </AggregateColumnsDirective>
             </AggregateDirective>
 
         return (aggrDirectives)
 
-        function getAggrDirectives() {
+        function getAggrColDirectives() {
             const defaultFooterTemplate: FC = (props: any) => <span><b>{props.Sum}</b></span>
             const ds: any[] = aggrs.map((aggr: AggrOptions, index: number) => {
                 return (<AggregateColumnDirective
@@ -248,11 +247,6 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
             </Tooltip>
         </Box>
 
-        {/* <Button size="small" variant="contained" 
-        onClick={handleAction}
-        // onClick={() => { gridOptions.itemSelectedAction ? gridOptions.itemSelectedAction(1): ()=>1 }}
-        >Select action</Button> */}
-
         {/* Search */}
         <Box display='flex' alignItems='center' >
             <SearchIcon fontSize="small" sx={{ mr: .5 }} />
@@ -268,25 +262,6 @@ function GridHeader({ gridOptions, gridRef }: { gridOptions: GridOptions, gridRe
             gridRef.current.search(searchText)
         }
     }
-
-    // async function handleAction(){
-    //     //10776
-    //     const id = 10776
-    //     if (!id) { return }
-    //     emit('SHOW-LOADING-INDICATOR', true)
-    //     const ret = await execGenericView({
-    //         isMultipleRows: false,
-    //         sqlKey: 'getJson_sale_purchase_on_id',
-    //         args: { id: id }
-    //     })
-
-    //     emit('SHOW-LOADING-INDICATOR', false)
-    //     if (!_.isEmpty(ret)) {
-    //         PurchaseStore.tabValue.value = 0
-    //         PurchaseStore.goToView = true // After submit operation, the view is loaded
-    //         // preparePurchaseStore(ret)
-    //     }
-    // }
 
     function handleExcelExport() {
         gridRef.current.excelExport()
