@@ -3,6 +3,8 @@ import { genericUpdateMasterDetails, getFromBag, useIbuki } from "../../inventor
 import { PurchaseLineItemType, PurchaseStore, resetPurchaseStore } from "../../../stores/purchase-store"
 import { _, useCallback, useEffect } from '../../../../../imports/regular-imports'
 import Swal from "sweetalert2"
+import { AppStore } from "../../../stores/app-store"
+import { PurchaseMainInvoices } from "./purchase-main-invoices"
 
 function usePurchaseMainHeader() {
     const { emit } = useIbuki()
@@ -20,6 +22,14 @@ function usePurchaseMainHeader() {
         setErrorsObjectCB()
         PurchaseStore.main.functions.isFormError = isFormError
     }, [isGstinExistsCB, header.isGstInvoice, setErrorsObjectCB])
+
+    function handleInvoiceSearch() {
+        AppStore.modalDialogA.title.value = 'Search from all purchase invoices'
+        AppStore.modalDialogA.body.value = () => <PurchaseMainInvoices />
+        AppStore.modalDialogA.isOpen.value = true
+        AppStore.modalDialogA.maxWidth.value='lg'
+        // AppStore.modalDialogA.itemData.value =item
+    }
 
     function handleOnChangeGstInvoiceCheckbox(e: any) {
         header.isGstInvoice.value = !header.isGstInvoice.value
@@ -248,6 +258,6 @@ function usePurchaseMainHeader() {
         return ({ extractHeader, extractDetails })
     }
 
-    return ({ handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError })
+    return ({ handleInvoiceSearch, handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError })
 }
 export { usePurchaseMainHeader }

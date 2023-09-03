@@ -2,14 +2,18 @@
 import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import { PurchaseMain } from './main/purchase-main'
 import { usePurchase } from './purchase-hook'
-import { PurchaseStore } from '../../stores/purchase-store'
+import { PurchaseStore, resetPurchaseStore } from '../../stores/purchase-store'
 import { PurchaseView } from './purchase-view'
-function Purchase({ purchaseType }: { purchaseType: 'pur' | 'ret' }) {
+function Purchase({ purchaseType, origin }: { purchaseType: 'pur' | 'ret', origin?: string }) {
+    if (purchaseType !== PurchaseStore.purchaseType) {
+        resetPurchaseStore()
+    }
     PurchaseStore.purchaseType = purchaseType
     const { handleOnReset, handleOnTabChange } = usePurchase()
+
     const theme = useTheme()
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography color='secondary' variant='subtitle1' component='div'>Purchase</Typography>
+        <Typography color='secondary' variant='subtitle1' component='div'>{purchaseType === 'pur' ? 'Purchase' : 'Purchase return'}</Typography>
         <Tabs sx={{
             backgroundColor: theme.palette.grey[200],
             color: theme.palette.primary.dark,

@@ -1,16 +1,19 @@
-## Purchase to do            
-- Debounce search on prod code  
-- Serial no color                                                                                       
+## Purchase to do
+- Purchase ret select from invoice
+- Drill down from balance sheet
+- remove old purchase
+                                                                                                                    - Debounce search on prod code  
+                                                                                                                    - Serial no color                                                                                       
                                                                                                                     - items search and populate                                                                                                        
 - warning for price variation of products by 5 % and above
-- submit and save                                                                                                      
-- Check calculations
+                                                                                                                    - submit and save                                                                                                      
+                                                                                                                    - Check calculations
 
-- Purchase Ret
-- Edit
-- View
+                                                                                                                    - Purchase Ret
+                                                                                                                    - Edit
+                                                                                                                    - View
                                                                                                                     - Checkup with real invoice: 3 invoices
-- Mechanism to see whether sl no required or not
+                                                                                                                    - Mechanism to see whether sl no required or not
                                                                                                                     - Total error handling
                                                                                                                     - Validations
                                                                                                                     - serial no  
@@ -35,9 +38,9 @@
                                                                                                                     - Add button on every line
                                                                                                                     - Seach icon button with index
                                                                                                                     - items wire up with data
-- view with syncfusion
-- Populate gstin from party account
-- database delete functionlity
+                                                                                                                    - view with syncfusion
+                                                                                                                    - Populate gstin from party account
+                                                                                                                    - database delete functionlity
 
 ## Important
 1. Stock summary, include HSN code.
@@ -161,6 +164,8 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
+# 03-09-2023
+- Purchase ret, Submit, view back etc.
 # 27-08-2023
 - Modified Errors validaion
 # 16-07-2023 - 17-07-2023

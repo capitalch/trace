@@ -9,7 +9,7 @@ function PurchaseMainSubheader() {
     const theme = useTheme()
     const { errorsObject, handleClearSubHeaderTotals, handleLedgerSubledgerPurchase, handleLedgerSubledgerOther } = usePurchaseMainSubheader()
     const subheader = PurchaseStore.main.subheader
-
+    const purchaseType = PurchaseStore.purchaseType
     return (<Box sx={{ display: 'flex', mt: 2, columnGap: 4, rowGap: 4, flexWrap: 'wrap',alignItems:'center' }}>
         
         {/* Purchase a/c */}
@@ -23,12 +23,12 @@ function PurchaseMainSubheader() {
             />
         </Box>
 
-        {/* Credit a/c */}
+        {/* Credit / Debit a/c */}
         <Box>
-            <Typography variant="caption">Credit a/c</Typography>
+            <Typography variant="caption">{purchaseType==='pur'? 'Credit a/c' : 'Debit a/c'}</Typography>
             <LedgerSubledger
                 className="ledger-subledger"
-                ledgerFilterMethodName='debtorsCreditors'
+                ledgerFilterMethodName='debtorsCreditorsCashBank'
                 onChange={handleLedgerSubledgerOther}
                 rowData={subheader.ledgerSubledgerOther}
             />

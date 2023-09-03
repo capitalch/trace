@@ -280,6 +280,17 @@ function LedgerSubledger({
             return (getMappedAccounts(dc) || [])
         }
 
+        function debtorsCreditorsCashBank(){
+            const dcCb = allAccounts
+                .filter(
+                    (el: any) =>
+                        ['debtor', 'creditor', 'cash', 'bank', 'card', 'ecash'].includes(el.accClass) &&
+                        (el.accLeaf === 'Y' || el.accLeaf === 'L') &&
+                        !el.isAutoSubledger
+                )
+            return (getMappedAccounts(dcCb) || [])
+        }
+
         function autoSubledgers() {
             const as = allAccounts.filter(
                 (el: any) =>
@@ -299,7 +310,7 @@ function LedgerSubledger({
             return (getMappedAccounts(pa) || [])
         }
 
-        return ({all, cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, autoSubledgers, purchaseAccounts, })
+        return ({all, cashBank, journal, paymentOther, receiptOther, saleAccounts, debtorsCreditors, debtorsCreditorsCashBank, autoSubledgers, purchaseAccounts, })
     }
 
     function getItemFromValue(val: number) {

@@ -29,7 +29,7 @@ function PurchaseView() {
             sqlKey: 'get_purchase_headers',
             columns: getColumns(),
             sqlArgs: {
-                tranTypeId: 5,
+                tranTypeId: PurchaseStore.purchaseType === 'pur' ? 5 : 10,
                 no: 100,
             },
             onDelete: onPurchaseDelete,
@@ -57,7 +57,7 @@ function PurchaseView() {
             { field: 'index', headerText: '#', width: 70 }
             , { field: 'tranDate', headerText: 'Date', type: 'date', width: 95, format: { type: 'date', format: 'dd/MM/yyyy', } }
             , { field: 'autoRefNo', headerText: 'Ref no', width: 170 }
-            , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }            
+            , { field: 'userRefNo', headerText: 'Invoice no', width: 200 }
             , { field: 'productDetails', headerText: 'Product details', width: 220 }
             , { field: 'accounts', headerText: 'Account', width: 160 }
             , { field: 'amount', headerText: 'Amount', textAlign: 'Right', type: 'number', width: 130, format: 'N2' }

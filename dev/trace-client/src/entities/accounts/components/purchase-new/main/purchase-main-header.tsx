@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
-import { Box, Button, Checkbox, FormControlLabel, Radio, Tab, Tabs, TextField, Typography, useTheme } from '../../../../../imports/gui-imports'
-import { Error, Check, PrintIcon } from '../../../../../imports/icons-import'
+import { Box, Button, Checkbox, FormControlLabel, IconButton, Radio, Tab, Tabs, TextField, Typography, useTheme } from '../../../../../imports/gui-imports'
+import { Error, Check, PrintIcon, Search } from '../../../../../imports/icons-import'
 import { PurchaseStore } from '../../../stores/purchase-store'
 import { usePurchaseMainHeader } from './purchase-main-header-hook'
 import { useSharedElements } from '../../common/shared-elements-hook'
 
 function PurchaseMainHeader() {
     const theme = useTheme()
-    const { handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError } = usePurchaseMainHeader()
+    const { handleInvoiceSearch, handleOnChangeGstInvoiceCheckbox, handleOnReset, handleSubmit, isFormError } = usePurchaseMainHeader()
     const header = PurchaseStore.main.header
     const errorsObject = PurchaseStore.errorsObject
 
-    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4), alignItems: 'center' }}>
+    return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4), alignItems: 'center', }}>
 
         {/* auto ref no */}
         <TextField
@@ -51,6 +51,11 @@ function PurchaseMainHeader() {
             value={header.invoiceNo.value || ''}
         />
 
+        {/* Search */}
+        {(PurchaseStore.purchaseType !== 'pur') && <IconButton sx={{ ml: -7, mt: 2, }} size="small" color='secondary' onClick={handleInvoiceSearch}>
+            <Search />
+        </IconButton>}
+        
         {/* remarks */}
         <TextField
             sx={{ maxWidth: '12rem', width: '11rem', ml: .3 }}

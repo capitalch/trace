@@ -41,6 +41,10 @@ const appStoreT: AppStoreType = {
         pur: {
             searchText: signal(''),
             viewLimit: signal(100)
+        },
+        ret: {
+            searchText: signal(''),
+            viewLimit: signal(100)
         }
     }
 
