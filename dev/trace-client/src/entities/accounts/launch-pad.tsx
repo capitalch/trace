@@ -12,6 +12,7 @@ import {
     TrialBalance, Voucher, OpeningStock, InventoryReports, Purchase
 } from './components/common/redirect'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
+import { resetPurchaseStore } from './stores/purchase-store'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
@@ -41,6 +42,8 @@ function LaunchPad() {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
+        // Initialize and reset the PurchaseStore
+        // resetPurchaseStore()
         const subs: any = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
             (d: any) => {
                 if (!getCurrentEntity()) {

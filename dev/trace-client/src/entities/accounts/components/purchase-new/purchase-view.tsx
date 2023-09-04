@@ -20,7 +20,7 @@ function PurchaseView() {
 
     useEffect(() => {
         PurchaseStore.main.functions.preparePurchaseStore = preparePurchaseStore
-    },[])
+    }, [])
 
     return (<Box mt={2}>
         <GenericSyncfusionGrid gridOptions={getGridOptions()} />
@@ -113,9 +113,9 @@ function PurchaseView() {
         }
     }
 
-    function preparePurchaseStore(data: any) {
+    function preparePurchaseStore(data: any, isEdit = true) {
         const res = data.jsonResult
-        const { loadTranH, loadExtGstTranD, loadSalePurchaseDetails, loadTranD } = populateFunctions()
+        const { loadTranH, loadExtGstTranD, loadSalePurchaseDetails, loadTranD } = populateFunctions(isEdit)
         loadTranH(res)
         loadExtGstTranD(res)
         loadSalePurchaseDetails(res)
@@ -123,14 +123,14 @@ function PurchaseView() {
         PurchaseStore.main.functions.computeSummary()
     }
 
-    function populateFunctions() {
+    function populateFunctions(isEdit: boolean) {
         const header = PurchaseStore.main.header
         const subheader = PurchaseStore.main.subheader
         const lineItemsHeader = PurchaseStore.main.lineItemsHeader
 
         function loadTranH(res: any) {
             const tranH = res.tranH
-            header.id = tranH.id
+            header.id = isEdit ? tranH.id : undefined
             header.refNo.value = tranH.autoRefNo
             header.tranDate.value = tranH.tranDate
             header.invoiceNo.value = tranH.userRefNo
@@ -139,7 +139,7 @@ function PurchaseView() {
 
         function loadExtGstTranD(res: any) {
             const extGstTranD = res?.extGstTranD
-            subheader.extGstTranDId = extGstTranD.id
+            subheader.extGstTranDId = isEdit ? extGstTranD.id : undefined
             subheader.gstinNumber.value = extGstTranD?.gstin
             subheader.cgst.value = extGstTranD?.cgst
             subheader.sgst.value = extGstTranD?.sgst
@@ -166,7 +166,7 @@ function PurchaseView() {
             }
 
             PurchaseStore.main.lineItems.value = salePurchaseDetails.map((item: any) => ({
-                id: item.id,
+                id: isEdit ? item.id : undefined,
                 remarks: signal(item.remarks || ''),
                 upcCode: signal(item.upcCode),
                 productCodeOrUpc: signal(''),

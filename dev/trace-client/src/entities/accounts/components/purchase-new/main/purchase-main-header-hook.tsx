@@ -28,7 +28,7 @@ function usePurchaseMainHeader() {
         AppStore.modalDialogA.body.value = () => <PurchaseMainInvoices />
         AppStore.modalDialogA.isOpen.value = true
         AppStore.modalDialogA.maxWidth.value='lg'
-        const x = AppStore.modalDialogA.itemData.value
+        // const x = AppStore.modalDialogA.itemData.value
         // AppStore.modalDialogA.itemData.value =item
     }
 

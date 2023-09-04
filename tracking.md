@@ -1,5 +1,10 @@
+## Clone voucher or any other instrument
+
 ## Purchase to do
-- Ned to reset purchaseStore at proper times like change of company, fin year etc                                                                                                         - Purchase ret select from invoice
+- Check purchase and purchase ret with trial balance and inventory final values
+- When you select from invoice into purchase return; then id's are also copied. Hence the original purchase invoice is actually converted to purchase return. This is dangerous. You need to remove all id's
+- Check all the id's while doing modification of purchase
+- Need to reset purchaseStore at proper times like change of company, fin year etc                                                                                                         - Purchase ret select from invoice
 - Drill down from balance sheet
 - remove old purchase
                                                                                                                     - Debounce search on prod code  
