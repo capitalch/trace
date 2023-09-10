@@ -151,7 +151,8 @@ function PurchaseMainInvoices() {
             // PurchaseStore.tabValue.value = 0
             // PurchaseStore.goToView = true // After submit operation, the view is loaded
             // preparePurchaseStore(ret)
-            PurchaseStore.main.functions.preparePurchaseStore(ret)
+            // Here set all id's to be undefined. Becausethe id's are for purchase invoice; data from these invoices are required nad not the id's. If id's are used then original purchase invoice will be converted to purchase return            
+            PurchaseStore.main.functions.preparePurchaseStore(ret, false); // false means it is isEdit = false; so all id's are undefined
         }
     }
 }
