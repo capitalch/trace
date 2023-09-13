@@ -1,14 +1,31 @@
+																									## Debit note / Credit note view not working. Giving errors
+## QA script
+																									- Delete all purchase invoices
+																									- Select a physical invoice and create all products
+																									- Check Stock inventory and trial balance figures and write them down
+
+																									- Add entries for invoice. Verify trial balance and inventory: OK
+																									- Verify entry in table ExtTanDGst table: OK
+
+																									- Create normal purchase return and verify trial balance and inventory: ok
+																									- Verify entry in table ExtGstTranD table:OK
+																									- Delete purchase return and verify entries as above: OK
+
+																									- Do purchase return after selecting an already entered invoice
+																									- Verify trial balance and inventory
+																									- delete purchase return and verify entries
+
 ## Purchase
-- salePurchaseDeletedIds if empty array then save error at server
-- Purchase delete of lineItem not working. Row still remains in SalePurchaseDetails table
+- Security in purchase
+																									- salePurchaseDeletedIds if empty array then save error at server
+																									- Purchase delete of lineItem not working. Row still remains in SalePurchaseDetails table
 																									- Sum of item values has floating point approximations. Use big.js
 																									- Purchase edit: Total amount at bottom is not changing
-- Purchase view index should be serially ASC
+																									- Purchase view index should be serially ASC
 - Drill down compatibility
-- Autorized to delete and edit implement
-- purchase ret
-- submit for insert, update and delete
-- Exhaustive check
+																									- purchase ret
+																									- submit for insert, update and delete
+																									- Exhaustive check
 																									- Column Account: Inter Photo, Capital Photo etc.
 																									- delete				
 																									- Descr column at end

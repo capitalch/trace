@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
-import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
+import { useEffect, } from 'react'
+import { Box, } from '../../../../imports/gui-imports'
 import _ from 'lodash'
-import { accountsMessages, execGenericView, manageEntitiesState, useSharedElements, utilMethods } from '../inventory/redirect';
+import { accountsMessages, execGenericView, useSharedElements, utilMethods } from '../inventory/redirect';
 import { PurchaseStore } from '../../stores/purchase-store';
 import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
 import { signal } from '@preact/signals-react';
 
 function PurchaseView() {
-    const { emit, confirm, genericUpdateMaster, isAllowedUpdate }: any = useSharedElements()
+    const { emit, confirm, genericUpdateMaster, }: any = useSharedElements()
     const { isControlDisabled } = utilMethods()
     const isDeleteDisabled = isControlDisabled('salespurchases-purchase-delete')
     const isEditDisabled = isControlDisabled('salespurchases-purchase-edit')
@@ -210,13 +210,13 @@ function PurchaseView() {
             for (let row of tranD) {
                 if (row.dc === 'D') {
                     subheader.ledgerSubledgerPurchase.accId = row.accId
-                    subheader.ledgerSubledgerPurchase.id = row.id
+                    subheader.ledgerSubledgerPurchase.id = isEdit ? row.id : undefined
                     subheader.purchaseAccId.value = row.accId
                     subheader.invoiceAmount.value = row.amount
                 } else {
                     subheader.otherAccId.value = row.accId
                     subheader.ledgerSubledgerOther.accId = row.accId
-                    subheader.ledgerSubledgerOther.id = row.id
+                    subheader.ledgerSubledgerOther.id = isEdit ? row.id : undefined
                 }
                 PurchaseStore.main.functions.refreshSubheader()
             }
