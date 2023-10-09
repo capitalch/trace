@@ -10,12 +10,12 @@ import {
 } from '../../../../imports/gui-imports'
 import { utilMethods } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
-import { GeneralLedgerPdf } from './general-ledger-pdf'
+// import { GeneralLedgerPdf } from './general-ledger-pdf'
 import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 
 function useGeneralLedger(getArtifacts: any) {
     const [, setRefresh] = useState({})
-    const { showPdf } = utilMethods()
+    // const { showPdf } = utilMethods()
     const { emit, filterOn, getFromBag, PDFViewer } = useSharedElements()
 
     useEffect(() => {
@@ -79,10 +79,7 @@ function useGeneralLedger(getArtifacts: any) {
             </PDFViewer>
         )
         setRefresh({})
-        // showPdf(meta, <GeneralLedgerPdf ledgerData={
-        //     meta.current.sharedData.filteredRows || []
-        // }
-        //     accName={meta.current.accName} />)
+
     }
     return { handleLedgerDialogClose, handleLedgerPreview, meta }
 }

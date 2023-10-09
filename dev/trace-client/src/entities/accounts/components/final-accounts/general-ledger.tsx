@@ -1,37 +1,29 @@
 import {
-    PrimeDialog,
     moment,
     useState,
 } from '../../../../imports/regular-imports'
 import {
     Box,
-    // Dialog,
-    // DialogContent,
-    // DialogTitle,
     IconButton,
     Tooltip,
     Typography,
 } from '../../../../imports/gui-imports'
-import { CloseSharp, Preview } from '../../../../imports/icons-import'
+import { Preview } from '../../../../imports/icons-import'
 import { useTraceMaterialComponents, XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
-// import { PdfLedger } from '../pdf/ledgers/pdf-ledger'
 import { TypographySmart } from '../common/typography-smart'
-// import { GeneralLedgerPdf } from './general-ledger-pdf'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
-    const { handleLedgerDialogClose, handleLedgerPreview, meta } =
+    const { handleLedgerPreview, meta } =
         useGeneralLedger(getArtifacts)
 
     const {
-        accountsMessages,
         emit,
         getAccountName,
         getGridReportSubTitle,
         LedgerSubledger,
-        PDFViewer,
         toDecimalFormat,
     } = useSharedElements()
 
@@ -95,7 +87,6 @@ function GeneralLedger() {
                     />
                 </div>
             </div>
-
             <Box className='data-grid'>
                 <XXGrid
                     autoFetchData={false}
@@ -118,47 +109,6 @@ function GeneralLedger() {
                 />
             </Box>
             <BasicMaterialDialog parentMeta={meta} />
-            {/* <GeneralLedgerPdf ledgerData={
-                meta.current.sharedData.filteredRows || []
-            }
-                accName={meta.current.accName} /> */}
-            {/* <PrimeDialog
-                header={accountsMessages.selectAccountHeader}
-                visible={meta.current.showDialog}
-                onHide={() => {
-                    meta.current.showDialog = false
-                    meta.current.isMounted && setRefresh({})
-                }}>
-                {accountsMessages.selectAccountDetails}
-            </PrimeDialog> */}
-            {/* <Dialog
-                open={meta.current.showLedgerDialog}
-                fullWidth={true}
-                maxWidth="md">
-                <DialogTitle>
-                    <div className={classes.previewTitle}>
-                        <div>Ledger view: {meta.current.accName}</div>
-                        <Tooltip title="Close">
-                            <IconButton
-                                size="small"
-                                disabled={false}
-                                onClick={handleLedgerDialogClose}>
-                                <CloseSharp />
-                            </IconButton>
-                        </Tooltip>
-                    </div>
-                </DialogTitle>
-                <DialogContent>
-                    <PDFViewer showToolbar={true} width={840} height={600}>
-                        <PdfLedger
-                            ledgerData={
-                                meta.current.sharedData.filteredRows || []
-                            }
-                            accName={meta.current.accName}
-                        />
-                    </PDFViewer>
-                </DialogContent>
-            </Dialog> */}
         </div>
     )
 
@@ -269,3 +219,45 @@ function GeneralLedger() {
     }
 }
 export { GeneralLedger }
+
+// {/* <GeneralLedgerPdf ledgerData={
+//                 meta.current.sharedData.filteredRows || []
+//             }
+//                 accName={meta.current.accName} /> */}
+//             {/* <PrimeDialog
+//                 header={accountsMessages.selectAccountHeader}
+//                 visible={meta.current.showDialog}
+//                 onHide={() => {
+//                     meta.current.showDialog = false
+//                     meta.current.isMounted && setRefresh({})
+//                 }}>
+//                 {accountsMessages.selectAccountDetails}
+//             </PrimeDialog> */}
+//             {/* <Dialog
+//                 open={meta.current.showLedgerDialog}
+//                 fullWidth={true}
+//                 maxWidth="md">
+//                 <DialogTitle>
+//                     <div className={classes.previewTitle}>
+//                         <div>Ledger view: {meta.current.accName}</div>
+//                         <Tooltip title="Close">
+//                             <IconButton
+//                                 size="small"
+//                                 disabled={false}
+//                                 onClick={handleLedgerDialogClose}>
+//                                 <CloseSharp />
+//                             </IconButton>
+//                         </Tooltip>
+//                     </div>
+//                 </DialogTitle>
+//                 <DialogContent>
+//                     <PDFViewer showToolbar={true} width={840} height={600}>
+//                         <PdfLedger
+//                             ledgerData={
+//                                 meta.current.sharedData.filteredRows || []
+//                             }
+//                             accName={meta.current.accName}
+//                         />
+//                     </PDFViewer>
+//                 </DialogContent>
+//             </Dialog> */}

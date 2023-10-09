@@ -1,3 +1,6 @@
+## Purchases new
+- Drill down from balance sheet, trial balance, ledgers
+- Final thorough checkup with a new entry and then delete
 																									## Debit note / Credit note view not working. Giving errors
 ## QA script
 																									- Delete all purchase invoices
@@ -22,7 +25,7 @@
 																									- Sum of item values has floating point approximations. Use big.js
 																									- Purchase edit: Total amount at bottom is not changing
 																									- Purchase view index should be serially ASC
-- Drill down compatibility
+
 																									- purchase ret
 																									- submit for insert, update and delete
 																									- Exhaustive check
