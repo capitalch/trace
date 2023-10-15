@@ -1,5 +1,44 @@
+## Plan for Checkup
+- delete all purchase and purchase return
+- New purchase entry
+	- Check trial balance
+	- Enter purchase invoice
+	- Verify trial balance
+	- Verify GST report
+- New purchase Return entry
+	- Check trial balance
+	- Enter purchase invoice
+	- Verify trial balance
+	- Verify GST report
+- New purchase return from purchase entry
+	- Check trial balance
+	- Enter purchase invoice
+	- Verify trial balance
+	- Verify GST report
+- Delete Purchase Return entry
+	- Check trial balance
+	- Enter purchase invoice
+	- Verify trial balance
+	- Verify GST report
+- Delete Purchase Return entry
+	- Check trial balance
+	- Enter purchase invoice
+	- Verify trial balance
+	- Verify GST report
+- Delete purchase Entry
+	- Check trial balance
+	- Enter purchase invoice
+	- Verify trial balance
+	- Verify GST report
+
 ## Purchases new
-- Drill down from balance sheet, trial balance, ledgers
+- When prod code is given sometimes wrong selection. Say for prod code 11 the prod code 1013 is selected
+																								- Drill down from balance sheet, trial balance, ledgers
+																									- Prevent multi load purchase
+																									- Close on submit and reset
+
+																									- Bug: When edit purchase Ret, it becomes purchase
+
 - Final thorough checkup with a new entry and then delete
 																									## Debit note / Credit note view not working. Giving errors
 ## QA script

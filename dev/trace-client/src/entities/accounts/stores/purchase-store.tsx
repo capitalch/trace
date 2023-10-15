@@ -4,6 +4,7 @@ import { signal, Signal, _ } from '../../../imports/regular-imports'
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
     goToView: false,
+    closeOnSubmit: false,
     purchaseType: 'pur',
     errorsObject: {
         tranDateError: () => '',
@@ -103,6 +104,7 @@ function resetPurchaseStore() {
 type PurchaseStoreType = {
     tabValue: Signal<number>,
     goToView: boolean
+    closeOnSubmit: boolean
     purchaseType: 'pur' | 'ret'
     errorsObject: {
         tranDateError: ErrorType

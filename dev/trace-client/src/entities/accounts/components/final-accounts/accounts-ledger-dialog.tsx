@@ -33,6 +33,7 @@ import {
     getDebitCreditNotesArbitraryData,
     getVouchersArbitraryData,
 } from '../../components/common/multi-data-bridge'
+import { Purchase } from '../purchase-new/purchase'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
@@ -243,11 +244,12 @@ function AccountsLedgerDialog() {
             ret = <Sales saleType="ret" drillDownEditAttributes={attrs} />
         } else if (attrs.tranTypeId === 5) {
             ret = (
-                <Purchases purchaseType="pur" drillDownEditAttributes={attrs} />
+                // <Purchases purchaseType="pur" drillDownEditAttributes={attrs} />
+                <Purchase purchaseType='pur' drillDownEditAttributes={attrs} />
             )
         } else if (attrs.tranTypeId === 10) {
             ret = (
-                <Purchases purchaseType="ret" drillDownEditAttributes={attrs} />
+                <Purchase purchaseType="ret" drillDownEditAttributes={attrs} />
             )
         } else if (attrs.tranTypeId === 7) {
             //debit notes

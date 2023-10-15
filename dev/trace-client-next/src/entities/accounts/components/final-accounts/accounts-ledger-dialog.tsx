@@ -1,3 +1,4 @@
+import {} from 'react'
 import {
     moment,
     useState,
@@ -14,6 +15,7 @@ import {
     createStyles,
     makeStyles,
 } from '../../../../imports/gui-imports'
+
 import { CloseSharp } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import {
@@ -25,7 +27,7 @@ import { Sales } from '../sales/sales'
 import { Purchases } from '../purchases/purchases'
 import { DebitNotes } from '../debit-credit-notes/debit-notes'
 import { CreditNotes } from '../debit-credit-notes/credit-notes'
-import { truncateSync } from 'fs'
+// import { truncateSync } from 'fs'
 import {
     MultiDataContext,
     getPurchasesArbitraryData,
@@ -78,7 +80,7 @@ function AccountsLedgerDialog() {
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
-        const subs = filterOn('SHOW-LEDGER').subscribe(async (d) => {
+        const subs = filterOn('SHOW-LEDGER').subscribe(async (d:any) => {
             curr.showDialog = true
             curr.accId = d.data
             curr.accName = getAccountName(d.data)
@@ -122,71 +124,7 @@ function AccountsLedgerDialog() {
     }, [isAllowedUpdate])
 
     return (
-        <div>
-            <Dialog
-                className={classes.content}
-                open={meta.current.showDialog}
-                maxWidth="lg"
-                fullWidth={true}
-                onClose={closeDialog}>
-                <DialogTitle
-                    id="generic-dialog-title"
-                    className="dialog-title">
-                    <div>{'Account: '.concat(meta.current.accName)}</div>
-                    <IconButton
-                        size="small"
-                        color="default"
-                        onClick={closeDialog}
-                        aria-label="close">
-                        <CloseSharp />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent className={classes.dialogContent}>
-                    <XXGrid
-                        gridActionMessages={getArtifacts().gridActionMessages}
-                        autoFetchData={true}
-                        columns={getArtifacts().columns}
-                        hideViewLimit={true}
-                        summaryColNames={getArtifacts().summaryColNames}
-                        title="Ledger view"
-                        sqlQueryId="get_accountsLedger"
-                        sqlQueryArgs={getArtifacts().args}
-                        specialColumns={getArtifacts().specialColumns}
-                        toShowOpeningBalance={true}
-                        toShowClosingBalance={true}
-                        toShowDailySummary={true}
-                        toShowReverseCheckbox={true}
-                        jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
-                    />
-                </DialogContent>
-                <DialogActions></DialogActions>
-            </Dialog>
-            {/* Child dialog */}
-            <Dialog
-                className={classes.content}
-                open={meta.current.showChildDialog}
-                maxWidth="xl"
-                fullWidth={true}
-                onClose={closeChildDialog}
-            >
-                <DialogTitle
-                    id="generic-child-dialog-title"
-                    className="dialog-title">
-                    <div>{meta.current.childDialogTiitle}</div>
-                    <IconButton
-                        size="small"
-                        color="default"
-                        onClick={closeChildDialog}
-                        aria-label="close">
-                        <CloseSharp />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent className={classes.dialogContent}>
-                    <DrillDownEditComponent />
-                </DialogContent>
-                <DialogActions></DialogActions>
-            </Dialog>
-        </div>
+    <div></div>
     )
 
     function closeDialog() {
@@ -351,7 +289,7 @@ function AccountsLedgerDialog() {
         }
         const specialColumns: any = {
             isEdit: true,
-            isDelete: truncateSync,
+            // isDelete: truncateSync,
         }
         const gridActionMessages = {
             fetchIbukiMessage: 'XX-GRID-HOOK-FETCH-ACCOUNTS-LEDGER-DATA',

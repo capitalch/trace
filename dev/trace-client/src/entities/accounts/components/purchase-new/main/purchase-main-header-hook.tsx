@@ -27,7 +27,7 @@ function usePurchaseMainHeader() {
         AppStore.modalDialogA.title.value = 'Select an invoice by clicking a row'
         AppStore.modalDialogA.body.value = () => <PurchaseMainInvoices />
         AppStore.modalDialogA.isOpen.value = true
-        AppStore.modalDialogA.maxWidth.value='lg'
+        AppStore.modalDialogA.maxWidth.value = 'lg'
         // const x = AppStore.modalDialogA.itemData.value
         // AppStore.modalDialogA.itemData.value =item
     }
@@ -69,32 +69,17 @@ function usePurchaseMainHeader() {
         } else {
             // Reset purchase data and go back to purchase view
             const goToView = PurchaseStore.goToView
+            const closeOnSubmit = PurchaseStore.closeOnSubmit
             resetPurchaseStore()
             if (goToView) {
+                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
                 PurchaseStore.tabValue.value = 1
             }
-            emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-            // if (ad.shouldCloseParentOnSave) {
-            //     emit(
-            //         'ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG',
-            //         null
-            //     )
-            // } else if (ad.isViewBack) {
-            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-            //     emit('PURCHASES-HOOK-CHANGE-TAB', 1)
-            //     emit('PURCHASE-VIEW-HOOK-FETCH-DATA', null)
-            // } else {
-            //     emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-            // }
+            if (closeOnSubmit) {
+                emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
+                // return
+            }
         }
-        // const data = {
-        //     refNo: header.refNo.value,
-        //     tranDate: header.tranDate.value,
-        //     userRefNo: header.invoiceNo.value,
-        //     commonRemarks: header.commonRemarks.value,
-        //     isGstInvoice: header.isGstInvoice.value,
-        //     purchase: subheader.ledgerSubledgerPurchase
-        // }
     }
 
     function isGstinExists() {
@@ -185,7 +170,7 @@ function usePurchaseMainHeader() {
                 // id: ad.ledgerSubledgerPurchase.id,
                 id: subheader.ledgerSubledgerPurchase.id || undefined,
                 accId: subheader.purchaseAccId.value, //ledgerSubledgerPurchase.accId,
-                dc: PurchaseStore.purchaseType === 'pur' ? 'D' : 'C',
+                dc: 'D',// PurchaseStore.purchaseType === 'pur' ? 'D' : 'C',
                 amount: subheader.invoiceAmount.value,
                 details: [],
             }
@@ -194,12 +179,10 @@ function usePurchaseMainHeader() {
                 // id: ad.ledgerSubledgerOther.id,
                 id: subheader.ledgerSubledgerOther.id || undefined,
                 accId: subheader.otherAccId.value, //ad.ledgerSubledgerOther.accId,
-                dc: PurchaseStore.purchaseType === 'pur' ? 'C' : 'D',
+                dc: 'C', // PurchaseStore.purchaseType === 'pur' ? 'C' : 'D',
                 amount: subheader.invoiceAmount.value,
                 details: [],
             }
-
-
             tranD.data.push(purchRow)
             tranD.data.push(otherRow)
 

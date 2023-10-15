@@ -1,17 +1,20 @@
-import { Box, Button, IconButton, useTheme } from "@mui/material"
+import { Box, Button, IconButton, } from "@mui/material"
 import { SearchBox } from "../../common/search-box"
-import { DataGridPro, GridSearchIcon, useGridApiRef } from "@mui/x-data-grid-pro"
+import { DataGridPro, 
+    // GridSearchIcon, 
+    useGridApiRef } from "@mui/x-data-grid-pro"
 import { FC, useEffect, useRef, useState } from "react"
 import { Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective, AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject, Resize, RowSelectEventArgs, Search, Selection } from "@syncfusion/ej2-react-grids"
-import { _, execGenericView, useIbuki } from "../../inventory/redirect"
+import { _, execGenericView, useIbuki, useTheme } from "../../inventory/redirect"
 import { AppStore } from "../../../stores/app-store"
 import { Close } from "@mui/icons-material"
 import { TextBoxComponent } from "@syncfusion/ej2-react-inputs"
 import { PurchaseStore } from "../../../stores/purchase-store"
 
 function PurchaseMainInvoices() {
+    
     const { debounceFilterOn, emit } = useIbuki()
-    const theme = useTheme()
+    // const theme = useTheme()
     const [, setRefresh] = useState({})
     const gridRef: any = useRef({})
     const meta: any = useRef({
@@ -33,7 +36,7 @@ function PurchaseMainInvoices() {
         // console.log(e.data)
         // AppStore.modalDialogA.itemData.value = e.data
         AppStore.modalDialogA.isOpen.value = false
-        const id:number = e.data?.id
+        const id: number = e.data?.id
         fetchInvoiceOnId(id)
     }
 
@@ -182,7 +185,7 @@ function SyncSearchBox() {
     const { debounceEmit } = useIbuki()
     return (
         <Box display='flex' alignItems='center' >
-            <GridSearchIcon fontSize="small" sx={{ mr: .5 }} />
+            {/* <GridSearchIcon fontSize="small" sx={{ mr: .5 }} /> */}
             <TextBoxComponent value={AppStore.syncFusionGrid['ret'].searchText.value} type='text' style={{ height: '30px', width: '100%' }} ref={textBoxRef} showClearButton={true} placeholder="Search"
                 input={handleToolbarTextChanged}
             />

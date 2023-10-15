@@ -1,15 +1,16 @@
 
-import { Box, Button, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
+import { Box, Tab, Tabs, Typography, useTheme } from '../../../../imports/gui-imports'
 import { PurchaseMain } from './main/purchase-main'
 import { usePurchase } from './purchase-hook'
 import { PurchaseStore, resetPurchaseStore } from '../../stores/purchase-store'
 import { PurchaseView } from './purchase-view'
-function Purchase({ purchaseType, origin }: { purchaseType: 'pur' | 'ret', origin?: string }) {
+
+function Purchase({ purchaseType, drillDownEditAttributes }: { purchaseType: 'pur' | 'ret', drillDownEditAttributes?: any }) {
     if (purchaseType !== PurchaseStore.purchaseType) {
         resetPurchaseStore()
     }
     PurchaseStore.purchaseType = purchaseType
-    const { handleOnReset, handleOnTabChange } = usePurchase()
+    const { handleOnTabChange } = usePurchase(drillDownEditAttributes)
 
     const theme = useTheme()
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
