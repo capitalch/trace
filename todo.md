@@ -1,10 +1,12 @@
+##  Bugs
+- Purchase return being entered as purchase
 ## Plan for Checkup
-- delete all purchase and purchase return
-- New purchase entry
-	- Check trial balance
-	- Enter purchase invoice
-	- Verify trial balance
-	- Verify GST report
+																								- delete all purchase and purchase return
+																								- New purchase entry
+																									- Check trial balance
+																									- Enter purchase invoice
+																									- Verify trial balance
+																									- Verify GST report
 - New purchase Return entry
 	- Check trial balance
 	- Enter purchase invoice

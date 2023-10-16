@@ -71,13 +71,13 @@ function usePurchaseMainHeader() {
             const goToView = PurchaseStore.goToView
             const closeOnSubmit = PurchaseStore.closeOnSubmit
             resetPurchaseStore()
-            if (goToView) {
-                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
-                PurchaseStore.tabValue.value = 1
-            }
             if (closeOnSubmit) {
                 emit('ACCOUNTS-LEDGER-DIALOG-CLOSE-DRILL-DOWN-CHILD-DIALOG', '')
-                // return
+            } else {
+                emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+                if (goToView) {
+                    PurchaseStore.tabValue.value = 1
+                }
             }
         }
     }
