@@ -1,5 +1,7 @@
 ##  Bugs
-- Purchase return being entered as purchase
+																								- Reset purchase and purchase ret after drill down from trial balance. Otherwise on Purchase it shows the populated values
+																								- PurchPurchase entry saved but not reset
+																								- Purchase return from purchase wrong behavior
 ## Plan for Checkup
 																								- delete all purchase and purchase return
 																								- New purchase entry
@@ -7,32 +9,37 @@
 																									- Enter purchase invoice
 																									- Verify trial balance
 																									- Verify GST report
-- New purchase Return entry
-	- Check trial balance
-	- Enter purchase invoice
-	- Verify trial balance
-	- Verify GST report
-- New purchase return from purchase entry
-	- Check trial balance
-	- Enter purchase invoice
-	- Verify trial balance
-	- Verify GST report
-- Delete Purchase Return entry
-	- Check trial balance
-	- Enter purchase invoice
-	- Verify trial balance
-	- Verify GST report
-- Delete Purchase Return entry
-	- Check trial balance
-	- Enter purchase invoice
-	- Verify trial balance
-	- Verify GST report
-- Delete purchase Entry
-	- Check trial balance
-	- Enter purchase invoice
-	- Verify trial balance
-	- Verify GST report
-
+																									- Verify stock
+																								- New purchase Return entry
+																									- Check trial balance
+																									- Enter purchase invoice
+																									- Verify trial balance
+																									- Verify GST report
+																									- Verify stock
+																								- New purchase return from purchase entry
+																									- Check trial balance
+																									- Enter purchase invoice
+																									- Verify trial balance
+																									- Verify GST report
+																									- Verify stock
+																								- Delete Purchase Return entry
+																									- Check trial balance
+																									- Enter purchase invoice
+																									- Verify trial balance
+																									- Verify GST report
+																									- Verify stock
+																								- Delete Purchase Return entry
+																									- Check trial balance
+																									- Enter purchase invoice
+																									- Verify trial balance
+																									- Verify GST report
+																									- Verify stock
+																								- Delete purchase Entry
+																									- Check trial balance
+																									- Enter purchase invoice
+																									- Verify trial balance
+																									- Verify GST report
+																									- Verify stock
 ## Purchases new
 - When prod code is given sometimes wrong selection. Say for prod code 11 the prod code 1013 is selected
 																								- Drill down from balance sheet, trial balance, ledgers

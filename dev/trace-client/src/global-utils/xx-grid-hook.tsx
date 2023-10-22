@@ -330,9 +330,6 @@ function useXXGrid(gridOptions: any) {
             pre.filteredRows = pre.isSearchTextOr ?
                 pre.allRows.filter((row: any) => arr.some((x: string) => Object.values(row).toString().toLowerCase().includes(x.toLowerCase())))
                 : pre.allRows.filter((row: any) => arr.every((x: string) => Object.values(row).toString().toLowerCase().includes(x.toLowerCase())))
-            // pre.filteredRows = pre.allRows.filter((row: any) =>
-            //     Object.values(row).some((value: any) =>
-            //         arr.some((x: string) => String(value).toLowerCase().includes(x.toLowerCase()))))
         } else {
             pre.filteredRows = pre.allRows.map((x: any) => ({
                 ...x,

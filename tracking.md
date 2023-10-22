@@ -1,12 +1,12 @@
-## Clone voucher or any other instrument
+                                                                                                                    ## Clone voucher or any other instrument
 
-## Purchase to do
-- Check purchase and purchase ret with trial balance and inventory final values
-- When you select from invoice into purchase return; then id's are also copied. Hence the original purchase invoice is actually converted to purchase return. This is dangerous. You need to remove all id's
-- Check all the id's while doing modification of purchase
-- Need to reset purchaseStore at proper times like change of company, fin year etc                                                                                                         - Purchase ret select from invoice
-- Drill down from balance sheet
-- remove old purchase
+                                                                                                                    ## Purchase to do
+                                                                                                                    - Check purchase and purchase ret with trial balance and inventory final values
+                                                                                                                    - When you select from invoice into purchase return; then id's are also copied. Hence the original purchase invoice is actually converted to purchase return. This is dangerous. You need to remove all id's
+                                                                                                                    - Check all the id's while doing modification of purchase
+                                                                                                                    - Need to reset purchaseStore at proper times like change of company, fin year etc                                                                                                         - Purchase ret select from invoice
+                                                                                                                    - Drill down from balance sheet
+                                                                                                                    - remove old purchase
                                                                                                                     - Debounce search on prod code  
                                                                                                                     - Serial no color                                                                                       
                                                                                                                     - items search and populate                                                                                                        
@@ -169,6 +169,9 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
+# 22-10-2023
+- Completed new purchase and purchase return and tested thoroughly
+- Cloning of vouchers completed
 # 03-09-2023
 - Purchase ret, Submit, view back etc.
 # 27-08-2023

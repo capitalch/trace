@@ -170,7 +170,7 @@ function usePurchaseMainHeader() {
                 // id: ad.ledgerSubledgerPurchase.id,
                 id: subheader.ledgerSubledgerPurchase.id || undefined,
                 accId: subheader.purchaseAccId.value, //ledgerSubledgerPurchase.accId,
-                dc: 'D',// PurchaseStore.purchaseType === 'pur' ? 'D' : 'C',
+                dc: PurchaseStore.purchaseType === 'pur' ? 'D' : 'C',
                 amount: subheader.invoiceAmount.value,
                 details: [],
             }
@@ -179,7 +179,7 @@ function usePurchaseMainHeader() {
                 // id: ad.ledgerSubledgerOther.id,
                 id: subheader.ledgerSubledgerOther.id || undefined,
                 accId: subheader.otherAccId.value, //ad.ledgerSubledgerOther.accId,
-                dc: 'C', // PurchaseStore.purchaseType === 'pur' ? 'C' : 'D',
+                dc: PurchaseStore.purchaseType === 'pur' ? 'C' : 'D',
                 amount: subheader.invoiceAmount.value,
                 details: [],
             }

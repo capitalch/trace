@@ -27,6 +27,7 @@ export {
     ChevronLeft,
     ChevronRight,
     Contacts,
+    ContentCopySharp as Clone,
     CloseSharp,
 
     DeleteTwoTone,

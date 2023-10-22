@@ -14,7 +14,6 @@ import { PurchaseStore } from "../../../stores/purchase-store"
 function PurchaseMainInvoices() {
     
     const { debounceFilterOn, emit } = useIbuki()
-    // const theme = useTheme()
     const [, setRefresh] = useState({})
     const gridRef: any = useRef({})
     const meta: any = useRef({
@@ -33,8 +32,6 @@ function PurchaseMainInvoices() {
     }, [])
 
     gridRef.current.rowSelected = (e: any) => {
-        // console.log(e.data)
-        // AppStore.modalDialogA.itemData.value = e.data
         AppStore.modalDialogA.isOpen.value = false
         const id: number = e.data?.id
         fetchInvoiceOnId(id)
@@ -151,6 +148,17 @@ function PurchaseMainInvoices() {
         })
         emit('SHOW-LOADING-INDICATOR', false)
         if (!_.isEmpty(ret)) {
+            // This change is necessary because it is purchase return. Data is originally taken as purchase
+            const tranD:any[] = ret?.jsonResult?.tranD
+            if(!_.isEmpty(tranD)){
+                tranD.forEach((row:any) => {
+                    if(row.dc === 'D'){
+                        row.dc = 'C'
+                    } else {
+                        row.dc = 'D'
+                    }
+                })
+            }
             // PurchaseStore.tabValue.value = 0
             // PurchaseStore.goToView = true // After submit operation, the view is loaded
             // preparePurchaseStore(ret)

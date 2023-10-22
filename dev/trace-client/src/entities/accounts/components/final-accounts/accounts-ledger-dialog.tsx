@@ -22,7 +22,6 @@ import {
 } from '../../../../imports/trace-imports'
 import { Voucher } from '../vouchers/voucher'
 import { Sales } from '../sales/sales'
-import { Purchases } from '../purchases/purchases'
 import { DebitNotes } from '../debit-credit-notes/debit-notes'
 import { CreditNotes } from '../debit-credit-notes/credit-notes'
 import { truncateSync } from 'fs'
@@ -34,6 +33,7 @@ import {
     getVouchersArbitraryData,
 } from '../../components/common/multi-data-bridge'
 import { Purchase } from '../purchase-new/purchase'
+import { resetPurchaseStore } from '../../stores/purchase-store'
 
 function AccountsLedgerDialog() {
     const [, setRefresh] = useState({})
@@ -191,6 +191,7 @@ function AccountsLedgerDialog() {
     )
 
     function closeDialog() {
+        resetPurchaseStore()
         meta.current.showDialog = false
         setRefresh({})
     }

@@ -28,12 +28,26 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
     const arbitraryData: any = multiData.vouchers
 
     arbitraryData && (arbitraryData.header.tranTypeId = getTranTypeId())
+
+    const meta: any = useRef({
+        isMounted: false,
+        title: getTitle(),
+        tabValue: 0,
+        isClone: false,
+        setRefresh: setRefresh,
+        showDialog: false,
+        dialogConfig: {
+            title: 'Vouchers print preview',
+            content: () => <></>,
+            fullWidth: false,
+        },
+    })
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
         arbitraryData.shouldViewReload = true
         arbitraryData.shouldGoBackToView = false
-        // setAccounts()
         setRefresh({})
         const subs1 = filterOn('VOUCHER-CHANGE-TAB-TO-EDIT').subscribe(
             (d: any) => {
@@ -70,6 +84,14 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             setInBag('vouchersData', multiData.vouchers)
         })
 
+        const subs6 = filterOn('VOUCHER-CHANGE-TAB-TO-CLONE').subscribe((d: any) => {
+            const tranHeaderId = d.data?.tranHeaderId
+            meta.current.isClone = true
+            tranHeaderId && fetchAndPopulateDataOnId(tranHeaderId)
+            arbitraryData.shouldGoBackToView = true
+            handleOnTabChange(null, 0)
+        })
+
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
@@ -77,6 +99,7 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             subs3.unsubscribe()
             subs4.unsubscribe()
             subs5.unsubscribe()
+            subs6.unsubscribe()
         }
     }, [])
 
@@ -85,20 +108,6 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
             tranHeaderId: drillDownEditAttributes?.tranHeaderId,
         })
     }, [drillDownEditAttributes?.tranHeaderId])
-
-    const meta: any = useRef({
-        isMounted: false,
-        title: getTitle(),
-        tabValue: 0,
-
-        setRefresh: setRefresh,
-        showDialog: false,
-        dialogConfig: {
-            title: 'Vouchers print preview',
-            content: () => <></>,
-            fullWidth: false,
-        },
-    })
 
     const vouchersData = getFromBag('vouchersData')
     if (vouchersData) {
@@ -128,6 +137,18 @@ function useVoucher(loadComponent: string, drillDownEditAttributes: any) {
         function populateData(jsonResult: any) {
             const tranDetails: any[] = jsonResult.tranDetails
             const tranHeader: any = jsonResult.tranHeader
+            if (meta.current.isClone) {
+                tranHeader.autoRefNo = ''
+                tranHeader.id = undefined
+                tranHeader.tranDate = null
+                tranDetails.forEach((row: any) => {
+                    row.id = undefined
+                    row.tranHeaderId = undefined
+                    if(row.gst){
+                        row.gst.id = undefined
+                    }
+                })
+            }
             const ad = arbitraryData
             ad.header = tranHeader
             ad.debits = []

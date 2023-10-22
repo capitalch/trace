@@ -52,6 +52,12 @@
             "hierarchy": "salespurchases-purchase-return",
             "isActive": false
         },
+
+        {
+            "hierarchy": "salespurchases-purchase",
+            "isActive": false
+        },
+
         {
             "hierarchy": "salespurchases-debit-notes",
             "isActive": false

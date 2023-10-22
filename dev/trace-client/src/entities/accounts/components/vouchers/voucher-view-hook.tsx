@@ -27,10 +27,10 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         isGoodToDelete,
         toDecimalFormat,
     } = useSharedElements()
-    
+
     const meta: any = useRef({
         isMounted: false,
-        title: _.upperFirst(''.concat(getTranType(tranTypeId),'s view')),
+        title: _.upperFirst(''.concat(getTranType(tranTypeId), 's view')),
     })
 
     useEffect(() => {
@@ -57,11 +57,18 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
             emit(gridActionMessages.fetchIbukiMessage, null)
         })
 
+        const subs4 = filterOn(gridActionMessages.cloneIbukiMessage).subscribe((d: any) => {
+            emit('VOUCHER-CHANGE-TAB-TO-CLONE', {
+                tranHeaderId: d.data?.row?.id1,
+            })
+        })
+
         return () => {
             curr.isMounted = false
             subs1.unsubscribe()
             subs2.unsubscribe()
             subs3.unsubscribe()
+            subs4.unsubscribe()
         }
     }, [])
 
@@ -215,13 +222,16 @@ function useVoucherView(hidden: boolean, tranTypeId: number) {
         tranTypeId: tranTypeId,
         no: null,
     }
+
     const summaryColNames = ['debit', 'credit']
     const specialColumns = {
+        isClone: true,
         isEdit: true,
         isDelete: true,
         // isPrint: true,
     }
     const gridActionMessages = {
+        cloneIbukiMessage: 'XX-GRID-CLONE-VOUCHER',
         fetchIbukiMessage: 'XX-GRID-VIEW-FETCH-VOUCHER-DATA',
         editIbukiMessage: 'VOUCHER-VIEW-XX-GRID-EDIT-CLICKED',
         deleteIbukiMessage: 'VOUCHER-VIEW-XX-GRID-DELETE-CLICKED',

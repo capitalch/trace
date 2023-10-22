@@ -208,15 +208,28 @@ function PurchaseView() {
             }
 
             for (let row of tranD) {
-                if (row.dc === 'D') {
-                    subheader.ledgerSubledgerPurchase.accId = row.accId
-                    subheader.ledgerSubledgerPurchase.id = isEdit ? row.id : undefined
-                    subheader.purchaseAccId.value = row.accId
-                    subheader.invoiceAmount.value = row.amount
+                if(PurchaseStore.purchaseType==='pur'){
+                    if (row.dc === 'D') {
+                        subheader.ledgerSubledgerPurchase.accId = row.accId
+                        subheader.ledgerSubledgerPurchase.id = isEdit ? row.id : undefined
+                        subheader.purchaseAccId.value = row.accId
+                        subheader.invoiceAmount.value = row.amount
+                    } else {
+                        subheader.otherAccId.value = row.accId
+                        subheader.ledgerSubledgerOther.accId = row.accId
+                        subheader.ledgerSubledgerOther.id = isEdit ? row.id : undefined
+                    }
                 } else {
-                    subheader.otherAccId.value = row.accId
-                    subheader.ledgerSubledgerOther.accId = row.accId
-                    subheader.ledgerSubledgerOther.id = isEdit ? row.id : undefined
+                    if (row.dc === 'C') {
+                        subheader.ledgerSubledgerPurchase.accId = row.accId
+                        subheader.ledgerSubledgerPurchase.id = isEdit ? row.id : undefined
+                        subheader.purchaseAccId.value = row.accId
+                        subheader.invoiceAmount.value = row.amount
+                    } else {
+                        subheader.otherAccId.value = row.accId
+                        subheader.ledgerSubledgerOther.accId = row.accId
+                        subheader.ledgerSubledgerOther.id = isEdit ? row.id : undefined
+                    }
                 }
                 PurchaseStore.main.functions.refreshSubheader()
             }

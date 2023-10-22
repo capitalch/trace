@@ -1,6 +1,6 @@
 import { useStyles } from './xx-grid-hook'
 import { _, clsx, useRef, } from '../imports/regular-imports'
-import { useTheme } from '../imports/gui-imports'
+import { Tooltip, useTheme } from '../imports/gui-imports'
 import {
     FormControlLabel,
     IconButton,
@@ -11,6 +11,7 @@ import {
     Checkbox,
 } from '../imports/gui-imports'
 import {
+    Clone,
     CloseSharp,
     CheckBoxOutlineBlankSharp,
     CheckBoxOutlined,
@@ -37,8 +38,10 @@ import { useXXGrid } from './xx-grid-hook'
 import { useIbuki, useTraceGlobal, utilMethods } from '../imports/trace-imports'
 
 interface SpecialColumnOptions {
+    isClone?: boolean
+    isCloneDisabled?: boolean
     isEdit?: boolean
-    isEditDisabled?:boolean
+    isEditDisabled?: boolean
     isDelete?: boolean
     isDeleteDisabled?: boolean
     isHide?: boolean
@@ -51,6 +54,7 @@ interface SpecialColumnOptions {
 interface GridActionMessagesOptions {
     addIbukiMessage?: any
     calculateBalanceIbukiMessage?: any
+    cloneIbukiMessage?: any
     fetchIbukiMessage?: any
     editIbukiMessage?: any
     justRefreshIbukiMessage?: any
@@ -166,7 +170,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             processRowUpdate={processRowUpdate}
             rows={meta.current.filteredRows}
             rowHeight={rowHeight}
-            getRowHeight={()=>'auto'}
+            getRowHeight={() => 'auto'}
             disableColumnMenu={true}
             components={{
                 Toolbar: CustomGridToolbar,
@@ -567,7 +571,7 @@ function XXGrid(gridOptions: XXGridOptions) {
             }
             columns.push(customColumn1)
         }
-
+        
         if (options.isDelete) {
             const deleteColumn = {
                 headerName: 'D',
@@ -586,7 +590,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                             size="small"
                             color="secondary"
                             className="delete"
-                            disabled = {!!options.isDeleteDisabled}
+                            disabled={!!options.isDeleteDisabled}
                             onClick={() =>
                                 gridActionMessages.deleteIbukiMessage &&
                                 emit(
@@ -595,7 +599,8 @@ function XXGrid(gridOptions: XXGridOptions) {
                                 )
                             }
                             aria-label="Delete">
-                            <DeleteForever />
+                            <Tooltip title='Delete'>
+                                <DeleteForever /></Tooltip>
                         </IconButton>
                     )
                 },
@@ -608,7 +613,7 @@ function XXGrid(gridOptions: XXGridOptions) {
                 headerName: 'E',
                 description: 'Edit',
                 disableColumnMenu: true,
-                disableExport: true, 
+                disableExport: true,
                 disablePrint: true,
                 disableReorder: true,
                 filterable: false,
@@ -625,20 +630,28 @@ function XXGrid(gridOptions: XXGridOptions) {
                                     fontSize: '1.1rem',
                                     cursor: 'pointer'
                                 }} /> : undefined}
-                            <IconButton
-                                size="small"
-                                color="secondary"
-                                disabled={options.isEditDisabled}
-                                onClick={() => {
-                                    gridActionMessages.editIbukiMessage &&
-                                        emit(
-                                            gridActionMessages.editIbukiMessage,
-                                            params
-                                        )
-                                }}
-                                aria-label="Edit">
-                                <Edit />
-                            </IconButton>
+                            {/* <Tooltip title='Edit'> */}
+                                <IconButton
+                                    size="small"
+                                    color="secondary"
+                                    disabled={options.isEditDisabled}
+                                    onClick={() => {
+                                        gridActionMessages.editIbukiMessage &&
+                                            emit(
+                                                gridActionMessages.editIbukiMessage,
+                                                params
+                                            )
+                                    }}
+                                    aria-label="Edit">
+                                    <Edit />
+                                </IconButton>
+                            {/* </Tooltip> */}
+                            {options.isClone ? <Clone onClick={() => gridActionMessages.cloneIbukiMessage
+                                && emit(gridActionMessages.cloneIbukiMessage, params)} sx={{
+                                    ml: -1.1,
+                                    fontSize: '1.1rem',
+                                    cursor: 'pointer',
+                                }} /> : undefined}
                         </Box>
                     )
                 },
