@@ -152,7 +152,7 @@ allSqls = {
                 STRING_AGG("lineRemarks", ',') as "lineRemarks"
                 from cte1
                     group by "id", "tranDate", "autoRefNo", "userRefNo", "remarks"
-                    order by "id" DESC limit (table "no") --%(no)s
+                    order by "id" DESC limit %(no)s
     ''',
 
     'get_allTransactions': '''
