@@ -1,16 +1,13 @@
 import { _, useContext, useState } from '../../../../imports/regular-imports'
 import { Button, Typography } from '../../../../imports/gui-imports'
-// import { utilMethods } from '../../../../imports/trace-imports'
 import { Error, Check } from '../../../../imports/icons-import'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { MultiDataContext } from '../common/multi-data-bridge'
-// import { VoucherPdf } from './voucher-pdf'
 import { PdfVoucher } from '../pdf/vouchers/pdf-voucher'
 
 function useCrown(meta: any, componentRef: any) {
     const [, setRefresh] = useState({})
     const ctx: any = useContext(MultiDataContext)
-    // const { showPdf } = utilMethods()
 
     const {
         accountsMessages,

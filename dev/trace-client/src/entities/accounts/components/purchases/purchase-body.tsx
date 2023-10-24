@@ -211,11 +211,7 @@ function PurchaseBody({ purchaseType }: any) {
                         <Typography variant="caption">Credit a/c</Typography>
                         {/* credit account */}
                         <LedgerSubledger
-                            // allAccounts={ad.accounts.allAccounts}
                             className="ledger-subledger"
-                            // ledgerAccounts={getMappedAccounts(
-                            //     ad.accounts.ledgerAccounts
-                            // )}
                             ledgerFilterMethodName={ad.ledgerFilterMethodName}
                             onChange={async () => {
                                 const gstin: string = await queryGstin(

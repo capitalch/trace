@@ -124,8 +124,8 @@ function PurchaseMainSubheader() {
                         //using onChange event stores formatted value
                         const { floatValue } = values
                         subheader.cgst.value = floatValue
-                        // setRefresh({})
-                        // emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                        subheader.sgst.value = floatValue
+                        subheader.igst.value = 0
                     }}
                     thousandSeparator={true}
                     value={subheader.cgst.value || 0.00}
@@ -158,8 +158,9 @@ function PurchaseMainSubheader() {
                         //using onChange event stores formatted value
                         const { floatValue } = values
                         subheader.sgst.value = floatValue
-                        // setRefresh({})
-                        // emit('PURCHASE-BODY-SUBMIT-REFRESH', null)
+                        subheader.cgst.value = floatValue
+                        subheader.sgst.value = floatValue
+                        subheader.igst.value = 0
                     }}
                     thousandSeparator={true}
                     value={subheader.sgst.value || 0.00}
