@@ -1,7 +1,6 @@
 import { moment, useEffect, useRef, useSharedElements, } from './redirect'
-import messages from '../../../../messages.json'
+
 function useOpeningStock() {
-    // const [, setRefresh] = useState({})
     const { globalMessages, confirm, emit, execGenericView, filterOn, genericUpdateMaster, getFromBag, toDecimalFormat } = useSharedElements()
     const meta = useRef({
         title: 'Opening stock (New / Edit)',
@@ -146,7 +145,9 @@ function useOpeningStock() {
                     emit('SHOW-MESSAGE', {})
                 }
             })
-            .catch(() => { }) // important to have otherwise eror
+            .catch((e: any) => {
+                console.log(e)
+            }) // important to have otherwise eror
     }
 
     return ({ getXXGriArtifacts, handleStockTransferToNextYear })

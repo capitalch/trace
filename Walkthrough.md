@@ -1,4 +1,5 @@
-
+# Client
+- Client runs in node environment 16.x. Use NVM to switch environment for client to run at port:3000
 # Good React.js libraries
 1. react-load-spinner
 2. react-animated-burgers for animated menus
