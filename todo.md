@@ -1,3 +1,11 @@
+## Immediate to Do
+- Remove and delete database of bika and all its users and clean the database
+- Create new client and new admin user
+	- Setup inventory
+	- Check why not audit_table is created and rectify that
+	- Check why sales report are not visible and rectify that
+	- Check why stock transaction not visible
+
 ##  Bugs
 																								- Reset purchase and purchase ret after drill down from trial balance. Otherwise on Purchase it shows the populated values
 																								- PurchPurchase entry saved but not reset
