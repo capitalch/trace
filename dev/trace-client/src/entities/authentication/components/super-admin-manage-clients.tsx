@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from '../../../imports/regular-imports'
 import { useSharedElements } from './shared-elements-hook'
 import { ReactForm } from '../../../imports/trace-imports'
 import { useCommonArtifacts } from './common-artifacts-hook'
-// import { useSuperAdminClientsEntitiesHook } from './super-admin-clients-entities-hook'
 
 function SuperAdminManageClients() {
     const [, setRefresh] = useState({})

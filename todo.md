@@ -1,5 +1,18 @@
 ## Immediate to Do
-- Remove and delete database of bika and all its users and clean the database
+																								- Remove and delete database of bika and all its users and clean the database
+- Maintenance
+																								- Part 1
+																									- Create an admin user sanjeev using temp email and a database bille
+																									- Create a BU billenium
+																									- Create some inventory and check inv reports. That will not be coming
+																									- Update database with latest patch and check inventory reports
+																									- Do corrective actions
+	- Part 2
+																								- delete the new admin user and new database
+		- using pg_dump create the new accounts.sql file
+		- update code at server
+		- repeat part 1
+
 - Create new client and new admin user
 	- Setup inventory
 	- Check why not audit_table is created and rectify that

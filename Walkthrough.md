@@ -1,13 +1,5 @@
 # Client
 - Client runs in node environment 16.x. Use NVM to switch environment for client to run at port:3000
-# Good React.js libraries
-1. react-load-spinner
-2. react-animated-burgers for animated menus
-3. react-responsive-carousel
-4. react-markdown
-5. statelake : a good state maintainance library
-
-# Lessons Learned
 
 ## Technology used
 React, GraphQL, Flask, Graphene, Python, postgreSql
@@ -16,7 +8,7 @@ React, GraphQL, Flask, Graphene, Python, postgreSql
 For Inserts and Updates of data, the entire data is converted to a big JSON object with all master and details data to be inserted in tables at back end. This JSON object is sent to GraphQL / Flask server as GraphQL mutation. The same is saved in PostgreSQL db using Graphene and Python.
 
 # Flask deployment while serving static files and index.html from Apache web server.
-Go through ood at my documentation of cloudjiffy
+Go through my documentation of cloudjiffy
 
 # Flask tips
 ## Understanding of template_folder, static_url_path, static_folder
@@ -45,11 +37,13 @@ cd c:\projects\trace
 2. python -m venv env
 3. env\Scripts\activate
 4. pip install flask demjson simplejson psycopg2 requests ariadne pandas flask_cors nested_lookup flask_mail pyjwt datetime bcrypt autopep8 xlsxwriter flask_scss flask_weasyprint babel
-5. in .vscode settings.json
-{
-    "python.pythonPath": "c:\\projects\\trace\\env\\Scripts\\python.exe",
-    "python.formatting.provider": "autopep8"
-}
+
+# VS code settings
+    in .vscode settings.json
+    {
+        "python.pythonPath": "c:\\projects\\trace\\env\\Scripts\\python.exe",
+        "python.formatting.provider": "autopep8"
+    }
 6. In launch.json I put this:
 {
     // Use IntelliSense to learn about possible attributes.
@@ -76,13 +70,12 @@ cd c:\projects\trace
         }
     ]
 }
-7. To start development server from command line in a command window:
+
+# To start development server from command line in a command window:
   a) env\Scripts\activate
   b) cd dev\traceServer
   c) set FLASK_APP=traceServer  // no spaces
   d) flask run
-
-complete
 
 * Because of settings.json the environment is switched to "env"
 
@@ -126,7 +119,8 @@ try flask.cloudjiffy.net
 	```pip install flask_cors```
 	In code:
 	``` from flask_cors import CORS
-	CORS(app)```
+	CORS(app) 
+    ```
 
 * Always remember to wrap the results of GRAPHQL query into a data container as 
  ```
@@ -252,7 +246,8 @@ From Python server code using psycopg2
 clientCodeObj = execSql(ENTITY_NAME, sqlString, {
         'fieldName': AsIs('"clientCode"'), 'tableName': AsIs('"TraceClient"'), "id": valueDict['data']['clientId']}, False)
 ```
-execSql is a method which executes sql statement using cursors. It manages connections, commits and rollbacks.
+
+* execSql is a method which executes sql statement using cursors. It manages connections, commits and rollbacks.
 Check the usage of AsIs('"clientCode"'). It passes the field name clientCode in case sensitive manner to underlying sql statement. It worked.
 
 ## Data format sample for master details JSON data. Python genericUpdateMasterDetails method at server consumes this data format
@@ -284,6 +279,9 @@ Check the usage of AsIs('"clientCode"'). It passes the field name clientCode in 
   ]
 }
 
+## When the database and schema (BU) is created
+- When SuperAdmin creaes an user and a new client and associate them with entity, then a new database with client name is created at server
+- When the admin user creates a BU then database schema is created and accounts.sql file is run. Now the database objcts in the newly created schema or BU are generated
 
 ## pgadmin and maintainance tips
 
@@ -294,11 +292,12 @@ Password: *******
 port: *****
 
 ## Taking a dump of existing uptodate database and provision it to TraceServer
-1. pg_dump -d trace -h node41766-chisel.cloudjiffy.net -p 11107 -n demounit1 -f c:\projects\trace\DbCreate\accounts.sql -U webadmin --inserts
-    It creates the accounts.sql file
+1. pg_dump -d demo_accounts -h node41766-chisel.cloudjiffy.net -p 11107 -n demounit1 -f c:\projects\trace\DbCreate\accounts.sql -U webadmin --inserts
+    It creates the accounts.sql file. Make following changes in newly created accounts.sql file. Take help of older accounts.sql file
 2. Replace all instances of 'demounit1' with 'public'
 3. The file contains several insert table data. Remove the ones which are not required. Basically only retain the master data as in old accounts.sql file
-
+    - Required ones are for table AccClassM, AccM, BranchM, FinYearM, GodownM, PosM, Settings
+4. Comment out some sequences values
 * How to take a dump of database schema and data together through pg_dump
 pg_dump -d trace -h node41766-chisel.cloudjiffy.net -p 11107 -n public -f c:\accounts -U webadmin --inserts
   -d trace            : Take dump of database trace
@@ -307,7 +306,7 @@ pg_dump -d trace -h node41766-chisel.cloudjiffy.net -p 11107 -n public -f c:\acc
   -n public           : take dump of schema public
   -f c:\accounts.sql  : Outputs to c:\accounts.sql file
   -U user name        : Give user name
-  --inserts           : In generated sql file use insert statement for adding data. By default copy statement is there which is not recognized by psycopg2 python driver. So it is necessary to convert copy statements to insert statements. The --inserts flag does that work
+  --inserts           : In generated sql file use insert statement for adding data. By default, the copy statement is there which is not recognized by psycopg2 python driver. So it is necessary to convert copy statements to insert statements. The --inserts flag does that work
   You need to have administrative privilege
 
 * Calling a stored procedure

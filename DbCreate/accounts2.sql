@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 12.3
--- Dumped by pg_dump version 12.18
+-- Dumped by pg_dump version 12.11
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -31,241 +31,6 @@ ALTER SCHEMA public OWNER TO postgres;
 
 COMMENT ON SCHEMA public IS 'standard public schema';
 
-
---
--- Name: audit_function(); Type: FUNCTION; Schema: public; Owner: webadmin
---
-
-CREATE FUNCTION public.audit_function() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $_$
-DECLARE
-  old_data JSON;
-  new_data JSON;
-  table_name TEXT;
-  column_name TEXT;
-  altered_columns_arr JSONB[] := ARRAY[]::JSONB[];
-  altered_columns JSONB;
-  old_value TEXT;
-  new_value TEXT;
-BEGIN
-  table_name := TG_TABLE_NAME;
-
-  IF (TG_OP = 'INSERT') THEN
-    new_data := row_to_json(NEW);
-    INSERT INTO audit_table ("user", action, timestamp, table_name, altered_columns, old_data, new_data)
-    VALUES (current_user, 'INSERT', now(), table_name, NULL, NULL, new_data);
-    RETURN NEW;
-  ELSIF (TG_OP = 'UPDATE') THEN
-    -- Compare old and new values column by column
-    FOR column_name IN 
-	SELECT c.column_name FROM information_schema.columns c WHERE c.table_schema = TG_TABLE_SCHEMA AND c.table_name = TG_TABLE_NAME
-	LOOP
-      EXECUTE format('SELECT $1.%I::text, $2.%I::text', column_name, column_name)
-      INTO old_value, new_value
-      USING OLD, NEW;
-
-      IF old_value IS DISTINCT FROM new_value THEN
-        altered_columns_arr := array_append(altered_columns_arr, json_build_object('column', column_name, 'old_value', old_value, 'new_value', new_value)::jsonb);
-		altered_columns := jsonb_agg(altered_columns_arr);
-      END IF;
-    END LOOP;
-
-    old_data := row_to_json(OLD);
-    new_data := row_to_json(NEW);
-    INSERT INTO audit_table ("user", action, timestamp, table_name, altered_columns, old_data, new_data, table_id)
-    VALUES (current_user, 'UPDATE', now(), table_name, altered_columns, old_data, new_data, OLD.id);
-    RETURN NEW;
-  ELSIF (TG_OP = 'DELETE') THEN
-    old_data := row_to_json(OLD);
-    INSERT INTO audit_table ("user", action, timestamp, table_name, altered_columns, old_data, new_data)
-    VALUES (current_user, 'DELETE', now(), table_name, NULL, old_data, NULL);
-    RETURN OLD;
-  END IF;
-  RETURN NULL;
-END;
-$_$;
-
-
-ALTER FUNCTION public.audit_function() OWNER TO webadmin;
-
---
--- Name: get_productids_on_brand_category_tag(text, integer); Type: FUNCTION; Schema: public; Owner: webadmin
---
-
-CREATE FUNCTION public.get_productids_on_brand_category_tag(type text, value integer) RETURNS TABLE(id integer, "productCode" text, "catId" integer, "brandId" integer, label text, info text)
-    LANGUAGE plpgsql
-    AS $$
-	BEGIN
-		if value = 0 then
-			return query select p."id", p."productCode", p."catId", p."brandId", p."label", p."info" from "ProductM" p where p."isActive";
-		elseif type = 'cat' then
-			return query with cte1 as (
-				with recursive rec as (
-					select c."id", c."parentId", c."isLeaf"
-						from "CategoryM" c
-							where (c."id" = value)
-					union all
-					select c.id, c."parentId", c."isLeaf"
-							from "CategoryM" c
-								join rec on
-									rec."id" = c."parentId"
-				) select * from rec where "isLeaf"
-			) select p."id", p."productCode", p."catId", p."brandId", p."label", p."info"
-				from "ProductM" p
-					join cte1 c1
-						on c1."id" = p."catId" where p."isActive";
-		elseif type = 'brand' then
-			return query select p."id", p."productCode", p."catId", p."brandId", p."label", p."info" from "ProductM" p
-				join "BrandM" b 
-					on b."id" = p."brandId" 
-						where p."brandId" = value and p."isActive";
-		else --tag
-			return query with cte1 as (
-				with recursive	rec as (
-					select c.id, c."parentId", c."isLeaf"
-						from "CategoryM" c
-							where ("tagId" = value) 
-					union all
-					select c.id, c."parentId", c."isLeaf"
-						from "CategoryM" c
-							join rec on
-								rec."id" = c."parentId"
-					) select * from rec where "isLeaf"
-			) select p."id", p."productCode", p."catId", p."brandId", p."label", p."info"
-				from "ProductM" p
-					join cte1 c1
-						on c1."id" = p."catId" where p."isActive";
-		end if;
-	END;
-	
-$$;
-
-
-ALTER FUNCTION public.get_productids_on_brand_category_tag(type text, value integer) OWNER TO webadmin;
-
---
--- Name: get_stock_on_date(integer, integer, date); Type: FUNCTION; Schema: public; Owner: webadmin
---
-
-CREATE FUNCTION public.get_stock_on_date(branchid integer, finyearid integer, "onDate" date DEFAULT CURRENT_DATE) RETURNS TABLE("productId" integer, "productCode" text, "catName" text, "brandName" text, label text, info text, op numeric, "openingPrice" numeric, "opValue" numeric, sale numeric, purchase numeric, "saleRet" numeric, "purchaseRet" numeric, "stockJournalDebits" numeric, "stockJournalCredits" numeric, "lastPurchaseDate" date, "lastSaleDate" date, clos numeric, price numeric, value numeric, age integer)
-    LANGUAGE sql
-    AS $$
-		with cte0 as( --base cte used many times in next
-		select "productId", "tranTypeId", "qty", "price", "tranDate", '' as "dc"
-			from "TranH" h
-				join "TranD" d
-					on h."id" = d."tranHeaderId"
-				join "SalePurchaseDetails" s
-					on d."id" = s."tranDetailsId"
-			where ("branchId" = branchId) and ("finYearId" =finYearId) and ("tranDate" <= "onDate")
-				union all --necessary otherwise rows with same values are removed
-		select "productId", "tranTypeId", "qty", 0 as "price", "tranDate", "dc"
-			from "TranH" h
-				join "StockJournal" s
-					on h."id" = s."tranHeaderId"
-			where ("branchId" = branchId) and ("finYearId" =finYearId) and ("tranDate" <= "onDate")
-		), 
-		cte1 as ( -- opening balance
-			select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
-				from "ProductOpBal" p 
-			where "branchId" = branchId and "finYearId" =finYearId
-		),
-		cte2 as ( -- create columns for sale, saleRet, purch... Actually creates columns from rows
-			select "productId","tranTypeId", 
-				SUM(CASE WHEN "tranTypeId" = 4 THEN "qty" ELSE 0 END) as "sale"
-				, SUM(CASE WHEN "tranTypeId" = 9 THEN "qty" ELSE 0 END) as "saleRet"
-				, SUM(CASE WHEN "tranTypeId" = 5 THEN "qty" ELSE 0 END) as "purchase"
-				, SUM(CASE WHEN "tranTypeId" = 10 THEN "qty" ELSE 0 END) as "purchaseRet"
-				, SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'D') THEN "qty" ELSE 0 END) as "stockJournalDebits"
-				, SUM(CASE WHEN ("tranTypeId" = 11) and ("dc" = 'C') THEN "qty" ELSE 0 END) as "stockJournalCredits"
-				, MAX(CASE WHEN "tranTypeId" = 4 THEN "tranDate" END) as "lastSaleDate"
-				, MAX(CASE WHEN "tranTypeId" = 5 THEN "tranDate" END) as "lastPurchaseDate"
-				from cte0
-			group by "productId", "tranTypeId" order by "productId", "tranTypeId"
-		),
-		cte3 as ( -- sum columns group by productId
-			select "productId"
-			, coalesce(SUM("sale"),0) as "sale"
-			, coalesce(SUM("purchase"),0) as "purchase"
-			, coalesce(SUM("saleRet"),0) as "saleRet"
-			, coalesce(SUM("purchaseRet"),0) as "purchaseRet"
-			, coalesce(SUM("stockJournalDebits"),0) as "stockJournalDebits"
-			, coalesce(SUM("stockJournalCredits"),0) as "stockJournalCredits"
-			, MAX("lastSaleDate") as "lastSaleDate"
-			, MAX("lastPurchaseDate") as "lastPurchaseDate"
-			from cte2
-				group by "productId"
-		),
-		cte4 as ( -- join opening balance (cte1) with latest result set
-			select coalesce(c1."productId",c3."productId")  as "productId"
-			, coalesce(c1.qty,0) as "op"
-			, coalesce("sale",0) as "sale"
-			, coalesce("purchase",0) as "purchase"
-			, coalesce("saleRet", 0) as "saleRet"
-			, coalesce("purchaseRet", 0) as "purchaseRet"
-			, coalesce("stockJournalDebits", 0) as "stockJournalDebits"
-			, coalesce("stockJournalCredits", 0) as "stockJournalCredits"
-			, coalesce(c3."lastPurchaseDate", c1."lastPurchaseDate") as "lastPurchaseDate"
-			, "openingPrice", "lastSaleDate"
-				from cte1 c1
-					full join cte3 c3
-						on c1."productId" = c3."productId"
-		),
-		cte5 as ( -- get last purchase price for transacted products
-			select DISTINCT ON("productId") "productId", "price" as "lastPurchasePrice"
-				from cte0
-					where "tranTypeId" = 5
-						order by "productId", "tranDate" DESC
-		),
-		cte6 as (  -- combine last purchase price with latest result set and add clos column and filter on lastPurchaseDate(ageing)
-			select coalesce(c4."productId", c5."productId") as "productId"
-				,"op", coalesce("openingPrice",0) as "openingPrice",  coalesce("op"* "openingPrice",0)::numeric(12,2) "opValue", "sale", "purchase", "saleRet","purchaseRet","stockJournalDebits", "stockJournalCredits", "lastPurchaseDate","lastSaleDate"
-				, coalesce("op" + "purchase" - "purchaseRet" - "sale" + "saleRet" + "stockJournalDebits" - "stockJournalCredits",0) as "clos"
-				, coalesce("lastPurchasePrice", "openingPrice") as "lastPurchasePrice"
-				from cte4 c4
-					full join cte5 c5
-						on c4."productId" = c5."productId"
-		),
-		cte7 as ( -- combine with productM, CategoryM and BrandM
-			select c6.*,"productCode", "catName", "brandName", "label", "info"
-				from cte6 c6
-					join "ProductM" p
-						on p."id" = c6."productId"
-					join "BrandM" b
-						on b."id" = p."brandId"
-					join "CategoryM" c
-						on c."id" = p."catId"
-			where p."isActive" --and "clos" <> 0
-		)
-		
-		select "productId"
-		, "productCode"
-		, "catName"
-		, "brandName"
-		, "label"
-		, "info"
-		, "op"
-		, "openingPrice"
-		, "opValue"
-		, "sale"
-		, "purchase"
-		, "saleRet"
-		, "purchaseRet"
-		, "stockJournalDebits"
-		, "stockJournalCredits"
-		, "lastPurchaseDate"
-		, "lastSaleDate"
-		, "clos"
-		, "lastPurchasePrice" as "price"
-		, "clos" * "lastPurchasePrice" as "value"
-		, DATE_PART('day', (CURRENT_DATE - "lastPurchaseDate"::timestamp))::int as "age"
-				  from cte7
-	
-$$;
-
-
-ALTER FUNCTION public.get_stock_on_date(branchid integer, finyearid integer, "onDate" date) OWNER TO webadmin;
 
 --
 -- Name: reset_all(); Type: PROCEDURE; Schema: public; Owner: webadmin
@@ -376,47 +141,6 @@ ALTER TABLE public."AccOpBal_id_seq" OWNER TO webadmin;
 --
 
 ALTER SEQUENCE public."AccOpBal_id_seq" OWNED BY public."AccOpBal".id;
-
-
---
--- Name: audit_table; Type: TABLE; Schema: public; Owner: webadmin
---
-
-CREATE TABLE public.audit_table (
-    id integer NOT NULL,
-    "user" text NOT NULL,
-    action text NOT NULL,
-    "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    old_data jsonb,
-    new_data jsonb,
-    table_name text,
-    altered_columns jsonb,
-    table_id integer
-);
-
-
-ALTER TABLE public.audit_table OWNER TO webadmin;
-
---
--- Name: AuditTrail_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
---
-
-CREATE SEQUENCE public."AuditTrail_id_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public."AuditTrail_id_seq" OWNER TO webadmin;
-
---
--- Name: AuditTrail_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
---
-
-ALTER SEQUENCE public."AuditTrail_id_seq" OWNED BY public.audit_table.id;
 
 
 --
@@ -1099,8 +823,7 @@ CREATE TABLE public."StockJournal" (
     "lineRemarks" text,
     "lineRefNo" text,
     "timestamp" timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    "jData" jsonb,
-    price numeric(12,0) DEFAULT 0
+    "jData" jsonb
 );
 
 
@@ -1144,6 +867,43 @@ ALTER TABLE public."TagsM" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
     NO MAXVALUE
     CACHE 1
 );
+
+
+--
+-- Name: Test; Type: TABLE; Schema: public; Owner: webadmin
+--
+
+CREATE TABLE public."Test" (
+    id integer NOT NULL,
+    "accName" text NOT NULL,
+    amount numeric DEFAULT 0 NOT NULL,
+    "parentId" integer,
+    "jData" jsonb
+);
+
+
+ALTER TABLE public."Test" OWNER TO webadmin;
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE; Schema: public; Owner: webadmin
+--
+
+CREATE SEQUENCE public."Test_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Test_id_seq" OWNER TO webadmin;
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: webadmin
+--
+
+ALTER SEQUENCE public."Test_id_seq" OWNED BY public."Test".id;
 
 
 --
@@ -1352,6 +1112,13 @@ ALTER TABLE ONLY public."ProductM" ALTER COLUMN id SET DEFAULT nextval('public."
 
 
 --
+-- Name: Test id; Type: DEFAULT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Test" ALTER COLUMN id SET DEFAULT nextval('public."Test_id_seq"'::regclass);
+
+
+--
 -- Name: TranCounter id; Type: DEFAULT; Schema: public; Owner: webadmin
 --
 
@@ -1370,13 +1137,6 @@ ALTER TABLE ONLY public."TranD" ALTER COLUMN id SET DEFAULT nextval('public."Tra
 --
 
 ALTER TABLE ONLY public."TranH" ALTER COLUMN id SET DEFAULT nextval('public."TranH_id_seq"'::regclass);
-
-
---
--- Name: audit_table id; Type: DEFAULT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public.audit_table ALTER COLUMN id SET DEFAULT nextval('public."AuditTrail_id_seq"'::regclass);
 
 
 --
@@ -1436,15 +1196,11 @@ INSERT INTO public."AccM" VALUES (21, 'LoansAndAdvances', 'Loans & Advances (Ass
 INSERT INTO public."AccM" VALUES (22, 'SundryDebtors', 'Sundry Debtors', 'A', 15, 'N', true, 12, '2021-03-25 09:52:36.002381+00');
 INSERT INTO public."AccM" VALUES (3, 'CapitalSubgroup', 'Capital Account Subgroup', 'L', 2, 'N', true, 2, '2021-03-25 09:52:36.002381+00');
 
-
 --
 -- Data for Name: BranchM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 INSERT INTO public."BranchM" VALUES (1, 'head office', NULL, NULL, 'head', '2021-03-25 09:55:23.321624+00');
 
---
--- Data for Name: FinYearM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
 
 INSERT INTO public."FinYearM" VALUES ('2003-04-01', '2004-03-31', 2003);
 INSERT INTO public."FinYearM" VALUES ('2004-04-01', '2005-03-31', 2004);
@@ -1465,25 +1221,25 @@ INSERT INTO public."FinYearM" VALUES ('2018-04-01', '2019-03-31', 2018);
 INSERT INTO public."FinYearM" VALUES ('2019-04-01', '2020-03-31', 2019);
 INSERT INTO public."FinYearM" VALUES ('2021-04-01', '2022-03-31', 2021);
 INSERT INTO public."FinYearM" VALUES ('2002-04-01', '2003-03-31', 2002);
+INSERT INTO public."FinYearM" VALUES ('2022-04-01', '2023-03-31', 2022);
+INSERT INTO public."FinYearM" VALUES ('2023-04-01', '2024-03-31', 2023);
 INSERT INTO public."FinYearM" VALUES ('2024-04-01', '2025-03-31', 2024);
 INSERT INTO public."FinYearM" VALUES ('2020-04-01', '2021-03-31', 2020);
 INSERT INTO public."FinYearM" VALUES ('2025-04-01', '2026-03-31', 2025);
 INSERT INTO public."FinYearM" VALUES ('2026-04-01', '2027-03-31', 2026);
-INSERT INTO public."FinYearM" VALUES ('2022-04-01', '2023-03-31', 2022);
-INSERT INTO public."FinYearM" VALUES ('2023-04-01', '2024-03-31', 2023);
-
 
 --
 -- Data for Name: GodownM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
 
 INSERT INTO public."GodownM" VALUES (1, 'main', NULL, NULL, '2021-03-25 09:58:55.45763+00');
+
 INSERT INTO public."PosM" VALUES (1, 'sample1', NULL, NULL, 1);
+
 
 INSERT INTO public."Settings" VALUES (1, 'menu', NULL, '{"menu": [{"name": "financialAccounting", "label": "Accounts", "children": [{"name": "finalAccounts", "label": "Final Accounts", "children": [{"name": "trialBalance", "label": "Trial Balance", "component": "TraceTrialBalance"}, {"name": "balanceSheet", "label": "Balance Sheet", "component": "balanceSheet"}, {"name": "pl", "label": "PL Account", "component": "plAccount"}]}, {"name": "sales", "label": "Sales", "children": [{"name": "creditSales", "label": "Credit Sales"}, {"name": "cashSales", "label": "Cash Sales"}, {"name": "mixedSales", "label": "Mixed Sales"}, {"name": "cardSales", "label": "Card Sales"}]}, {"name": "purchase", "label": "Purchase", "children": [{"name": "creditPurchase", "label": "Credit Purchase"}, {"name": "cashPurchase", "label": "Cash Purchase"}]}, {"name": "misc", "label": "Misc", "children": [{"name": "contra", "label": "Contra"}, {"name": "journal", "label": "Journals"}, {"name": "stockJournal", "label": "Stock Journal"}]}, {"name": "payments", "label": "Payments", "children": [{"name": "cashPayment", "label": "Cash Payment"}, {"name": "chequePayment", "label": "Cheque Payment"}]}, {"name": "receipts", "label": "Receipts", "children": [{"name": "cashReceipt", "label": "Cash Receipt"}, {"name": "cashReceipt", "label": "Cash receipt"}]}]}, {"name": "payroll", "label": "Payroll", "children": [{"name": "transactions", "label": "Transactions", "children": [{"name": "timeSheet", "label": "Time Sheet", "children": []}, {"name": "leaves", "label": "Leaves", "children": []}]}, {"name": "processing", "label": "Processing", "children": [{"name": "processPayroll", "label": "Process Payroll", "children": []}, {"name": "undoProcessing", "label": "Undo Processing", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "payslips", "label": "Payslips", "children": []}, {"name": "loanAccount", "label": "Loan Account", "children": []}]}, {"name": "reports", "label": "Reports", "children": [{"name": "providentFund", "label": "ProvidentFund", "children": []}, {"name": "esi", "label": "ESI", "children": []}]}]}, {"name": "marketing", "label": "Marketing", "children": [{"name": "mission", "label": "Mission", "children": [{"name": "missionStatement", "label": "Mission Statement", "children": []}, {"name": "objectives", "label": "Objectives", "children": []}]}, {"name": "analysis", "label": "Analysis", "children": [{"name": "opportunities", "label": "Opportunities", "children": []}, {"name": "5canalysis", "label": "5C Analysis", "children": []}, {"name": "swotAnalysis", "label": "SWOT Analysis", "children": []}, {"name": "pestAnalysis", "label": "PEST Analysis", "children": []}]}, {"name": "strategy", "label": "Strategy", "children": [{"name": "targetAudience", "label": "Target Audience", "children": []}, {"name": "measurableGoals", "label": "Measurable Goals", "children": []}, {"name": "budget", "label": "Budget", "children": []}]}, {"name": "marketingMix", "label": "Marketing Mix", "children": [{"name": "productDevelopment", "label": "Product Dev", "children": []}, {"name": "pricing", "label": "Pricing", "children": []}, {"name": "promotion", "label": "Promotion", "children": []}, {"name": "placeAndDistribution", "label": "Place and Distribution", "children": []}]}, {"name": "implementation", "label": "Implementation", "children": [{"name": "planToAction", "label": "Plan to Action", "children": []}, {"name": "monitorResults", "label": "Monitor Results", "children": []}]}]}, {"name": "recruitment", "label": "Recruitment", "children": [{"name": "planning", "label": "Planning", "children": [{"name": "vacancy", "label": "Vacancy", "children": []}, {"name": "resumesScreening", "label": "Resume Screening", "children": []}, {"name": "jobAnalysis", "label": "Job Analysis", "children": []}, {"name": "jobDescription", "label": "Job Description", "children": []}, {"name": "jobSpecification", "label": "Job Specification", "children": []}, {"name": "jobEvaluation", "label": "Job Evaluation", "children": []}]}, {"name": "execution", "label": "Execution", "children": [{"name": "directRecruitment", "label": "Direct Recruitment", "children": []}, {"name": "employmentExchange", "label": "Employment Exch.", "children": []}, {"name": "employmentAgencies", "label": "Employment Ag.", "children": []}, {"name": "advertisement", "label": "Advertisement", "children": []}, {"name": "professionalAssociation", "label": "Proff Associations", "children": []}, {"name": "campusRecruitment", "label": "Campus Recruit", "children": []}, {"name": "wordOfMouth", "label": "Word Of Mouth", "children": []}]}, {"name": "screening", "label": "Screening", "children": [{"name": "processing", "label": "Processing", "children": []}, {"name": "finalization", "label": "Finalization", "children": []}]}, {"name": "stationary", "label": "Stationary", "children": [{"name": "coverLetter", "label": "Cover Letter", "children": []}, {"name": "appointmentLetter", "label": "Appointment Letter", "children": []}]}]}, {"name": "sampleForms", "label": "Sample Forms", "children": [{"name": "registrations", "label": "Registrations", "children": [{"name": "gym", "label": "Gym", "children": []}, {"name": "studentAdmission", "label": "Student Admission", "children": []}, {"name": "clubMembership", "label": "Club Membership", "children": []}, {"name": "employeeInfo", "label": "Employee Information", "children": []}]}, {"name": "applications", "label": "Applications", "children": [{"name": "loanApplication", "label": "Loan Application", "children": []}, {"name": "electronicsRental", "label": "Electronics Rental", "children": []}]}, {"name": "feedbacks", "label": "Feedbacks", "children": [{"name": "employeePerformance", "label": "Employee Performance", "children": []}, {"name": "softwareEvaluation", "label": "Software Evaluation", "children": []}, {"name": "eventFeedback", "label": "Event Feedback", "children": []}]}, {"name": "others", "label": "Others", "children": [{"name": "deeplyNested", "label": "Deeply Nested", "children": []}]}]}]}', 0, '2021-03-25 10:00:14.291414+00');
 INSERT INTO public."Settings" ("id", "key", "intValue")
 	SELECT 4, 'lastProductCode', 1000;
-
 --
 -- Data for Name: TranTypeM; Type: TABLE DATA; Schema: public; Owner: webadmin
 --
@@ -1507,13 +1263,6 @@ INSERT INTO public."TranTypeM" VALUES (11, 'Stock journal', 'STJ');
 INSERT INTO public."UnitM" VALUES (1, 'piece', NULL, 'Pc');
 INSERT INTO public."UnitM" VALUES (2, 'kilogram', NULL, 'Kg');
 
-
-
---
--- Data for Name: PosM; Type: TABLE DATA; Schema: public; Owner: webadmin
---
-
-
 --
 -- Name: AccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
@@ -1525,84 +1274,77 @@ SELECT pg_catalog.setval('public."AccM_id_seq"', 30, true);
 -- Name: AccOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 0, true);
-
-
---
--- Name: AuditTrail_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
---
-
--- SELECT pg_catalog.setval('public."AuditTrail_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."AccOpBal_id_seq"', 727, true);
 
 
 --
 -- Name: AutoSubledgerCounter_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."AutoSubledgerCounter_id_seq"', 3, true);
 
 
 --
 -- Name: BranchM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
-SELECT pg_catalog.setval('public."BranchM_id_seq"', 1, true);
+SELECT pg_catalog.setval('public."BranchM_id_seq"', 2, true);
 
 
 --
 -- Name: BrandM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."BrandM_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."BrandM_id_seq"', 26, true);
 
 
 --
 -- Name: Category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."Category_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."Category_id_seq"', 79, true);
 
 
 --
 -- Name: Contacts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."Contacts_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."Contacts_id_seq"', 296, true);
 
 
 --
 -- Name: ExtBankOpBalAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ExtBankOpBalAccM_id_seq"', 4, true);
 
 
 --
 -- Name: ExtBankReconTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ExtBankReconTranD_id_seq"', 162, true);
 
 
 --
 -- Name: ExtBusinessContactsAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ExtBusinessContactsAccM_id_seq"', 15, true);
 
 
 --
 -- Name: ExtGstTranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ExtGstTranD_id_seq"', 10058, true);
 
 
 --
 -- Name: ExtMiscAccM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ExtMiscAccM_id_seq"', 2, true);
 
 
 --
@@ -1616,7 +1358,7 @@ SELECT pg_catalog.setval('public."GodownM_id_seq"', 1, false);
 -- Name: LastTranNumber_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."LastTranNumber_id_seq"', 28, true);
 
 
 --
@@ -1630,49 +1372,56 @@ SELECT pg_catalog.setval('public."PosM_id_seq"', 1, true);
 -- Name: ProductM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ProductM_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ProductM_id_seq"', 222, true);
 
 
 --
 -- Name: ProductOpBal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."ProductOpBal_id_seq"', 32, true);
 
 
 --
 -- Name: SalePurchaseDetails_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."SalePurchaseDetails_id_seq"', 10226, true);
 
 
 --
 -- Name: StockJournal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."StockJournal_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."StockJournal_id_seq"', 42, true);
 
 
 --
 -- Name: TagsM_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."TagsM_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."TagsM_id_seq"', 10, true);
+
+
+--
+-- Name: Test_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
+--
+
+-- SELECT pg_catalog.setval('public."Test_id_seq"', 39, true);
 
 
 --
 -- Name: TranD_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."TranD_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."TranD_id_seq"', 20863, true);
 
 
 --
 -- Name: TranH_id_seq; Type: SEQUENCE SET; Schema: public; Owner: webadmin
 --
 
--- SELECT pg_catalog.setval('public."TranH_id_seq"', 0, true);
+-- SELECT pg_catalog.setval('public."TranH_id_seq"', 10485, true);
 
 
 --
@@ -1705,14 +1454,6 @@ ALTER TABLE ONLY public."AccM"
 
 ALTER TABLE ONLY public."AccOpBal"
     ADD CONSTRAINT "AccOpBal_pkey" PRIMARY KEY (id);
-
-
---
--- Name: audit_table AuditTrail_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
---
-
-ALTER TABLE ONLY public.audit_table
-    ADD CONSTRAINT "AuditTrail_pkey" PRIMARY KEY (id);
 
 
 --
@@ -1948,6 +1689,14 @@ ALTER TABLE ONLY public."TagsM"
 
 
 --
+-- Name: Test Test_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
+--
+
+ALTER TABLE ONLY public."Test"
+    ADD CONSTRAINT "Test_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: TranD TranD_pkey; Type: CONSTRAINT; Schema: public; Owner: webadmin
 --
 
@@ -2107,69 +1856,6 @@ CREATE INDEX "fki_posId" ON public."TranH" USING btree ("posId");
 --
 
 CREATE INDEX "fki_unitId" ON public."ProductM" USING btree ("unitId");
-
-
---
--- Name: AccM audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."AccM" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: AccOpBal audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."AccOpBal" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: BankOpBal audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."BankOpBal" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: ProductM audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."ProductM" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: ProductOpBal audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."ProductOpBal" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: SalePurchaseDetails audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."SalePurchaseDetails" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: StockJournal audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."StockJournal" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: TranD audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."TranD" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
-
-
---
--- Name: TranH audit_trigger; Type: TRIGGER; Schema: public; Owner: webadmin
---
-
-CREATE TRIGGER audit_trigger AFTER INSERT OR DELETE OR UPDATE ON public."TranH" FOR EACH ROW EXECUTE FUNCTION public.audit_function();
 
 
 --
