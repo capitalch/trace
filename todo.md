@@ -9,9 +9,11 @@
 																									- Do corrective actions
 	- Part 2
 																								- delete the new admin user and new database
-		- using pg_dump create the new accounts.sql file
-		- update code at server
-		- repeat part 1
+																								- using pg_dump create the new accounts.sql file
+																								- update code at server
+																								- repeat part 1
+																								- create new accounts
+																								- create new products
 
 - Create new client and new admin user
 	- Setup inventory
