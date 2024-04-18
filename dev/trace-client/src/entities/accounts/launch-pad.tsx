@@ -12,7 +12,7 @@ import {
     TrialBalance, Voucher, OpeningStock, InventoryReports, Purchase
 } from './components/common/redirect'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
-import { resetPurchaseStore } from './stores/purchase-store'
+// import { resetPurchaseStore } from './stores/purchase-store'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
