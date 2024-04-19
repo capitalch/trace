@@ -44,7 +44,7 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
         AppStore.modalDialogA.body.value = () => <ProductsSearch />
         AppStore.modalDialogA.isOpen.value = true
         AppStore.modalDialogA.maxWidth.value='md'
-        AppStore.modalDialogA.itemData.value =item
+        AppStore.modalDialogA.itemData.value = item
     }
 
     function handleSerialNumber(item: PurchaseLineItemType) {
@@ -94,10 +94,6 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
                     </Box>
                 </Box>
             )
-
-            // function processCount() {
-            //     item.serialNumberCount.value = item?.serialNumbers.value.split(',').filter(Boolean).length
-            // }
 
             function handleClear() {
                 item.serialNumbers.value = ''

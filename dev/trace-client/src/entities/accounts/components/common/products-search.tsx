@@ -1,11 +1,8 @@
-import { ListItemSecondaryAction } from '@mui/material'
 import { AppStore } from '../../stores/app-store'
 import {
     _, Box, Button, DataGridPro, IMegaData, MegaDataContext, SearchBox, Typography,
     useContext, useEffect, useGridApiRef, useIbuki, useRef, useState, useTheme, utilMethods, manageEntitiesState
 } from '../sales-new/redirect'
-import { isTemplateMiddleOrTemplateTail } from 'typescript'
-import { inventoryMegaData } from './init-mega-data-context-values'
 
 function ProductsSearch({ parentMeta }: any) {
     const [, setRefresh] = useState({})
@@ -34,6 +31,10 @@ function ProductsSearch({ parentMeta }: any) {
             pre.filteredRows = pre.allRows.map((x: any) => ({ ...x }))
             setRefresh({})
         }
+        return (() => {
+            //Cleanup
+            AppStore.modalDialogA.itemData.value = undefined
+        })
     }, [])
 
     return (<Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -49,7 +50,7 @@ function ProductsSearch({ parentMeta }: any) {
             showCellRightBorder={true}
             showColumnRightBorder={true}
             sx={getGridSx()}
-            getRowHeight={()=>'auto'}
+            getRowHeight={() => 'auto'}
             selectionModel={pre.selectionModel}
             onSelectionModelChange={(newModel: any) => {
                 const products = allProducts
@@ -66,7 +67,7 @@ function ProductsSearch({ parentMeta }: any) {
                     megaData.executeMethodForKey(renderCallbackKey, {}) // calling setRefresh({}) of parent
                     megaData.executeMethodForKey(setItemToSelectedProductCallbackKey) // populates the selected product to current item
                 }
-                if(!_.isEmpty(AppStore.modalDialogA.itemData?.value)){
+                if (!_.isEmpty(AppStore.modalDialogA.itemData?.value)) {
                     const itemData: any = AppStore.modalDialogA.itemData?.value
                     itemData.hsn.value = selectedProduct.hsn
                     itemData.productCode.value = selectedProduct.productCode
@@ -106,7 +107,7 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 60,
             },
             {
-                cellClassName:'cell-class-padding',
+                cellClassName: 'cell-class-padding',
                 headerName: 'Product',
                 headerClassName: 'header-class',
                 description: 'Product',
@@ -115,7 +116,7 @@ function ProductsSearch({ parentMeta }: any) {
                 width: 200,
             },
             {
-                cellClassName:'cell-class-padding',
+                cellClassName: 'cell-class-padding',
                 headerName: 'Details',
                 headerClassName: 'header-class',
                 description: 'Product details',

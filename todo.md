@@ -7,7 +7,7 @@
 																									- Create some inventory and check inv reports. That will not be coming
 																									- Update database with latest patch and check inventory reports
 																									- Do corrective actions
-	- Part 2
+																								- Part 2
 																								- delete the new admin user and new database
 																								- using pg_dump create the new accounts.sql file
 																								- update code at server
@@ -15,11 +15,11 @@
 																								- create new accounts
 																								- create new products
 
-- Create new client and new admin user
-	- Setup inventory
-	- Check why not audit_table is created and rectify that
-	- Check why sales report are not visible and rectify that
-	- Check why stock transaction not visible
+																							- Create new client and new admin user
+																								- Setup inventory
+																								- Check why not audit_table is created and rectify that
+																								- Check why sales report are not visible and rectify that
+																								- Check why stock transaction not visible
 
 ##  Bugs
 																								- Reset purchase and purchase ret after drill down from trial balance. Otherwise on Purchase it shows the populated values
