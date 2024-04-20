@@ -1,4 +1,4 @@
-import { AllErrors, Box, Paper, Typography, } from './redirect'
+import { AllErrors, Box, Typography, } from './redirect'
 import { Customer } from './customer/customer'
 import { Crown } from './crown/crown'
 import { Payments } from './payments/payments'

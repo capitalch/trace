@@ -1,12 +1,12 @@
-import { _, accountsMessages, useConfirm, Box, Button, IconButton, IMegaData, manageEntitiesState, MegaDataContext, pdf, Preview, Tooltip, Typography, useContext, useEffect, useRef, useTraceMaterialComponents, useState, useTheme, utilMethods } from '../redirect'
+import { accountsMessages, useConfirm, IMegaData, manageEntitiesState, MegaDataContext, pdf, useContext, useEffect, useRef, useState, utilMethods } from '../redirect'
 import { InvoiceA } from '../../pdf/invoices/invoiceA'
 
 function useDebitsCreditsPreview() {
     const [, setRefresh] = useState({})
-    const theme = useTheme()
-    const { toDecimalFormat } = utilMethods()
+    // const theme = useTheme()
+    // const { toDecimalFormat } = utilMethods()
     const megaData: IMegaData = useContext(MegaDataContext)
-    const sales = megaData.accounts.sales
+    // const sales = megaData.accounts.sales
     const confirm = useConfirm()
     const { getFromBag, setInBag } = manageEntitiesState()
     const { sendEmail, sendSms } = utilMethods()
@@ -51,7 +51,6 @@ function useDebitsCreditsPreview() {
     }
 
     async function handleEmail() {
-        // const rawSaleData = sales.rawSaleData || {}
         const rawSaleData = getFromBag('rawSaleData') || {}
         const emailAddress = rawSaleData?.jsonResult?.billTo?.email
         const options = {

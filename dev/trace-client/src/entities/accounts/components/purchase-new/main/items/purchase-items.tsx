@@ -6,9 +6,7 @@ import { PurchaseLineItemType, PurchaseStore, getEmptyPurchaseLineItem } from ".
 import Big from "big.js"
 import { useCallback, useEffect } from "react"
 import { produce } from "immer"
-import { signal } from "@preact/signals-react"
 import { isNumber } from "lodash"
-import { LineItems } from "../../../sales-new/redirect"
 
 function PurchaseItems() {
 

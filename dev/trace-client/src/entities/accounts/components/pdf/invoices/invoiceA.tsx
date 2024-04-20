@@ -136,14 +136,7 @@ function InvoiceA({
         for (const item of ti.tranD) {
             const accClass = getAccountClass(item.accId)
             if (accClass === 'sale') {
-
                 i.summary.amount = toDecimalFormat(item?.amount || 0)
-                // i.summary.aggr = toDecimalFormat(
-                //     (item?.amount || 0) -
-                //     ((gstObj?.cgst || 0) +
-                //         (gstObj?.sgst || 0) +
-                //         (gstObj?.igst || 0))
-                // )
             } else if (['debtor', 'creditor'].includes(accClass)) {
                 i.invoiceInfo.type = i.invoiceInfo.type.concat(' ', 'on credit')
             } else {

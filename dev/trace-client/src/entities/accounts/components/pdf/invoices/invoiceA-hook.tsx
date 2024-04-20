@@ -37,13 +37,10 @@ function useInvoiceA() {
                 borderBottom: 1,
             },
             footer: {
-                // position: 'absolute',
-                // bottom: 30,
                 fontWeight: 'bold',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 width: '100%',
-                // left: 30,
             },
             normal: {
                 fontSize: 8,

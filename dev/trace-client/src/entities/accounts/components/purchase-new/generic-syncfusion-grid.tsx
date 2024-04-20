@@ -6,7 +6,7 @@ import {
     , PdfExport, ExcelExport, Resize, Search, Toolbar,InfiniteScroll, Selection, 
 } from "@syncfusion/ej2-react-grids"
 import { FC, useEffect, useRef, } from "react"
-import { _, execGenericView, useIbuki, useSharedElements } from "../inventory/redirect"
+import { _, execGenericView,Preview, useIbuki, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
 import { Search as SearchIcon } from '../../../../imports/icons-import'
 import { useTraceGlobal } from "../masters/redirect"
@@ -19,14 +19,16 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     const gridRef: any = useRef({})
     const { getCurrentWindowSize } = useTraceGlobal()
     const { emit, filterOn, } = useSharedElements()
-    let toShowDeleteButton: boolean = false, toShowEditButton: boolean = false
+    let toShowDeleteButton: boolean = false, toShowEditButton: boolean = false, toShowPreviewButton: boolean = false
     if (gridOptions.onDelete) {
         toShowDeleteButton = true
     }
     if (gridOptions.onEdit) {
         toShowEditButton = true
     }
-
+    if(gridOptions.onPreview){
+        toShowPreviewButton = true
+    }
     useEffect(() => {
         const subs1 = filterOn('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + gridOptions.instance).subscribe(loadData)
         return (() => {
@@ -34,24 +36,16 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         })
     }, [])
 
-    // gridRef.current.rowSelected = (e:RowSelectEventArgs) => {
-    //     console.log(e.data)
-    // }
-
     return (
         <Box>
             <GridHeader gridOptions={gridOptions} gridRef={gridRef} />
             <GridComponent id='grid'
                 allowPdfExport={true}
-                // allowFiltering={true}
                 allowExcelExport={true}
                 allowResizing={true}
                 allowSorting={true}
                 allowSelection={true}
                 allowTextWrap={true}
-                // enableInfiniteScrolling={true}
-                // infiniteScrollSettings={infiniteOptions}
-                // enableVirtualization={true}
                 gridLines="Both"
                 ref={gridRef}
                 selectionSettings={{enableToggle:true}}
@@ -94,7 +88,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
         }
     }
 
-    function editDeleteColumnTemplate(props: any) {
+    function editDeletePreviewColumnTemplate(props: any) {
         return (<Box display='flex'>
             {toShowEditButton && <IconButton
                 onClick={(e) => handleClickEdit(props)}
@@ -110,6 +104,13 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 color='error'>
                 <DeleteForever></DeleteForever>
             </IconButton>}
+            {toShowPreviewButton && <IconButton
+                onClick={(e) => handleClickPreview(props)}
+                size="small"
+                color="info">
+                <Preview className="preview-icon" />
+                </IconButton>
+            }
         </Box>)
     }
 
@@ -119,6 +120,10 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
 
     function handleClickEdit(props: any) {
         gridOptions.onEdit && gridOptions.onEdit(props.id)
+    }
+
+    function handleClickPreview(props: any) {
+        gridOptions.onPreview && gridOptions.onPreview(props.id)
     }
 
     function getColumnDirectives() {
@@ -132,7 +137,6 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 type={column.type}
                 width={column.width}
                 format={column.format}
-            // allowFiltering={(column.allowFiltering === undefined) || (column.allowFiltering === true) ? true : false}
             />)
         })
         if (toShowEditButton || toShowDeleteButton) {
@@ -140,8 +144,8 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 key='E'
                 field=""
                 headerText=""
-                template={editDeleteColumnTemplate}
-                width={80}
+                template={editDeletePreviewColumnTemplate}
+                width={120}
             />)
         }
         return (columnDirectives)
@@ -291,6 +295,7 @@ export type GridOptions = {
     widthInPercent?: string
     onEdit?: (id: number) => void
     onDelete?: (id: number) => void
+    onPreview?: (id: number) => void
     itemSelectedAction?: (id: number) => void
     isDeleteDisabled?: boolean
     isEditDisabled?: boolean

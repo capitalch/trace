@@ -14,7 +14,6 @@ function DebitsCreditsPreview() {
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const { handleBillPreview, handleClose, handleEmail, handleSms, meta } = useDebitsCreditsPreview()
-    const { BasicMaterialDialog } = useTraceMaterialComponents()
     const unitInfo = getFromBag('unitInfo')
 
     useEffect(() => {
