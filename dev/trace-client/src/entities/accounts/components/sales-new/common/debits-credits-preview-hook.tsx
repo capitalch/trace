@@ -3,10 +3,7 @@ import { InvoiceA } from '../../pdf/invoices/invoiceA'
 
 function useDebitsCreditsPreview() {
     const [, setRefresh] = useState({})
-    // const theme = useTheme()
-    // const { toDecimalFormat } = utilMethods()
     const megaData: IMegaData = useContext(MegaDataContext)
-    // const sales = megaData.accounts.sales
     const confirm = useConfirm()
     const { getFromBag, setInBag } = manageEntitiesState()
     const { sendEmail, sendSms } = utilMethods()

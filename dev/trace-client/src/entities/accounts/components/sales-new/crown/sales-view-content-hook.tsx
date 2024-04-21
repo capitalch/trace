@@ -1,7 +1,6 @@
-import { _, accountsMessages, Box, Button, IMegaData, manageEntitiesState, MegaDataContext, moment, salesMegaData, useConfirm, useContext, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, XXGrid } from '../redirect'
+import { _, accountsMessages, IMegaData, manageEntitiesState, MegaDataContext, moment, useConfirm, useContext, useEffect, useIbuki, useRef, utils, utilMethods} from '../redirect'
 
 function useSalesViewContent() {
-    const [, setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const sales = megaData.accounts.sales
     const confirm = useConfirm()

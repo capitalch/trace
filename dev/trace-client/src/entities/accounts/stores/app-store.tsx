@@ -3,18 +3,6 @@ import _ from "lodash";
 import { FC } from "react";
 
 const appStoreT: AppStoreType = {
-    // misc: {
-    //     purchase: {
-    //         grid: {
-    //             searchTextWrapper: {
-    //                 text: signal('')
-    //             },
-    //             viewLimitWrapper: {
-    //                 no: signal(100)
-    //             }
-    //         },
-    //     }
-    // },
     modalDialogA: {
         body: signal(() => <></>),
         defaultData: signal(undefined),
@@ -47,26 +35,12 @@ const appStoreT: AppStoreType = {
             viewLimit: signal(100)
         }
     }
-
-
 }
 
 const AppStore: AppStoreType = _.cloneDeep(appStoreT)
 export { AppStore }
 
 type AppStoreType = {
-    // misc: {
-    //     purchase: {
-    //         grid: {
-    //             searchTextWrapper: {
-    //                 text: Signal<string>
-    //             },
-    //             viewLimitWrapper: {
-    //                 no: Signal<number>
-    //             }
-    //         }
-    //     }
-    // },
     modalDialogA: {
         body: Signal<FC>
         defaultData: Signal<any>

@@ -1,5 +1,4 @@
 import { signal, Signal, _ } from '../../../imports/regular-imports'
-// import { produce } from 'immer'
 
 const PurchaseStoreT: PurchaseStoreType = {
     tabValue: signal(0),
@@ -47,7 +46,6 @@ const PurchaseStoreT: PurchaseStoreType = {
             isFormError: () => true,
             populateLineItem: () => { },
             preparePurchaseStore: () => { },
-            // refreshPurchaseLineItems: () => {},
             refreshSubheader: () => { },
             setPrice: () => { },
             setPriceGst: () => { },
@@ -58,7 +56,6 @@ const PurchaseStoreT: PurchaseStoreType = {
             tranDate: signal(undefined),
             invoiceNo: signal(undefined),
             commonRemarks: signal(undefined),
-            // isCreditPurchase: signal(true),
             isGstInvoice: signal(false),
             isSubmitDisabled: signal(true)
         },
@@ -156,7 +153,6 @@ type PurchaseStoreType = {
             tranDate: Signal<string | undefined>
             invoiceNo: Signal<string | undefined>
             commonRemarks: Signal<string | undefined>
-            // isCreditPurchase: Signal<boolean>
             isGstInvoice: Signal<boolean>
             isSubmitDisabled: Signal<boolean>
         }

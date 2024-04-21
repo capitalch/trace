@@ -5,6 +5,9 @@ import { accountsMessages, execGenericView, useSharedElements, utilMethods } fro
 import { PurchaseStore } from '../../stores/purchase-store';
 import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
 import { signal } from '@preact/signals-react';
+import { AppStore } from '../../stores/app-store';
+import { Apps } from '@mui/icons-material';
+import { PurchasePreview } from './purchase-preview';
 
 function PurchaseView() {
     const { emit, confirm, genericUpdateMaster, }: any = useSharedElements()
@@ -122,8 +125,17 @@ function PurchaseView() {
             sqlKey: 'getJson_sale_purchase_on_id',
             args: { id: id }
         })
+        if(_.isEmpty(ret?.jsonResult)) {
+            alert('No data found')
+            return
+        }
+        // console.log(JSON.stringify(ret?.jsonResult))
+        AppStore.modalDialogA.isCentered = true
+        AppStore.modalDialogA.title.value = 'Purchase Preview'
+        AppStore.modalDialogA.body.value = () => <PurchasePreview invoiceData={ret.jsonResult}  />
+        AppStore.modalDialogA.maxWidth.value = 'md'
+        AppStore.modalDialogA.isOpen.value = true
         emit('SHOW-LOADING-INDICATOR', false)
-        console.log(JSON.stringify(ret))
     }
 
     function preparePurchaseStore(data: any, isEdit = true) {
@@ -253,5 +265,4 @@ function PurchaseView() {
 }
 export { PurchaseView }
 
-// { "jsonResult": { "tranH": 
-// { "id": 10826, "tranDate": "2024-04-18", "userRefNo": "ww", "remarks": null, "autoRefNo": "H/PUR/1/2024", "jData": { }, "tranTypeId": 5 }, "billTo": null, "businessContacts": { "id": 7, "contactName": "ABM", "contactCode": "ABMSales", "mobileNumber": null, "otherMobileNumber": null, "landPhone": null, "email": "aaa@nn.com", "otherEmail": null, "jAddress": [{ "pin": "700067", "city": "Kolkata", "state": "WB", "country": "India", "address1": "12", "address2": "12" }], "descr": null, "accId": 154, "jData": null, "gstin": "37AADCB2230M2ZS", "timestamp": "2021-03-25T09:58:01.098404+00:00", "stateCode": 19 }, "tranD": [{ "id": 21441, "accId": 168, "dc": "D", "amount": 3871, "instrNo": null, "remarks": null, "accClass": "purchase" }, { "id": 21442, "accId": 154, "dc": "C", "amount": 3871, "instrNo": null, "remarks": null, "accClass": "creditor" }], "extGstTranD": { "id": 10327, "gstin": "37AADCB2230M2ZS", "cgst": 295.32, "sgst": 295.32, "igst": 0 }, "salePurchaseDetails": [{ "id": 10745, "productId": 184, "qty": 1, "price": 3281.33, "priceGst": 3871.97, "discount": 0, "cgst": 295.32, "sgst": 295.32, "igst": 0, "amount": 3871.97, "hsn": 8509, "gstRate": 18, "productCode": "1170", "upcCode": null, "catName": "Iron", "brandName": "Bajaj", "info": null, "label": "CLASSIC 750W(410174)", "serialNumbers": "", "remarks": "" }] } }
+const sampleInvoiceData = {"tranH":{"id":10826,"tranDate":"2024-04-18","userRefNo":"BB/www/222/2024025","remarks":null,"autoRefNo":"H/PUR/1/2024","jData":{},"tranTypeId":5},"billTo":null,"businessContacts":{"id":7,"contactName":"ABM Sales Pvt Ltd","contactCode":"ABMSales","mobileNumber":"8882344432","otherMobileNumber":null,"landPhone":null,"email":"aaa@nn.com","otherEmail":null,"jAddress":[{"pin":"700067","city":"Kolkata","state":"WB","country":"India","address1":"12 eleventh Tower","address2":"Elgin Road"}],"descr":null,"accId":154,"jData":null,"gstin":"37AADCB2230M2ZS","timestamp":"2021-03-25T09:58:01.098404+00:00","stateCode":19},"tranD":[{"id":21441,"accId":168,"dc":"D","amount":3871,"instrNo":null,"remarks":null,"accClass":"purchase"},{"id":21442,"accId":154,"dc":"C","amount":3871,"instrNo":null,"remarks":null,"accClass":"creditor"}],"extGstTranD":{"id":10327,"gstin":"37AADCB2230M2ZS","cgst":295.32,"sgst":295.32,"igst":0},"salePurchaseDetails":[{"id":10745,"productId":184,"qty":1,"price":3281.33,"priceGst":3871.97,"discount":0,"cgst":295.32,"sgst":295.32,"igst":0,"amount":3871.97,"hsn":8509,"gstRate":18,"productCode":"1170","upcCode":null,"catName":"Iron","brandName":"Bajaj","info":null,"label":"CLASSIC 750W(410174)","serialNumbers":"","remarks":""}]}
