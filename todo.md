@@ -1,8 +1,11 @@
-## To Do 20-04-2024
-- Purchase preview
-	- Provide preview icon in purchase view
-	- Provide preview icon in edit purchase
-	- implement preview
+## Purchase preview
+- For purchase return
+- Final invoice value with amount in words																							
+																							## To Do 20-04-2024
+																							- Purchase preview
+																								- Provide preview icon in purchase view
+																								- Provide preview icon in edit purchase
+																								- implement preview
 ## Immediate to Do
 																								- Remove and delete database of bika and all its users and clean the database
 - Maintenance

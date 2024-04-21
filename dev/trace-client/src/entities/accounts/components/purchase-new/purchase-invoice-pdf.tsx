@@ -7,6 +7,7 @@ export function PurchaseInvoicePdf({ invoiceData }: any) {
             <HeaderBlock invoiceData={invoiceData} />
             <SubHeaderBlock />
             <ItemsTable invoiceData={invoiceData} />
+            <FooterBlock invoiceData={invoiceData} />
         </Page>
     </Document>)
 }
@@ -28,68 +29,70 @@ function HeaderBlock({ invoiceData }: any) {
             <HeaderInvoice invoiceData={invoiceData} />
         </View>
     )
-}
 
-function HeaderCompany({ invoiceData }: any) {
-    const contact: any = invoiceData?.businessContacts
-    const address: any = contact?.jAddress[0]
-    const styles = StyleSheet.create({
-        headerCompany: {
-            flexDirection: 'column',
-            marginTop: 8,
-            width: '60%',
-            paddingRight: 8,
-        },
-        companyName: {
-            fontSize: 12,
-            fontWeight: 'bold',
-        },
-        gstin: {
-            marginTop: 3,
-            fontSize: 10,
-            fontWeight: 'bold',
-        },
-        address: {
-            fontSize: 8,
-            flexWrap: 'wrap',
-        },
-    })
-    return (<View style={styles.headerCompany}>
-        <Text style={styles.companyName}>{contact?.contactName || ''}</Text>
-        <Text style={styles.gstin}>GSTIN: {contact?.gstin || ''}</Text>
-        <Text style={styles.address}>{''.concat(address?.address1 || ''
-            , ' ', address?.address2 || ''
-            , ' State: ', address?.state
-            , ' PIN: ', address?.pin || ''
-            , ' email: ', contact?.email || ''
-            , ' PH: '
-            , contact?.mobileNumber || contact?.landPhone || '')}</Text>
-    </View>)
-}
-
-function HeaderInvoice({ invoiceData }: any) {
-    const dateFormat = getFromBag('dateFormat')
-    const tranH: any = invoiceData?.tranH
-    const invoiceDate = moment(tranH.tranDate).format(dateFormat)
-    const styles = StyleSheet.create({
-        headerInvoice: {
-            flexDirection: 'column',
-            marginTop: 8,
-            width: '40%',
-        },
-        invoiceNumber: {
-            fontSize: 10,
-            fontWeight: 'bold',
-        },
-        invoiceDate: {
-            fontSize: 10,
-        },
-    })
-    return (<View style={styles.headerInvoice}>
-        <Text style={styles.invoiceNumber}>Auto ref #: {tranH?.autoRefNo}</Text>
-        <Text style={styles.invoiceNumber}>Invoice #: {tranH?.userRefNo}</Text>
-        <Text style={styles.invoiceDate}>Inv date: {invoiceDate}</Text>
-    </View>)
+    function HeaderCompany({ invoiceData }: any) {
+        const contact: any = invoiceData?.businessContacts
+        const address: any = contact?.jAddress[0]
+        const styles = StyleSheet.create({
+            headerCompany: {
+                flexDirection: 'column',
+                marginTop: 8,
+                width: '60%',
+                paddingRight: 8,
+            },
+            companyName: {
+                fontSize: 12,
+                fontWeight: 'bold',
+            },
+            gstin: {
+                marginTop: 3,
+                fontSize: 10,
+                fontWeight: 'bold',
+            },
+            address: {
+                fontSize: 8,
+                flexWrap: 'wrap',
+            },
+        })
+        return (<View style={styles.headerCompany}>
+            <Text style={styles.companyName}>{contact?.contactName || ''}</Text>
+            <Text style={styles.gstin}>GSTIN: {contact?.gstin || ''}</Text>
+            <Text style={styles.address}>{''.concat(address?.address1 || ''
+                , ' ', address?.address2 || ''
+                , ' State: ', address?.state
+                , ' PIN: ', address?.pin || ''
+                , ' email: ', contact?.email || ''
+                , ' PH: '
+                , contact?.mobileNumber || contact?.landPhone || '')}</Text>
+        </View>)
+    }
+    
+    function HeaderInvoice({ invoiceData }: any) {
+        const dateFormat = getFromBag('dateFormat')
+        const tranH: any = invoiceData?.tranH
+        const tranType: string = (tranH.tranTypeId=== 5) ? 'Purchase' : 'Purchase return'
+        const invoiceDate = moment(tranH.tranDate).format(dateFormat)
+        const styles = StyleSheet.create({
+            headerInvoice: {
+                flexDirection: 'column',
+                marginTop: 8,
+                width: '40%',
+            },
+            invoiceNumber: {
+                fontSize: 10,
+                fontWeight: 'bold',
+            },
+            invoiceDate: {
+                fontSize: 10,
+            },
+        })
+        return (<View style={styles.headerInvoice}>
+            <Text style={styles.invoiceNumber}>Invoice #: {tranH?.userRefNo}</Text>
+            <Text style={styles.invoiceDate}>Inv date: {invoiceDate}</Text>
+            <Text style={gStyles.bold}>{''.concat('Type: ', tranType)}</Text>
+            <Text style={{ fontSize: 8, marginTop: 3 }}>Auto ref #: {tranH?.autoRefNo}</Text>
+        </View>)
+    }
 }
 
 function SubHeaderBlock() {
@@ -120,7 +123,7 @@ function SubHeaderBlock() {
 }
 
 function ItemsTable({ invoiceData }: any) {
-    const { toDecimalFormat, getAccountClass } = useSharedElements()
+    const { toDecimalFormat} = useSharedElements()
     return (
         <View>
             <TableHeader />
@@ -388,6 +391,27 @@ function ItemsTable({ invoiceData }: any) {
     }
 }
 
+function FooterBlock({invoiceData}: any) {
+    const tranD = invoiceData.tranD
+    const { toDecimalFormat, numberToWordsInRs} = useSharedElements()
+    let invoiceAmount = 0.00
+    
+    for(const item of tranD) {
+        if(item.accClass === 'purchase'){
+            invoiceAmount = item.amount
+            break
+        }
+    }
+    return(<View style={gStyles.footer}>
+        <Text style = {{fontSize: 8, flexWrap:'wrap', width: '65%'}}>
+            {numberToWordsInRs(invoiceAmount)}
+        </Text>
+        <Text style={{fontSize: 12, fontWeight:'extrabold'}}>
+            {'Invoice amount: '.concat(toDecimalFormat(invoiceAmount))}
+        </Text>
+    </View>)
+}
+
 const gStyles = StyleSheet.create({
     page: {
         flexDirection: 'column',
@@ -407,9 +431,11 @@ const gStyles = StyleSheet.create({
         color: 'grey',
     },
     footer: {
-        fontWeight: 'bold',
+        marginTop: 10,
+        // fontWeight: 'bold',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems:'center',
         width: '100%',
     },
     normal: {
