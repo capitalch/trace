@@ -1,6 +1,6 @@
-## Purchase preview
-- For purchase return
-- Final invoice value with amount in words																							
+																							## Purchase preview
+																							- For purchase return
+																							- Final invoice value with amount in words																							
 																							## To Do 20-04-2024
 																							- Purchase preview
 																								- Provide preview icon in purchase view
