@@ -169,6 +169,9 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
 
+# 12-05-2024
+- Branch transfer server side completed
+- Branch transfer client side started
 # 22-10-2023
 - Completed new purchase and purchase return and tested thoroughly
 - Cloning of vouchers completed

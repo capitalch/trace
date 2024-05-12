@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
 import { Box, Button, Checkbox, FormControlLabel, IconButton, Radio, Tab, Tabs, TextField, Typography, useTheme } from '../../../../../imports/gui-imports'
-import { Error, Check, PrintIcon, Search } from '../../../../../imports/icons-import'
+import { Error, Check, Search } from '../../../../../imports/icons-import'
 import { PurchaseStore } from '../../../stores/purchase-store'
 import { usePurchaseMainHeader } from './purchase-main-header-hook'
-import { useSharedElements } from '../../common/shared-elements-hook'
 
 function PurchaseMainHeader() {
     const theme = useTheme()

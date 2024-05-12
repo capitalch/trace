@@ -5,6 +5,16 @@
 - Client
 	- Summary and transaction reports changes client
 	- Client interface for branch stock transfer
+		- Branch code
+		- product code as per purchase new
+		- product descr
+		- qty
+		- price
+		- serial no
+		- db / cr
+		- remarks
+		- Add button
+		- Remove button
 	- Stock transfer preview
 ## Branch features
 - Consolidated final reports
