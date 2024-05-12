@@ -1,3 +1,15 @@
+## Branch Transfer
+- Server
+																							- New table StockTransfer with audit trigger
+																							- Entry in TranTypeM
+- Client
+	- Summary and transaction reports changes client
+	- Client interface for branch stock transfer
+	- Stock transfer preview
+## Branch features
+- Consolidated final reports
+- Consolidated bank recon
+
 																							## Purchase preview
 																							- For purchase return
 																							- Final invoice value with amount in words																							

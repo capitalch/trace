@@ -141,7 +141,6 @@ type PurchaseStoreType = {
             getComputedTotalIgst: () => number
             isFormError: () => boolean
             populateLineItem: (row: PurchaseLineItemType, data: any) => void
-            // refreshPurchaseLineItems: () => void
             preparePurchaseStore: (data: any, isEdit?: boolean) => void
             refreshSubheader: () => void
             setPrice: (row: PurchaseLineItemType) => void
@@ -241,13 +240,6 @@ type PurchaseLineItemType = {
 }
 
 export { type PurchaseLineItemType, resetPurchaseStore }
-
-// type LineItemErrorType = {
-//     productCode: Signal<string>
-//     hsn: Signal<string>
-//     gstPercent: Signal<string>
-//     qty: Signal<string>
-// }
 
 type ErrorType = () => string
 type ErrorTypeWithLineItem = (lineItem: PurchaseLineItemType) => string

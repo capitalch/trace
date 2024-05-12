@@ -295,6 +295,12 @@
                             "hierarchy":"inventory-stock-journal",
                             "label": "Stock journal",
                             "componentName": "stockJournal"
+                        },
+                        {
+                            "name": "branchTransferSubMenu",
+                            "hierarchy":"inventory-branch-transfer",
+                            "label": "Branch transfer",
+                            "componentName": "branchTransfer"
                         }
                     ]
                 }

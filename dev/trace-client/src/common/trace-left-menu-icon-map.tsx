@@ -97,7 +97,7 @@ const iconMap: any = {
     openingStockSubMenu: <AccountBalanceWallet />,
     inventoryReportsSubMenu: <ListAlt />,
     stockJournalSubMenu: <AutoGraph />,
-
+    branchTransferSubMenu: <FlightTakeoff />,
     //Admin menu
     artifacts: <CheckCircle></CheckCircle>,
     manageUsers: <Contacts></Contacts>,

@@ -11,6 +11,7 @@ import {
     GenericExports, GenericReports, GeneralLedger, Products, Purchases, Sales, SalesNew, Taxation,
     TrialBalance, Voucher, OpeningStock, InventoryReports, Purchase
 } from './components/common/redirect'
+import { BranchTransfer } from './components/inventory/branch-transfer/branch-transfer'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
 // import { resetPurchaseStore } from './stores/purchase-store'
 // import { settingsMegaData, salesMegaData } from './mega-data-init-values'
@@ -141,7 +142,8 @@ function LaunchPad() {
             vouchers: Voucher,
             openingStock: OpeningStock,
             inventoryReports: InventoryReports,
-            stockJournal: StockJournal
+            stockJournal: StockJournal,
+            branchTransfer: BranchTransfer
         }
         let ret: any = <></>
 
