@@ -1,4 +1,4 @@
-import { Box, Button, TextField, useTheme } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { BranchTransferStore } from "../../../../stores/branch-transfer-store";
 
 export function BranchTransferMainHeader() {
@@ -8,53 +8,60 @@ export function BranchTransferMainHeader() {
     return (<Box sx={{ display: 'flex', columnGap: 4, flexWrap: 'wrap', rowGap: theme.spacing(4), alignItems: 'center', mt: theme.spacing(2) }}>
 
         {/* auto ref no */}
-        <TextField
-            sx={{ maxWidth: theme.spacing(20) }}
-            variant="standard"
-            disabled={true}
-            label="Ref no"
-            value={header.refNo.value || ''}
-        />
-
-        {/* date */}
-        <TextField
-            autoFocus
-            label={header.tranDate.value ? 'Date' : undefined}
-            variant='standard'
-            type='date'
-            value={header.tranDate.value || ''}
-            error={
-                Boolean(errorsObject.tranDateError())
-            }
-            helperText={errorsObject.tranDateError()}
-            onChange={(e: any) => {
-                header.tranDate.value = e.target.value
+        <Typography
+            sx={{
+                fontWeight: 'bold',
+                mt: 2,
+                width: theme.spacing(14),
             }}
-            onFocus={(e: any) => e.target.select()}
-        />
+            variant="body2">{header.refNo.value || ''}</Typography>
+
+        {/* tran date */}
+        <Box className="vertical">
+            <Typography variant="body2">Date</Typography>
+            <TextField
+                autoFocus
+                variant="standard"
+                type="date"
+                value={header.tranDate.value || ''}
+                error={Boolean(errorsObject.tranDateError())}
+                helperText={errorsObject.tranDateError()}
+
+                onChange={(e: any) => {
+                    header.tranDate.value = e.target.value
+                }}
+                onFocus={(e: any) => e.target.select()}
+            />
+        </Box>
 
         {/* User ref no  */}
-        <TextField
-            label="User ref no"
-            variant="standard"
-            sx={{ maxWidth: '15rem', width: '13rem' }}
-            // error={Boolean(errorsObject.invoiceNoError())}
-            onChange={(e: any) => {
-                header.userRefNo.value = e.target.value
-            }}
-            value={header.userRefNo.value || ''}
-        />
+        <Box className="vertical" sx={{ maxWidth: theme.spacing(17) }}>
+            <Typography variant="body2">User ref no</Typography>
+            <TextField
+                variant="standard"
+                value={header.userRefNo.value || ''}
+                sx={{ width: theme.spacing(22) }}
+                autoComplete="off"
+                onChange={(e: any) => header.userRefNo.value = e.target.value}
+            />
+        </Box>
 
-        {/* remarks */}
-        <TextField
-            sx={{ maxWidth: '24rem', width: '18rem', ml: .3 }}
-            label="Common remarks"
-            variant="standard"
-            onChange={(e: any) => {
-                header.commonRemarks.value = e.target.value
-            }}
-            value={header?.commonRemarks.value || ''}
-        />
+        {/* Remarks */}
+        <Box
+            className="vertical"
+            sx={{ width: theme.spacing(70), ml: 1 }}>
+            <Typography variant="body2">Remarks</Typography>
+            <TextField
+                variant="standard"
+                value={header?.commonRemarks.value || ''}
+                autoComplete="off"
+                onChange={(e: any) => {
+                    header.commonRemarks.value = e.target.value
+                }}
+            />
+
+        </Box>
+
         {/* Reset */}
         <Button color='info' sx={{
             height: theme.spacing(5),
