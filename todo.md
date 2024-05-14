@@ -3,6 +3,18 @@
 																							- New table StockTransfer with audit trigger
 																							- Entry in TranTypeM
 - Client
+	- BT UI
+		- Main
+			- Header
+			- Items
+			- line item
+			- Items footer
+			- Add row
+			- Delete row
+			- Submit error
+			- Submit functionality
+			- Reset functionality
+		- View
 	- Summary and transaction reports changes client
 	- Client interface for branch stock transfer
 		- Branch code
@@ -15,7 +27,7 @@
 		- remarks
 		- Add button
 		- Remove button
-	- Stock transfer preview
+	- Branch transfer preview
 ## Branch features
 - Consolidated final reports
 - Consolidated bank recon

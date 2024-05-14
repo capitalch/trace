@@ -74,7 +74,6 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 className='right-aligned'
                 customInput={TextField}
                 decimalScale={0}
-                // error={item.isHsnError}
                 fixedDecimalScale={true}
                 value={item.hsn.value || 0}
                 variant='standard'

@@ -48,7 +48,7 @@ function initCode() {
         emit('SHOW-LOADING-INDICATOR', false)
 
         // comment following line
-        // await dummy()
+        await dummy()
     }
 
     async function dummy() {
@@ -56,8 +56,8 @@ function initCode() {
         setInBag('buCode', 'demounit1')
         const finYearObject: any = {
             finYearId: 2023,
-            startDate: moment('2023-04-01').format(dateFormat),
-            endDate: moment('2024-03-31').format(dateFormat),
+            startDate: moment('2024-04-01').format(dateFormat),
+            endDate: moment('2025-03-31').format(dateFormat),
         }
         setInBag('finYearObject', finYearObject)
         setInBag('dateFormat', dateFormat)

@@ -1,11 +1,12 @@
 import { Box, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import { useBranchTransfer } from "./branch-transfer-hook";
 import { BranchTransferStore } from "../../../stores/branch-transfer-store";
-import { BranchTransferHeader } from "./branch-transfer-header";
+import { BranchTransferMain } from "./branch-transfer-main";
 
 export function BranchTransfer() {
     const theme = useTheme()
     const { handleOnChangeTab } = useBranchTransfer();
+    
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography color='secondary' variant="subtitle1" component='div'>Branch Transfer</Typography>
@@ -21,7 +22,7 @@ export function BranchTransfer() {
                 <Tab label='View' />
             </Tabs>
             <Box hidden={BranchTransferStore.tabValue.value === 1}>
-                <BranchTransferHeader />
+                <BranchTransferMain />
             </Box>
             <Box hidden={BranchTransferStore.tabValue.value === 0}>
                 <Box>Branch Transfer View</Box>
