@@ -6,9 +6,12 @@ import { BranchTransferMain } from "./branch-transfer-main";
 export function BranchTransfer() {
     const theme = useTheme()
     const { handleOnChangeTab } = useBranchTransfer();
-    
+
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{
+            display: 'flex', flexDirection: 'column', '& .vertical': { display: 'flex', flexDirection: 'column', },
+            '& .right-aligned': { '& input': { textAlign: 'end' } }
+        }}>
             <Typography color='secondary' variant="subtitle1" component='div'>Branch Transfer</Typography>
             <Tabs sx={{
                 backgroundColor: theme.palette.grey[200],

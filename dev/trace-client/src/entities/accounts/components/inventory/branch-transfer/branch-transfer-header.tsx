@@ -12,14 +12,17 @@ export function BranchTransferHeader() {
         }}>
 
             {/* auto ref no */}
-            <Typography
-                sx={{
-                    fontWeight: 'bold',
-                    mt: 2,
-                    width: theme.spacing(14),
-                }}
-                variant="body2">{header.refNo.value || ''}</Typography>
-
+            <Box className="vertical">
+                <Typography
+                    variant="body2">{header.refNo.value || 'Auto ref no'}</Typography>
+                <TextField
+                    variant="standard"
+                    value={header.refNo.value || ''}
+                    sx={{ width: theme.spacing(22) }}
+                    disabled={true}
+                />
+            </Box>
+            
             {/* tran date */}
             <Box className="vertical">
                 <Typography variant="body2">Date</Typography>

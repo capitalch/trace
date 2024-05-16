@@ -35,15 +35,11 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 sx={{ maxWidth: theme.spacing(12) }}
                 variant='standard'
                 value={item?.productCodeOrUpc?.value || ''}
-                // value={meta.current.productCodeOrUpc || ''}
                 onChange={(e: any) => {
                     item.productCodeOrUpc.value = e.target.value
-                    // meta.current.productCodeOrUpc = e.target.value
                 }}
                 onBlur={(e: any) => {
-                    // if(item.productCodeOrUpc.value !== e.target.value) {
                     doSearchOnProductCodeOrUpc(e.target.value)
-                    // }
                 }}
             />
             <Box display='flex'>
@@ -312,7 +308,7 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 }}>
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
-            
+
         </Box>
     </Box >)
 }
