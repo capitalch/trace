@@ -3,7 +3,7 @@ import { useAccountsSubHeader, useStyles } from './accounts-sub-header-hook'
 import {
     Avatar,
     Box, IconButton,
-    Chip, useTheme
+    Chip
 } from '../../../../imports/gui-imports'
 import {
     Add, FontAwesomeIcon, faSpinner, RemoveCircleOutline, Search,
@@ -11,7 +11,7 @@ import {
 } from '../../../../imports/icons-import'
 function AccountsSubHeader() {
     const classes = useStyles()
-    const theme = useTheme()
+    // const theme = useTheme()
     const {
         exhibitLogic,
         handleSelectBu,

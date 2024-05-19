@@ -5,8 +5,7 @@ import { utilMethods } from "../../../inventory/redirect"
 function PurchaseItemsFooter() {
     const theme = useTheme()
     const { toDecimalFormat } = utilMethods()
-    return (<Box sx={{ pt: 1, pb: 0, display: 'flex', flexWrap: 'wrap', rowGap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
-        {/* <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, rowGap: 3, }}> */}
+    return (<Box sx={{ pt: 1, pb: 0, display: 'flex', flexWrap: 'wrap', rowGap: 1, alignItems: 'center', justifyContent: 'space-between' }}>        
 
         <Box display='flex' columnGap={2}>
             {/* Count */}

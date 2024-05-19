@@ -1,13 +1,21 @@
 ## Branch Transfer
 - Line item
 																							- right aligned qty, price
-	- ser no implement
-	- add implement
-	- dr cr
-	- branch implement
-	- search and product code
-	- product details
+																							- ser no implement
+																							- add implement
+																							- remove implement
+																							- clear implement
+																							- dr cr
+																							- branch implement
+																							- search and product code
+																							- product details
 	- assignment of values in branchTransferStore
+	- Error handling
+	- Validation
+	- Summary
+	- Submit
+	- DB changes
+	- Report changes
 - Server
 																							- New table StockTransfer with audit trigger
 																							- Entry in TranTypeM

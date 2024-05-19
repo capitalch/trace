@@ -69,13 +69,13 @@ function ProductsSearch({ parentMeta }: any) {
                 }
                 if (!_.isEmpty(AppStore.modalDialogA.itemData?.value)) {
                     const itemData: any = AppStore.modalDialogA.itemData?.value
-                    itemData.hsn.value = selectedProduct.hsn
+                    itemData.hsn && (itemData.hsn.value = selectedProduct.hsn)
                     itemData.productCode.value = selectedProduct.productCode
                     itemData.productDetails.value = `${selectedProduct.catName} ${selectedProduct.brandName} ${selectedProduct.label}`
                     itemData.productId.value = selectedProduct.id1
-                    itemData.clos.value = selectedProduct.clos
+                    itemData.clos && (itemData.clos.value = selectedProduct.clos)
                     itemData.price.value = selectedProduct.lastPurchasePrice || selectedProduct.openingPrice
-                    itemData.gstRate.value = selectedProduct.gstRate
+                    itemData.gstRate && (itemData.gstRate.value = selectedProduct.gstRate)
                     AppStore.modalDialogA.isOpen.value = false
                 }
             }}

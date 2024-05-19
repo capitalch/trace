@@ -1,16 +1,18 @@
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material";
-import { BranchTransferLineItemType } from "../../../stores/branch-transfer-store";
-import { AddCircle, ClearAll, Search } from "@mui/icons-material";
+import { BranchTransferLineItemType, addBranchTransferLineItem, clearBranchTransferLineItem, computeAmountBranchTransferLineItem, computeFooterBranchTransferLineItem, deleteBranchTransferLineItem } from "../../../stores/branch-transfer-store";
+import { AddCircle, ClearAll, CloseSharp, Search } from "@mui/icons-material";
 import NumberFormat from "react-number-format";
 import { useBranchTransferLineItem } from "./branch-transfer-line-item-hook";
+import { utilMethods } from "../redirect";
 
 export function BranchTransferLineItem({ item, index }: { item: BranchTransferLineItemType, index: number }) {
     const theme = useTheme()
-    const { getbranchesOptions } = useBranchTransferLineItem()
+    const { extractAmount, toDecimalFormat } = utilMethods()
+    const { doSearchOnProductCodeOrUpc, getbranchesOptions, handleItemSearch, handleSerialNumber } = useBranchTransferLineItem()
     return (
         <Box sx={{
             display: 'flex', alignItems: 'center', borderBottom: '2px solid teal', mt: 1, pb: 1,
-            flexWrap: 'wrap', rowGap: 3, columnGap: 5
+            flexWrap: 'wrap', rowGap: 3, columnGap: 3
         }}>
 
             <Box display='flex' flexDirection='column'>
@@ -36,7 +38,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                         item.productCodeOrUpc.value = e.target.value
                     }}
                     onBlur={(e: any) => {
-                        // doSearchOnProductCodeOrUpc(e.target.value)
+                        doSearchOnProductCodeOrUpc(index, item, e.target.value)
                     }}
                 />
                 <Box display='flex'>
@@ -50,7 +52,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                         sx={{ mt: .8, height: '1.3rem', width: '1.3rem' }}
                         size="small"
                         onClick={() => {
-                            // PurchaseStore.main.functions.clearLineItem(item)
+                            clearBranchTransferLineItem(index)
                         }}>
                         <ClearAll className="clear-icon" />
                     </IconButton>
@@ -75,22 +77,18 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
             <Box className='vertical'>
                 <Typography variant='body2' textAlign='right'>Branch</Typography>
                 <select
-                    // value={meta.current.viewLimit || ''}
+                    value={item.branchId.value || ''}
                     style={{
                         fontSize: '0.8rem',
-                        width: '5rem',
+                        width: '15rem',
                         marginLeft: '0.1rem',
                         height: theme.spacing(3),
                         marginTop: theme.spacing(1),
                     }}
                     onChange={(e: any) => {
-                        // meta.current.viewLimit = e.target.value
-                        // fetchRows(sqlQueryId, sqlQueryArgs)
-                        // meta.current.isMounted && setRefresh({})
+                        item.branchId.value = e.target.value
                     }}>
-                        {getbranchesOptions()}
-                    {/* <option value={'D'}>Debit</option>
-                    <option value={'C'}>Credit</option> */}
+                    {getbranchesOptions()}
                 </select>
             </Box>
 
@@ -98,7 +96,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
             <Box className='vertical'>
                 <Typography sx={{ textAlign: 'right' }} variant='body2'>Dr / Cr</Typography>
                 <select
-                    // value={meta.current.viewLimit || ''}
+                    value={item.dbCr.value || ''}
                     style={{
                         fontSize: '0.8rem',
                         width: '5rem',
@@ -107,12 +105,11 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                         marginTop: theme.spacing(1),
                     }}
                     onChange={(e: any) => {
-                        // meta.current.viewLimit = e.target.value
-                        // fetchRows(sqlQueryId, sqlQueryArgs)
-                        // meta.current.isMounted && setRefresh({})
+                        item.dbCr.value = e.target.value
+                        computeFooterBranchTransferLineItem()
                     }}>
-                    <option value={'D'}>Debit</option>
-                    <option value={'C'}>Credit</option>
+                    <option value={'D'}>Debit (In)</option>
+                    <option value={'C'}>Credit (Out)</option>
                 </select>
             </Box>
 
@@ -134,8 +131,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                     onValueChange={(value) => {
                         const { floatValue } = value
                         item.qty.value = floatValue || 0
-                        // PurchaseStore.main.functions.computeRow(item)
-                        // PurchaseStore.main.functions.computeSummary()
+                        computeAmountBranchTransferLineItem(item)
                     }}
                     thousandSeparator={true}
                     variant='standard'
@@ -154,10 +150,8 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                     fixedDecimalScale={true}
                     value={item.price.value || 0.00}
                     onChange={(e: any) => {
-                        // item.price.value = +extractAmount(e.target.value) || 0.0
-                        // PurchaseStore.main.functions.setPriceGst(item)
-                        // PurchaseStore.main.functions.computeRow(item)
-                        // PurchaseStore.main.functions.computeSummary()
+                        item.price.value = +extractAmount(e.target.value) || 0.0
+                        computeAmountBranchTransferLineItem(item)
                     }}
                     onFocus={(e: any) => {
                         e.target.select()
@@ -184,7 +178,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
 
                         showZero={true}>
                         <Button color="info" variant='text' sx={{ width: theme.spacing(9), height: 22, fontWeight: 'bold', }} onClick={() => {
-                            // handleSerialNumber(item)
+                            handleSerialNumber(item)
                         }}>Ser No</Button>
                     </Badge>
                 </Box>
@@ -197,23 +191,29 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                 />
             </Box>
 
+            {/* Amount */}
+            <Typography variant='body1' sx={{ textAlign: 'right', width: theme.spacing(12), color: theme.palette.common.black, fontWeight: 'bolder' }} >
+                {toDecimalFormat(item.amount.value || 0.00)}</Typography>
+
             {/* Add button */}
             <IconButton
-                sx={{ height: '2.3rem', width: '2.3rem', ml: 1 }}
+                sx={{ height: '2.3rem', width: '2.3rem', ml: 'auto' }}
                 className="add-box"
                 aria-label="add"
                 size="small"
                 onClick={() => {
-                    // PurchaseStore.main.functions.addLineItem(index)
+                    addBranchTransferLineItem(index)
                 }}>
                 <AddCircle sx={{ fontSize: '2.5rem', color: theme.palette.secondary.main, }} />
             </IconButton>
+
+            {/* Delete */}
+            <IconButton sx={{ mt: 0, height: '1.3rem', width: '1.3rem' }} size="small" color='info'
+                onClick={(e: any) => {
+                    deleteBranchTransferLineItem(index)
+                }}>
+                <CloseSharp sx={{ fontSize: '1.3rem' }} />
+            </IconButton>
         </Box>)
 
-
-
-
-    function handleItemSearch(item: any) {
-
-    }
 }

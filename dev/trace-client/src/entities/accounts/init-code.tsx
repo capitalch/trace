@@ -48,7 +48,7 @@ function initCode() {
         emit('SHOW-LOADING-INDICATOR', false)
 
         // comment following line
-        await dummy()
+        // await dummy()
     }
 
     async function dummy() {
