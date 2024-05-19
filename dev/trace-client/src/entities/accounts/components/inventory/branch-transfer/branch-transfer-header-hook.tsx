@@ -2,9 +2,12 @@ import { getFromBag } from "../redirect"
 
 export function useBranchTransferheader(){
     
-    function getbranchesOptions() {
+    function getOptionsOtherThanCurrentBranch() {
         const branches: any[] = getFromBag('branches')
-        const options: any[] = branches.map((branch: any) => {
+        const branchObject = getFromBag('branchObject')
+        const currentBranchId = branchObject.branchId
+        const filteredBranches = branches.filter((branch: any) => branch.branchId !== currentBranchId)
+        const options: any[] = filteredBranches.map((branch: any) => {
             return <option key={branch.branchId} value={branch.branchId}>{branch.branchName}</option>
         })
         options.unshift(<option key={0} value={''}>--- Select branch ---</option>)
@@ -13,8 +16,8 @@ export function useBranchTransferheader(){
 
     function getCurrentBranchObject(){
         const branchObject = getFromBag('branchObject')
-        // const branchId = branchObject.branchId
+        // 
         return(branchObject)
     }
-    return ({ getbranchesOptions, getCurrentBranchObject })
+    return ({ getOptionsOtherThanCurrentBranch, getCurrentBranchObject })
 }

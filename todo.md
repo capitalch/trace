@@ -1,50 +1,19 @@
 ## Branch Transfer
-- Line item
-																							- right aligned qty, price
-																							- ser no implement
-																							- add implement
-																							- remove implement
-																							- clear implement
-																							- dr cr
-																							- branch implement
-																							- search and product code
-																							- product details
-	- assignment of values in branchTransferStore
-	- Error handling
-	- Validation
-	- Summary
-	- Submit
-	- DB changes
-	- Report changes
-- Server
-																							- New table StockTransfer with audit trigger
-																							- Entry in TranTypeM
-- Client
-	- BT UI
-		- Main
-			- Header
-			- Items
-			- line item
-			- Items footer
-			- Add row
-			- Delete row
-			- Submit error
-			- Submit functionality
-			- Reset functionality
-		- View
-	- Summary and transaction reports changes client
-	- Client interface for branch stock transfer
-		- Branch code
-		- product code as per purchase new
-		- product descr
-		- qty
-		- price
-		- serial no
-		- db / cr
-		- remarks
-		- Add button
-		- Remove button
-	- Branch transfer preview
+# New design
+																							- Dest branch should not have current branch
+																							- Line item correction
+																							- BranchTransferStore correction
+- Validations
+	- Dest branch
+	- qty != 0
+	- productId should be there
+- Error management
+- Reset functionality
+- Submit functionality
+- DB changes
+- Report changes
+
+
 ## Branch features
 - Consolidated final reports
 - Consolidated bank recon

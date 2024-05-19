@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
-import { BranchTransferStore } from "../../../stores/branch-transfer-store";
+import { BranchTransferStore, resetBranchTransferStore } from "../../../stores/branch-transfer-store";
 import { useBranchTransferheader } from "./branch-transfer-header-hook";
 import { getFromBag } from "../redirect";
 
@@ -8,61 +8,12 @@ export function BranchTransferHeader() {
     const header = BranchTransferStore.main.header
     const errorsObject = BranchTransferStore.errorsObject
     const branchObject = getFromBag('branchObject')
-    const { getbranchesOptions, getCurrentBranchObject } = useBranchTransferheader()
+    const { getOptionsOtherThanCurrentBranch} = useBranchTransferheader()
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', mt: theme.spacing(3), pb: theme.spacing(4), borderBottom: '1px solid black' }}>
-
-            <Box sx={{ display: 'flex', columnGap: theme.spacing(4), alignItems: 'end', }}>
-
-                {/* Source branch */}
-                <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 0.5, width: '100%' }}>
-                    <Typography variant="body2" fontWeight='bold'>Source branch</Typography>
-
-                    <Typography variant="body1" fontWeight='bold' height='2rem' border='1px solid lightGrey' p={0.8}>{branchObject.branchName}</Typography>
-                    {/* <select disabled style={{ height: '2rem', width: '100%' }} value={branchObject.branchId}>
-                        {getbranchesOptions()}
-                    </select> */}
-                </Box>
-
-                {/* Destination branch */}
-                <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 0.5, width: '100%' }}>
-                    <Typography variant="body2" fontWeight='bold'>Destination branch</Typography>
-                    <select style={{ height: '2rem', width: '100%', border: '1px solid lightGrey' }}>
-                        {getbranchesOptions()}
-                    </select>
-                </Box>
-
-                {/* Reset */}
-                <Button color='info' sx={{
-                    height: theme.spacing(5),
-                    ml: 'auto'
-                }} variant='contained'
-                // onClick={handleOnReset}
-                >Reset</Button>
-
-                {/* Submit */}
-                <Button
-                    sx={{ height: theme.spacing(5), width: theme.spacing(16), }}
-                    type='button'
-                    variant="contained"
-                    size="medium"
-                    color="secondary"
-                // disabled={isFormError()}
-                // startIcon={
-                //     PurchaseStore.main.functions.isFormError() ? (
-                //         <Error color="error" />
-                //     ) : (
-                //         <Check style={{ color: 'white' }} />
-                //     )
-                // }
-                // onClick={handleSubmit}
-                >Submit
-                </Button>
-            </Box>
-
+        <Box sx={{ display: 'flex', flexDirection: 'column',  }}>
             <Box sx={{
                 display: 'flex', columnGap: 4, flexWrap: 'wrap',
-                rowGap: theme.spacing(4), alignItems: 'center', mt: theme.spacing(2)
+                rowGap: theme.spacing(4), alignItems: 'center', mt: theme.spacing(3)
             }}>
 
                 {/* auto ref no */}
@@ -110,7 +61,7 @@ export function BranchTransferHeader() {
                 {/* Remarks */}
                 <Box
                     className="vertical"
-                    sx={{ width: theme.spacing(55), ml: 'auto' }}>
+                    sx={{ width: theme.spacing(55),}}>
                     <Typography variant="body2" fontWeight='bold'>Remarks</Typography>
                     <TextField
                         sx={{ width: theme.spacing(55) }}
@@ -121,10 +72,50 @@ export function BranchTransferHeader() {
                             header.commonRemarks.value = e.target.value
                         }}
                     />
-
                 </Box>
 
+                {/* Reset */}
+                <Button color='info' sx={{
+                    height: theme.spacing(5),
+                    ml: 'auto'
+                }} variant='contained'
+                onClick={resetBranchTransferStore}
+                >Reset</Button>
+                
+                {/* Submit */}
+                <Button
+                    sx={{ height: theme.spacing(5), width: theme.spacing(16), }}
+                    type='button'
+                    variant="contained"
+                    size="medium"
+                    color="secondary"
+                // disabled={isFormError()}
+                // startIcon={
+                //     PurchaseStore.main.functions.isFormError() ? (
+                //         <Error color="error" />
+                //     ) : (
+                //         <Check style={{ color: 'white' }} />
+                //     )
+                // }
+                // onClick={handleSubmit}
+                >Submit
+                </Button>
+            </Box>
 
+            <Box sx={{ display: 'flex', columnGap: theme.spacing(4), alignItems: 'end', mt: theme.spacing(4),  }}>
+                {/* Source branch */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 0.5, width: '100%' }}>
+                    <Typography variant="body2" fontWeight='bold'>Source branch</Typography>
+                    <Typography variant="body1" fontSize='.8rem' height='2rem' border='1px solid lightGrey' p={0.8}>{branchObject.branchName}</Typography>
+                </Box>
+
+                {/* Destination branch */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 0.5, width: '100%' }}>
+                    <Typography variant="body2" fontWeight='bold'>Destination branch</Typography>
+                    <select style={{ height: '2rem', width: '100%', border: '1px solid lightGrey' }}>
+                        {getOptionsOtherThanCurrentBranch()}
+                    </select>
+                </Box>
             </Box>
         </Box>
     )

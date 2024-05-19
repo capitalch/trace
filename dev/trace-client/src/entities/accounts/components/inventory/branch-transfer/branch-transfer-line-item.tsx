@@ -45,7 +45,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                     <Typography
                         width='6rem'
                         variant='body2'
-                        fontWeight='bolder'
+                        // fontWeight='bolder'
                         // color={Boolean(errorsObject.productCodeError(item)) ? theme.palette.error.light : theme.palette.success.main}
                         mt={1}>{item.productCode.value || 'Product code'}</Typography>
                     <IconButton color="info"
@@ -61,7 +61,8 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
 
             {/* Product details */}
             <Card variant='outlined' sx={{
-                width: theme.spacing(26), height: theme.spacing(8),
+                width: theme.spacing(26),
+                height: theme.spacing(8),
                 p: .5,
                 pt: 0,
                 border: '1px solid lightGrey',
@@ -69,49 +70,9 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
             }}>
                 <Typography sx={{
                     fontSize: theme.spacing(1.8),
-                    fontWeight: 'bold', overflow: 'hidden', color: theme.palette.common.black,
+                    overflow: 'hidden', color: theme.palette.common.black,
                 }} variant='body1'>{item.productDetails || ''}</Typography>
             </Card>
-
-            {/* Branch */}
-            <Box className='vertical'>
-                <Typography variant='body2' textAlign='right'>Branch</Typography>
-                <select
-                    value={item.branchId.value || ''}
-                    style={{
-                        fontSize: '0.8rem',
-                        width: '15rem',
-                        marginLeft: '0.1rem',
-                        height: theme.spacing(3),
-                        marginTop: theme.spacing(1),
-                    }}
-                    onChange={(e: any) => {
-                        item.branchId.value = e.target.value
-                    }}>
-                    {getbranchesOptions()}
-                </select>
-            </Box>
-
-            {/* dr /cr  */}
-            <Box className='vertical'>
-                <Typography sx={{ textAlign: 'right' }} variant='body2'>Dr / Cr</Typography>
-                <select
-                    value={item.dbCr.value || ''}
-                    style={{
-                        fontSize: '0.8rem',
-                        width: '5rem',
-                        marginLeft: '0.1rem',
-                        height: theme.spacing(3),
-                        marginTop: theme.spacing(1),
-                    }}
-                    onChange={(e: any) => {
-                        item.dbCr.value = e.target.value
-                        computeFooterBranchTransferLineItem()
-                    }}>
-                    <option value={'D'}>Debit (In)</option>
-                    <option value={'C'}>Credit (Out)</option>
-                </select>
-            </Box>
 
             {/* Qty */}
             <Box className='vertical'>
@@ -192,7 +153,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
             </Box>
 
             {/* Amount */}
-            <Typography variant='body1' sx={{ textAlign: 'right', width: theme.spacing(12), color: theme.palette.common.black, fontWeight: 'bolder' }} >
+            <Typography variant='body1' sx={{ textAlign: 'right', width: theme.spacing(12), color: theme.palette.common.black }} >
                 {toDecimalFormat(item.amount.value || 0.00)}</Typography>
 
             {/* Add button */}
@@ -215,5 +176,45 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                 <CloseSharp sx={{ fontSize: '1.3rem' }} />
             </IconButton>
         </Box>)
-
 }
+
+
+// {/* Branch */}
+// {/* <Box className='vertical'>
+//     <Typography variant='body2' textAlign='right'>Branch</Typography>
+//     <select
+//         value={item.branchId.value || ''}
+//         style={{
+//             fontSize: '0.8rem',
+//             width: '15rem',
+//             marginLeft: '0.1rem',
+//             height: theme.spacing(3),
+//             marginTop: theme.spacing(1),
+//         }}
+//         onChange={(e: any) => {
+//             item.branchId.value = e.target.value
+//         }}>
+//         {getbranchesOptions()}
+//     </select>
+// </Box> */}
+
+// {/* dr /cr  */}
+// {/* <Box className='vertical'>
+//     <Typography sx={{ textAlign: 'right' }} variant='body2'>Dr / Cr</Typography>
+//     <select
+//         value={item.dbCr.value || ''}
+//         style={{
+//             fontSize: '0.8rem',
+//             width: '5rem',
+//             marginLeft: '0.1rem',
+//             height: theme.spacing(3),
+//             marginTop: theme.spacing(1),
+//         }}
+//         onChange={(e: any) => {
+//             item.dbCr.value = e.target.value
+//             computeFooterBranchTransferLineItem()
+//         }}>
+//         <option value={'D'}>Debit (In)</option>
+//         <option value={'C'}>Credit (Out)</option>
+//     </select>
+// </Box> */}

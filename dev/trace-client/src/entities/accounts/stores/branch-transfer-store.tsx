@@ -23,10 +23,8 @@ const BranchTransferStoreT: BranchTransferStoreType = {
         },
         lineItems: signal([getEmptyBranchTransferLineItem()]),
         lineItemsFooter: {
-            debitQty: signal(0),
-            creditQty: signal(0),
-            debitAmount: signal(0),
-            creditAmount: signal(0)
+            qty: signal(0),
+            amount: signal(0)
         }
     }
 }
@@ -49,26 +47,16 @@ export function computeAmountBranchTransferLineItem(item: BranchTransferLineItem
 }
 
 export function computeFooterBranchTransferLineItem() {
-    let debitQty = 0
-    let creditQty = 0
-    let debitAmount = 0
-    let creditAmount = 0
+    let qty = 0
+    let amount = 0
 
     BranchTransferStore.main.lineItems.value.forEach((item: BranchTransferLineItemType) => {
-        if (item.dbCr.value === 'D') {
-            debitQty += item.qty.value
-            debitAmount += item.amount.value
-        } else {
-            creditQty += item.qty.value
-            creditAmount += item.amount.value
-        }
+        qty += item.qty.value
+        amount += item.amount.value
     })
 
-    BranchTransferStore.main.lineItemsFooter.debitQty.value = debitQty
-    BranchTransferStore.main.lineItemsFooter.creditQty.value = creditQty
-    BranchTransferStore.main.lineItemsFooter.debitAmount.value = debitAmount
-    BranchTransferStore.main.lineItemsFooter.creditAmount.value = creditAmount
-
+    BranchTransferStore.main.lineItemsFooter.qty.value = qty
+    BranchTransferStore.main.lineItemsFooter.amount.value = amount
 }
 
 export function clearBranchTransferLineItem(index: number) {
@@ -102,6 +90,11 @@ export function populateBranchTransferLineItem(item: BranchTransferLineItemType,
     item.serialNumbers.value = ''
     item.remarks.value = ''
     computeAmountBranchTransferLineItem(item)
+}
+
+export function resetBranchTransferStore() {
+    BranchTransferStore.main.header.commonRemarks.value = ''
+    // BranchTransferStore = _.cloneDeep(BranchTransferStoreT)
 }
 
 function getEmptyBranchTransferLineItem() {
@@ -142,10 +135,8 @@ type BranchTransferStoreType = {
         },
         lineItems: Signal<BranchTransferLineItemType[]>
         lineItemsFooter: {
-            debitQty: Signal<number>
-            creditQty: Signal<number>
-            debitAmount: Signal<number>
-            creditAmount: Signal<number>
+            qty: Signal<number>
+            amount: Signal<number>
         }
     }
 }
@@ -158,8 +149,8 @@ export type BranchTransferLineItemType = {
     upcCode: Signal<string>
     productId: Signal<number | undefined>
     productDetails: Signal<string>
-    branchId: Signal<string>
-    dbCr: Signal<string>
+    // branchId: Signal<string>
+    // dbCr: Signal<string>
     qty: Signal<number>
     price: Signal<number>
     amount: Signal<number>

@@ -13,28 +13,15 @@ export function BranchTransferLineItemsFooter() {
             {''.concat('Count: ', String(BranchTransferStore.main.lineItems.value.length))}
         </Typography>
 
-        <Box sx={{ display: 'flex', columnGap: 2 }}>
-            {/* Debit qty */}
-            <Typography color={theme.palette.common.black} className='footer' variant="body2" fontWeight='bold'>
-                {''.concat('Debit qty: ', toDecimalFormat(BranchTransferStore.main.lineItemsFooter.debitQty.value))}
-            </Typography>
+        {/* Total qty */}
+        <Typography color={theme.palette.common.black} className='footer' variant="body2" fontWeight='bold'>
+            {''.concat('Total qty: ', toDecimalFormat(BranchTransferStore.main.lineItemsFooter.qty.value))}
+        </Typography>
 
-            {/* Credit qty */}
-            <Typography color={theme.palette.common.black} className='footer' variant="body2" fontWeight='bold'>
-                {''.concat('Credit qty: ', toDecimalFormat(BranchTransferStore.main.lineItemsFooter.creditQty.value))}
-            </Typography>
-        </Box>
+        {/* Total amount */}
+        <Typography color={theme.palette.common.black} className='footer' variant="body2" fontWeight='bold'>
+            {''.concat('Total amount: ', toDecimalFormat(BranchTransferStore.main.lineItemsFooter.amount.value))}
+        </Typography>
 
-        <Box sx={{ display: 'flex', columnGap: 2 }}>
-            {/* Debit amount */}
-            <Typography color={theme.palette.common.black} className='footer' variant="body2" fontWeight='bold'>
-                {''.concat('Debit amount: ', toDecimalFormat(BranchTransferStore.main.lineItemsFooter.debitAmount.value))}
-            </Typography>
-
-            {/* credit amount */}
-            <Typography color={theme.palette.common.black} className='footer' variant="body2" fontWeight='bold'>
-                {''.concat('Credit amount: ', toDecimalFormat(BranchTransferStore.main.lineItemsFooter.creditAmount.value))}
-            </Typography>
-        </Box>
     </Box>)
 }
