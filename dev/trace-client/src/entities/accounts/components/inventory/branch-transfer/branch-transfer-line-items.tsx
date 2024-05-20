@@ -7,7 +7,7 @@ export function BranchTransferLineItems() {
     const theme = useTheme()
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', mt: theme.spacing(2), rowGap: .5 }} >
+        <Box sx={{ display: 'flex', flexDirection: 'column', mt: theme.spacing(3), rowGap: .5 }} >
             <Box sx={{ mb: 1, borderBottom: '1px solid #E5E4E2' }}>
                 <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Items</Typography>
             </Box>

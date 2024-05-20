@@ -7,11 +7,13 @@
 	- Dest branch
 	- qty != 0
 	- productId should be there
+	- Date
 - Error management
 - Reset functionality
 - Submit functionality
 - DB changes
 - Report changes
+- View grid
 
 
 ## Branch features

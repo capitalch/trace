@@ -1,7 +1,13 @@
-import { getFromBag } from "../redirect"
+import { BranchTransferStore } from "../../../stores/branch-transfer-store"
+import { getFromBag, useEffect, useSharedElements } from "../redirect"
 
-export function useBranchTransferheader(){
-    
+export function useBranchTransferheader() {
+    const header = BranchTransferStore.main.header
+    const { isInvalidDate, accountsMessages } = useSharedElements()
+    useEffect(() => {
+        setErrorsObject()
+    }, [])
+
     function getOptionsOtherThanCurrentBranch() {
         const branches: any[] = getFromBag('branches')
         const branchObject = getFromBag('branchObject')
@@ -13,11 +19,15 @@ export function useBranchTransferheader(){
         options.unshift(<option key={0} value={''}>--- Select branch ---</option>)
         return (options)
     }
-
-    function getCurrentBranchObject(){
-        const branchObject = getFromBag('branchObject')
-        // 
-        return(branchObject)
+    function setErrorsObject() {
+        const errorsObject = BranchTransferStore.errorsObject
+        errorsObject.tranDateError = () => {
+            return (isInvalidDate(header.tranDate.value) ? accountsMessages.dateRangeAuditLockMessage : '')
+        }
+        errorsObject.destBranchError = () => {
+            return (BranchTransferStore.main.destBranchId.value ? '' : accountsMessages.destBranchRequired)
+        }
     }
-    return ({ getOptionsOtherThanCurrentBranch, getCurrentBranchObject })
+
+    return ({ getOptionsOtherThanCurrentBranch })
 }

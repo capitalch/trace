@@ -8,7 +8,10 @@ const currentDate = moment().format('YYYY-MM-DD')
 const BranchTransferStoreT: BranchTransferStoreType = {
     tabValue: signal(0),
     errorsObject: {
-        tranDateError: () => ''
+        tranDateError: () => '',
+        destBranchError: () => '',
+        qtyError: () => '',
+        productCodeError: () => ''
     },
     main: {
         sourchBranchId: signal(0),
@@ -121,10 +124,13 @@ type BranchTransferStoreType = {
     tabValue: Signal<number>,
     errorsObject: {
         tranDateError: ErrorType
+        destBranchError: ErrorType
+        qtyError: ErrorType
+        productCodeError: ErrorType
     }
     main: {
         sourchBranchId: Signal<number>
-        destBranchId: Signal<number>
+        destBranchId: Signal<any>
         header: {
             id: number | undefined
             refNo: Signal<string | undefined>
