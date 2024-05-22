@@ -6,9 +6,7 @@ import { Badge, Box, Button, TextareaAutosize, execGenericView, getFromBag, useI
 
 export function useBranchTransferLineItem() {
     const { emit } = useIbuki()
-    // if(!AppStore.modalDialogA.isOpen.value) {
-    //     computeFooterBranchTransferLineItem()
-    // }
+    
     async function doSearchOnProductCodeOrUpc(index: number, item: BranchTransferLineItemType, value: string) {
         if (!value) {
             return
@@ -111,5 +109,5 @@ export function useBranchTransferLineItem() {
         }
     }
 
-    return ({ doSearchOnProductCodeOrUpc, getbranchesOptions, handleItemSearch, handleSerialNumber })
+    return ({ doSearchOnProductCodeOrUpc, getbranchesOptions, handleItemSearch, handleSerialNumber})
 }

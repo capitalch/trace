@@ -1,5 +1,5 @@
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material";
-import { BranchTransferLineItemType, addBranchTransferLineItem, clearBranchTransferLineItem, computeAmountBranchTransferLineItem, computeFooterBranchTransferLineItem, deleteBranchTransferLineItem } from "../../../stores/branch-transfer-store";
+import { BranchTransferLineItemType, BranchTransferStore, addBranchTransferLineItem, clearBranchTransferLineItem, computeAmountBranchTransferLineItem, computeFooterBranchTransferLineItem, deleteBranchTransferLineItem } from "../../../stores/branch-transfer-store";
 import { AddCircle, ClearAll, CloseSharp, Search } from "@mui/icons-material";
 import NumberFormat from "react-number-format";
 import { useBranchTransferLineItem } from "./branch-transfer-line-item-hook";
@@ -8,7 +8,8 @@ import { utilMethods } from "../redirect";
 export function BranchTransferLineItem({ item, index }: { item: BranchTransferLineItemType, index: number }) {
     const theme = useTheme()
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { doSearchOnProductCodeOrUpc, getbranchesOptions, handleItemSearch, handleSerialNumber } = useBranchTransferLineItem()
+    const { doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber} = useBranchTransferLineItem()
+    const errorsObject = BranchTransferStore.errorsObject
     return (
         <Box sx={{
             display: 'flex', alignItems: 'center', borderBottom: '2px solid teal', mt: 1, pb: 1,
@@ -45,8 +46,8 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                     <Typography
                         width='6rem'
                         variant='body2'
-                        // fontWeight='bolder'
-                        // color={Boolean(errorsObject.productCodeError(item)) ? theme.palette.error.light : theme.palette.success.main}
+                        fontWeight='bolder'
+                        color={Boolean(errorsObject.productCodeError(item)) ? theme.palette.error.light : theme.palette.success.main}
                         mt={1}>{item.productCode.value || 'Product code'}</Typography>
                     <IconButton color="info"
                         sx={{ mt: .8, height: '1.3rem', width: '1.3rem' }}
@@ -66,7 +67,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                 p: .5,
                 pt: 0,
                 border: '1px solid lightGrey',
-                // borderColor: Boolean(errorsObject.productDetailsError(item)) ? theme.palette.error.light : 'lightGrey'
+                borderColor: Boolean(errorsObject.productDetailsError(item)) ? theme.palette.error.light : 'lightGrey'
             }}>
                 <Typography sx={{
                     fontSize: theme.spacing(1.8),
@@ -82,7 +83,7 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                     allowNegative={false}
                     className='right-aligned'
                     customInput={TextField}
-                    // error={Boolean(errorsObject.qtyError(item))}
+                    error={Boolean(errorsObject.qtyError(item))}
                     decimalScale={2}
                     fixedDecimalScale={true}
                     value={item.qty.value}
@@ -131,12 +132,11 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                                 .split(',')
                                 .filter(Boolean).length
                         }
-                        // color={
-                        //     PurchaseStore.errorsObject.slNoError(item)
-                        //         ? 'error'
-                        //         : 'secondary'
-                        // }
-
+                        color={
+                            BranchTransferStore.errorsObject.isSlNoError(item)
+                                ? 'error'
+                                : 'secondary'
+                        }
                         showZero={true}>
                         <Button color="info" variant='text' sx={{ width: theme.spacing(9), height: 22, fontWeight: 'bold', }} onClick={() => {
                             handleSerialNumber(item)

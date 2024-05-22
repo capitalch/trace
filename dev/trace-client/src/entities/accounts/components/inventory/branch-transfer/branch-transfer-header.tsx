@@ -1,17 +1,18 @@
 import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { BranchTransferStore, resetBranchTransferStore } from "../../../stores/branch-transfer-store";
 import { useBranchTransferheader } from "./branch-transfer-header-hook";
-import { getFromBag, useState } from "../redirect";
+import { getFromBag } from "../redirect";
 import { Dropdown } from 'primereact/dropdown'
+import { Check, Error } from "@mui/icons-material";
 
 export function BranchTransferHeader() {
-    const [, setRefresh] = useState({})
     const theme = useTheme()
     const header = BranchTransferStore.main.header
     const errorsObject = BranchTransferStore.errorsObject
     const branchObject = getFromBag('branchObject')
-    // console.log('branchId:', BranchTransferStore.main.destBranchId.value)
-    const { getOptionsOtherThanCurrentBranch, getOptionsArrayOtherThanCurrentBranch } = useBranchTransferheader()
+    const destBranchError: string | undefined = BranchTransferStore.errorsObject.destBranchError()
+    const { getOptionsArrayOtherThanCurrentBranch, handleOnReset, isFormError } = useBranchTransferheader()
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', }}>
             <Box sx={{
@@ -82,7 +83,7 @@ export function BranchTransferHeader() {
                     height: theme.spacing(5),
                     ml: 'auto'
                 }} variant='contained'
-                    onClick={resetBranchTransferStore}
+                    onClick={handleOnReset}
                 >Reset</Button>
 
                 {/* Submit */}
@@ -92,14 +93,14 @@ export function BranchTransferHeader() {
                     variant="contained"
                     size="medium"
                     color="secondary"
-                // disabled={isFormError()}
-                // startIcon={
-                //     PurchaseStore.main.functions.isFormError() ? (
-                //         <Error color="error" />
-                //     ) : (
-                //         <Check style={{ color: 'white' }} />
-                //     )
-                // }
+                    disabled={isFormError()}
+                    startIcon={
+                        isFormError() ? (
+                            <Error color="error" />
+                        ) : (
+                            <Check style={{ color: 'white' }} />
+                        )
+                    }
                 // onClick={handleSubmit}
                 >Submit
                 </Button>
@@ -114,36 +115,22 @@ export function BranchTransferHeader() {
 
                 {/* Destination branch */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 0.5, width: '100%' }}>
-                    <Typography variant="body2" fontWeight='bold'
-                        color={BranchTransferStore.errorsObject.destBranchError() ? 'red' : 'black'}>
-                        Destination branch
-                    </Typography>
-                    {/* <select style={{ height: '2rem', width: '100%', border: errorsObject.destBranchError() ? '2px solid red' : '1px solid lightGrey' }}
-                        value={BranchTransferStore.main.destBranchId.value}
-                        onChange={(e: any) => {
-                            BranchTransferStore.main.destBranchId.value = e.target.value
-                            console.log(BranchTransferStore.main.destBranchId.value)
-                            setRefresh({})
-                        }}
-                    >
-
-                        {getOptionsOtherThanCurrentBranch()}
-                    </select> */}
+                    <Box display='flex' alignItems='center'>
+                        <label style={{ color: 'red' }}>*&nbsp;</label>
+                        <Typography variant="body2" fontWeight='bold'
+                            color={destBranchError ? 'red' : 'black'}>
+                            Destination branch
+                        </Typography>&nbsp;&nbsp;
+                        <Typography color='red'>{destBranchError}</Typography>
+                    </Box>
                     <Dropdown placeholder="Select destination branch"
                         optionLabel="label"
                         optionValue="code"
                         value={BranchTransferStore.main.destBranchId.value}
                         options={getOptionsArrayOtherThanCurrentBranch()}
                         onChange={(e: any) => {
-                            console.log(e.value)
                             BranchTransferStore.main.destBranchId.value = e?.value
                         }}
-                    // highlightOnSelect= {false}
-                    // unstyled= {true}
-                    // className="hover:border-red-500"
-                    // color={BranchTransferStore.errorsObject.destBranchError() ? 'red' : 'black'}
-
-                    // style={ }
                     />
                 </Box>
             </Box>

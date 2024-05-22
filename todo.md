@@ -3,13 +3,13 @@
 																							- Dest branch should not have current branch
 																							- Line item correction
 																							- BranchTransferStore correction
-- Validations
-	- Dest branch
-	- qty != 0
-	- productId should be there
-	- Date
-- Error management
-- Reset functionality
+																							- Validations
+																								- Dest branch
+																								- qty != 0
+																								- productId should be there
+																								- Date
+																							- Error management
+																							- Reset functionality
 - Submit functionality
 - DB changes
 - Report changes

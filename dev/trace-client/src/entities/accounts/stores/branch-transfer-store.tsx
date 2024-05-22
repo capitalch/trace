@@ -10,8 +10,23 @@ const BranchTransferStoreT: BranchTransferStoreType = {
     errorsObject: {
         tranDateError: () => '',
         destBranchError: () => '',
-        qtyError: () => '',
-        productCodeError: () => ''
+        qtyError: (item: BranchTransferLineItemType) => {
+            return (item.qty.value ? '' : 'qty error')
+        },
+        productDetailsError: (item: BranchTransferLineItemType) => {
+            return (item.productDetails.value ? '' : 'product details error')
+        },
+        productCodeError: (item: BranchTransferLineItemType) => {
+            return (item.productCode.value ? '' : 'product code error')
+        },
+        isSlNoError: (item: BranchTransferLineItemType) => {
+            const ret = (getCount() === item.qty.value) || (getCount() === 0)
+            return !ret
+
+            function getCount() {
+                return item.serialNumbers.value ? item.serialNumbers.value.split(',').filter(Boolean).length : 0
+            }
+        }
     },
     main: {
         sourchBranchId: signal(0),
@@ -96,8 +111,8 @@ export function populateBranchTransferLineItem(item: BranchTransferLineItemType,
 }
 
 export function resetBranchTransferStore() {
-    BranchTransferStore.main.header.commonRemarks.value = ''
-    // BranchTransferStore = _.cloneDeep(BranchTransferStoreT)
+    // BranchTransferStore.main.header.commonRemarks.value = ''
+    BranchTransferStore = _.cloneDeep(BranchTransferStoreT)
 }
 
 function getEmptyBranchTransferLineItem() {
@@ -125,8 +140,10 @@ type BranchTransferStoreType = {
     errorsObject: {
         tranDateError: ErrorType
         destBranchError: ErrorType
-        qtyError: ErrorType
-        productCodeError: ErrorType
+        qtyError: (item: BranchTransferLineItemType) => string | undefined
+        productCodeError: (item: BranchTransferLineItemType) => string | undefined
+        productDetailsError: (item: BranchTransferLineItemType) => string | undefined
+        isSlNoError: (item: BranchTransferLineItemType) => boolean
     }
     main: {
         sourchBranchId: Signal<number>
