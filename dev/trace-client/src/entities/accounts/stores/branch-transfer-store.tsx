@@ -147,7 +147,7 @@ type BranchTransferStoreType = {
     }
 }
 
-type ErrorType = () => string
+type ErrorType = () => string | undefined
 export type BranchTransferLineItemType = {
     id: number | undefined
     productCodeOrUpc: Signal<string>
@@ -155,8 +155,6 @@ export type BranchTransferLineItemType = {
     upcCode: Signal<string>
     productId: Signal<number | undefined>
     productDetails: Signal<string>
-    // branchId: Signal<string>
-    // dbCr: Signal<string>
     qty: Signal<number>
     price: Signal<number>
     amount: Signal<number>

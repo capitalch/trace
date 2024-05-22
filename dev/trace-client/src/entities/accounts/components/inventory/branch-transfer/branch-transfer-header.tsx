@@ -10,7 +10,8 @@ export function BranchTransferHeader() {
     const header = BranchTransferStore.main.header
     const errorsObject = BranchTransferStore.errorsObject
     const branchObject = getFromBag('branchObject')
-    const { getOptionsOtherThanCurrentBranch } = useBranchTransferheader()
+    // console.log('branchId:', BranchTransferStore.main.destBranchId.value)
+    const { getOptionsOtherThanCurrentBranch, getOptionsArrayOtherThanCurrentBranch } = useBranchTransferheader()
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', }}>
             <Box sx={{
@@ -113,7 +114,10 @@ export function BranchTransferHeader() {
 
                 {/* Destination branch */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 0.5, width: '100%' }}>
-                    <Typography variant="body2" fontWeight='bold'>Destination branch</Typography>
+                    <Typography variant="body2" fontWeight='bold'
+                        color={BranchTransferStore.errorsObject.destBranchError() ? 'red' : 'black'}>
+                        Destination branch
+                    </Typography>
                     {/* <select style={{ height: '2rem', width: '100%', border: errorsObject.destBranchError() ? '2px solid red' : '1px solid lightGrey' }}
                         value={BranchTransferStore.main.destBranchId.value}
                         onChange={(e: any) => {
@@ -122,11 +126,25 @@ export function BranchTransferHeader() {
                             setRefresh({})
                         }}
                     >
+
                         {getOptionsOtherThanCurrentBranch()}
                     </select> */}
-                        <Dropdown  placeholder="Select destination branch"
+                    <Dropdown placeholder="Select destination branch"
+                        optionLabel="label"
+                        optionValue="code"
                         value={BranchTransferStore.main.destBranchId.value}
-                        />
+                        options={getOptionsArrayOtherThanCurrentBranch()}
+                        onChange={(e: any) => {
+                            console.log(e.value)
+                            BranchTransferStore.main.destBranchId.value = e?.value
+                        }}
+                    // highlightOnSelect= {false}
+                    // unstyled= {true}
+                    // className="hover:border-red-500"
+                    // color={BranchTransferStore.errorsObject.destBranchError() ? 'red' : 'black'}
+
+                    // style={ }
+                    />
                 </Box>
             </Box>
         </Box>
