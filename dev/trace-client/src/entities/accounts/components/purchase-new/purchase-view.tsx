@@ -6,7 +6,6 @@ import { PurchaseStore } from '../../stores/purchase-store';
 import { AggrOptions, ColumnOptions, GenericSyncfusionGrid, GridOptions } from './generic-syncfusion-grid'
 import { signal } from '@preact/signals-react';
 import { AppStore } from '../../stores/app-store';
-import { Apps } from '@mui/icons-material';
 import { PurchasePreview } from './purchase-preview';
 
 function PurchaseView() {
@@ -129,7 +128,6 @@ function PurchaseView() {
             alert('No data found')
             return
         }
-        // console.log(JSON.stringify(ret?.jsonResult))
         AppStore.modalDialogA.isCentered = true
         AppStore.modalDialogA.title.value = 'Purchase Preview'
         AppStore.modalDialogA.body.value = () => <PurchasePreview invoiceData={ret.jsonResult}  />
@@ -264,5 +262,3 @@ function PurchaseView() {
     }
 }
 export { PurchaseView }
-
-const sampleInvoiceData = {"tranH":{"id":24459,"tranDate":"2024-04-15","userRefNo":"TI-KL2425-600099","remarks":null,"autoRefNo":"HD/PUR/36/2024","jData":{},"tranTypeId":5},"billTo":null,"businessContacts":{"id":20,"contactName":"InterFotoIndiaPvtLtd","contactCode":"InterFoto","mobileNumber":null,"otherMobileNumber":null,"landPhone":"03322651101","email":"kolkata@interfotoindia.com","otherEmail":null,"jAddress":[{"pin":"700017","city":"KOLKATA","state":"WEST BENGAL","country":"INDIA","address1":"Shantiniketan Building","address2":"8, Camac Street"}],"descr":null,"accId":367,"jData":null,"gstin":"19AAACI8655C1ZI","timestamp":"2022-04-07T11:17:47.463316+00:00","stateCode":19},"tranD":[{"id":49660,"accId":421,"dc":"D","amount":551089,"instrNo":null,"remarks":null,"accClass":"purchase"},{"id":49661,"accId":367,"dc":"C","amount":551089,"instrNo":null,"remarks":null,"accClass":"creditor"}],"extGstTranD":{"id":17197,"gstin":"19AAACI8655C1ZI","cgst":42032.21,"sgst":42032.21,"igst":0},"salePurchaseDetails":[{"id":20449,"productId":856,"qty":1,"price":59106.36,"priceGst":69745.5,"discount":0,"cgst":5319.57,"sgst":5319.57,"igst":0,"amount":69745.5,"hsn":85258900,"gstRate":18,"productCode":"1777","upcCode":null,"catName":"Digital camera","brandName":"Nikon","info":"Mind-blowing 3000mm zoom. 4K Ultra HD video. RAW (NRW), macro, time-lapse and so much more.","label":"COOLPIX P1000","serialNumbers":"11022092","remarks":null},{"id":20450,"productId":407,"qty":3,"price":73938.19,"priceGst":87247.06,"discount":0,"cgst":19963.31,"sgst":19963.31,"igst":0,"amount":261741.19,"hsn":85258900,"gstRate":18,"productCode":"1336","upcCode":null,"catName":"Digital camera","brandName":"Nikon","info":"Z50 with Z DX 16-50mm f/3.5-6.3 VR & Z DX 50-250mm f/4.5-6.3 VR) and Includes 64GB (class 10) SD card ","label":"Z50 KIT with 16-50mm+50-250 mm","serialNumbers":"7656646,7656711,7656984","remarks":null},{"id":20451,"productId":747,"qty":1,"price":70205.21,"priceGst":82842.15,"discount":0,"cgst":6318.47,"sgst":6318.47,"igst":0,"amount":82842.15,"hsn":85258900,"gstRate":18,"productCode":"1669","upcCode":null,"catName":"Digital camera","brandName":"Nikon","info":"NIKON Z30 MIRRORLESS CAMERA WITH Z DX 18-140MM, WITH 65GB UHS-I SD CARD 20.8MP DX-FORMAT CMOS SENSOR.","label":"Z30 KIT WITH Z DX 18-140MM","serialNumbers":"7630477","remarks":null},{"id":20452,"productId":746,"qty":1,"price":67836.2,"priceGst":80046.72,"discount":0,"cgst":6105.26,"sgst":6105.26,"igst":0,"amount":80046.72,"hsn":85258900,"gstRate":18,"productCode":"1668","upcCode":null,"catName":"Digital camera","brandName":"Nikon","info":"NIKON Z30 MIRRORLESS CAMERA WITH Z DX 16-50MM &   Z DX50-250MM WITH 65GB UHS-I SD CARD 20.8MP DX-FORMAT CMOS SENSOR.","label":"Z30 KIT WITH Z DX 16-50MM & Z DX50-250MM","serialNumbers":"7625207","remarks":null},{"id":20453,"productId":442,"qty":1,"price":48062.16,"priceGst":56713.35,"discount":0,"cgst":4325.59,"sgst":4325.59,"igst":0,"amount":56713.35,"hsn":90021100,"gstRate":18,"productCode":"1370","upcCode":null,"catName":"Camera lens","brandName":"Nikon","info":"NIKKOR Z 35mm f/1.8 S. As a fast wide-angle prime lens","label":" Z 35MM F/1.8 S","serialNumbers":"20080184","remarks":null}]}

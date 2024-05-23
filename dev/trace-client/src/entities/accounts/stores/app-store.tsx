@@ -13,6 +13,7 @@ const appStoreT: AppStoreType = {
         maxWidth: signal('sm'),
         title: signal(''),
         toShowCloseButton: signal(false),
+        onModalDialogClose: () => { }
     },
 
     modalDialogB: {
@@ -51,6 +52,7 @@ type AppStoreType = {
         maxWidth: Signal<'md' | 'sm' | 'lg' | 'md'>
         title: Signal<string>
         toShowCloseButton: Signal<boolean>
+        onModalDialogClose: (item?:any) => void
     },
 
     modalDialogB: {

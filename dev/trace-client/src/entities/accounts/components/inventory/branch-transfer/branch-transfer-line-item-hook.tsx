@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { AppStore } from "../../../stores/app-store"
-import { BranchTransferLineItemType, clearBranchTransferLineItem, computeAmountBranchTransferLineItem, computeFooterBranchTransferLineItem, populateBranchTransferLineItem } from "../../../stores/branch-transfer-store"
+import { BranchTransferLineItemType, clearBranchTransferLineItem, computeAmountBranchTransferLineItem,  populateBranchTransferLineItem } from "../../../stores/branch-transfer-store"
 import { ProductsSearch } from "../../sales-new/redirect"
 import { Badge, Box, Button, TextareaAutosize, execGenericView, getFromBag, useIbuki } from "../redirect"
 
@@ -43,14 +43,15 @@ export function useBranchTransferLineItem() {
     }
 
     function handleItemSearch(item: BranchTransferLineItemType) {
+        AppStore.modalDialogA.onModalDialogClose = computeAmountBranchTransferLineItem
         AppStore.modalDialogA.title.value = 'Search for all products'
         AppStore.modalDialogA.body.value = () => <ProductsSearch />
         AppStore.modalDialogA.isOpen.value = true
         AppStore.modalDialogA.maxWidth.value = 'md'
         AppStore.modalDialogA.itemData.value = item
-        computeAmountBranchTransferLineItem(item)
+        // computeAmountBranchTransferLineItem(item)
     }
-
+    
     function handleSerialNumber(item: BranchTransferLineItemType) {
         AppStore.modalDialogA.title.value = 'Serial numbers (Comma separated)'
         AppStore.modalDialogA.body.value = Content

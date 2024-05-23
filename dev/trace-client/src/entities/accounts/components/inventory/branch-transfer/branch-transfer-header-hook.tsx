@@ -43,7 +43,7 @@ export function useBranchTransferheader() {
         if (ret.error) {
             console.log(ret.error)
         } else {
-            resetBranchTransferStore()
+            handleOnReset()
         }
     }
 
@@ -72,7 +72,7 @@ export function useBranchTransferheader() {
         obj.data.push(item)
         return obj
     }
-
+    
     function getTranDetails() {
         const deletedBranchTransferIds: number[] = []
         const lineItems: BranchTransferLineItemType[] = BranchTransferStore.main.lineItems.value

@@ -77,6 +77,7 @@ function ProductsSearch({ parentMeta }: any) {
                     itemData.price.value = selectedProduct.lastPurchasePrice || selectedProduct.openingPrice
                     itemData.gstRate && (itemData.gstRate.value = selectedProduct.gstRate)
                     AppStore.modalDialogA.isOpen.value = false
+                    AppStore.modalDialogA.onModalDialogClose(itemData)
                 }
             }}
         />

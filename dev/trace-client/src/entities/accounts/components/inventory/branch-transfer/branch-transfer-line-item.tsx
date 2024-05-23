@@ -8,7 +8,7 @@ import { utilMethods } from "../redirect";
 export function BranchTransferLineItem({ item, index }: { item: BranchTransferLineItemType, index: number }) {
     const theme = useTheme()
     const { extractAmount, toDecimalFormat } = utilMethods()
-    const { doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber} = useBranchTransferLineItem()
+    const { doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber } = useBranchTransferLineItem()
     const errorsObject = BranchTransferStore.errorsObject
     return (
         <Box sx={{
@@ -167,7 +167,11 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
             </Box>
 
             {/* Amount */}
-            <Typography variant='body1' sx={{ textAlign: 'right', width: theme.spacing(12), color: theme.palette.common.black }} >
+            <Typography variant='body1'
+                sx={{
+                    textAlign: 'right', width: theme.spacing(12),
+                    color: theme.palette.common.black
+                }} >
                 {toDecimalFormat(item.amount.value || 0.00)}</Typography>
 
             {/* Add button */}

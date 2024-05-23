@@ -52,8 +52,6 @@ function useStockJournalCrown() {
             console.log(ret.error)
         } else {
             const id = ret?.data?.accounts?.genericUpdateMasterDetails
-            console.log('id for TranH:', id)
-            // megaData.executeMethodForKey('render:stockJournalTotals',{})
             handleReset()
             megaData.accounts.stockJournal.selectedStockJournalId = id
             megaData.executeMethodForKey('render:stockJournalTotals',{})
