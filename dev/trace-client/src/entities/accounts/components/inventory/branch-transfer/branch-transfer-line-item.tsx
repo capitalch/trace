@@ -75,6 +75,20 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                 }} variant='body1'>{item.productDetails || ''}</Typography>
             </Card>
 
+            {/* Line ref no */}
+            <Box className="vertical">
+                <Typography variant="body2">Ref no</Typography>
+                <TextField
+                    sx={{ maxWidth: theme.spacing(15) }}
+                    autoComplete="off"
+                    onChange={(e: any) => {
+                        item.lineRefNo.value = e.target.value
+                    }}
+                    value={item.lineRefNo.value || ''}
+                    variant="standard"
+                />
+            </Box>
+
             {/* Qty */}
             <Box className='vertical'>
                 <Typography sx={{ textAlign: 'right' }} variant='body2'>Qty</Typography>
@@ -147,8 +161,8 @@ export function BranchTransferLineItem({ item, index }: { item: BranchTransferLi
                     autoComplete='off'
                     sx={{ maxWidth: theme.spacing(26) }}
                     variant='standard'
-                    value={item?.remarks?.value || ''}
-                    onChange={(e: any) => { item.remarks.value = e.target.value }}
+                    value={item?.lineRemarks?.value || ''}
+                    onChange={(e: any) => { item.lineRemarks.value = e.target.value }}
                 />
             </Box>
 

@@ -1,4 +1,4 @@
-## Branch Transfer
+## Branch Transfer + others
 # New design
 																							- Dest branch should not have current branch
 																							- Line item correction
@@ -11,10 +11,18 @@
 																							- Error management
 																							- Reset functionality
 - Submit functionality
-- DB changes
+	- Insert
+	- Update
+	- Delete
+																							- DB changes
+- DB changes deployment script
+- Deploy in all databasesand BU's
 - Report changes
 - View grid
-
+- Client side
+- Consolidated reports
+	- Bank reconciliation
+- Search in BS and PL
 
 ## Branch features
 - Consolidated final reports

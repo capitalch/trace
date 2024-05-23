@@ -207,10 +207,6 @@ function usePurchaseMainHeader() {
                     tableName: 'SalePurchaseDetails',
                     fkeyName: 'tranDetailsId',
                     deletedIds: _.isEmpty(PurchaseStore.main.deletedSalePurchaseIds) ? undefined : PurchaseStore.main.deletedSalePurchaseIds,
-                    // deletedIds:
-                    //     ad?.deletedSalePurchaseIds.length > 0
-                    //         ? [...ad.deletedSalePurchaseIds]
-                    //         : undefined,
                     data: [
                         {
                             id: item.id,

@@ -11,7 +11,7 @@ export function BranchTransferHeader() {
     const errorsObject = BranchTransferStore.errorsObject
     const branchObject = getFromBag('branchObject')
     const destBranchError: string | undefined = BranchTransferStore.errorsObject.destBranchError()
-    const { getOptionsArrayOtherThanCurrentBranch, handleOnReset, isFormError } = useBranchTransferheader()
+    const { getOptionsArrayOtherThanCurrentBranch, handleOnReset, handleOnSubmit, isFormError } = useBranchTransferheader()
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', }}>
@@ -101,7 +101,7 @@ export function BranchTransferHeader() {
                             <Check style={{ color: 'white' }} />
                         )
                     }
-                // onClick={handleSubmit}
+                    onClick={handleOnSubmit}
                 >Submit
                 </Button>
             </Box>

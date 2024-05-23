@@ -40,6 +40,7 @@ const BranchTransferStoreT: BranchTransferStoreType = {
             isSubmitDisabled: signal(true)
         },
         lineItems: signal([getEmptyBranchTransferLineItem()]),
+        deletedBranchTransferIds: [],
         lineItemsFooter: {
             qty: signal(0),
             amount: signal(0)
@@ -96,25 +97,6 @@ export function deleteBranchTransferLineItem(index: number) {
     computeFooterBranchTransferLineItem()
 }
 
-export function populateBranchTransferLineItem(item: BranchTransferLineItemType, data: any) {
-    item.productCodeOrUpc.value = ''
-    item.productCode.value = data.productCode
-    item.upcCode.value = data.upcCode
-    item.productId.value = data.productId
-    item.productDetails.value = `${data.catName} ${data.brandName} ${data.label}`
-    item.qty.value = 1
-    item.price.value = data.lastPurchasePrice
-    item.amount.value = 0
-    item.serialNumbers.value = ''
-    item.remarks.value = ''
-    computeAmountBranchTransferLineItem(item)
-}
-
-export function resetBranchTransferStore() {
-    // BranchTransferStore.main.header.commonRemarks.value = ''
-    BranchTransferStore = _.cloneDeep(BranchTransferStoreT)
-}
-
 function getEmptyBranchTransferLineItem() {
     const lineItem = {
         id: undefined,
@@ -130,9 +112,28 @@ function getEmptyBranchTransferLineItem() {
         amount: signal(0),
         serialNumbers: signal(''),
         serialNumberCount: signal(0),
-        remarks: signal(''),
+        lineRemarks: signal(''),
+        lineRefNo: signal('')
     }
     return ({ ...lineItem })
+}
+
+export function populateBranchTransferLineItem(item: BranchTransferLineItemType, data: any) {
+    item.productCodeOrUpc.value = ''
+    item.productCode.value = data.productCode
+    item.upcCode.value = data.upcCode
+    item.productId.value = data.productId
+    item.productDetails.value = `${data.catName} ${data.brandName} ${data.label}`
+    item.qty.value = 1
+    item.price.value = data.lastPurchasePrice
+    item.amount.value = 0
+    item.serialNumbers.value = ''
+    item.lineRemarks.value = ''
+    computeAmountBranchTransferLineItem(item)
+}
+
+export function resetBranchTransferStore() {
+    BranchTransferStore = _.cloneDeep(BranchTransferStoreT)
 }
 
 type BranchTransferStoreType = {
@@ -157,6 +158,7 @@ type BranchTransferStoreType = {
             isSubmitDisabled: Signal<boolean>
         },
         lineItems: Signal<BranchTransferLineItemType[]>
+        deletedBranchTransferIds: number[]
         lineItemsFooter: {
             qty: Signal<number>
             amount: Signal<number>
@@ -177,5 +179,6 @@ export type BranchTransferLineItemType = {
     amount: Signal<number>
     serialNumbers: Signal<string>
     serialNumberCount: Signal<number>
-    remarks: Signal<string>
+    lineRemarks: Signal<string>
+    lineRefNo: Signal<string>
 }
