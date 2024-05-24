@@ -2,6 +2,7 @@ import { Box, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import { useBranchTransfer } from "./branch-transfer-hook";
 import { BranchTransferStore } from "../../../stores/branch-transfer-store";
 import { BranchTransferMain } from "./branch-transfer-main";
+import { BranchTransferView } from "./branch-transfer-view";
 
 export function BranchTransfer() {
     const theme = useTheme()
@@ -24,11 +25,12 @@ export function BranchTransfer() {
                 <Tab label='Main' />
                 <Tab label='View' />
             </Tabs>
+            
             <Box hidden={BranchTransferStore.tabValue.value === 1}>
                 <BranchTransferMain />
             </Box>
             <Box hidden={BranchTransferStore.tabValue.value === 0}>
-                <Box>Branch Transfer View</Box>
+                <BranchTransferView />
             </Box>
         </Box>)
 }

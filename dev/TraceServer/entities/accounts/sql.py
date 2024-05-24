@@ -350,6 +350,39 @@ allSqls = {
         from "BranchM"
             order by "id"
     ''',
+    
+    "get_branch_transfer_headers": '''
+        --with "branchId" as (values (1)), "finYearId" as (values (2024)), "no" as (values(100))
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "no" as (values(%(no)s::int))
+        select h.id
+        , "tranDate"
+        ,"autoRefNo"
+        , "userRefNo"
+        , h."remarks"
+        , MIN(b."branchName") as "sourceBranchName"
+        , MIN(b1."branchName") as "destBranchName"
+        , string_agg(t."lineRemarks", ', ') as "lineRemarks"
+        , string_agg("productCode", ', ') as "productCodes"
+        , string_agg("brandName" || ' ' || "label",', ') as "productDetails"
+        , string_agg(t."jData"->>'serialNumbers', ', ') as "serialNumbers"
+		, SUM(qty * price) as amount
+            from "TranH" h
+                join "BranchM" b
+                    on b.id = h."branchId"
+                join "BranchTransfer" t
+                    on h.id = t."tranHeaderId"
+                join "ProductM" p
+                    on p.id = t."productId"
+                join "BrandM" br
+                    on br.id = p."brandId"
+                join "BranchM" b1
+                    on b1.id = t."destBranchId"
+			where "finYearId" = (table "finYearId") 
+				and "branchId" = (table "branchId")
+            group by h.id
+			order by "tranDate" DESC, h.id 
+			--limit (table "no")
+    ''',
 
     'get_businessContact_for_contactCode': '''
     select * from "ExtBusinessContactsAccM"

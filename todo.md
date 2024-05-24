@@ -11,7 +11,7 @@
 																							- Error management
 																							- Reset functionality
 - Submit functionality
-	- Insert
+																							- Insert
 	- Update
 	- Delete
 																							- DB changes
@@ -19,10 +19,16 @@
 - Deploy in all databasesand BU's
 - Report changes
 - View grid
+																							- Show data
+																								- Create SQL for view
+	- Edit
+	- Preview
+	- Delete
+	- Load data on tab change
 - Client side
 - Consolidated reports
 	- Bank reconciliation
-- Search in BS and PL
+- Provide SearchBox in BS and PL
 
 ## Branch features
 - Consolidated final reports
