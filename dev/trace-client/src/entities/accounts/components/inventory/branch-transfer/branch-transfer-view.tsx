@@ -43,10 +43,6 @@ export function BranchTransferView() {
         const aggrs: AggrOptions[] = [
             { field: 'index', type: 'Count', format: 'N0', footerTemplate: (props: any) => <span><b>{props.Count}</b></span> }
             , { field: 'amount', type: 'Sum', format: 'N2', }
-            // , { field: 'aggr', type: 'Sum', }
-            // , { field: 'cgst', type: 'Sum', }
-            // , { field: 'sgst', type: 'Sum', }
-            // , { field: 'igst', type: 'Sum', }
         ]
         return (aggrs)
     }
@@ -109,25 +105,25 @@ export function BranchTransferView() {
         header.userRefNo.value = tranH.userRefNo
         header.commonRemarks.value = tranH.remarks
 
-        BranchTransferStore.main.lineItems.value = branchTransfer.map((item: any)=>{
+        const lineItems: BranchTransferLineItemType[] = branchTransfer.map((item: any) => {
             const lineItem: BranchTransferLineItemType = getEmptyBranchTransferLineItem()
             lineItem.id = item.id
-            lineItem.lineRefNo = item.lineRefNo
-            lineItem.lineRemarks = item.lineRemarks
-            lineItem.productCode = item.productCode
-            lineItem.productId = item.productId
-            lineItem.qty = item.qty
-            lineItem.price = item.price
-            lineItem.serialNumbers = item.serialNumbers
+            lineItem.productCodeOrUpc.value = ''
+            lineItem.productCode.value = item.productCode
+            lineItem.upcCode.value = ''
+            lineItem.productId.value = item.productId
+            lineItem.productDetails.value = `${item.catName} ${item.brandName} ${item.label}`
+            lineItem.destBranchId.value = item.destBranchId
+            lineItem.qty.value = item.qty
+            lineItem.price.value = item.price
+            lineItem.amount.value = 0
+            lineItem.serialNumbers.value = item.serialNumbers
+            lineItem.lineRemarks.value = item.lineRemarks
+            lineItem.lineRefNo.value = item.lineRefNo
             return lineItem
         })
-    
-        // BranchTransferStore.main.sourchBranchId.value = data.sourceBranchId
-        // BranchTransferStore.main.destBranchId.value = data.destBranchId
-        // BranchTransferStore.main.lineItems.value = data.lineItems
-        // computeFooterBranchTransferLineItem()
+        BranchTransferStore.main.lineItems.value = lineItems
     }
-
 }
 
 // type TranHType = {

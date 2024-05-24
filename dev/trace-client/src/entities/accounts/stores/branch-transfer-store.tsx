@@ -107,8 +107,7 @@ export function getEmptyBranchTransferLineItem() {
         upcCode: signal(''),
         productId: signal(0),
         productDetails: signal(''),
-        branchId: signal(''),
-        // dbCr: signal('D'),
+        destBranchId: signal(undefined),
         qty: signal(1),
         price: signal(0),
         amount: signal(0),
@@ -178,6 +177,7 @@ export type BranchTransferLineItemType = {
     upcCode: Signal<string>
     productId: Signal<number | undefined>
     productDetails: Signal<string>
+    destBranchId: Signal<number | undefined>
     qty: Signal<number>
     price: Signal<number>
     amount: Signal<number>
