@@ -22,10 +22,17 @@
 																							- Show data
 																								- Create SQL for view
 	- Edit
+		- Load branch transfer from DB on id
+		- Populate branch transfer
+		- Submit
 	- Preview
+		- Create preview PDF
 	- Delete
-	- Load data on tab change
+		- deleted IDs populate
+		- submit
+																							- Load data on tab change
 - Client side
+- Security of buttons etc.
 - Consolidated reports
 	- Bank reconciliation
 - Provide SearchBox in BS and PL

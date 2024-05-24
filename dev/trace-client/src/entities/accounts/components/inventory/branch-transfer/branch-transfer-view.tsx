@@ -1,7 +1,22 @@
-import { PurchaseStore } from '../../../stores/purchase-store'
+import { useEffect } from 'react'
+import _ from 'lodash'
 import { AggrOptions, ColumnOptions, GridOptions, GenericSyncfusionGrid, } from '../../purchase-new/generic-syncfusion-grid'
+import { BranchTransferLineItemType, BranchTransferStore, getEmptyBranchTransferLineItem } from '../../../stores/branch-transfer-store'
+import { accountsMessages, execGenericView, useSharedElements, utilMethods } from '../../inventory/redirect';
+import { getEmptyPurchaseLineItem } from '../../../stores/purchase-store';
 
 export function BranchTransferView() {
+    const currentInstance = 'branchTransfer'
+    const { emit, confirm, genericUpdateMaster, }: any = useSharedElements()
+    const { isControlDisabled } = utilMethods()
+    const isDeleteDisabled = isControlDisabled('salespurchases-purchase-delete')
+    const isEditDisabled = isControlDisabled('salespurchases-purchase-edit')
+
+    useEffect(() => {
+        if (BranchTransferStore.tabValue.value === 1) {
+            emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + currentInstance, undefined)
+        }
+    }, [BranchTransferStore.tabValue.value])
 
     return (<GenericSyncfusionGrid
         gridOptions={getGridOptions()}
@@ -10,15 +25,14 @@ export function BranchTransferView() {
     function getGridOptions(): GridOptions {
         const gridOptions: GridOptions = {
             aggregates: getAggregates(),
-            instance: PurchaseStore.purchaseType,
+            instance: 'branchTransfer',
             sqlKey: 'get_branch_transfer_headers',
             columns: getColumns(),
             sqlArgs: {
-                // no: 100,
             },
-            onDelete: onPurchaseDelete,
-            onEdit: onPurchaseEdit,
-            onPreview: onPurchasePreview,
+            onDelete: onBranchTransferDelete,
+            onEdit: onBranchTransferEdit,
+            onPreview: onBranchTransferPreview,
             isDeleteDisabled: false,
             isEditDisabled: false
         }
@@ -28,7 +42,7 @@ export function BranchTransferView() {
     function getAggregates() {
         const aggrs: AggrOptions[] = [
             { field: 'index', type: 'Count', format: 'N0', footerTemplate: (props: any) => <span><b>{props.Count}</b></span> }
-            // , { field: 'amount', type: 'Sum', }
+            , { field: 'amount', type: 'Sum', format: 'N2', }
             // , { field: 'aggr', type: 'Sum', }
             // , { field: 'cgst', type: 'Sum', }
             // , { field: 'sgst', type: 'Sum', }
@@ -41,31 +55,90 @@ export function BranchTransferView() {
         const columns: ColumnOptions[] = [
             { field: 'index', headerText: '#', width: 70 }
             , { field: 'tranDate', headerText: 'Date', type: 'date', width: 95, format: { type: 'date', format: 'dd/MM/yyyy', } }
-            , { field: 'autoRefNo', headerText: 'Auto ref no', width: 170 }            
+            , { field: 'autoRefNo', headerText: 'Auto ref no', width: 170 }
             , { field: 'sourceBranchName', headerText: 'Source branch', width: 200 }
             , { field: 'destBranchName', headerText: 'Dest branch', width: 200 }
             , { field: 'userRefNo', headerText: 'User ref no', width: 200 }
             , { field: 'productDetails', headerText: 'Product details', width: 220 }
             , { field: 'serialNumbers', headerText: 'Serial No', width: 150 }
             , { field: 'productCodes', headerText: 'Product codes', width: 150 }
-            , { field: 'amount', headerText: 'Amount', width: 100, type: 'number', format:'N2', textAlign: 'Right'}
+            , { field: 'amount', headerText: 'Amount', width: 100, type: 'number', format: 'N2', textAlign: 'Right' }
             , { field: 'remarks', headerText: 'Remarks', width: 150 }
             , { field: 'lineRemarks', headerText: 'Line remarks', width: 150 }
         ]
         return (columns)
     }
 
-    function onPurchaseDelete() {
+    function onBranchTransferDelete() {
         // PurchaseStore.deletePurchase()
     }
 
-    function onPurchaseEdit() {
-        // PurchaseStore.editPurchase()
+    async function onBranchTransferEdit(id: number) {
+        if (!id) { return }
+        emit('SHOW-LOADING-INDICATOR', true)
+        const ret = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'getJson_branch_transfer_on_id',
+            args: { id: id }
+        })
+        emit('SHOW-LOADING-INDICATOR', false)
+        if (!_.isEmpty(ret)) {
+            BranchTransferStore.tabValue.value = 0
+            BranchTransferStore.goToView = true // After submit operation, go back to view
+            prepareBranchTransferStore(ret)
+        }
     }
 
-    function onPurchasePreview() {
+    function onBranchTransferPreview() {
         // PurchaseStore.previewPurchase()
     }
 
+    function prepareBranchTransferStore(data: any, isEdit = true){
+        const res: any = data.jsonResult
+        const tranH: any = res.tranH
+        const branchTransfer: any[] = res.branchTransfer
+
+        const main = BranchTransferStore.main
+        const header = main.header
+        const firstRow: any = branchTransfer[0]
+        
+        main.destBranchId.value = firstRow.destBranchId
+        header.id = tranH.id
+        header.refNo.value = tranH.autoRefNo
+        header.tranDate.value = tranH.tranDate
+        header.userRefNo.value = tranH.userRefNo
+        header.commonRemarks.value = tranH.remarks
+
+        BranchTransferStore.main.lineItems.value = branchTransfer.map((item: any)=>{
+            const lineItem: BranchTransferLineItemType = getEmptyBranchTransferLineItem()
+            lineItem.id = item.id
+            lineItem.lineRefNo = item.lineRefNo
+            lineItem.lineRemarks = item.lineRemarks
+            lineItem.productCode = item.productCode
+            lineItem.productId = item.productId
+            lineItem.qty = item.qty
+            lineItem.price = item.price
+            lineItem.serialNumbers = item.serialNumbers
+            return lineItem
+        })
+    
+        // BranchTransferStore.main.sourchBranchId.value = data.sourceBranchId
+        // BranchTransferStore.main.destBranchId.value = data.destBranchId
+        // BranchTransferStore.main.lineItems.value = data.lineItems
+        // computeFooterBranchTransferLineItem()
+    }
 
 }
+
+// type TranHType = {
+//     id: number
+//     refNo: string
+//     tranDate: string
+//     userRefNo: string
+//     commonRemarks: string
+//     isSubmitDisabled: boolean
+// }
+
+// type BranchTransferType = {
+
+// }

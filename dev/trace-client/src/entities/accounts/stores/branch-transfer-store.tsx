@@ -7,6 +7,8 @@ const currentDate = moment().format('YYYY-MM-DD')
 
 const BranchTransferStoreT: BranchTransferStoreType = {
     tabValue: signal(0),
+    goToView: false,
+    closeOnSubmit: false,
     errorsObject: {
         tranDateError: () => '',
         destBranchError: () => '',
@@ -97,7 +99,7 @@ export function deleteBranchTransferLineItem(index: number) {
     computeFooterBranchTransferLineItem()
 }
 
-function getEmptyBranchTransferLineItem() {
+export function getEmptyBranchTransferLineItem() {
     const lineItem = {
         id: undefined,
         productCodeOrUpc: signal(''),
@@ -106,7 +108,7 @@ function getEmptyBranchTransferLineItem() {
         productId: signal(0),
         productDetails: signal(''),
         branchId: signal(''),
-        dbCr: signal('D'),
+        // dbCr: signal('D'),
         qty: signal(1),
         price: signal(0),
         amount: signal(0),
@@ -138,6 +140,8 @@ export function resetBranchTransferStore() {
 
 type BranchTransferStoreType = {
     tabValue: Signal<number>,
+    goToView: boolean,
+    closeOnSubmit: boolean
     errorsObject: {
         tranDateError: ErrorType
         destBranchError: ErrorType

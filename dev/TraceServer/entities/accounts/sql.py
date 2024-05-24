@@ -2199,6 +2199,46 @@ allSqls = {
             , 'opBalance', (SELECT row_to_json(b) from cte2 b)
         ) as "jsonResult"
     ''',
+    
+    "getJson_branch_transfer_on_id":'''
+        --with "id" as (values(10832))
+        with "id" as (values(%(id)s::int))
+        , cte1 as (
+                select "id", "tranDate", "userRefNo", "remarks", "autoRefNo", "tranTypeId"
+                    from "TranH"
+                        where "id" = (table "id")
+            )
+        , cte2 as (
+                select  t."id"
+            , "tranHeaderId"
+            , "productId"
+            , "productCode"
+            , "brandName"
+            , "label"
+            , "catName"
+            , "info"
+            , "qty"
+            , "lineRemarks"
+            , "lineRefNo"
+            , t."jData"->>'serialNumbers' as "serialNumbers"
+            , "price"
+            , "destBranchId"
+                    from cte1 c1
+                        join "BranchTransfer" t
+                            on c1."id" = t."tranHeaderId"
+                        join "ProductM" p
+                                on p."id" = t."productId"
+                        join "CategoryM" c
+                            on c."id" = p."catId"
+                        join "BrandM" b
+                            on b."id" = p."brandId"
+                        order by t."id"
+            )
+            select json_build_object(
+                'tranH', (SELECT row_to_json(a) from cte1 a),
+                'branchTransfer', (SELECT json_agg(row_to_json (b)) from cte2 b)
+            ) as "jsonResult"
+    ''',
 
     "getJson_brands_categories_products_units": '''
         with cte1 as (

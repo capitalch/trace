@@ -34,6 +34,10 @@ const appStoreT: AppStoreType = {
         ret: {
             searchText: signal(''),
             viewLimit: signal(100)
+        },
+        branchTransfer: {
+            searchText: signal(''),
+            viewLimit: signal(100)
         }
     }
 }
