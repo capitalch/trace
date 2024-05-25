@@ -1,9 +1,11 @@
 import { useEffect } from 'react'
 import _ from 'lodash'
 import { AggrOptions, ColumnOptions, GridOptions, GenericSyncfusionGrid, } from '../../purchase-new/generic-syncfusion-grid'
-import { BranchTransferLineItemType, BranchTransferStore, getEmptyBranchTransferLineItem } from '../../../stores/branch-transfer-store'
+import { BranchTransferLineItemType, BranchTransferStore,  getEmptyBranchTransferLineItem } from '../../../stores/branch-transfer-store'
 import { accountsMessages, execGenericView, useSharedElements, utilMethods } from '../../inventory/redirect';
-import { getEmptyPurchaseLineItem } from '../../../stores/purchase-store';
+import { AppStore } from '../../../stores/app-store';
+import { BranchTransferPreview } from './branch-transfer-preview';
+// import { getEmptyPurchaseLineItem } from '../../../stores/purchase-store';
 
 export function BranchTransferView() {
     const currentInstance = 'branchTransfer'
@@ -65,8 +67,27 @@ export function BranchTransferView() {
         return (columns)
     }
 
-    function onBranchTransferDelete() {
-        // PurchaseStore.deletePurchase()
+    function onBranchTransferDelete(id: number) {
+        const options: any = {
+            description: accountsMessages.transactionDelete,
+            confirmationText: 'Yes',
+            cancellationText: 'No',
+        }
+        confirm(options)
+            .then(async () => {
+                emit('SHOW-LOADING-INDICATOR', true)
+                await genericUpdateMaster({
+                    deletedIds: [id],
+                    tableName: 'TranH',
+                })
+                emit('SHOW-LOADING-INDICATOR', false)
+                emit('SHOW-MESSAGE', {})
+                emit('GENERIC-SYNCFUSION-GRID-LOAD-DATA' + currentInstance, undefined)
+            }).catch((e:any) => { 
+                console.log(e)
+            }).finally(() => {
+                emit('SHOW-LOADING-INDICATOR', false)
+            })
     }
 
     async function onBranchTransferEdit(id: number) {
@@ -85,8 +106,25 @@ export function BranchTransferView() {
         }
     }
 
-    function onBranchTransferPreview() {
-        // PurchaseStore.previewPurchase()
+    async function onBranchTransferPreview(id:number) {
+        if (!id) { return }
+        emit('SHOW-LOADING-INDICATOR', true)
+        const ret = await execGenericView({
+            isMultipleRows: false,
+            sqlKey: 'getJson_branch_transfer_on_id',
+            args: { id: id }
+        })
+        if(_.isEmpty(ret?.jsonResult)) {
+            alert('No data found')
+            return
+        }
+
+        AppStore.modalDialogA.isCentered = true
+        AppStore.modalDialogA.title.value = 'Branch transfer Preview'
+        AppStore.modalDialogA.body.value = () => <BranchTransferPreview branchTransferData={ret.jsonResult}  />
+        AppStore.modalDialogA.maxWidth.value = 'md'
+        AppStore.modalDialogA.isOpen.value = true
+        emit('SHOW-LOADING-INDICATOR', false)
     }
 
     function prepareBranchTransferStore(data: any, isEdit = true){
@@ -116,25 +154,13 @@ export function BranchTransferView() {
             lineItem.destBranchId.value = item.destBranchId
             lineItem.qty.value = item.qty
             lineItem.price.value = item.price
-            lineItem.amount.value = 0
+            lineItem.amount.value = item.qty * item.price
             lineItem.serialNumbers.value = item.serialNumbers
             lineItem.lineRemarks.value = item.lineRemarks
             lineItem.lineRefNo.value = item.lineRefNo
             return lineItem
         })
         BranchTransferStore.main.lineItems.value = lineItems
+        BranchTransferStore.goToView = true
     }
 }
-
-// type TranHType = {
-//     id: number
-//     refNo: string
-//     tranDate: string
-//     userRefNo: string
-//     commonRemarks: string
-//     isSubmitDisabled: boolean
-// }
-
-// type BranchTransferType = {
-
-// }

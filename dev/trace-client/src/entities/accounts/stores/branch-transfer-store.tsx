@@ -89,6 +89,7 @@ export function clearBranchTransferLineItem(index: number) {
 }
 
 export function deleteBranchTransferLineItem(index: number) {
+    const item: BranchTransferLineItemType = BranchTransferStore.main.lineItems.value[index]
     if (BranchTransferStore.main.lineItems.value.length === 1) { // No delete for 1 item in the list
         return
     }
@@ -96,6 +97,9 @@ export function deleteBranchTransferLineItem(index: number) {
         draft.splice(index, 1)
         return (draft)
     })
+    if(item.id){
+        BranchTransferStore.main.deletedBranchTransferIds.push(item.id)
+    }
     computeFooterBranchTransferLineItem()
 }
 

@@ -945,7 +945,7 @@ allSqls = {
                 left join "BrandM" b
                     on b."id" = p."brandId"
             where (p."productCode" = (table "productCodeOrUpc") or (p."upcCode" = (table "productCodeOrUpc")))
-                and h."tranTypeId" = 5
+                --and h."tranTypeId" = 5
                 and h."tranDate" <= CURRENT_DATE
             order by h."tranDate" DESC limit 1
     ''',

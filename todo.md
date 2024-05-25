@@ -1,5 +1,33 @@
 ## Branch Transfer + others
 # New design
+- Preview
+	- Create preview PDF
+																					- Delete
+																							- Delete an entire record from TranH
+																							- DB: Cascade delete for BranchTransfer table
+- Security of submit button in branch transfer
+- Consolidated reports
+	- Bank reconciliation
+	- Final reports
+- Provide SearchBox in BS and PL																			
+- DB changes deployment script
+- Deploy in all databasesand BU's
+- Report changes
+																							- View grid
+																								- Show data
+																								- Create SQL for view
+																						- Submit functionality
+																							- Edit
+																								- Amount update
+																								- Come back to view after save
+																								- Load branch transfer from DB on id
+																								- Populate branch transfer
+																								- Submit
+	
+																							- Delete
+																								- deleted IDs populate
+																								- submit
+																							- Load data on tab change
 																							- Dest branch should not have current branch
 																							- Line item correction
 																							- BranchTransferStore correction
@@ -10,45 +38,9 @@
 																								- Date
 																							- Error management
 																							- Reset functionality
-- Submit functionality
 																							- Insert
-	- Update
-	- Delete
+																								- Price is not happening when item is obtained from search
 																							- DB changes
-- DB changes deployment script
-- Deploy in all databasesand BU's
-- Report changes
-- View grid
-																							- Show data
-																								- Create SQL for view
-	- Edit
-		- Load branch transfer from DB on id
-		- Populate branch transfer
-		- Submit
-	- Preview
-		- Create preview PDF
-	- Delete
-		- deleted IDs populate
-		- submit
-																							- Load data on tab change
-- Client side
-- Security of buttons etc.
-- Consolidated reports
-	- Bank reconciliation
-- Provide SearchBox in BS and PL
-
-## Branch features
-- Consolidated final reports
-- Consolidated bank recon
-
-																							## Purchase preview
-																							- For purchase return
-																							- Final invoice value with amount in words																							
-																							## To Do 20-04-2024
-																							- Purchase preview
-																								- Provide preview icon in purchase view
-																								- Provide preview icon in edit purchase
-																								- implement preview
 ## Immediate to Do
 																								- Remove and delete database of bika and all its users and clean the database
 - Maintenance

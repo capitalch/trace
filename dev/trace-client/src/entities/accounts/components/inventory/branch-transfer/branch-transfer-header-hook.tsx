@@ -1,5 +1,6 @@
 import Swal from "sweetalert2"
-import { BranchTransferLineItemType, BranchTransferStore, deleteBranchTransferLineItem, resetBranchTransferStore } from "../../../stores/branch-transfer-store"
+import _ from 'lodash'
+import { BranchTransferLineItemType, BranchTransferStore, resetBranchTransferStore } from "../../../stores/branch-transfer-store"
 import { genericUpdateMasterDetails, getFromBag, useEffect, useIbuki, useSharedElements, useState } from "../redirect"
 
 export function useBranchTransferheader() {
@@ -43,7 +44,12 @@ export function useBranchTransferheader() {
         if (ret.error) {
             console.log(ret.error)
         } else {
-            handleOnReset()
+            const goToView = BranchTransferStore.goToView
+            resetBranchTransferStore()
+            emit('LAUNCH-PAD:LOAD-COMPONENT', getCurrentComponent())
+            if (goToView) {
+                BranchTransferStore.tabValue.value = 1
+            }
         }
     }
 
@@ -72,14 +78,14 @@ export function useBranchTransferheader() {
         obj.data.push(item)
         return obj
     }
-    
+
     function getTranDetails() {
         const deletedBranchTransferIds: number[] = []
         const lineItems: BranchTransferLineItemType[] = BranchTransferStore.main.lineItems.value
         const tranDetails: any = {
             tableName: 'BranchTransfer',
             fkeyName: 'tranHeaderId',
-            deletedIds: deleteBranchTransferLineItem,
+            deletedIds: _.isEmpty(BranchTransferStore.main.deletedBranchTransferIds) ? undefined : BranchTransferStore.main.deletedBranchTransferIds
         }
         const data: any[] = []
         for (const item of lineItems) {

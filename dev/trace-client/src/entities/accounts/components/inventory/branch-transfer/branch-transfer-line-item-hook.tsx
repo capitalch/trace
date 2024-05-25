@@ -65,8 +65,7 @@ export function useBranchTransferLineItem() {
                         showZero={true}
                         badgeContent={(item.serialNumbers.value || '')
                             .split(',')
-                            .filter(Boolean).length}
-                    >
+                            .filter(Boolean).length}>
                     </Badge>
                     <TextareaAutosize
                         autoFocus={true}
