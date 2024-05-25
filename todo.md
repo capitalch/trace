@@ -1,18 +1,25 @@
 ## Branch Transfer + others
 # New design
-- Preview
-	- Create preview PDF
+																					- Preview
+																						- Create preview PDF
+																							- Footer
+																							- Product
+																							- price right aligned
+																							- amount
+																							- serial No
 																					- Delete
 																							- Delete an entire record from TranH
 																							- DB: Cascade delete for BranchTransfer table
-- Security of submit button in branch transfer
+- Report changes
+																							- Security of submit button in branch transfer
 - Consolidated reports
 	- Bank reconciliation
 	- Final reports
 - Provide SearchBox in BS and PL																			
+- In sale invoices payment remarks is not there in print preview
+- In sale invoice print preview if autosubledger then also give subledger ac no
 - DB changes deployment script
-- Deploy in all databasesand BU's
-- Report changes
+- Deploy in all databases and BU's
 																							- View grid
 																								- Show data
 																								- Create SQL for view

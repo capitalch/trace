@@ -1,12 +1,13 @@
 import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { BranchTransferStore, } from "../../../stores/branch-transfer-store";
 import { useBranchTransferheader } from "./branch-transfer-header-hook";
-import { getFromBag } from "../redirect";
+import { getFromBag, utilMethods } from "../redirect";
 import { Dropdown } from 'primereact/dropdown'
 import { Check, Error } from "@mui/icons-material";
 
 export function BranchTransferHeader() {
     const theme = useTheme()
+    const { isControlDisabled } = utilMethods()
     const header = BranchTransferStore.main.header
     const errorsObject = BranchTransferStore.errorsObject
     const branchObject = getFromBag('branchObject')
@@ -93,7 +94,7 @@ export function BranchTransferHeader() {
                     variant="contained"
                     size="medium"
                     color="secondary"
-                    disabled={isFormError()}
+                    disabled={isFormError() || isControlDisabled('inventory-branch-transfer-submit')}
                     startIcon={
                         isFormError() ? (
                             <Error color="error" />

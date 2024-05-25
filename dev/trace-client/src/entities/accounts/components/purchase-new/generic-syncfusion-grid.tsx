@@ -3,10 +3,10 @@ import { TextBoxComponent } from '@syncfusion/ej2-react-inputs'
 import {
     Aggregate, AggregateColumnDirective, AggregateColumnsDirective, AggregateDirective,
     AggregatesDirective, ColumnDirective, ColumnsDirective, GridComponent, Inject
-    , PdfExport, ExcelExport, Resize, Search, Toolbar,InfiniteScroll, Selection, 
+    , PdfExport, ExcelExport, Resize, Search, Toolbar, InfiniteScroll, Selection,
 } from "@syncfusion/ej2-react-grids"
 import { FC, useEffect, useRef, } from "react"
-import { _, execGenericView,Preview, useIbuki, useSharedElements } from "../inventory/redirect"
+import { _, execGenericView, Preview, useIbuki, useSharedElements } from "../inventory/redirect"
 import messages from "../../../../messages.json"
 import { Search as SearchIcon } from '../../../../imports/icons-import'
 import { useTraceGlobal } from "../masters/redirect"
@@ -26,7 +26,7 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
     if (gridOptions.onEdit) {
         toShowEditButton = true
     }
-    if(gridOptions.onPreview){
+    if (gridOptions.onPreview) {
         toShowPreviewButton = true
     }
     useEffect(() => {
@@ -48,8 +48,8 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
                 allowTextWrap={true}
                 gridLines="Both"
                 ref={gridRef}
-                selectionSettings={{enableToggle:true}}
-                height='calc(100vh - 380px)' 
+                selectionSettings={{ enableToggle: true }}
+                height='calc(100vh - 380px)'
                 width={getCurrentWindowSize()}>
                 <ColumnsDirective>
                     {getColumnDirectives()}
@@ -87,31 +87,40 @@ function GenericSyncfusionGrid({ gridOptions }: { gridOptions: GridOptions }) {
             return (ds)
         }
     }
-
+    
     function editDeletePreviewColumnTemplate(props: any) {
         return (<Box display='flex'>
-            {toShowEditButton && <IconButton
-                onClick={(e) => handleClickEdit(props)}
-                size='small'
-                disabled={gridOptions.isEditDisabled}
-                color='secondary'>
-                <Edit></Edit>
-            </IconButton>}
-            {toShowDeleteButton && <IconButton
-                disabled={gridOptions.isDeleteDisabled}
-                onClick={(e) => handleClickDelete(props)}
-                size='small'
-                color='error'>
-                <DeleteForever></DeleteForever>
-            </IconButton>}
-            {toShowPreviewButton && <IconButton
-                onClick={(e) => handleClickPreview(props)}
-                size="small"
-                color="info">
-                <Preview className="preview-icon" />
-                </IconButton>
-            }
-        </Box>)
+            {toShowEditButton &&
+                <Tooltip title="Edit">
+                    <IconButton
+                        onClick={(e) => handleClickEdit(props)}
+                        size='small'
+                        disabled={gridOptions.isEditDisabled}
+                        color='secondary'>
+                        <Edit></Edit>
+                    </IconButton>
+                </Tooltip>}
+
+            {toShowDeleteButton &&
+                <Tooltip title="Delete">
+                    <IconButton
+                        disabled={gridOptions.isDeleteDisabled}
+                        onClick={(e) => handleClickDelete(props)}
+                        size='small'
+                        color='error'>
+                        <DeleteForever></DeleteForever>
+                    </IconButton>
+                </Tooltip>}
+            {toShowPreviewButton &&
+                <Tooltip title="Preview">
+                    <IconButton
+                        onClick={(e) => handleClickPreview(props)}
+                        size="small"
+                        color="info">
+                        <Preview className="preview-icon" />
+                    </IconButton>
+                </Tooltip>}
+        </Box >)
     }
 
     function handleClickDelete(props: any) {

@@ -6,10 +6,11 @@ import {
     useTheme,
     createStyles,
     makeStyles,
+    Box,
 } from '../../../../imports/gui-imports'
 import { Search } from '../../../../imports/icons-import'
 import styled from 'styled-components'
-import { queries } from '../../../../imports/trace-imports'
+import { queries, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
 import { useSharedElements } from '../common/shared-elements-hook'
 
@@ -17,6 +18,7 @@ function BalanceSheetProfitLoss() {
     const [, setRefresh] = useState({})
     const classes = useStyles()
     const meta: any = useRef({
+        globalFilter: '',
         isMounted: false,
         leftView: [],
         rightView: [],
@@ -40,7 +42,9 @@ function BalanceSheetProfitLoss() {
         toDecimalFormat,
     } = useSharedElements()
     const theme: Theme = useTheme()
-
+    const { traceGlobalSearch } = useTraceMaterialComponents()
+    const { isMediumSizeUp } =
+        useTraceGlobal()
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -183,9 +187,14 @@ function BalanceSheetProfitLoss() {
 
     return (
         <div className={classes.content}>
+            
             <Typography color="primary" variant="h6" component="div">
                 {meta.current.title}
             </Typography>
+            {traceGlobalSearch({
+                meta: meta,
+                isMediumSizeUp: isMediumSizeUp,
+            })}
             <div className="bs-pl">
                 <div>
                     <TreeTable
@@ -209,9 +218,11 @@ function BalanceSheetProfitLoss() {
                                 : setInBag('plLeftExpandedKeys', e.value)
                             meta.current.isMounted && setRefresh({})
                         }}
+                        globalFilter={meta.current.globalFilter}
                         header={
                             <HeaderDiv>
                                 {meta.current.leftTableHeader}
+
                                 <InputSwitch
                                     checked={
                                         meta.current.isBs
@@ -304,6 +315,7 @@ function BalanceSheetProfitLoss() {
                             marginRight: '1rem',
                         }}
                         value={meta.current.rightView}
+                        globalFilter={meta.current.globalFilter}
                         expandedKeys={
                             meta.current.isBs
                                 ? getFromBag('bsRightExpandedKeys') || {}

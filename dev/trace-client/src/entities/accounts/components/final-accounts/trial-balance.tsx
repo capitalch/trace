@@ -48,7 +48,7 @@ function TrialBalance() {
     const { queryGraphql } = graphqlService()
     const classes = useStyles({ meta: meta })
     const { traceGlobalSearch } = useTraceMaterialComponents()
-    const { getCurrentMediaSize, isMediumSizeUp, getCurrentWindowSize } =
+    const { getCurrentMediaSize, isMediumSizeUp } =
         useTraceGlobal()
 
     const currentMediaSize: string = getCurrentMediaSize()
@@ -201,10 +201,7 @@ function TrialBalance() {
     }
 
     return (
-        <div
-            className={classes.content}
-            // style={{ width: getCurrentWindowSize() }}
-            >
+        <div className={classes.content}>
             <Box className={classes.header}>
                 <Typography
                     color="primary"
