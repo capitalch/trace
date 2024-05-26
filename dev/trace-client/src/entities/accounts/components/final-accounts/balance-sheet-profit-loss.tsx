@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import { queries, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
 import accountsMessages from '../../json/accounts-messages.json'
 import { useSharedElements } from '../common/shared-elements-hook'
+import { preProcessFile } from 'typescript'
 
 function BalanceSheetProfitLoss() {
     const [, setRefresh] = useState({})
@@ -30,6 +31,8 @@ function BalanceSheetProfitLoss() {
         allKeys: [],
         isBs: false,
         isOpBalError: false,
+
+        isAllBranches: false
     })
 
     const {
@@ -45,6 +48,7 @@ function BalanceSheetProfitLoss() {
     const { traceGlobalSearch } = useTraceMaterialComponents()
     const { isMediumSizeUp } =
         useTraceGlobal()
+
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
@@ -78,13 +82,17 @@ function BalanceSheetProfitLoss() {
     }
 
     async function getData(isBusyIndicator = true) {
+        const branchObject: any = getFromBag('branchObject')
         const currentComponent: any = getCurrentComponent()
         const componentName: string = currentComponent.componentName
         meta.current.isBs = componentName === 'balanceSheet'
         let profitOrLoss = 0.0
-
+        const args = encodeURIComponent(JSON.stringify({
+            branchId: meta.current.isAllBranches ? null : branchObject.branchId
+        }))
         const q = queries['genericQueryBuilder']({
             queryName: 'balanceSheetProfitLoss',
+            args: args
         })
         if (q) {
             let results: any
@@ -187,227 +195,242 @@ function BalanceSheetProfitLoss() {
 
     return (
         <div className={classes.content}>
-            
-            <Typography color="primary" variant="h6" component="div">
-                {meta.current.title}
-            </Typography>
-            {traceGlobalSearch({
-                meta: meta,
-                isMediumSizeUp: isMediumSizeUp,
-            })}
+            <Box display='flex' justifyContent='space-between' paddingBottom={theme.spacing(2)}>
+                <Typography color="primary" variant="h6" component="div">
+                    {meta.current.title}
+                </Typography>
+                <Span style={{ display: 'flex' }}>
+                    <Span>This branch</Span>
+                    <InputSwitch
+                        checked={meta.current.isAllBranches}
+                        onChange={(e: any) => {
+                            meta.current.isAllBranches = e.target.value
+                            getData()
+                            setRefresh({})
+                        }}></InputSwitch>
+                    <Span style={{ marginLeft: theme.spacing(2) }}>All branches</Span>
+                </Span>
+                {traceGlobalSearch({
+                    meta: meta,
+                    isMediumSizeUp: isMediumSizeUp,
+                })}
+            </Box>
             <div className="bs-pl">
-                <div>
-                    <TreeTable
-                        scrollable={true}
-                        scrollHeight="calc(100vh - 22rem)"
-                        style={{
-                            minWidth: '24rem',
-                            maxWidth: '40rem',
-                            display: 'inline-block',
-                            marginRight: '1rem',
-                        }}
-                        value={meta.current.leftView}
-                        expandedKeys={
-                            meta.current.isBs
-                                ? getFromBag('bsLeftExpandedKeys') || {}
-                                : getFromBag('plLeftExpandedKeys') || {}
-                        }
-                        onToggle={(e: any) => {
-                            meta.current.isBs
-                                ? setInBag('bsLeftExpandedKeys', e.value)
-                                : setInBag('plLeftExpandedKeys', e.value)
-                            meta.current.isMounted && setRefresh({})
-                        }}
-                        globalFilter={meta.current.globalFilter}
-                        header={
-                            <HeaderDiv>
-                                {meta.current.leftTableHeader}
+                {/* <div> */}
+                <TreeTable
+                    scrollable={true}
+                    scrollHeight="calc(100vh - 22rem)"
+                    style={{
+                        minWidth: '24rem',
+                        width: '47%',
+                        // maxWidth: '40rem',
+                        display: 'inline-block',
+                        marginRight: '1rem',
+                    }}
+                    value={meta.current.leftView}
+                    expandedKeys={
+                        meta.current.isBs
+                            ? getFromBag('bsLeftExpandedKeys') || {}
+                            : getFromBag('plLeftExpandedKeys') || {}
+                    }
+                    onToggle={(e: any) => {
+                        meta.current.isBs
+                            ? setInBag('bsLeftExpandedKeys', e.value)
+                            : setInBag('plLeftExpandedKeys', e.value)
+                        meta.current.isMounted && setRefresh({})
+                    }}
+                    globalFilter={meta.current.globalFilter}
+                    header={
+                        <HeaderDiv>
+                            {meta.current.leftTableHeader}
 
-                                <InputSwitch
-                                    checked={
+                            <InputSwitch
+                                checked={
+                                    meta.current.isBs
+                                        ? getFromBag('bsLeftExpandAll') ||
+                                        false
+                                        : getFromBag('plLeftExpandAll') ||
+                                        false
+                                }
+                                style={{
+                                    float: 'right',
+                                    marginRight: '0.5rem',
+                                }}
+                                onChange={(e: any) => {
+                                    const val = e.target.value
+                                    meta.current.isBs
+                                        ? setInBag('bsLeftExpandAll', val)
+                                        : setInBag('plLeftExpandAll', val)
+                                    if (val) {
+                                        const expObject = meta.current.allKeys.reduce(
+                                            (prev: any, x: any) => {
+                                                prev[x] = true
+                                                return prev
+                                            },
+                                            {}
+                                        )
                                         meta.current.isBs
-                                            ? getFromBag('bsLeftExpandAll') ||
-                                            false
-                                            : getFromBag('plLeftExpandAll') ||
-                                            false
-                                    }
-                                    style={{
-                                        float: 'right',
-                                        marginRight: '0.5rem',
-                                    }}
-                                    onChange={(e: any) => {
-                                        const val = e.target.value
+                                            ? setInBag(
+                                                'bsLeftExpandedKeys',
+                                                expObject
+                                            )
+                                            : setInBag(
+                                                'plLeftExpandedKeys',
+                                                expObject
+                                            )
+                                    } else {
                                         meta.current.isBs
-                                            ? setInBag('bsLeftExpandAll', val)
-                                            : setInBag('plLeftExpandAll', val)
-                                        if (val) {
-                                            const expObject = meta.current.allKeys.reduce(
-                                                (prev: any, x: any) => {
-                                                    prev[x] = true
-                                                    return prev
-                                                },
+                                            ? setInBag(
+                                                'bsLeftExpandedKeys',
                                                 {}
                                             )
-                                            meta.current.isBs
-                                                ? setInBag(
-                                                    'bsLeftExpandedKeys',
-                                                    expObject
-                                                )
-                                                : setInBag(
-                                                    'plLeftExpandedKeys',
-                                                    expObject
-                                                )
-                                        } else {
-                                            meta.current.isBs
-                                                ? setInBag(
-                                                    'bsLeftExpandedKeys',
-                                                    {}
-                                                )
-                                                : setInBag(
-                                                    'plLeftExpandedKeys',
-                                                    {}
-                                                )
-                                        }
-                                        meta.current.isMounted && setRefresh({})
-                                    }}></InputSwitch>
-                                <Span>Expand</Span>
-                            </HeaderDiv>
-                        }>
-                        <PrimeColumn
-                            columnKey='0'
-                            field="accName"
-                            header={<TDiv align="left">Account names</TDiv>}
-                            footer={<TDiv align="left">Total</TDiv>}
-                            expander></PrimeColumn>
-                        <PrimeColumn
-                            columnKey='1'
-                            field="amount"
-                            header={<TDiv align="right">Amount</TDiv>}
-                            style={{
-                                textAlign: 'right',
-                                width: '8rem',
-                                fontSize: '0.9rem',
-                            }}
-                            footer={
-                                <TDiv align="right">
-                                    {toDecimalFormat(
-                                        meta.current.leftAggregate
-                                    )}
-                                </TDiv>
-                            }
-                            body={amountTemplate}></PrimeColumn>
-                        <PrimeColumn
-                            columnKey='2'
-                            body={actionTemplate}
-                            style={{ width: '3rem' }}
-                        />
-                    </TreeTable>
-                </div>
+                                            : setInBag(
+                                                'plLeftExpandedKeys',
+                                                {}
+                                            )
+                                    }
+                                    meta.current.isMounted && setRefresh({})
+                                }}></InputSwitch>
+                            <Span>Expand</Span>
+                        </HeaderDiv>
+                    }>
+                    <PrimeColumn
+                        columnKey='0'
+                        field="accName"
+                        header={<TDiv align="left">Account names</TDiv>}
+                        footer={<TDiv align="left">Total</TDiv>}
+                        expander></PrimeColumn>
+                    <PrimeColumn
+                        columnKey='1'
+                        field="amount"
+                        header={<TDiv align="right">Amount</TDiv>}
+                        style={{
+                            textAlign: 'right',
+                            width: '8rem',
+                            fontSize: '0.9rem',
+                        }}
+                        footer={
+                            <TDiv align="right">
+                                {toDecimalFormat(
+                                    meta.current.leftAggregate
+                                )}
+                            </TDiv>
+                        }
+                        body={amountTemplate}></PrimeColumn>
+                    <PrimeColumn
+                        columnKey='2'
+                        body={actionTemplate}
+                        style={{ width: '3rem' }}
+                    />
+                </TreeTable>
+                {/* </div> */}
+
                 {/* right */}
-                <div>
-                    <TreeTable
-                        scrollable={true}
-                        scrollHeight="calc(100vh - 22rem)"
-                        style={{
-                            minWidth: '24rem',
-                            maxWidth: '40rem',
-                            display: 'inline-block',
-                            marginRight: '1rem',
-                        }}
-                        value={meta.current.rightView}
-                        globalFilter={meta.current.globalFilter}
-                        expandedKeys={
-                            meta.current.isBs
-                                ? getFromBag('bsRightExpandedKeys') || {}
-                                : getFromBag('plRightExpandedKeys') || {}
-                        }
-                        onToggle={(e: any) => {
-                            meta.current.isBs
-                                ? setInBag('bsRightExpandedKeys', e.value)
-                                : setInBag('plRightExpandedKeys', e.value)
-                            meta.current.isMounted && setRefresh({})
-                        }}
-                        header={
-                            <HeaderDiv>
-                                {meta.current.rightTableHeader}
-                                <InputSwitch
-                                    checked={
+                {/* <div> */}
+                <TreeTable
+                    scrollable={true}
+                    scrollHeight="calc(100vh - 22rem)"
+                    style={{
+                        minWidth: '24rem',
+                        width: '47%',
+                        // maxWidth: '40rem',
+                        display: 'inline-block',
+                        marginRight: '1rem',
+                    }}
+                    value={meta.current.rightView}
+                    globalFilter={meta.current.globalFilter}
+                    expandedKeys={
+                        meta.current.isBs
+                            ? getFromBag('bsRightExpandedKeys') || {}
+                            : getFromBag('plRightExpandedKeys') || {}
+                    }
+                    onToggle={(e: any) => {
+                        meta.current.isBs
+                            ? setInBag('bsRightExpandedKeys', e.value)
+                            : setInBag('plRightExpandedKeys', e.value)
+                        meta.current.isMounted && setRefresh({})
+                    }}
+                    header={
+                        <HeaderDiv>
+                            {meta.current.rightTableHeader}
+                            <InputSwitch
+                                checked={
+                                    meta.current.isBs
+                                        ? getFromBag('bsRightExpandAll') ||
+                                        false
+                                        : getFromBag('plRightExpandAll') ||
+                                        false
+                                }
+                                style={{
+                                    float: 'right',
+                                    marginRight: '0.5rem',
+                                }}
+                                onChange={(e: any) => {
+                                    const val = e.target.value
+                                    meta.current.isBs
+                                        ? setInBag('bsRightExpandAll', val)
+                                        : setInBag('plRightExpandAll', val)
+                                    if (val) {
+                                        const expObject = meta.current.allKeys.reduce(
+                                            (prev: any, x: any) => {
+                                                prev[x] = true
+                                                return prev
+                                            },
+                                            {}
+                                        )
                                         meta.current.isBs
-                                            ? getFromBag('bsRightExpandAll') ||
-                                            false
-                                            : getFromBag('plRightExpandAll') ||
-                                            false
-                                    }
-                                    style={{
-                                        float: 'right',
-                                        marginRight: '0.5rem',
-                                    }}
-                                    onChange={(e: any) => {
-                                        const val = e.target.value
+                                            ? setInBag(
+                                                'bsRightExpandedKeys',
+                                                expObject
+                                            )
+                                            : setInBag(
+                                                'plRightExpandedKeys',
+                                                expObject
+                                            )
+                                    } else {
                                         meta.current.isBs
-                                            ? setInBag('bsRightExpandAll', val)
-                                            : setInBag('plRightExpandAll', val)
-                                        if (val) {
-                                            const expObject = meta.current.allKeys.reduce(
-                                                (prev: any, x: any) => {
-                                                    prev[x] = true
-                                                    return prev
-                                                },
+                                            ? setInBag(
+                                                'bsRightExpandedKeys',
                                                 {}
                                             )
-                                            meta.current.isBs
-                                                ? setInBag(
-                                                    'bsRightExpandedKeys',
-                                                    expObject
-                                                )
-                                                : setInBag(
-                                                    'plRightExpandedKeys',
-                                                    expObject
-                                                )
-                                        } else {
-                                            meta.current.isBs
-                                                ? setInBag(
-                                                    'bsRightExpandedKeys',
-                                                    {}
-                                                )
-                                                : setInBag(
-                                                    'plRightExpandedKeys',
-                                                    {}
-                                                )
-                                        }
-                                        meta.current.isMounted && setRefresh({})
-                                    }}></InputSwitch>
-                                <Span>Expand</Span>
-                            </HeaderDiv>
-                        }>
-                        <PrimeColumn
-                            field="accName"
-                            header={<TDiv align="left">Account names</TDiv>}
-                            footer={<TDiv align="left">Total</TDiv>}
-                            expander></PrimeColumn>
-                        <PrimeColumn
-                            field="amount"
-                            header={<TDiv align="right">Amount</TDiv>}
-                            style={{
-                                textAlign: 'right',
-                                width: '8rem',
-                                fontSize: '0.9rem',
-                            }}
+                                            : setInBag(
+                                                'plRightExpandedKeys',
+                                                {}
+                                            )
+                                    }
+                                    meta.current.isMounted && setRefresh({})
+                                }}></InputSwitch>
+                            <Span>Expand</Span>
+                        </HeaderDiv>
+                    }>
+                    <PrimeColumn
+                        field="accName"
+                        header={<TDiv align="left">Account names</TDiv>}
+                        footer={<TDiv align="left">Total</TDiv>}
+                        expander></PrimeColumn>
+                    <PrimeColumn
+                        field="amount"
+                        header={<TDiv align="right">Amount</TDiv>}
+                        style={{
+                            textAlign: 'right',
+                            width: '8rem',
+                            fontSize: '0.9rem',
+                        }}
 
-                            footer={
-                                <TDiv align="right">
-                                    {toDecimalFormat(
-                                        meta.current.rightAggregate
-                                    )}
-                                </TDiv>
-                            }
-                            body={amountTemplate}></PrimeColumn>
-                        <PrimeColumn
-                            body={actionTemplate}
-                            style={{ width: '3rem' }}
-                        />
-                    </TreeTable>
-                </div>
+                        footer={
+                            <TDiv align="right">
+                                {toDecimalFormat(
+                                    meta.current.rightAggregate
+                                )}
+                            </TDiv>
+                        }
+                        body={amountTemplate}></PrimeColumn>
+                    <PrimeColumn
+                        body={actionTemplate}
+                        style={{ width: '3rem' }}
+                    />
+                </TreeTable>
+                {/* </div> */}
             </div>
             <Typography
                 style={{ color: theme.palette.error.main }}
@@ -429,6 +452,7 @@ const useStyles: any = makeStyles((theme: Theme) =>
             '& .bs-pl': {
                 display: 'flex',
                 flexWrap: 'wrap',
+                justifyContent: 'space-between'
             },
         },
     })

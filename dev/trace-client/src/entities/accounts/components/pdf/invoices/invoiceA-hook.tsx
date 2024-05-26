@@ -185,6 +185,9 @@ function useInvoiceA() {
                         <Text style={gStyles.normal}>
                             {''.concat('Type: ', ii.type)}
                         </Text>
+                        <Text style={gStyles.normal}>
+                            {''.concat('Account: ', ii.accCode)}
+                            </Text>
                     </View>
                 )
             }
@@ -562,7 +565,7 @@ function useInvoiceA() {
                     return (
                         <View style={styles.header}>
                             <Text style={{ width: 10 }}>#</Text>
-                            <Text style={{ width: 60 }}>Type</Text>
+                            <Text style={{ width: 60 }}>Info</Text>
                             <Text style={{ width: 60 }}>Instrument</Text>
                             <Text style={{ width: 60 }}>Remarks</Text>
                             <Text style={{ width: 40, textAlign: 'right' }}>

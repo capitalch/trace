@@ -13,8 +13,6 @@ import {
 } from './components/common/redirect'
 import { BranchTransfer } from './components/inventory/branch-transfer/branch-transfer'
 import { StockJournal } from './components/inventory/stock-journal/stock-journal'
-// import { resetPurchaseStore } from './stores/purchase-store'
-// import { settingsMegaData, salesMegaData } from './mega-data-init-values'
 
 function LaunchPad() {
     const { getUnitHeading } = utils()
@@ -33,18 +31,13 @@ function LaunchPad() {
         mainHeading: '',
     })
     const { connectToLinkServer, joinRoom, onReceiveData } = useLinkClient()
-    // const megaData = useContext(MegaDataContext)
     meta.current.mainHeading = getUnitHeading()
-
-
-
     const { socketMessageHandler } = useServerSocketMessageHandler()
 
     useEffect(() => {
         const curr = meta.current
         curr.isMounted = true
         // Initialize and reset the PurchaseStore
-        // resetPurchaseStore()
         const subs: any = filterOn('LAUNCH-PAD:LOAD-COMPONENT').subscribe(
             (d: any) => {
                 if (!getCurrentEntity()) {
@@ -98,7 +91,6 @@ function LaunchPad() {
             <Typography variant="h6" sx={{ color: theme.palette.common.black, fontWeight: 'bold' }}>
                 {meta.current.mainHeading}
             </Typography>
-            {/* <MegaContext.Provider value={meta.current.mega}> */}
             <MultiDataContext.Provider
                 value={{
                     sales: salesData,
@@ -109,7 +101,6 @@ function LaunchPad() {
                 }}>
                 <Comp></Comp>
             </MultiDataContext.Provider>
-            {/* </MegaContext.Provider> */}
             <AccountsLedgerDialog></AccountsLedgerDialog>
         </>
     )

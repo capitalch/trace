@@ -169,10 +169,13 @@ def resolve_categories(parent, info):
 
 
 @accountsQuery.field("balanceSheetProfitLoss")
-def resolve_balance_sheet_profit_loss(parent, info):
+def resolve_balance_sheet_profit_loss(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = (
         getDbNameBuCodeClientIdFinYearIdBranchId(info.context)
     )
+    value = unquote(value)
+    valueObject = json.loads(value)
+    branchId = valueObject.get('branchId')
     return balanceSheetProfitLossHelper(dbName, buCode, finYearId, branchId)
 
 

@@ -30,7 +30,7 @@ const salesMegaData = () => ({
         paymentMethodsList: [], // id from TranD table // object array of type: {id, amount, instrNo, remarks, rowData:{accId}, ledgerFilterMethodName, }
         paymentVariety: 'r',
     },
-    // rawSaleData: undefined,
+   
     saleType: 'sal',
     shipTo: {},
     summary: {

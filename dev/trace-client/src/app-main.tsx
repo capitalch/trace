@@ -17,11 +17,6 @@ function AppMain() {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
     const { setInGlobalBag, isMediumSizeUp } = useTraceGlobal()
-    // const meta = useRef({
-    //     mega: {
-    //         accounts: {}
-    //     }
-    // })
 
     useEffect(() => {
         setInGlobalBag('isDrawyerOpen', isMediumSizeUp)
@@ -69,10 +64,7 @@ function AppMain() {
                 matches={isMediumSizeUp}
                 handleDrawerClose={handleDrawerClose}></TraceLeft>
             {/* Main */}
-            {/*   */}
-            {/* <MegaContext.Provider value={meta.current.mega}> */}
                 <TraceMain open={open}></TraceMain>
-            {/* </MegaContext.Provider> */}
             {/* universal loading indicator */}
             <TraceLoadingIndicator></TraceLoadingIndicator>
         </Box>

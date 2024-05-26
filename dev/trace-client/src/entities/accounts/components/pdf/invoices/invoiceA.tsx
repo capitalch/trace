@@ -13,7 +13,7 @@ function InvoiceA({
     const { InvoicePdf } = useInvoiceA()
     const dateFormat = getFromBag('dateFormat')
     const invoiceData = getInvoiceData(unitInfo, rawSaleData)
-
+    console.log(invoiceData)
     return <InvoicePdf invoiceData={invoiceData} />
 
     function getInvoiceData(traceCompany: any, traceInvoice: any) {
@@ -120,14 +120,14 @@ function InvoiceA({
             discount: 0,
         }
         const temp = ti.salePurchaseDetails.reduce((prev: any, current: any) => {
-            const obj = { 
-                qty: prev.qty + (current.qty || 0), 
-                discount: (prev.discount + current.discount || 0) ,
+            const obj = {
+                qty: prev.qty + (current.qty || 0),
+                discount: (prev.discount + current.discount || 0),
                 aggr: (prev.aggr + ((current.qty * (current.price - current.discount)) || 0))
             }
             return (obj)
         }, { qty: 0, discount: 0, aggr: 0 })
-        
+
         i.summary.qty = temp.qty
         i.summary.discount = toDecimalFormat(temp.discount)
         i.summary.amountInWords = ti.amountInWords
@@ -135,13 +135,17 @@ function InvoiceA({
         i.receipts = []
         for (const item of ti.tranD) {
             const accClass = getAccountClass(item.accId)
+            const accCode = item.accCode
             if (accClass === 'sale') {
                 i.summary.amount = toDecimalFormat(item?.amount || 0)
-            } else if (['debtor', 'creditor'].includes(accClass)) {
-                i.invoiceInfo.type = i.invoiceInfo.type.concat(' ', 'on credit')
             } else {
+                i.invoiceInfo.accCode = ''
+                if (['debtor', 'creditor'].includes(accClass)) {
+                    i.invoiceInfo.type = i.invoiceInfo.type.concat(' ', 'on credit')
+                    i.invoiceInfo.accCode = item?.accCode || ''
+                }
                 i.receipts.push({
-                    type: accClass,
+                    type: `${accClass}: ${accCode}`,
                     instrument: item.instrNo || '',
                     remarks: ''.concat(
                         item.lineRefNo || '',

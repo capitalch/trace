@@ -12,12 +12,16 @@
 																							- DB: Cascade delete for BranchTransfer table
 - Report changes
 																							- Security of submit button in branch transfer
-- Consolidated reports
+- Consolidated reports for Branch incorporation
 	- Bank reconciliation
+																							- BS / PL
+	- Trial bal
+	- General ledger
 	- Final reports
-- Provide SearchBox in BS and PL																			
-- In sale invoices payment remarks is not there in print preview
-- In sale invoice print preview if autosubledger then also give subledger ac no
+	- Inventory reports
+																							- Provide SearchBox in BS and PL																			
+																							- In sale invoices payment remarks is not there in print preview For Institution sales and autosubledger sales
+																							- In sale invoice print preview if autosubledger then also give subledger ac no
 - DB changes deployment script
 - Deploy in all databases and BU's
 																							- View grid

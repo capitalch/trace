@@ -250,9 +250,105 @@ allSqls = {
 
         select (select "autoRefNo" from cte4) as "autoRefNo", (select "lastNo" from cte3) as "lastNo"
     ''',
+    
+    'get_balanceSheetProfitLoss': '''
+        --with "branchId" as (values (1::int)), "finYearId" as (values (2024)),
+            with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+        cte1 as (
+                with RECURSIVE cte as (
+                    select m."id", m."accName",m."accType", m."parentId", m."accLeaf", CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end as "amount"
+                        from "TranD" t
+                            join "AccM" m
+                                on t."accId" = m."id"
+                            join "TranH" h
+                                on h."id" = t."tranHeaderId"
+                        where "finYearId" = (table "finYearId") 
+                            --and "branchId" = (table "branchId")
+                            AND (SELECT COALESCE((TABLE "branchId"), h."branchId") = h."branchId")
+                        
+                    union all
+                        select m."id", m."accName", m."accType", m."parentId", m."accLeaf", CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end as "amount"
+                            from "AccOpBal" p
+                                join "AccM" m
+                                    on p."accId" = m."id"
+                        where "finYearId" = (table "finYearId") 
+                            --and "branchId" = (table "branchId")
+                            AND (SELECT COALESCE((TABLE "branchId"), p."branchId") = p."branchId")
+                    
+                    union all
+                        select a.id,a."accName", a."accType", a."parentId", a."accLeaf", ( cte."amount") as "amount"
+                            from "AccM" a join cte on
+                                cte."parentId" = a.id),
+                            
+                    cteTemp as (select id, "accName", "accType", "parentId","accLeaf", sum(amount ) as "amount"
+                        from cte 
+                            group by id, "accName", "accType", "parentId", "accLeaf"
+                                order by cte.id)
 
-    'get_balanceSheetProfitLoss': ''' -- Fin
-        with cte1 as (
+                    select "id", "accName","accType", "parentId", "accLeaf", "amount", 
+                        (select array_agg(id) from cteTemp where "parentId" = a."id") as children 
+                    from cteTemp as a order by "accName"
+            ), cte2 as (
+                with cte as
+                    (select "accType", SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end) as "amount"
+                        from "AccM" a
+                            join "TranD" t
+                                on a."id" = t."accId"                                
+                            join "TranH" h
+                                on h."id" = t."tranHeaderId"				 				
+                        where "finYearId" = (table "finYearId") 
+                            --and "branchId" = (table "branchId")
+                            AND (SELECT COALESCE((TABLE "branchId"), h."branchId") = h."branchId")
+                            group by "accType"
+                    union 
+                        select "accType", SUM(CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end) as amount
+                            from "AccM" a
+                                join "AccOpBal" p
+                                    on a."id" = p."accId"
+                            where "finYearId" = (table "finYearId") 
+                                --and "branchId" = (table "branchId")
+                                AND (SELECT COALESCE((TABLE "branchId"), p."branchId") = p."branchId")
+                                group by "accType")
+
+                    select SUM("amount") as "profitOrLoss" from cte where "accType" in ('A', 'L')
+            ), cte3 as (
+                with cte as
+                    (select "accType", SUM(CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end) as "amount"
+                        from "AccM" a
+                            join "TranD" t
+                                on a."id" = t."accId"
+                            join "TranH" h
+                                on h."id" = t."tranHeaderId"
+                        where "finYearId" = (table "finYearId") 
+                            --and "branchId" = (table "branchId")
+                            AND (SELECT COALESCE((TABLE "branchId"), h."branchId") = h."branchId")
+                            group by "accType"
+                    union 
+                        select "accType", SUM(CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end) as amount
+                            from "AccM" a
+                                join "AccOpBal" p
+                                    on a."id" = p."accId"
+                            where "finYearId" = (table "finYearId") 
+                                --and "branchId" = (table "branchId")
+                                AND (SELECT COALESCE((TABLE "branchId"), p."branchId") = p."branchId")
+                                group by "accType")
+
+                    select "accType", SUM("amount") as amount 
+                        from cte 
+                            group by "accType"
+                                order by "accType"
+            ) SELECT
+                json_build_object(
+                    'balanceSheetProfitLoss', (SELECT json_agg(row_to_json(a)) from cte1 a)
+                    , 'profitOrLoss', (SELECT "profitOrLoss" FROM cte2 b)
+                    , 'aggregates',(SELECT json_agg(row_to_json(c)) FROM cte3 c)
+                ) as "jsonResult"
+    ''',
+    
+    'get_balanceSheetProfitLoss1': '''
+        with "branchId" as (values (1)), "finYearId" as (values (2024)),
+        --with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+	    cte1 as (
             with RECURSIVE cte as (
                 select m."id", m."accName",m."accType", m."parentId", m."accLeaf", CASE WHEN "dc" = 'D' then t."amount" else -t."amount" end as "amount"
                     from "TranD" t
@@ -260,14 +356,14 @@ allSqls = {
                             on t."accId" = m."id"
 						join "TranH" h
 							on h."id" = t."tranHeaderId"
-					where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+					where "finYearId" = (table "finYearId") and "branchId" = (table "branchId")
                     --order by m."accName"
                 union all
                     select m."id", m."accName", m."accType", m."parentId", m."accLeaf", CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end as "amount"
                         from "AccOpBal" p
                             join "AccM" m
                                 on p."accId" = m."id"
-                    where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                    where "finYearId" = (table "finYearId") and "branchId" = (table "branchId")
                     --order by m."accName"
                 union all
                     select a.id,a."accName", a."accType", a."parentId", a."accLeaf", ( cte."amount") as "amount"
@@ -292,14 +388,14 @@ allSqls = {
                             on a."id" = t."accId"                                
 				 		join "TranH" h
 				 			on h."id" = t."tranHeaderId"				 				
-				 	where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+				 	where "finYearId" = (table "finYearId") and "branchId" = (table "branchId")
                         group by "accType"
                 union 
                     select "accType", SUM(CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end) as amount
                         from "AccM" a
                             join "AccOpBal" p
                                 on a."id" = p."accId"
-                        where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+                        where "finYearId" = (table "finYearId") and "branchId" = (table "branchId")
                             group by "accType")
 
                 select SUM("amount") as "profitOrLoss" from cte where "accType" in ('A', 'L')
@@ -311,14 +407,14 @@ allSqls = {
                             on a."id" = t."accId"
 				 		join "TranH" h
 				 			on h."id" = t."tranHeaderId"
-				 	where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+				 	where "finYearId" = (table "finYearId") and "branchId" = (table "branchId")
                     	group by "accType"
                 union 
                     select "accType", SUM(CASE WHEN "dc" = 'D' then p."amount" else -p."amount" end) as amount
                         from "AccM" a
                             join "AccOpBal" p
                                 on a."id" = p."accId"
-				 		where "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
+				 		where "finYearId" = (table "finYearId") and "branchId" = (table "branchId")
 							group by "accType")
 
                 select "accType", SUM("amount") as amount 
@@ -332,6 +428,7 @@ allSqls = {
                 , 'aggregates',(SELECT json_agg(row_to_json(c)) FROM cte3 c)
             ) as "jsonResult"
     ''',
+
 
     "get_bank_op_balance": '''
         select "id", "amount", "dc"
@@ -2480,7 +2577,7 @@ allSqls = {
 					where  h."id" = %(id)s
 		),
         cte2 as (
-            select d."id", d."accId", "dc", "amount", d."instrNo", d."remarks", "accClass"
+            select d."id", d."accId", "dc", "amount", d."instrNo", d."remarks", "accClass", "accName", "accCode"
                 from "cte1" c1 join "TranD" d 
                     on c1."id" = d."tranHeaderId"
                 join "AccM" m
