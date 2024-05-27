@@ -63,64 +63,76 @@ allSqls = {
     ''',
 
     "get_accountsLedger": '''
-            with cte as(
-            select "accName" from "AccM"
-                where "id" = %(id)s
-        ), cte1 as (
-            select
-            CASE WHEN "dc" = 'D' then "amount" ELSE 0.00 END as "debit"
-            , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
-            , "dc"
-            from "AccM" a
-                join "AccOpBal" b
-                    on a."id" = b."accId"
-            where a."id" = %(id)s
-                 and "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-        ), cte2 as(
-            select
-            CASE WHEN "dc" = 'D' then "amount" ELSE 0.00 END as "debit"
-            , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
-            , "dc"
-            , "tranDate"
-            , "tranTypeId"
-            , "userRefNo"
-            , h."remarks"
-            , (select "tranType" from "TranTypeM" where "id" = h."tranTypeId") as "tranType"
-            , (select string_agg(distinct "accName",', ') 
-				from "TranD" t1
-					join "AccM" a1
-						on a1."id" = t1."accId"
-					where h."id" = t1."tranHeaderId" 
-						and "dc" <> t."dc") as "otherAccounts" 
-            , "autoRefNo"
-            , "accName"
-            , t."remarks" as "lineRemarks"
-            , "lineRefNo"
-            , (select string_agg("instrNo",',') from "TranD" t1 where h.id = t1."tranHeaderId") as "instrNo"
-            , h."id" --as "headerId"
-            from "AccM" a
-                join "TranD" as t
-                    on a."id" = t."accId"
-                join "TranH" as h
-                    on t."tranHeaderId" = h."id"
-            where a."id" = %(id)s
-					and "finYearId" = %(finYearId)s and "branchId" = %(branchId)s
-                order by "tranDate", t."id"
-        ), cte3 as (
-            select "debit", "credit" from cte1
-                union all
-            select "debit", "credit" from cte2
-        ), cte4 as (
-            select SUM("debit") as "debit", SUM("credit") as "credit"
-                from cte3
-        )
-        SELECT
-            json_build_object(
-                'accName', (SELECT "accName" FROM cte a)
-                , 'opBalance', (SELECT row_to_json(b) FROM cte1 b)
-                , 'transactions',(SELECT json_agg(row_to_json(c)) FROM cte2 c)
-                , 'sum', (SELECT json_agg(row_to_json(d)) from cte4 d)
-            ) as "jsonResult"
+        with "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "id" as (values(%(id)s::int)),
+        -- with "branchId" as (values (1::int)), "finYearId" as (values (2024)), "id" as (values(129::int)),
+        cte as(
+                select "accName" from "AccM"
+                    where "id" = (table "id")
+            ), cte1 as (
+                select
+                CASE WHEN "dc" = 'D' then "amount" ELSE 0.00 END as "debit"
+                , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
+                , "dc"
+                , "branchCode"
+                from "AccM" a
+                    join "AccOpBal" b
+                        on a."id" = b."accId"
+                    join "BranchM" c
+                        on c.id = b."branchId"
+                where a."id" = (table "id")
+                    and "finYearId" = (table "finYearId") 
+				--and "branchId" = (table "branchId")
+				AND (SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+            ), cte2 as(
+                select
+                CASE WHEN "dc" = 'D' then "amount" ELSE 0.00 END as "debit"
+                , CASE WHEN "dc" = 'C' then "amount" ELSE 0.00 END as "credit"
+                , "dc"
+                , "tranDate"
+                , "tranTypeId"
+                , "userRefNo"
+                , h."remarks"
+                , (select "tranType" from "TranTypeM" where "id" = h."tranTypeId") as "tranType"
+                , (select string_agg(distinct "accName",', ') 
+                    from "TranD" t1
+                        join "AccM" a1
+                            on a1."id" = t1."accId"
+                        where h."id" = t1."tranHeaderId" 
+                            and "dc" <> t."dc") as "otherAccounts" 
+                , "autoRefNo"
+                , "accName"
+                , t."remarks" as "lineRemarks"
+                , "lineRefNo"
+                , (select string_agg("instrNo",',') from "TranD" t1 where h.id = t1."tranHeaderId") as "instrNo"
+                , h."id"
+                , "branchCode"
+                from "AccM" a
+                    join "TranD" as t
+                        on a."id" = t."accId"
+                    join "TranH" as h
+                        on t."tranHeaderId" = h."id"
+                    join "BranchM" b
+                        on b."id" = h."branchId"
+                where a."id" = (table "id")
+                        and "finYearId" = (table "finYearId") 
+				--and "branchId" = (table "branchId")
+				AND (SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+                    order by "tranDate", t."id"
+            ), cte3 as (
+                select "debit", "credit" from cte1
+                    union all
+                select "debit", "credit" from cte2
+            ), cte4 as (
+                select SUM("debit") as "debit", SUM("credit") as "credit"
+                    from cte3
+            )
+            SELECT
+                json_build_object(
+                    'accName', (SELECT "accName" FROM cte a)
+                    , 'opBalance', (SELECT row_to_json(b) FROM cte1 b)
+                    , 'transactions',(SELECT json_agg(row_to_json(c)) FROM cte2 c)
+                    , 'sum', (SELECT json_agg(row_to_json(d)) from cte4 d)
+                ) as "jsonResult"
     ''',
 
     'get_allBanks': '''
@@ -1752,8 +1764,75 @@ allSqls = {
             order by "tranDate" DESC, h."id", d."id" 
             limit %(no)s
             ''',
-
+            
     "get_trialBalance": '''
+        with recursive cte as (
+        select * from cte1
+            union all
+        select a."id", a."accName", a."accType", a."parentId", a."accLeaf"
+        , c."opening"
+        , c."sign"
+        , c."opening_dc"
+        , c."debit", c."credit"
+            from cte c
+                join "AccM" a
+                    on c."parentId" = a."id"
+        )
+		, "branchId" as (values (%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)),
+		--, "branchId" as (values (1::int)), "finYearId" as (values (2024)),
+        cte1 as (
+            select a."id", "accName", "accType", "parentId", "accLeaf"
+                , 0.00 as "opening"
+                , 1 as "sign"
+                , '' as "opening_dc"
+                , CASE WHEN t."dc" = 'D' THEN t."amount" else 0.00 END as "debit"
+                , CASE WHEN t."dc" = 'C' THEN t."amount" else 0.00 END as "credit"
+            from "AccM" a
+                join "TranD" t
+                    on t."accId" = a."id"
+                join "TranH" h
+                    on h."id" = t."tranHeaderId"
+                        where "finYearId" = (table "finYearId") 
+                            --and "branchId" = (table "branchId")
+                            AND (SELECT COALESCE((TABLE "branchId"), h."branchId") = h."branchId")
+                union all
+            select a."id", "accName", "accType", "parentId", "accLeaf"
+                , "amount" as "opening"
+                , CASE WHEN "dc" = 'D' THEN 1 ELSE -1 END as "sign"
+                , "dc" as "opening_dc"
+                , 0 as "debit"
+                , 0 as "credit"
+            from "AccM" a
+                join "AccOpBal" b
+                    on a."id" = b."accId"
+                        where "finYearId" = (table "finYearId") 
+                            --and "branchId" = (table "branchId")
+                            AND (SELECT COALESCE((TABLE "branchId"), b."branchId") = b."branchId")
+                            	order by "accType", "accName"
+            ),
+        cte2 as (
+            select "id", "accName", "accType", "parentId", "accLeaf"
+                , SUM("opening" * "sign") as "opening"
+                , SUM("debit") as "debit"
+                , SUM("credit") as "credit"
+                from cte
+                    group by "id", "accName", "accType", "parentId", "accLeaf"
+                        --order by "id"
+                        order by "accType", "accName"
+            ) select 
+                "id", "accName", "accType", "parentId", "accLeaf"
+                , ABS("opening") as "opening"
+                , CASE WHEN "opening" < 0 THEN 'C' ELSE 'D' END as "opening_dc"
+                , "debit"
+                , "credit"
+                , (select ARRAY_AGG("id") from cte2 where "parentId" = a."id") as "children"
+                , ABS("opening" + "debit" - "credit") as "closing"
+                , CASE WHEN ("opening" + "debit" - "credit") < 0 THEN 'C' ELSE 'D' END as "closing_dc"
+            from cte2 a
+                order by "accType", "accName"
+    ''',
+
+    "get_trialBalance1": '''
         --with branch as (values (%(branchId)s)), finyearid as (values (%(finYearId)s))
         --with branch as (values (1), finyearid as (values (2022)
         with recursive cte as (

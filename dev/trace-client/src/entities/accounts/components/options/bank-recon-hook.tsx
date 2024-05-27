@@ -1,6 +1,5 @@
 import {
     _,
-    hash,
     moment,
     NumberFormat,
     useEffect,

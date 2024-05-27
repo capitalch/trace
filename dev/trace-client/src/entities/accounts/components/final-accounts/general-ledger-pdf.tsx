@@ -1,5 +1,4 @@
-// 19-08-2022 This file not used at present. Using react-pdf/renderer for pdf generation and not puppeteer
-
+// This file is not used anymore
 import { manageEntitiesState } from '../../../../imports/trace-imports'
 import { moment } from '../../../../imports/regular-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
@@ -7,16 +6,13 @@ import { useSharedElements } from '../common/shared-elements-hook'
 function GeneralLedgerPdf({ ledgerData, accName }: any) {
     const ld = ledgerData.map((x: any) => ({ ...x }))
     prepareData(ld)
-    let closingBalance = ld[ld.length - 1]?.ledgerBal
     return (
         <div style={styles().verticalStyle}>
             <div style={styles().horSpreadStyle}>
                 <CompanyInfo />
                 <Instrument accName={accName} />
             </div>
-            {/* <hr style={styles().lineStyle}></hr> */}
             <Transactions ld={ld} />
-            {/* <Footer arbitraryData={arbitraryData} /> */}
         </div>
     )
 
@@ -120,9 +116,6 @@ function GeneralLedgerPdf({ ledgerData, accName }: any) {
                         <th style={{ width: '7rem', textAlign: 'right' }}>
                             Credits
                         </th>
-                        {/* <th style={{ width: '10rem', textAlign: 'right' }}>
-                            Balance
-                        </th> */}
                         <th style={{width:'0.5rem'}}></th>
                         <th style={{ width: '10rem', textAlign: 'left' }}>
                             Info
@@ -165,7 +158,6 @@ function GeneralLedgerPdf({ ledgerData, accName }: any) {
                     <td style={{ textAlign: 'right' }}>{debit}</td>
                     <td style={{ textAlign: 'right' }}>{credit}</td>
                     <td style={{width:'.5rem'}}></td>
-                    {/* <td style={{ textAlign: 'right' }}>{item.ledgerBal}</td> */}
                     <td>{info}</td>
                 </tr>
             )

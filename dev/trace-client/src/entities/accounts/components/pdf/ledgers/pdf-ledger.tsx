@@ -229,6 +229,8 @@ function PdfLedger({ ledgerData, accName }: any) {
                                     { width: 80, marginLeft: 5 },
                                 ]}>
                                 {''.concat(
+                                    x.branchCode || '',
+                                    ': ',
                                     x.userRefNo || '',
                                     ' ',
                                     x.instrNo || '',

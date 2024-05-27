@@ -21,12 +21,10 @@ function BankRecon() {
         emit,
         getGridReportSubTitle,
         TraceDialog,
-        useTraceGlobal,
         XXGrid,
     } = useSharedElements()
 
     const classes = useStyles()
-    const { getCurrentWindowSize } = useTraceGlobal()
 
     const {
         columns,
@@ -120,11 +118,9 @@ function BankRecon() {
                 className="xx-grid"
                 gridActionMessages={gridActionMessages}
                 columns={columns}
-                // editableFields={['clearDate', 'remarks']}
                 hideViewLimit={true}
                 isReverseOrderByDefault={true}
                 isShowColBalanceByDefault={true}
-                // onCellClick={handleCellClicked}
                 sharedData={meta.current.sharedData}
                 subTitle={getGridReportSubTitle()}
                 summaryColNames={summaryColNames}

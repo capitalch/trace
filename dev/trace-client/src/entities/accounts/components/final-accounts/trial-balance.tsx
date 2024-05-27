@@ -6,6 +6,7 @@ import {
     Theme,
     createStyles,
     makeStyles,
+    useTheme,
 } from '../../../../imports/gui-imports'
 import { Search, SyncSharp } from '../../../../imports/icons-import'
 import { graphqlService, manageEntitiesState, queries, useIbuki, useTraceGlobal, useTraceMaterialComponents } from '../../../../imports/trace-imports'
@@ -18,7 +19,7 @@ function TrialBalance() {
     const [, setRefresh] = useState({})
     const { toDecimalFormat } = utilMethods()
     const { getFromBag, setInBag } = manageEntitiesState()
-
+    const theme:any = useTheme()
     const meta: any = useRef({
         data: [],
         isMounted: false,
@@ -41,6 +42,8 @@ function TrialBalance() {
         tableConfig: {
             expanderColumn: '',
         },
+
+        isAllBranches: false,
     })
     const headerConfig = meta.current.headerConfig
     const dialogConfig = meta.current.dialogConfig
@@ -84,10 +87,16 @@ function TrialBalance() {
 
     async function getData(isBusyIndicator = true) {
         try {
+            const branchObject: any = getFromBag('branchObject')
             isBusyIndicator && emit('SHOW-LOADING-INDICATOR', true)
+            const args = encodeURIComponent(JSON.stringify({
+                branchId: meta.current.isAllBranches ? null : branchObject.branchId
+            }))
             const q = queries['genericQueryBuilder']({
                 queryName: 'trialBalance',
+                args: args
             })
+
             const ret = await queryGraphql(q)
             const pre = ret?.data?.accounts?.trialBalance
             meta.current.data = pre?.trialBal
@@ -238,7 +247,17 @@ function TrialBalance() {
                         <SyncSharp></SyncSharp>
                     </IconButton>
                 </Box>
-                {/* </Box> */}
+                <Span style={{ display: 'flex' }}>
+                    <Span>This branch</Span>
+                    <InputSwitch
+                        checked={meta.current.isAllBranches}
+                        onChange={(e: any) => {
+                            meta.current.isAllBranches = e.target.value
+                            getData()
+                            setRefresh({})
+                        }}></InputSwitch>
+                    <Span style={{ marginLeft: theme.spacing(2) }}>All branches</Span>
+                </Span>
                 {traceGlobalSearch({
                     meta: meta,
                     isMediumSizeUp: isMediumSizeUp,

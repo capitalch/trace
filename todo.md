@@ -1,5 +1,18 @@
 ## Branch Transfer + others
 # New design
+- Report changes
+- Consolidated reports for Branch incorporation
+																							- Bank reconciliation
+																							- BS / PL
+																							- Trial bal
+	- General ledger
+		- New column Branch Code in view
+		- New column Branch Code in PDF
+		- Put branchId in sql
+		- Client side This branch / All branches
+	- Inventory reports
+- DB changes deployment script
+- Deploy in all databases and BU's
 																					- Preview
 																						- Create preview PDF
 																							- Footer
@@ -10,20 +23,12 @@
 																					- Delete
 																							- Delete an entire record from TranH
 																							- DB: Cascade delete for BranchTransfer table
-- Report changes
+
 																							- Security of submit button in branch transfer
-- Consolidated reports for Branch incorporation
-	- Bank reconciliation
-																							- BS / PL
-	- Trial bal
-	- General ledger
-	- Final reports
-	- Inventory reports
+
 																							- Provide SearchBox in BS and PL																			
 																							- In sale invoices payment remarks is not there in print preview For Institution sales and autosubledger sales
 																							- In sale invoice print preview if autosubledger then also give subledger ac no
-- DB changes deployment script
-- Deploy in all databases and BU's
 																							- View grid
 																								- Show data
 																								- Create SQL for view

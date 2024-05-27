@@ -175,7 +175,7 @@ def resolve_balance_sheet_profit_loss(parent, info, value):
     )
     value = unquote(value)
     valueObject = json.loads(value)
-    branchId = valueObject.get('branchId')
+    branchId = valueObject.get("branchId")
     return balanceSheetProfitLossHelper(dbName, buCode, finYearId, branchId)
 
 
@@ -333,7 +333,10 @@ def resolve_generic_view(parent, info, value):
     valueDict["args"]["clientId"] = clientId
     if "finYearId" not in valueDict["args"]:
         valueDict["args"]["finYearId"] = finYearId
-    valueDict["args"]["branchId"] = branchId
+        
+    if("branchId" not in valueDict["args"]):
+        valueDict["args"]["branchId"] = branchId
+    # valueDict["args"]["branchId"] = branchId
     valueDict["isMultipleRows"] = valueDict.get("isMultipleRows", False)
     return genericView(dbName, sqlString, valueDict, buCode)
 
@@ -368,8 +371,11 @@ def resolve_transfer_closing_balances(parent, info):
 
 
 @accountsQuery.field("trialBalance")
-def resolve_trial_balance(parent, info):
+def resolve_trial_balance(parent, info, value):
     dbName, buCode, clientId, finYearId, branchId = (
         getDbNameBuCodeClientIdFinYearIdBranchId(info.context)
     )
+    value = unquote(value)
+    valueObject = json.loads(value)
+    branchId = valueObject.get("branchId")
     return trialBalanceHelper(dbName, buCode, finYearId, branchId)

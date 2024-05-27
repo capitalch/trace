@@ -1,4 +1,5 @@
 import {
+    InputSwitch,
     moment,
     useState,
 } from '../../../../imports/regular-imports'
@@ -7,15 +8,19 @@ import {
     IconButton,
     Tooltip,
     Typography,
+    useTheme,
 } from '../../../../imports/gui-imports'
 import { Preview } from '../../../../imports/icons-import'
 import { useTraceMaterialComponents, XXGrid } from '../../../../imports/trace-imports'
 import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
 import { TypographySmart } from '../common/typography-smart'
+import { getFromBag } from '../inventory/redirect'
 function GeneralLedger() {
     const [, setRefresh] = useState({})
+    const theme = useTheme()
     const classes = useStyles()
+    const branchObject: any = getFromBag('branchObject')
     const { handleLedgerPreview, meta } =
         useGeneralLedger(getArtifacts)
 
@@ -35,6 +40,30 @@ function GeneralLedger() {
                 <Typography variant="h6" className="heading" component="span">
                     {meta.current.accName}
                 </Typography>
+
+                <Box component='span' display='flex' alignItems='center'>
+                    <span style = {{marginRight: theme.spacing(2)}}>This branch</span>
+                    <InputSwitch
+                        checked={meta.current.isAllBranches}
+                        onChange={(e: any) => {
+                            meta.current.isAllBranches = e.target.value
+                            meta.current.sqlQueryArgs = {
+                                id: meta.current.accId,
+                                branchId: meta.current.isAllBranches ? null : branchObject.branchId
+                            }
+                            setRefresh({})
+                            if (meta.current.accId) {
+                                emit(
+                                    getArtifacts().gridActionMessages
+                                        .fetchIbukiMessage,
+                                    meta.current.sqlQueryArgs
+                                )
+                            } else {
+                                emit('XX-GRID-RESET', null)
+                            }
+                        }}></InputSwitch>
+                    <span style={{ marginLeft: theme.spacing(2) }}>All branches</span>
+                </Box>
 
                 <div className="select-ledger">
                     <Box
@@ -71,6 +100,7 @@ function GeneralLedger() {
                             )
                             meta.current.sqlQueryArgs = {
                                 id: meta.current.accId,
+                                branchId: meta.current.isAllBranches ? null : branchObject.branchId
                             }
                             if (meta.current.accId) {
                                 emit(
@@ -93,7 +123,7 @@ function GeneralLedger() {
                     columns={getArtifacts().columns}
                     gridActionMessages={getArtifacts().gridActionMessages}
                     hideViewLimit={true}
-                    jsonFieldPath="jsonResult.transactions" // data is available in nested jason property
+                    jsonFieldPath="jsonResult.transactions" // data is available in nested json property
                     sharedData={meta.current.sharedData}
                     summaryColNames={getArtifacts().summaryColNames}
                     sqlQueryId="get_accountsLedger"
@@ -195,6 +225,12 @@ function GeneralLedger() {
                 width: 200,
                 sortable: false,
             },
+            {
+                headerName: 'Br code',
+                field: 'branchCode',
+                width: 150,
+                sortable: false,
+            },
         ]
         const summaryColNames = ['debit', 'credit']
         const args = {
@@ -219,45 +255,3 @@ function GeneralLedger() {
     }
 }
 export { GeneralLedger }
-
-// {/* <GeneralLedgerPdf ledgerData={
-//                 meta.current.sharedData.filteredRows || []
-//             }
-//                 accName={meta.current.accName} /> */}
-//             {/* <PrimeDialog
-//                 header={accountsMessages.selectAccountHeader}
-//                 visible={meta.current.showDialog}
-//                 onHide={() => {
-//                     meta.current.showDialog = false
-//                     meta.current.isMounted && setRefresh({})
-//                 }}>
-//                 {accountsMessages.selectAccountDetails}
-//             </PrimeDialog> */}
-//             {/* <Dialog
-//                 open={meta.current.showLedgerDialog}
-//                 fullWidth={true}
-//                 maxWidth="md">
-//                 <DialogTitle>
-//                     <div className={classes.previewTitle}>
-//                         <div>Ledger view: {meta.current.accName}</div>
-//                         <Tooltip title="Close">
-//                             <IconButton
-//                                 size="small"
-//                                 disabled={false}
-//                                 onClick={handleLedgerDialogClose}>
-//                                 <CloseSharp />
-//                             </IconButton>
-//                         </Tooltip>
-//                     </div>
-//                 </DialogTitle>
-//                 <DialogContent>
-//                     <PDFViewer showToolbar={true} width={840} height={600}>
-//                         <PdfLedger
-//                             ledgerData={
-//                                 meta.current.sharedData.filteredRows || []
-//                             }
-//                             accName={meta.current.accName}
-//                         />
-//                     </PDFViewer>
-//                 </DialogContent>
-//             </Dialog> */}
