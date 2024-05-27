@@ -1,16 +1,23 @@
 ## Branch Transfer + others
 # New design
-- Report changes
-- Consolidated reports for Branch incorporation
-																							- Bank reconciliation
-																							- BS / PL
-																							- Trial bal
-	- General ledger
-		- New column Branch Code in view
-		- New column Branch Code in PDF
-		- Put branchId in sql
-		- Client side This branch / All branches
-	- Inventory reports
+																				- Report changes
+																				- Consolidated reports for Branch incorporation
+																					- Bank reconciliation
+																					- BS / PL
+																					- Trial bal
+																				- General ledger
+																					- New column Branch Code in view
+																					- New column Branch Code in PDF
+																					- Put branchId in sql
+																					- Client side This branch / All branches
+- Inventory reports
+	- Stock Summary
+																					- Sql to accommodate the branch
+		- Branch Transfer Dr and Branch Transfer Cr info in report
+		- Client side this branch /  all branches
+	- Purchases
+	- Sales
+	- Stock Transaction
 - DB changes deployment script
 - Deploy in all databases and BU's
 																					- Preview

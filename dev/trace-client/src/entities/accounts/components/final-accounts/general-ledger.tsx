@@ -16,6 +16,7 @@ import { useSharedElements } from '../common/shared-elements-hook'
 import { useGeneralLedger, useStyles } from './general-ledger-hook'
 import { TypographySmart } from '../common/typography-smart'
 import { getFromBag } from '../inventory/redirect'
+
 function GeneralLedger() {
     const [, setRefresh] = useState({})
     const theme = useTheme()

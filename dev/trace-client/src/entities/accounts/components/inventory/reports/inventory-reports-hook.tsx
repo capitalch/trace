@@ -7,11 +7,10 @@ import { StockTransactionReport } from './gr-stock-transaction-report'
 function useInventoryReports() {
     const [, setRefresh] = useState({})
     const megaData = useContext(MegaDataContext)
-    // const inventoryReports = megaData.accounts.inventoryReports
     const inventory = megaData.accounts.inventory
     const { emit } = useIbuki()
     const { execGenericView } = utilMethods()
-    const meta = useRef({
+    const meta: any = useRef({
         title: 'Inventory reports',
         reportComponent: () => <></>,
         selectedReport: {
@@ -19,11 +18,7 @@ function useInventoryReports() {
             value: null,
             breadCrumb: ''
         },
-        // selectedReport: {
-        //     label: 'Stock transactions',
-        //     value: 'stockTransactionReport',
-        //     breadCrumb: 'Stock transactions'
-        // },
+        isAllBranches: false,
     })
     const pre = meta.current
 

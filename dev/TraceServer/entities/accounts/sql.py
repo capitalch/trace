@@ -1611,7 +1611,7 @@ allSqls = {
     ''',
 
     "get_stock_summary":'''
-        --with "branchId" as (values(1)), "finYearId" as (values (2022)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)), "type" as (values('cat')), "value" as (values(0)),
+        --with "branchId" as (values(null::int)), "finYearId" as (values (2024)),"tagId" as (values(0)), "onDate" as (values(CURRENT_DATE)), "isAll" as (values(true)), "days" as (values(0)), "type" as (values('cat')), "value" as (values(0)),
         with "branchId" as (values(%(branchId)s::int)), "finYearId" as (values (%(finYearId)s::int)), "onDate" as (values(%(onDate)s ::date)), "isAll" as (values(%(isAll)s::boolean)), "days" as (values(%(days)s::int)), "type" as (values (%(type)s::text)), "value" as (values (%(value)s::int)),     
 		"cteProduct" as (select * from get_productids_on_brand_category_tag((table "type") , (table "value") )),
 		cte0 as( --base cte used many times in next
@@ -1621,20 +1621,29 @@ allSqls = {
                         on h."id" = d."tranHeaderId"
                     join "SalePurchaseDetails" s
                         on d."id" = s."tranDetailsId"
-                where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+                where 
+					--"branchId" = (table "branchId") 
+					(SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+					and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
                         union all --necessary otherwise rows with same values are removed
             select h."id", "productId", "tranTypeId", "qty", "price", 0 as "discount", "tranDate", "dc"
                 from "TranH" h
                     join "StockJournal" s
                         on h."id" = s."tranHeaderId"
-                where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+                where 
+					--"branchId" = (table "branchId") 
+					(SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+					and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
             )
 			, cte1 as ( -- opening balance
                 select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
                     from "ProductOpBal" p 
-                where "branchId" = (table "branchId") and "finYearId" =(table "finYearId")
+                where 
+					--"branchId" = (table "branchId") 
+					(SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+					and "finYearId" =(table "finYearId")
             ),
 			cte00 as ( -- add lastTranPurchasePrice
 			select c0.*,

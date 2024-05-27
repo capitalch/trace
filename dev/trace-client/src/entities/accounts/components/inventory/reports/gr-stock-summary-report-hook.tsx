@@ -36,7 +36,6 @@ function useStockSummaryReport() {
         searchTextRef: null,
         selectedAgeingOption: { label: 'Age (all)', value: 0 },
         selectedRowsObject: {},
-        // selectedTagOption: { label: 'All', value: 0 },
         sqlKey: 'get_stock_summary',
         stockDate: moment().format('YYYY-MM-DD'),
         subTitle: '',
@@ -53,7 +52,6 @@ function useStockSummaryReport() {
 
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
-        // fetchData()
         fetchOptionsData()
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
             const requestSearch = d.data[0]
@@ -130,7 +128,6 @@ function useStockSummaryReport() {
                     || null,
                 days: pre.selectedAgeingOption.value || 0,
                 isAll: false, // Only products having some transaction or OP bal are shown
-                // tagId: pre.selectedTagOption.value,
                 type: pre.queryArgs.type,
                 value: pre.queryArgs.value
             },
@@ -237,10 +234,7 @@ function useStockSummaryReport() {
                 headerClassName: 'header-class',
                 description: 'Product',
                 field: '1',
-                // field:'product',
-                // renderCell: (params: any) => <Product params={params} />,
                 valueGetter: (params: any) => `${params.row?.catName ? params.row.catName : ''} ${params.row?.brandName ? params.row.brandName : ''} ${params.row?.label ? params.row.label : params.row.label}`,
-                // valueFormatter: (params: any) => `${params?.value ? params.value : ''} `,
                 width: '430',
             },
             {

@@ -3,7 +3,6 @@ import {
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
-    GridToolbarColumnsButton,
     GridFooterContainer,
     IconButton, IMegaData, MegaDataContext, moment, ReactSelect, SyncSharp, TextField, TreeSelect,
     Typography, useContext, useRef, useState, useTheme,
@@ -49,7 +48,6 @@ function StockSummaryReport() {
             getRowClassName={getRowClassName}
             onSelectionModelChange={onSelectModelChange}
             rowHeight={25}
-            // getRowHeight={() => 'auto'}
             rows={pre.filteredRows}
             showCellRightBorder={true}
             showColumnRightBorder={true}
@@ -67,7 +65,6 @@ function StockSummaryReport() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
-                        {/* <GridToolbarColumnsButton color='secondary' /> */}
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
                         <ReactSelect menuPlacement='auto' placeholder='Select ageing'
@@ -139,19 +136,6 @@ function StockSummaryReport() {
                             }}>
                             <SyncSharp fontSize='small'></SyncSharp>
                         </IconButton>
-
-                        {/* Select tag */}
-                        {/* <Typography variant='body2' sx={{ ml: 1, mr: 1 }}> Tag</Typography>
-                        <ReactSelect
-                            menuPlacement='auto' placeholder='Select tag'
-                            styles={reactSelectStyles}
-                            options={allTagsOptions}
-                            value={pre.selectedTagOption}
-                            onChange={
-                                (selectedTag: any) => {
-                                    handleSelectedTagOption(selectedTag)
-                                }}
-                        /> */}
                     </Box>
                     <GridSearchBox parentMeta={meta} />
                 </Box>
