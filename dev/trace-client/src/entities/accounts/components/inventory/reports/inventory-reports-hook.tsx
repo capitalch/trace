@@ -22,6 +22,7 @@ function useInventoryReports() {
     const pre = meta.current
 
     useEffect(() => {
+        inventory.inventoryReportRefresh = setRefresh
         if (_.isEmpty(inventory.allTags)) {
             fetchAllTags()
         }

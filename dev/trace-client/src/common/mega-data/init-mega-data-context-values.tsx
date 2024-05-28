@@ -5,7 +5,8 @@ const inventoryMegaData = () => ({
     allTags: [],
     selectedReportName: undefined,
     isAllBranches: false,
-    fetchDataMethod: undefined
+    fetchDataMethod: undefined,
+    inventoryReportRefresh: undefined
 })
 
 const salesMegaData = () => ({

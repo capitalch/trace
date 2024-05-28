@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react'
 import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, IMegaData, useContext, MegaDataContext, getFromBag } from '../redirect'
 
 function useStockSummaryReport() {
@@ -64,6 +65,8 @@ function useStockSummaryReport() {
         return (() => {
             subs1.unsubscribe()
             inventory.fetchDataMethod = undefined
+            inventory.isAllBranches = false
+            inventory.inventoryReportRefresh({})
         })
     }, [])
 

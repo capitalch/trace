@@ -23,7 +23,6 @@ function InventoryReports() {
     }
 
     pre.selectedReport = reportsJson.find((x: any) => x.value === selectedReportName) || pre.selectedReport
-    const branchObject: any = getFromBag('branchObject')
     return (
         <Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', '& .react-select': { width: '60%' } }}>
@@ -35,6 +34,7 @@ function InventoryReports() {
                         <span style={{ marginRight: theme.spacing(2) }}>This branch</span>
                         <InputSwitch
                             checked={inventory.isAllBranches}
+                            disabled={inventory.selectedReportName !== 'stockSummaryReport'}
                             onChange={(e: any) => {
                                 inventory.isAllBranches = e.target.value
                                 if(inventory.fetchDataMethod){
