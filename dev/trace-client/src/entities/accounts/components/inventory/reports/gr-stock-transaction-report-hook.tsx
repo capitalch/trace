@@ -1,11 +1,13 @@
-import { _, GridCellParams, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, GridCellParams, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, IMegaData, useContext, MegaDataContext, getFromBag } from '../redirect'
 function useStockTransactionReport() {
     const [, setRefresh] = useState({})
     const { execGenericView, toDecimalFormat } = utilMethods()
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const inventory: any = megaData.accounts.inventory
+    const branchObject = getFromBag('branchObject')
     const meta: any = useRef({
         allRows: [],
         debounceMessage: 'STOCK-SUMMARY-DEBOUNCE',
@@ -48,6 +50,7 @@ function useStockTransactionReport() {
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
         fetchOptionsData()
+        inventory.fetchDataMethod = fetchData
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
             pre.productSearchText = ''
             const requestSearch = d.data[0]
@@ -56,6 +59,7 @@ function useStockTransactionReport() {
         })
         return (() => {
             subs1.unsubscribe()
+            inventory.fetchDataMethod = undefined
         })
     }, [])
 
@@ -125,7 +129,8 @@ function useStockTransactionReport() {
             sqlKey: pre.sqlKey,
             args: {
                 type: pre.queryArgs.type,
-                value: pre.queryArgs.value
+                value: pre.queryArgs.value,
+                branchId: inventory.isAllBranches ? null: branchObject.branchId
             },
         }) || {}
         setId(pre.allRows)
