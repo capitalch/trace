@@ -13,7 +13,7 @@ import { utilMethods } from '../global-utils/misc-utils'
 import { getArtifacts } from '../react-form/common/react-form-hook'
 import { LedgerSubledger } from '../entities/accounts/components/common/ledger-subledger'
 import { XXGrid } from '../global-utils/xx-grid'
-export { MegaDataContext, type IMegaData } from '../common/mega-data-context'
+export { MegaDataContext, type IMegaData } from '../common/mega-data/mega-data-context'
 export {
     componentStore,
     getArtifacts,

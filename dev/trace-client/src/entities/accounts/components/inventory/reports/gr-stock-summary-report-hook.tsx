@@ -1,4 +1,4 @@
-import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods } from '../redirect'
+import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, IMegaData, useContext, MegaDataContext, getFromBag } from '../redirect'
 
 function useStockSummaryReport() {
     const [, setRefresh] = useState({})
@@ -6,7 +6,9 @@ function useStockSummaryReport() {
     const { toCurrentDateFormat, getGridReportSubTitle } = utils()
     const { debounceFilterOn, emit, } = useIbuki()
     const theme = useTheme()
-
+    const megaData: IMegaData = useContext(MegaDataContext)
+    const inventory: any = megaData.accounts.inventory
+    const branchObject = getFromBag('branchObject')
     const meta: any = useRef({
         allRows: [],
         dataPath: 'jsonResult.stock',
@@ -53,6 +55,7 @@ function useStockSummaryReport() {
     useEffect(() => {
         pre.subTitle = getGridReportSubTitle()
         fetchOptionsData()
+        inventory.fetchDataMethod = fetchData
         const subs1 = debounceFilterOn(pre.debounceMessage).subscribe((d: any) => {
             const requestSearch = d.data[0]
             const searchText = d.data[1]
@@ -60,6 +63,7 @@ function useStockSummaryReport() {
         })
         return (() => {
             subs1.unsubscribe()
+            inventory.fetchDataMethod = undefined
         })
     }, [])
 
@@ -129,7 +133,8 @@ function useStockSummaryReport() {
                 days: pre.selectedAgeingOption.value || 0,
                 isAll: false, // Only products having some transaction or OP bal are shown
                 type: pre.queryArgs.type,
-                value: pre.queryArgs.value
+                value: pre.queryArgs.value,
+                branchId: inventory.isAllBranches ? null: branchObject.branchId
             },
         }) || {}
         setId(pre.allRows)

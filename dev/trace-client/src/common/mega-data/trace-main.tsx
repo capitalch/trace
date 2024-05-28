@@ -1,13 +1,13 @@
-import { _, clsx, useState, useEffect, useRef, } from '../imports/regular-imports'
-import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData } from '../entities/accounts/components/common/init-mega-data-context-values'
+import { _, clsx, useState, useEffect, useRef, } from '../../imports/regular-imports'
+import { inventoryMegaData, salesMegaData, settingsMegaData, stockJournalMegaData } from './init-mega-data-context-values'
 import {
     Container,
     makeStyles,
     createStyles,
-} from '../imports/gui-imports'
-import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '../imports/trace-imports'
-import { LaunchPad as LaunchPadAccounts } from '../entities/accounts/launch-pad'
-import { LaunchPad as LaunchPadAuthentication } from '../entities/authentication/launch-pad'
+} from '../../imports/gui-imports'
+import { manageEntitiesState, MegaDataContext, useIbuki, useTraceGlobal } from '../../imports/trace-imports'
+import { LaunchPad as LaunchPadAccounts } from '../../entities/accounts/launch-pad'
+import { LaunchPad as LaunchPadAuthentication } from '../../entities/authentication/launch-pad'
 import { IMegaData } from './mega-data-context'
 
 function TraceMain({ open }: any) {
@@ -79,14 +79,13 @@ function TraceMain({ open }: any) {
             {/* initialize accounts entity for all global data  */}
             <MegaDataContext.Provider value={meta.current.megaData}>
                 <LaunchPad></LaunchPad>
-                {/* <meta.current.launchPad /> */}
             </MegaDataContext.Provider>
         </Container>
     )
 
 
     function initMegaData() {
-        const megaData: IMegaData 
+        const megaData: IMegaData
             = {
             accounts: {
                 common: {},
@@ -102,7 +101,7 @@ function TraceMain({ open }: any) {
                 this.keysWithMethods[key] = method
             },
 
-            executeMethodForKey: function (key: string, ...params:any) {
+            executeMethodForKey: function (key: string, ...params: any) {
                 if (!this.keysWithMethods[key]) {
                     return
                 }

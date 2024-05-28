@@ -18,7 +18,6 @@ function useInventoryReports() {
             value: null,
             breadCrumb: ''
         },
-        isAllBranches: false,
     })
     const pre = meta.current
 
@@ -69,6 +68,6 @@ function useInventoryReports() {
             return (map[rName] || (() => <></>))
         }
     }
-    return ({ meta, onReportSelected, setRefresh })
+    return ({inventory, meta, onReportSelected, setRefresh })
 }
 export { useInventoryReports }

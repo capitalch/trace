@@ -1,7 +1,7 @@
-import { createContext } from '../imports/regular-imports'
+import { createContext } from '../../imports/regular-imports'
 const MegaDataContext = createContext<any>({})
 interface KeyWithMethod {
-    (key: string, method: (...params:any) => void): void
+    (key: string, method: (...params: any) => void): void
 }
 interface KeyWithParams {
     (key: string, ...params: any): void

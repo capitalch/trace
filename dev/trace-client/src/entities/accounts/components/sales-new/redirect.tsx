@@ -17,7 +17,7 @@ export {
     useTheme,
 } from '../../../../imports/gui-imports'
 
-export { MegaDataContext, type IMegaData, } from '../../../../common/mega-data-context'
+export { MegaDataContext, type IMegaData, } from '../../../../common/mega-data/mega-data-context'
 export { _, moment, InputMask, NumberFormat, PrimeColumn, ReactSelect, TreeTable, useContext, useEffect, useRef, useState, XXGrid } from '../../../../imports/regular-imports'
 export { AddCircle, CloseSharp, EmailIcon, Preview, Search, SmsIcon, } from '../../../../imports/icons-import'
 export { LedgerSubledger } from '../common/ledger-subledger'
@@ -52,7 +52,7 @@ export { ShipTo } from './payments/ship-to'
 export { PaymentsHeader } from './payments/payments-header'
 export { PaymentsMethods } from './payments/payments-methods'
 export { AllErrors } from './common/all-errors'
-export { salesMegaData } from '../common/init-mega-data-context-values'
+export { salesMegaData } from '../../../../common/mega-data/init-mega-data-context-values'
 export { manageEntitiesState } from '../../../../imports/trace-imports'
 export { Document, BlobProvider, Line, Page, pdf, PDFViewer, StyleSheet, Svg, Text, usePDF, View, } from '@react-pdf/renderer'
 

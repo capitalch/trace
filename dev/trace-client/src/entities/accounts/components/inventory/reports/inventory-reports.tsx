@@ -6,7 +6,7 @@ function InventoryReports() {
     const [,setRefresh] = useState({})
     const megaData: IMegaData = useContext(MegaDataContext)
     const selectedReportName = megaData.accounts.inventory.selectedReportName
-    const { meta, onReportSelected } = useInventoryReports()
+    const {inventory, meta, onReportSelected } = useInventoryReports()
     const pre = meta.current
     const theme = useTheme()
     // To reduce space between two items of drop down
@@ -34,23 +34,13 @@ function InventoryReports() {
                     <Box component='span' display='flex' alignItems='center'>
                         <span style={{ marginRight: theme.spacing(2) }}>This branch</span>
                         <InputSwitch
-                            checked={meta.current.isAllBranches}
+                            checked={inventory.isAllBranches}
                             onChange={(e: any) => {
-                                meta.current.isAllBranches = e.target.value
-                                meta.current.sqlQueryArgs = {
-                                    id: meta.current.accId,
-                                    branchId: meta.current.isAllBranches ? null : branchObject.branchId
+                                inventory.isAllBranches = e.target.value
+                                if(inventory.fetchDataMethod){
+                                    inventory.fetchDataMethod()
                                 }
                                 setRefresh({})
-                                // if (meta.current.accId) {
-                                //     emit(
-                                //         getArtifacts().gridActionMessages
-                                //             .fetchIbukiMessage,
-                                //         meta.current.sqlQueryArgs
-                                //     )
-                                // } else {
-                                //     emit('XX-GRID-RESET', null)
-                                // }
                             }}></InputSwitch>
                         <span style={{ marginLeft: theme.spacing(2) }}>All branches</span>
                     </Box>

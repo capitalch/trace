@@ -97,7 +97,7 @@ export {
 } from '../../../../imports/trace-imports'
 export { useInventoryUtils } from './inventory-utils-hook'
 export { PurchaseReport } from './reports/gr-purchase-report'
-export { stockJournalMegaData } from '../common/init-mega-data-context-values'
+export { stockJournalMegaData } from '../../../../common/mega-data/init-mega-data-context-values'
 export { manageEntitiesState }
 export const { getFromBag, setInBag } = manageEntitiesState()
 // export { getFromBag, setInBag }

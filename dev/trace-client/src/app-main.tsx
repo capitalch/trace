@@ -9,7 +9,7 @@ import {
 } from './imports/trace-imports'
 import { TraceHeader } from './common/trace-header'
 import { TraceLeft } from './common/trace-left'
-import { TraceMain } from './common/trace-main'
+import { TraceMain } from './common/mega-data/trace-main'
 import { TraceSubHeader } from './common/trace-subheader'
 
 function AppMain() {
@@ -31,13 +31,13 @@ function AppMain() {
     }, [])
 
     function handleDrawerOpen() {
-        setInGlobalBag('isDrawyerOpen',true)
+        setInGlobalBag('isDrawyerOpen', true)
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(true)
     }
 
     function handleDrawerClose() {
-        setInGlobalBag('isDrawyerOpen',false)
+        setInGlobalBag('isDrawyerOpen', false)
         emit('DRAWER-STATUS-CHANGED', null)
         setOpen(false)
     }
@@ -64,7 +64,7 @@ function AppMain() {
                 matches={isMediumSizeUp}
                 handleDrawerClose={handleDrawerClose}></TraceLeft>
             {/* Main */}
-                <TraceMain open={open}></TraceMain>
+            <TraceMain open={open}></TraceMain>
             {/* universal loading indicator */}
             <TraceLoadingIndicator></TraceLoadingIndicator>
         </Box>

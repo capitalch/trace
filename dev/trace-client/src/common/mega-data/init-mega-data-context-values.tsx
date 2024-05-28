@@ -4,6 +4,8 @@ const isoDateFormat = 'YYYY-MM-DD'
 const inventoryMegaData = () => ({
     allTags: [],
     selectedReportName: undefined,
+    isAllBranches: false,
+    fetchDataMethod: undefined
 })
 
 const salesMegaData = () => ({

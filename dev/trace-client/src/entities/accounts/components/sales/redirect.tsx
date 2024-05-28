@@ -7,7 +7,7 @@ export {
     TextField, Tooltip, Typography,
     useTheme,
 } from '../../../../imports/gui-imports'
-export { MegaDataContext } from '../../../../common/mega-data-context'
+export { MegaDataContext } from '../../../../common/mega-data/mega-data-context'
 export { _, moment, NumberFormat, PrimeColumn, ReactSelect, TreeTable, useContext, useEffect, useRef, useState, XXGrid } from '../../../../imports/regular-imports'
 export { CloseSharp } from '../../../../imports/icons-import'
 export { LedgerSubledger } from '../common/ledger-subledger'

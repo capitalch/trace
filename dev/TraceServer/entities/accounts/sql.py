@@ -1623,7 +1623,7 @@ allSqls = {
                         on d."id" = s."tranDetailsId"
                 where 
 					--"branchId" = (table "branchId") 
-					(SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+					(COALESCE((TABLE "branchId"), "branchId") = "branchId")
 					and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
                         union all --necessary otherwise rows with same values are removed
@@ -1633,17 +1633,18 @@ allSqls = {
                         on h."id" = s."tranHeaderId"
                 where 
 					--"branchId" = (table "branchId") 
-					(SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+					(COALESCE((TABLE "branchId"), "branchId") = "branchId")
 					and "finYearId" =(table "finYearId")
                     and "tranDate" <= coalesce((table "onDate"), CURRENT_DATE)
             )
 			, cte1 as ( -- opening balance
-                select id, "productId", "qty", "openingPrice", "lastPurchaseDate"
+                select "productId", SUM("qty") as "qty", MAX("openingPrice") as "openingPrice", MAX("lastPurchaseDate") as "lastPurchaseDate"
                     from "ProductOpBal" p 
                 where 
 					--"branchId" = (table "branchId") 
-					(SELECT COALESCE((TABLE "branchId"), "branchId") = "branchId")
+					(COALESCE((TABLE "branchId"), "branchId") = "branchId")
 					and "finYearId" =(table "finYearId")
+				GROUP BY "productId"
             ),
 			cte00 as ( -- add lastTranPurchasePrice
 			select c0.*,
