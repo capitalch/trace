@@ -390,6 +390,22 @@ function useStockSummaryReport() {
                 type: 'number',
                 width: 90,
             },
+            {
+                description: 'Branch transfer debits',
+                headerName: 'Br Trf Dr',
+                headerClassName: 'header-class',
+                field: 'branchTransferDebits',
+                type: 'number',
+                width: 90,
+            },
+            {
+                description: 'Branch Transfer credits',
+                headerName: 'Br Trf Cr',
+                headerClassName: 'header-class',
+                field: 'branchTransferCredits',
+                type: 'number',
+                width: 90,
+            },
         ])
     }
 
