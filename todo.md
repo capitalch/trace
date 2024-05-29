@@ -2,8 +2,12 @@
 # New design
 - DB changes deployment script
 - Deploy in all databases and BU's
-- In stock transaction report opening balance is coming individually from all branches
-- Cleanup stock transaction client from branches code
+																			- Opening Balance of stock
+																				- Product code not being searched. It should appear as a column
+																				- Somehow In stock transaction report for -ve balances the Cr becomes -ve
+																			- Stock transaction report
+																				- Implement the Branch Transfer
+																				- In stock transaction report opening balance is coming individually from all branches
 																				- Report changes
 																				- Consolidated reports for Branch incorporation
 																					- Bank reconciliation

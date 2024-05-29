@@ -382,6 +382,20 @@ function useSalesReport() {
                 type: 'number',
                 width: 80,
             },
+            {
+                headerName: 'Common remarks',
+                description: 'Common remarks',
+                headerClassName: 'header-class',
+                field: 'commonRemarks',
+                width: 250,
+            },
+            {
+                headerName: 'Line remarks',
+                description: 'Line remarks',
+                headerClassName: 'header-class',
+                field: 'lineRemarks',
+                width: 250,
+            },
         ])
     }
 

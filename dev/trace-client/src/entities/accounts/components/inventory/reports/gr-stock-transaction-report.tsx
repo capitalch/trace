@@ -58,7 +58,6 @@ function StockTransactionReport() {
     )
 
     function CustomToolbar() {
-        const [, setRefresh] = useState({})
         return (
             <GridToolbarContainer className='grid-toolbar'>
                 <Box>
@@ -67,7 +66,6 @@ function StockTransactionReport() {
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
                         <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
-                        {/* <GridToolbarColumnsButton color='secondary' /> */}
                         <GridToolbarFilterButton color='primary' />
                         <GridToolbarExport color='info' />
 

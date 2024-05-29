@@ -40,7 +40,6 @@ function OpeningStock() {
                     columns={columns}
                     customFooterField1={{ label: 'Value', value: 233.44, path: 'jsonResult.value' }}
                     gridActionMessages={actionMessages}
-                    // hideFilteredButton={true}
                     hideColumnsButton={true}
                     hideExportButton={true}
                     hideViewLimit={true}
@@ -49,7 +48,6 @@ function OpeningStock() {
                     sqlQueryArgs={sqlQueryArgs}
                     sqlQueryId={sqlQueryId}
                     summaryColNames={summaryColNames}
-                // title={title}
                 />
             </Box>
         </Box>)

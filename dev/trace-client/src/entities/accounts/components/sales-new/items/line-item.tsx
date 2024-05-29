@@ -229,7 +229,7 @@ function LineItem({ item, index, }: any) {
                 <Typography variant='body2'>Remarks</Typography>
                 <TextField
                     autoComplete='off'
-                    sx={{ maxWidth: theme.spacing(18) }}
+                    sx={{ width: theme.spacing(30) }}
                     variant='standard'
                     value={item.remarks || ''}
                     onChange={(e: any) => handleTextChanged(item, 'remarks', e)} />

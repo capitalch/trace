@@ -9,12 +9,11 @@ function Customer() {
     const allErrors = sales.allErrors
     const { checkAllErrors, handleCloseDialog, handleCustomerClear, handleCustomerSearch, handleCustomerSearchClear, handleNewEditCustomer, handleTextChanged, meta } = useCustomer()
     const pre = meta.current
-    // const isoDateFormat = 'YYYY-MM-DD'
     const billTo = sales?.billTo
     checkAllErrors()
-    
+
     return (
-        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, pl: 1, pr: 1, rowGap: 2, flexWrap: 'wrap', }}>
+        <Box className='vertical' sx={{ display: 'flex', border: '1px solid lightGrey', p: 2, pl: 1, pr: 1, rowGap: 2, flexWrap: 'wrap', width: theme.spacing(120) }}>
             <Box sx={{ display: 'flex', columnGap: 2, flexWrap: 'wrap', rowGap: 2, alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', rowGap: 1, columnGap: 1, width: theme.spacing(25) }}>
                     <Typography variant='subtitle1' sx={{ textDecoration: 'underline', fontWeight: 'bold' }}>Customer</Typography>
@@ -46,7 +45,7 @@ function Customer() {
                 {/* Remarks */}
                 <Box className='vertical' sx={{ maxWidth: theme.spacing(18), width: theme.spacing(18) }}>
                     <Typography variant='body2'>Remarks</Typography>
-                    <TextField variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
+                    <TextField sx={{ width: theme.spacing(40) }} variant='standard' value={sales.commonRemarks || ''} autoComplete='off' onChange={(e: any) => handleTextChanged('commonRemarks', e)} />
                 </Box>
             </Box>
             <Box sx={{ pointerEvents: sales.paymentVariety === 'i' ? 'none' : 'all', opacity: sales.paymentVariety === 'i' ? 0.4 : 1, display: 'flex', columnGap: 2, rowGap: 2, flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -110,22 +109,6 @@ function Customer() {
                     , (billTo?.email ? ', ' + billTo.email : '')
                     , (billTo?.pin ? ', ' + billTo.pin : '')
                 )}</Typography>
-                {/* <Box sx={{
-                    display: 'flex', fontFamily: 'sans-serif', color: theme.palette.common.black,
-                    fontSize: theme.spacing(1.6), p: 0.5, pl: 1, maxWidth: theme.spacing(40), width: theme.spacing(40)
-                    , height: theme.spacing(10), flexWrap: 'wrap', overflow: 'clip', border: '2px solid lightGrey', borderColor: allErrors['customerError'] ? theme.palette.error.light : 'lightgrey'
-                }}>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.id ? ''.concat('Id:', billTo.id, ', ') : ''}</Typography>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.contactName ? billTo.contactName.concat(', ') : ''}</Typography>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.mobileNumber ? ''.concat(' M: ', billTo.mobileNumber, ', ') : ''}</Typography>
-                    <Typography>{billTo?.address1 ? ''.concat(' ', billTo.address1, ', ') : ''}</Typography>
-                    <Typography>{billTo?.address2 ? ''.concat(' ', billTo.address2, ', ') : ''}</Typography>
-                    <Typography>{billTo?.email ? ''.concat(' ', billTo.email, ', ') : ''}</Typography>
-                    <Typography>{billTo?.country ? ''.concat(' ', billTo.country, ', ') : ''}</Typography>
-                    <Typography>{billTo?.state ? ''.concat(' ', billTo.state, ', ') : ''}</Typography>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.city ? ''.concat(' ', billTo.city, ', ') : ''}</Typography>
-                    <Typography sx={{ fontWeight: 'bold' }}>{billTo?.pin ? ' Pin: '.concat(' ', billTo.pin,) : ''}</Typography>
-                </Box> */}
 
                 <Box sx={{ display: 'flex', }}>
                     {/* clear */}

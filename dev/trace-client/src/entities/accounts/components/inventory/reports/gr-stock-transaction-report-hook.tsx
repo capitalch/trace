@@ -384,13 +384,12 @@ function useStockTransactionReport() {
             const remarks = rows[i].remarks
             const debits = rows[i].debits
             const credits = rows[i].credits
-            // const gp = rows[i].grossProfit
             if (remarks === 'Opening balance') {
                 bufferBal = rows[i].debits - rows[i].credits
                 rows[i].itemIndex = incr()
                 bColor = !bColor
             } else if (remarks === 'Summary') {
-
+                rows[i].tranDate = ''
             } else {
                 bufferBal = bufferBal + debits - credits
                 rows[i].balance = bufferBal
@@ -405,11 +404,6 @@ function useStockTransactionReport() {
             return (count++)
         }
     }
-
-    // function resetProductSearch() {
-    //     pre.productSearchText = ''
-    //     setRefresh({})
-    // }
 
     return ({ fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta })
 }

@@ -34,7 +34,7 @@ function InventoryReports() {
                         <span style={{ marginRight: theme.spacing(2) }}>This branch</span>
                         <InputSwitch
                             checked={inventory.isAllBranches}
-                            disabled={inventory.selectedReportName !== 'stockSummaryReport'}
+                            disabled={ !['stockSummaryReport',].includes(inventory.selectedReportName)}
                             onChange={(e: any) => {
                                 inventory.isAllBranches = e.target.value
                                 if(inventory.fetchDataMethod){

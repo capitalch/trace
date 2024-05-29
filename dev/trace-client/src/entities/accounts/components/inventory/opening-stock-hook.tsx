@@ -74,6 +74,12 @@ function useOpeningStock() {
                 width: 140,
             },
             {
+                headerName: 'Pr code',
+                description: 'Product code',
+                field: 'productCode',
+                width: 100,
+            },
+            {
                 headerName: 'Purch dt',
                 description: 'Last purchase date',
                 field: 'lastPurchaseDate',
