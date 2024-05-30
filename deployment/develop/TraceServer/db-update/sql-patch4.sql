@@ -1,4 +1,4 @@
--- created in April 2023. 
+-- created in April 2024. 
 -- New database will need to be upgraded from this patch. 
 -- sql-patch1, sql-patch2, sql-patch3, sql-patch4 are already there in accounts.sql (creates new database)
 -- As on April 2024 end, all databases are upgraded from this patch

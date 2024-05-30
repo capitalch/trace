@@ -136,6 +136,11 @@ function useSalesViewContent() {
                 field: 'contact',
                 width: 200,
             },
+            {
+                headerName: 'Line remarks',
+                field: 'lineRemarks',
+                width: 200,
+            },
         ]
         const queryId = 'get_sale_purchase_headers'
         const queryArgs = {

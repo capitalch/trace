@@ -2,6 +2,10 @@
 # New design
 - DB changes deployment script
 - Deploy in all databases and BU's
+																			- Sales report remarks and lineRemarks
+																				- Preview: Provide main remarks below customer details
+																				- Sale view: provide remarks and line remarks. Check that it does not collide with auto subledger remarks
+																				- Sale report: provide remarks and line remarks. Check that it does not collide with auto subledger remarks
 																			- Opening Balance of stock
 																				- Product code not being searched. It should appear as a column
 																				- Somehow In stock transaction report for -ve balances the Cr becomes -ve

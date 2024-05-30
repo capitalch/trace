@@ -43,6 +43,7 @@ function InvoiceA({
             invoiceDate: moment(ti.tranH.tranDate).format(dateFormat),
             type: ti.tranH.tranTypeId === 4 ? 'Sale' : 'Sale Ret',
             terms: '',
+            remarks: ti.tranH.remarks
         }
         i.companyInfo = {
             name: tc.unitName,

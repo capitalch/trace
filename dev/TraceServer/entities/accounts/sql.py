@@ -1381,6 +1381,7 @@ allSqls = {
             select h."id", "autoRefNo", "tranDate", "userRefNo", h."remarks", 
                 d."amount" , string_agg("label", ' ,') as "labels", 
                 string_agg(s."jData"->>'serialNumbers', ' ,') as "serialNumbers",
+                string_agg(s."jData"->>'remarks', ' ,') as "lineRemarks",
                 string_agg("productCode", ' ,') as "productCodes",
                 SUM(s."qty" * (s."price" - s."discount")) as "aggr", SUM(s."cgst") as "cgst",
                 SUM(s."sgst") as "sgst", SUM(s."igst") as "igst"
@@ -1423,7 +1424,7 @@ allSqls = {
         ),
         
         cte0 as( --base cte: from tranD where 4,5,9,10, branchId, finYearId, tranDate <= endDate
-        select h."id",h."remarks" as "commonRemarks", d.remarks as "lineRemarks", "tranDate", s."productId", "tranTypeId", "qty", ("price" - "discount") "price", "cgst", "sgst","igst"
+        select h."id",h."remarks" as "commonRemarks", CONCAT_WS(', ', d.remarks, s."jData"->'remarks', s."jData"->'serialNumbers') as "lineRemarks", "tranDate", s."productId", "tranTypeId", "qty", ("price" - "discount") "price", "cgst", "sgst","igst"
             , s."amount", "gstRate", s."id" as "salePurchaseDetailsId", "autoRefNo", h."timestamp" , concat_ws(' ', "contactName", "mobileNumber", "address1", "address2") as "contact"
             , '' as "dc"
             from "TranH" h

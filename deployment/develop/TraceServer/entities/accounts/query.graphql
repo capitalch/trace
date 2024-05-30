@@ -2,12 +2,12 @@ type AccountsQuery {
     allCategories: Generic
     accountsMasterGroupsLedgers: Generic
     accountsOpBal: Generic
-    balanceSheetProfitLoss: Generic
+    balanceSheetProfitLoss(value:Generic): Generic
     configuration: Generic
     genericView(value: Generic): Generic
     saleInvoiceView(value: Generic): Generic
     searchProduct(value: Generic): Generic
-    trialBalance: Generic
+    trialBalance(value:Generic): Generic
 }
 
 scalar Generic

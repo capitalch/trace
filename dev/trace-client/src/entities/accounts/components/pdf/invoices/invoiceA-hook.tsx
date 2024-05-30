@@ -187,7 +187,7 @@ function useInvoiceA() {
                         </Text>
                         <Text style={gStyles.normal}>
                             {''.concat('Account: ', ii.accCode)}
-                            </Text>
+                        </Text>
                     </View>
                 )
             }
@@ -217,53 +217,59 @@ function useInvoiceA() {
             const ib = invoiceData.billTo
             const is = invoiceData.shipTo
             return (
-                <View style={styles.SubHeaderBlock}>
-                    <View style={styles.customerDetailsCont}>
-                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}>
-                            Customer Details
-                        </Text>
-                        <Text style={styles.bold}>
-                            {ib.name || ''}
-                        </Text>
-                        <Text style={styles.bold}>
-                            {''.concat('GSTIN ', ib.gstin || '')}
-                        </Text>
-                        <Text style={gStyles.normal}>
-                            {''.concat(
-                                ib.address1 || '',
-                                ' ',
-                                ib.address2 || '',
-                                ' Pin: ',
-                                ib.pin || '',
-                                ' Ph: ',
-                                ib.phone || '',
-                                ' email:',
-                                ib.email || ''
-                            )}
-                        </Text>
-                        <Text style={gStyles.bold}>
-                            {''.concat(
-                                'Place of supply:',
-                                ib?.stateName || '',
-                                ' State Code: ',
-                                ib?.stateCode || ''
-                            )}
-                        </Text>
-                    </View>
-                    <View style={styles.shippingAddressCont}>
-                        <Text style={{ fontSize: 10, fontWeight: 'bold' }}> Shipping Address</Text>
-                        <Text style={gStyles.normal}>
-                            {''.concat(
-                                is.name ? is.name + ', ' : '',
-                                is.address1 ? ' ' + is.address1 : '',
-                                is.address2 ? ' ' + is.address2 : '',
-                                is.pin ? ' Pin:' + is.pin : '',
-                                is.phone ? ' Ph:' + is.phone : '',
-                                is.email ? ' email:' + is.email : '',
-                                is.state ? ' State:' + is.state : '',
-                                is.country ? ' Country: ' + is.country : ''
-                            )}
-                        </Text>
+                <View style={{ display: 'flex', flexDirection: 'column' }}>
+                    <View style={styles.SubHeaderBlock}>
+                        <View style={styles.customerDetailsCont}>
+                            <Text style={{ fontSize: 10, fontWeight: 'bold' }}>
+                                Customer Details
+                            </Text>
+                            <Text style={styles.bold}>
+                                {ib.name || ''}
+                            </Text>
+                            <Text style={styles.bold}>
+                                {''.concat('GSTIN ', ib.gstin || '')}
+                            </Text>
+                            <Text style={gStyles.normal}>
+                                {''.concat(
+                                    ib.address1 || '',
+                                    ' ',
+                                    ib.address2 || '',
+                                    ' Pin: ',
+                                    ib.pin || '',
+                                    ' Ph: ',
+                                    ib.phone || '',
+                                    ' email:',
+                                    ib.email || '',
+                                )}
+                            </Text>
+                            <Text style={gStyles.bold}>
+                                {''.concat(
+                                    'Place of supply:',
+                                    ib?.stateName || '',
+                                    ' State Code: ',
+                                    ib?.stateCode || ''
+                                )}
+                            </Text>
+                            <Text style={gStyles.normal}>
+                                Remarks:
+                                {invoiceData?.invoiceInfo?.remarks || ''}
+                            </Text>
+                        </View>
+                        <View style={styles.shippingAddressCont}>
+                            <Text style={{ fontSize: 10, fontWeight: 'bold' }}> Shipping Address</Text>
+                            <Text style={gStyles.normal}>
+                                {''.concat(
+                                    is.name ? is.name + ', ' : '',
+                                    is.address1 ? ' ' + is.address1 : '',
+                                    is.address2 ? ' ' + is.address2 : '',
+                                    is.pin ? ' Pin:' + is.pin : '',
+                                    is.phone ? ' Ph:' + is.phone : '',
+                                    is.email ? ' email:' + is.email : '',
+                                    is.state ? ' State:' + is.state : '',
+                                    is.country ? ' Country: ' + is.country : ''
+                                )}
+                            </Text>
+                        </View>
                     </View>
                 </View>
             )
@@ -354,7 +360,7 @@ function useInvoiceA() {
                         <View
                             style={{
                                 flexDirection: 'row',
-                                paddingBottom: 5,                               
+                                paddingBottom: 5,
                             }}
                             key={keyGen()}>
                             <Text style={[gStyles.normal, { width: 20 }]}>
@@ -415,7 +421,7 @@ function useInvoiceA() {
                         </View>
                     )
                 })
-                return <View style={{ flexDirection: 'column',  borderBottom:1, }}>{rows}</View>
+                return <View style={{ flexDirection: 'column', borderBottom: 1, }}>{rows}</View>
 
                 function keyGen() {
                     return ++counter
@@ -429,7 +435,7 @@ function useInvoiceA() {
                         paddingTop: 2,
                         flexDirection: 'row',
                         paddingBottom: 2,
-                        borderBottom:1,
+                        borderBottom: 1,
                     },
                 })
                 return (
@@ -651,7 +657,7 @@ function useInvoiceA() {
         function Footer({ invoiceData }: any) {
             return (
                 <View style={[gStyles.footer]}>
-                    <Text style={{ fontSize: 10, flexWrap:'wrap', width:'72%' }}>
+                    <Text style={{ fontSize: 10, flexWrap: 'wrap', width: '72%' }}>
                         {invoiceData?.summary?.amountInWords || ''}
                     </Text>
                     <Text
