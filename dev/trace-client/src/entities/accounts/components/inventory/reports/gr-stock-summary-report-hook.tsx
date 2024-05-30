@@ -1,5 +1,4 @@
-import { useLayoutEffect } from 'react'
-import { _, Box, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, IMegaData, useContext, MegaDataContext, getFromBag } from '../redirect'
+import { _, CloseSharp, clsx, GridCellParams, IconButton, moment, useEffect, useIbuki, useRef, useState, useTheme, utils, utilMethods, IMegaData, useContext, MegaDataContext, getFromBag } from '../redirect'
 
 function useStockSummaryReport() {
     const [, setRefresh] = useState({})
@@ -137,7 +136,7 @@ function useStockSummaryReport() {
                 isAll: false, // Only products having some transaction or OP bal are shown
                 type: pre.queryArgs.type,
                 value: pre.queryArgs.value,
-                branchId: inventory.isAllBranches ? null: branchObject.branchId
+                branchId: inventory.isAllBranches ? null : branchObject.branchId
             },
         }) || {}
         setId(pre.allRows)
