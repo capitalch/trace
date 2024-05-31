@@ -168,6 +168,8 @@ k. Server logging for modify and delete, time and log viewer
                                                                                 9. Bottom bar: final accounts, bank reconcillation, stock tally, Product search as FAB, Business health
                                                                                 8. Business health:
                                                                                     Opening stock, Opening stock(Gst), Closing stock, Closing stock(Gst), Sundry debtors, Sundry creditors, Profit / loss as per balance sheet, Diff in stock, Diff in stock(Gst), Business index
+# 24-05-2024 - 30-05-2024
+- Completion of branch transfer and several reports
 # 19-05-2024 - 23-05-2024
 - Branch Transfer client
 # 16-05-2024
