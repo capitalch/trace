@@ -59,6 +59,16 @@
         },
 
         {
+            "hierarchy": "salespurchases-purchase-delete",
+            "isActive": false
+        },
+
+        {
+            "hierarchy": "salespurchases-purchase-edit",
+            "isActive": false
+        },
+
+        {
             "hierarchy": "salespurchases-debit-notes",
             "isActive": false
         },
@@ -242,6 +252,20 @@
         },
         {
             "hierarchy": "salespurchases-purchase-return",
+            "isActive": true
+        },
+        {
+            "hierarchy": "salespurchases-purchase",
+            "isActive": true
+        },
+
+        {
+            "hierarchy": "salespurchases-purchase-delete",
+            "isActive": true
+        },
+
+        {
+            "hierarchy": "salespurchases-purchase-edit",
             "isActive": true
         },
         {

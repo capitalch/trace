@@ -1,13 +1,15 @@
 import { AddCircle, ClearAll, CloseSharp, Search } from "@mui/icons-material"
 import { Badge, Box, Button, Card, IconButton, TextField, Typography, useTheme } from "@mui/material"
 import NumberFormat from "react-number-format"
-import { utilMethods } from "../../../inventory/redirect"
+import { accountsMessages, utilMethods } from "../../../inventory/redirect"
 import { usePurchaseLineItem } from "./purchase-line-item-hook"
 import { PurchaseLineItemType, PurchaseStore } from "../../../../stores/purchase-store"
+import Swal from "sweetalert2"
 
 function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: number }) {
     const theme = useTheme()
-    const { doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber } = usePurchaseLineItem(item)
+    const { doSearchOnProductCodeOrUpc, handleItemSearch, handleSerialNumber, meta } = usePurchaseLineItem(item)
+    const pre: any = meta.current
     const { extractAmount, toDecimalFormat } = utilMethods()
     const errorsObject = PurchaseStore.errorsObject
 
@@ -156,6 +158,22 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                 decimalScale={2}
                 fixedDecimalScale={true}
                 value={item.price.value || 0.00}
+                onBlur={(e: any) => {
+                    const productId = item.productId.value
+                    const price = item.price.value
+                    if (productId) {
+                        const lastPurchasePrice = pre.lastPurchasePrices[productId]
+                        if (lastPurchasePrice) {
+                            if ((Math.abs(lastPurchasePrice - price) / lastPurchasePrice * 100) > 10) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Product error',
+                                    text: accountsMessages.priceDifferenceTooHigh
+                                })
+                            }
+                        }
+                    }
+                }}
                 onChange={(e: any) => {
                     item.price.value = +extractAmount(e.target.value) || 0.0
                     PurchaseStore.main.functions.setPriceGst(item)

@@ -88,7 +88,7 @@ function utilMethods() {
         }
     }
 
-    // By default if id is present in data, an insert sql is created at server otherwise an update sql is crested.
+    // By default if id is not present in data, an insert sql is created at server otherwise an update sql is crested.
     // If you want to you updateCodeBlock and you don't have an id field in data then put a dummy id value in data. This will mimic the server not to generate an insert statement
     //idInsert property is used to allow value for id field to be inserted in table. In absence of this property in case value for id is present then it is considered as edit. idinsert forces to treat it as insert operation if id value is present
     // data: any, tableName: string, idInsert: boolean = false, deletedIds: any = undefined, updateCodeBlock: any = undefined

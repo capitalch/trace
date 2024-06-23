@@ -61,6 +61,7 @@
     "notFound": "Not found",
     "paymentAmountError":"Amount cannot be zero",
     "productCodeError":"Product code required",
+    "priceDifferenceTooHigh":"Please check the product. Price difference is too high",
     "productDetailsError":"Product details required",
     "purchaseError": "There is error in this purchase transaction",
     "receivedWithThanks": "Received with thanks a sum of $rs from $person.",

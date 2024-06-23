@@ -8,7 +8,8 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
     const { execGenericView, } = utilMethods()
 
     const meta: any = useRef({
-        productCodeOrUpc: ''
+        productCodeOrUpc: '',
+        lastPurchasePrices: {}
     })
 
     async function doSearchOnProductCodeOrUpc(value: string) {
@@ -27,6 +28,11 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
             if (_.isEmpty(result)) {
                 PurchaseStore.main.functions.clearLineItem(item)
             } else {
+                const productId = result?.productId
+                const lastPurchasePrice = result?.lastPurchasePrice
+                if(productId && lastPurchasePrice){
+                    meta.current.lastPurchasePrices[productId] = lastPurchasePrice
+                }
                 PurchaseStore.main.functions.populateLineItem(item, result)
                 PurchaseStore.main.functions.computeRow(item)
                 PurchaseStore.main.functions.computeSummary()
@@ -45,6 +51,15 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
         AppStore.modalDialogA.isOpen.value = true
         AppStore.modalDialogA.maxWidth.value='md'
         AppStore.modalDialogA.itemData.value = item
+        AppStore.modalDialogA.onModalDialogClose = ((itm:any) =>{
+            if(!_.isEmpty(itm)){
+                const productId = itm?.productId
+                const lastPurchasePrice = itm?.price
+                if(productId && lastPurchasePrice){
+                    meta.current.lastPurchasePrices[productId] = lastPurchasePrice
+                }
+            }
+        })
     }
 
     function handleSerialNumber(item: PurchaseLineItemType) {
