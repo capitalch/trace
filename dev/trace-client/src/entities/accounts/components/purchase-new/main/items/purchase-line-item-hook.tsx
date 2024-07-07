@@ -53,11 +53,13 @@ function usePurchaseLineItem(item: PurchaseLineItemType) {
         AppStore.modalDialogA.itemData.value = item
         AppStore.modalDialogA.onModalDialogClose = ((itm:any) =>{
             if(!_.isEmpty(itm)){
-                const productId = itm?.productId
-                const lastPurchasePrice = itm?.price
+                const productId = itm?.productId?.value
+                const lastPurchasePrice = itm?.price?.value
                 if(productId && lastPurchasePrice){
                     meta.current.lastPurchasePrices[productId] = lastPurchasePrice
                 }
+                PurchaseStore.main.functions.computeRow(item)
+                PurchaseStore.main.functions.computeSummary()
             }
         })
     }

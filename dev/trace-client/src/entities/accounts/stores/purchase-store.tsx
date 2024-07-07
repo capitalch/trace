@@ -33,6 +33,7 @@ const PurchaseStoreT: PurchaseStoreType = {
     main: {
         functions: {
             addLineItem: () => { },
+            almostEqual: () => false,
             clearSubheaderTotals: () => { },
             clearLineItem: () => { },
             computeRow: () => { },
@@ -129,6 +130,7 @@ type PurchaseStoreType = {
     main: {
         functions: {
             addLineItem: (index: number) => void
+            almostEqual: (givenNumber: number, computedNumber: number, tolerancePercent: number, toleranceAbsolute: number) => boolean
             clearSubheaderTotals: () => void
             clearLineItem: (row: PurchaseLineItemType) => void
             computeRow: (row: PurchaseLineItemType) => void

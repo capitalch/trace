@@ -1,7 +1,13 @@
-## Branch Transfer + others
-# New design
-- DB changes deployment script
-- Deploy in all databases and BU's
+## Purchase price variation warning
+																			- Grant permission for invoice edit to Subrato: Its already there
+- Search select a product not enabling price checking
+																			- Invoice price difference not allowing it to save. Need to allow it
+- When product selected from search, then price changes but priceGst and total invoice price does not change
+
+																			## Branch Transfer + others
+																			# New design
+																			- DB changes deployment script
+																			- Deploy in all databases and BU's
 																			- Sales report remarks and lineRemarks
 																				- Preview: Provide main remarks below customer details
 																				- Sale view: provide remarks and line remarks. Check that it does not collide with auto subledger remarks

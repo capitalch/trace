@@ -11,6 +11,7 @@ function usePurchaseMainSubheader() {
 
     useEffect(() => {
         PurchaseStore.main.functions.refreshSubheader = doRefresh
+        PurchaseStore.main.functions.almostEqual = almostEqual
     }, [])
 
     const errorsObject = PurchaseStore.errorsObject
@@ -64,7 +65,7 @@ function usePurchaseMainSubheader() {
 
         errorsObject.invoiceAmountError = () => {
             let ret = ''
-            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(), 0.1, 0.99)) {
+            if (!almostEqual(subheader.invoiceAmount.value, main.functions.getComputedInvoiceAmount(), .15, 0.99)) {
                 ret = 'invalid'
             }
             return (ret)
@@ -127,8 +128,8 @@ function usePurchaseMainSubheader() {
         }
     }
 
-    function almostEqual(givenNumber: number, computedNumber: number, tolerancePercent: number = 0.5, toleranceAbs: number = 0.99): boolean {
-        const tolerance = Math.max(toleranceAbs, computedNumber * tolerancePercent / 100)
+    function almostEqual(givenNumber: number, computedNumber: number, tolerancePercent: number = 0.5, toleranceAbsolute: number = 0.99): boolean {
+        const tolerance = Math.max(toleranceAbsolute, computedNumber * tolerancePercent / 100)
         const ret: boolean = Math.abs(givenNumber - computedNumber) <= tolerance
         return (ret)
     }

@@ -164,13 +164,20 @@ function PurchaseLineItem({ item, index }: { item: PurchaseLineItemType, index: 
                     if (productId) {
                         const lastPurchasePrice = pre.lastPurchasePrices[productId]
                         if (lastPurchasePrice) {
-                            if ((Math.abs(lastPurchasePrice - price) / lastPurchasePrice * 100) > 10) {
+                            if(!PurchaseStore.main.functions.almostEqual(price, lastPurchasePrice,10,.99)){
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Product error',
                                     text: accountsMessages.priceDifferenceTooHigh
                                 })
                             }
+                            // if ((Math.abs(lastPurchasePrice - price) / lastPurchasePrice * 100) > 10) {
+                            //     Swal.fire({
+                            //         icon: 'error',
+                            //         title: 'Product error',
+                            //         text: accountsMessages.priceDifferenceTooHigh
+                            //     })
+                            // }
                         }
                     }
                 }}
