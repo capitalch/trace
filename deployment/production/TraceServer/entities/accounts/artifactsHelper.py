@@ -439,7 +439,7 @@ def transferClosingBalancesHelper(dbName, buCode, finYearId, branchId):
 
 
 def trialBalanceHelper(dbName, buCode, finYearId, branchId):
-    if (finYearId is None) or (branchId is None):
+    if (finYearId is None):
         return {'trialBal': [], 'allKeys': []}
     sqlString = allSqls['get_trialBalance']
     allKeys = []
