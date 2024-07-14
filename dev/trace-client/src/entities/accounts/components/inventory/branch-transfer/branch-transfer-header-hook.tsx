@@ -1,7 +1,7 @@
 import Swal from "sweetalert2"
 import _ from 'lodash'
 import { BranchTransferLineItemType, BranchTransferStore, resetBranchTransferStore } from "../../../stores/branch-transfer-store"
-import { genericUpdateMasterDetails, getFromBag, useEffect, useIbuki, useSharedElements, useState, utilMethods } from "../redirect"
+import { genericUpdateMasterDetails, getFromBag, useEffect, useIbuki, useSharedElements, useState, } from "../redirect"
 
 export function useBranchTransferheader() {
     const { emit } = useIbuki()
@@ -14,10 +14,17 @@ export function useBranchTransferheader() {
     }, [])
 
     function getOptionsArrayOtherThanCurrentBranch() {
-        const branches: any[] = getFromBag('branches')
+        const branchesBuffer: any[] = getFromBag('branches')
         const branchObject = getFromBag('branchObject')
         const currentBranchId = branchObject.branchId
-        const filteredBranches = branches.filter((branch: any) => branch.branchId !== currentBranchId)
+        const branches = JSON.parse(JSON.stringify(branchesBuffer))
+        branches.forEach((x: any) => {
+            if(x.id){
+                x.branchId = x.id
+                x.id = undefined
+            }
+        })
+        const filteredBranches = branches.filter((branch: any) => (branch.branchId !== currentBranchId))
         const options: any[] = filteredBranches.map((branch: any) => {
             return { label: branch.branchName, code: branch.branchId }
         })

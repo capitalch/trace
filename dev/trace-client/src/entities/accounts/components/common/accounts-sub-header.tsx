@@ -11,7 +11,6 @@ import {
 } from '../../../../imports/icons-import'
 function AccountsSubHeader() {
     const classes = useStyles()
-    // const theme = useTheme()
     const {
         exhibitLogic,
         handleSelectBu,

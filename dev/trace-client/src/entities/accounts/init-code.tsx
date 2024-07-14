@@ -184,16 +184,6 @@ function initCode() {
         emit('DATACACHE-SUCCESSFULLY-LOADED', dataCache)
         emit('TRACE-MAIN:JUST-REFRESH', '')
         emit('LOAD-LEFT-MENU', '')
-        // function getRoom() {
-        //     const clientId = getLoginData()?.clientId
-        //     const buCode = getFromBag('buCode')
-        //     const { finYearId } = getFromBag('finYearObject') || ''
-        //     const { branchId } = getFromBag('branchObject') || ''
-        //     const room = `${String(
-        //         clientId
-        //     )}:${buCode}:${finYearId}:${branchId}`
-        //     return room
-        // }
     }
 
     return { setLastBuCodeFinYearIdBranchId, execDataCache }
