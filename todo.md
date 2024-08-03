@@ -1,8 +1,10 @@
-## Purchase price variation warning
+## Purchase price variation report
+	- This report blocks
+
 																			- Grant permission for invoice edit to Subrato: Its already there
-- Search select a product not enabling price checking
+																			- Search select a product not enabling price checking
 																			- Invoice price difference not allowing it to save. Need to allow it
-- When product selected from search, then price changes but priceGst and total invoice price does not change
+																			- When product selected from search, then price changes but priceGst and total invoice price does not change
 
 																			## Branch Transfer + others
 																			# New design
