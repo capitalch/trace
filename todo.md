@@ -1,3 +1,5 @@
+## Bugs
+- Purchase return printout Party name not there. Purchase return should be in bold
 ## Purchase price variation report
 	- This report blocks
 
