@@ -1,15 +1,30 @@
 import {
-    Box, DataGridPro,
+    Box,
+    DataGridPro,
     GridToolbarFilterButton,
     GridToolbarExport,
     GridToolbarContainer,
     GridToolbarColumnsButton,
-    IconButton, ReactSelect, SyncSharp, TreeSelect,
-    Typography, useState, useTheme
+    IconButton,
+    ReactSelect,
+    SyncSharp,
+    TreeSelect,
+    Typography,
+    useState,
+    useTheme,
 } from '../redirect'
 import { usePurchasePriceVariation } from './gr-purchase-price-variation-hook'
-function PurchasePriceVariation() {    
-    const {fetchData, getColumns, getGridSx, getRowClassName, handleSelectedBrand, handleSelectedCategory, handleSelectedTag, meta } = usePurchasePriceVariation()
+function PurchasePriceVariation() {
+    const {
+        fetchData,
+        getColumns,
+        getGridSx,
+        getRowClassName,
+        handleSelectedBrand,
+        handleSelectedCategory,
+        handleSelectedTag,
+        meta,
+    } = usePurchasePriceVariation()
     const pre = meta.current
     const theme = useTheme()
 
@@ -24,7 +39,7 @@ function PurchasePriceVariation() {
             ...provided,
             width: theme.spacing(22),
             marginLeft: '.8rem',
-        })
+        }),
     }
 
     return (
@@ -48,51 +63,74 @@ function PurchasePriceVariation() {
 
     function CustomToolbar() {
         return (
-            <GridToolbarContainer className='grid-toolbar'>
+            <GridToolbarContainer className="grid-toolbar">
                 <Box>
-                    <Typography variant='subtitle2'>{pre.subTitle}</Typography>
+                    <Typography variant="subtitle2">{pre.subTitle}</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', rowGap: 1, justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', rowGap: 1 }}>
-                        <Typography variant='subtitle1' sx={{ fontWeight: 'bold' }}>{pre.title}</Typography>
-                        <GridToolbarColumnsButton color='secondary' />
-                        <GridToolbarFilterButton color='primary' />
-                        <GridToolbarExport color='info' />
-                        
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        rowGap: 1,
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                    }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            rowGap: 1,
+                        }}>
+                        <Typography
+                            variant="subtitle1"
+                            sx={{ fontWeight: 'bold' }}>
+                            {pre.title}
+                        </Typography>
+                        <GridToolbarColumnsButton color="secondary" />
+                        <GridToolbarFilterButton color="primary" />
+                        <GridToolbarExport color="info" />
+
                         {/* Select brand */}
                         <ReactSelect
-                            menuPlacement='auto' placeholder='Select tag'
+                            menuPlacement="auto"
+                            placeholder="Select tag"
                             styles={reactSelectStyles}
                             options={pre.options.optionsBrand}
                             value={pre.options.selectedBrand}
-                            onChange={
-                                (selectedBrand: any) => {
-                                    handleSelectedBrand(selectedBrand)
-                                }}
+                            onChange={(selectedBrand: any) => {
+                                handleSelectedBrand(selectedBrand)
+                            }}
                         />
                         {/* Select category */}
-                        <TreeSelect options={pre.options.catTree} style={{marginLeft:'0.8rem'}}
-                            onChange={(e: any) => handleSelectedCategory(e.value)}
+                        <TreeSelect
+                            options={pre.options.catTree}
+                            style={{ marginLeft: '0.8rem' }}
+                            onChange={(e: any) =>
+                                handleSelectedCategory(e.value)
+                            }
                             value={pre.options.selectedCategory}
                         />
-                       
-                        {/* Select tag */}                       
+
+                        {/* Select tag */}
                         <ReactSelect
-                            menuPlacement='auto' placeholder='Select tag'
+                            menuPlacement="auto"
+                            placeholder="Select tag"
                             styles={reactSelectStyles}
                             options={pre.options.optionsTag}
                             value={pre.options.selectedTag}
-                            onChange={
-                                (selectedTag: any) => {
-                                    handleSelectedTag(selectedTag)
-                                }}
+                            onChange={(selectedTag: any) => {
+                                handleSelectedTag(selectedTag)
+                            }}
                         />
                         {/* Sync */}
                         <IconButton
                             size="small"
                             color="secondary"
                             onClick={fetchData}>
-                            <SyncSharp fontSize='small'></SyncSharp>
+                            <SyncSharp fontSize="small"></SyncSharp>
                         </IconButton>
                     </Box>
                 </Box>
